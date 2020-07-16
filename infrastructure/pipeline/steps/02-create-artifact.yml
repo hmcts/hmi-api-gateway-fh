@@ -1,0 +1,17 @@
+jobs:
+
+- job:
+
+  steps:
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      Contents: |
+       environment/**
+       pipeline/**
+       template/**
+       terraform/**
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
