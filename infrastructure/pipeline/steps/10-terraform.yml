@@ -1,0 +1,48 @@
+jobs:
+
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: 0
+
+    steps:
+
+      - task: TerraformInstaller@0
+        displayName: Install Terraform ${{ parameters.terraformVersion }}
+        inputs:
+          terraformVersion: ${{ parameters.terraformVersion }}
+
+      - task: TerraformCLI@0
+        displayName: terraform init
+        inputs:
+          command: init
+          workingDirectory: $(System.DefaultWorkingDirectory)
+          backendType: azurerm
+          backendServiceArm: ${{ parameters.subscription }}
+          backendAzureRmResourceGroupName: ${{ parameters.resourcegroup }}
+          backendAzureRmResourceGroupLocation: uksouth
+          backendAzureRmStorageAccountName: ${{ parameters.storageaccount }}
+          backendAzureRmContainerName: tfstate
+          backendAzureRmKey: hmi/${{ parameters.environment }}.tfstate
+
+      - task: TerraformCLI@0
+        displayName: terraform validate
+        inputs:
+          command: validate
+          workingDirectory: $(System.DefaultWorkingDirectory)
+
+      - task: TerraformCLI@0
+        displayName: terraform plan
+        inputs:
+          command: plan
+          workingDirectory: $(System.DefaultWorkingDirectory)
+          environmentServiceName: ${{ parameters.subscription }}
+          commandOptions: -var-file="environment/${{ parameters.environment }}.tfvars" -out=tfplan-${{ parameters.environment }}
+
+      - task: TerraformCLI@0
+        displayName: terraform apply
+        inputs:
+          command: apply
+          workingDirectory: $(System.DefaultWorkingDirectory)
+          environmentServiceName: ${{ parameters.subscription }}
+          commandOptions: -auto-approve tfplan-${{ parameters.environment }}

@@ -1,0 +1,19 @@
+jobs:
+
+- job:
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+
+  - task: TerraformInstaller@0
+    displayName: Install Terraform ${{ parameters.terraformVersion }}
+    inputs:
+      terraformVersion: ${{ parameters.terraformVersion }}
+
+  - task: Bash@3
+    displayName: Terraform fmt
+    inputs:
+      targetType: inline
+      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+      script: terraform fmt -recursive
