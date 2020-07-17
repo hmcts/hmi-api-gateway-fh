@@ -1,11 +1,9 @@
-# Spring Boot application template
-
-[![Build Status](https://travis-ci.org/hmcts/spring-boot-template.svg?branch=master)](https://travis-ci.org/hmcts/spring-boot-template)
+# HMI API Gateway
 
 ## Purpose
 
 The purpose of this template is to speed up the creation of tests for the Functional,
-Integration and Smoke Tests.
+Integration, Contract and Smoke Tests.
 
 ## What's inside
 
@@ -101,7 +99,7 @@ and use the next generation
 
 ## Building and deploying the application
 
-### Building the application
+### Building the application (for purpose of running the test)
 
 The project uses [Gradle](https://gradle.org) as a build tool. It already contains
 `./gradlew` wrapper script, so there's no need to install gradle.
