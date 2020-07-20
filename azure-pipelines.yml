@@ -23,6 +23,14 @@ stages:
   - stage: prepare
     displayName: Read and update variable groups
     jobs:
+      - job:
+        displayName: "Get Variable Groups"
+        steps:
+          - task: Bash@3
+            inputs:
+              filePath: 'pipeline/variables/update_variable_groups.sh'
+              arguments: '$(devopsUser), $(devopsPAT)'
+              workingDirectory: 'pipeline/variables'
     # - template: pipeline/steps/20-tf-install.yml
     #   parameters:
     #     terraformVersion: ${{ variables.terraformVersion }}
@@ -33,11 +41,3 @@ stages:
     #     prefix: $(prefix)
     #     product: $(product)
     #     location: $(location)
-      - job:
-        steps:
-          - task: Bash@3
-            displayName: "Get Variable Groups"
-            inputs:
-              filePath: 'pipeline/variables/update_variable_groups.sh'
-              arguments: '$(devopsUser), $(devopsPAT)'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/pipeline'
