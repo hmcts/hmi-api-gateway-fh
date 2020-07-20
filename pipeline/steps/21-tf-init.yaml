@@ -1,28 +1,20 @@
-jobs:
+steps:
 
-  - job:
-    displayName: "Terraform Init"
-    pool:
-      vmImage: 'ubuntu-latest'
-    timeoutInMinutes: 0
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+      command: init
+      workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+      backendType: azurerm
+      backendServiceArm: ${{ parameters.subscription }}
+      backendAzureRmResourceGroupName: ${{ parameters.prefix }}-devops-${{ parameters.environment }}-rg
+      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+      backendAzureRmStorageAccountName: ${{ parameters.prefix }}${{ parameters.product }}storage${{ parameters.environment }}
+      backendAzureRmContainerName: ${{ parameters.prefix }}${{ parameters.product }}terraform
+      backendAzureRmKey: ${{ parameters.prefix }}${{ parameters.product }}.tfstate
 
-    steps:
-
-      - task: TerraformCLI@0
-        displayName: terraform init
-        inputs:
-          command: init
-          workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-          backendType: azurerm
-          backendServiceArm: ${{ parameters.subscription }}
-          backendAzureRmResourceGroupName: ${{ parameters.prefix }}-devops-${{ parameters.environment }}-rg
-          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-          backendAzureRmStorageAccountName: ${{ parameters.prefix }}${{ parameters.product }}storage${{ parameters.environment }}
-          backendAzureRmContainerName: ${{ parameters.prefix }}${{ parameters.product }}terraform
-          backendAzureRmKey: ${{ parameters.prefix }}${{ parameters.product }}.tfstate
-
-      - task: TerraformCLI@0
-        displayName: terraform validate
-        inputs:
-          command: validate
-          workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+  - task: TerraformCLI@0
+    displayName: terraform validate
+    inputs:
+      command: validate
+      workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
