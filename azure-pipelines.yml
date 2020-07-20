@@ -5,13 +5,13 @@ trigger:
       - HMIS-152_SANDBOX_CI/CD_Pipeline
 
 parameters:
-  name: environment
-  displayName: Environment
-  type: string
-  default: 'sbox'
-  values:
-    - sbox
-    - test
+  - name: environment
+    displayName: Environment
+    type: string
+    default: 'sbox'
+    values:
+      - sbox
+      - test
 
 variables:
   - group: HMI-APIM-Common
