@@ -15,7 +15,7 @@ variables:
   - template: pipeline/variables-common.yaml
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - template: pipeline/variables-sbox.yaml
-  - ${{ if eq(parameters.env, 'test') }}:
+  - ${{ if eq(parameters.environment, 'test') }}:
     - template: pipeline/variables-test.yaml
 
 stages:
