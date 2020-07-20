@@ -17,7 +17,7 @@ variables:
     - template: pipeline/variables-test.yaml
   
 stages:
-  - stage: '1'
+  - stage: terraform
     displayName: Terraform
     jobs:
     - template: pipeline/steps/20-tf-install.yml
