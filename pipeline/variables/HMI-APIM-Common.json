@@ -3,10 +3,16 @@
 		"location": {
 			"value": "uksouth"
 		},
+		"prefix": {
+			"value": "hmi"
+		},
+		"product": {
+			"value": "apim"
+		},
 		"terraformVersion": {
 			"value": "0.12.16"
 		}
-	},
+  	},
 	"type": "Vsts",
 	"name": "HMI-APIM-Common",
 	"description": "HMI-APIM Common variables group"

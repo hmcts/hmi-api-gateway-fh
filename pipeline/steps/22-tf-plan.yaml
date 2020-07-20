@@ -1,6 +1,7 @@
 jobs:
 
   - job:
+    displayName: "Terraform Plan"
     pool:
       vmImage: 'ubuntu-latest'
     timeoutInMinutes: 0
