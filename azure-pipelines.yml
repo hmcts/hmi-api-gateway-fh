@@ -1,23 +1,22 @@
 trigger:
-  branches:
-    include:
-      - HMIS-152*
-
+  - HMIS-152*
+pr:
+  - master
 parameters:
   - name: environment
-    displayName: Environment
+    displayName: Env
     type: string
-    default: 'sbox,test'
+    default: sbox
+    values:
+      - sbox
 
 variables:
   - template: pipeline/variables-common.yaml
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - template: pipeline/variables-sbox.yaml
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - template: pipeline/variables-test.yaml
-  
+
 stages:
-  - stage: terraform
+  - stage: Terraform
     displayName: Terraform
     jobs:
     - template: pipeline/steps/20-tf-install.yml
