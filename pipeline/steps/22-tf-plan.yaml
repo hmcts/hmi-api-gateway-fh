@@ -1,3 +1,7 @@
+parameters:
+  subscription: ''
+  environment: ''
+
 steps:
 
   - task: TerraformCLI@0
