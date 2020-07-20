@@ -24,7 +24,7 @@ stages:
   - stage: PRESTAGE
     displayName: Update variable groups
     jobs:
-      - job:
+      - job: UpdateVarGroups
         steps:
           - task: Bash@3
             inputs:
@@ -35,18 +35,22 @@ stages:
   - stage: TERRAFORM
     displayName: Build infrastructure with Terraform
     jobs:
-      - template: pipeline/steps/20-tf-install.yaml
-        parameters:
-          terraformVersion: $(terraformVersion)
-      - template: pipeline/steps/21-tf-init.yaml
-        parameters:
-          subscription: $(subscription)
-          location: $(location)
-          environment: $(environment)
-          prefix: $(prefix)
-          product: $(product)
-      - template: pipeline/steps/22-tf-plan.yaml
-        parameters:
-          subscription: $(subscription)
-          environment: $(environment)
+      - job: Terraform
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - template: pipeline/steps/20-tf-install.yaml
+          parameters:
+            terraformVersion: $(terraformVersion)
+        - template: pipeline/steps/21-tf-init.yaml
+          parameters:
+            subscription: $(subscription)
+            location: $(location)
+            environment: $(environment)
+            prefix: $(prefix)
+            product: $(product)
+        - template: pipeline/steps/22-tf-plan.yaml
+          parameters:
+            subscription: $(subscription)
+            environment: $(environment)
 
