@@ -12,12 +12,12 @@ parameters:
       - sbox
       - test
 
-variables:
-  - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-Sbox
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-Test
+# variables:
+#   - group: HMI-APIM-Common
+#   - ${{ if eq(parameters.environment, 'sbox') }}:
+#     - group: HMI-APIM-Sbox
+#   - ${{ if eq(parameters.environment, 'test') }}:
+#     - group: HMI-APIM-Test
 
 stages:
   - stage: prepare
