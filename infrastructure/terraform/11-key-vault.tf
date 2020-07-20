@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "hmi_apim_kv" {
-    name                     = "${var.prefix}-kv-${var.environment}"
+    name                     = "${var.prefix}-${var.product}-kv-${var.environment}"
     location                 = var.location
     resource_group_name      = azurerm_resource_group.hmi_apim_rg.name
     tenant_id                = var.principal_tenant_id

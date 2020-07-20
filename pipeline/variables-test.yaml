@@ -1,5 +1,6 @@
 variables:
   environment: 'test'
+  subscription: 'DTS-SHAREDSERVICES-SBOX' # change this later to -TEST
   apim_sku_name: 'Developer'
   apim_sku_capacity: '1'
   publisher_name: 'HMCTS HMI'
