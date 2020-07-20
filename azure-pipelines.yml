@@ -25,8 +25,8 @@ stages:
         terraformVersion: ${{ variables.terraformVersion }}
     - template: pipeline/steps/21-tf-init.yml
       parameters:
-        subscription: ${{ variables.subscription }}
-        environment: ${{ variables.environment }}
-        prefix: ${{ variables.prefix }}
-        product: ${{ variables.product }}
-        location: ${{ variables.location }}
+        subscription: $(subscription)
+        environment: $(environment)
+        prefix: $(prefix)
+        product: $(product)
+        location: $(location)
