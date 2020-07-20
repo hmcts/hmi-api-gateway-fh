@@ -1,0 +1,5 @@
+variables:
+  location: 'uksouth'
+  prefix: 'hmi'
+  product: 'apim'
+  terraformVersion: '0.12.16'
