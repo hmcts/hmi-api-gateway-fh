@@ -6,16 +6,16 @@ parameters:
   - name: environment
     displayName: Env
     type: string
-    default: Choose
+    default: sbox
     values:
       - sbox
       - test
 
 variables:
   - template: pipeline/variables-common.yaml
-  - ${{ if eq(parameters.environment, 'sbox') }}:
+  - ${{ if eq(parameters.environment, sbox) }}:
     - template: pipeline/variables-sbox.yaml
-  - ${{ if eq(parameters.environment, 'test') }}:
+  - ${{ if eq(parameters.environment, test) }}:
     - template: pipeline/variables-test.yaml
 
 stages:
