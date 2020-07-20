@@ -11,7 +11,7 @@ jobs:
         displayName: terraform init
         inputs:
           command: init
-          workingDirectory: $(System.DefaultWorkingDirectory)
+          workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
           backendType: azurerm
           backendServiceArm: ${{ parameters.subscription }}
           backendAzureRmResourceGroupName: ${{ parameters.prefix }}-devops-${{ parameters.environment }}-rg
@@ -24,4 +24,4 @@ jobs:
         displayName: terraform validate
         inputs:
           command: validate
-          workingDirectory: $(System.DefaultWorkingDirectory)
+          workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/

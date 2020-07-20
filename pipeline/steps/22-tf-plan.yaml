@@ -1,7 +1,17 @@
+jobs:
+
+  - job:
+    pool:
+      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: 0
+
+    steps:
       - task: TerraformCLI@0
         displayName: terraform plan
         inputs:
           command: plan
-          workingDirectory: $(System.DefaultWorkingDirectory)
+          workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
           environmentServiceName: ${{ parameters.subscription }}
-          commandOptions: -var-file="environment/${{ parameters.environment }}.tfvars" -out=tfplan-${{ parameters.environment }}
+          commandOptions: |
+            -var-file="environment/$(environment)-hmi.tfvars" 
+            -out="tfplan-$(environment)" 
