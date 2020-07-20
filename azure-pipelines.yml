@@ -1,36 +1,37 @@
+---
 trigger:
+  branches:
+    include:
+      - HMIS-152_SANDBOX_CI/CD_Pipeline
 
-  - HMIS-152*
-pr:
-  - master
 parameters:
-  - name: environment
-    displayName: Env
-    type: string
-    default: 'sbox'
-    values:
-      - sbox
-      - test
+  name: environment
+  displayName: Environment
+  type: string
+  default: 'sbox'
+  values:
+    - sbox
+    - test
 
-# variables:
-#   - group: HMI-APIM-Common
-#   - ${{ if eq(parameters.environment, 'sbox') }}:
-#     - group: HMI-APIM-Sbox
-#   - ${{ if eq(parameters.environment, 'test') }}:
-#     - group: HMI-APIM-Test
+variables:
+  - group: HMI-APIM-Common
+  - ${{ if eq(parameters.environment, 'sbox') }}:
+    - group: HMI-APIM-Sbox
+  - ${{ if eq(parameters.environment, 'test') }}:
+    - group: HMI-APIM-Test
 
-stages:
-  - stage: prepare
-    displayName: Read and update variable groups
-    jobs:
-      - job:
-        displayName: "Get Variable Groups"
-        steps:
-          - task: Bash@3
-            inputs:
-              filePath: 'pipeline/variables/update_variable_groups.sh'
-              arguments: '$(devopsUser), $(devopsPAT)'
-              workingDirectory: 'pipeline/variables'
+# stages:
+#   - stage: PRESTAGE
+#     displayName: Read and update variable groups
+#     jobs:
+#       - job:
+#         displayName: "Get Variable Groups"
+#         steps:
+#           - task: Bash@3
+#             inputs:
+#               filePath: 'pipeline/variables/update_variable_groups.sh'
+#               arguments: '$(devopsUser), $(devopsPAT)'
+#               workingDirectory: 'pipeline/variables'
     # - template: pipeline/steps/20-tf-install.yml
     #   parameters:
     #     terraformVersion: ${{ variables.terraformVersion }}
