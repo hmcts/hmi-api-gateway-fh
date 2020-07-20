@@ -1,3 +1,10 @@
+parameters:
+  subscription: ''
+  location: ''
+  environment: ''
+  prefix: ''
+  product: ''
+
 steps:
 
   - task: TerraformCLI@0
