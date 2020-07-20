@@ -13,16 +13,15 @@ parameters:
       - test
 
 variables:
-  # - template: pipeline/variables-common.yaml
   - group: HMI-APIM-Common
-  # - ${{ if eq(parameters.environment, 'sbox') }}:
-  #   - template: pipeline/variables-sbox.yaml
-  # - ${{ if eq(parameters.environment, 'test') }}:
-  #   - template: pipeline/variables-test.yaml
+  - ${{ if eq(parameters.environment, 'sbox') }}:
+    - group: HMI-APIM-Sbox
+  - ${{ if eq(parameters.environment, 'test') }}:
+    - group: HMI-APIM-Test
 
 stages:
-  - stage: Terraform
-    displayName: Terraform
+  - stage: prepare
+    displayName: Read and update variable groups
     jobs:
     # - template: pipeline/steps/20-tf-install.yml
     #   parameters:
@@ -39,6 +38,6 @@ stages:
           - task: Bash@3
             displayName: "Get Variable Groups"
             inputs:
-              filePath: 'pipeline/scripts/get_variable_groups.sh'
-              arguments: '$(devopsUserName), $(devopsAccessToken)'
+              filePath: 'pipeline/variables/update_variable_groups.sh'
+              arguments: '$(devopsUser), $(devopsPAT)'
               workingDirectory: '$(System.DefaultWorkingDirectory)/pipeline'
