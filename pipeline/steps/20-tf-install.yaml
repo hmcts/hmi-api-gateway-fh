@@ -1,6 +1,7 @@
 jobs:
 
 - job:
+  displayName: "Install Terraform"
   pool:
     vmImage: 'ubuntu-latest'
 

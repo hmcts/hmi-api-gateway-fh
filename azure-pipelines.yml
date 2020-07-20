@@ -22,10 +22,9 @@ variables:
 
 stages:
   - stage: PRESTAGE
-    displayName: Read and update variable groups
+    displayName: Update variable groups
     jobs:
       - job:
-        displayName: "Get Variable Groups"
         steps:
           - task: Bash@3
             inputs:
@@ -46,8 +45,8 @@ stages:
           environment: $(environment)
           prefix: $(prefix)
           product: $(product)
-      - template: pipeline/steps/22-tf-plan.yaml
-        parameters:
-          subscription: $(subscription)
-          environment: $(environment)
+      # - template: pipeline/steps/22-tf-plan.yaml
+      #   parameters:
+      #     subscription: $(subscription)
+      #     environment: $(environment)
 
