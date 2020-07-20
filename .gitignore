@@ -37,6 +37,7 @@ terraform.rc
 
 # local files
 *.iml
+target/site/serenity/
 
 # ignore .gradle
 .gradle/
