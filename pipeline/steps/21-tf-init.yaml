@@ -1,7 +1,7 @@
 steps:
 
   - task: TerraformCLI@0
-    displayName: terraform init
+    displayName: Terraform init
     inputs:
       command: init
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
@@ -14,7 +14,7 @@ steps:
       backendAzureRmKey: ${{ parameters.prefix }}${{ parameters.product }}.tfstate
 
   - task: TerraformCLI@0
-    displayName: terraform validate
+    displayName: Terraform validate
     inputs:
       command: validate
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
