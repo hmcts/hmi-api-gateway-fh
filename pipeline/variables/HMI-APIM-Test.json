@@ -1,0 +1,40 @@
+{
+	"variables": {
+		"environment": {
+			"value": "test"
+		},
+		"subscription": {
+			"value": "DTS-SHAREDSERVICES-SBOX"
+		},
+		"apim_sku_name": {
+			"value": "Developer"
+		},
+		"apim_sku_capacity": {
+			"value": "1"
+		},
+		"publisher_name": {
+			"value": "HMCTS HMI"
+		},
+		"publisher_email": {
+			"value": "test@hmcts.placeholder"
+		},
+		"protocols": {
+			"value": "https"
+		},
+		"revision": {
+			"value": "1"
+		},
+		"open_api_spec_content_format": {
+			"value": "swagger-link-json"
+		},
+		"open_api_spec_content_value": {
+			"value": "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-request-hearing.json"
+		},
+		"service_url": {
+			"value": "https://www.hmcts.com/request-hearings/request-listings"
+		}
+  },
+  "type": "Vsts",
+  "name": "HMI-APIM-Test",
+  "description": "HMI-APIM TEST variables group"
+}
