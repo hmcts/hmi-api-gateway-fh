@@ -1,5 +1,4 @@
 variables:
-  environment: 'sbox'
   subscription: 'DTS-SHAREDSERVICES-SBOX'
   apim_sku_name: 'Developer'
   apim_sku_capacity: '1'
