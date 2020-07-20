@@ -17,9 +17,9 @@ variables:
     - template: pipeline/variables-test.yaml
   
 stages:
-  - stage: ci_config_check
-    displayName: CI - Config Check
+  - stage: '1'
+    displayName: Terraform
     jobs:
-    - template: pipeline/steps/01-config-check.yml
+    - template: pipeline/steps/20-tf-install.yml
       parameters:
         terraformVersion: ${{ variables.terraformVersion }}

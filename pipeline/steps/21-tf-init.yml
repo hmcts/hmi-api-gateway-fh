@@ -7,11 +7,6 @@ jobs:
 
     steps:
 
-      - task: TerraformInstaller@0
-        displayName: Install Terraform ${{ parameters.terraformVersion }}
-        inputs:
-          terraformVersion: ${{ parameters.terraformVersion }}
-
       - task: TerraformCLI@0
         displayName: terraform init
         inputs:
