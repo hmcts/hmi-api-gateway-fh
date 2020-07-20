@@ -23,3 +23,10 @@ stages:
     - template: pipeline/steps/20-tf-install.yml
       parameters:
         terraformVersion: ${{ variables.terraformVersion }}
+    - template: pipeline/steps/21-tf-init.yml
+      parameters:
+        subscription: ${{ variables.subscription }}
+        environment: ${{ variables.environment }}
+        prefix: ${{ variables.prefix }}
+        product: ${{ variables.product }}
+        location: ${{ variables.location }}
