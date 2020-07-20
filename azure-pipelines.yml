@@ -46,3 +46,8 @@ stages:
           environment: $(environment)
           prefix: $(prefix)
           product: $(product)
+      - template: pipeline/steps/22-tf-plan.yaml
+        parameters:
+          subscription: $(subscription)
+          environment: $(environment)
+
