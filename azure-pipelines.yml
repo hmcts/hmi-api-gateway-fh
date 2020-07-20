@@ -33,3 +33,13 @@ stages:
               arguments: '$(devopsUser), $(devopsPAT)'
               workingDirectory: 'pipeline/variables'
 
+  - stage: TERRAFORM
+    displayName: Build infrastructure with Terraform
+    jobs:
+      - job: 
+        displayName: "Terraform INSTALL"
+        steps:
+          - template: pipeline/steps/20-tf-install.yaml
+            parameters:
+              terraformVersion: $(terraformVersion)
+
