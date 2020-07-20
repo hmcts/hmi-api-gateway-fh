@@ -15,5 +15,5 @@ jobs:
     displayName: Terraform fmt
     inputs:
       targetType: inline
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+      workingDirectory: $(System.DefaultWorkingDirectory)
       script: terraform fmt -recursive
