@@ -1,7 +1,3 @@
-prefix = "hmi"
-product = "apim"
-environment = "test"
-location = "uksouth"
 apim_sku_name = "Developer"
 apim_sku_capacity = "1"
 publisher_name = "HMCTS HMI"
