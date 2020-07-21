@@ -11,6 +11,9 @@
 		},
 		"terraformVersion": {
 			"value": "0.12.16"
+		},
+		"owaspZapImage": {
+			"value": "owasp/zap2docker-weekly"
 		}
   	},
 	"type": "Vsts",
