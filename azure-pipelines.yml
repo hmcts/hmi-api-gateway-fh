@@ -40,15 +40,21 @@ stages:
           vmImage: 'ubuntu-latest'
         steps:
         - template: pipeline/steps/20-tf-install.yaml
-        - template: pipeline/steps/21-tf-init.yaml
-        - template: pipeline/steps/22-tf-plan.yaml
-        - template: pipeline/steps/22-tf-plan.yaml
           parameters:
             terraformVersion: $(terraformVersion)
+        - template: pipeline/steps/21-tf-init.yaml
+          parameters:
             subscription: $(subscription)
             location: $(location)
             environment: $(environment)
             prefix: $(prefix)
             product: $(product)
-            
+        - template: pipeline/steps/22-tf-plan.yaml
+          parameters:
+            subscription: $(subscription)
+            environment: $(environment)
+        - template: pipeline/steps/23-tf-apply.yaml
+          parameters:
+            subscription: $(subscription)
+            environment: $(environment)
 
