@@ -5,6 +5,15 @@
 		},
 		"subscription": {
 			"value": "DTS-SHAREDSERVICES-SBOX"
+        },
+        "resourceGroup": {
+			"value": "hmi-devops-test-rg"
+		},
+		"storageAccount": {
+			"value": "hmiapimsatest"
+		},
+		"storageAccountVolume": {
+			"value": "hmiapimvoltest"
 		}
 	},
 	"type": "Vsts",
