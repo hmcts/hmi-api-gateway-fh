@@ -5,7 +5,7 @@ resource "random_id" "user_id" {
 resource "azurerm_api_management_user" "hmi_apim_user" {
   api_management_name = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_api_management.hmi_apim.resource_group_name
-  user_id             = "tfsta${lower(random_id.user_id.hex)}"
+  user_id             = "${lower(random_id.user_id.hex)}"
   first_name          = "Test"
   last_name           = "User"
   email               = "test@hmcts.dev.null"
