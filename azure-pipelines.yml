@@ -1,8 +1,6 @@
 ---
 trigger:
-  branches:
-    include:
-      - HMIS-152_SANDBOX_CI/CD_Pipeline
+  - HMIS-152_SANDBOX_CI/CD_Pipeline
 
 parameters:
   - name: environment
