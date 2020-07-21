@@ -11,9 +11,6 @@
 		},
 		"storageAccount": {
 			"value": "hmiapimsatest"
-		},
-		"storageAccountVolume": {
-			"value": "hmiapimvoltest"
 		}
 	},
 	"type": "Vsts",
