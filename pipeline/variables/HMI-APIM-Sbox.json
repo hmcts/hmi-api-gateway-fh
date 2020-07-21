@@ -10,7 +10,7 @@
 			"value": "hmi-devops-sbox-rg"
 		},
 		"storageAccount": {
-			"value": "hmiapimstoragesbox"
+			"value": "hmiapimsasbox"
 		},
 		"storageAccountVolume": {
 			"value": "hmiapimvolsbox"
