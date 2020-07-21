@@ -1,15 +1,7 @@
-resource "random_id" "user_id" {
-  byte_length = 8
-}
-
-resource "azurerm_api_management_user" "hmi_apim_user" {
+data "azurerm_api_management_user" "hmi_apim_user" {
   api_management_name = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_api_management.hmi_apim.resource_group_name
-  user_id             = "${lower(random_id.user_id.hex)}"
-  first_name          = "Test"
-  last_name           = "User"
-  email               = "test@hmcts.dev.null"
-  state               = "active"
+  user_id             = "temp user"
 }
 
 resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
