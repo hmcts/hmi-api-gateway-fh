@@ -11,11 +11,7 @@
 		},
 		"storageAccount": {
 			"value": "hmiapimsasbox"
-		},
-		"storageAccountVolume": {
-			"value": "hmiapimvolsbox"
 		}
-
 	},
 	"type": "Vsts",
 	"name": "HMI-APIM-Sbox",
