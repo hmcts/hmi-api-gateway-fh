@@ -60,7 +60,8 @@ stages:
     displayName: Tests - Functional
     jobs:
       - job:
-        pool: 'windows-latest'
+        pool:
+          vmImage: 'windows-latest'
         steps:
           - task: AzureCLI@2
             inputs:
