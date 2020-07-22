@@ -1,6 +1,6 @@
 <policies>
     <inbound>
-        <set-variable name="req" value="@(context.Request.Body.As<JObject>())" />
+        <set-variable name="req" value="@(context.Request.Body.As&ltJObject&gt())" />
         <choose>
             <when condition="@(!((JObject)context.Variables["req"]).ContainsKey("Case Title") || ((JObject)context.Variables["req"]).GetValue("Case Title").Type != JTokenType.String)">
                 <return-response>
