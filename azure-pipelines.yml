@@ -30,7 +30,7 @@ stages:
               arguments: '$(devopsUser), $(devopsPAT)'
               workingDirectory: 'pipeline/variables'
 
-  - stage: TERRAFORM
+  - stage: BUILD
     displayName: Build infrastructure with Terraform
     jobs:
       - job: Terraform
@@ -56,7 +56,7 @@ stages:
             subscription: $(subscription)
             environment: $(environment)
   
-  - stage: TESTS FUNCTIONAL
+  - stage: TESTS
     displayName: Tests - Functional
     jobs:
       - job:
