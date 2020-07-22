@@ -58,7 +58,7 @@ stages:
             subscription: $(subscription)
             environment: $(environment)
   
-  - stage: TESTS
+  - stage: TESTS1
     displayName: Tests - Functional
     jobs:
       - job:
@@ -108,7 +108,7 @@ stages:
               ContainerName: '$web'
             condition: succeededOrFailed()
 
-  - stage: TESTS
+  - stage: TESTS2
     displayName: Tests - Security
     jobs:
       - job:
