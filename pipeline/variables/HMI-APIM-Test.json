@@ -10,7 +10,7 @@
 			"value": "hmi-devops-test-rg"
 		},
 		"storageAccount": {
-			"value": "hmiapimsatest"
+			"value": "hmiapimstoragetest"
 		}
 	},
 	"type": "Vsts",

@@ -10,7 +10,7 @@
 			"value": "hmi-devops-sbox-rg"
 		},
 		"storageAccount": {
-			"value": "hmiapimsasbox"
+			"value": "hmiapimstoragesbox"
 		}
 	},
 	"type": "Vsts",
