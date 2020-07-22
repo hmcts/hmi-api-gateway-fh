@@ -1,6 +1,6 @@
 ---
 trigger:
-  - HMIS-152_SANDBOX_CI/CD_Pipeline
+  - none
 
 parameters:
   - name: environment
