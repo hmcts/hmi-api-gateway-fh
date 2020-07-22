@@ -1,10 +1,20 @@
 <policies>
     <inbound>
-        <set-header name="Company-Name" exists-action="override">
-            <value>HMCTS</value>
-        </set-header>
+        <set-variable name="req" value="@(context.Request.Body.As<JObject>())" />
+        <choose>
+            <when condition="@(!((JObject)context.Variables["req"]).ContainsKey("Case Title") || ((JObject)context.Variables["req"]).GetValue("Case Title").Type != JTokenType.String)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("Error", "400"),
+                        new JProperty("Reason", "Malformed request. Missing property: 'Case Title'")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/health-check" />
     </inbound>
     <backend>
         <base />
