@@ -60,7 +60,7 @@ stages:
     displayName: Tests - Functional
     jobs:
       - job:
-        pool: 'vs2017-win2016'
+        pool: 'windows-latest'
         steps:
           - task: AzureCLI@2
             inputs:
@@ -84,3 +84,23 @@ stages:
               javaHomeOption: 'JDKVersion'
               jdkVersionOption: '1.11'
               sonarQubeRunAnalysis: false
+          
+          - task: AzureFileCopy@4
+            displayName: 'Publish gradle output'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/build/reports/tests/functional'
+              azureSubscription: $(subscription)
+              Destination: AzureBlob
+              storage: $(storageAccount)
+              ContainerName: '$web'
+            condition: succeededOrFailed()
+
+          - task: AzureFileCopy@4
+            displayName: 'Publish serenity output'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
+              azureSubscription: $(subscription)
+              Destination: AzureBlob
+              storage: $(storageAccount)
+              ContainerName: '$web'
+            condition: succeededOrFailed()
