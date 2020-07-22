@@ -12,5 +12,5 @@ resource "azurerm_api_management_api_operation_policy" "health_check_policy" {
   api_management_name = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
   operation_id        = "health-check"
-  xml_content = file("../template/api-op-req-hearing-policy.xml")
+  xml_content = file("../template/api-op-health-check-policy.xml")
 }
