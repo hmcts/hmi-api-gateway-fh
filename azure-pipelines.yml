@@ -60,7 +60,6 @@ stages:
     displayName: Tests - Functional
     jobs:
       - job:
-        pool: 'vs2017-win2016'
         steps:
           - task: AzureCLI@2
             inputs:
