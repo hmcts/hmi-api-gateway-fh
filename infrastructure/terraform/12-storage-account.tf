@@ -4,7 +4,6 @@ resource "azurerm_storage_account" "hmi_apim_storage" {
   resource_group_name      = azurerm_resource_group.hmi_apim_rg.name
   account_tier             = "Standard"
   account_replication_type = "GRS"
-  account_kind             = "Storage"
   tags                     = var.tags
 
   static_website {
