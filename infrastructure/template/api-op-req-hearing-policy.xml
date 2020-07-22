@@ -13,7 +13,6 @@
                     }</set-body>
                 </return-response>
             </when>
-
             <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Case Id&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Id&quot;).Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
