@@ -15,8 +15,10 @@ variables:
   - group: HMI-APIM-Common
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-Sbox
+    - group: HMI-APIM-Sbox-KV
   - ${{ if eq(parameters.environment, 'test') }}:
     - group: HMI-APIM-Test
+    - group: HMI-APIM-Test-KV
 
 stages:
   - stage: PRESTAGE
