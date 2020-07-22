@@ -7,6 +7,7 @@ resource "azurerm_api_management_user" "hmi_apim_user" {
   email               = "test@hmcts.dev.null"
   state               = "active"
 }
+
 resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
   api_management_name = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_api_management.hmi_apim.resource_group_name
