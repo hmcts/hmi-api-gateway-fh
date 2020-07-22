@@ -2,7 +2,7 @@
     <inbound>
         <set-variable name="req" value="@(context.Request.Body.As&lt;JObject&gt;())" />
         <choose>
-            <when condition="@(!((JObject)context.Variables["req"]).ContainsKey("Case Title") || ((JObject)context.Variables["req"]).GetValue("Case Title").Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey("&quot;Case Title"&quot;) || ((JObject)context.Variables[&quot;"req"&quot;]).GetValue("&quot;Case Title"&quot;).Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
