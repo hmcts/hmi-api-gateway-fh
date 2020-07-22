@@ -114,6 +114,7 @@
             </when>
         </choose>
         <base />
+        <set-backend-service base-url="https://www.hmcts.com/request-hearings/request-listings" />
     </inbound>
     <backend>
         <base />

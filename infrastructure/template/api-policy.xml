@@ -14,7 +14,6 @@
             <value>HMCTS</value>
         </check-header>
         <mock-response status-code="200" content-type="application/json" />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/request-listings" />
     </inbound>
     <backend>
         <base />
