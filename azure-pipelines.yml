@@ -60,7 +60,7 @@ stages:
     displayName: Tests - Functional
     jobs:
       - job:
-        pool: 'windows-latest'
+        pool: 'windows-2019'
         steps:
           - task: AzureCLI@2
             inputs:
