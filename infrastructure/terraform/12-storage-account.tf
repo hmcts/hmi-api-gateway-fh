@@ -5,6 +5,11 @@ resource "azurerm_storage_account" "hmi_apim_storage" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
   tags                     = var.tags
+
+  static_website {
+    index_document     = "index.html"
+    error_404_document = null
+  }
 }
 
 resource "azurerm_storage_container" "hmi_apim_container" {
