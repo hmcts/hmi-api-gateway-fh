@@ -69,6 +69,7 @@ stages:
           vmImage: 'windows-latest'
         steps:
           - task: AzureCLI@2
+            displayName: Update test file
             inputs:
               azureSubscription: $(subscription)
               scriptType: 'bash'
@@ -113,6 +114,7 @@ stages:
           vmImage: 'ubuntu-latest'
         steps:
         - task: AzureCLI@2
+          displayName: Build and run API ZAP scan
           inputs:
             azureSubscription: $(subscription)
             scriptType: bash
