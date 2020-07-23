@@ -1,21 +1,4 @@
 {
-	"variables": {
-		"environment": {
-			"value": "sbox"
-		},
-		"subscription": {
-			"value": "DTS-SHAREDSERVICES-SBOX",
-			"description": "Subscription to deploy resources to"
-		},
-		"devopsResourceGroup": {
-			"value": "hmi-devops-sbox-rg",
-			"description": "Resource group which holds resources associated with Azure DevOps Project"
-		},
-		"devopsStorageAccount": {
-			"value": "hmiapimstoragesbox",
-			"description": "DevOps storage account that holds files associated with Azure DevOps Project"
-		}
-	},
 	"type": "Vsts",
 	"name": "HMI-APIM-Sbox",
 	"description": "HMI-APIM SBOX variables group"

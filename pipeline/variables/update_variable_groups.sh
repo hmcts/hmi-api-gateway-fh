@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-# if [ $# -lt 2 ]
-#   then
-#     echo "Please provide username and PAT"
-#     exit 1
-# fi
-
-USER="kara.nottingham1@HMCTS.NET"
-PAT="bxm7dno7hkdjtla7raly4h7etmmuz4bmcrppt7vcswn4ho7sr27a"
+if [ $# -lt 2 ]
+  then
+    echo "Please provide username and PAT"
+    exit 1
+fi
 
 for fileName in *.json; do
 
