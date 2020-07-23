@@ -16,21 +16,6 @@ public class HearingSteps {
     private String actor;
 
     @Step("#actor routes to {0} in order to get invoke {1}")
-    public void invokeEmployee (final String basePath,
-                                final String api,
-                                final Map<String,Object> headersAsMap) {
-
-        System.out.println("The value of the base path " + basePath);
-        Response response = expect().that().statusCode(200)
-                .given().contentType("application/json")
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-        verifySessionResponse(lastResponse());
-    }
-
-    @Step("#actor routes to {0} in order to get invoke {1}")
     public void requestHearing (final String api,
                                 final Map<String,Object> headersAsMap,
                                 final String payloadBody) {
