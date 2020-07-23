@@ -47,8 +47,6 @@ public class HearingAPITest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String EMPLOYEE_API = "employees";
-    private static final String SESSION_API = "future-hearings-api/session/1?time=morning";
     private static final String HEARINGS_API = "hmi-apim-api/hearings";
     Map<String, Object> headersAsMap = new HashMap<>();
 
@@ -61,19 +59,6 @@ public class HearingAPITest {
 
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
-    }
-
-
-    @Test
-    @Ignore
-    public void testSuccessfullGet() throws IOException {
-        String input =
-                readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/poc-input.json");
-        System.out.println("The value of the Input File : "+ input);
-        System.out.println("The target instance of the Functional Test : " + targetInstance);
-        hearingSteps.invokeEmployee(targetInstance,
-                SESSION_API,
-                headersAsMap);
     }
 
     @Test
