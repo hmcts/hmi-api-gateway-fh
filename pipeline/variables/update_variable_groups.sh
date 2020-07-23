@@ -7,6 +7,9 @@ if [ $# -lt 2 ]
     exit 1
 fi
 
+USER=$1
+PAT=$2
+
 for fileName in *.json; do
 
 groupName=$(cat ${fileName} | jq -r .name)
