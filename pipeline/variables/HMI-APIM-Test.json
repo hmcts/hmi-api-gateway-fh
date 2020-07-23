@@ -4,13 +4,16 @@
 			"value": "test"
 		},
 		"subscription": {
-			"value": "DTS-SHAREDSERVICES-SBOX"
+			"value": "DTS-SHAREDSERVICES-SBOX",
+			"description": "Subscription to deploy resources to"
         },
-        "resourceGroup": {
-			"value": "hmi-devops-test-rg"
+        "devopsResourceGroup": {
+			"value": "hmi-devops-test-rg",
+			"description": "Resource group which holds resources associated with Azure DevOps Project"
 		},
-		"storageAccount": {
-			"value": "hmiapimstoragetest"
+		"devopsRtorageAccount": {
+			"value": "hmiapimstoragetest",
+			"description": "DevOps storage account that holds files associated with Azure DevOps Project"
 		}
 	},
 	"type": "Vsts",

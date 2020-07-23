@@ -45,8 +45,8 @@ stages:
         - template: pipeline/steps/tf-init.yaml
           parameters:
             subscription: $(subscription)
-            resourceGroup: $(resourceGroup)
-            storageAccount: $(storageAccount)
+            resourceGroup: $(devopsResourceGroup)
+            storageAccount: $(devopsStorageAccount)
             location: $(location)
             environment: $(environment)
             prefix: $(prefix)
@@ -89,7 +89,7 @@ stages:
               SourcePath: '$(System.DefaultWorkingDirectory)/build/reports/tests/functional'
               azureSubscription: $(subscription)
               Destination: AzureBlob
-              storage: $(storageAccount)
+              storage: $(devopsStorageAccount)
               ContainerName: '$web'
             condition: succeededOrFailed()
 
@@ -99,7 +99,7 @@ stages:
               SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
               azureSubscription: $(subscription)
               Destination: AzureBlob
-              storage: $(storageAccount)
+              storage: $(devopsStorageAccount)
               ContainerName: '$web'
             condition: succeededOrFailed()
 
@@ -117,11 +117,11 @@ stages:
             scriptLocation: inlineScript
             inlineScript: |
               echo "Obtaining container key..."
-              KEY=$(az storage account keys list -g $(resourceGroup) --account-name $(storageAccount) --query "[0].value" -o tsv)
+              KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
               echo $KEY
               echo "Creating ACI ZAP container..."
-              az container create -g $(resourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(storageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml"
+              az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml"
               sleep 30
               echo "Downloading ZAP report..."
-              az storage file download --account-name $(storageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.xml --dest $(System.DefaultWorkingDirectory)/api_scan.xml
-              az container delete -g $(resourceGroup) -n hmi-aci-zap-sbox --yes
+              az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.xml --dest $(System.DefaultWorkingDirectory)/api_scan.xml
+              az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
