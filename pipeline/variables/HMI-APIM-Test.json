@@ -1,18 +1,4 @@
 {
-	"variables": {
-		"environment": {
-			"value": "test"
-		},
-		"subscription": {
-			"value": "DTS-SHAREDSERVICES-SBOX"
-        },
-        "resourceGroup": {
-			"value": "hmi-devops-test-rg"
-		},
-		"storageAccount": {
-			"value": "hmiapimsatest"
-		}
-	},
 	"type": "Vsts",
 	"name": "HMI-APIM-Test",
 	"description": "HMI-APIM TEST variables group"

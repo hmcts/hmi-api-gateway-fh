@@ -1,0 +1,14 @@
+parameters:
+  runCommand: ''
+
+steps:
+  - task: Gradle@2
+    inputs:
+      gradleWrapperFile: 'gradlew'
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+      tasks: ${{ parameters.runCommand }}
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.11'
+      sonarQubeRunAnalysis: false

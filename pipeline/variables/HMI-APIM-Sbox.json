@@ -1,18 +1,4 @@
 {
-	"variables": {
-		"environment": {
-			"value": "sbox"
-		},
-		"subscription": {
-			"value": "DTS-SHAREDSERVICES-SBOX"
-		},
-		"resourceGroup": {
-			"value": "hmi-devops-sbox-rg"
-		},
-		"storageAccount": {
-			"value": "hmiapimsasbox"
-		}
-	},
 	"type": "Vsts",
 	"name": "HMI-APIM-Sbox",
 	"description": "HMI-APIM SBOX variables group"
