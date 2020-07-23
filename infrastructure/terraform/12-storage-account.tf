@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "hmi_apim_storage" {
-  name                     = var.storageaccount
+  name                     = "${var.prefix}${var.product}${var.environment}sa"
   location                 = var.location
   resource_group_name      = azurerm_resource_group.hmi_apim_rg.name
   account_tier             = "Standard"
@@ -13,7 +13,7 @@ resource "azurerm_storage_account" "hmi_apim_storage" {
 }
 
 resource "azurerm_storage_share" "hmi_apim_fileshare" {
-  name                 = var.storagevolume
+  name                 = "${var.prefix}${var.product}${var.environment}vol"
   storage_account_name = azurerm_storage_account.hmi_apim_storage.name
   quota                = 1
 }
