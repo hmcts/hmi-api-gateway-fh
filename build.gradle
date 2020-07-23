@@ -134,6 +134,13 @@ task smoke(type: Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
+  include "uk/gov/hmcts/futurehearings/hmi/smoke/**"
+  testLogging.showStandardStreams = true
+  systemProperties System.getProperties()
+  environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+
+  enableAssertions = true
+  scanForTestClasses = true
 }
 
 checkstyle {
