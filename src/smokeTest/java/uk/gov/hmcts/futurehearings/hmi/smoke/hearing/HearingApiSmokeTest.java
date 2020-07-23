@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +43,8 @@ public class HearingApiSmokeTest {
     }
 
     @Test
+    @Disabled
+    @DisplayName("Smoke Test to Test the Endpoint for the Hearing Root Context")
     public void testSuccessfulHearingApiGet() {
          expect().that().statusCode(200)
                 .given().contentType("application/json")

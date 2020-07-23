@@ -1,6 +1,0 @@
-uk/gov/hmcts/futurehearings/hmi/functional/Application.java
- uk.gov.hmcts.futurehearings.hmi.functional.Application
-uk/gov/hmcts/futurehearings/hmi/functional/config/SwaggerConfiguration.java
- uk.gov.hmcts.futurehearings.hmi.functional.config.SwaggerConfiguration
-uk/gov/hmcts/futurehearings/hmi/functional/controllers/RootController.java
- uk.gov.hmcts.futurehearings.hmi.functional.controllers.RootController
