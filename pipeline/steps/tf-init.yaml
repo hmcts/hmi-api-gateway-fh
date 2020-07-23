@@ -1,7 +1,7 @@
 parameters:
   subscription: ''
-  devopsResourceGroup: ''
-  devopsStorageAccount: ''
+  resourceGroup: ''
+  storageAccount: ''
   location: ''
   environment: ''
   prefix: ''
@@ -16,9 +16,9 @@ steps:
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
       backendType: azurerm
       backendServiceArm: ${{ parameters.subscription }}
-      backendAzureRmResourceGroupName: ${{ parameters.devopsResourceGroup }}
+      backendAzureRmResourceGroupName: ${{ parameters.resourceGroup }}
       backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-      backendAzureRmStorageAccountName: ${{ parameters.devopsStorageAccount }}
+      backendAzureRmStorageAccountName: ${{ parameters.storageAccount }}
       backendAzureRmContainerName: ${{ parameters.prefix }}${{ parameters.product }}terraform
       backendAzureRmKey: ${{ parameters.prefix }}${{ parameters.product }}.tfstate
 
