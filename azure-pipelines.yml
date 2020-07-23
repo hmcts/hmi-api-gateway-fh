@@ -45,8 +45,8 @@ stages:
         - template: pipeline/steps/tf-init.yaml
           parameters:
             subscription: $(subscription)
-            resourceGroup: $(devopsResourceGroup)
-            storageAccount: $(devopsStorageAccount)
+            devopsResourceGroup: $(devopsResourceGroup)
+            devopsStorageAccount: $(devopsStorageAccount)
             location: $(location)
             environment: $(environment)
             prefix: $(prefix)
