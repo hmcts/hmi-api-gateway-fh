@@ -59,7 +59,7 @@ stages:
           parameters:
             subscription: $(subscription)
             environment: $(environment)
-  
+
   - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Functional
@@ -80,11 +80,11 @@ stages:
                 targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} |
                 spring.flyway.enabled: false" > application-functional.yaml
               workingDirectory: '$(System.DefaultWorkingDirectory)/build/resources/functionalTest'
-          
+
           - template: pipeline/steps/run-gradlew.yaml
             parameters:
               runCommand: 'clean functional'
-          
+
           - task: AzureFileCopy@4
             displayName: 'Publish gradle output'
             inputs:
@@ -124,11 +124,31 @@ stages:
               KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
               echo $KEY
               echo "Creating ACI ZAP container..."
-              az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.xml"
+              az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
               sleep 30
               echo "Downloading ZAP report..."
               az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
+
+        - task: AzureCLI@2
+          displayName: Pulish test results
+          condition: succeededOrFailed()
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
               reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
-              echo $reportFile
-              ls $(System.DefaultWorkingDirectory)
+              mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
+              echo "##vso[task.uploadfile]$($reportFile.fullname)"
+              echo "##vso[task.uploadsummary]$($mdReportFile.fullname)"
+
+
+        - task: AzureCLI@2
+          displayName: Delete ACI container
+          condition: succeededOrFailed()
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
               az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
