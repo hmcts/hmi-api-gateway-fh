@@ -129,5 +129,6 @@ stages:
               echo "Downloading ZAP report..."
               az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
               reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
-              cat $reportFile
+              echo $reportFile
+              ls $(System.DefaultWorkingDirectory)
               az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
