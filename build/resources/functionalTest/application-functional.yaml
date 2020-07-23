@@ -1,4 +1,0 @@
-targetInstance: ${TEST_URL:https://xxx.net}
-targetHost : ${TEST_HOST:xxx.net}
-targetSubscriptionKey : ${TEST_SUBSCRIPTION_KEY:xxx}
-spring.flyway.enabled: false
