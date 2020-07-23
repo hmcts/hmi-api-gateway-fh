@@ -8,7 +8,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Case Title'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Case Title'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -19,7 +19,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Case Id'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Case Id'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -30,7 +30,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Venue'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Venue'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -41,7 +41,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Jurisdiction'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Jurisdiction'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -52,7 +52,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Service'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Service'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -63,7 +63,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Case Type'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Case Type'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -74,7 +74,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Hearing Type'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Hearing Type'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -85,7 +85,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Hearing channel'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Hearing channel'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -96,7 +96,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Private Hearing'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Private Hearing'")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -107,7 +107,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing property: 'Allocated Listing Team'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Allocated Listing Team'")
                         ).ToString();
                     }</set-body>
                 </return-response>
