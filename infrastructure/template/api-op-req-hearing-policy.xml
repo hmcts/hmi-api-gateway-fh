@@ -24,6 +24,17 @@
                     }</set-body>
                 </return-response>
             </when>
+            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;TransactionIDHMCTS&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Id&quot;).Type != JTokenType.String)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("Error", "400"),
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Case Id'")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
             <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Venue&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Venue&quot;).Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
