@@ -113,9 +113,16 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps:
-          - template: pipeline/steps/run-gradlew.yaml
-            parameters:
-              runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key)
+      - task: Gradle@2
+        inputs:
+          gradleWrapperFile: 'gradlew'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key)
+          publishJUnitResults: true
+          testResultsFiles: '**/TEST-*.xml'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          sonarQubeRunAnalysis: false
 
   - stage: TESTS2
     dependsOn: BUILD
