@@ -1,4 +1,5 @@
-targetInstance: ${TEST_URL:https://hmi-apim-svc-test.azure-api.net}
-targetHost : ${TEST_HOST:hmi-apim-svc-test.azure-api.net}
-targetSubscriptionKey : ${TEST_SUBSCRIPTION_KEY:xxx}
+targetInstance: ${TEST_URL}
+targetHost : ${TEST_HOST}
+targetSubscriptionKey : ${TEST_SUBSCRIPTION_KEY}
+hearingApiRootContext: /hmi/hearings
 spring.flyway.enabled: false
