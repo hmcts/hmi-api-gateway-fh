@@ -44,6 +44,7 @@ public class HmiApiSmokeTest {
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     public void testSuccessfulHmiApiGet() {
+        System.out.println("The value of the target Instance " +targetInstance);
         expect().that().statusCode(200)
                 .given().contentType("application/json")
                 .headers(headersAsMap)
