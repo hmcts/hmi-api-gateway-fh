@@ -140,15 +140,15 @@ stages:
               reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
               mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
               echo "##vso[task.uploadfile]$reportFile"
-              echo "##vso[task.uploadsummary]$mdReportFile"
+              # echo "##vso[task.uploadsummary]$mdReportFile"
 
 
-        - task: AzureCLI@2
-          displayName: Delete ACI container
-          condition: succeededOrFailed()
-          inputs:
-            azureSubscription: $(subscription)
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
+        # - task: AzureCLI@2
+        #   displayName: Delete ACI container
+        #   condition: succeededOrFailed()
+        #   inputs:
+        #     azureSubscription: $(subscription)
+        #     scriptType: bash
+        #     scriptLocation: inlineScript
+        #     inlineScript: |
+        #       az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
