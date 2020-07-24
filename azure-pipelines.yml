@@ -139,8 +139,8 @@ stages:
             inlineScript: |
               reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
               mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
-              echo "##vso[task.uploadfile]$reportFile.fullname"
-              echo "##vso[task.uploadsummary]$mdReportFile.fullname"
+              echo "##vso[task.uploadfile]$reportFile"
+              echo "##vso[task.uploadsummary]$mdReportFile"
 
 
         - task: AzureCLI@2
