@@ -134,6 +134,13 @@ task smoke(type: Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
+  include "uk/gov/hmcts/futurehearings/hmi/smoke/**"
+  testLogging.showStandardStreams = true
+  systemProperties System.getProperties()
+  environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+
+  enableAssertions = true
+  scanForTestClasses = true
 }
 
 checkstyle {
@@ -303,6 +310,22 @@ dependencies {
   functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
 
 
+
+  smokeTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+
+  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+  smokeTestCompile ("org.springframework.boot:spring-boot-starter-test")
+  smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+  smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
+  smokeTestImplementation 'io.rest-assured:rest-assured:4.2.0'
+  smokeTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
+  smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+  smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+  smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
 
