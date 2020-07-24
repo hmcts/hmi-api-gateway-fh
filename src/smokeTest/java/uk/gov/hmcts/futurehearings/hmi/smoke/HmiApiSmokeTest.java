@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ public class HmiApiSmokeTest {
     }
 
     @Test
+    @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     public void testSuccessfulHmiApiGet() {
         expect().that().statusCode(200)
                 .given().contentType("application/json")
