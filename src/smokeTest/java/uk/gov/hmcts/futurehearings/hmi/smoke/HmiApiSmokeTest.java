@@ -7,6 +7,7 @@ import uk.gov.hmcts.futurehearings.hmi.functional.Application;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+@Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 public class HmiApiSmokeTest {
@@ -34,6 +36,7 @@ public class HmiApiSmokeTest {
 
     @BeforeEach
     public void initialiseValues() {
+        log.info("The value of the target Instance " +targetInstance);
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
@@ -44,7 +47,7 @@ public class HmiApiSmokeTest {
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     public void testSuccessfulHmiApiGet() {
-        System.out.println("The value of the target Instance " +targetInstance);
+
         expect().that().statusCode(200)
                 .given().contentType("application/json")
                 .headers(headersAsMap)
