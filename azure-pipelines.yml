@@ -79,16 +79,23 @@ stages:
                 targetHost : \${TEST_HOST:hmi-apim-svc-sbox.azure-api.net} |
                 targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} |
                 spring.flyway.enabled: false" > application-functional.yaml
-              workingDirectory: '$(System.DefaultWorkingDirectory)/build/resources/functionalTest'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
 
-          - template: pipeline/steps/run-gradlew.yaml
-            parameters:
-              runCommand: 'clean functional'
+          - task: Gradle@2
+            inputs:
+              gradleWrapperFile: 'gradlew'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              tasks: clean functional
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.11'
+              sonarQubeRunAnalysis: false
 
           - task: AzureFileCopy@4
             displayName: 'Publish gradle output'
             inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/build/reports/tests/functional'
+              SourcePath: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
               azureSubscription: $(subscription)
               Destination: AzureBlob
               storage: $(devopsStorageAccount)
