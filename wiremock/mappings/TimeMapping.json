@@ -1,0 +1,16 @@
+{
+  "request":
+  {
+    "urlPattern": "/product/p0001",
+    "method": "GET"
+  },
+  "response":
+  {
+    "status": 200,
+    "headers":
+    {
+      "Content-Type" : "application/json"
+    },
+    "body": "{\n  \"id\": \"1\",\n  \"currentDateTime\": \"2019-03-12T10:54+01:00\",\n  \"utcOffset\": \"01:00:00\",\n  \"isDayLightSavingsTime\": false,\n  \"dayOfTheWeek\": \"Tuesday\",\n  \"timeZoneName\": \"Central Europe Standard Time FROM HMCTS\",\n  \"currentFileTime\": \"131968616698822965\",\n  \"ordinalDate\": \"2019-71\",\n  \"serviceResponse\": null\n}"
+  }
+}
