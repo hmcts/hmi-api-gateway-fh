@@ -4,7 +4,7 @@ resource "azurerm_template_deployment" "apim-policy" {
     depends_on          = ["azurerm_api_management_product.hmi_apim_product"]
     deployment_mode 	= "Incremental"
     parameters          = {
-        "ApimServiceName" = azurerm_api_management.hmi_apim.name
+        "ApimServiceName" = "hmi-apim-svc-sbox" # azurerm_api_management.hmi_apim.name
     	}
 
 
