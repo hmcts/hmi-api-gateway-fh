@@ -268,6 +268,8 @@ dependencies {
   
   compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.37'
   compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.37'
+  annotationProcessor 'org.projectlombok:lombok:1.18.12'
+  compileOnly 'org.projectlombok:lombok:1.18.12'
 
   compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
@@ -297,6 +299,8 @@ dependencies {
   functionalTestCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
   functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version :versions.serenity
   //functionalTestCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+  functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  functionalTestCompileOnly 'org.projectlombok:lombok:1.18.12'
   functionalTestImplementation "ch.qos.logback:logback-classic:1.2.3"
   functionalTestImplementation "org.assertj:assertj-core:3.8.0"
   functionalTestImplementation "junit:junit:${junitVersion}"
@@ -326,6 +330,9 @@ dependencies {
   smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
   smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
   smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+  smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+  smokeTestImplementation "ch.qos.logback:logback-classic:1.2.3"
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
 
