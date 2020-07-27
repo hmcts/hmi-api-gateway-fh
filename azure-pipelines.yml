@@ -68,21 +68,21 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
-          - task: AzureCLI@2
-            displayName: Update test file
-            inputs:
-              azureSubscription: $(subscription)
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                echo targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} >> application-functional.yaml
-              workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
+          # - task: AzureCLI@2
+          #   displayName: Update test file
+          #   inputs:
+          #     azureSubscription: $(subscription)
+          #     scriptType: 'bash'
+          #     scriptLocation: 'inlineScript'
+          #     inlineScript: |
+          #       echo targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} >> application-functional.yaml
+          #     workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
 
           - task: Gradle@2
             inputs:
               gradleWrapperFile: 'gradlew'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-              tasks: clean functional
+              tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               javaHomeOption: 'JDKVersion'
@@ -121,7 +121,7 @@ stages:
         inputs:
           gradleWrapperFile: 'gradlew'
           workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key)
+          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
           publishJUnitResults: true
           testResultsFiles: '**/TEST-*.xml'
           javaHomeOption: 'JDKVersion'
