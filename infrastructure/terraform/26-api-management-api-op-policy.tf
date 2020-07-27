@@ -13,4 +13,4 @@
 #   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
 #   operation_id        = "health-check"
 #   xml_content = file("../template/api-op-health-check-policy.xml")
-}
+# }
