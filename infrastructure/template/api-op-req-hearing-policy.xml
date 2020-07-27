@@ -1,8 +1,8 @@
 <policies>
     <inbound>
-        <set-variable name="req" value="@(context.Request.Body.As&lt;JObject&gt;())" />
+        <set-variable name="req" value="@(context.Request.Body.As\<JObject\>())" />
         <choose>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Case Title&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Title&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Case Title\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Case Title\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -13,7 +13,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Case Id&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Id&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Case Id\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Case Id\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -24,7 +24,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;TransactionIDHMCTS&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Id&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"TransactionIDHMCTS\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Case Id\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -35,7 +35,7 @@
                         }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Venue&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Venue&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Venue\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Venue\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -46,7 +46,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Jurisdiction&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Jurisdiction&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Jurisdiction\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Jurisdiction\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -57,7 +57,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Service&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Service&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Service\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Service\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -68,7 +68,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Case Type&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Case Type&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Case Type\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Case Type\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -79,7 +79,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Hearing Type&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Hearing Type&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Hearing Type\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Hearing Type\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -90,7 +90,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Hearing channel&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Hearing channel&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Hearing channel\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Hearing channel\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -101,7 +101,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Private Hearing&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Private Hearing&quot;).Type != JTokenType.Boolean)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Private Hearing\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Private Hearing\").Type != JTokenType.Boolean)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
@@ -112,7 +112,7 @@
                     }</set-body>
                 </return-response>
             </when>
-            <when condition="@(!((JObject)context.Variables[&quot;req&quot;]).ContainsKey(&quot;Allocated Listing Team&quot;) || ((JObject)context.Variables[&quot;req&quot;]).GetValue(&quot;Allocated Listing Team&quot;).Type != JTokenType.String)">
+            <when condition="@(!((JObject)context.Variables[\"req\"]).ContainsKey(\"Allocated Listing Team\") || ((JObject)context.Variables[\"req\"]).GetValue(\"Allocated Listing Team\").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
