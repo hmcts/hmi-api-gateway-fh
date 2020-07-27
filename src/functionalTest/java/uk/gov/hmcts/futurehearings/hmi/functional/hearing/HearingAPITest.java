@@ -61,7 +61,6 @@ public class HearingAPITest {
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
 
-
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
     }
