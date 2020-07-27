@@ -29,10 +29,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "properties": {
                 "policyContent": "[../template/product-unlimited.policy.xml')]",
                 "contentFormat": "rawxml-link"
-            },
-            "targetResourceId": [
-                "[resourceId('Microsoft.ApiManagement/service/products', parameters('ApimServiceName'), 'hmi-apim-product')]"
-            ]
+            }
         }],
     "outputs": {}
     }
