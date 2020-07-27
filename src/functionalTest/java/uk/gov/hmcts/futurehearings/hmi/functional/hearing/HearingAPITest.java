@@ -44,7 +44,9 @@ public class HearingAPITest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String HEARINGS_API = "hmi-apim-api/hearings";
+    @Value("${hearingApiRootContext}")
+    private String hearingApiRootContext;
+
     Map<String, Object> headersAsMap = new HashMap<>();
 
     @Before
@@ -53,6 +55,11 @@ public class HearingAPITest {
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Company-Name", "HMCTS");
+        headersAsMap.put("Content-Type", "application/json");
+        headersAsMap.put("Source", "SnL");
+        headersAsMap.put("Destination", "CFT");
+        headersAsMap.put("DateTime", "datetimestring");
+        headersAsMap.put("RequestType", "TypeOfCase");
 
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
@@ -61,10 +68,10 @@ public class HearingAPITest {
 
     @Test
     public void testSuccessfullPostToHearing() throws IOException {
-
+        
         String input =
                 readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/mock-demo-request.json");
-        hearingSteps.requestHearing(HEARINGS_API,
+        hearingSteps.requestHearing(hearingApiRootContext,
                                     headersAsMap,
                                     input);
     }
