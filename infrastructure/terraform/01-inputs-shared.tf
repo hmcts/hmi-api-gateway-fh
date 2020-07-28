@@ -1,5 +1,7 @@
 variable "prefix" {}
-variable "product" {}
+variable "product" {
+  default = "apim2"
+}
 variable "environment" {}
 variable "location" {
   default = "uksouth"
