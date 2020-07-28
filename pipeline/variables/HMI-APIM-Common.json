@@ -7,7 +7,7 @@
 			"value": "hmi"
 		},
 		"product": {
-			"value": "apim2"
+			"value": "apim"
 		},
 		"terraformVersion": {
 			"value": "0.12.16"
