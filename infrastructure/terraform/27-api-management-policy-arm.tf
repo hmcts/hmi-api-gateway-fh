@@ -31,9 +31,9 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
             "properties": {
-                "displayName": "Health-Check",
+                "displayName": "Health-Check2",
                 "method": "GET",
-                "urlTemplate": "/"
+                "urlTemplate": "/hc"
             }
         },
         {
