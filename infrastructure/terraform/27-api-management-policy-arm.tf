@@ -24,8 +24,8 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/hmi-apim-api-sbox/request-hearing/policy')]",
             "properties": {
-                "policyContent": "[../template/product-unlimited.policy.xml]",
-                "contentFormat": "rawxml-link"
+                "value": "[../template/product-unlimited.policy.xml]",
+                "format": "rawxml-link"
                 },
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'hmi-apim-api-sbox', 'request-hearing')]",
