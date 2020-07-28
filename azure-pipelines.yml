@@ -15,10 +15,8 @@ variables:
   - group: HMI-APIM-Common
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
-    - group: HMI-APIM-Sbox-KV
   - ${{ if eq(parameters.environment, 'test') }}:
     - group: HMI-APIM-Test
-    - group: HMI-APIM-Test-KV
 
 stages:
   - stage: PRESTAGE
@@ -61,6 +59,11 @@ stages:
             environment: $(environment)
 
   - stage: TESTS1
+    variables:
+    - group: HMI-APIM-Common
+    - ${{ if eq(parameters.environment, 'sbox') }}:
+      - group: HMI-APIM-BUILD-SBOX
+      - group: HMI-APIM-Sbox-KV
     dependsOn: BUILD
     displayName: Tests - Functional
     jobs:
