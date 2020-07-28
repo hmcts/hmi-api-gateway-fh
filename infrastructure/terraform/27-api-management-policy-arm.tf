@@ -4,7 +4,9 @@ resource "azurerm_template_deployment" "apim-policy" {
     depends_on          = [azurerm_api_management_product.hmi_apim_product]
     deployment_mode 	= "Incremental"
     parameters          = {
-        "ApimServiceName" = "hmi-apim-svc-sbox" # azurerm_api_management.hmi_apim.name
+        "ApimServiceName" = azurerm_api_management.hmi_apim.name
+        "ApiName"         = azurerm_api_management_api.hmi_apim_api.name 
+        "OperationId"     = "request-hearing"
     	}
 
 
@@ -14,28 +16,37 @@ resource "azurerm_template_deployment" "apim-policy" {
     "contentVersion": "1.0.0.0",
     "parameters": {
         "ApimServiceName": {
-            "type": "string",
-            "metadata": {"description": "The name of the API Management"}
-            },
-    "variables": {}, 
+            "type": "String"
+        },
+        "ApiName": {
+            "type": "String"
+        },
+        "OperationId": {
+            "type": "String"
+        }
+    },
     "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/apis/operations",
+            "apiVersion": "2019-12-01",
+            "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
+            "properties": {
+                "displayName": "Health-Check",
+                "method": "GET",
+                "urlTemplate": "/"
+            }
+        },
         {
             "type": "Microsoft.ApiManagement/service/apis/operations/policies",
             "apiVersion": "2019-12-01",
-            "name": "[concat(parameters('ApimServiceName'), '/hmi-apim-api-sbox/request-hearing/policy')]",
+            "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'), '/policy')]",
             "properties": {
-                "value": "<policies>\r\n  <inbound>\r\n    <set-header name=\"Company-Name\" exists-action=\"override\">\r\n      <value>HMCTS</value>\r\n    </set-header>\r\n    <base />\r\n    <set-backend-service base-url=\"https://www.hmcts.com/request-hearings/health-check\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
-                "format": "xml"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'hmi-apim-api-sbox', 'request-hearing')]",
-                "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'hmi-apim-api-sbox')]",
-                "[resourceId('Microsoft.ApiManagement/service', parameters('ApimServiceName'))]"
-            ]
+                "value": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-health-check-policy.xml",
+                "format": "xml-link"
             }
-        ],
+        }
+    ],
     "outputs": {}
-    }
 }
 DEPLOY
 }
