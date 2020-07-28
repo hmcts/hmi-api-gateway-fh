@@ -15,22 +15,23 @@ resource "azurerm_template_deployment" "apim-policy" {
     "parameters": {
         "ApimServiceName": {
             "type": "string",
-            "metadata": {
-                "description": "The name of the API Management"
-            }
-        },
-    "variables": {
-
-    }, 
-    "resources": [{
+            "metadata": {"description": "The name of the API Management"}
+            },
+    "variables": {}, 
+    "resources": [
+        {
             "type": "Microsoft.ApiManagement/service/products/policies",
             "name": "[concat(parameters('ApimServiceName'), '/hmi-apim-product/policy')]",
             "apiVersion": "2018-01-01",
             "properties": {
-                "policyContent": "[../template/product-unlimited.policy.xml')]",
+                "policyContent": "[../template/product-unlimited.policy.xml]",
                 "contentFormat": "rawxml-link"
+                },
+            "dependsOn": [
+				"[resourceId('Microsoft.ApiManagement/service/products', parameters('ApimServiceName'), 'hmi-apim-product')]"
+			    ]
             }
-        }],
+        ],
     "outputs": {}
     }
 }
