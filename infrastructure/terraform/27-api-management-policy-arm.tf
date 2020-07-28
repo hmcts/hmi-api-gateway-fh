@@ -31,9 +31,9 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
             "properties": {
-                "displayName": "Health-Check2",
-                "method": "GET",
-                "urlTemplate": "/hc"
+                "displayName": "Hearing",
+                "method": "POST",
+                "urlTemplate": "/hearing"
             }
         },
         {
@@ -41,7 +41,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'), '/policy')]",
             "properties": {
-                "value": "../template/api-op-req-hearing-policy.xml",
+                "value": "infrastructure/template/api-op-req-hearing-policy.xml",
                 "format": "xml-link"
             }
         }
