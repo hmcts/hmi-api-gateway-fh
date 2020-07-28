@@ -24,9 +24,9 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/hmi-apim-api-sbox/request-hearing/policy')]",
             "properties": {
-                "value": "[../template/product-unlimited.policy.xml]",
-                "format": "rawxml-link"
-                },
+                "value": "<policies>\r\n  <inbound>\r\n    <set-header name=\"Company-Name\" exists-action=\"override\">\r\n      <value>HMCTS</value>\r\n    </set-header>\r\n    <base />\r\n    <set-backend-service base-url=\"https://www.hmcts.com/request-hearings/health-check\" />\r\n  </inbound>\r\n  <backend>\r\n    <base />\r\n  </backend>\r\n  <outbound>\r\n    <base />\r\n  </outbound>\r\n  <on-error>\r\n    <base />\r\n  </on-error>\r\n</policies>",
+                "format": "xml"
+            }
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), 'hmi-apim-api-sbox', 'request-hearing')]",
                 "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'hmi-apim-api-sbox')]",
