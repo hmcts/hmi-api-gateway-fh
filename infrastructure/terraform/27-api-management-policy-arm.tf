@@ -15,10 +15,10 @@ resource "azurerm_template_deployment" "apim-policy" {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ApimServiceName": {
+        "ApiName": {
             "type": "String"
         },
-        "ApiName": {
+        "ApimServiceName": {
             "type": "String"
         },
         "OperationId": {
@@ -31,7 +31,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
             "properties": {
-                "displayName": "Hearing",
+                "displayName": "parameters('OperationId')",
                 "method": "POST",
                 "urlTemplate": "/hearing"
             }
@@ -41,8 +41,8 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'), '/policy')]",
             "properties": {
-                "value": "infrastructure/template/api-op-req-hearing-policy.xml",
-                "format": "xml-link"
+                "format": "rawxml-link",
+                "value": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-req-hearing-policy.xml"
             }
         }
     ],
