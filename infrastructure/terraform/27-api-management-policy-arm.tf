@@ -41,7 +41,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'), '/policy')]",
             "properties": {
-                "value": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-health-check-policy.xml",
+                "value": "../template/api-op-req-hearing-policy.xml",
                 "format": "xml-link"
             }
         }
