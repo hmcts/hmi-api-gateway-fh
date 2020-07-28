@@ -4,7 +4,7 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
   api_management_name = azurerm_api_management.hmi_apim.name
   revision            = var.revision
   display_name        = "${var.prefix}-${var.product}-api"
-  path                = "${var.prefix}"
+  path                = var.prefix
   protocols           = var.protocols
 
   service_url = var.service_url
