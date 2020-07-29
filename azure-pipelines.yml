@@ -30,16 +30,16 @@ stages:
               arguments: '$(devopsUser), $(devopsPAT)'
               workingDirectory: 'pipeline/variables'
 
-  # - stage: BUILD
-  #   displayName: Build infrastructure with Terraform
-  #   jobs:
-  #     - job: Terraform
-  #       pool:
-  #         vmImage: 'ubuntu-latest'
-  #       steps:
-  #       - template: pipeline/steps/tf-install.yaml
-  #         parameters:
-  #           terraformVersion: $(terraformVersion)
+  - stage: BUILD
+    displayName: Build infrastructure with Terraform
+    jobs:
+      - job: Terraform
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - template: pipeline/steps/tf-install.yaml
+          parameters:
+            terraformVersion: $(terraformVersion)
   #       - template: pipeline/steps/tf-init.yaml
   #         parameters:
   #           subscription: $(subscription)
