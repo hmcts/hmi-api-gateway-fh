@@ -40,15 +40,15 @@ stages:
         - template: pipeline/steps/tf-install.yaml
           parameters:
             terraformVersion: $(terraformVersion)
-  #       - template: pipeline/steps/tf-init.yaml
-  #         parameters:
-  #           subscription: $(subscription)
-  #           resourceGroup: $(devopsResourceGroup)
-  #           storageAccount: $(devopsStorageAccount)
-  #           location: $(location)
-  #           environment: $(environment)
-  #           prefix: $(prefix)
-  #           product: $(product)
+        - template: pipeline/steps/tf-init.yaml
+          parameters:
+            subscription: $(subscription)
+            resourceGroup: $(devopsResourceGroup)
+            storageAccount: $(devopsStorageAccount)
+            location: $(location)
+            environment: $(environment)
+            prefix: $(prefix)
+            product: $(product)
   #       - template: pipeline/steps/tf-plan.yaml
   #         parameters:
   #           subscription: $(subscription)
