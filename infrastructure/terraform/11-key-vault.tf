@@ -1,7 +1,4 @@
-variable "devops_keyvault" {
-  description = "Azure DevOps pipeline keyvault"
-}
-
-variable "devops_resource_group" {
-  description = "Azure DevOps pipeline resource group"
+data "azurerm_key_vault" "devops_keyvault" {
+  name                = var.devops_keyvault
+  resource_group_name = var.devops_resource_group
 }
