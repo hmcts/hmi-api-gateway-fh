@@ -1,12 +1,9 @@
-parameters:
-  terraformVersion: ''
-
 steps:
 
 - task: TerraformInstaller@0
-  displayName: Install Terraform ${{ parameters.terraformVersion }}
+  displayName: Install Terraform $(terraformVersion)
   inputs:
-    terraformVersion: ${{ parameters.terraformVersion }}
+    terraformVersion: $(terraformVersion)
 
 - task: Bash@3
   displayName: Terraform fmt
