@@ -55,10 +55,10 @@ stages:
             subscription: $(subscription)
             environment: $(environment)
             devopsKeyVault: $(devopsKeyVault)
-  #       - template: pipeline/steps/tf-apply.yaml
-  #         parameters:
-  #           subscription: $(subscription)
-  #           environment: $(environment)
+        - template: pipeline/steps/tf-apply.yaml
+          parameters:
+            subscription: $(subscription)
+            environment: $(environment)
 
   # - stage: TESTS1
   #   variables:

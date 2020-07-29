@@ -31,7 +31,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "apiVersion": "2019-12-01",
             "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
             "properties": {
-                "displayName": "parameters('OperationId')",
+                "displayName": "[parameters('OperationId')]",
                 "method": "POST",
                 "urlTemplate": "/hearing"
             }
