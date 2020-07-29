@@ -61,7 +61,7 @@ stages:
         - template: pipeline/steps/export-keyvault.yaml
           parameters:
             keyVaultName: hmi-apim-kv-$(environment)
-            secret: hmi-apim-svc-$(environment)-sub-key
+            secret: hmi-apim-sub-key
 
   # - stage: TESTS1
   #   dependsOn: BUILD
@@ -117,7 +117,7 @@ stages:
         inputs:
           gradleWrapperFile: 'gradlew'
           workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
           publishJUnitResults: true
           testResultsFiles: '**/TEST-*.xml'
           javaHomeOption: 'JDKVersion'
