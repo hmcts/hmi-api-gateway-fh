@@ -42,7 +42,7 @@ stages:
             terraformVersion: $(terraformVersion)
         - template: pipeline/steps/tf-init.yaml
           parameters:
-            subscription: $(subscription)
+            subscription: "DTS-SHAREDSERVICES-SBOX"
             resourceGroup: $(devopsResourceGroup)
             storageAccount: $(devopsStorageAccount)
             location: $(location)
