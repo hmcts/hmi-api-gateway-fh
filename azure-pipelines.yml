@@ -19,16 +19,6 @@ variables:
     - group: HMI-APIM-BUILD-TEST
 
 stages:
-  - stage: PRESTAGE
-    displayName: Update variable groups
-    jobs:
-      - job: UpdateVarGroups
-        steps:
-          - task: Bash@3
-            inputs:
-              filePath: 'pipeline/variables/update_variable_groups.sh'
-              arguments: '$(devopsUser), $(devopsPAT)'
-              workingDirectory: 'pipeline/variables'
 
   - stage: BUILD
     displayName: Build infrastructure with Terraform
@@ -53,7 +43,6 @@ stages:
           parameters:
             subscription: $(subscription)
             environment: $(environment)
-            devopsKeyVault: $(devopsKeyVault)
         - template: pipeline/steps/tf-apply.yaml
           parameters:
             subscription: $(subscription)
