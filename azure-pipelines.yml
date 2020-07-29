@@ -15,6 +15,7 @@ variables:
   - group: HMI-APIM-Common
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
+    - group: HMI-APIM-BUILD-SBOX-KV
   - ${{ if eq(parameters.environment, 'test') }}:
     - group: HMI-APIM-Test
 
