@@ -30,150 +30,150 @@ stages:
               arguments: '$(devopsUser), $(devopsPAT)'
               workingDirectory: 'pipeline/variables'
 
-  - stage: BUILD
-    displayName: Build infrastructure with Terraform
-    jobs:
-      - job: Terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - template: pipeline/steps/tf-install.yaml
-          parameters:
-            terraformVersion: $(terraformVersion)
-        - template: pipeline/steps/tf-init.yaml
-          parameters:
-            subscription: $(subscription)
-            resourceGroup: $(devopsResourceGroup)
-            storageAccount: $(devopsStorageAccount)
-            location: $(location)
-            environment: $(environment)
-            prefix: $(prefix)
-            product: $(product)
-        - template: pipeline/steps/tf-plan.yaml
-          parameters:
-            subscription: $(subscription)
-            environment: $(environment)
-        - template: pipeline/steps/tf-apply.yaml
-          parameters:
-            subscription: $(subscription)
-            environment: $(environment)
+  # - stage: BUILD
+  #   displayName: Build infrastructure with Terraform
+  #   jobs:
+  #     - job: Terraform
+  #       pool:
+  #         vmImage: 'ubuntu-latest'
+  #       steps:
+  #       - template: pipeline/steps/tf-install.yaml
+  #         parameters:
+  #           terraformVersion: $(terraformVersion)
+  #       - template: pipeline/steps/tf-init.yaml
+  #         parameters:
+  #           subscription: $(subscription)
+  #           resourceGroup: $(devopsResourceGroup)
+  #           storageAccount: $(devopsStorageAccount)
+  #           location: $(location)
+  #           environment: $(environment)
+  #           prefix: $(prefix)
+  #           product: $(product)
+  #       - template: pipeline/steps/tf-plan.yaml
+  #         parameters:
+  #           subscription: $(subscription)
+  #           environment: $(environment)
+  #       - template: pipeline/steps/tf-apply.yaml
+  #         parameters:
+  #           subscription: $(subscription)
+  #           environment: $(environment)
 
-  - stage: TESTS1
-    variables:
-    - group: HMI-APIM-Common
-    - ${{ if eq(parameters.environment, 'sbox') }}:
-      - group: HMI-APIM-BUILD-SBOX
-      - group: HMI-APIM-Sbox-KV
-    dependsOn: BUILD
-    displayName: Tests - Functional
-    jobs:
-      - job:
-        pool:
-          vmImage: 'windows-latest'
-        steps:
-          # - task: AzureCLI@2
-          #   displayName: Update test file
-          #   inputs:
-          #     azureSubscription: $(subscription)
-          #     scriptType: 'bash'
-          #     scriptLocation: 'inlineScript'
-          #     inlineScript: |
-          #       echo targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} >> application-functional.yaml
-          #     workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
+  # - stage: TESTS1
+  #   variables:
+  #   - group: HMI-APIM-Common
+  #   - ${{ if eq(parameters.environment, 'sbox') }}:
+  #     - group: HMI-APIM-BUILD-SBOX
+  #     - group: HMI-APIM-Sbox-KV
+  #   dependsOn: BUILD
+  #   displayName: Tests - Functional
+  #   jobs:
+  #     - job:
+  #       pool:
+  #         vmImage: 'windows-latest'
+  #       steps:
+  #         # - task: AzureCLI@2
+  #         #   displayName: Update test file
+  #         #   inputs:
+  #         #     azureSubscription: $(subscription)
+  #         #     scriptType: 'bash'
+  #         #     scriptLocation: 'inlineScript'
+  #         #     inlineScript: |
+  #         #       echo targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} >> application-functional.yaml
+  #         #     workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
 
-          - task: Gradle@2
-            inputs:
-              gradleWrapperFile: 'gradlew'
-              workingDirectory: '$(System.DefaultWorkingDirectory)'
-              tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
-              publishJUnitResults: true
-              testResultsFiles: '**/TEST-*.xml'
-              javaHomeOption: 'JDKVersion'
-              jdkVersionOption: '1.11'
-              sonarQubeRunAnalysis: false
+  #         - task: Gradle@2
+  #           inputs:
+  #             gradleWrapperFile: 'gradlew'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #             tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+  #             publishJUnitResults: true
+  #             testResultsFiles: '**/TEST-*.xml'
+  #             javaHomeOption: 'JDKVersion'
+  #             jdkVersionOption: '1.11'
+  #             sonarQubeRunAnalysis: false
 
-          - task: AzureFileCopy@4
-            displayName: 'Publish gradle output'
-            inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
-              azureSubscription: $(subscription)
-              Destination: AzureBlob
-              storage: $(devopsStorageAccount)
-              ContainerName: '$web'
-            condition: succeededOrFailed()
+  #         - task: AzureFileCopy@4
+  #           displayName: 'Publish gradle output'
+  #           inputs:
+  #             SourcePath: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
+  #             azureSubscription: $(subscription)
+  #             Destination: AzureBlob
+  #             storage: $(devopsStorageAccount)
+  #             ContainerName: '$web'
+  #           condition: succeededOrFailed()
 
-          - task: AzureFileCopy@4
-            displayName: 'Publish serenity output'
-            inputs:
-              SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
-              azureSubscription: $(subscription)
-              Destination: AzureBlob
-              storage: $(devopsStorageAccount)
-              ContainerName: '$web'
-            condition: succeededOrFailed()
+  #         - task: AzureFileCopy@4
+  #           displayName: 'Publish serenity output'
+  #           inputs:
+  #             SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
+  #             azureSubscription: $(subscription)
+  #             Destination: AzureBlob
+  #             storage: $(devopsStorageAccount)
+  #             ContainerName: '$web'
+  #           condition: succeededOrFailed()
 
-  - stage: TESTS3
-    dependsOn: BUILD
-    displayName: Tests - Smoke
-    jobs:
-    - job:
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-      - task: Gradle@2
-        inputs:
-          gradleWrapperFile: 'gradlew'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
-          publishJUnitResults: true
-          testResultsFiles: '**/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.11'
-          sonarQubeRunAnalysis: false
+  # - stage: TESTS3
+  #   dependsOn: BUILD
+  #   displayName: Tests - Smoke
+  #   jobs:
+  #   - job:
+  #     pool:
+  #       vmImage: 'windows-latest'
+  #     steps:
+  #     - task: Gradle@2
+  #       inputs:
+  #         gradleWrapperFile: 'gradlew'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #         tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+  #         publishJUnitResults: true
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         javaHomeOption: 'JDKVersion'
+  #         jdkVersionOption: '1.11'
+  #         sonarQubeRunAnalysis: false
 
-  - stage: TESTS2
-    dependsOn: BUILD
-    displayName: Tests - Security
-    jobs:
-      - job:
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - task: AzureCLI@2
-          displayName: Build and run API ZAP scan
-          inputs:
-            azureSubscription: $(subscription)
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              echo "Obtaining container key..."
-              KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
-              echo $KEY
-              echo "Creating ACI ZAP container..."
-              az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
-              sleep 30
-              echo "Downloading ZAP report..."
-              az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
+  # - stage: TESTS2
+  #   dependsOn: BUILD
+  #   displayName: Tests - Security
+  #   jobs:
+  #     - job:
+  #       pool:
+  #         vmImage: 'ubuntu-latest'
+  #       steps:
+  #       - task: AzureCLI@2
+  #         displayName: Build and run API ZAP scan
+  #         inputs:
+  #           azureSubscription: $(subscription)
+  #           scriptType: bash
+  #           scriptLocation: inlineScript
+  #           inlineScript: |
+  #             echo "Obtaining container key..."
+  #             KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
+  #             echo $KEY
+  #             echo "Creating ACI ZAP container..."
+  #             az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
+  #             sleep 30
+  #             echo "Downloading ZAP report..."
+  #             az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
 
-        - task: AzureCLI@2
-          displayName: Pulish test results
-          condition: succeededOrFailed()
-          inputs:
-            azureSubscription: $(subscription)
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
-              mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
-              echo "##vso[task.uploadfile]$reportFile"
-              # echo "##vso[task.uploadsummary]$mdReportFile"
+  #       - task: AzureCLI@2
+  #         displayName: Pulish test results
+  #         condition: succeededOrFailed()
+  #         inputs:
+  #           azureSubscription: $(subscription)
+  #           scriptType: bash
+  #           scriptLocation: inlineScript
+  #           inlineScript: |
+  #             reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
+  #             mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
+  #             echo "##vso[task.uploadfile]$reportFile"
+  #             # echo "##vso[task.uploadsummary]$mdReportFile"
 
-        - task: AzureCLI@2
-          displayName: Delete ACI container
-          condition: succeededOrFailed()
-          inputs:
-            azureSubscription: $(subscription)
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
+  #       - task: AzureCLI@2
+  #         displayName: Delete ACI container
+  #         condition: succeededOrFailed()
+  #         inputs:
+  #           azureSubscription: $(subscription)
+  #           scriptType: bash
+  #           scriptLocation: inlineScript
+  #           inlineScript: |
+  #             az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
