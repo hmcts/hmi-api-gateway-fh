@@ -1,11 +1,6 @@
 parameters:
-  subscription: ''
   resourceGroup: ''
   storageAccount: ''
-  location: ''
-  environment: ''
-  prefix: ''
-  product: ''
 
 steps:
 
@@ -15,12 +10,12 @@ steps:
       command: init
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
       backendType: azurerm
-      backendServiceArm: ${{ parameters.subscription }}
+      backendServiceArm: $(subscription)
       backendAzureRmResourceGroupName: ${{ parameters.resourceGroup }}
-      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+      backendAzureRmResourceGroupLocation: $(location)
       backendAzureRmStorageAccountName: ${{ parameters.storageAccount }}
-      backendAzureRmContainerName: ${{ parameters.prefix }}${{ parameters.product }}terraform
-      backendAzureRmKey: ${{ parameters.prefix }}${{ parameters.product }}.tfstate
+      backendAzureRmContainerName: $(prefix)$(product)terraform
+      backendAzureRmKey: $(prefix)$(product).tfstate
 
   - task: TerraformCLI@0
     displayName: Terraform validate

@@ -29,6 +29,9 @@ stages:
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
+          parameters:
+            resourceGroup: $(devopsResourceGroup)
+            storageAccount: $(devopsStorageAccount)
         - template: pipeline/steps/tf-plan.yaml
         - template: pipeline/steps/tf-apply.yaml
         - template: pipeline/steps/export-keyvault.yaml
