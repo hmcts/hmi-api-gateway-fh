@@ -63,25 +63,25 @@ stages:
             keyVaultName: hmi-apim-kv-$(environment)
             secret: hmi-apim-sub-key
 
-  # - stage: TESTS1
-  #   dependsOn: BUILD
-  #   displayName: Tests - Functional
-  #   jobs:
-  #     - job:
-  #       pool:
-  #         vmImage: 'windows-latest'
-  #       steps:
+  - stage: TESTS1
+    dependsOn: BUILD
+    displayName: Tests - Functional
+    jobs:
+      - job:
+        pool:
+          vmImage: 'windows-latest'
+        steps:
 
-  #         - task: Gradle@2
-  #           inputs:
-  #             gradleWrapperFile: 'gradlew'
-  #             workingDirectory: '$(System.DefaultWorkingDirectory)'
-  #             tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
-  #             publishJUnitResults: true
-  #             testResultsFiles: '**/TEST-*.xml'
-  #             javaHomeOption: 'JDKVersion'
-  #             jdkVersionOption: '1.11'
-  #             sonarQubeRunAnalysis: false
+          - task: Gradle@2
+            inputs:
+              gradleWrapperFile: 'gradlew'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+              tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.11'
+              sonarQubeRunAnalysis: false
 
   #         - task: AzureFileCopy@4
   #           displayName: 'Publish gradle output'
