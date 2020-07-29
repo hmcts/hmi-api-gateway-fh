@@ -16,7 +16,7 @@ variables:
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
   - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-Test
+    - group: HMI-APIM-BUILD-TEST
 
 stages:
   - stage: PRESTAGE
@@ -67,7 +67,7 @@ stages:
     dependsOn: BUILD
     displayName: Tests - Functional
     jobs:
-      - job:
+      - job: testfunc
         pool:
           vmImage: 'windows-latest'
         steps:
@@ -83,25 +83,25 @@ stages:
               jdkVersionOption: '1.11'
               sonarQubeRunAnalysis: false
 
-  #         - task: AzureFileCopy@4
-  #           displayName: 'Publish gradle output'
-  #           inputs:
-  #             SourcePath: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
-  #             azureSubscription: $(subscription)
-  #             Destination: AzureBlob
-  #             storage: $(devopsStorageAccount)
-  #             ContainerName: '$web'
-  #           condition: succeededOrFailed()
+          - task: AzureFileCopy@4
+            displayName: 'Publish gradle output'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
+              azureSubscription: $(subscription)
+              Destination: AzureBlob
+              storage: $(devopsStorageAccount)
+              ContainerName: '$web'
+            condition: succeededOrFailed()
 
-  #         - task: AzureFileCopy@4
-  #           displayName: 'Publish serenity output'
-  #           inputs:
-  #             SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
-  #             azureSubscription: $(subscription)
-  #             Destination: AzureBlob
-  #             storage: $(devopsStorageAccount)
-  #             ContainerName: '$web'
-  #           condition: succeededOrFailed()
+          - task: AzureFileCopy@4
+            displayName: 'Publish serenity output'
+            inputs:
+              SourcePath: '$(System.DefaultWorkingDirectory)/target/site/serenity'
+              azureSubscription: $(subscription)
+              Destination: AzureBlob
+              storage: $(devopsStorageAccount)
+              ContainerName: '$web'
+            condition: succeededOrFailed()
 
   - stage: TESTS3
     dependsOn: BUILD
@@ -109,7 +109,7 @@ stages:
     variables:
       hmi-apim-svc-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
     jobs:
-    - job:
+    - job: testsmoke
       pool:
         vmImage: 'windows-latest'
       steps:
@@ -124,49 +124,49 @@ stages:
           jdkVersionOption: '1.11'
           sonarQubeRunAnalysis: false
 
-  # - stage: TESTS2
-  #   dependsOn: BUILD
-  #   displayName: Tests - Security
-  #   jobs:
-  #     - job:
-  #       pool:
-  #         vmImage: 'ubuntu-latest'
-  #       steps:
-  #       - task: AzureCLI@2
-  #         displayName: Build and run API ZAP scan
-  #         inputs:
-  #           azureSubscription: $(subscription)
-  #           scriptType: bash
-  #           scriptLocation: inlineScript
-  #           inlineScript: |
-  #             echo "Obtaining container key..."
-  #             KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
-  #             echo $KEY
-  #             echo "Creating ACI ZAP container..."
-  #             az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
-  #             sleep 30
-  #             echo "Downloading ZAP report..."
-  #             az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
+  - stage: TESTS2
+    dependsOn: BUILD
+    displayName: Tests - Security
+    jobs:
+      - job: testsec
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - task: AzureCLI@2
+          displayName: Build and run API ZAP scan
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              echo "Obtaining container key..."
+              KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
+              echo $KEY
+              echo "Creating ACI ZAP container..."
+              az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
+              sleep 30
+              echo "Downloading ZAP report..."
+              az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
 
-  #       - task: AzureCLI@2
-  #         displayName: Pulish test results
-  #         condition: succeededOrFailed()
-  #         inputs:
-  #           azureSubscription: $(subscription)
-  #           scriptType: bash
-  #           scriptLocation: inlineScript
-  #           inlineScript: |
-  #             reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
-  #             mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
-  #             echo "##vso[task.uploadfile]$reportFile"
-  #             # echo "##vso[task.uploadsummary]$mdReportFile"
+        - task: AzureCLI@2
+          displayName: Pulish test results
+          condition: succeededOrFailed()
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
+              mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
+              echo "##vso[task.uploadfile]$reportFile"
+              # echo "##vso[task.uploadsummary]$mdReportFile"
 
-  #       - task: AzureCLI@2
-  #         displayName: Delete ACI container
-  #         condition: succeededOrFailed()
-  #         inputs:
-  #           azureSubscription: $(subscription)
-  #           scriptType: bash
-  #           scriptLocation: inlineScript
-  #           inlineScript: |
-  #             az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
+        - task: AzureCLI@2
+          displayName: Delete ACI container
+          condition: succeededOrFailed()
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
