@@ -397,6 +397,10 @@ dependencies {
   contractTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
   contractTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
 
+  contractTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  contractTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+  contractTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+
   contractTestImplementation sourceSets.main.runtimeClasspath
   contractTestImplementation sourceSets.test.runtimeClasspath
 

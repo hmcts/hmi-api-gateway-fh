@@ -1,0 +1,2 @@
+targetHost: ${TEST_URL:hmi-apim-svc-test.azure-api.net}
+targetSubscriptionKey: ${TEST_SUBSCRIPTION_KEY:587c56f59a604054b1ce73dac0ea5b28}
