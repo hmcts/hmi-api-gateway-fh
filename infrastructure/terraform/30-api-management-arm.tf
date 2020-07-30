@@ -9,7 +9,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         "operationId"     = "request-hearing"
         "method"          = "POST"
         "format"          = "rawxml-link"
-        "urlTemplate"     = "/hearing"
+        "urlTemplate"     = "/hearings"
         "templateLink"    = "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-req-hearing-policy.xml"
     	}
 
