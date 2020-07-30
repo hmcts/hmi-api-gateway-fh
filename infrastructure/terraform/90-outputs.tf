@@ -34,16 +34,3 @@ output "subscription_key" {
   value       = azurerm_api_management_subscription.hmi_apim_subscription.primary_key
   sensitive   = true
 }
-
-output "arm-params" {
-  value = {
-        count           = "${length(var.api_policies)}"
-        apimServiceName = "${lookup(var.api_policies[0], "apimServiceName")}"
-        apiName         = "${lookup(var.api_policies[0], "apiName")}"
-        operationId     = "${lookup(var.api_policies[0], "operationId")}"
-        method          = "${lookup(var.api_policies[0], "method")}"
-        format          = "${lookup(var.api_policies[0], "format")}"
-        urlTemplate     = "${lookup(var.api_policies[0], "urlTemplate")}"
-        templateLink    = "${lookup(var.api_policies[0], "templateLink")}"
-    	}
-  }
