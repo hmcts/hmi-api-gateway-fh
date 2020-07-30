@@ -27,6 +27,18 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "operationId": {
             "type": "String"
+        },
+        "method": {
+            "type": "String"
+        },
+        "format": {
+            "type": "String"
+        },
+        "urlTemplate": {
+            "type": "String"
+        },
+        "templateLink": {
+            "type": "String"
         }
     },
     "resources": [
