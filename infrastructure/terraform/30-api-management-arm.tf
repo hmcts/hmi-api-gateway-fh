@@ -11,7 +11,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         method          = "${lookup(var.api_policies[count.index], "method")}"
         format          = "${lookup(var.api_policies[count.index], "format")}"
         urlTemplate     = "${lookup(var.api_policies[count.index], "urlTemplate")}"
-        templateLink    = "${lookup(var.api_policies[count.index], "templateLink")}"
+        templateFile    = "${lookup(var.api_policies[count.index], "templateFile")}"
     	}
     template_body 	    = <<DEPLOY
 {
@@ -36,8 +36,13 @@ resource "azurerm_template_deployment" "apim-policy" {
         "urlTemplate": {
             "type": "String"
         },
-        "templateLink": {
+        "templateFile": {
             "type": "String"
+        },
+        "repoBaseUrl": {
+            "type": "string",
+            "value": "https://github.com/hmcts/hmi-api-gateway-fh/infrastructure/template/"
+            }
         }
     },
     "resources": [
@@ -57,7 +62,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
                 "format": "[parameters('format')]",
-                "value": "[parameters('templateLink')]"
+                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile')]"
             }
         }
     ],
