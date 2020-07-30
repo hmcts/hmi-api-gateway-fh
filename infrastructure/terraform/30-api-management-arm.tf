@@ -1,7 +1,7 @@
 resource "azurerm_template_deployment" "apim-policy" {
     name                = "apim-policy-01"
     resource_group_name = azurerm_resource_group.hmi_apim_rg.name
-    depends_on          = [azurerm_api_management_product.hmi_apim_product]
+    depends_on          = [azurerm_api_management_api.hmi_apim_api]
     deployment_mode 	= "Incremental"
     parameters          = {
         "apimServiceName" = azurerm_api_management.hmi_apim.name
