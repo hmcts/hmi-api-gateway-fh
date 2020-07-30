@@ -4,13 +4,14 @@ resource "azurerm_template_deployment" "apim-policy" {
     depends_on          = [azurerm_api_management_api.hmi_apim_api]
     deployment_mode 	= "Incremental"
     parameters          = {
-        "apimServiceName" = azurerm_api_management.hmi_apim.name
-        "apiName"         = azurerm_api_management_api.hmi_apim_api.name 
-        "operationId"     = "request-hearing"
-        "method"          = "POST"
-        "format"          = "rawxml-link"
-        "urlTemplate"     = "/hearings"
-        "templateLink"    = "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-req-hearing-policy.xml"
+        count             = "${length(var.api_policies)}"
+        "apimServiceName" = "${lookup(var.api_policies[count.index], "apimServiceName")}"
+        "apiName"         = "${lookup(var.api_policies[count.index], "apiName")}"
+        "operationId"     = "${lookup(var.api_policies[count.index], "operationId")}"
+        "method"          = "${lookup(var.api_policies[count.index], "method")}"
+        "format"          = "${lookup(var.api_policies[count.index], "format")}"
+        "urlTemplate"     = "${lookup(var.api_policies[count.index], "urlTemplate")}"
+        "templateLink"    = "${lookup(var.api_policies[count.index], "templateLink")}"
     	}
 
 
