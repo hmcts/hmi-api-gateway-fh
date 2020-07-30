@@ -5,16 +5,14 @@ resource "azurerm_template_deployment" "apim-policy" {
     deployment_mode 	= "Incremental"
     count               = "${length(var.api_policies)}"
     parameters          = {
-        apimServiceName = "${lookup(var.api_policies[count.index], "apimServiceName")}"
-        apiName         = "${lookup(var.api_policies[count.index], "apiName")}"
+        apimServiceName = azurerm_api_management.hmi_apim.name
+        apiName         = azurerm_api_management_api.hmi_apim_api.name
         operationId     = "${lookup(var.api_policies[count.index], "operationId")}"
         method          = "${lookup(var.api_policies[count.index], "method")}"
         format          = "${lookup(var.api_policies[count.index], "format")}"
         urlTemplate     = "${lookup(var.api_policies[count.index], "urlTemplate")}"
         templateLink    = "${lookup(var.api_policies[count.index], "templateLink")}"
     	}
-
-
     template_body 	    = <<DEPLOY
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
