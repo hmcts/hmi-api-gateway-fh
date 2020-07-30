@@ -39,5 +39,5 @@ output "arm-params" {
   value = [
     for apolicy in var.api_policies:
       policy.operationId if policy.method == "POST"
-  ]
+  ][0]
 }
