@@ -44,11 +44,14 @@ resource "azurerm_template_deployment" "apim-policy" {
             "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/master/infrastructure/template/"
         }
     },
+    "variables": {
+        "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]"
+    },
     "resources": [
         {
             "type": "Microsoft.ApiManagement/service/apis/operations",
             "apiVersion": "2019-12-01",
-            "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
+            "name": "[variables('operationName')]",
             "properties": {
                 "displayName": "[parameters('operationId')]",
                 "method": "[parameters('method')]",
@@ -64,7 +67,7 @@ resource "azurerm_template_deployment" "apim-policy" {
                 "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
             },
 			"dependsOn": [
-				"[resourceId('Microsoft.ApiManagement/service/apis/operations', concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId')))]"
+				"[resourceId('Microsoft.ApiManagement/service/apis/operations', variables('operationName'))]"
 			]
         }
     ],
