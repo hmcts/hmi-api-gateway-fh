@@ -52,16 +52,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "properties": {
                 "displayName": "[parameters('operationId')]",
                 "method": "[parameters('method')]",
-                "urlTemplate": "[parameters('urlTemplate')]",
-                "templateParameters": [],
-                "responses": [
-                    {
-                        "statusCode": 200,
-                        "description": "OK",
-                        "headers": []
-                    }
-                ],
-                "policies": null
+                "urlTemplate": "[parameters('urlTemplate')]"
             }
         },
         {
