@@ -36,5 +36,5 @@ output "subscription_key" {
 }
 
 output "arm-params" {
-  apimServiceName = "${lookup(var.api_policies[0], "apimServiceName")}"
+  value = "${lookup(var.api_policies[0], "apimServiceName")}"
 }
