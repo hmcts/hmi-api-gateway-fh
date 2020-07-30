@@ -1,18 +1,18 @@
 variable "api_policies" {
     default = [
     { 
-      operationId     = "Request Hearing"
+      operationId     = "Request-Hearing"
       method          = "POST"
       format          = "rawxml-link"
       urlTemplate     = "/hearings"
       templateFile    = "api-op-req-hearing-policy.xml"
     },
         { 
-      operationId     = "request-hearing-2"
-      method          = "POST"
+      operationId     = "Health-Check"
+      method          = "GET"
       format          = "rawxml-link"
-      urlTemplate     = "/hearings2"
-      templateFile    = "api-op-req-hearing-policy.xml"
+      urlTemplate     = "/"
+      templateFile    = "api-op-health-check-policy.xml"
     }
     ]
 }
