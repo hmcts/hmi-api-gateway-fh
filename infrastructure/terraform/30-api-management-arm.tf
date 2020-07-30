@@ -54,15 +54,6 @@ resource "azurerm_template_deployment" "apim-policy" {
                 "method": "[parameters('method')]",
                 "urlTemplate": "[parameters('urlTemplate')]"
             }
-        },
-        {
-            "type": "Microsoft.ApiManagement/service/apis/operations/policies",
-            "apiVersion": "2019-12-01",
-            "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
-            "properties": {
-                "format": "[parameters('format')]",
-                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
-            }
         }
     ],
     "outputs": {}
