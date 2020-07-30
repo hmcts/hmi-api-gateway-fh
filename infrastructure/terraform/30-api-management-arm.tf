@@ -52,7 +52,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "properties": {
                 "displayName": "[parameters('operationId')]",
                 "method": "[parameters('method')]",
-                "urlTemplate": "[parameters('urlTemplate')]"
+                "urlTemplate": "[parameters('urlTemplate')]",
                 "templateParameters": [],
                 "responses": [
                     {
@@ -62,6 +62,7 @@ resource "azurerm_template_deployment" "apim-policy" {
                     }
                 ],
                 "policies": null
+            }
         },
         {
             "type": "Microsoft.ApiManagement/service/apis/operations/policies",
