@@ -36,8 +36,5 @@ output "subscription_key" {
 }
 
 output "arm-params" {
-  value = [
-    for apolicy in var.api_policies:
-      policy.operationId if policy.method == "POST"
-  ][0]
+  apimServiceName = "${lookup(var.api_policies[0], "apimServiceName")}"
 }
