@@ -4,9 +4,13 @@ resource "azurerm_template_deployment" "apim-policy" {
     depends_on          = [azurerm_api_management_product.hmi_apim_product]
     deployment_mode 	= "Incremental"
     parameters          = {
-        "ApimServiceName" = azurerm_api_management.hmi_apim.name
-        "ApiName"         = azurerm_api_management_api.hmi_apim_api.name 
-        "OperationId"     = "request-hearing"
+        "apimServiceName" = azurerm_api_management.hmi_apim.name
+        "apiName"         = azurerm_api_management_api.hmi_apim_api.name 
+        "operationId"     = "request-hearing"
+        "method"          = "POST"
+        "format"          = "rawxml-link"
+        "urlTemplate"     = "/hearing"
+        "templateLink"    = "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-req-hearing-policy.xml"
     	}
 
 
@@ -15,13 +19,25 @@ resource "azurerm_template_deployment" "apim-policy" {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ApiName": {
+        "apiName": {
             "type": "String"
         },
-        "ApimServiceName": {
+        "apimServiceName": {
             "type": "String"
         },
-        "OperationId": {
+        "operationId": {
+            "type": "String"
+        },
+        "method": {
+            "type": "String"
+        },
+        "format": {
+            "type": "String"
+        },
+        "urlTemplate": {
+            "type": "String"
+        },
+        "templateLink": {
             "type": "String"
         }
     },
@@ -29,20 +45,20 @@ resource "azurerm_template_deployment" "apim-policy" {
         {
             "type": "Microsoft.ApiManagement/service/apis/operations",
             "apiVersion": "2019-12-01",
-            "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'))]",
+            "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
             "properties": {
-                "displayName": "[parameters('OperationId')]",
-                "method": "POST",
-                "urlTemplate": "/hearing"
+                "displayName": "[parameters('operationId')]",
+                "method": "[parameters('method')]",
+                "urlTemplate": "[parameters('urlTemplate')]"
             }
         },
         {
             "type": "Microsoft.ApiManagement/service/apis/operations/policies",
             "apiVersion": "2019-12-01",
-            "name": "[concat(parameters('ApimServiceName'), '/', parameters('ApiName'), '/', parameters('OperationId'), '/policy')]",
+            "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
-                "format": "rawxml-link",
-                "value": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-152_SANDBOX_CI/CD_Pipeline-temp/infrastructure/template/api-op-req-hearing-policy.xml"
+                "format": "[parameters('format')]",
+                "value": "[parameters('templateLink')]"
             }
         }
     ],
