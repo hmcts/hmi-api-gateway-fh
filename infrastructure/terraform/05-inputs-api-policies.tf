@@ -2,8 +2,6 @@ variable "api_policies" {
     default = [
     { 
       operationId     = "request-hearing-1"
-      apimServiceName = "azurerm_api_management.hmi_apim.name"
-      apiName         = "azurerm_api_management_api.hmi_apim_api.name"
       method          = "POST"
       format          = "rawxml-link"
       urlTemplate     = "/hearings1"
@@ -11,8 +9,6 @@ variable "api_policies" {
     },
         { 
       operationId     = "request-hearing-2"
-      apimServiceName = "azurerm_api_management.hmi_apim.name"
-      apiName         = "azurerm_api_management_api.hmi_apim_api.name"
       method          = "POST"
       format          = "rawxml-link"
       urlTemplate     = "/hearings2"
