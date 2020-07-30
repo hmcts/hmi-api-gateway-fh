@@ -38,6 +38,6 @@ output "subscription_key" {
 output "arm-params" {
   value = [
     for apolicy in var.api_policies:
-      policy.operationId
+      policy.operationId if policy.method == "POST"
   ]
 }
