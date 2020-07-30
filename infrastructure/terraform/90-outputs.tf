@@ -34,3 +34,10 @@ output "subscription_key" {
   value       = azurerm_api_management_subscription.hmi_apim_subscription.primary_key
   sensitive   = true
 }
+
+output "arm-params" {
+  value = [
+    for apolicy in var.api_policies:
+      policy.operationId
+  ]
+}
