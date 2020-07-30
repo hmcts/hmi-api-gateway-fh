@@ -36,5 +36,14 @@ output "subscription_key" {
 }
 
 output "arm-params" {
-  value = "${lookup(var.api_policies[0], "apimServiceName")}"
-}
+  value = {
+        count           = "${length(var.api_policies)}"
+        apimServiceName = "${lookup(var.api_policies[count.index], "apimServiceName")}"
+        apiName         = "${lookup(var.api_policies[count.index], "apiName")}"
+        operationId     = "${lookup(var.api_policies[count.index], "operationId")}"
+        method          = "${lookup(var.api_policies[count.index], "method")}"
+        format          = "${lookup(var.api_policies[count.index], "format")}"
+        urlTemplate     = "${lookup(var.api_policies[count.index], "urlTemplate")}"
+        templateLink    = "${lookup(var.api_policies[count.index], "templateLink")}"
+    	}
+  }
