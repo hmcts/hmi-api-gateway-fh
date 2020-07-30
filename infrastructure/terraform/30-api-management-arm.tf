@@ -40,9 +40,8 @@ resource "azurerm_template_deployment" "apim-policy" {
             "type": "String"
         },
         "repoBaseUrl": {
-            "type": "string",
+            "type": "String",
             "value": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/master/infrastructure/template/"
-            }
         }
     },
     "resources": [
@@ -62,7 +61,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
                 "format": "[parameters('format')]",
-                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile')]"
+                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
             }
         }
     ],
