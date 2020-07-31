@@ -2,7 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.hearing;
 
 import static io.restassured.RestAssured.expect;
 
-import uk.gov.hmcts.futurehearings.hmi.functional.Application;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.util.HashMap;
 import java.util.Map;
