@@ -1,9 +1,9 @@
-package uk.gov.hmcts.futurehearings.hmi.functional.hearing;
+package uk.gov.hmcts.futurehearings.hmi.integration.hearing;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.integration.common.TestingUtils.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.hearing.steps.HearingSteps;
+import uk.gov.hmcts.futurehearings.hmi.integration.hearing.steps.HearingIntegrationSteps;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,11 +29,11 @@ import org.springframework.test.context.ActiveProfiles;
         "As a tester",
         "I want to be able to execute the tests for various endpoints"})
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("functional")
-public class HearingAPITest {
+@ActiveProfiles("integration")
+public class HearingAPIIntegrationTest {
 
     @Steps
-    HearingSteps hearingSteps;
+    HearingIntegrationSteps hearingIntegrationSteps;
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -69,11 +69,11 @@ public class HearingAPITest {
     @Test
     public void testSuccessfullPostToHearing() throws IOException {
 
-        log.info("Post hearing request to target Instance" + targetInstance);
+        log.info("Post hearing request to target Instance " + targetInstance);
 
         String input =
-                readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/mock-demo-request.json");
-        hearingSteps.requestHearing(hearingApiRootContext,
+                readFileContents("uk/gov/hmcts/futurehearings/hmi/integration/hearing/input/mock-demo-request.json");
+        hearingIntegrationSteps.requestHearing(hearingApiRootContext,
                                     headersAsMap,
                                     input);
     }
