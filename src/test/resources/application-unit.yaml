@@ -1,0 +1,6 @@
+targetInstance: ${TEST_URL}
+targetHost: ${TEST_HOST}
+targetSubscriptionKey: ${TEST_SUBSCRIPTION_KEY}
+hearingApiRootContext: /hmi/hearings
+hmiApiRootContext : /hmi/
+spring.flyway.enabled: false
