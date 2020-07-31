@@ -2,6 +2,7 @@ variable "api_policies" {
     default = [
     { 
       operationId     = "Request-Hearing"
+      operationName   = "Request Hearing"
       method          = "POST"
       format          = "rawxml-link"
       urlTemplate     = "/hearings"
@@ -9,6 +10,7 @@ variable "api_policies" {
     },
         { 
       operationId     = "Health-Check"
+      operationName   = "Health Check"
       method          = "GET"
       format          = "rawxml-link"
       urlTemplate     = "/"
