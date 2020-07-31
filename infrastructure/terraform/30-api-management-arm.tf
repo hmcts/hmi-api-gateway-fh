@@ -1,14 +1,3 @@
-# resource "azurerm_api_management_api_operation" "apim_operation" {
-#     api_name            = azurerm_api_management_api.hmi_apim_api.name
-#     api_management_name = azurerm_api_management.hmi_apim.name
-#     resource_group_name = azurerm_resource_group.hmi_apim_rg.name
-#     count               = length(var.api_policies)
-#     operation_id        = lookup(var.api_policies[count.index], "operationId")
-#     display_name        = lookup(var.api_policies[count.index], "operationName")
-#     method              = lookup(var.api_policies[count.index], "method")
-#     url_template        = lookup(var.api_policies[count.index], "urlTemplate")
-# }
-
 resource "azurerm_template_deployment" "apim-policy" {
     name                = "apim-policy-${format("%02d",count.index)}"
     resource_group_name = azurerm_resource_group.hmi_apim_rg.name
