@@ -19,6 +19,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         apimServiceName = azurerm_api_management.hmi_apim.name
         apiName         = azurerm_api_management_api.hmi_apim_api.name
         operationId     = lookup(var.api_policies[count.index], "operationId")
+        format          = lookup(var.api_policies[count.index], "format")
         templateFile    = lookup(var.api_policies[count.index], "templateFile")
     	}
     template_body 	    = <<DEPLOY
@@ -36,6 +37,9 @@ resource "azurerm_template_deployment" "apim-policy" {
             "type": "String"
         },
         "templateFile": {
+            "type": "String"
+        },
+        "format": {
             "type": "String"
         },
         "repoBaseUrl": {
