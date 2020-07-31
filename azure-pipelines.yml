@@ -109,7 +109,7 @@ stages:
               ContainerName: '$web'
             condition: succeededOrFailed()
 
-  - stage: TESTS3
+  - stage: TESTS4
     dependsOn: BUILD
     displayName: Tests - Smoke
     jobs:
@@ -128,7 +128,26 @@ stages:
           jdkVersionOption: '1.11'
           sonarQubeRunAnalysis: false
 
-  - stage: TESTS2
+  - stage: TESTS3
+    dependsOn: BUILD
+    displayName: Tests - Unit
+    jobs:
+    - job:
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+      - task: Gradle@2
+        inputs:
+          gradleWrapperFile: 'gradlew'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+          publishJUnitResults: true
+          testResultsFiles: '**/TEST-*.xml'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          sonarQubeRunAnalysis: false
+
+  - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Security
     jobs:
