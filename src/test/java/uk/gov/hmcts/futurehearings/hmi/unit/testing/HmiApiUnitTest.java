@@ -17,12 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.expect;
+import static net.serenitybdd.rest.SerenityRest.lastResponse;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingCaseTitle;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("unit")
+@ActiveProfiles("local")
 public class HmiApiUnitTest {
 
     private static final String CASE_TITLE_MISSING_REQ_PATH = "requests/case-title-missing-request.json";
@@ -45,7 +47,8 @@ public class HmiApiUnitTest {
     @Steps
     HearingApiCallSteps hearingApiCallSteps;
 
-    private Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private String input;
 
     @Before
     public void initialiseValues() {
@@ -73,7 +76,16 @@ public class HmiApiUnitTest {
 
     @Test
     public void testRequestValidationWhenCaseTitleMissing() throws IOException{
-        final String input = readFileContents(CASE_TITLE_MISSING_REQ_PATH);
+        givenARequesWithMissingCaseTitle();
+        whenRequestHearingIsInvoked();
+        thenResponseHasErrorForMissingCaseTitle(lastResponse());
+    }
+
+    private void givenARequesWithMissingCaseTitle() throws IOException {
+        input = readFileContents(CASE_TITLE_MISSING_REQ_PATH);
+    }
+
+    private void whenRequestHearingIsInvoked() {
         hearingApiCallSteps.requestHearingWithMissingCaseTitle(hearingApiRootContext, headersAsMap, targetInstance, input);
     }
 
