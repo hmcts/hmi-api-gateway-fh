@@ -1,7 +1,3 @@
-parameters:
-  subscription: ''
-  environment: ''
-
 steps:
 
   - task: TerraformCLI@0
@@ -9,5 +5,5 @@ steps:
     inputs:
       command: apply
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-      environmentServiceName: ${{ parameters.subscription }}
-      commandOptions: -auto-approve tfplan-${{ parameters.environment }}
+      environmentServiceName: $(subscription)
+      commandOptions: -auto-approve tfplan-$(environment)
