@@ -15,22 +15,10 @@ variables:
   - group: HMI-APIM-Common
   - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
-    - group: HMI-APIM-Sbox-KV
   - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-Test
-    - group: HMI-APIM-Test-KV
+    - group: HMI-APIM-BUILD-TEST
 
 stages:
-  - stage: PRESTAGE
-    displayName: Update variable groups
-    jobs:
-      - job: UpdateVarGroups
-        steps:
-          - task: Bash@3
-            inputs:
-              filePath: 'pipeline/variables/update_variable_groups.sh'
-              arguments: '$(devopsUser), $(devopsPAT)'
-              workingDirectory: 'pipeline/variables'
 
   - stage: BUILD
     displayName: Build infrastructure with Terraform
@@ -40,49 +28,31 @@ stages:
           vmImage: 'ubuntu-latest'
         steps:
         - template: pipeline/steps/tf-install.yaml
-          parameters:
-            terraformVersion: $(terraformVersion)
         - template: pipeline/steps/tf-init.yaml
           parameters:
-            subscription: $(subscription)
             resourceGroup: $(devopsResourceGroup)
             storageAccount: $(devopsStorageAccount)
-            location: $(location)
-            environment: $(environment)
-            prefix: $(prefix)
-            product: $(product)
         - template: pipeline/steps/tf-plan.yaml
-          parameters:
-            subscription: $(subscription)
-            environment: $(environment)
         - template: pipeline/steps/tf-apply.yaml
+        - template: pipeline/steps/export-keyvault.yaml
           parameters:
-            subscription: $(subscription)
-            environment: $(environment)
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
 
   - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Functional
     jobs:
-      - job:
+      - job: testfunc
         pool:
           vmImage: 'windows-latest'
         steps:
-          # - task: AzureCLI@2
-          #   displayName: Update test file
-          #   inputs:
-          #     azureSubscription: $(subscription)
-          #     scriptType: 'bash'
-          #     scriptLocation: 'inlineScript'
-          #     inlineScript: |
-          #       echo targetSubscriptionKey : \${TEST_SUBSCRIPTION_KEY:$(hmi-apim-svc-sbox-sub-key)} >> application-functional.yaml
-          #     workingDirectory: '$(System.DefaultWorkingDirectory)/src/functionalTest/resources/'
 
           - task: Gradle@2
             inputs:
               gradleWrapperFile: 'gradlew'
               workingDirectory: '$(System.DefaultWorkingDirectory)'
-              tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+              tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               javaHomeOption: 'JDKVersion'
@@ -112,8 +82,10 @@ stages:
   - stage: TESTS4
     dependsOn: BUILD
     displayName: Tests - Smoke
+    variables:
+      hmi-apim-svc-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
     jobs:
-    - job:
+    - job: testsmoke
       pool:
         vmImage: 'windows-latest'
       steps:
@@ -121,7 +93,7 @@ stages:
         inputs:
           gradleWrapperFile: 'gradlew'
           workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-svc-sbox-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
           publishJUnitResults: true
           testResultsFiles: '**/TEST-*.xml'
           javaHomeOption: 'JDKVersion'
@@ -151,7 +123,7 @@ stages:
     dependsOn: BUILD
     displayName: Tests - Security
     jobs:
-      - job:
+      - job: testsec
         pool:
           vmImage: 'ubuntu-latest'
         steps:
@@ -184,13 +156,12 @@ stages:
               echo "##vso[task.uploadfile]$reportFile"
               # echo "##vso[task.uploadsummary]$mdReportFile"
 
-
-        # - task: AzureCLI@2
-        #   displayName: Delete ACI container
-        #   condition: succeededOrFailed()
-        #   inputs:
-        #     azureSubscription: $(subscription)
-        #     scriptType: bash
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
+        - task: AzureCLI@2
+          displayName: Delete ACI container
+          condition: succeededOrFailed()
+          inputs:
+            azureSubscription: $(subscription)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
