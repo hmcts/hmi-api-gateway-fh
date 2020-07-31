@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.functional;
+package uk.gov.hmcts.futurehearings.hmi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
