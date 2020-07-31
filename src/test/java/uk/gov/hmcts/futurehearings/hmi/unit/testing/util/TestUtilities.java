@@ -10,8 +10,7 @@ import java.nio.file.Paths;
 public class TestUtilities {
 
     public static String readFileContents (final String path) throws IOException {
-
-        File file = ResourceUtils.getFile("classpath:"+path);
+        final File file = ResourceUtils.getFile("classpath:" + path);
         return new String(Files.readAllBytes(Paths.get(file.toURI())));
     }
 

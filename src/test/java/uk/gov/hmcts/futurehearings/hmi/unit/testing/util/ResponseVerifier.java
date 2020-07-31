@@ -41,14 +41,13 @@ public class ResponseVerifier {
 
     }
 
-    public static void verifyHearingResponseForMissingCaseTitle(Response response) {
+    public static void thenResponseHasErrorForMissingCaseTitle(Response response) {
 
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
-        /*System.out.println(response.getBody().asString());
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals("400",responseMap.get(("Error")));
-        assertEquals("Malformed request. Missing/Invalid property: 'Case Title'",responseMap.get(("Reason")));*/
+        assertEquals("Malformed request. Missing/Invalid property: 'Case Title'",responseMap.get(("Reason")));
 
         //Option 2 - Use a Json Equality based library like JsonAssert
         comparePayloads("responses/case-title-missing-response.json", response);
