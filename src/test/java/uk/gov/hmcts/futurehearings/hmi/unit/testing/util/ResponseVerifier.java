@@ -42,7 +42,6 @@ public class ResponseVerifier {
     }
 
     public static void thenResponseHasErrorForMissingCaseTitle(Response response) {
-
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");

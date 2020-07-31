@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.expect;
 import static net.serenitybdd.rest.SerenityRest.lastResponse;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingCaseTitle;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -55,23 +54,11 @@ public class HmiApiUnitTest {
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
-        headersAsMap.put("Company-Name", "HMCTS");
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Source", "SnL");
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
-    }
-
-    @Test
-    public void testSuccessfulHmiApiGet() {
-
-        expect().that().statusCode(200)
-                .given().contentType("application/json")
-                .headers(headersAsMap)
-                .baseUri(targetInstance)
-                .basePath(hmiApiRootContext)
-                .when().get();
     }
 
     @Test
