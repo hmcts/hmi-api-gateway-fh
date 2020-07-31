@@ -1,16 +1,24 @@
+resource "azurerm_api_management_api_operation" "apim_operation" {
+    api_name            = azurerm_api_management_api.hmi_apim_api.name
+    api_management_name = azurerm_api_management.hmi_apim.name
+    resource_group_name = azurerm_resource_group.hmi_apim_rg.name
+    count               = length(var.api_policies)
+    operation_id        = "${lookup(var.api_policies[count.index], "operationId")}"
+    display_name        = "${lookup(var.api_policies[count.index], "operationName")}"
+    method              = "${lookup(var.api_policies[count.index], "method")}"
+    url_template         = "${lookup(var.api_policies[count.index], "urlTemplate")}"
+}
+
 resource "azurerm_template_deployment" "apim-policy" {
     name                = "apim-policy-${format("%02d",count.index)}"
     resource_group_name = azurerm_resource_group.hmi_apim_rg.name
-    depends_on          = [azurerm_api_management_api.hmi_apim_api]
+    depends_on          = [azurerm_api_management_api.hmi_apim_api, azurerm_api_management_api_operation.apim_operation]
     deployment_mode 	= "Incremental"
     count               = length(var.api_policies)
     parameters          = {
         apimServiceName = azurerm_api_management.hmi_apim.name
         apiName         = azurerm_api_management_api.hmi_apim_api.name
         operationId     = "${lookup(var.api_policies[count.index], "operationId")}"
-        method          = "${lookup(var.api_policies[count.index], "method")}"
-        format          = "${lookup(var.api_policies[count.index], "format")}"
-        urlTemplate     = "${lookup(var.api_policies[count.index], "urlTemplate")}"
         templateFile    = "${lookup(var.api_policies[count.index], "templateFile")}"
     	}
     template_body 	    = <<DEPLOY
@@ -27,15 +35,6 @@ resource "azurerm_template_deployment" "apim-policy" {
         "operationId": {
             "type": "String"
         },
-        "method": {
-            "type": "String"
-        },
-        "format": {
-            "type": "String"
-        },
-        "urlTemplate": {
-            "type": "String"
-        },
         "templateFile": {
             "type": "String"
         },
@@ -48,16 +47,6 @@ resource "azurerm_template_deployment" "apim-policy" {
         "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]"
     },
     "resources": [
-        {
-            "type": "Microsoft.ApiManagement/service/apis/operations",
-            "apiVersion": "2019-12-01",
-            "name": "[variables('operationName')]",
-            "properties": {
-                "displayName": "[parameters('operationId')]",
-                "method": "[parameters('method')]",
-                "urlTemplate": "[parameters('urlTemplate')]"
-            }
-        },
         {
             "type": "Microsoft.ApiManagement/service/apis/operations/policies",
             "apiVersion": "2019-12-01",
