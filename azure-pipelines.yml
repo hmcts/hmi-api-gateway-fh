@@ -13,7 +13,7 @@ variables:
 
 stages:
 
-  - stage: '1'
+  - stage: BUILD
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
       - job: sbox
