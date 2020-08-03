@@ -1,0 +1,12 @@
+parameters:
+  sub: ''
+  subs: ''
+
+steps:
+
+- task: Bash@3
+  displayName: echo
+  inputs:
+    targetType: inline
+    workingDirectory: $(System.DefaultWorkingDirectory)
+    script: echo $(subscription) ${{ parameters.sub }} ${{ parameters.subs }}
