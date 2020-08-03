@@ -28,8 +28,7 @@ stages:
             vmImage: 'ubuntu-latest'
           variables:
           - group: ${{ sub.group }}
-            environment: ${{ sub.environment }}
 
           steps:
-            - script: echo Building $(environment)
+            - script: echo Building $(subscription)
 
