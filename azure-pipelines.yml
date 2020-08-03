@@ -13,10 +13,6 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-BUILD-SBOX
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-BUILD-TEST
 
 stages:
 
@@ -26,9 +22,13 @@ stages:
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
       - job: sbox
+        variables:
+        - group: HMI-APIM-BUILD-SBOX
         steps:
         - script: echo Building sbox... $(subscription)
     - ${{ if contains(parameters.environment, 'test') }}:
       - job: test
+        variables:
+        - group: HMI-APIM-BUILD-TEST
         steps:
         - script: echo Building test... $(subscription)
