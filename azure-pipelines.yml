@@ -30,9 +30,9 @@ stages:
           - group: ${{ sub.group }}
 
           steps:
-            - script: echo Building $(subscription)
-            - template: pipeline/steps/tf-install.yaml
-            - template: pipeline/steps/tf-init.yaml
-              parameters:
-                subscription: ${{ variables.subscription }}
+            - script: echo Building $(subscription) $(terraformVersion)
+            # - template: pipeline/steps/tf-install.yaml
+            # - template: pipeline/steps/tf-init.yaml
+            #   parameters:
+            #     subscription: ${{ variables.subscription }}
 
