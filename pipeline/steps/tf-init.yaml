@@ -1,3 +1,6 @@
+parameters:
+  subscription: ''
+
 steps:
 
   - task: TerraformCLI@0
@@ -6,7 +9,7 @@ steps:
       command: init
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
       backendType: azurerm
-      backendServiceArm: $(subscription)
+      backendServiceArm: ${{ parameters.subscription }}
       backendAzureRmResourceGroupName: $(devopsResourceGroup)
       backendAzureRmResourceGroupLocation: $(location)
       backendAzureRmStorageAccountName: $(devopsStorageAccount)
