@@ -4,12 +4,14 @@ trigger:
 
 parameters:
   - name: environments
-    type: string
+    type: object
     default: 
+
     - name: sbox
       group: HMI-APIM-BUILD-SBOX
     - name: test
       group: HMI-APIM-BUILD-TEST
+
 
 variables:
   - group: HMI-APIM-Common
