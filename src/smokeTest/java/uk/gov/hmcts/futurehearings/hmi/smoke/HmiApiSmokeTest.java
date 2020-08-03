@@ -2,7 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke;
 
 import static io.restassured.RestAssured.expect;
 
-import uk.gov.hmcts.futurehearings.hmi.functional.Application;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,6 @@ public class HmiApiSmokeTest {
 
     @BeforeEach
     public void initialiseValues() {
-        log.info("The value of the target Instance " +targetInstance);
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
@@ -51,6 +50,8 @@ public class HmiApiSmokeTest {
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     public void testSuccessfulHmiApiGet() {
+
+        log.info("Get hearing request to target Instance " +targetInstance);
 
         expect().that().statusCode(200)
                 .given().contentType("application/json")
