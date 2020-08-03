@@ -3,23 +3,23 @@ trigger:
   - none
 
 parameters:
-  - name: environments
+  - name: subscriptions
     type: object
     default: 
 
-    - name: sbox
+    - environment: sbox
       group: HMI-APIM-BUILD-SBOX
-    - name: test
+    - environment: test
       group: HMI-APIM-BUILD-TEST
 
 
 variables:
-  - group: HMI-APIM-Common
+  group: HMI-APIM-Common
 
 stages:
-  - ${{ each environment in parameters.environments}}:
+  - ${{ each sub in parameters.subscription}}:
 
-    - stage: ${{ environment.name }}
+    - stage: ${{ sub.environment }}
       
       jobs:
 
@@ -27,7 +27,7 @@ stages:
           pool:
             vmImage: 'ubuntu-latest'
           variables:
-          - group: ${{ environment.group }}
+          - group: ${{ sub.group }}
           steps:
-            - script: echo Building ${{ environment.name }}...
+            - script: echo Building ${{ sub.environment }}...
 
