@@ -1,4 +1,5 @@
 parameters:
+  subscription: ''
   resourceGroup: ''
   storageAccount: ''
 
@@ -10,7 +11,7 @@ steps:
       command: init
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
       backendType: azurerm
-      backendServiceArm: $(subscription)
+      backendServiceArm: ${{ parameters.subscription }}
       backendAzureRmResourceGroupName: ${{ parameters.resourceGroup }}
       backendAzureRmResourceGroupLocation: $(location)
       backendAzureRmStorageAccountName: ${{ parameters.storageAccount }}
