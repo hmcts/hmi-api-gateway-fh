@@ -1,9 +1,12 @@
+parameters:
+  subscription: ''
+
 steps:
 
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    inputs:
-      command: apply
-      workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-      environmentServiceName: $(subscription)
-      commandOptions: -auto-approve tfplan-$(environment)
+- task: TerraformCLI@0
+  displayName: Terraform apply
+  inputs:
+    command: apply
+    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    environmentServiceName: $(subscription)
+    commandOptions: -auto-approve tfplan-$(environment)
