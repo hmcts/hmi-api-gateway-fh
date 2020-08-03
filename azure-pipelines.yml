@@ -27,6 +27,7 @@ stages:
           parameters:
             sub: ${{ variables.subscription }}
             subs: $(subscription)
+        - template: pipeline/steps/tf-install.yaml
 
   - stage: TEST
     jobs:
@@ -40,6 +41,7 @@ stages:
           parameters:
             sub: ${{ variables.subscription }}
             subs: $(subscription)
+        - template: pipeline/steps/tf-install.yaml
 
   #     - job: testfunc
   #       pool:
