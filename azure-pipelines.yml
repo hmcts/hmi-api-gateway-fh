@@ -21,12 +21,6 @@ stages:
         variables:
         - group: HMI-APIM-BUILD-SBOX
         steps:
-
-        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
-        - template: pipeline/steps/echo.yaml
-          parameters:
-            sub: ${{ variables.subscription }}
-            subs: $(subscription)
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
           parameters:
@@ -42,11 +36,6 @@ stages:
         variables:
         - group: HMI-APIM-BUILD-TEST
         steps:
-        - script: echo Building test... $(subscription)
-        - template: pipeline/steps/echo.yaml
-          parameters:
-            sub: ${{ variables.subscription }}
-            subs: $(subscription)
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
           parameters:
