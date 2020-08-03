@@ -20,10 +20,8 @@ stages:
           vmImage: 'ubuntu-latest'
         variables:
         - group: HMI-APIM-BUILD-SBOX
-        parameters:
-          subscription1: $(subscription)
         steps:
-          script: echo Building sbox... param ${{ parameters.subscription1 }} var $(subscription)
+          script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
   #       - template: pipeline/steps/tf-install.yaml
   #       - template: pipeline/steps/tf-init.yaml
