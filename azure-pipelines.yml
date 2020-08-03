@@ -14,7 +14,7 @@ stages:
 
   - stage: SANDBOX
     jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
+    - ${{ if eq(parameters.environment, 'sbox') }}:
       - job: terraform
         pool:
           vmImage: 'ubuntu-latest'
