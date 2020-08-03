@@ -4,16 +4,13 @@ trigger:
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-BUILD-SBOX
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-BUILD-TEST
+  # - group: HMI-APIM-BUILD-TEST
 
 stages:
 
   - stage: SANDBOX
     variables:
-      environment: sbox
+      - group: HMI-APIM-BUILD-SBOX
 
     jobs:
       
