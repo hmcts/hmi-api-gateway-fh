@@ -127,6 +127,7 @@ task integration(type: Test) {
   group = "Verification"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
+  failFast = true
   include "uk/gov/hmcts/futurehearings/hmi/integration/hearing/**"
   testLogging.showStandardStreams = true
   systemProperties System.getProperties()
