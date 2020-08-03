@@ -119,10 +119,27 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  ./gradlew clean functional
+  gradle clean functional -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 
+### Running the Smoke Tests
 
+Change Directory to the root folder of the Project:
+
+Run the following command
+
+```bash
+  gradle clean smoke -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+```
+
+### Running the Integration Tests
+
+Change Directory to the root folder of the Project:
+
+Run the following command
+
+```bash
+  gradle clean integration -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
