@@ -29,11 +29,11 @@ stages:
           parameters:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
         - template: pipeline/steps/tf-apply.yaml
-        # - template: pipeline/steps/export-keyvault.yaml
-        #   parameters:
-        #     subscription: 'DTS-SHAREDSERVICES-SBOX'
-        #     keyVaultName: hmi-apim-kv-$(environment)
-        #     secret: hmi-apim-sub-key
+        - template: pipeline/steps/export-keyvault.yaml
+          parameters:
+            subscription: 'DTS-SHAREDSERVICES-SBOX'
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
 
   - stage: TEST
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
@@ -51,8 +51,8 @@ stages:
           parameters:
             subscription: 'DTS-SHAREDSERVICES-TEST'
         - template: pipeline/steps/tf-apply.yaml
-        # - template: pipeline/steps/export-keyvault.yaml
-        #   parameters:
-        #     subscription: 'DTS-SHAREDSERVICES-TEST'
-        #     keyVaultName: hmi-apim-kv-$(environment)
-        #     secret: hmi-apim-sub-key
+        - template: pipeline/steps/export-keyvault.yaml
+          parameters:
+            subscription: 'DTS-SHAREDSERVICES-TEST'
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
