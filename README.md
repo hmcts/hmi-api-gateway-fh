@@ -140,7 +140,37 @@ Run the following command
 
 ```bash
   gradle clean integration -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
-## License
+```
+
+### Running the Contract Tests
+
+Change Directory to the root folder of the Project:
+
+Start the broker first running the pact docker-compose: docker-compose -f docker-pactbroker-compose.yml up
+You can run contract or pact tests as follows:
+
+Run the following command
+
+```bash
+  gradle clean contract -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+```
+
+PUBLISHING YOUR PACT    
+You can publish your pact tests locally by using it to publish your tests:
+
+```bash
+./gradlew pactPublish
+```
+
+VERIFY YOUR PACT
+
+Make sure that your end point is up and running...
+
+The following command should perform all the verifications tests
+
+```
+./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+```
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
