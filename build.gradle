@@ -93,11 +93,11 @@ configurations {
 test {
   description = "Runs unit tests"
   group = 'Delivery pipeline'
-  description = 'Executes functional tests'
+  description = 'Executes unit tests'
   testClassesDirs = sourceSets.test.output.classesDirs
   classpath = sourceSets.test.runtimeClasspath
   include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
-  failFast = true
+  failFast = false
   testLogging.showStandardStreams = true
   systemProperties System.getProperties()
   environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
