@@ -17,7 +17,7 @@ variables:
   group: HMI-APIM-Common
 
 stages:
-  - ${{ each sub in parameters.subscription}}:
+  - ${{ each sub in parameters.subscriptions }}:
 
     - stage: ${{ sub.environment }}
       
