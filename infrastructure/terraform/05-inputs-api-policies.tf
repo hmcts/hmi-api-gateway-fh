@@ -3,7 +3,7 @@ variable "api_policies" {
     { 
       operationId     = "Request-Hearing"
       format          = "rawxml-link"
-      templateFile    = "api-op-req-hearing-policy.xml"
+      templateFile    = "api-op-request-hearing-policy.xml"
     },
         { 
       operationId     = "Health-Check"
