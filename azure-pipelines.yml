@@ -20,7 +20,7 @@ stages:
           vmImage: 'ubuntu-latest'
         variables:
         - group: HMI-APIM-BUILD-SBOX
-        paramters:
+        parameters:
           subscription1: $(subscription)
         steps:
           script: echo Building sbox... param ${{ parameters.subscription1 }} var $(subscription)
