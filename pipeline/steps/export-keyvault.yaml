@@ -1,4 +1,5 @@
 parameters:
+  subscription: ''
   keyVaultName: ''
   secret: ''
 
@@ -6,7 +7,7 @@ steps:
 - task: AzureKeyVault@1
   displayName: 'Export Secrets from KeyVault'
   inputs:
-    azureSubscription: $(subscription)
+    azureSubscription: ${{ parameters.subscription }}
     keyVaultName: ${{ parameters.keyVaultName }}
     secretsFilter: ${{ parameters.secret }}
 - script: |
