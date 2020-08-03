@@ -3,40 +3,29 @@ trigger:
   - none
 
 parameters:
-  - name: environment
+  - name: environments
     type: string
-    default: 'sbox,test'
+    default: 
+    - name: sbox
+      group: HMI-APIM-BUILD-SBOX
+    - name: test
+      group: HMI-APIM-BUILD-TEST
 
 variables:
   - group: HMI-APIM-Common
 
 stages:
+  - ${{ each environment in parameters.environments}}:
 
-  - stage: SANDBOX
-    jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
-      - job: terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        variables:
-        - group: HMI-APIM-BUILD-SBOX
-        steps:
-          - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
-          - template: pipeline/steps/tf-install.yaml
-          - template: pipeline/steps/tf-init.yaml
-            parameters:
-              subscription: ${{ variables.subscription }}
+    - stage: ${{ environment.name }}
+      
+      jobs:
 
+        - job: echo
+          pool:
+            vmImage: 'ubuntu-latest'
+          variables:
+          - group: ${{ environment.group }}
+          steps:
+            - script: echo Building ${{ environment.name }}...
 
-  - stage: TEST
-    jobs:
-    - ${{ if contains(parameters.environment, 'test') }}:
-      - job: terraform
-        variables:
-        - group: HMI-APIM-BUILD-TEST
-        steps:
-          - script: echo Building test... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
-          - template: pipeline/steps/tf-install.yaml
-          - template: pipeline/steps/tf-init.yaml
-            parameters:
-              subscription: ${{ variables.subscription }}
