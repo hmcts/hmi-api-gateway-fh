@@ -30,7 +30,7 @@ stages:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
           parameters:
-            subscription: $(subscription)
+            subscription: 'DTS-SHAREDSERVICES-SBOX'
 
   - stage: TEST
     jobs:
@@ -47,7 +47,7 @@ stages:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
           parameters:
-            subscription: $(subscription)
+            subscription: 'DTS-SHAREDSERVICES-TEST'
   #     - job: testfunc
   #       pool:
   #         vmImage: 'windows-latest'
