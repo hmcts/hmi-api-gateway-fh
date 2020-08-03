@@ -6,15 +6,15 @@ parameters:
 trigger: none
 
 jobs:
-- ${{ if contains(parameters.configs, 'sbox') }}:
+- ${{ if contains(parameters.environment, 'sbox') }}:
   - job: sbox
     steps:
     - script: echo Building sbox...
-- ${{ if contains(parameters.configs, 'test') }}:
+- ${{ if contains(parameters.environment, 'test') }}:
   - job: test
     steps:
     - script: echo Building test...
-- ${{ if contains(parameters.configs, 'stg') }}:
+- ${{ if contains(parameters.environment, 'stg') }}:
   - job: stg
     steps:
     - script: echo Building stg...
