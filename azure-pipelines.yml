@@ -20,13 +20,13 @@ stages:
         variables:
         - group: HMI-APIM-BUILD-SBOX
         steps:
-        - script: echo Building sbox... $(subscription)
+        - script: echo Building sbox... $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
     - ${{ if contains(parameters.environment, 'test') }}:
       - job: test
         variables:
         - group: HMI-APIM-BUILD-TEST
         steps:
-        - script: echo Building test... $(subscription)
+        - script: echo Building test... $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
   - stage: BUILD2
     jobs:
