@@ -21,10 +21,7 @@ stages:
         variables:
         - group: HMI-APIM-BUILD-SBOX
         steps:
-          script: |
-            echo Building sbox... var $(subscription) 
-            echo $(devopsResourceGroup) 
-            echo $(devopsStorageAccount)"
+        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
   #       - template: pipeline/steps/tf-install.yaml
   #       - template: pipeline/steps/tf-init.yaml
