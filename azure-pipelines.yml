@@ -4,31 +4,24 @@ trigger:
 
 parameters:
   - name: environment
-    displayName: Environment
     type: string
     default: 'sbox,test'
-    values:
-      - sbox
-      - test
 
 variables:
   - group: HMI-APIM-Common
 
-stages:
 
-  - stage: BUILD
-    displayName: Build infrastructure with Terraform
 
-    jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
-      - job: sbox
-        variables:
-        - group: HMI-APIM-BUILD-SBOX
-        steps:
-        - script: echo Building sbox... $(subscription)
-    - ${{ if contains(parameters.environment, 'test') }}:
-      - job: test
-        variables:
-        - group: HMI-APIM-BUILD-TEST
-        steps:
-        - script: echo Building test... $(subscription)
+jobs:
+- ${{ if contains(parameters.environment, 'sbox') }}:
+  - job: sbox
+    variables:
+    - group: HMI-APIM-BUILD-SBOX
+    steps:
+    - script: echo Building sbox... $(subscription)
+- ${{ if contains(parameters.environment, 'test') }}:
+  - job: test
+    variables:
+    - group: HMI-APIM-BUILD-TEST
+    steps:
+    - script: echo Building test... $(subscription)
