@@ -31,4 +31,8 @@ stages:
 
           steps:
             - script: echo Building $(subscription)
+            - template: pipeline/steps/tf-install.yaml
+            - template: pipeline/steps/tf-init.yaml
+              parameters:
+                subscription: ${{ variables.subscription }}
 
