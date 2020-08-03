@@ -1,8 +1,3 @@
-parameters:
-  subscription: ''
-  resourceGroup: ''
-  storageAccount: ''
-
 steps:
 
   - task: TerraformCLI@0
@@ -11,10 +6,10 @@ steps:
       command: init
       workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
       backendType: azurerm
-      backendServiceArm: ${{ parameters.subscription }}
-      backendAzureRmResourceGroupName: ${{ parameters.resourceGroup }}
+      backendServiceArm: $(subscription)
+      backendAzureRmResourceGroupName: $(devopsResourceGroup)
       backendAzureRmResourceGroupLocation: $(location)
-      backendAzureRmStorageAccountName: ${{ parameters.storageAccount }}
+      backendAzureRmStorageAccountName: $(devopsStorageAccount)
       backendAzureRmContainerName: $(prefix)$(product)terraform
       backendAzureRmKey: $(prefix)$(product).tfstate
 
