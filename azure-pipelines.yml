@@ -10,32 +10,42 @@ parameters:
 variables:
   - group: HMI-APIM-Common
 
-
 stages:
 
-  - stage: BUILD1
+  - stage: SANDBOX
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
-      - job: sbox
+      - job: terraform
+        pool:
+          vmImage: 'ubuntu-latest'
         variables:
         - group: HMI-APIM-BUILD-SBOX
         steps:
-        - script: echo Building sbox... $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
-    - ${{ if contains(parameters.environment, 'test') }}:
-      - job: test
-        variables:
-        - group: HMI-APIM-BUILD-TEST
-        steps:
-        - script: echo Building test... $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
+        - template: pipeline/steps/tf-install.yaml
+        - template: pipeline/steps/tf-init.yaml
+          parameters:
+            resourceGroup: $(devopsResourceGroup)
+            storageAccount: $(devopsStorageAccount)
+        - template: pipeline/steps/tf-plan.yaml
+        - template: pipeline/steps/tf-apply.yaml
+        - template: pipeline/steps/export-keyvault.yaml
+          parameters:
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
 
-  - stage: BUILD2
-    jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
-      - job: sbox
+      - job: testfunc
+        pool:
+          vmImage: 'windows-latest'
         variables:
         - group: HMI-APIM-BUILD-SBOX
         steps:
-        - script: echo Building sbox... $(subscription)
+        - template: pipeline/steps/run-gradlew.yaml
+          prameters:
+            runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+
+
+  - stage: TEST
+    jobs:
     - ${{ if contains(parameters.environment, 'test') }}:
       - job: test
         variables:
