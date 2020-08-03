@@ -19,4 +19,4 @@ RUN ls -al /opt/app/wiremock/
 
 EXPOSE 8080:8080
 #RUN java -jar wiremock-jre8-standalone-2.27.0.jar
-ENTRYPOINT ["java", "-jar", "wiremock-jre8-standalone-2.27.0.jar"]
+ENTRYPOINT ["java", "-jar", "wiremock-jre8-standalone-2.27.1.jar"]
