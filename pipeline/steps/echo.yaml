@@ -9,4 +9,4 @@ steps:
   inputs:
     targetType: inline
     workingDirectory: $(System.DefaultWorkingDirectory)
-    script: echo $(subscription) ${{ parameters.sub }} ${{ parameters.subs }}
+    script: echo var $(subscription) sub ${{ parameters.sub }} subs ${{ parameters.subs }}
