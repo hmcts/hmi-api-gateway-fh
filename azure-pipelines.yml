@@ -28,6 +28,9 @@ stages:
             sub: ${{ variables.subscription }}
             subs: $(subscription)
         - template: pipeline/steps/tf-install.yaml
+        - template: pipeline/steps/tf-init.yaml
+          parameters:
+            subscription: $(subscription)
 
   - stage: TEST
     jobs:
@@ -42,7 +45,9 @@ stages:
             sub: ${{ variables.subscription }}
             subs: $(subscription)
         - template: pipeline/steps/tf-install.yaml
-
+        - template: pipeline/steps/tf-init.yaml
+          parameters:
+            subscription: $(subscription)
   #     - job: testfunc
   #       pool:
   #         vmImage: 'windows-latest'
