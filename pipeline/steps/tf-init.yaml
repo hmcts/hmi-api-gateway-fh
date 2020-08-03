@@ -3,21 +3,21 @@ parameters:
 
 steps:
 
-  - task: TerraformCLI@0
-    displayName: Terraform init
-    inputs:
-      command: init
-      workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-      backendType: azurerm
-      backendServiceArm: ${{ parameters.subscription }}
-      backendAzureRmResourceGroupName: $(devopsResourceGroup)
-      backendAzureRmResourceGroupLocation: $(location)
-      backendAzureRmStorageAccountName: $(devopsStorageAccount)
-      backendAzureRmContainerName: $(prefix)$(product)terraform
-      backendAzureRmKey: $(prefix)$(product).tfstate
+- task: TerraformCLI@0
+  displayName: Terraform init
+  inputs:
+    command: init
+    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    backendType: azurerm
+    backendServiceArm: ${{ parameters.subscription }}
+    backendAzureRmResourceGroupName: $(devopsResourceGroup)
+    backendAzureRmResourceGroupLocation: $(location)
+    backendAzureRmStorageAccountName: $(devopsStorageAccount)
+    backendAzureRmContainerName: $(prefix)$(product)terraform
+    backendAzureRmKey: $(prefix)$(product).tfstate
 
-  - task: TerraformCLI@0
-    displayName: Terraform validate
-    inputs:
-      command: validate
-      workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+- task: TerraformCLI@0
+  displayName: Terraform validate
+  inputs:
+    command: validate
+    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
