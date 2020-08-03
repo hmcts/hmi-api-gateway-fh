@@ -28,8 +28,14 @@ stages:
         - template: pipeline/steps/tf-plan.yaml
           parameters:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
+        - template: pipeline/steps/tf-apply.yaml
+        - template: pipeline/steps/export-keyvault.yaml
+          parameters:
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
 
   - stage: TEST
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     jobs:
     - ${{ if contains(parameters.environment, 'test') }}:
       - job: test
@@ -43,3 +49,8 @@ stages:
         - template: pipeline/steps/tf-plan.yaml
           parameters:
             subscription: 'DTS-SHAREDSERVICES-TEST'
+        - template: pipeline/steps/tf-apply.yaml
+        - template: pipeline/steps/export-keyvault.yaml
+          parameters:
+            keyVaultName: hmi-apim-kv-$(environment)
+            secret: hmi-apim-sub-key
