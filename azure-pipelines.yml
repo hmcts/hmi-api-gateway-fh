@@ -3,30 +3,32 @@ trigger:
   - none
 
 parameters:
-  - name: environments
+  - name: environment
     type: object
-    default: 
-      - environment: sbox
-        group: HMI-APIM-BUILD-SBOX
-      - environment: test
-        group: HMI-APIM-BUILD-TEST
+    default: (sbox,test)
+      - sbox
+      - test
 
 variables:
   - group: HMI-APIM-Common
+  - ${{ if eq(parameters.environment, 'sbox') }}:
+    - group: HMI-APIM-BUILD-SBOX
+  - ${{ if eq(parameters.environment, 'test') }}:
+    - group: HMI-APIM-BUILD-TEST
 
 
 stages:
 
-  - ${{ each env in parameters.environments }}:
+  - ${{ each env in parameters.environment }}:
 
-    - stage: ${{ env.environment }}
+    - stage: ${{ env }}
 
       jobs:
 
         - job: terraform
           pool:
             vmImage: 'ubuntu-latest'
-          variables: ${{ env.group }}
+
           steps:
           - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
