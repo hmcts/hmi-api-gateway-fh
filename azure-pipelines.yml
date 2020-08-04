@@ -3,30 +3,31 @@ trigger:
   - none
 
 parameters:
-  - name: environment
+  - name: environments
     type: object
-    default: 'sbox,test'
-    values:
-      - sbox
-      - test
+    default: 
+      - environment: sbox
+        group: HMI-APIM-BUILD-SBOX
+      - environment: test
+        group: HMI-APIM-BUILD-TEST
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if contains(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-BUILD-SBOX
-  - ${{ if contains(parameters.environment, 'test') }}:
-    - group: HMI-APIM-BUILD-TEST
+
 
 stages:
 
-  - stage: SANDBOX
-    jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
-      - job: terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
+  - ${{ each env in parameters.environments }}:
+
+    - stage: ${{ env.environment }}
+
+      jobs:
+
+        - job: terraform
+          pool:
+            vmImage: 'ubuntu-latest'
+          steps:
+          - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
         # - template: pipeline/steps/tf-install.yaml
         # - template: pipeline/steps/tf-init.yaml
@@ -44,15 +45,15 @@ stages:
         #     keyVaultName: hmi-apim-kv-$(environment)
         #     secret: hmi-apim-sub-key
 
-  - stage: TEST
-    # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    jobs:
-    - ${{ if contains(parameters.environment, 'test') }}:
-      - job: terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
+  # - stage: TEST
+  #   # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  #   jobs:
+  #   - ${{ if contains(parameters.environment, 'test') }}:
+  #     - job: terraform
+  #       pool:
+  #         vmImage: 'ubuntu-latest'
+  #       steps:
+  #       - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
   #       - template: pipeline/steps/tf-install.yaml
   #       - template: pipeline/steps/tf-init.yaml
   #         parameters:
