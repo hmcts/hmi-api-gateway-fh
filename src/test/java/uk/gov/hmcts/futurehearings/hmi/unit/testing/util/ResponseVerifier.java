@@ -38,7 +38,7 @@ public class ResponseVerifier {
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals("400",responseMap.get(("Error")));
-        assertEquals("Malformed request. Missing/Invalid property: 'TransactionIDHMCTS'",responseMap.get(("Reason")));
+        assertEquals("Malformed request. Missing/Invalid property: 'Case Id'",responseMap.get(("Reason")));
     }
 
     public static void thenResponseHasErrorForMissingVenue(Response response) {
