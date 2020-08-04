@@ -20,6 +20,7 @@ stages:
           vmImage: 'ubuntu-latest'
         variables:
         - group: HMI-APIM-BUILD-SBOX
+          subscription: 'DTS-SHAREDSERVICES-SBOX'
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
