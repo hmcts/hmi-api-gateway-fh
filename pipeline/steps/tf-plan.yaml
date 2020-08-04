@@ -10,3 +10,11 @@ steps:
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
     commandOptions: '-var-file="environment/$(environment)-hmi.tfvars" -out="tfplan-$(environment)" -var "principal_tenant_id=$(principal_tenant_id)" -var "principal_object_id=$(principal_object_id)" -var "prefix=$(prefix)" -var "product=$(product)" -var "environment=$(environment)" -var "location=$(location)"'
+
+- task: TerraformCLI@0
+  displayName: Terraform apply
+  inputs:
+    command: apply
+    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    environmentServiceName: ${{ parameters.subscription }}
+    commandOptions: -auto-approve tfplan-$(environment)
