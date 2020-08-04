@@ -3,25 +3,25 @@ trigger:
   - none
 
 parameters:
-  - name: environment
+  - name: environments
     type: object
-    default: (sbox,test)
-      - sbox
-      - test
+    default: 
+      - environment: sbox
+      - environment: test
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
+  - ${{ if eq(parameters.environments.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
-  - ${{ if eq(parameters.environment, 'test') }}:
+  - ${{ if eq(parameters.environments.environment, 'test') }}:
     - group: HMI-APIM-BUILD-TEST
 
 
 stages:
 
-  - ${{ each env in parameters.environment }}:
+  - ${{ each env in parameters.environments }}:
 
-    - stage: ${{ env }}
+    - stage: ${{ env.environment }}
 
       jobs:
 
