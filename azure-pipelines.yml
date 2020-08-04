@@ -26,6 +26,7 @@ stages:
         - job: terraform
           pool:
             vmImage: 'ubuntu-latest'
+          variables: ${{ env.group }}
           steps:
           - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
