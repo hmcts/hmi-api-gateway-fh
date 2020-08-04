@@ -23,8 +23,14 @@ stages:
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
+          parameters:
+            subscription: 'DTS-SHAREDSERVICES-SBOX'
         - template: pipeline/steps/tf-plan.yaml
+          parameters:
+            subscription: 'DTS-SHAREDSERVICES-SBOX'
         - template: pipeline/steps/tf-apply.yaml
+          parameters:
+            subscription: 'DTS-SHAREDSERVICES-SBOX'
         - template: pipeline/steps/export-keyvault.yaml
           parameters:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
