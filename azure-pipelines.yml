@@ -12,9 +12,9 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if contains(parameters.environment, 'sbox') }}:
+  - ${{ if eq(parameters.environment, 'sbox') }}:
     - group: HMI-APIM-BUILD-SBOX
-  - ${{ if contains(parameters.environment, 'test') }}:
+  - ${{ if eq(parameters.environment, 'test') }}:
     - group: HMI-APIM-BUILD-TEST
 
 stages:
@@ -26,30 +26,33 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-        - template: pipeline/steps/tf-install.yaml
-        - template: pipeline/steps/tf-init.yaml
-          parameters:
-            subscription: $(subscription)
-        - template: pipeline/steps/tf-plan.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-        - template: pipeline/steps/tf-apply.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-TEST'
-        - template: pipeline/steps/export-keyvault.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-            keyVaultName: hmi-apim-kv-$(environment)
-            secret: hmi-apim-sub-key
+        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
 
-  # - stage: TEST
-  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-  #   jobs:
-  #   - ${{ if contains(parameters.environment, 'test') }}:
-  #     - job: terraform
-  #       variables:
-  #       - group: HMI-APIM-BUILD-TEST
-  #       steps:
+        # - template: pipeline/steps/tf-install.yaml
+        # - template: pipeline/steps/tf-init.yaml
+        #   parameters:
+        #     subscription: $(subscription)
+        # - template: pipeline/steps/tf-plan.yaml
+        #   parameters:
+        #     subscription: 'DTS-SHAREDSERVICES-SBOX'
+        # - template: pipeline/steps/tf-apply.yaml
+        #   parameters:
+        #     subscription: 'DTS-SHAREDSERVICES-TEST'
+        # - template: pipeline/steps/export-keyvault.yaml
+        #   parameters:
+        #     subscription: 'DTS-SHAREDSERVICES-SBOX'
+        #     keyVaultName: hmi-apim-kv-$(environment)
+        #     secret: hmi-apim-sub-key
+
+  - stage: TEST
+    # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    jobs:
+    - ${{ if contains(parameters.environment, 'test') }}:
+      - job: terraform
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - script: echo Building sbox... var $(subscription) $(devopsResourceGroup) $(devopsStorageAccount)
   #       - template: pipeline/steps/tf-install.yaml
   #       - template: pipeline/steps/tf-init.yaml
   #         parameters:
