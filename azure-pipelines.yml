@@ -4,11 +4,17 @@ trigger:
 
 parameters:
   - name: environment
-    type: string
-    default: 'sbox,test'
+    type: object
+    default: 
+      - sbox
+      - test
 
 variables:
   - group: HMI-APIM-Common
+  - ${{ if contains(parameters.environment, 'sbox') }}:
+    - group: HMI-APIM-BUILD-SBOX
+  - ${{ if contains(parameters.environment, 'test') }}:
+    - group: HMI-APIM-BUILD-TEST
 
 stages:
 
@@ -18,13 +24,11 @@ stages:
       - job: terraform
         pool:
           vmImage: 'ubuntu-latest'
-        variables:
-        - group: HMI-APIM-BUILD-SBOX
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
           parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
+            subscription: $(subscription)
         - template: pipeline/steps/tf-plan.yaml
           parameters:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
@@ -37,26 +41,26 @@ stages:
             keyVaultName: hmi-apim-kv-$(environment)
             secret: hmi-apim-sub-key
 
-  - stage: TEST
-    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    jobs:
-    - ${{ if contains(parameters.environment, 'test') }}:
-      - job: terraform
-        variables:
-        - group: HMI-APIM-BUILD-TEST
-        steps:
-        - template: pipeline/steps/tf-install.yaml
-        - template: pipeline/steps/tf-init.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-TEST'
-        - template: pipeline/steps/tf-plan.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-TEST'
-        - template: pipeline/steps/tf-apply.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-TEST'
-        - template: pipeline/steps/export-keyvault.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-TEST'
-            keyVaultName: hmi-apim-kv-$(environment)
-            secret: hmi-apim-sub-key
+  # - stage: TEST
+  #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  #   jobs:
+  #   - ${{ if contains(parameters.environment, 'test') }}:
+  #     - job: terraform
+  #       variables:
+  #       - group: HMI-APIM-BUILD-TEST
+  #       steps:
+  #       - template: pipeline/steps/tf-install.yaml
+  #       - template: pipeline/steps/tf-init.yaml
+  #         parameters:
+  #           subscription: 'DTS-SHAREDSERVICES-TEST'
+  #       - template: pipeline/steps/tf-plan.yaml
+  #         parameters:
+  #           subscription: 'DTS-SHAREDSERVICES-TEST'
+  #       - template: pipeline/steps/tf-apply.yaml
+  #         parameters:
+  #           subscription: 'DTS-SHAREDSERVICES-TEST'
+  #       - template: pipeline/steps/export-keyvault.yaml
+  #         parameters:
+  #           subscription: 'DTS-SHAREDSERVICES-TEST'
+  #           keyVaultName: hmi-apim-kv-$(environment)
+  #           secret: hmi-apim-sub-key
