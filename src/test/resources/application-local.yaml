@@ -1,6 +1,5 @@
 targetInstance: https://hmi-apim-svc-test.azure-api.net
 targetHost:  hmi-apim-svc-test.azure-api.net
-targetSubscriptionKey: samplesecret
+targetSubscriptionKey: b34973433dca4f3984800c5c9c193970
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
-spring.flyway.enabled: false
