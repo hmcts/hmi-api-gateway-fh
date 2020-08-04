@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class HmiApiUnitTest {
 
     private static final String CASE_TITLE_MISSING_REQ_PATH = "requests/case-title-missing-request.json";
