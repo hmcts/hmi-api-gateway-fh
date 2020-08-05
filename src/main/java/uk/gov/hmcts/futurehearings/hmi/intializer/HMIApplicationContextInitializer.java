@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
+@Slf4j
 public class HMIApplicationContextInitializer implements
         ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -25,8 +27,9 @@ public class HMIApplicationContextInitializer implements
         System.out.println(currentDir.normalize().toAbsolutePath()+"/script");
 
         ProcessBuilder processBuilder = new ProcessBuilder("./read-vault.sh",key,value);
-        processBuilder = processBuilder.directory(new File(Paths.get(".").normalize().toAbsolutePath()+"/script"));
-        System.out.println("The Set Path : " + processBuilder.directory().getAbsolutePath());
+        processBuilder = processBuilder.directory(new File(Paths.get(".")
+                .normalize().toAbsolutePath()+"/script"));
+        log.info("The Set Path : " + processBuilder.directory().getAbsolutePath());
 
         final Process process = processBuilder.start();
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
