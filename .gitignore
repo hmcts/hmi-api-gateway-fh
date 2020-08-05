@@ -41,6 +41,7 @@ terraform.rc
 .gradle
 build/
 /target/
+/pacts/
 !gradle/wrapper/gradle-wrapper.jar
 /node_modules
 /infrastructure/.terraform/
