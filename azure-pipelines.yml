@@ -25,12 +25,12 @@ stages:
     jobs:
       - job: testsec
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-2019'
 
-        container: owasp/zap2docker-weekly
+        container: mcr.microsoft.com/windows/servercore:ltsc2019
 
         steps:
-        - script: ls -la
+        - script: set
 
 
 
