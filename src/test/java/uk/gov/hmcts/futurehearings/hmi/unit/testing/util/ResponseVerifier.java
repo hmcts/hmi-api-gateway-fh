@@ -19,12 +19,6 @@ public class ResponseVerifier {
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Case Title'",responseMap.get(("Reason")));
-
-        //Option 2 - Use a Json Equality based library like JsonAssert
-        //This method however is more cumbersome as we will have to maintain a separate response
-        //file for each test case which may pose maintainability challenges.
-        //Also when backend is real time the
-        comparePayloads("responses/case-title-missing-response.json", response);
     }
 
     public static void thenResponseHasErrorForMissingCaseId(Response response) {
