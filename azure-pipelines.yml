@@ -27,7 +27,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
 
-        container: $(owaspZapImage)
+        container: owasp/zap2docker-weekly
 
         steps:
         - script: ls -la
