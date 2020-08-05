@@ -27,25 +27,7 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-      - task: TerraformInstaller@0
-        displayName: Install Terraform $(terraformVersion)
-        inputs:
-          terraformVersion: $(terraformVersion)
-
-      - task: PowerShell@2
-        displayName: Run tests
-        inputs:
-          targetType: 'inline'
-          script: |
-            Install-Module -Name Pester -MaximumVersion 4.99.99 -Force -Verbose -Scope CurrentUser
-            Invoke-Pester pipeline/scripts/ -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
-          pwsh: true
-      - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TEST-*.xml'
-        inputs:
-          testResultsFormat: NUnit
-          failTaskOnFailedTests: true
-        condition: always()
+      - template: pipeline/steps/tf-test.yaml
 
   - stage: BUILD
     displayName: Build infrastructure with Terraform
