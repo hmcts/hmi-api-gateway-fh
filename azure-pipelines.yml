@@ -23,7 +23,7 @@ stages:
   - stage: CI
     displayName: Validate the code
     jobs:
-    - job: validate
+    - job: validatetf
       pool:
         vmImage: 'ubuntu-latest'
       steps:
