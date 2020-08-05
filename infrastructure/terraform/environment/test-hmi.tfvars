@@ -7,3 +7,8 @@ revision = "1"
 open_api_spec_content_format = "swagger-link-json"
 open_api_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-request-hearing.json"
 service_url = "https://www.hmcts.com/request-hearings/request-listings"
+tags = {
+    "businessarea":"cross-cutting",
+    "application":"hearing-management-interface",
+    "environment":"test"
+  }
