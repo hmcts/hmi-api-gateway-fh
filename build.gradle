@@ -292,13 +292,10 @@ dependencies {
     exclude group: 'org.hamcrest', module: 'hamcrest-core'
   }
   testCompile ("org.springframework.boot:spring-boot-starter-test")
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-  testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version :versions.serenity
-  testImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
-  testImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
   testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
   testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
   testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
