@@ -1,0 +1,1 @@
+from owasp/zap2docker-weekly:latest
