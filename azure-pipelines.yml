@@ -43,6 +43,14 @@ stages:
             tags: |
               latest
 
+        - template: pipeline/steps/push-img.yaml
+          parameters:
+            registry: 'DTS-SS-ACRPrivate'
+            repository: 'hmi/apim-tests-wiremock'
+            dockerfile: 'pipeline/tests/wiremock/Dockerfile'
+            tags: |
+              latest
+
       - job: containerjob
         dependsOn: BuildACRimage
         pool:
