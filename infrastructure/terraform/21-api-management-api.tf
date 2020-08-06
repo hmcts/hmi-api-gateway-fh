@@ -11,7 +11,7 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
 
   subscription_key_parameter_names {
     header = "Ocp-Apim-Subscription-Key"
-    query = "subscription-key"
+    query = "hmi-apim-sub-key"
   }
   subscription_required = true
 
