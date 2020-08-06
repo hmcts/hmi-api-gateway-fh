@@ -30,10 +30,9 @@ stages:
         steps:
         - template: pipeline/steps/push-img.yaml
           parameters:
-            containerRegistry: 'DTS-SS-ACRPrivate'
+            registry: 'DTS-SS-ACRPrivate'
             repository: 'hmi/apim-tests-owasp'
-            command: 'buildAndPush'
-            Dockerfile: 'pipeline/tests/owasp/Dockerfile'
+            dockerfile: 'pipeline/tests/owasp/Dockerfile'
 
 
         # steps:
