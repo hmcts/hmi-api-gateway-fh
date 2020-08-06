@@ -103,9 +103,16 @@ configurations {
 }
 
 test {
-  failFast = true
+  description = "Runs unit tests"
+  group = 'Delivery pipeline'
+  description = 'Executes unit tests'
+  testClassesDirs = sourceSets.test.output.classesDirs
+  classpath = sourceSets.test.runtimeClasspath
+  include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
+  failFast = false
   testLogging.showStandardStreams = true
   systemProperties System.getProperties()
+  environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
 gradle.startParameter.continueOnFailure = true
@@ -311,12 +318,26 @@ dependencies {
 
   compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
-  testImplementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
-          "net.serenity-bdd:serenity-junit:${serenityCoreVersion}",
-          "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
-          "junit:junit:${junitVersion}",
-          "org.junit.vintage:junit-vintage-engine:5.6.2",
-          "org.assertj:assertj-core:${assertJVersion}"
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+
+  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+  testCompile ("org.springframework.boot:spring-boot-starter-test")
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
+  testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
+  testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+  testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+  testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  testCompileOnly 'org.projectlombok:lombok:1.18.12'
+  testImplementation "ch.qos.logback:logback-classic:1.2.3"
+
+  smokeTestImplementation sourceSets.main.runtimeClasspath
 
   //Smoke Test Dependencies - START
   smokeTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
