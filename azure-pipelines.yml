@@ -62,7 +62,6 @@ stages:
     displayName: Tests - OWASP
     jobs:
       - job: containerjob
-        dependsOn: BuildACRimage
         pool:
           vmImage: 'ubuntu-latest'
         container: owasp_zap_container
@@ -73,7 +72,6 @@ stages:
     displayName: Tests - Wiremock
     jobs:
       - job: containerjob
-        dependsOn: BuildACRimage
         pool:
           vmImage: 'ubuntu-latest'
         container: wiremock_container
