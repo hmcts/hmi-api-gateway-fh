@@ -1,5 +1,5 @@
 FROM openjdk:11
-MAINTAINER HMI-QA
+LABEL maintainer = HMI-QA
 WORKDIR /opt/app/wiremock
 COPY ./wiremock/ /opt/app/wiremock/
 RUN chmod a+x wiremock-jre8-standalone-2.27.1.jar
