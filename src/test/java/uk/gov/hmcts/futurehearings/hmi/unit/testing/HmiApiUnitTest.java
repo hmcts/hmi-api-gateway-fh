@@ -46,11 +46,10 @@ public class HmiApiUnitTest {
     @Value("${hearingApiRootContext}")
     private String hearingApiRootContext;
 
-    private Map<String, Object> headersAsMap;
+    private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
     public void initialiseValues() {
-        headersAsMap = new HashMap<>();
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
