@@ -39,9 +39,11 @@ stages:
             registry: 'DTS-SS-ACRPrivate'
             repository: 'hmi/apim-tests-owasp'
             dockerfile: 'pipeline/tests/owasp/Dockerfile'
-            tags: 'latest'
+            tags: |
+              latest
 
       - job: containerjob
+        dependsOn: BuildACRimage
         pool:
           vmImage: 'ubuntu-latest'
         container: my_container
