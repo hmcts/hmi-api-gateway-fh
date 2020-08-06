@@ -146,7 +146,7 @@ public class HmiApiUnitTest {
     }
 
     private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(400)
+        return expect().that().statusCode(401)
                 .given().contentType("application/json").body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
