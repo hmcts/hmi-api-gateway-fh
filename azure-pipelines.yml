@@ -79,7 +79,7 @@ stages:
               ContainerName: '$web'
             condition: succeededOrFailed()
 
-  - stage: TESTS3
+  - stage: TESTS4
     dependsOn: BUILD
     displayName: Tests - Smoke
     variables:
@@ -99,6 +99,27 @@ stages:
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.11'
           sonarQubeRunAnalysis: false
+
+  - stage: TESTS3
+    dependsOn: BUILD
+    displayName: Tests - Unit Tests
+    variables:
+      hmi-apim-svc-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
+    jobs:
+      - job: testunit
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+        - task: Gradle@2
+          inputs:
+            gradleWrapperFile: 'gradlew'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+            publishJUnitResults: true
+            testResultsFiles: '**/TEST-*.xml'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.11'
+            sonarQubeRunAnalysis: false
 
   - stage: TESTS2
     dependsOn: BUILD
