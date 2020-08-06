@@ -62,6 +62,7 @@ public class HmiApiUnitTest {
 
     @Test
     public void testRequestValidationWhenCaseTitleMissing() throws IOException{
+        System.out.println("Target Subscription Key:" + targetSubscriptionKey);
         final String input = givenARequesWithMissingField(CASE_TITLE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
         thenResponseHasErrorForMissingCaseTitle(response);
