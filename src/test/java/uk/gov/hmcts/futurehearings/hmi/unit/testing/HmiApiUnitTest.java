@@ -1,25 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingAllocatedListingTeam;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingCaseId;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingCaseTitle;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingCaseType;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingHearingChannel;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingHearingType;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingJurisdiction;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingPrivateHearing;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingService;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingTransactionIDHMCTS;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenResponseHasErrorForMissingVenue;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.steps.HearingApiCallSteps;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static io.restassured.RestAssured.expect;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -57,9 +46,6 @@ public class HmiApiUnitTest {
     @Value("${hearingApiRootContext}")
     private String hearingApiRootContext;
 
-    //@Steps
-    HearingApiCallSteps hearingApiCallSteps;
-
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
@@ -72,7 +58,6 @@ public class HmiApiUnitTest {
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
-        hearingApiCallSteps = new HearingApiCallSteps();
     }
 
     @Test
@@ -157,7 +142,16 @@ public class HmiApiUnitTest {
     }
 
     private Response whenRequestHearingIsInvoked(final String input) {
-        return hearingApiCallSteps.requestHearingWithMissingField(hearingApiRootContext, headersAsMap, targetInstance, input);
+        return requestHearingWithMissingField(hearingApiRootContext, headersAsMap, targetInstance, input);
+    }
+
+    private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(400)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
     }
 
 }
