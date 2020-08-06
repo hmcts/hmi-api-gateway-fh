@@ -30,7 +30,7 @@
                     <set-body>@{
                         return new JObject(
                         new JProperty("Error", "400"),
-                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'Case Id'")
+                        new JProperty("Reason", "Malformed request. Missing/Invalid property: 'TransactionIDHMCTS'")
                         ).ToString();
                         }</set-body>
                 </return-response>
