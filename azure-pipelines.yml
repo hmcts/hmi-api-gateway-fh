@@ -28,15 +28,10 @@ stages:
           vmImage: 'ubuntu-latest'
 
         steps:
-        - task: Docker@2
-          inputs:
+        - template: pipeline/steps/push-img.yaml
+          parameters:
             containerRegistry: 'DTS-SS-ACRPrivate'
-            command: 'login'
-    
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi-apim-owasp'
+            repository: 'hmi/apim-tests-owasp'
             command: 'buildAndPush'
             Dockerfile: 'pipeline/tests/owasp/Dockerfile'
 
