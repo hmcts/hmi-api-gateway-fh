@@ -9,6 +9,11 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
 
   service_url = var.service_url
 
+  subscription_key_parameter_names = {
+    header = Ocp-Apim-Subscription-Key
+    query = subscription-key
+  }
+
   import {
     content_format = var.open_api_spec_content_format
     content_value  = var.open_api_spec_content_value
