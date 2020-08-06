@@ -31,14 +31,18 @@ stages:
         - task: Docker@2
           inputs:
             containerRegistry: 'DTS-SS-ACRPrivate'
-            command: 'login'#
-        
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi-apim-owasp'
-            command: 'buildAndPush'
-            Dockerfile: 'pipeline/tests/owasp/Dockerfile'
+            command: 'login'
+
+        - bash: |
+            ls -la
+          displayName: 'ls'
+          name: 'ls'       
+        # - task: Docker@2
+        #   inputs:
+        #     containerRegistry: 'DTS-SS-ACRPrivate'
+        #     repository: 'hmi-apim-owasp'
+        #     command: 'buildAndPush'
+        #     Dockerfile: 'pipeline/tests/owasp/Dockerfile'
 
 
         # steps:
