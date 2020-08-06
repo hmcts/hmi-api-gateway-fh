@@ -79,6 +79,15 @@ sourceSets {
     }
     resources.srcDir file('src/contactTest/resources')
   }
+
+  acceptanceTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/acceptanceTest/java')
+    }
+    resources.srcDir file('src/acceptanceTest/resources')
+  }
 }
 
 tasks.withType(JavaCompile) {
@@ -100,6 +109,8 @@ configurations {
   functionalTestRuntime.extendsFrom testRuntime
   contractTestCompile.extendsFrom testCompile
   contractTestRuntime.extendsFrom testRuntime
+  acceptanceTestCompile.extendsFrom testCompile
+  acceptanceTestRuntime.extendsFrom testRuntime
 }
 
 
@@ -175,6 +186,17 @@ task contract(type: Test) {
   classpath = sourceSets.contractTest.runtimeClasspath
   include "uk/gov/hmcts/futurehearings/hmi/cdc/consumer/**"
   systemProperty 'pact.rootDir', "pacts"
+  systemProperties System.getProperties()
+  environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+task acceptance(type: Test) {
+  group = 'Delivery pipeline'
+  description = 'Runs the QA Acceptance tests'
+  useJUnitPlatform()
+  testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
+  classpath = sourceSets.acceptanceTest.runtimeClasspath
+  include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
   systemProperties System.getProperties()
   environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
@@ -385,6 +407,29 @@ dependencies {
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
   //Integration Test Dependencies - FINISH
+
+  //Acceptance Test Dependencies - START
+  acceptanceTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+  acceptanceTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter', {
+    exclude group: 'org.hamcrest', module: 'hamcrest-core'
+  }
+  acceptanceTestCompile ("org.springframework.boot:spring-boot-starter-test")
+  acceptanceTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+  acceptanceTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
+  acceptanceTestImplementation 'io.rest-assured:rest-assured:4.2.0'
+  acceptanceTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
+  acceptanceTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+  acceptanceTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+  acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+  acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+  acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+  acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+
+  acceptanceTestImplementation sourceSets.main.runtimeClasspath
+  acceptanceTestImplementation sourceSets.test.runtimeClasspath
+  //Acceptance Test Dependencies - FINISH
 
   //Contract Testing Dependencies - START
   contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
