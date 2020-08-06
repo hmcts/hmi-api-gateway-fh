@@ -18,6 +18,12 @@ variables:
   - ${{ if eq(parameters.environment, 'test') }}:
     - group: HMI-APIM-BUILD-TEST
 
+resources:
+  containers:
+  - container: my_container
+    image: sspublicprod.azurecr.io/hmi/apim-tests-owasp:latest
+    endpoint: 'DTS-SS-ACRPrivate'
+
 stages:
 
   - stage: TEST
