@@ -6,7 +6,6 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
   display_name        = "${var.prefix}-${var.product}-api"
   path                = var.prefix
   protocols           = var.protocols
-
   service_url = var.service_url
 
 //  subscription_key_parameter_names {
