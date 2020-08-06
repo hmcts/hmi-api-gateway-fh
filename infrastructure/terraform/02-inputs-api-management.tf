@@ -25,3 +25,8 @@ variable "open_api_spec_content_value" {
 variable "service_url" {
   description = "Absolute URL of the backend service implementing this API."
 }
+
+variable "subscription_key" {
+  header = Ocp-Apim-Subscription-Key
+  query = subscription-key
+}
