@@ -17,6 +17,7 @@ public class ResponseVerifier {
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        System.out.println("Response Map: " + responseMap);
         assertEquals("400", responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Case Title'", responseMap.get(("Reason")));
     }
