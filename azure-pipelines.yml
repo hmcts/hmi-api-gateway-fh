@@ -21,7 +21,7 @@ variables:
 resources:
   containers:
   - container: my_container
-    image: sspublicprod.azurecr.io/hmi/apim-tests-owasp:73342 #change this later
+    image: sspublicprod.azurecr.io/hmi/apim-tests-owasp:73341 #change this later
     endpoint: 'DTS-SS-ACRPrivate'
 
 stages:
