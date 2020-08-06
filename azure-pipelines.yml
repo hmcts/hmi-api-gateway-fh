@@ -29,7 +29,7 @@ stages:
   - stage: TEST
     displayName: Tests - Security
     jobs:
-      - job: testsec
+      - job: BuildACRimage
         pool:
           vmImage: 'ubuntu-latest'
 
@@ -39,6 +39,14 @@ stages:
             registry: 'DTS-SS-ACRPrivate'
             repository: 'hmi/apim-tests-owasp'
             dockerfile: 'pipeline/tests/owasp/Dockerfile'
+
+      - job: containerjob
+        pool:
+          vmImage: 'ubuntu-latest'
+        container: my_container
+        steps:
+        - script: printenv
+
 
 
         # steps:
