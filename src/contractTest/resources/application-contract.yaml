@@ -1,0 +1,2 @@
+targetHost: ${TEST_HOST}
+targetSubscriptionKey: ${TEST_SUBSCRIPTION_KEY}
