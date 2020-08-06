@@ -39,6 +39,7 @@ stages:
             registry: 'DTS-SS-ACRPrivate'
             repository: 'hmi/apim-tests-owasp'
             dockerfile: 'pipeline/tests/owasp/Dockerfile'
+            tags: 'latest'
 
       - job: containerjob
         pool:
