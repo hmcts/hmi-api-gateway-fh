@@ -20,8 +20,13 @@ variables:
 
 resources:
   containers:
-  - container: my_container
-    image: hmi/apim-tests-owasp:73341 #change this later
+  - container: owasp_zap_container
+    image: hmi/apim-tests-owasp:latest
+    endpoint: 'DTS-SS-ACRPrivate'
+    options: --user 0:0
+
+  - container: wiremock_container
+    image: hmi/apim-tests-wiremock:latest
     endpoint: 'DTS-SS-ACRPrivate'
     options: --user 0:0
 
@@ -55,7 +60,15 @@ stages:
         dependsOn: BuildACRimage
         pool:
           vmImage: 'ubuntu-latest'
-        container: my_container
+        container: owasp_zap_container
+        steps:
+        - script: ls
+
+      - job: containerjob
+        dependsOn: BuildACRimage
+        pool:
+          vmImage: 'ubuntu-latest'
+        container: wiremock_container
         steps:
         - script: ls
 
