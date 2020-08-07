@@ -19,7 +19,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 public class HmiApiUnitTest {
 
     private static final String CASE_TITLE_MISSING_REQ_PATH = "requests/case-title-missing-request.json";
@@ -58,6 +58,7 @@ public class HmiApiUnitTest {
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
+        System.out.println("Header Map: " + headersAsMap);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class HmiApiUnitTest {
     }
 
     private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(401)
+        return expect().that().statusCode(400)
                 .given().contentType("application/json").body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
