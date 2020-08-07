@@ -37,7 +37,7 @@ stages:
         - template: pipeline/steps/export-keyvault.yaml
           parameters:
             keyVaultName: hmi-apim-kv-$(environment)
-        - bash: echo $(hmi-apim-sub-key)
+            secret: hmi-apim-sub-key
 
   - stage: TESTS1
     dependsOn: BUILD
@@ -48,62 +48,40 @@ stages:
         hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
       pool:
-        vmImage: 'ubuntu-latest'
+        vmImage: 'windows-latest'
       steps:
-      - bash: echo $(hmi-apim-sub-key)
-  #     - task: Gradle@2
-  #       inputs:
-  #         gradleWrapperFile: 'gradlew'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
-  #         tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
-  #         publishJUnitResults: true
-  #         testResultsFiles: '**/TEST-*.xml'
-  #         javaHomeOption: 'JDKVersion'
-  #         jdkVersionOption: '1.11'
-  #         sonarQubeRunAnalysis: false
+      - template: pipeline/steps/run-gradlew.yaml
+        parameters:
+          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
 
 
-  # - stage: TESTS2
-  #   dependsOn: BUILD
-  #   displayName: Tests - Smoke
-  #   jobs:
-  #   - job: testsmoke
-  #     variables:
-  #       hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
-  #       hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-  #     pool:
-  #       vmImage: 'ubuntu-latest'
-  #     steps:
-  #     - task: Gradle@2
-  #       inputs:
-  #         gradleWrapperFile: 'gradlew'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
-  #         tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
-  #         publishJUnitResults: true
-  #         testResultsFiles: '**/TEST-*.xml'
-  #         javaHomeOption: 'JDKVersion'
-  #         jdkVersionOption: '1.11'
-  #         sonarQubeRunAnalysis: false
+  - stage: TESTS2
+    dependsOn: BUILD
+    displayName: Tests - Smoke
+    jobs:
+    - job: testsmoke
+      variables:
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+      pool:
+        vmImage: 'windows-latest'
+        steps:
+        - template: pipeline/steps/run-gradlew.yaml
+          parameters:
+            runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
 
-  # - stage: TESTS3
-  #   dependsOn: BUILD
-  #   displayName: Tests - Unit
-  #   jobs:
-  #   - job: testunit
-  #     variables:
-  #       hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
-  #       hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-  #     pool:
-  #       vmImage: 'ubuntu-latest'
-  #     steps:
-  #     - task: Gradle@2
-  #       inputs:
-  #         gradleWrapperFile: 'gradlew'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
-  #         tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
-  #         publishJUnitResults: true
-  #         testResultsFiles: '**/TEST-*.xml'
-  #         javaHomeOption: 'JDKVersion'
-  #         jdkVersionOption: '1.11'
-  #         sonarQubeRunAnalysis: false
+  - stage: TESTS3
+    dependsOn: BUILD
+    displayName: Tests - Unit
+    jobs:
+      - job: testunit
+        variables:
+          hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+          hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+        - template: pipeline/steps/run-gradlew.yaml
+          parameters:
+            runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
