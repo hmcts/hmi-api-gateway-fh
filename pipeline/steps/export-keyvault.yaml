@@ -1,6 +1,5 @@
 parameters:
   keyVaultName: ''
-  secret: ''
 
 steps:
 - task: AzureKeyVault@1
@@ -8,8 +7,8 @@ steps:
   inputs:
     azureSubscription: $(subscription)
     keyVaultName: ${{ parameters.keyVaultName }}
-    secretsFilter: ${{ parameters.secret }}
+    secretsFilter: '*'
 - script: |
-    echo "##vso[task.setvariable variable=${{ parameters.secret }};isOutput=true]$(hmi-apim-sub-key)"
+    echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true]$(hmi-apim-sub-key)"
   displayName: 'Export KeyVault Variables'
   name: exportKeyVaultSecret
