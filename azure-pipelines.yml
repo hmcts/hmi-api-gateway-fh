@@ -37,7 +37,6 @@ stages:
         - template: pipeline/steps/export-keyvault.yaml
           parameters:
             keyVaultName: hmi-apim-kv-$(environment)
-            secret: hmi-apim-sub-key
 
   - stage: TESTS1
     dependsOn: BUILD
