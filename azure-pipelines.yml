@@ -35,14 +35,14 @@ resources:
   
 stages:
 
-#   - stage: TEST
-#     displayName: Create ACR Images
-#     jobs:
-#       - job: BuildACRimage
-#         pool:
-#           vmImage: 'ubuntu-latest'
+  - stage: TEST
+    displayName: Create ACR Images
+    jobs:
+      - job: BuildACRimage
+        pool:
+          vmImage: 'ubuntu-latest'
 
-#         steps:
+        steps:
         # - template: pipeline/steps/push-img.yaml
         #   parameters:
         #     registry: 'DTS-SS-ACRPrivate'
@@ -51,13 +51,13 @@ stages:
         #     tags: |
         #       latest
 
-        # - template: pipeline/steps/push-img.yaml
-        #   parameters:
-        #     registry: 'DTS-SS-ACRPrivate'
-        #     repository: 'hmi/apim-tests-wiremock'
-        #     dockerfile: 'pipeline/tests/wiremock/Dockerfile'
-        #     tags: |
-        #       latest
+        - template: pipeline/steps/push-img.yaml
+          parameters:
+            registry: 'DTS-SS-ACRPrivate'
+            repository: 'hmi/apim-tests-wiremock'
+            dockerfile: 'pipeline/tests/wiremock/Dockerfile'
+            tags: |
+              latest
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
@@ -75,48 +75,6 @@ stages:
       - job: containerjob
         pool:
           vmImage: 'ubuntu-16.04'
-        container: centos:latest
+        container: wiremock_container
         steps:
         - script: ls
-
-
-
-        # steps:
-        # - task: AzureCLI@2
-        #   displayName: Build and run API ZAP scan
-        #   inputs:
-        #     azureSubscription: $(subscription)
-        #     scriptType: bash
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       echo "Obtaining container key..."
-        #       KEY=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
-        #       echo $KEY
-        #       echo "Creating ACI ZAP container..."
-        #       az container create -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --image $(owaspZapImage) --azure-file-volume-account-name $(devopsStorageAccount) --azure-file-volume-account-key $KEY --azure-file-volume-share-name $(owaspZapVolume) --azure-file-volume-mount-path /zap/wrk/ --command-line "zap-baseline.py -t https://hmi-apim-svc-sbox.azure-api.net -d -l FAIL -x api_scan.xml -r api_scan.html -w api_scan.md"
-        #       sleep 30
-        #       echo "Downloading ZAP report..."
-        #       az storage file download --account-name $(devopsStorageAccount) --account-key $KEY -s $(owaspZapVolume) -p api_scan.html --dest $(System.DefaultWorkingDirectory)/api_scan.html
-
-        # - task: AzureCLI@2
-        #   displayName: Pulish test results
-        #   condition: succeededOrFailed()
-        #   inputs:
-        #     azureSubscription: $(subscription)
-        #     scriptType: bash
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       reportFile=$(System.DefaultWorkingDirectory)/api_scan.html
-        #       mdReportFile=$$(System.DefaultWorkingDirectory)/api_scan.md
-        #       echo "##vso[task.uploadfile]$reportFile"
-        #       # echo "##vso[task.uploadsummary]$mdReportFile"
-
-        # - task: AzureCLI@2
-        #   displayName: Delete ACI container
-        #   condition: succeededOrFailed()
-        #   inputs:
-        #     azureSubscription: $(subscription)
-        #     scriptType: bash
-        #     scriptLocation: inlineScript
-        #     inlineScript: |
-        #       az container delete -g $(devopsResourceGroup) -n hmi-aci-zap-sbox --yes
