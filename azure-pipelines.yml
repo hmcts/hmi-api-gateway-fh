@@ -42,27 +42,29 @@ stages:
   - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Functional
-    variables:
-      hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
-      hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
     jobs:
-      - job: testfunc
-        pool:
-          vmImage: 'windows-latest'
-        steps:
-        - template: pipeline/steps/run-gradlew.yaml
-          parameters:
-            runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+    - job: testfunc
+      condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
+      variables:
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+      - template: pipeline/steps/run-gradlew.yaml
+        parameters:
+          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
 
   - stage: TESTS2
     dependsOn: BUILD
     displayName: Tests - Smoke
-    variables:
-      hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
-      hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
     jobs:
     - job: testsmoke
+      condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
+      variables:
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
       pool:
         vmImage: 'windows-latest'
         steps:
@@ -73,12 +75,13 @@ stages:
 
   - stage: TESTS3
     dependsOn: BUILD
-    displayName: Tests - Unit Tests
-    variables:
-      hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
-      hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+    displayName: Tests - Unit
     jobs:
       - job: testunit
+        condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
+        variables:
+          hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+          hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
         pool:
           vmImage: 'windows-latest'
         steps:
