@@ -34,7 +34,7 @@ resources:
 stages:
 
   - stage: TEST
-    displayName: Tests - Security
+    displayName: Create ACR Images
     jobs:
       - job: BuildACRimage
         pool:
@@ -57,15 +57,15 @@ stages:
             tags: |
               latest
 
-  - stage: OWASP
-    displayName: Tests - OWASP
-    jobs:
-      - job: containerjob
-        pool:
-          vmImage: 'ubuntu-latest'
-        container: owasp_zap_container
-        steps:
-        - script: ls
+  # - stage: OWASP
+  #   displayName: Tests - OWASP
+  #   jobs:
+  #     - job: containerjob
+  #       pool:
+  #         vmImage: 'ubuntu-latest'
+  #       container: owasp_zap_container
+  #       steps:
+  #       - script: ls
 
   - stage: WIREMOCK
     displayName: Tests - Wiremock
