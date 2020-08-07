@@ -1,5 +1,5 @@
 targetInstance: https://hmi-apim-svc-test.azure-api.net
 targetHost:  hmi-apim-svc-test.azure-api.net
-targetSubscriptionKey: sample
+targetSubscriptionKey: sampleKey
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
