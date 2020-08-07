@@ -44,7 +44,6 @@ stages:
     displayName: Tests - Functional
     jobs:
     - job: testfunc
-      condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
       variables:
         hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
@@ -61,7 +60,6 @@ stages:
     displayName: Tests - Smoke
     jobs:
     - job: testsmoke
-      condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
       variables:
         hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
@@ -78,7 +76,6 @@ stages:
     displayName: Tests - Unit
     jobs:
       - job: testunit
-        condition: eq(stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key], 'Yes')
         variables:
           hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
           hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
