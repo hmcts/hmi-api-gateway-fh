@@ -38,6 +38,7 @@ stages:
           parameters:
             keyVaultName: hmi-apim-kv-$(environment)
             secret: hmi-apim-sub-key
+        - bash: echo $(subscription_key)
 
   - stage: TESTS1
     dependsOn: BUILD
