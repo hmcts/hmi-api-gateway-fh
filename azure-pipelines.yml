@@ -33,7 +33,7 @@ resources:
     - 8080:8080
 
   
-# stages:
+stages:
 
 #   - stage: TEST
 #     displayName: Create ACR Images
