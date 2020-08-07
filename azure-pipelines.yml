@@ -37,8 +37,7 @@ stages:
         - template: pipeline/steps/export-keyvault.yaml
           parameters:
             keyVaultName: hmi-apim-kv-$(environment)
-            secret: hmi-apim-sub-key
-        - bash: echo $(subscription_key)
+        - bash: echo $(hmi-apim-sub-key)
 
   - stage: TESTS1
     dependsOn: BUILD
@@ -46,7 +45,7 @@ stages:
     jobs:
     - job: testfunc
       variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
       pool:
         vmImage: 'ubuntu-latest'
