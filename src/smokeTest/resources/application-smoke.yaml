@@ -5,5 +5,5 @@ hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
 sessionApiRootContext : /sessions
 notificationApiRootContext : /notification
-updateUserApiRootContext : /users
+userApiRootContext : /users
 spring.flyway.enabled: false
