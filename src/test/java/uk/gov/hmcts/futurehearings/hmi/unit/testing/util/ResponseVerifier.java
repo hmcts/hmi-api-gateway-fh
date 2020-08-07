@@ -14,10 +14,8 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 public class ResponseVerifier {
 
     public static void thenResponseHasErrorForMissingCaseTitle(Response response) {
-        //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        System.out.println("Response Map:" + responseMap);
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Case Title'",responseMap.get(("Reason")));
     }
@@ -25,7 +23,6 @@ public class ResponseVerifier {
     public static void thenResponseHasErrorForMissingCaseId(Response response) {
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        System.out.println("Response Map: " + responseMap);
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Case Id'",responseMap.get(("Reason")));
     }
@@ -33,7 +30,6 @@ public class ResponseVerifier {
     public static void thenResponseHasErrorForMissingTransactionIDHMCTS(Response response) {
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        System.out.println("Response Map: " + responseMap);
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Case Id'",responseMap.get(("Reason")));
     }
@@ -41,7 +37,6 @@ public class ResponseVerifier {
     public static void thenResponseHasErrorForMissingVenue(Response response) {
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        System.out.println("Response Map: " + responseMap);
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Venue'",responseMap.get(("Reason")));
     }
