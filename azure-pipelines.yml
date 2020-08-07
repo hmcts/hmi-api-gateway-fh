@@ -33,16 +33,16 @@ resources:
     - 8080:8080
 
   
-stages:
+# stages:
 
-  - stage: TEST
-    displayName: Create ACR Images
-    jobs:
-      - job: BuildACRimage
-        pool:
-          vmImage: 'ubuntu-latest'
+#   - stage: TEST
+#     displayName: Create ACR Images
+#     jobs:
+#       - job: BuildACRimage
+#         pool:
+#           vmImage: 'ubuntu-latest'
 
-        steps:
+#         steps:
         # - template: pipeline/steps/push-img.yaml
         #   parameters:
         #     registry: 'DTS-SS-ACRPrivate'
