@@ -45,14 +45,14 @@ stages:
     jobs:
     - job: testfunc
       variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
       pool:
         vmImage: 'windows-latest'
       steps:
       - template: pipeline/steps/run-gradlew.yaml
         parameters:
-          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
 
 
   - stage: TESTS2
@@ -61,7 +61,7 @@ stages:
     jobs:
     - job: testsmoke
       variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']
         hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
       pool:
         vmImage: 'windows-latest'
@@ -77,7 +77,7 @@ stages:
     jobs:
       - job: testunit
         variables:
-          hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']
+          hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']
           hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
         pool:
           vmImage: 'windows-latest'
