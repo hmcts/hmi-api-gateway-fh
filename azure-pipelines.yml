@@ -83,7 +83,7 @@ stages:
     dependsOn: BUILD
     displayName: Tests - Smoke
     variables:
-      hmi-apim-svc-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
+      hmi-apim-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
     jobs:
     - job: testsmoke
       pool:
@@ -104,7 +104,7 @@ stages:
     dependsOn: BUILD
     displayName: Tests - Unit Tests
     variables:
-      hmi-apim-svc-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
+      hmi-apim-sub-key: stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.variableName']
     jobs:
       - job: testunit
         pool:
