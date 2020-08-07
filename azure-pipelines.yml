@@ -20,16 +20,17 @@ variables:
 
 resources:
   containers:
-  - container: owasp_zap_container
-    image: hmi/apim-tests-owasp:latest
-    endpoint: 'DTS-SS-ACRPrivate'
-    options: --user 0:0
+  # - container: owasp_zap_container
+  #   image: hmi/apim-tests-owasp:latest
+  #   endpoint: 'DTS-SS-ACRPrivate'
+  #   options: --user 0:0
 
   - container: wiremock_container
     image: hmi/apim-tests-wiremock:latest
     endpoint: 'DTS-SS-ACRPrivate'
-    options: --user 1001:1001
+    options: --user 0:0
 
+  
 stages:
 
   - stage: TEST
@@ -40,13 +41,13 @@ stages:
           vmImage: 'ubuntu-latest'
 
         steps:
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi/apim-tests-owasp'
-            dockerfile: 'pipeline/tests/owasp/Dockerfile'
-            tags: |
-              latest
+        # - template: pipeline/steps/push-img.yaml
+        #   parameters:
+        #     registry: 'DTS-SS-ACRPrivate'
+        #     repository: 'hmi/apim-tests-owasp'
+        #     dockerfile: 'pipeline/tests/owasp/Dockerfile'
+        #     tags: |
+        #       latest
 
         - template: pipeline/steps/push-img.yaml
           parameters:
@@ -55,8 +56,6 @@ stages:
             dockerfile: 'pipeline/tests/wiremock/Dockerfile'
             tags: |
               latest
-
-
 
   - stage: OWASP
     displayName: Tests - OWASP
