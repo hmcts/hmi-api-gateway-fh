@@ -28,7 +28,7 @@ resources:
   - container: wiremock_container
     image: hmi/apim-tests-wiremock:latest
     endpoint: 'DTS-SS-ACRPrivate'
-    options: --user 0:0
+    # options: --user 0:0
 
 stages:
 
