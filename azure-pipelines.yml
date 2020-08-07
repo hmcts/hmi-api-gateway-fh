@@ -51,13 +51,13 @@ stages:
         #     tags: |
         #       latest
 
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi/apim-tests-wiremock'
-            dockerfile: 'pipeline/tests/wiremock/Dockerfile'
-            tags: |
-              latest
+        # - template: pipeline/steps/push-img.yaml
+        #   parameters:
+        #     registry: 'DTS-SS-ACRPrivate'
+        #     repository: 'hmi/apim-tests-wiremock'
+        #     dockerfile: 'pipeline/tests/wiremock/Dockerfile'
+        #     tags: |
+        #       latest
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
@@ -75,7 +75,7 @@ stages:
       - job: containerjob
         pool:
           vmImage: 'ubuntu-16.04'
-        container: wiremock_container
+        container: centos:latest
         steps:
         - script: ls
 
