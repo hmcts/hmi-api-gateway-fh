@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM adoptopenjdk/openjdk-11:alpine-slim
 LABEL maintainer = HMI-QA
 WORKDIR /opt/app/wiremock
 COPY wiremock/ /opt/app/wiremock/
