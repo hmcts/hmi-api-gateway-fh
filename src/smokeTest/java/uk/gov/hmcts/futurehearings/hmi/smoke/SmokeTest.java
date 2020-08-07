@@ -1,6 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke.updateuser;
-
-import static io.restassured.RestAssured.expect;
+package uk.gov.hmcts.futurehearings.hmi.smoke;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
@@ -8,30 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class UpdateUserApiSmokeTest {
+public class SmokeTest {
 
     @Value("${targetInstance}")
-    private String targetInstance;
+    protected String targetInstance;
 
     @Value("${targetHost}")
-    private String targetHost;
+    protected String targetHost;
 
     @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
+    protected String targetSubscriptionKey;
 
-    @Value("${updateUserApiRootContext}")
-    private String updateUserApiRootContext;
-
-    private Map<String, Object> headersAsMap = new HashMap<>();
+    protected Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
     public void initialiseValues() {
@@ -44,17 +36,5 @@ public class UpdateUserApiSmokeTest {
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
-    }
-
-    @Test
-    @Disabled
-    @DisplayName("Smoke Test to Test the Endpoint for the Get Update Users Root Context")
-    public void testSuccessfulAllSessionsApiGet() {
-         expect().that().statusCode(200)
-                .given().contentType("application/json")
-                .headers(headersAsMap)
-                .baseUri(targetInstance)
-                .basePath(updateUserApiRootContext)
-                .when().get();
     }
 }
