@@ -39,7 +39,6 @@ stages:
             keyVaultName: hmi-apim-kv-$(environment)
             secret: hmi-apim-sub-key
 
-
   - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Functional
@@ -51,59 +50,60 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
-      - task: Gradle@2
-        inputs:
-          gradleWrapperFile: 'gradlew'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
-          publishJUnitResults: true
-          testResultsFiles: '**/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.11'
-          sonarQubeRunAnalysis: false
+      - bash: echo $(hmi-apim-sub-key)
+  #     - task: Gradle@2
+  #       inputs:
+  #         gradleWrapperFile: 'gradlew'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #         tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
+  #         publishJUnitResults: true
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         javaHomeOption: 'JDKVersion'
+  #         jdkVersionOption: '1.11'
+  #         sonarQubeRunAnalysis: false
 
 
-  - stage: TESTS2
-    dependsOn: BUILD
-    displayName: Tests - Smoke
-    jobs:
-    - job: testsmoke
-      variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
-        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - task: Gradle@2
-        inputs:
-          gradleWrapperFile: 'gradlew'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
-          publishJUnitResults: true
-          testResultsFiles: '**/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.11'
-          sonarQubeRunAnalysis: false
+  # - stage: TESTS2
+  #   dependsOn: BUILD
+  #   displayName: Tests - Smoke
+  #   jobs:
+  #   - job: testsmoke
+  #     variables:
+  #       hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
+  #       hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+  #     pool:
+  #       vmImage: 'ubuntu-latest'
+  #     steps:
+  #     - task: Gradle@2
+  #       inputs:
+  #         gradleWrapperFile: 'gradlew'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #         tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+  #         publishJUnitResults: true
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         javaHomeOption: 'JDKVersion'
+  #         jdkVersionOption: '1.11'
+  #         sonarQubeRunAnalysis: false
 
 
-  - stage: TESTS3
-    dependsOn: BUILD
-    displayName: Tests - Unit
-    jobs:
-    - job: testunit
-      variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
-        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - task: Gradle@2
-        inputs:
-          gradleWrapperFile: 'gradlew'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
-          tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
-          publishJUnitResults: true
-          testResultsFiles: '**/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.11'
-          sonarQubeRunAnalysis: false
+  # - stage: TESTS3
+  #   dependsOn: BUILD
+  #   displayName: Tests - Unit
+  #   jobs:
+  #   - job: testunit
+  #     variables:
+  #       hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.subscription_key']]
+  #       hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+  #     pool:
+  #       vmImage: 'ubuntu-latest'
+  #     steps:
+  #     - task: Gradle@2
+  #       inputs:
+  #         gradleWrapperFile: 'gradlew'
+  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #         tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+  #         publishJUnitResults: true
+  #         testResultsFiles: '**/TEST-*.xml'
+  #         javaHomeOption: 'JDKVersion'
+  #         jdkVersionOption: '1.11'
+  #         sonarQubeRunAnalysis: false
