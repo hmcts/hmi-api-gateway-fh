@@ -39,6 +39,7 @@ stages:
             keyVaultName: hmi-apim-kv-$(environment)
             secret: hmi-apim-sub-key
 
+
   - stage: TESTS1
     dependsOn: BUILD
     displayName: Tests - Functional
@@ -50,9 +51,16 @@ stages:
       pool:
         vmImage: 'windows-latest'
       steps:
-      - template: pipeline/steps/run-gradlew.yaml
-        parameters:
-          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
+      - task: Gradle@2
+        inputs:
+          gradleWrapperFile: 'gradlew'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          tasks: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
+          publishJUnitResults: true
+          testResultsFiles: '**/TEST-*.xml'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          sonarQubeRunAnalysis: false
 
 
   - stage: TESTS2
@@ -66,9 +74,16 @@ stages:
       pool:
         vmImage: 'windows-latest'
         steps:
-        - template: pipeline/steps/run-gradlew.yaml
-          parameters:
-            runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+        - task: Gradle@2
+          inputs:
+            gradleWrapperFile: 'gradlew'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            tasks: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+            publishJUnitResults: true
+            testResultsFiles: '**/TEST-*.xml'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.11'
+            sonarQubeRunAnalysis: false
 
 
   - stage: TESTS3
@@ -82,6 +97,13 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
-        - template: pipeline/steps/run-gradlew.yaml
-          parameters:
-            runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+        - task: Gradle@2
+          inputs:
+            gradleWrapperFile: 'gradlew'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            tasks: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+            publishJUnitResults: true
+            testResultsFiles: '**/TEST-*.xml'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.11'
+            sonarQubeRunAnalysis: false
