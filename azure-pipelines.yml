@@ -72,11 +72,7 @@ stages:
         container: owasp_zap_container
         steps:
         - script: |
-            cp -r /home/zap/* /root/zap/
-            ls /root/zap/
-
-
-  # zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml
+            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml
 
   # - stage: WIREMOCK
   #   displayName: Tests - Wiremock
