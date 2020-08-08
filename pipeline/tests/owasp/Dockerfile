@@ -1,2 +1,2 @@
 FROM owasp/zap2docker-weekly:latest
-WORKDIR /home/zap/.cache
+RUN chmod -R 777 /home/zap
