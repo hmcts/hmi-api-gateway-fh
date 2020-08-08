@@ -27,7 +27,7 @@ resources:
     ports:
     - 80:80
     volumes:
-    - /zap/wrk:/zap/wrk
+    - /zap/wrk:/zap/wrk:rw
 
   # - container: wiremock_container
   #   image: hmi/apim-tests-wiremock:latest
@@ -71,7 +71,7 @@ stages:
           vmImage: 'ubuntu-latest'
         container: owasp_zap_container
         steps:
-        - script: zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml
+        - script: "zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml"
 
   # - stage: WIREMOCK
   #   displayName: Tests - Wiremock
