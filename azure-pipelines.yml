@@ -71,7 +71,12 @@ stages:
           vmImage: 'ubuntu-latest'
         container: owasp_zap_container
         steps:
-        - script: "zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml"
+        - script: |
+            cp -r /home/zap/* /root/zap/
+            ls /root/zap/
+
+
+  # zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml
 
   # - stage: WIREMOCK
   #   displayName: Tests - Wiremock
