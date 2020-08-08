@@ -23,7 +23,7 @@ resources:
   - container: owasp_zap_container
     image: hmi/apim-tests-owasp:latest
     endpoint: 'DTS-SS-ACRPrivate'
-    options: --user 0:0
+    # options: --user 0:0
     ports:
     - 80:80
     volumes:
@@ -72,6 +72,7 @@ stages:
         container: owasp_zap_container
         steps:
         - script: |
+        pwd
             zap-api-scan.py -t https://www.example.com/openapi.json -f openapi -x report_xml
 
   # - stage: WIREMOCK
