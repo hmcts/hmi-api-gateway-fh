@@ -1,5 +1,6 @@
-FROM adoptopenjdk/openjdk-11:alpine-slim
-LABEL maintainer = HMI-QA
+FROM openjdk:8-jre-alpine
+LABEL maintainer="HMI-QA"
+RUN apk add curl
 WORKDIR /opt/app/wiremock
 COPY wiremock/ /opt/app/wiremock/
 RUN curl -s -O https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-jre8-standalone/2.27.1/wiremock-jre8-standalone-2.27.1.jar
