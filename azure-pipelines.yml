@@ -20,19 +20,10 @@ variables:
 
 stages:
 
-  - stage: CI
-    displayName: Validate the code
-    jobs:
-    - job: validatetf
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - template: pipeline/steps/tf-test.yaml
-
   - stage: BUILD
     displayName: Build infrastructure with Terraform
     jobs:
-      - job: terraform
+      - job: Terraform
         pool:
           vmImage: 'ubuntu-latest'
         steps:
