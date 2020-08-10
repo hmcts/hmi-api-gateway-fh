@@ -56,5 +56,5 @@ stages:
         steps:
         - script: |
             pwd
-            zap-api-scan.py -t "https://www.example.com/openapi.json" -f openapi
+            zap-baseline.py -t "https://www.example.com/openapi.json"
 
