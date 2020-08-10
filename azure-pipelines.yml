@@ -27,12 +27,12 @@ resources:
     ports:
     - 80:80
 
-  # - container: wiremock_container
-  #   image: hmi/apim-tests-wiremock:latest
-  #   endpoint: 'DTS-SS-ACRPrivate'
-  #   options: --user 0:0
-  #   ports:
-  #   - 8080:8080
+  - container: wiremock_container
+    image: hmi/apim-tests-wiremock:latest
+    endpoint: 'DTS-SS-ACRPrivate'
+    options: --user 0:0
+    ports:
+    - 8080:8080
 
 
 stages:
