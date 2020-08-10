@@ -26,8 +26,6 @@ resources:
     options: --user 0:0
     ports:
     - 80:80
-    volumes:
-    - /zap/wrk:/zap/wrk:rw
 
   # - container: wiremock_container
   #   image: hmi/apim-tests-wiremock:latest
@@ -73,7 +71,7 @@ stages:
         steps:
         - script: |
             pwd
-            zap-api-scan.py -h
+            zap-api-scan.py -t "https://www.example.com/openapi.json" -f openapi -x report_xml
 
   # - stage: WIREMOCK
   #   displayName: Tests - Wiremock
