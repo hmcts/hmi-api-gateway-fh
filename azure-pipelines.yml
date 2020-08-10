@@ -17,6 +17,14 @@ stages:
     
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
+
+      - job: ValidateTF
+        displayName: Validate the code
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - template: pipeline/steps/tf-test.yaml
+
       - job: Terraform
         variables:
         - group: HMI-APIM-BUILD-SBOX
