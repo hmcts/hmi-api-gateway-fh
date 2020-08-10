@@ -4,10 +4,3 @@ steps:
   displayName: Install Terraform $(terraformVersion)
   inputs:
     terraformVersion: $(terraformVersion)
-
-- task: Bash@3
-  displayName: Terraform fmt
-  inputs:
-    targetType: inline
-    workingDirectory: $(System.DefaultWorkingDirectory)
-    script: terraform fmt -recursive
