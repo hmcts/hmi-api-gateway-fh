@@ -1,0 +1,1003 @@
+ 1049  git add infrastructure/
+ 1050  git commit -m "redo tf operation"
+ 1051  git push
+ 1052  git add infrastructure/
+ 1053  git commit -m "redo tf operation"
+ 1054  git push
+ 1055  git status
+ 1056  git add infrastructure/
+ 1057  git commit -m "removing api policy"
+ 1058  git push
+ 1059  git status
+ 1060  git add infrastructure/
+ 1061  git commit -m "removed api ops"
+ 1062  git push
+ 1063  git add infrastructure/
+ 1064  git commit -m "removed api ops"
+ 1065  git push
+ 1066  git status
+ 1067  git add .
+ 1068  git commit -m "removed unused vars"
+ 1069  git push
+ 1070  git pull 
+ 1071  git checkout HMIS-174
+ 1072  git pull origin master
+ 1073  git stash
+ 1074  git checkout master
+ 1075  git pull
+ 1076  git stash
+ 1077  git status
+ 1078  git stash
+ 1079  git checkout HMIS-152_SANDBOX_CI/CD_Pipeline
+ 1080  git checkout master
+ 1081  git rm src/unitTest/
+ 1082  git status
+ 1083  git pull
+ 1084  git checkout -b "HMIS-203_add_code_validation"
+ 1085  cd infrastructure/terraform/
+ 1086  terraform fmt
+ 1087  git status
+ 1088  git add .
+ 1089  git commit -m "add validation"
+ 1090  git push
+ 1091  git push --set-upstream origin HMIS-203_add_code_validation
+ 1092  git status
+ 1093  git add ../../azure-pipelines.yml 
+ 1094  git commit -m "add validation"
+ 1095  git push --set-upstream origin HMIS-203_add_code_validation
+ 1096  cd ../..
+ 1097  git status
+ 1098  git add 
+ 1099  git add .
+ 1100  git commit -m "copied lint script"
+ 1101  git push
+ 1102  docker ps
+ 1103  ./gradlew pactPublish
+ 1104  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1105  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=1234
+ 1106  ./gradlew pactPublish
+ 1107  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1108  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=142d982c9ed4436bbda8c124840edced
+ 1109  ./gradlew pactPublish
+ 1110  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1111  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=95e5c4909a54404c9ea04de93bb02a17
+ 1112  ./gradlew pactPublish
+ 1113  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1114  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-sbox.azure-api.net' -DTEST_SUBSCRIPTION_KEY=95e5c4909a54404c9ea04de93bb02a17
+ 1115  git stash
+ 1116  docker container stop
+ 1117  docker container ls
+ 1118  docker container stop 4549
+ 1119  docker container stop 1bd8
+ 1120  docker-compose -f docker-pactbroker-compose.yml up
+ 1121  git checkout master
+ 1122  docker-compose -f docker-pactbroker-compose.yml up
+ 1123  git pull
+ 1124  docker-compose -f docker-pactbroker-compose.yml up
+ 1125  docker-compose -f docker-pactbroker-compose.yml up -d
+ 1126  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=142d982c9ed4436bbda8c124840edced
+ 1127  ./gradlew pactPublish
+ 1128  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1129  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION
+ 1130  ./gradlew pactPublish
+ 1131  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1132  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=12345
+ 1133  ./gradlew pactPublish
+ 1134  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1135  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=SAUSAGE
+ 1136  ./gradlew pactPublish
+ 1137  ./gradlew clean pactVerify -Ppact.verifier.publishResults=true
+ 1138  docker ps
+ 1139  docker container stop 4549
+ 1140  docker container stop 1bd8
+ 1141  git status
+ 1142  git stash
+ 1143  git status
+ 1144  git checkout HMIS-203_add_code_validation 
+ 1145  git status
+ 1146  git add .
+ 1147  git commit -m "testing tf lint script"
+ 1148  git push
+ 1149  git pull origin master
+ 1150  git status
+ 1151  git merge --abort
+ 1152  git checkout master infrastructure/
+ 1153  git status
+ 1154  git add .
+ 1155  git commit -m "merged"
+ 1156  git push
+ 1157  git status
+ 1158  git add azure-pipelines.yml 
+ 1159  git add pipeline/steps/tf-test.yaml 
+ 1160  git commit -m "fix path"
+ 1161  git push
+ 1162  terraform fmt
+ 1163  git status
+ 1164  cd infrastructure/terraform/
+ 1165  terraform fmt
+ 1166  git status
+ 1167  git add .
+ 1168  git commit -m "corrected tf formatting"
+ 1169  git push
+ 1170  git checkout master 
+ 1171  git status
+ 1172  git checkout -b HMIS-143_Security_Test
+ 1173  git status
+ 1174  cd ../..
+ 1175  git add azure-pipelines.yml 
+ 1176  git commit -m "test container job"
+ 1177  git push 
+ 1178  git push --set-upstream origin HMIS-143_Security_Test
+ 1179  git pull
+ 1180  git checkout HMIS-203_add_code_validation 
+ 1181  git pull
+ 1182  git push
+ 1183  git pull origin master
+ 1184  git checkout master infrastructure/terraform/05-inputs-api-policies.tf
+ 1185  cd infrastructure/terraform/
+ 1186  terraform fmt
+ 1187  git status
+ 1188  git add 05-inputs-api-policies.tf 
+ 1189  git commit -m "fmt tf"
+ 1190  git push
+ 1191  git checkout HMIS-143_Security_Test 
+ 1192  cd ../..
+ 1193  git add azure-pipelines.yml 
+ 1194  git commit -m "name image"
+ 1195  git push
+ 1196  git status
+ 1197  set
+ 1198  git status
+ 1199  git add azure-pipelines.yml 
+ 1200  git commit -m "test basic windows"
+ 1201  git push
+ 1202  htop
+ 1203  sudo apt-get remove clamav* --purge
+ 1204  htop
+ 1205  ls -la /
+ 1206  ls -la **/
+ 1207  ls -la **/pipeline
+ 1208  ls -la
+ 1209  ls -la */pipeline
+ 1210  ls -la /pipeline
+ 1211  ls -la pipeline
+ 1212  git pull
+ 1213  git stash
+ 1214  git pull 
+ 1215  git status
+ 1216  git add .
+ 1217  git commit -m "add acr build"
+ 1218  git push
+ 1219  git pull 
+ 1220  git add azure-pipelines.yml 
+ 1221  git commit -m "add acr template"
+ 1222  gt push 
+ 1223  git push 
+ 1224  git add azure-pipelines.yml 
+ 1225  git commit -m "add acr template"
+ 1226  git push 
+ 1227  git status
+ 1228  git add azure-pipelines.yml 
+ 1229  git commit -m "add container resource"
+ 1230  git push
+ 1231  printenv
+ 1232  git add azure-pipelines.yml 
+ 1233  git commit -m "test container job"
+ 1234  git push 
+ 1235  git add azure-pipelines.yml 
+ 1236  git commit -m "add tag"
+ 1237  git push 
+ 1238  git add azure-pipelines.yml 
+ 1239  git commit -m "added dependency"
+ 1240  git push 
+ 1241  git status
+ 1242  git checkout master
+ 1243  git add azure-pipelines.yml 
+ 1244  git commit -m "test tag"
+ 1245  git push
+ 1246  git add azure-pipelines.yml 
+ 1247  git commit -m "test tag"
+ 1248  git push
+ 1249  git commit -m "test tag"
+ 1250  git add azure-pipelines.yml 
+ 1251  git commit -m "test tag"
+ 1252  git push
+ 1253  git add azure-pipelines.yml 
+ 1254  git commit -m "test tag"
+ 1255  git add azure-pipelines.yml 
+ 1256  git commit -m "test tag"
+ 1257  git push
+ 1258  git add azure-pipelines.yml 
+ 1259  git commit -m "add user permission"
+ 1260  git push
+ 1261  git status
+ 1262  git add .
+ 1263  git checkout HMIS-201
+ 1264  cd pipeline/tests/wiremock/
+ 1265  docker build -t wire .
+ 1266  ./wiremock/wiremock-download.sh 
+ 1267  docker build -t wire .
+ 1268  cd ../..
+ 1269  cd ..
+ 1270  git status
+ 1271  git add .
+ 1272  git commit -m "add wiremock"
+ 1273  git status
+ 1274  git add .
+ 1275  git status
+ 1276  git checkout master
+ 1277  git checkout HMIS-143_Security_Test 
+ 1278  cd pipeline/tests/wiremock/
+ 1279  docker build -t wire .
+ 1280  docker image ls
+ 1281  docker image rm wire
+ 1282  docker build -t wire .
+ 1283  cd ../..
+ 1284  git status
+ 1285  git add .
+ 1286  git commit -m "adding wiremock image"
+ 1287  git push 
+ 1288  git status
+ 1289  cd ..
+ 1290  git add .
+ 1291  git commit -m "adding wiremock image"
+ 1292  git push 
+ 1293  git add .
+ 1294  git commit -m "adding wiremock image"
+ 1295  git push 
+ 1296  git staus
+ 1297  git status
+ 1298  git checkout master
+ 1299  git pull
+ 1300  git checkout -b "Test_sub_key_tf"
+ 1301  git checkout HMIS-143_Security_Test 
+ 1302  git add azure-pipelines.yml azure-pipelines.yml
+ 1303  git commit -m "separate container stages"
+ 1304  git push
+ 1305  git checkout "Test_sub_key_tf"
+ 1306  git checkout HMIS-143_Security_Test 
+ 1307  git add azure-pipelines.yml azure-pipelines.yml 
+ 1308  git commit -m "separate container stages"
+ 1309  git push
+ 1310  cd pipeline/tests/wiremock/
+ 1311  ls
+ 1312  docker run -d wiremock
+ 1313  docker image ls
+ 1314  docker run -d wire
+ 1315  docker create --name wire-cont --user 0:0 
+ 1316  docker create --name wire-cont --user 0:0 -t -i wire bash
+ 1317  docker start 8733f0f3266e7683603f29c5ed2bca803e23ca47d8f7177ad10912a185430649
+ 1318  docker ps --all --filter id=8733f0f3266e7683603f29c5ed2bca803e23ca47d8f7177ad10912a185430649
+ 1319  docker exec 8733f0f3266e7683603f29c5ed2bca803e23ca47d8f7177ad10912a185430649 sh -c "command -v bash"
+ 1320  whoami
+ 1321  id -u sadfaerie
+ 1322  docker exec 8733f0f3266e7683603f29c5ed2bca803e23ca47d8f7177ad10912a185430649 bash -c "getend passwd 1000 | cut -d: -f1"
+ 1323  docker exec 8733f0f3266e7683603f29c5ed2bca803e23ca47d8f7177ad10912a185430649 bash -c "getent passwd 1000 | cut -d: -f1"
+ 1324  docker ps
+ 1325  docker container stop 8733
+ 1326  docker container stop b6f5
+ 1327  docker prune
+ 1328  docker container prune
+ 1329  docker image prune
+ 1330  git status
+ 1331  git add .
+ 1332  git commit -m "owasp test"
+ 1333  cd ../..
+ 1334  git add .
+ 1335  git commit -m "owasp test"
+ 1336  git push
+ 1337  git checkout master
+ 1338  git status
+ 1339  git diff
+ 1340  cd ../..
+ 1341  cd hmi-api-gateway-fh/
+ 1342  git add .
+ 1343  git commit -m "remove useradd"
+ 1344  git push
+ 1345  git checkout "Test_sub_key_tf"
+ 1346  git pull origin master
+ 1347  git diff HMIS-208_Add_tags master
+ 1348  git diff HMIS-208_Add_tags infrastructure/terraform/ master
+ 1349  git diff HMIS-208_Add_tags infrastructure/terraform/ master infrastructure/terraform/
+ 1350  git diff HMIS-208_Add_tags master infrastructure/terraform/
+ 1351  git diff HMIS-208_Add_tags master pipeline/
+ 1352  git diff HMIS-208_Add_tags master src/
+ 1353  git status
+ 1354  git checkout HMIS-143_Security_Test 
+ 1355  git add azure-pipelines.yml 
+ 1356  git status
+ 1357  git commit -m "change uuid"
+ 1358  git push
+ 1359  git status
+ 1360  git add azure-pipelines.yml 
+ 1361  git commit -m "try useradd on wiremock"
+ 1362  git push
+ 1363  git status
+ 1364  git add azure-pipelines.yml 
+ 1365  git commit -m "change uuid"
+ 1366  git push 
+ 1367  git stash
+ 1368  git status
+ 1369  git add azure-pipelines.yml 
+ 1370  git commit -m "add ports"
+ 1371  git push
+ 1372  git add azure-pipelines.yml 
+ 1373  git commit -m "add ports"
+ 1374  git push
+ 1375  git add azure-pipelines.yml 
+ 1376  git commit -m "add ports"
+ 1377  git push
+ 1378  git add azure-pipelines.yml 
+ 1379  git commit -m "add ports"
+ 1380  git push
+ 1381  git add azure-pipelines.yml 
+ 1382  git commit -m "add ports"
+ 1383  git push
+ 1384  git add azure-pipelines.yml 
+ 1385  git commit -m "add ports"
+ 1386  git push
+ 1387  git status
+ 1388  git add .
+ 1389  git commit -m "changed wiremock base img"
+ 1390  git push 
+ 1391  git checkout master
+ 1392  ./gradlew clean smoke -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1393  ./gradlew clean smoke -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285 -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1394  clean functional -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285 -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1395  ./gradlew clean functional -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285 -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1396  git status
+ 1397  git checkout -b "fix_stage_variable_name"
+ 1398  git status
+ 1399  git add azure-pipelines.yml 
+ 1400  git commit -m "changes stage var name"
+ 1401  git push 
+ 1402  git push --set-upstream origin fix_stage_variable_name
+ 1403  git add .
+ 1404  git commit -m "change stage dependencies"
+ 1405  git push 
+ 1406  git add azure-pipelines.yml 
+ 1407  git commit -m "add conditions"
+ 1408  git push 
+ 1409  git add azure-pipelines.yml 
+ 1410  git commit -m "rm conditions"
+ 1411  git push 
+ 1412  git status
+ 1413  git add .
+ 1414  git commit -m "rename sub key var"
+ 1415  git push 
+ 1416  git add .
+ 1417  git commit -m "add missing bracket"
+ 1418  git push 
+ 1419  git status
+ 1420  git add azure-pipelines.yml 
+ 1421  git commit -m "removed templates"
+ 1422  git puhs 
+ 1423  git push 
+ 1424  git add azure-pipelines.yml 
+ 1425  git commit -m "fixed indents"
+ 1426  git push 
+ 1427  git add azure-pipelines.yml 
+ 1428  git commit -m "echo var between stages"
+ 1429  git push 
+ 1430  git add azure-pipelines.yml 
+ 1431  git commit -m "echo var between stages"
+ 1432  git push 
+ 1433  git add azure-pipelines.yml 
+ 1434  git commit -m "echo var between stages"
+ 1435  git push 
+ 1436  git add azure-pipelines.yml 
+ 1437  git commit -m "echo var between stages"
+ 1438  git add .
+ 1439  git commit -m "echo var between stages"
+ 1440  git push 
+ 1441  git add .
+ 1442  git commit -m "echo var between stages"
+ 1443  git push 
+ 1444  git status
+ 1445  git add azure-pipelines.yml 
+ 1446  gti commit -m "final tweak"
+ 1447  git push 
+ 1448  gti commit -m "final tweak"
+ 1449  git add .
+ 1450  git commit -m "final tweak"
+ 1451  git puhs 
+ 1452  git push
+ 1453  git status
+ 1454  ./gradlew clean test -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1455  ./gradlew clean test -DTEST_SUBSCRIPTION_KEY=20b9734901c647fd8396c59e83ebb285 -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=hmi-apim-svc-sbox.azure-api.net
+ 1456  git status
+ 1457  git pull origin master
+ 1458  git add .
+ 1459  git commit -m "rm stray param"
+ 1460  git push 
+ 1461  git checkout -b "fix_terraform_outputs"
+ 1462  git status
+ 1463  git add infrastructure/
+ 1464  git commit -m "output hostname"
+ 1465  git push 
+ 1466  output "hmi_apim_gateway_url" {
+ 1467  git push --set-upstream origin fix_terraform_outputs
+ 1468  cd infrastructure/terraform/
+ 1469  terraform fmt
+ 1470  git add .
+ 1471  git validate
+ 1472  terraform validate
+ 1473  git commit -m "working on outputs"
+ 1474  git push 
+ 1475  git add .
+ 1476  git commit -m "working on outputs"
+ 1477  git push 
+ 1478  terraforom init
+ 1479  terraform init
+ 1480  terraform init -backend-config=backend.tfvars
+ 1481  terraform verify
+ 1482  terrafor validate
+ 1483  terraform validate
+ 1484  terraform plan
+ 1485  terraform plan -var-file="environment/sbox-hmi.tfvars"
+ 1486  git add .
+ 1487  git commit -m "working on outputs"
+ 1488  git push 
+ 1489  terraform validate
+ 1490  git add .
+ 1491  git commit -m "output hostname"
+ 1492  git push 
+ 1493  terraform validate
+ 1494  git add .
+ 1495  git commit -m "output hostname"
+ 1496  git push 
+ 1497  terraform fmt
+ 1498  cd ../..
+ 1499  gateway=https://hmi-apim-svc-sbox.azure-api.net
+ 1500  echo gateway
+ 1501  echo $gateway
+ 1502  echo $gateway | awk -F'https://'
+ 1503  echo $gateway | awk -F'https://' '{print $2 }
+ 1504  echo $gateway | awk -F'https://' '{print $2 }'
+ 1505  host=echo $gateway | awk -F'https://' '{print $2 }'
+ 1506  host_name=$(echo $gateway | awk -F'https://' '{print $2 }')
+ 1507  echo $host_name
+ 1508  git status
+ 1509  git add .
+ 1510  git commit -m "export tf output"
+ 1511  git push 
+ 1512  terraform output
+ 1513  terraform output -state-file="terra.tfstate"
+ 1514  terraform output  -state="terra.tfstate"
+ 1515  terraform console
+ 1516  git add .
+ 1517  git commit -m "export tf output"
+ 1518  git push 
+ 1519  cd infrastructure/terraform/
+ 1520  terraform fmt
+ 1521  terraform validate
+ 1522  git status
+ 1523  git add .
+ 1524  git commit -m "export gw url to kv"
+ 1525  git push
+ 1526  cd ../..
+ 1527  git add .
+ 1528  git commit -m "export gw url to kv"
+ 1529  git push
+ 1530  git add .
+ 1531  git commit -m "export gw url to kv"
+ 1532  git push
+ 1533  git add .
+ 1534  git commit -m "export gw url to kv"
+ 1535  git push
+ 1536  git checkout HMIS-203_add_code_validation 
+ 1537  git checkout master infrastructure/terraform/05-inputs-api-policies.tf
+ 1538  cd infrastructure/terraform/
+ 1539  terraform fmt
+ 1540  git status
+ 1541  git add .
+ 1542  git commit -m "formatted tf"
+ 1543  git ../..
+ 1544  cd ../.
+ 1545  cd ..
+ 1546  git push
+ 1547  git checkout fix_terraform_outputs 
+ 1548  host_name=$(echo $gateway | awk -F'https://' '{print $2 }')
+ 1549  echo $host_name
+ 1550  git add .
+ 1551  git commit -m "export gw url to kv"
+ 1552  git push
+ 1553  echo $gateway
+ 1554  echo $gateway > tmp.txt
+ 1555  host_name=$(cat tmp.txt | awk -F'https://' '{print $2 }')
+ 1556  echo $host_name
+ 1557  git add .
+ 1558  git commit -m "export gw url to kv"
+ 1559  git push
+ 1560  host_name=$(cat tmp.txt | awk -F\'https://\' '{print $2 }')
+ 1561  echo $host_name
+ 1562  host_name="$(cat tmp.txt | awk -F'https://' '{print $2 }')"
+ 1563  echo $host_name
+ 1564  git add .
+ 1565  git commit -m "export gw url to kv"
+ 1566  git push
+ 1567  git add .
+ 1568  git commit -m "export gw url to kv"
+ 1569  git push
+ 1570  git add .
+ 1571  git commit -m "export gw url to kv"
+ 1572  git push
+ 1573  git add .
+ 1574  git commit -m "export gw url to kv"
+ 1575  git push
+ 1576  git add .
+ 1577  git commit -m "export gw url to kv"
+ 1578  git push
+ 1579  git add .
+ 1580  git commit -m "export gw url to kv"
+ 1581  git push
+ 1582  echo $gateway
+ 1583  cut -d -f 2- $gateway
+ 1584  cut -d -f 1 $gateway
+ 1585  cut -d -f 1-4 $gateway
+ 1586  cut -d_ -f 1-4 $gateway
+ 1587  cut -d'/' $gateway
+ 1588  cut -d'/' $gateway -f2
+ 1589  echo $gateway | cut -d'/' -f2
+ 1590  echo $gateway | cut -d'//' -f2
+ 1591  echo $gateway | cut -d'h' -f2
+ 1592  echo $gateway | cut -d':' -f2
+ 1593  echo $gateway | cut -d'\/' -f2
+ 1594  echo $gateway | cut -d'/' -f2
+ 1595  git checkout master 
+ 1596  git checkout -b "hotfix_host_name"
+ 1597  git checkout master 
+ 1598  git pull
+ 1599  git checkout -b "hotfix_host_name"
+ 1600  git checkout "hotfix_host_name"
+ 1601  git pull origin master
+ 1602  git add azure-pipelines.yml 
+ 1603  git commit -m "fix hostname with var"
+ 1604  git push
+ 1605  git push --set-upstream origin hotfix_host_name
+ 1606  git status
+ 1607  git checkout HMIS-143_Security_Test 
+ 1608  git add azure-pipelines.yml 
+ 1609  git commit -m "api scan"
+ 1610  git push
+ 1611  git add .
+ 1612  git commit -m "api scan"
+ 1613  git push
+ 1614  git add .
+ 1615  git commit -m "api scan"
+ 1616  git push
+ 1617  cd pipeline/tests/wiremock/
+ 1618  docker build -t aplinewire .
+ 1619  docker run -p 8080:8080 alpinewire -d
+ 1620  docker run -p 8080:8080 aplinewire -d
+ 1621  docker run -p 8080:8080 aplinewire 
+ 1622  docker build -t aplinewire .
+ 1623  docker run -p 8080:8080 aplinewire 
+ 1624  git status
+ 1625  git checkout master
+ 1626  git checkout -b "HMIS-202-add-test-pipeline"
+ 1627  git add .
+ 1628  git commit -m "start test pipeline"
+ 1629  git push
+ 1630  git push --set-upstream origin HMIS-202-add-test-pipeline
+ 1631  git add .
+ 1632  git commit -m "refactoring build"
+ 1633  git push 
+ 1634  git add .
+ 1635  git commit -m "refactoring build"
+ 1636  git push 
+ 1637  git status
+ 1638  git stash
+ 1639  git status
+ 1640  git add .
+ 1641  git commit -m "test runtime params"
+ 1642  git push
+ 1643  git pull
+ 1644  git push
+ 1645  git pull
+ 1646  git add .
+ 1647  git commit -m "test runtime params"
+ 1648  git push
+ 1649  git pull
+ 1650  git status
+ 1651  git add .
+ 1652  git commit -m "test runtime params"
+ 1653  git status
+ 1654  git push
+ 1655  git add .
+ 1656  git commit -m "test runtime params"
+ 1657  git push
+ 1658  git add .
+ 1659  git commit -m "test runtime params"
+ 1660  git push
+ 1661  git add .
+ 1662  git commit -m "test runtime params"
+ 1663  git push
+ 1664  git add .
+ 1665  git commit -m "test runtime params"
+ 1666  git push
+ 1667  git add .
+ 1668  git commit -m "test runtime params"
+ 1669  git push
+ 1670  git add .
+ 1671  git commit -m "test importing vars"
+ 1672  git push
+ 1673  git add .
+ 1674  git commit -m "readding sandbox jobs"
+ 1675  git push
+ 1676  git checkout master
+ 1677  git checkout HMIS-202-add-test-pipeline 
+ 1678  git status
+ 1679  git add infrastructure/
+ 1680  git commit -m "renamed template file"
+ 1681  git push 
+ 1682  git checkout -b "fix filename"
+ 1683  git checkout -b "fix_filename"
+ 1684  git status
+ 1685  git push
+ 1686  git checkout master
+ 1687  git pull
+ 1688  git stash
+ 1689  git push
+ 1690  git checkout -b "fix filepath"
+ 1691  git checkout -b "fix_filename"
+ 1692  git checkout  "fix_filename"
+ 1693  git commit infrastructure/terraform/05-inputs-api-policies.tf 
+ 1694  git commit infrastructure/terraform/05-inputs-api-policies.tf -m "fix file name"
+ 1695  git push
+ 1696  git status
+ 1697  git checkout HMIS-202-add-test-pipeline 
+ 1698  git status
+ 1699  git add .
+ 1700  git commit -m "readding sandbox jobs"
+ 1701  git push
+ 1702  git status
+ 1703  git add .
+ 1704  git commit -m "redoing params"
+ 1705  git push 
+ 1706  git add .
+ 1707  git commit -m "redoing params"
+ 1708  git push 
+ 1709  git checkout master
+ 1710  git stash
+ 1711  git checkout master
+ 1712  git checkout HMIS-202-add-test-pipeline 
+ 1713  git add .
+ 1714  git commit -m "test params & vars"
+ 1715  git push
+ 1716  git checkout master 
+ 1717  git checkout -b "add_tags"
+ 1718  git status
+ 1719  git add infrastructure/
+ 1720  git commit -m "adding tags"
+ 1721  git push 
+ 1722  git branch -b "HMIS-208_Add_tags"
+ 1723  git checkout -b "HMIS-208_Add_tags"
+ 1724  git push 
+ 1725  tags = {
+ 1726  git push 
+ 1727  git push --set-upstream origin HMIS-208_Add_tags
+ 1728  git checkout HMIS-202-add-test-pipeline 
+ 1729  git add .
+ 1730  git commit -m "fixed typo"
+ 1731  git push
+ 1732  git add .
+ 1733  git commit -m "try different vars"
+ 1734  git push 
+ 1735  git add .
+ 1736  git commit -m "try different vars"
+ 1737  git push 
+ 1738  git add .
+ 1739  git commit -m "try different vars"
+ 1740  git push 
+ 1741  git status
+ 1742  git add .
+ 1743  git commit -m "pass vars to params"
+ 1744  git push 
+ 1745  git add .
+ 1746  git commit -m "pass vars to params"
+ 1747  git push 
+ 1748  git status
+ 1749  git add .
+ 1750  git commit -m "get vars from vargroup"
+ 1751  git push
+ 1752  git add .
+ 1753  git commit -m "changed contains to eq"
+ 1754  git push
+ 1755  git add .
+ 1756  git commit -m "changed contains to eq"
+ 1757  git push
+ 1758  git add .
+ 1759  git commit -m "test passing vars"
+ 1760  git push
+ 1761  git add .
+ 1762  git status
+ 1763  git push
+ 1764  git status
+ 1765  git add .
+ 1766  git commit -m "test passing vars"
+ 1767  git push
+ 1768  git status
+ 1769  git add .
+ 1770  git commit -m "test stages params"
+ 1771  git push
+ 1772  git add .
+ 1773  git commit -m "test stages params"
+ 1774  git push
+ 1775  git add .
+ 1776  git commit -m "test stages params"
+ 1777  git push
+ 1778  git add .
+ 1779  git commit -m "fix typo"
+ 1780  git push
+ 1781  git add .
+ 1782  git commit -m "test stages params"
+ 1783  git push
+ 1784  git add .
+ 1785  git commit -m "test stages params"
+ 1786  git push
+ 1787  git add .
+ 1788  git commit -m "test stages params"
+ 1789  git push
+ 1790  git add .
+ 1791  git commit -m "test stages params"
+ 1792  git push
+ 1793  git add .
+ 1794  git commit -m "test stages params"
+ 1795  git push
+ 1796  git add .
+ 1797  git commit -m "testing various vars"
+ 1798  git push
+ 1799  git add .
+ 1800  git commit -m "testing various vars"
+ 1801  git push
+ 1802  git add .
+ 1803  git commit -m "testing various vars"
+ 1804  git push
+ 1805  git add .
+ 1806  git commit -m "testing various vars"
+ 1807  git push
+ 1808  git add .
+ 1809  git commit -m "test manual var"
+ 1810  git push
+ 1811  git add .
+ 1812  git commit -m "test manual var"
+ 1813  git push
+ 1814  git add .
+ 1815  git commit -m "test manual var"
+ 1816  git push
+ 1817  git checkout -b HMIS-208_Add_tags 
+ 1818  git checkout HMIS-208_Add_tags 
+ 1819  git status
+ 1820  git add infrastructure/
+ 1821  git commit -m "changed tags values"
+ 1822  git push 
+ 1823  git add infrastructure/
+ 1824  git commit -m "changed tags values"
+ 1825  git push 
+ 1826  git checkout HMIS-202-add-test-pipeline 
+ 1827  git status
+ 1828  git add .
+ 1829  git commit -m "variable testing - sub"
+ 1830  git push
+ 1831  git pull origin master
+ 1832  git status
+ 1833  git push
+ 1834  git add .
+ 1835  git commit -m "readding tf apply"
+ 1836  git push
+ 1837  git status
+ 1838  git add pipeline/
+ 1839  git commit -m "refactoring"
+ 1840  git push
+ 1841  git add .
+ 1842  git commit -m "add sub param"
+ 1843  git push 
+ 1844  git add .
+ 1845  git commit -m "add sub param"
+ 1846  git push 
+ 1847  git add .
+ 1848  git commit -m "add sub param"
+ 1849  git push 
+ 1850  git add .
+ 1851  git commit -m "add sub param"
+ 1852  git push 
+ 1853  git status
+ 1854  git add .
+ 1855  git commit -m "add sub param to apply"
+ 1856  git push
+ 1857  git status
+ 1858  git add .
+ 1859  git commit -m "load vars before run"
+ 1860  git push
+ 1861  git add .
+ 1862  git commit -m "load vars before run"
+ 1863  git push
+ 1864  git add .
+ 1865  git push
+ 1866  git commit -m "load vars before run"
+ 1867  git push
+ 1868  git add .
+ 1869  git commit -m "load vars before run"
+ 1870  git push
+ 1871  git add .
+ 1872  git commit -m "load vars before run"
+ 1873  git push
+ 1874  git add .
+ 1875  git commit -m "load vars before run"
+ 1876  git push
+ 1877  git add .
+ 1878  git commit -m "load vars before run"
+ 1879  git push
+ 1880  git add .
+ 1881  git commit -m "load vars before run"
+ 1882  git push
+ 1883  git status
+ 1884  git add .
+ 1885  git commit -m "run plan and apply in one task"
+ 1886  git push
+ 1887  git add .
+ 1888  git commit -m "rerun"
+ 1889  git push
+ 1890  git pull origin master
+ 1891  git push
+ 1892  git status
+ 1893  git add pipeline/steps/export-keyvault.yaml 
+ 1894  git commit -m "made sub key secret"
+ 1895  git add .
+ 1896  git commit -m "rerun"
+ 1897  git push
+ 1898  git add .
+ 1899  git commit -m "rerun"
+ 1900  git push
+ 1901  git add .
+ 1902  git commit -m "rerun"
+ 1903  git push
+ 1904  git add .
+ 1905  git commit -m "rerun"
+ 1906  git push
+ 1907  git status
+ 1908  git diff
+ 1909  git stash
+ 1910  git checkout HMIS-203_add_code_validation 
+ 1911  git checkout contractTest 
+ 1912  git stash
+ 1913  git checkout contractTest 
+ 1914  docker-compose docker-pactbroker-compose.yml .
+ 1915  docker-compose docker-pactbroker-compose.yml run
+ 1916  docker-compose run docker-pactbroker-compose.yml 
+ 1917  docker-compose up docker-pactbroker-compose.yml 
+ 1918  docker-compose docker-pactbroker-compose.yml up
+ 1919  docker-compose -f docker-pactbroker-compose.yml up
+ 1920  docker-compose -f docker-pactbroker-compose.yml up -d
+ 1921  gradle clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=123
+ 1922  ./gradlew clean contract -DTEST_HOST='hmi-apim-svc-test.azure-api.net' -DTEST_SUBSCRIPTION_KEY=123
+ 1923  ./gradlew clean contract -DTEST_HOST='does.not.compute' -DTEST_SUBSCRIPTION_KEY=123
+ 1924  cd pipeline/tests/
+ 1925  cd owasp/
+ 1926  docker build -t owsp .
+ 1927  docker run -it owsp /bin/bash
+ 1928  git status
+ 1929  cd ../..
+ 1930  cd ..
+ 1931  git add azure-pipelines.yml 
+ 1932  git commit -m "add owasp volume"
+ 1933  git push 
+ 1934  git add azure-pipelines.yml 
+ 1935  git commit -m "add owasp volume"
+ 1936  git push 
+ 1937  docker run -it owsp /bin/bash
+ 1938  cp pipeline/tests/ /root/
+ 1939  cp -r pipeline/tests/ /root/
+ 1940  git add azure-pipelines.yml 
+ 1941  git commit -m "add owasp volume"
+ 1942  git push 
+ 1943  git add pipeline/tests/owasp/
+ 1944  git commit -m "add owasp volume"
+ 1945  git push 
+ 1946  cd pipeline/tests/owasp/
+ 1947  docker build -t owsp .
+ 1948  git add azure-pipelines.yml 
+ 1949  git add .
+ 1950  git push 
+ 1951  git commit -m "add owasp volume"
+ 1952  git push 
+ 1953  git add .
+ 1954  git commit -m "add owasp volume"
+ 1955  cd ../..
+ 1956  cd ..
+ 1957  git add azure-pipelines.yml 
+ 1958  git commit -m "add owasp volume"
+ 1959  git push 
+ 1960  git add pipeline/tests/owasp/
+ 1961  git commit -m "dd wrkdir
+ 1962  git commit -m "add wrkdir"
+ 1963  git commit -m "add workdir"
+ 1964  git push 
+ 1965  docker build -t owsp .
+ 1966  docker run -it owsp 
+ 1967  git add azure-pipelines.yml 
+ 1968  git commit -m "run scan"
+ 1969  git push 
+ 1970  git status
+ 1971  git add azure-pipelines.yml 
+ 1972  git commit -m "run scan"
+ 1973  git push 
+ 1974  pwd
+ 1975  git add azure-pipelines.yml 
+ 1976  git push 
+ 1977  git add azure-pipelines.yml 
+ 1978  git commit -m "run scan"
+ 1979  git push 
+ 1980  git add azure-pipelines.yml 
+ 1981  git commit -m "run scan"
+ 1982  git push 
+ 1983  git add azure-pipelines.yml 
+ 1984  git push 
+ 1985  docker run -it owsp /bin/bash
+ 1986  cd pipeline/tests/wiremock/
+ 1987  docker build -t wmock .
+ 1988  docker run wmock
+ 1989  docker run -p 8080:8080 wmock
+ 1990  git checkout master
+ 1991  git stash
+ 1992  git checkout master
+ 1993  git pull
+ 1994  docker build -t wmock .
+ 1995  docker run -p 8080:8080 wmock
+ 1996  ./wiremock/wiremock-download.sh 
+ 1997  docker build -t wmock .
+ 1998  docker run -p 8080:8080 wmock
+ 1999  git checkout HMIS-201
+ 2000  git pull
+ 2001  docker build -t wirem .
+ 2002  docker run -p 8080:8080 wirem
+ 2003  git checkout HMIS-202-add-test-pipeline 
+ 2004  git pull 
+ 2005  git pull origin master
+ 2006  git stash
+ 2007  git checkout hotfix_host_name 
+ 2008  git stash
+ 2009  git merge --abort
+ 2010  git checkout hotfix_host_name 
+ 2011  git stash
+ 2012  git checkout hotfix_host_name 
+ 2013  git commit -m "rm params that are vars"
+ 2014  git add .
+ 2015  git commit -m "rm params that are vars"
+ 2016  git push 
+ 2017  git add .
+ 2018  git reset --hard HEAD~1
+ 2019  git statsu
+ 2020  git status
+ 2021  git push
+ 2022  git push --force origin hotfix_host_name 
+ 2023  git checkout HMIS-202-add-test-pipeline 
+ 2024  git pull origin master
+ 2025  git status
+ 2026  git add . 
+ 2027  git commit -m "test running two stages"
+ 2028  git push 
+ 2029  docker ps
+ 2030  docker run -p 8080:8080 wirem
+ 2031  git status
+ 2032  git add 
+ 2033  git add .
+ 2034  git commit -m "test running two stages"
+ 2035  git push 
+ 2036  git status
+ 2037  git add .
+ 2038  git commit -m 'test dependent variable"
+git commit -m 'test dependent variable'
+
+
+ 2039  git commit -m 'test dependent variable'
+ 2040  git push 
+ 2041  git acc .
+ 2042  git add .
+ 2043  git commit -m "missing quote"
+ 2044  git push 
+ 2045  echo java_home
+ 2046  which java
+ 2047  java --version
+ 2048  history > history.txt
