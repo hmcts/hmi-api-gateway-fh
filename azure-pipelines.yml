@@ -26,6 +26,8 @@ resources:
     options: --user 0:0
     ports:
     - 80:80
+    volumes:
+    - /home/vsts/work/1:/zap/wrk:rw
 
 stages:
 
