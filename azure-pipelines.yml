@@ -1,6 +1,6 @@
 ---
 trigger:
-  - none
+  - master
 
 parameters:
   - name: environment
@@ -94,7 +94,7 @@ stages:
 
 
   - stage: TEST
-    # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     displayName: Build and Test TEST APIM
     
     jobs:
