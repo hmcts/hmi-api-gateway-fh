@@ -100,7 +100,7 @@ stages:
         - group: HMI-APIM-BUILD-TEST
         displayName: Build infrastructure with Terraform
         pool:
-          vmImage: ''ubuntu-latest'
+          vmImage: 'ubuntu-latest'
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
