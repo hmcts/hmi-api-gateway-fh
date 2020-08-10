@@ -27,7 +27,6 @@ resources:
     ports:
     - 80:80
 
-
 stages:
 
   - stage: TEST
@@ -55,6 +54,5 @@ stages:
         container: owasp_zap_container
         steps:
         - script: |
-            pwd
-            zap-baseline.py -t "https://www.example.com/openapi.json"
+            zap-baseline.py -t "https://www.example.com/openapi.json" -x report_xml
 
