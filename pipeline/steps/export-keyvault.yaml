@@ -10,6 +10,6 @@ steps:
     keyVaultName: ${{ parameters.keyVaultName }}
     secretsFilter: '*'
 - script: |
-    echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true]$(hmi-apim-sub-key)"
+    echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true;isSecret=true]$(hmi-apim-sub-key)"
   displayName: 'Export KeyVault Variables'
   name: exportKeyVaultSecret
