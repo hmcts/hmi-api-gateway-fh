@@ -49,7 +49,9 @@ stages:
           vmImage: 'ubuntu-latest'
         steps:
         - script: |
-            echo $(hmi-apim-sub-key) $(hmi-apim-host)
+            echo key $(hmi-apim-sub-key) 
+            echo $(environment)
+            echo host $(hmi-apim-host)
       #   - template: pipeline/steps/run-gradlew.yaml
       #     parameters:
       #       runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
