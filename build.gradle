@@ -102,6 +102,7 @@ configurations {
   contractTestRuntime.extendsFrom testRuntime
 }
 
+
 test {
   description = "Runs unit tests"
   group = 'Delivery pipeline'
@@ -215,10 +216,13 @@ sonarqube {
   properties {
     property "sonar.projectName", "HMI :: Hearing Management Interface API"
     property "sonar.projectKey", "HMIAPI"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.organization", "hmcts"
+    property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
   }
 }
 
-project.tasks['sonarqube'].dependsOn test, smoke, integration, contract, functional
+project.tasks['sonarqube'].dependsOn smoke
 project.tasks['sonarqube'].group = "Verification"
 
 // before committing a change, make sure task still works
