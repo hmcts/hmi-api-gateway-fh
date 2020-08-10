@@ -60,4 +60,5 @@ stages:
             zap-api-scan.py -t "https://conferenceapi.azurewebsites.net/?format=json" -f openapi
             echo "Finished Baseline Scan"
             echo "Checking log output"
-            cat log/output
+            ls
+            ls /
