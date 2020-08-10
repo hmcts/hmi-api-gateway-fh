@@ -57,5 +57,5 @@ stages:
         steps:
         - script: |
             echo "Initiating Baseline Scan"
-            zap-api-scan.py -t "https://conferenceapi.azurewebsites.net/?format=json" -f openapi -x report_xml
+            zap-api-scan.py -t "https://conferenceapi.azurewebsites.net/?format=json" -f openapi
             echo "Finished Baseline Scan"
