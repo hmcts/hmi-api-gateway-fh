@@ -45,40 +45,40 @@ stages:
           vmImage: 'ubuntu-latest'
 
         steps:
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi/apim-tests-owasp'
-            dockerfile: 'pipeline/tests/owasp/Dockerfile'
-            tags: |
-              latest
-
         # - template: pipeline/steps/push-img.yaml
         #   parameters:
         #     registry: 'DTS-SS-ACRPrivate'
-        #     repository: 'hmi/apim-tests-wiremock'
-        #     dockerfile: 'pipeline/tests/wiremock/Dockerfile'
+        #     repository: 'hmi/apim-tests-owasp'
+        #     dockerfile: 'pipeline/tests/owasp/Dockerfile'
         #     tags: |
         #       latest
 
-  - stage: OWASP
-    displayName: Tests - OWASP
-    jobs:
-      - job: containerjob
-        pool:
-          vmImage: 'ubuntu-latest'
-        container: owasp_zap_container
-        steps:
-        - script: |
-            pwd
-            zap-api-scan.py -t "https://www.example.com/openapi.json" -f openapi -x report_xml
+        - template: pipeline/steps/push-img.yaml
+          parameters:
+            registry: 'DTS-SS-ACRPrivate'
+            repository: 'hmi/apim-tests-wiremock'
+            dockerfile: 'pipeline/tests/wiremock/Dockerfile'
+            tags: |
+              latest
 
-  # - stage: WIREMOCK
-  #   displayName: Tests - Wiremock
+  # - stage: OWASP
+  #   displayName: Tests - OWASP
   #   jobs:
   #     - job: containerjob
   #       pool:
-  #         vmImage: 'ubuntu-16.04'
-  #       container: wiremock_container
+  #         vmImage: 'ubuntu-latest'
+  #       container: owasp_zap_container
   #       steps:
-  #       - script: ls
+  #       - script: |
+  #           pwd
+  #           zap-api-scan.py -t "https://www.example.com/openapi.json" -f openapi -x report_xml
+
+  - stage: WIREMOCK
+    displayName: Tests - Wiremock
+    jobs:
+      - job: containerjob
+        pool:
+          vmImage: 'ubuntu-16.04'
+        container: wiremock_container
+        steps:
+        - script: ls
