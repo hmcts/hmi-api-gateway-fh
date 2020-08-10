@@ -39,21 +39,21 @@ stages:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
             keyVaultName: hmi-apim-kv-$(environment)
 
-      # - job: TestUnit
-      #   dependsOn: Terraform
-      #   displayName: Unit Test
-      #   variables:
-      #     hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-      #     hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      #   pool:
-      #     vmImage: 'ubuntu-latest'
-      #   steps:
-      #   - template: pipeline/steps/run-gradlew.yaml
-      #     parameters:
-      #       runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+      - job: TestUnit
+        dependsOn: Terraform
+        displayName: Unit Test
+        variables:
+          hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+          hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - template: pipeline/steps/run-gradlew.yaml
+          parameters:
+            runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
       - job: TestSmoke
-        # dependsOn: TestUnit
+        dependsOn: TestUnit
         displayName: Smoke Test
         variables:
           hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
@@ -65,28 +65,28 @@ stages:
           parameters:
             runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
-      # # - job: TestAcceptance - PLACEHOLDER
-      # #   displayName: Acceptance Test
-      # # - job: TestContract - PLACEHOLDER
-      # #   displayName: Contract Test
+      # - job: TestAcceptance - PLACEHOLDER
+      #   displayName: Acceptance Test
+      # - job: TestContract - PLACEHOLDER
+      #   displayName: Contract Test
 
-      # - job: TestFunctional
-      #   dependsOn: TestSmoke # change this later to match testing order
-      #   displayName: Functional Test
-      #   variables:
-      #     hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-      #     hmi-apim-host: hmi-apim-svc-$(environment).azure-api.net
-      #   pool:
-      #     vmImage: 'ubuntu-latest'
-      #   steps:
-      #   - template: pipeline/steps/run-gradlew.yaml
-      #     parameters:
-      #       runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+      - job: TestFunctional
+        dependsOn: TestSmoke # change this later to match testing order
+        displayName: Functional Test
+        variables:
+          hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+          hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - template: pipeline/steps/run-gradlew.yaml
+          parameters:
+            runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
-      # # - job: TestSecurity - PLACEHOLDER
-      # #   displayName: Security Test
-      # # - job: TestCodeQuality - PLACEHOLDER
-      # #   displayName: Code Quality Test
+      # - job: TestSecurity - PLACEHOLDER
+      #   displayName: Security Test
+      # - job: TestCodeQuality - PLACEHOLDER
+      #   displayName: Code Quality Test
 
 
   # - stage: TEST
