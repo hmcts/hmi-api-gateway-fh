@@ -2,6 +2,7 @@
     <inbound>
         <base />
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-hearing" />
+        <mock-response status-code="201" content-type="application/json" />
     </inbound>
     <backend>
         <base />
