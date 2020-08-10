@@ -53,7 +53,9 @@ stages:
             runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
 
       - job: TestSmoke
-        dependsOn: Terraform, TestUnit
+        dependsOn: 
+        - Terraform
+        - TestUnit
         displayName: Smoke Test
         variables:
           hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
@@ -71,7 +73,9 @@ stages:
       #   displayName: Contract Test
 
       - job: TestFunctional
-        dependsOn: Terraform, TestSmoke # change this later to match testing order
+        dependsOn: 
+        - Terraform
+        - TestSmoke # change this later to match testing order
         displayName: Functional Test
         variables:
           hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
