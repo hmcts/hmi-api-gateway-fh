@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing;
 
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.restassured.RestAssured.expect;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -44,8 +47,62 @@ public class UpdateHearingUnitTest {
     }
 
     @Test
-    public void testRequestValidationWhenCaseTitleMissing() throws IOException {
-        /*empty test method;*/
+    public void testUpdateHearingRequestWithCorrectRequest() throws IOException {
+
+    }
+
+    private Response requestHearingWithProperRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(201)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithMissingHeaderOcpSubscriptionKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(401)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithMissingHeaderSource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(401)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithMissingHeaderDestination(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(401)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithMissingHeaderDateTime(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(401)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithMissingHeaderRequestType(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(401)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().post().then().extract().response();
     }
 
 }
