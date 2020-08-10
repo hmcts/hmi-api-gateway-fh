@@ -54,5 +54,6 @@ stages:
         container: owasp_zap_container
         steps:
         - script: |
-            zap-baseline.py -t "https://www.example.com/openapi.json" -x report_xml
-
+            echo "Initiating Baseline Scan"
+            zap-baseline.py -t "https://conferenceapi.azurewebsites.net/?format=json" -x report_xml
+            echo "Finished Baseline Scan"
