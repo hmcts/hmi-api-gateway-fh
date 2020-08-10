@@ -1,13 +1,20 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
+@SpringBootTest(classes = {Application.class})
+@ActiveProfiles("test")
 public class UpdateHearingUnitTest {
 
     @Value("${targetInstance}")
