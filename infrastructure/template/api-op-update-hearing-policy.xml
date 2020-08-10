@@ -1,7 +1,7 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/health-check" />
+        <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-hearing" />
     </inbound>
     <backend>
         <base />
