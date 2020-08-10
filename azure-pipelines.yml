@@ -22,7 +22,7 @@ stages:
         - group: HMI-APIM-BUILD-SBOX
         displayName: Build infrastructure with Terraform
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: ''ubuntu-latest'
         steps:
         - template: pipeline/steps/tf-install.yaml
         - template: pipeline/steps/tf-init.yaml
@@ -46,7 +46,7 @@ stages:
           hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
           hmi-apim-host: hmi-apim-svc-$(environment).azure-api.net
         pool:
-          vmImage: ubuntu-latest'
+          vmImage: 'ubuntu-latest'
         steps:
         - script: |
             echo $(hmi-apim-sub-key) $(hmi-apim-host)
@@ -61,7 +61,7 @@ stages:
       #     hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
       #     hmi-apim-host: hmi-apim-svc-$(environment).azure-api.net
       #   pool:
-      #     vmImage: ubuntu-latest'
+      #     vmImage: 'ubuntu-latest'
       #   steps:
       #   - template: pipeline/steps/run-gradlew.yaml
       #     parameters:
@@ -79,7 +79,7 @@ stages:
       #     hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
       #     hmi-apim-host: hmi-apim-svc-$(environment).azure-api.net
       #   pool:
-      #     vmImage: ubuntu-latest'
+      #     vmImage: 'ubuntu-latest'
       #   steps:
       #   - template: pipeline/steps/run-gradlew.yaml
       #     parameters:
@@ -102,7 +102,7 @@ stages:
   #       - group: HMI-APIM-BUILD-TEST
   #       displayName: Build infrastructure with Terraform
   #       pool:
-  #         vmImage: 'ubuntu-latest'
+  #         vmImage: ''ubuntu-latest'
   #       steps:
   #       - template: pipeline/steps/tf-install.yaml
   #       - template: pipeline/steps/tf-init.yaml
@@ -126,7 +126,7 @@ stages:
   #         hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
   #         hmi-apim-host: hmi-apim-svc-test.azure-api.net
   #       pool:
-  #         vmImage: ubuntu-latest'
+  #         vmImage: 'ubuntu-latest'
   #       steps:
   #       - template: pipeline/steps/run-gradlew.yaml
   #         parameters:
@@ -139,7 +139,7 @@ stages:
   #         hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
   #         hmi-apim-host: hmi-apim-svc-test.azure-api.net
   #       pool:
-  #         vmImage: ubuntu-latest'
+  #         vmImage: 'ubuntu-latest'
   #       steps:
   #       - template: pipeline/steps/run-gradlew.yaml
   #         parameters:
@@ -157,7 +157,7 @@ stages:
   #         hmi-apim-sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
   #         hmi-apim-host: hmi-apim-svc-test.azure-api.net
   #       pool:
-  #         vmImage: ubuntu-latest'
+  #         vmImage: 'ubuntu-latest'
   #       steps:
   #       - template: pipeline/steps/run-gradlew.yaml
   #         parameters:
