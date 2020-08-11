@@ -14,12 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.expect;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingResponseVerifier.thenASuccessfulResponseForUpdateIsReturned;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 public class UpdateHearingUnitTest {
 
+    public static final String CORRECT_UPDATE_HEARING_REQUEST_JSON = "requests/correct-update-hearing-request.json";
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -48,16 +51,35 @@ public class UpdateHearingUnitTest {
 
     @Test
     public void testUpdateHearingRequestWithCorrectRequest() throws IOException {
-
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(updateHearingRequest);
+        thenASuccessfulResponseForUpdateIsReturned(response);
     }
 
-    private Response requestHearingWithProperRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(201)
+    private String givenAnUpdateHearingRequest(final String path) throws IOException {
+        return readFileContents(path);
+    }
+
+    private Response whenUpdateHearingIsInvokedWithCorrectRequest(final String input) {
+        return requestHearingWithCorrectRequest(hearingApiRootContext, headersAsMap, targetInstance, input);
+    }
+
+    private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(400)
                 .given().contentType("application/json").body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().post().then().extract().response();
+    }
+
+    private Response requestHearingWithCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+        return expect().that().statusCode(201)
+                .given().contentType("application/json").body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().put().then().extract().response();
     }
 
     private Response requestHearingWithMissingHeaderOcpSubscriptionKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
