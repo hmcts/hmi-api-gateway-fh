@@ -126,15 +126,6 @@ public class UpdateHearingUnitTest {
                 .when().post().then().extract().response();
     }
 
-    private Response requestHearingWithMissingHeaderDateTime(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(401)
-                .given().contentType("application/json").body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
     private Response requestHearingWithMissingHeaderRequestType(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return expect().that().statusCode(401)
                 .given().contentType("application/json").body(payloadBody)
