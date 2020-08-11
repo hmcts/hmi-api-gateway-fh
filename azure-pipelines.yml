@@ -4,20 +4,20 @@ trigger:
 
 parameters:
   - name: environment
-    type: string
-    default: 'sbox,test'
+    type: object
+    default: 
+    - sbox
+    - test
 
 variables:
   - group: HMI-APIM-Common
 
 stages:
 
+- ${{ if contains(parameters.environment, 'sbox') }}:
   - stage: SANDBOX
-    displayName: Build and Test SANDBOX APIM
-    
+    displayName: Build and Test SANDBOX APIM  
     jobs:
-    - ${{ if contains(parameters.environment, 'sbox') }}:
-
       - job: ValidateTF
         displayName: Validate the code
         pool:
@@ -100,13 +100,12 @@ stages:
       # - job: TestCodeQuality - PLACEHOLDER
       #   displayName: Code Quality Test
 
-
+- ${{ if contains(parameters.environment, 'test') }}:
   - stage: TEST
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
     displayName: Build and Test TEST APIM
     
     jobs:
-    - ${{ if contains(parameters.environment, 'test') }}:
       - job: Terraform
         variables:
         - group: HMI-APIM-BUILD-TEST
