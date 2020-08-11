@@ -7,7 +7,19 @@ parameters:
     type: string
     default: ''
 
-steps:
+  - name: dependsOn
+    type: object
+    default: []
+
+jobs:
+- job: ExportKeyVault
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
 - task: AzureKeyVault@1
   displayName: 'Export Secrets from KeyVault'
   inputs:
