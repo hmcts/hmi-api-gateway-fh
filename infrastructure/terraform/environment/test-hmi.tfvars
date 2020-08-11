@@ -12,3 +12,4 @@ tags = {
     "application":"hearing-management-interface",
     "environment":"test"
   }
+enable_mock_header_string = ""
