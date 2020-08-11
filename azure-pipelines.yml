@@ -12,16 +12,12 @@ variables:
 
 stages:
 
-  - stage: ${{ parameters.environment }}
-    displayName: Build and Test ${{ parameters.environment }} APIM
+  - stage: SANDBOX
+    displayName: Build and Test SANDBOX APIM
+    
     jobs:
-      - job: ValidateTF
-        displayName: Validate the code
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - template: pipeline/steps/tf-test.yaml
-
+    - ${{ if contains(parameters.environment, 'sbox') }}:
+      
       - job: Terraform
         variables:
         - group: HMI-APIM-BUILD-SBOX
@@ -98,11 +94,12 @@ stages:
       #   displayName: Code Quality Test
 
 
-  - stage: ${{ parameters.environment }}
+  - stage: TEST
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    displayName: Build and Test ${{ parameters.environment }} APIM
+    displayName: Build and Test TEST APIM
     
     jobs:
+    - ${{ if contains(parameters.environment, 'test') }}:
       - job: Terraform
         variables:
         - group: HMI-APIM-BUILD-TEST
