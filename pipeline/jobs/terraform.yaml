@@ -3,7 +3,7 @@ parameters:
     type: string
     default: ''
 
-  - nam: group
+  - name: group
     type: string
     default: ''
 
