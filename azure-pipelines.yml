@@ -6,17 +6,16 @@ parameters:
   - name: environment
     type: object
     default: 
-    - sbox
-    - test
+      - sbox
+      - test
 
 variables:
   - group: HMI-APIM-Common
 
 stages:
 
-- ${{ if contains(parameters.environment, 'sbox') }}:
-  - stage: SANDBOX
-    displayName: Build and Test SANDBOX APIM  
+  - stage: ${{ parameters.environment }}
+    displayName: Build and Test ${{ parameters.environment }} APIM
     jobs:
       - job: ValidateTF
         displayName: Validate the code
@@ -100,10 +99,10 @@ stages:
       # - job: TestCodeQuality - PLACEHOLDER
       #   displayName: Code Quality Test
 
-- ${{ if contains(parameters.environment, 'test') }}:
-  - stage: TEST
+
+  - stage: ${{ parameters.environment }}
     condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-    displayName: Build and Test TEST APIM
+    displayName: Build and Test ${{ parameters.environment }} APIM
     
     jobs:
       - job: Terraform
