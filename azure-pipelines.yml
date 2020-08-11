@@ -34,7 +34,7 @@ stages:
         group: HMI-APIM-BUILD-SBOX
         displayName: Build infrastructure with Terraform
 
-    - template: pipeline/steps/export-keyvault.yaml
+    - template: pipeline/jobs/export-keyvault.yaml
       parameters:
         displayName: Read KeyVault Secret
         dependsOn: Terraform
