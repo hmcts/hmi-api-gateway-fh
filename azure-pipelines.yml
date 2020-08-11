@@ -17,34 +17,24 @@ stages:
     
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
-      
-      - job: Terraform
-        variables:
-        - group: HMI-APIM-BUILD-SBOX
-        displayName: Build infrastructure with Terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - template: pipeline/steps/tf-install.yaml
-        - template: pipeline/steps/tf-init.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-        - template: pipeline/steps/tf-plan.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-        - template: pipeline/steps/tf-apply.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-        - template: pipeline/steps/export-keyvault.yaml
-          parameters:
-            subscription: 'DTS-SHAREDSERVICES-SBOX'
-            keyVaultName: hmi-apim-kv-$(environment)
 
-    - template: pipeline/jobs/gradle-test-job.yaml
+    - template: pipeline/jobs/terraform.yaml  
       parameters:
-        displayName: Unit Test
-        apimHost: hmi-apim-svc-sbox.azure-api.net
-        command: clean test
+        subscription: DTS-SHAREDSERVICES-SBOX
+        group: HMI-APIM-BUILD-SBOX
+        displayName: Build infrastructure with Terraform
+
+    # - template: pipeline/steps/export-keyvault.yaml
+    #   parameters:
+    #     subscription: 'DTS-SHAREDSERVICES-SBOX'
+    #     keyVaultName: hmi-apim-kv-$(environment)
+
+    # - template: pipeline/jobs/gradle-test.yaml
+    #   parameters:
+    #     displayName: Unit Test
+    #     apimHost: hmi-apim-svc-sbox.azure-api.net
+    #     command: clean test
+    #     subscriptionKey: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
   #     - job: TestSmoke
   #       dependsOn: 
