@@ -1,23 +1,18 @@
 parameters:
   - name: displayName
     type: string
-    default: ''
 
   - name: dependsOn
     type: object
-    default: []
 
   - name: subscriptionKey
     type: string
-    default: ''
 
   - name: apimHost
     type: string
-    default: ''
 
   - name: command
     type: string
-    default: ''
 
 jobs:
 - job: ${{ parameters.displayName }}
