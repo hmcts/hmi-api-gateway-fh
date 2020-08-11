@@ -1,15 +1,12 @@
 parameters:
   - name: subscription
     type: string
-    default: ''
 
   - name: group
     type: string
-    default: ''
 
   - name: displayName
     type: string
-    default: ''
 
 jobs:
 - job: Terraform
