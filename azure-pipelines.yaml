@@ -50,12 +50,12 @@ stages:
         keyVaultName: hmi-apim-kv-${{ environment.name }}
 
     - ${{ if environment.tests_gradle }}:
-      - ${{ each test in environment.tests_gradle }}:
+    - ${{ each test in environment.tests_gradle }}:
 
-        - template: pipeline/jobs/gradle-test.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn: ExportKeyVault
-            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
-            command: ${{ test.command }}
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+    - template: pipeline/jobs/gradle-test.yaml
+      parameters:
+        displayName: ${{ test.name }}
+        dependsOn: ExportKeyVault
+        apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+        command: ${{ test.command }}
+        subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
