@@ -7,10 +7,6 @@ parameters:
     type: object
     default: []
 
-  - name: subscriptionKey
-    type: string
-    default: ''
-
   - name: apimHost
     type: string
     default: ''
@@ -21,15 +17,18 @@ parameters:
 
 jobs:
 - job: GradleTest
-  dependsOn: 
+  dependsOn:
+  - Terraform
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
-  displayName: Functional Test
+  displayName: ${{ parameters.displayName }}
+  variables:
+    sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
   pool:
     vmImage: 'ubuntu-latest'
   steps:
   - script: |
-      echo ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
+      echo ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=$(sub-key) -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
 
   # - template: ../steps/run-gradlew.yaml
   #   parameters:
