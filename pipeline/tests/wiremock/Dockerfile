@@ -7,4 +7,4 @@
 # RUN chmod a+x wiremock-jre8-standalone-2.27.1.jar
 # EXPOSE 8080:8080
 # ENTRYPOINT ["java", "-jar", "wiremock-jre8-standalone-2.27.1.jar"]
-FROM odolpheche/wiremock:latest
+FROM openjdk:11
