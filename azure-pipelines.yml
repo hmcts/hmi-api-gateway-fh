@@ -40,7 +40,7 @@ stages:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
             keyVaultName: hmi-apim-kv-$(environment)
 
-    - template: pipeline/templates/gradle-test-job.yaml
+    - template: pipeline/jobs/gradle-test-job.yaml
       parameters:
         dependsOn: Terraform
         displayName: Unit Test
