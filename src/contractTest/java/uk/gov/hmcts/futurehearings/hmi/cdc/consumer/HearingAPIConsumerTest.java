@@ -14,7 +14,7 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
-import net.serenitybdd.rest.SerenityRest;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +81,7 @@ public class HearingAPIConsumerTest {
         String requestHearingPayload =
                 readFileContents("payloads/request-hearing.json");
 
-        SerenityRest
+        RestAssured
                 .given()
                 .headers(headersAsMap)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
