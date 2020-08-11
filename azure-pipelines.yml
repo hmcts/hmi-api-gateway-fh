@@ -40,16 +40,11 @@ stages:
             subscription: 'DTS-SHAREDSERVICES-SBOX'
             keyVaultName: hmi-apim-kv-$(environment)
 
-      - job:
-        dependsOn: Terraform
-        variables:
-          sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-      - template: pipeline/jobs/gradle-test-job.yaml
-        parameters:
-          displayName: Unit Test
-          subscriptionKey: sub-key
-          apimHost: hmi-apim-svc-sbox.azure-api.net
-          command: clean test
+    - template: pipeline/jobs/gradle-test-job.yaml
+      parameters:
+        displayName: Unit Test
+        apimHost: hmi-apim-svc-sbox.azure-api.net
+        command: clean test
 
   #     - job: TestSmoke
   #       dependsOn: 
