@@ -24,7 +24,6 @@ jobs:
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
-  - ReadKVSecret
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
