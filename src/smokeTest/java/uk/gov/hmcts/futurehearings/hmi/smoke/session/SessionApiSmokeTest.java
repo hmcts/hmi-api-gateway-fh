@@ -1,35 +1,33 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke;
+package uk.gov.hmcts.futurehearings.hmi.smoke.session;
 
 import static io.restassured.RestAssured.expect;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.smoke.SmokeTest;
 
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class HmiApiSmokeTest extends SmokeTest {
+public class SessionApiSmokeTest extends SmokeTest {
 
-    @Value("${hmiApiRootContext}")
-    private String hmiApiRootContext;
+    @Value("${sessionApiRootContext}")
+    private String sessionApiRootContext;
 
     @Test
-    @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
-    public void testSuccessfulHmiApiGet() {
-
-        log.info("Get hearing request to target Instance " +targetInstance);
-
-        expect().that().statusCode(200)
+    @Disabled
+    @DisplayName("Smoke Test to Test the Endpoint for the Get All Sessions Root Context")
+    public void testSuccessfulAllSessionsApiGet() {
+         expect().that().statusCode(200)
                 .given().contentType("application/json")
                 .headers(headersAsMap)
                 .baseUri(targetInstance)
-                .basePath(hmiApiRootContext)
+                .basePath(sessionApiRootContext)
                 .when().get();
     }
 }

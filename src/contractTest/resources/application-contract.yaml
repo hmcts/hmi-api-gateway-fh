@@ -1,2 +1,2 @@
-targetHost: ${TEST_HOST}
-targetSubscriptionKey: ${TEST_SUBSCRIPTION_KEY}
+targetHost: ${ENDPOINT_HOST}
+targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
