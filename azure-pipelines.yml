@@ -41,10 +41,12 @@ stages:
             keyVaultName: hmi-apim-kv-$(environment)
 
       - template: pipeline/jobs/gradle-test-job.yaml
+        variables:
+          sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
         dependsOn: Terraform
         parameters:
           displayName: Unit Test
-          subscriptionKey: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+          subscriptionKey: sub-key
           apimHost: hmi-apim-svc-sbox.azure-api.net
           command: clean test
 
