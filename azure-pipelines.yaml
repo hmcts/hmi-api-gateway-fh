@@ -10,11 +10,11 @@ parameters:
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       tests_gradle:
-      - name: Unit Test 
+      - name: UnitTest 
         command: clean test
-      - name: Smoke Test
+      - name: SmokeTest
         command: clean smoke
-      - name: Functional Test
+      - name: FunctionalTest
         command: clean functional
 
     # - name: test
