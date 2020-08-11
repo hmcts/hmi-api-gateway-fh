@@ -8,10 +8,48 @@ import static org.junit.Assert.assertEquals;
 
 public class UpdateHearingResponseVerifier {
 
+    private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API";
+
     public static void thenASuccessfulResponseForUpdateIsReturned(Response response) {
-        assertEquals(2,response.getBody().jsonPath().getMap("$").size());
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals("201",responseMap.get(("status")));
-        assertEquals("Successfully updated hearing",responseMap.get(("description")));
+        assertEquals("201", responseMap.get(("status")));
+        assertEquals("Successfully updated hearing", responseMap.get(("description")));
     }
+
+    public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response) {
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals("401", responseMap.get(("statusCode")));
+        assertEquals(MISSING_SUB_KEY_ERROR, responseMap.get(("description")));
+    }
+
+    public static void thenResponseForMissingHeaderSourceIsReturned(Response response) {
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals("401", responseMap.get(("statusCode")));
+        assertEquals("Missing/Invalid Header Source", responseMap.get(("message")));
+    }
+
+    public static void thenResponseForMissingHeaderDestinationIsReturned(Response response) {
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals("401", responseMap.get(("statusCode")));
+        assertEquals("Missing/Invalid Header Destination", responseMap.get(("message")));
+    }
+
+    public static void thenResponseForMissingHeaderDateTimeIsReturned(Response response) {
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals("401", responseMap.get(("statusCode")));
+        assertEquals("Missing/Invalid Header DateTime", responseMap.get(("message")));
+    }
+
+    public static void thenResponseForMissingHeaderRequestTypeIsReturned(Response response) {
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals("401", responseMap.get(("statusCode")));
+        assertEquals("Missing/Invalid Header RequestType", responseMap.get(("message")));
+    }
+
 }
