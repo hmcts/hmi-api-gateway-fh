@@ -1,0 +1,31 @@
+parameters:
+  - name: subscription
+    type: string
+    default: ''
+
+  - name: group
+    type: string
+    default: ''
+
+  - name: displayName
+    type: string
+    default: ''
+
+jobs:
+- job: Terraform
+  variables:
+  - group: ${{ parameters.group }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: ../steps/tf-install.yaml
+  - template: ../steps/tf-init.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+  - template: ../steps/tf-plan.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+  - template: ../steps/tf-apply.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
