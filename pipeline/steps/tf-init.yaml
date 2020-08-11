@@ -1,5 +1,6 @@
 parameters:
-  subscription: ''
+  - name: subscription
+    type: string
 
 steps:
 

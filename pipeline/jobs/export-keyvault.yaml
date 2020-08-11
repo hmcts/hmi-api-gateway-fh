@@ -1,19 +1,15 @@
 parameters:
   - name: subscription
     type: string
-    default: ''
 
   - name: keyVaultName
     type: string
-    default: ''
 
   - name: dependsOn
     type: object
-    default: []
   
   - name: displayName
     type: string
-    default: ''
 
 jobs:
 - job: ExportKeyVault
