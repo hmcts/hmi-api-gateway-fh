@@ -19,7 +19,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingRes
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class UpdateHearingUnitTest {
 
     public static final String CORRECT_UPDATE_HEARING_REQUEST_JSON = "requests/correct-update-hearing-request.json";
