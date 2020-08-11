@@ -29,6 +29,7 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - script: |
+      echo ${{ parameters.dependsOn }}
       echo ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
 
   # - template: ../steps/run-gradlew.yaml
