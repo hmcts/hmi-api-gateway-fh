@@ -44,13 +44,12 @@ stages:
         dependsOn: Terraform
         variables:
           sub-key: $[dependencies.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-        steps:
-        - template: pipeline/jobs/gradle-test-job.yaml
-          parameters:
-            displayName: Unit Test
-            subscriptionKey: sub-key
-            apimHost: hmi-apim-svc-sbox.azure-api.net
-            command: clean test
+      - template: pipeline/jobs/gradle-test-job.yaml
+        parameters:
+          displayName: Unit Test
+          subscriptionKey: 
+          apimHost: hmi-apim-svc-sbox.azure-api.net
+          command: clean test
 
   #     - job: TestSmoke
   #       dependsOn: 
