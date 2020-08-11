@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.expect;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingResponseVerifier.thenASuccessfulResponseForUpdateIsReturned;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingResponseVerifier.*;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -56,6 +56,46 @@ public class UpdateHearingUnitTest {
         thenASuccessfulResponseForUpdateIsReturned(response);
     }
 
+    @Test
+    public void testUpdateHearingRequestWithMissingOcpSubKey() throws IOException {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
+        thenResponseForMissingHeaderOcpSubscriptionIsReturned(response);
+    }
+
+    @Test
+    public void testUpdateHearingRequestWithMissingSrcHeader() throws IOException {
+        headersAsMap.remove("Source");
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
+        thenResponseForMissingHeaderSourceIsReturned(response);
+    }
+
+    @Test
+    public void testUpdateHearingRequestWithMissingHeaderDestination() throws IOException {
+        headersAsMap.remove("Destination");
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
+        thenResponseForMissingHeaderDestinationIsReturned(response);
+    }
+
+    @Test
+    public void testUpdateHearingRequestWithMissingHeaderDateTime() throws IOException {
+        headersAsMap.remove("DateTime");
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
+        thenResponseForMissingHeaderDateTimeIsReturned(response);
+    }
+
+    @Test
+    public void testUpdateHearingRequestWithMissingRequestTypeHeader() throws IOException {
+        headersAsMap.remove("RequestType");
+        final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
+        final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
+        thenResponseForMissingHeaderRequestTypeIsReturned(response);
+    }
+
     private String givenAnUpdateHearingRequest(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -64,13 +104,8 @@ public class UpdateHearingUnitTest {
         return requestHearingWithCorrectRequest(hearingApiRootContext, headersAsMap, targetInstance, input);
     }
 
-    private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(400)
-                .given().contentType("application/json").body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
+    private Response whenUpdateHearingIsInvokedWithMissingHeader(final String input) {
+        return requestHearingWithAMissingHeader(hearingApiRootContext, headersAsMap, targetInstance, input);
     }
 
     private Response requestHearingWithCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
@@ -82,25 +117,7 @@ public class UpdateHearingUnitTest {
                 .when().put().then().extract().response();
     }
 
-    private Response requestHearingWithMissingHeaderOcpSubscriptionKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(401)
-                .given().contentType("application/json").body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response requestHearingWithMissingHeaderSource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(401)
-                .given().contentType("application/json").body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response requestHearingWithMissingHeaderDestination(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response requestHearingWithAMissingHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return expect().that().statusCode(401)
                 .given().contentType("application/json").body(payloadBody)
                 .headers(headersAsMap)
