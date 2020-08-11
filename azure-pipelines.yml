@@ -47,7 +47,7 @@ stages:
       - template: pipeline/jobs/gradle-test-job.yaml
         parameters:
           displayName: Unit Test
-          subscriptionKey: 
+          subscriptionKey: sub-key
           apimHost: hmi-apim-svc-sbox.azure-api.net
           command: clean test
 
