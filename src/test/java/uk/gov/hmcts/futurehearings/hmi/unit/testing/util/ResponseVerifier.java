@@ -1,15 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
 import io.restassured.response.Response;
-import org.json.JSONException;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import java.io.IOException;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 public class ResponseVerifier {
 
@@ -130,19 +125,6 @@ public class ResponseVerifier {
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals("400",responseMap.get(("Error")));
         assertEquals("Malformed request. Missing/Invalid property: 'Allocated Listing Team'",responseMap.get(("Reason")));
-    }
-
-
-    public static void comparePayloads(final String expectedPayloadPath, final Response response) {
-        try {
-            String output = readFileContents(expectedPayloadPath);
-            JSONAssert.assertEquals(output,
-                    response.getBody().asString(), JSONCompareMode.STRICT);
-        } catch (JSONException jsonException) {
-            throw new AssertionError("Payloads have not matched");
-        } catch (IOException ioException ) {
-            throw new AssertionError("Response file cannot be read..");
-        }
     }
 
 }
