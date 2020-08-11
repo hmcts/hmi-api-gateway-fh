@@ -4,4 +4,9 @@ parameters:
     default: []
 
 stages:
-  - stage: ${{ parameters.environment }}
+  - stage: ${{ parameters.stageName }}
+    ${{ if ne(parameters.condition, '') }}:
+      condition: ${{ parameters.condition }}
+    dependsOn:
+    - ${{ if parameters.dependantStages }}:
+      - ${{ parameters.dependantStages }}
