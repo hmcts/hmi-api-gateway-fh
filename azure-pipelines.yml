@@ -57,9 +57,5 @@ stages:
         steps:
         - script: |
             echo "Initiating Scan"
-            zap-api-scan.py -t "https://conferenceapi.azurewebsites.net/?format=json" -f openapi
+            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
             echo "Finished Scan"
-            echo ""
-            echo "Checking log output"
-            ls
-            ls /zap
