@@ -6,10 +6,13 @@ parameters:
   - name: environments
     type: object
     default: 
-    - env_name: sbox
+    - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
-    # - env_name: test
+    - name: test
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 variables:
   - group: HMI-APIM-Common
@@ -18,30 +21,30 @@ stages:
 
 - ${{ each environment in parameters.environments }}:
 
-  - stage: ${{ environment.env_name }}
-    displayName: Build and Test ${{ environment.env_name }} APIM
+  - stage: ${{ environment.name }}
+  - ${{ if environment.contidion }}:
+    condition: ${{ environment.contidion }}
+    displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
 
     - template: pipeline/jobs/terraform.yaml
       parameters:
-        subscription: ${{ environment.subscription }} # DTS-SHAREDSERVICES-SBOX
+        subscription: ${{ environment.subscription }} 
         group: HMI-APIM-BUILD-SBOX
         displayName: Build infrastructure with Terraform
 
-    - job: ReadKVSecret
-      dependsOn: Terraform
-      displayName: ReadKVSecret
-      steps:
-      - template: pipeline/steps/export-keyvault.yaml
-        parameters:
-          subscription: ${{ environment.subscription }}
-          keyVaultName: hmi-apim-kv-${{ environment.env_name }}
+    - template: pipeline/steps/export-keyvault.yaml
+      parameters:
+        displayName: Read KeyVault Secret
+        dependsOn: Terraform
+        subscription: ${{ environment.subscription }}
+        keyVaultName: hmi-apim-kv-${{ environment.name }}
 
     - template: pipeline/jobs/gradle-test.yaml
       parameters:
-        dependsOn: ReadKVSecret
         displayName: Unit Test
+        dependsOn: ReadKVSecret
         apimHost: hmi-apim-svc-sbox.azure-api.net
         command: clean test
         subscriptionKey: $[dependencies.ReadKVSecret.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
