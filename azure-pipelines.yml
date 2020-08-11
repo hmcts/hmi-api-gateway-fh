@@ -16,7 +16,7 @@ variables:
 
 stages:
 
-  - ${{ each environment in parameters.environments }}:
+- ${{ each environment in parameters.environments }}:
 
   - stage: ${{ environment.env_name }}
     displayName: Build and Test ${{ environment.env_name }} APIM
