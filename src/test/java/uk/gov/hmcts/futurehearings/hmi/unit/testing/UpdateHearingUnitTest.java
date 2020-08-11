@@ -19,7 +19,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingRes
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 public class UpdateHearingUnitTest {
 
     public static final String CORRECT_UPDATE_HEARING_REQUEST_JSON = "requests/correct-update-hearing-request.json";
@@ -123,7 +123,7 @@ public class UpdateHearingUnitTest {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response requestHearingWithMissingHeaderRequestType(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
@@ -132,7 +132,7 @@ public class UpdateHearingUnitTest {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
 }
