@@ -29,16 +29,8 @@ jobs:
     vmImage: 'ubuntu-latest'
     
   variables:
-    varFromA: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
+    subscriptionKey: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
   steps:
-  - script: echo $(varFromA)
-
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: echo $MYSECRET
-    env:
-      MYSECRET: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
-  # - template: ../steps/run-gradlew.yaml
-  #   parameters:
-  #     runCommand: ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
+   - template: ../steps/run-gradlew.yaml
+     parameters:
+       runCommand: ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=$(subscriptionKey) -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
