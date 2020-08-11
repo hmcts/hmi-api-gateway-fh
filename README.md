@@ -4,25 +4,21 @@
 
 ## Purpose
 
-The purpose of this template is to speed up the creation of tests for the Functional,
-Integration, Contract and Smoke Tests.
+The purpose of this README is to speed up the creation,usage and management of tests for the Functional,
+Acceptance, Integration, Contract and Smoke Tests.
 
 ## What's inside
 
 The template is a working application with a minimal setup. It contains:
- * application skeleton
- * setup script to prepare project
- * common plugins and libraries
+ * application set up code
+ * Developer Tests
+ * QA Tests (Smoke, Acceptance, Contract, Functional and Security)
  * docker setup
  * swagger configuration for api documentation ([see how to publish your api documentation to shared repository](https://github.com/hmcts/reform-api-docs#publish-swagger-docs))
  * code quality tools already set up
- * integration with Travis CI
- * Hystrix circuit breaker enabled
- * MIT license and contribution information
+ * integration with Azure Dev Ops
  * Helm chart using chart-java.
 
-The application exposes health endpoint (http://localhost:4550/health) and metrics endpoint
-(http://localhost:4550/metrics).
 
 ## Plugins
 
@@ -119,7 +115,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean functional -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean functional -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 
 ### Running the Smoke Tests
@@ -129,7 +125,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean smoke -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean smoke -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 
 ### Running the Integration Tests
@@ -139,7 +135,16 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean integration -DTEST_URL='{url}' -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean integration -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+```
+### Running the Acceptance Tests
+
+Change Directory to the root folder of the Project:
+
+Run the following command
+
+```bash
+  gradle clean acceptance -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 
 ### Running the Contract Tests
@@ -157,7 +162,7 @@ You can run contract or pact tests as follows:
 Run the following command
 
 ```bash
-  gradle clean contract -DTEST_HOST='{hostname}' -DTEST_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean contract -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 
 PUBLISHING YOUR PACT    
