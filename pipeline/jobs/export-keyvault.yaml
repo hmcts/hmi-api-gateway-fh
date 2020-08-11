@@ -20,13 +20,13 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-- task: AzureKeyVault@1
-  displayName: 'Export Secrets from KeyVault'
-  inputs:
-    azureSubscription: ${{ parameters.subscription }}
-    keyVaultName: ${{ parameters.keyVaultName }}
-    secretsFilter: 'hmi-apim-sub-key'
-- script: |
-    echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true;isSecret=true]$(hmi-apim-sub-key)"
-  displayName: 'Export KeyVault Variables'
-  name: exportKeyVaultSecret
+  - task: AzureKeyVault@1
+    displayName: 'Export Secrets from KeyVault'
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      keyVaultName: ${{ parameters.keyVaultName }}
+      secretsFilter: 'hmi-apim-sub-key'
+  - script: |
+      echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true;isSecret=true]$(hmi-apim-sub-key)"
+    displayName: 'Export KeyVault Variables'
+    name: exportKeyVaultSecret
