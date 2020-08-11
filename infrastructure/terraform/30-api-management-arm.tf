@@ -33,7 +33,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "repoBaseUrl": {
             "type": "String",
-            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-93-UpdateHearing/infrastructure/template/"
+            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/master/infrastructure/template/"
         }
     },
     "variables": {
