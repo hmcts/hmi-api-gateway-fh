@@ -127,7 +127,7 @@
         <base />
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/request-listings" />
         <choose>
-            <when condition="@(context.Request.Headers.ContainsKey("_EnableMocks"))">
+            <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
                 <mock-response status-code="200" content-type="application/json" />
             </when>
         </choose>
