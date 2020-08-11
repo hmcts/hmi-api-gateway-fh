@@ -49,7 +49,7 @@ stages:
         subscription: ${{ environment.subscription }}
         keyVaultName: hmi-apim-kv-${{ environment.name }}
 
-    ${{ if environment.tests_gradle }}:
+    - ${{ if environment.tests_gradle }}:
     - ${{ each test in environment.tests_gradle }}:
 
     - template: pipeline/jobs/gradle-test.yaml
