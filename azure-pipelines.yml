@@ -47,4 +47,4 @@ stages:
         dependsOn: ExportKeyVault
         apimHost: hmi-apim-svc-sbox.azure-api.net
         command: clean test
-        subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+        subscriptionKey: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
