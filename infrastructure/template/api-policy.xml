@@ -23,7 +23,6 @@
             <value>THEFT</value>
             <value>ASSAULT</value>
         </check-header>
-        <mock-response status-code="200" content-type="application/json" />
     </inbound>
     <backend>
         <base />
