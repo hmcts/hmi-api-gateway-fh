@@ -9,10 +9,10 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
-    - name: test
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    # - name: test
+    #   subscription: DTS-SHAREDSERVICES-SBOX
+    #   group: HMI-APIM-BUILD-SBOX
+    #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 variables:
   - group: HMI-APIM-Common
