@@ -17,10 +17,17 @@ parameters:
       - name: FunctionalTest
         command: clean functional
 
-    # - name: test
-    #   subscription: DTS-SHAREDSERVICES-SBOX
-    #   group: HMI-APIM-BUILD-SBOX
-    #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    - name: test
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+      - name: FunctionalTest
+        command: clean functional
 
 variables:
   - group: HMI-APIM-Common
@@ -31,7 +38,7 @@ stages:
 
   - stage: ${{ environment.name }}
     # ${{ if environment.condition }}:
-    # condition: ${{ environment.condition }}
+    condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
@@ -50,12 +57,12 @@ stages:
         keyVaultName: hmi-apim-kv-${{ environment.name }}
 
     - ${{ if environment.tests_gradle }}:
-    - ${{ each test in environment.tests_gradle }}:
+      - ${{ each test in environment.tests_gradle }}:
 
-    - template: pipeline/jobs/gradle-test.yaml
-      parameters:
-        displayName: ${{ test.name }}
-        dependsOn: ExportKeyVault
-        apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
-        command: ${{ test.command }}
-        subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+        - template: pipeline/jobs/gradle-test.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn: ExportKeyVault
+            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            command: ${{ test.command }}
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
