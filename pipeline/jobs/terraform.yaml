@@ -7,6 +7,10 @@ parameters:
     type: string
     default: ''
 
+  - name: displayName
+    type: string
+    default: ''
+
 jobs:
 - job: Terraform
   variables:
