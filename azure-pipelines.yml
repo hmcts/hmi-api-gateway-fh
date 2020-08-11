@@ -22,8 +22,8 @@ stages:
 - ${{ each environment in parameters.environments }}:
 
   - stage: ${{ environment.name }}
-  # - ${{ if environment.condition }}:
-  #   condition: ${{ environment.condition }}
+  - ${{ if environment.condition }}:
+    condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
