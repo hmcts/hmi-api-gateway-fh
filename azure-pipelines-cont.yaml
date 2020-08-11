@@ -52,4 +52,4 @@ stages:
           vmImage: 'ubuntu-16.04'
         container: wiremock_container
         steps:
-        - script: ls
+        - script: curl http://localhost:8080/product/p0001
