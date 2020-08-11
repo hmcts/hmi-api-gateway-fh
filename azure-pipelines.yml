@@ -9,6 +9,14 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
+      tests_gradle:
+      - name: Unit Test 
+        command: clean test
+      - name: Smoke Test
+        command: clean smoke
+      - name: Functional Test
+        command: clean functional
+
     # - name: test
     #   subscription: DTS-SHAREDSERVICES-SBOX
     #   group: HMI-APIM-BUILD-SBOX
@@ -41,10 +49,13 @@ stages:
         subscription: ${{ environment.subscription }}
         keyVaultName: hmi-apim-kv-${{ environment.name }}
 
+    ${{ if environment.tests_gradle }}:
+    - ${{ each test in environment.tests_gradle }}:
+
     - template: pipeline/jobs/gradle-test.yaml
       parameters:
-        displayName: Unit Test
+        displayName: ${{ test.name }}
         dependsOn: ExportKeyVault
         apimHost: hmi-apim-svc-sbox.azure-api.net
-        command: clean test
+        command: ${{ test.command }}
         subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
