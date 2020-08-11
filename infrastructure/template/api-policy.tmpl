@@ -10,6 +10,8 @@
                 <method>POST</method>
             </allowed-methods>
         </cors>
+        <!-- set a header to enable mocks -->
+        ${enableMockHeader}
         <check-header name="Source" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Source" ignore-case="true">
             <value>SnL</value>
         </check-header>
