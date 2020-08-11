@@ -19,19 +19,18 @@ parameters:
     type: string
     default: ''
 
-
 jobs:
-  - job: GradleTest
-    dependsOn: 
-    - ${{ if parameters.dependsOn }}:
-      - ${{ parameters.dependsOn }}
-    displayName: Functional Test
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - script: |
-        echo ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
+- job: GradleTest
+  dependsOn: 
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: Functional Test
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: |
+      echo ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
 
-    # - template: ../steps/run-gradlew.yaml
-    #   parameters:
-    #     runCommand: ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
+  # - template: ../steps/run-gradlew.yaml
+  #   parameters:
+  #     runCommand: ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
