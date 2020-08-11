@@ -18,11 +18,11 @@ stages:
     jobs:
     - ${{ if contains(parameters.environment, 'sbox') }}:
 
-    - template: pipeline/jobs/terraform.yaml  
-      parameters:
-        subscription: DTS-SHAREDSERVICES-SBOX
-        group: HMI-APIM-BUILD-SBOX
-        displayName: Build infrastructure with Terraform
+      - template: pipeline/jobs/terraform.yaml  
+        parameters:
+          subscription: DTS-SHAREDSERVICES-SBOX
+          group: HMI-APIM-BUILD-SBOX
+          displayName: Build infrastructure with Terraform
 
     # - template: pipeline/steps/export-keyvault.yaml
     #   parameters:
