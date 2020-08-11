@@ -30,6 +30,7 @@ stages:
         displayName: Build infrastructure with Terraform
 
     - job: ReadKVSecret
+      dependsOn: Terraform
       displayName: ReadKVSecret
       steps:
       - template: pipeline/steps/export-keyvault.yaml
