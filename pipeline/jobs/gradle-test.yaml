@@ -29,12 +29,11 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - script: |
-      echo $key
-      echo %KEY%
-      echo ${{ parameters.subscriptionKey }}
-      echo $(env.key)
+      echo 1 $key
+      echo 2 %KEY%
+      echo 3 ${{ parameters.subscriptionKey }}
     env:
-      key: ${{ parameters.subscriptionKey }}
+      key: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
   # - template: ../steps/run-gradlew.yaml
   #   parameters:
   #     runCommand: ${{ parameters.command }} -DTEST_SUBSCRIPTION_KEY=${{ parameters.subscriptionKey }} -DTEST_URL=https://${{ parameters.apimHost }} -DTEST_HOST=${{ parameters.apimHost }}
