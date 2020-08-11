@@ -4,10 +4,10 @@ trigger:
 
 parameters:
   - name: environment
-    type: object
+    type: string
     default: 
-      - sbox
-      - test
+    - sbox
+    - test
 
 variables:
   - group: HMI-APIM-Common
