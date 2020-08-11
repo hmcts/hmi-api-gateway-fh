@@ -20,7 +20,7 @@ parameters:
     default: ''
 
 jobs:
-- job: GradleTest
+- job: ${{ parameters.displayName }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
