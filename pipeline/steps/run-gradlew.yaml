@@ -1,10 +1,10 @@
 parameters:
   - name: runCommand
     type: string
-    default: ''
 
 steps:
   - task: Gradle@2
+    displayName: Run gradle
     inputs:
       gradleWrapperFile: 'gradlew'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
