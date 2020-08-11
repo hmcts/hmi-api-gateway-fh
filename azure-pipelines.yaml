@@ -37,32 +37,32 @@ stages:
 - ${{ each environment in parameters.environments }}:
 
   - stage: ${{ environment.name }}
-    ${{ if environment.condition }}:
-      condition: ${{ environment.condition }}
-      displayName: Build and Test ${{ environment.name }} APIM
+    # ${{ if environment.condition }}:
+    condition: ${{ environment.condition }}
+    displayName: Build and Test ${{ environment.name }} APIM
     
-      jobs:
+    jobs:
 
-      - template: pipeline/jobs/terraform.yaml
-        parameters:
-          subscription: ${{ environment.subscription }} 
-          group: HMI-APIM-BUILD-SBOX
-          displayName: Build infrastructure with Terraform
+    - template: pipeline/jobs/terraform.yaml
+      parameters:
+        subscription: ${{ environment.subscription }} 
+        group: HMI-APIM-BUILD-SBOX
+        displayName: Build infrastructure with Terraform
 
-      - template: pipeline/jobs/export-keyvault.yaml
-        parameters:
-          displayName: Read KeyVault Secret
-          dependsOn: Terraform
-          subscription: ${{ environment.subscription }}
-          keyVaultName: hmi-apim-kv-${{ environment.name }}
+    - template: pipeline/jobs/export-keyvault.yaml
+      parameters:
+        displayName: Read KeyVault Secret
+        dependsOn: Terraform
+        subscription: ${{ environment.subscription }}
+        keyVaultName: hmi-apim-kv-${{ environment.name }}
 
-      - ${{ if environment.tests_gradle }}:
-        - ${{ each test in environment.tests_gradle }}:
+    - ${{ if environment.tests_gradle }}:
+      - ${{ each test in environment.tests_gradle }}:
 
-          - template: pipeline/jobs/gradle-test.yaml
-            parameters:
-              displayName: ${{ test.name }}
-              dependsOn: ExportKeyVault
-              apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
-              command: ${{ test.command }}
-              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+        - template: pipeline/jobs/gradle-test.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn: ExportKeyVault
+            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            command: ${{ test.command }}
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
