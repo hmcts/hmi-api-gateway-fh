@@ -1,7 +1,6 @@
 parameters:
   - name: runCommand
     type: string
-    default: ''
 
 steps:
   - task: Gradle@2
