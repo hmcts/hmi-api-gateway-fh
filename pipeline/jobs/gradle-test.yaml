@@ -31,7 +31,6 @@ jobs:
   - script: |
       echo 1 $key
       echo 2 %KEY%
-      echo 3 ${{ parameters.subscriptionKey }}
     env:
       key: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
   # - template: ../steps/run-gradlew.yaml
