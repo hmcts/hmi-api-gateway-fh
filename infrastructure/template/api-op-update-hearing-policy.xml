@@ -2,7 +2,12 @@
     <inbound>
         <base />
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-hearing" />
-        <mock-response status-code="201" content-type="application/json" />
+        <choose>
+            <when condition="@(context.Request.Headers.ContainsKey("_EnableMocks"))">
+                <mock-response status-code="201" content-type="application/json" />
+            </when>
+        </choose>
+
     </inbound>
     <backend>
         <base />
