@@ -36,7 +36,7 @@ stages:
       - template: pipeline/steps/export-keyvault.yaml
         parameters:
           subscription: ${{ environment.subscription }}
-          keyVaultName: hmi-apim-kv-$(environment)
+          keyVaultName: hmi-apim-kv-${{ environment.env_name }}
 
     - template: pipeline/jobs/gradle-test.yaml
       parameters:
