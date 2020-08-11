@@ -27,13 +27,11 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
+    
+  variables:
+    varFromA: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
   steps:
-  - script: |
-      echo 1 $key
-      echo 2 %KEY%
-    env:
-      key: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
- 
+  - script: echo $(varFromA)
 
   - task: Bash@3
     inputs:
