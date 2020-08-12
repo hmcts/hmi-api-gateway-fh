@@ -9,7 +9,6 @@ resource "azurerm_template_deployment" "apim-policy" {
     apiName         = azurerm_api_management_api.hmi_apim_api.name
     operationId     = lookup(var.api_policies[count.index], "operationId")
     format          = lookup(var.api_policies[count.index], "format")
-    repoBaseUrl     = var.base_repo
     repoBranch      = var.repo_branch
     templateFile    = lookup(var.api_policies[count.index], "templateFile")
   }
@@ -34,7 +33,8 @@ resource "azurerm_template_deployment" "apim-policy" {
             "type": "String"
         },
         "repoBaseUrl": {
-            "type": "String"
+            "type": "String",
+            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/"
         },
         "repoBranch": {
             "type": "String"
@@ -46,7 +46,7 @@ resource "azurerm_template_deployment" "apim-policy" {
     },
     "variables": {
         "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
-        "repository": "[concat(parameters('repoBaseUrl'), '/', parameters('repoBranch'), parameters('directory'))]"
+        "repository": "[concat(parameters('repoBaseUrl'), parameters('repoBranch'), parameters('directory'))]"
     },
     "resources": [
         {
