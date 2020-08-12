@@ -14,8 +14,10 @@ parameters:
         command: clean test
       - name: SmokeTest
         command: clean smoke
+        dependsOn: UnitTest
       - name: FunctionalTest
         command: clean functional
+        dependsOn: SmokeTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
@@ -70,5 +72,6 @@ stages:
               - ${{ parameters.dependsOn }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
+            subscriptionKey: $(subscriptionKey)
             variables: 
               subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
