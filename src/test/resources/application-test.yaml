@@ -1,5 +1,5 @@
-targetInstance: ${TEST_URL}
-targetHost: ${TEST_HOST}
-targetSubscriptionKey: ${TEST_SUBSCRIPTION_KEY}
+targetInstance: ${ENDPOINT_URL}
+targetHost: ${ENDPOINT_HOST}
+targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
