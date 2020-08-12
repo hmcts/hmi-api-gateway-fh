@@ -5,9 +5,6 @@ parameters:
   - name: dependsOn
     type: object
 
-  # - name: subscriptionKey
-  #   type: string
-
   - name: apimHost
     type: string
 
