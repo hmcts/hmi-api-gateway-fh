@@ -1,95 +1,77 @@
 ---
 trigger:
-  - none
+  - master
 
 parameters:
-  - name: environment
-    displayName: Environment
-    type: string
-    default: 'sbox'
-    values:
-      - sbox
-      - test
+  - name: environments
+    type: object
+    default: 
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+        dependsOn: UnitTest
+      - name: FunctionalTest
+        command: clean functional
+        dependsOn: SmokeTest
+
+    - name: test
+      subscription: DTS-SHAREDSERVICES-TEST
+      group: HMI-APIM-BUILD-TEST
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+        dependsOn: UnitTest
+      - name: FunctionalTest
+        command: clean functional
+        dependsOn: SmokeTest
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-BUILD-SBOX
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-BUILD-TEST
 
 stages:
 
-  - stage: CI
-    displayName: Validate the code
-    jobs:
-    - job: validatetf
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - template: pipeline/steps/tf-test.yaml
+- ${{ each environment in parameters.environments }}:
 
-  - stage: BUILD
-    displayName: Build infrastructure with Terraform
+  - stage: ${{ environment.name }}
+    ${{ if environment.condition }}:
+      condition: ${{ environment.condition }}
+    displayName: Build and Test ${{ environment.name }} APIM
+    
     jobs:
-      - job: terraform
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-        - template: pipeline/steps/tf-install.yaml
-        - template: pipeline/steps/tf-init.yaml
+
+    - template: pipeline/jobs/terraform.yaml
+      parameters:
+        subscription: ${{ environment.subscription }} 
+        group: ${{ environment.group }}
+        displayName: Build infrastructure with Terraform
+
+    - template: pipeline/jobs/export-keyvault.yaml
+      parameters:
+        displayName: Read KeyVault Secret
+        dependsOn: Terraform
+        subscription: ${{ environment.subscription }}
+        keyVaultName: hmi-apim-kv-${{ environment.name }}
+
+    - ${{ if environment.tests_gradle }}:
+      - ${{ each test in environment.tests_gradle }}:
+
+        - template: pipeline/jobs/gradle-test.yaml
           parameters:
-            resourceGroup: $(devopsResourceGroup)
-            storageAccount: $(devopsStorageAccount)
-        - template: pipeline/steps/tf-plan.yaml
-        - template: pipeline/steps/tf-apply.yaml
-        - template: pipeline/steps/export-keyvault.yaml
-          parameters:
-            keyVaultName: hmi-apim-kv-$(environment)
-
-  - stage: TESTS1
-    dependsOn: BUILD
-    displayName: Tests - Functional
-    jobs:
-    - job: testfunc
-      variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-      - template: pipeline/steps/run-gradlew.yaml
-        parameters:
-          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
-
-
-  - stage: TESTS2
-    dependsOn: BUILD
-    displayName: Tests - Smoke
-    jobs:
-    - job: testsmoke
-      variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-      - template: pipeline/steps/run-gradlew.yaml
-        parameters:
-          runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
-
-
-  - stage: TESTS3
-    dependsOn: BUILD
-    displayName: Tests - Unit
-    jobs:
-    - job: testunit
-      variables:
-        hmi-apim-sub-key: $[stageDependencies.BUILD.Terraform.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-        hmi-apim-host: hmi-apim-svc-sbox.azure-api.net
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-      - template: pipeline/steps/run-gradlew.yaml
-        parameters:
-          runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+            displayName: ${{ test.name }}
+            dependsOn: 
+            - ExportKeyVault
+            - ${{ if parameters.dependsOn }}:
+              - ${{ parameters.dependsOn }}
+            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            command: ${{ test.command }}
+            subscriptionKey: $(subscriptionKey)
+            variables: 
+              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
