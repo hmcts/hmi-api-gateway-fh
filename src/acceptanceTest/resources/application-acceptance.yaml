@@ -4,3 +4,6 @@ targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
 spring.flyway.enabled: false
+
+mockServerHost: ${MOCK_SERVER_HOST}
+mockServerPort: ${MOCK_SERVER_PORT}
