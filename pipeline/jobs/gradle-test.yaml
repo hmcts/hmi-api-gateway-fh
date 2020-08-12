@@ -5,14 +5,17 @@ parameters:
   - name: dependsOn
     type: object
 
-  - name: subscriptionKey
-    type: string
+  # - name: subscriptionKey
+  #   type: string
 
   - name: apimHost
     type: string
 
   - name: command
     type: string
+
+  - name: variables
+    type: object
 
 jobs:
 - job: ${{ parameters.displayName }}
@@ -22,9 +25,8 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
-    
   variables:
-    subscriptionKey: $[ dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key'] ]
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
    - template: ../steps/run-gradlew.yaml
      parameters:
