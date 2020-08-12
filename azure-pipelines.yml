@@ -70,6 +70,5 @@ stages:
               - ${{ parameters.dependsOn }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
-            subscriptionKey: $(subscriptionKey)
             variables: 
               subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
