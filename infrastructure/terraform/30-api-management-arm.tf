@@ -9,6 +9,8 @@ resource "azurerm_template_deployment" "apim-policy" {
     apiName         = azurerm_api_management_api.hmi_apim_api.name
     operationId     = lookup(var.api_policies[count.index], "operationId")
     format          = lookup(var.api_policies[count.index], "format")
+    repoBaseUrl     = var.base_repo
+    repoBranch      = var.repo_branch
     templateFile    = lookup(var.api_policies[count.index], "templateFile")
   }
   template_body = <<DEPLOY
@@ -32,12 +34,15 @@ resource "azurerm_template_deployment" "apim-policy" {
             "type": "String"
         },
         "repoBaseUrl": {
-            "type": "String",
-            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/master/infrastructure/template/"
+            "type": "String"
+        },
+        "repoBranch": {
+            "type": "String"
         }
     },
     "variables": {
-        "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]"
+        "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
+        "repository": "[concat(parameters('repoBaseUrl'), '/', parameters('repoBranch'), '/infrastructure/template/')]"
     },
     "resources": [
         {
@@ -46,7 +51,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
                 "format": "[parameters('format')]",
-                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
+                "value": "[concat(variables('repository'), parameters('templateFile'))]"
             }
         }
     ],
