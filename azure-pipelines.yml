@@ -51,7 +51,7 @@ stages:
       steps:
       - template: pipeline/steps/run-gradlew.yaml
         parameters:
-          runCommand: clean functional -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://hmi-apim-svc-sbox.azure-api.net -DTEST_HOST=$(hmi-apim-host)
+          runCommand: clean functional -DENDPOINT_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DENDPOINT_URL=https://hmi-apim-svc-sbox.azure-api.net -DENDPOINT_HOST=$(hmi-apim-host)
 
 
   - stage: TESTS2
@@ -67,7 +67,7 @@ stages:
       steps:
       - template: pipeline/steps/run-gradlew.yaml
         parameters:
-          runCommand: clean smoke -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+          runCommand: clean smoke -DENDPOINT_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DENDPOINT_URL=https://$(hmi-apim-host) -DENDPOINT_HOST=$(hmi-apim-host)
 
 
   - stage: TESTS3
@@ -83,4 +83,4 @@ stages:
       steps:
       - template: pipeline/steps/run-gradlew.yaml
         parameters:
-          runCommand: clean test -DTEST_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DTEST_URL=https://$(hmi-apim-host) -DTEST_HOST=$(hmi-apim-host)
+          runCommand: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(hmi-apim-sub-key) -DENDPOINT_URL=https://$(hmi-apim-host) -DENDPOINT_HOST=$(hmi-apim-host)
