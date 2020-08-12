@@ -38,11 +38,15 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "repoBranch": {
             "type": "String"
+        },
+        "directory": {
+            "type": "String",
+            "default": "/infrastructure/template/"
         }
     },
     "variables": {
         "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
-        "repository": "[concat(parameters('repoBaseUrl'), '/', parameters('repoBranch'), '/infrastructure/template/'))]"
+        "repository": "[concat(parameters('repoBaseUrl'), '/', parameters('repoBranch'), parameters('directory'))]"
     },
     "resources": [
         {
