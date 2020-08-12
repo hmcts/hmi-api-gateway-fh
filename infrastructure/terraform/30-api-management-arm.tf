@@ -41,7 +41,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "directory": {
             "type": "String",
-            "default": "/infrastructure/template/"
+            "defaultValue": "/infrastructure/template/"
         }
     },
     "variables": {
