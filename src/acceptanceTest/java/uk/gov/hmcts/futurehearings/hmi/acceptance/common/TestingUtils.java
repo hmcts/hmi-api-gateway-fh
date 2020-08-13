@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.integration.common;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
 import java.io.File;
 import java.io.IOException;
