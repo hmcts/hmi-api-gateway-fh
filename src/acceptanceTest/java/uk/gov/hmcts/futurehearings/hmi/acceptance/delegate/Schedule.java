@@ -29,8 +29,8 @@ public class Schedule {
     public void test_successfull_post(final String targetSubscriptionKey,
                                       final String targetURL) throws IOException {
 
-        System.out.println("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
-        System.out.println("The value of the targetSubscriptionKey " +targetSubscriptionKey);
+        log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
+        log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
 
         Map<String,String> standardPayloadMap = createPayloadHeader(targetSubscriptionKey);
         String inputPayload =
