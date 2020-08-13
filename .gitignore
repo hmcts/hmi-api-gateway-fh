@@ -46,6 +46,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 /node_modules
 /infrastructure/.terraform/
+**/*.jar
 
 ### STS ###
 .apt_generated
