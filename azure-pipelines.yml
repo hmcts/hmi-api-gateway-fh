@@ -6,6 +6,7 @@ jobs:
   - job:
     steps:
     - script: |
+        echo Build.Repository.Git.SubmoduleCheckout $(Build.Repository.Git.SubmoduleCheckout)
         echo Build.DefinitionName $(Build.DefinitionName)
         echo Build.Reason $(Build.Reason)
         echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
