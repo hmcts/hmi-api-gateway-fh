@@ -21,3 +21,4 @@ jobs:
         cat $(Build.SourcesDirectory)/infrastructure/template/api-op-health-check-policy.xml
         echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
         echo ""
+        ls /home/vsts/work/1/s/infrastructure/template/
