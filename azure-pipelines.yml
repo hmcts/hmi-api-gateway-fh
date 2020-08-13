@@ -9,8 +9,12 @@ jobs:
         echo Build.DefinitionName $(Build.DefinitionName)
         echo Build.Reason $(Build.Reason)
         echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
+        ls $(Build.Repository.LocalPath)
+        echo ""
         echo Build.Repository.Name $(Build.Repository.Name)
         echo Build.SourceBranch $(Build.SourceBranch)
         echo Build.SourceBranchName $(Build.SourceBranchName)
         echo Build.SourcesDirectory $(Build.SourcesDirectory)
+        ls $(Build.SourcesDirectory)
         echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
+        echo ""
