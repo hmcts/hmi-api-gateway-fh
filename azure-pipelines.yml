@@ -1,77 +1,16 @@
 ---
 trigger:
-  - master
+  - none
 
-parameters:
-  - name: environments
-    type: object
-    default: 
-    - name: sbox
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-      tests_gradle:
-      - name: UnitTest 
-        command: clean test
-      - name: SmokeTest
-        command: clean smoke
-        dependsOn: UnitTest
-      - name: FunctionalTest
-        command: clean functional
-        dependsOn: SmokeTest
-
-    - name: test
-      subscription: DTS-SHAREDSERVICES-TEST
-      group: HMI-APIM-BUILD-TEST
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      tests_gradle:
-      - name: UnitTest 
-        command: clean test
-      - name: SmokeTest
-        command: clean smoke
-        dependsOn: UnitTest
-      - name: FunctionalTest
-        command: clean functional
-        dependsOn: SmokeTest
-
-variables:
-  - group: HMI-APIM-Common
-
-stages:
-
-- ${{ each environment in parameters.environments }}:
-
-  - stage: ${{ environment.name }}
-    ${{ if environment.condition }}:
-      condition: ${{ environment.condition }}
-    displayName: Build and Test ${{ environment.name }} APIM
-    
-    jobs:
-
-    - template: pipeline/jobs/terraform.yaml
-      parameters:
-        subscription: ${{ environment.subscription }} 
-        group: ${{ environment.group }}
-        displayName: Build infrastructure with Terraform
-
-    - template: pipeline/jobs/export-keyvault.yaml
-      parameters:
-        displayName: Read KeyVault Secret
-        dependsOn: Terraform
-        subscription: ${{ environment.subscription }}
-        keyVaultName: hmi-apim-kv-${{ environment.name }}
-
-    - ${{ if environment.tests_gradle }}:
-      - ${{ each test in environment.tests_gradle }}:
-
-        - template: pipeline/jobs/gradle-test.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn: 
-            - ExportKeyVault
-            - ${{ if parameters.dependsOn }}:
-              - ${{ parameters.dependsOn }}
-            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
-            command: ${{ test.command }}
-            subscriptionKey: $(subscriptionKey)
-            variables: 
-              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+jobs:
+  - job:
+    steps:
+    - script: |
+        echo Build.DefinitionName $(Build.DefinitionName)
+        echo Build.Reason $(Build.Reason)
+        echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
+        echo Build.Repository.Name $(Build.Repository.Name)
+        echo Build.SourceBranch $(Build.SourceBranch)
+        echo Build.SourceBranchName $(Build.SourceBranchName)
+        echo Build.SourcesDirectory $(Build.SourcesDirectory)
+        echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
