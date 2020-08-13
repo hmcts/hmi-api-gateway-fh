@@ -9,12 +9,15 @@ jobs:
         echo Build.DefinitionName $(Build.DefinitionName)
         echo Build.Reason $(Build.Reason)
         echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
-        ls $(Build.Repository.LocalPath)
+        ls $(Build.Repository.LocalPath)/infrastructure/template/
         echo ""
+        cat $(Build.Repository.LocalPath)/infrastructure/template/api-op-health-check-policy.xml
         echo Build.Repository.Name $(Build.Repository.Name)
         echo Build.SourceBranch $(Build.SourceBranch)
         echo Build.SourceBranchName $(Build.SourceBranchName)
         echo Build.SourcesDirectory $(Build.SourcesDirectory)
-        ls $(Build.SourcesDirectory)
+        ls $(Build.SourcesDirectory)/infrastructure/template/
+        echo ""
+        cat $(Build.SourcesDirectory)/infrastructure/template/api-op-health-check-policy.xml
         echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
         echo ""
