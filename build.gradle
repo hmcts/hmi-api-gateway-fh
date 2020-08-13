@@ -426,6 +426,8 @@ dependencies {
   acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
   acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
   acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+  testCompile group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
+  testCompile group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
 
   acceptanceTestImplementation sourceSets.main.runtimeClasspath
   acceptanceTestImplementation sourceSets.test.runtimeClasspath
