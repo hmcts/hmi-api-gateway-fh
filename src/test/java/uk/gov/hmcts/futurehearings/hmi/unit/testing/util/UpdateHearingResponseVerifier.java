@@ -28,28 +28,28 @@ public class UpdateHearingResponseVerifier {
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(401, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Source", responseMap.get(("message")));
+        assertEquals("Missing/Invalid Header Source-System", responseMap.get(("message")));
     }
 
     public static void thenResponseForMissingHeaderDestinationIsReturned(Response response) {
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(401, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Destination", responseMap.get(("message")));
+        assertEquals("Missing/Invalid Header Destination-System", responseMap.get(("message")));
     }
 
     public static void thenResponseForMissingHeaderDateTimeIsReturned(Response response) {
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(401, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header DateTime", responseMap.get(("message")));
+        assertEquals("Missing/Invalid Header Request-Created-At", responseMap.get(("message")));
     }
 
     public static void thenResponseForMissingHeaderRequestTypeIsReturned(Response response) {
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(401, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header RequestType", responseMap.get(("message")));
+        assertEquals("Missing/Invalid Header Request-Type", responseMap.get(("message")));
     }
 
 }

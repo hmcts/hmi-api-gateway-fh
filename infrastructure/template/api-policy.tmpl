@@ -12,15 +12,15 @@
         </cors>
         <!-- set a header to enable mocks -->
         ${enableMockHeader}
-        <check-header name="Source" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Source" ignore-case="true">
+        <check-header name="Source-System" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
             <value>SnL</value>
         </check-header>
-        <check-header name="Destination" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Destination" ignore-case="true">
+        <check-header name="Destination-System" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
             <value>CFT</value>
         </check-header>
-        <check-header name="DateTime" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header DateTime" ignore-case="true">
+        <check-header name="Request-Created-At" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true">
         </check-header>
-        <check-header name="RequestType" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header RequestType" ignore-case="true">
+        <check-header name="Request-Type" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Request-Type" ignore-case="true">
             <value>TypeOfCase</value>
             <value>THEFT</value>
             <value>ASSAULT</value>

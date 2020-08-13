@@ -43,10 +43,10 @@ public class UpdateHearingUnitTest {
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source", "SnL");
-        headersAsMap.put("Destination", "CFT");
-        headersAsMap.put("DateTime", "datetimestring");
-        headersAsMap.put("RequestType", "TypeOfCase");
+        headersAsMap.put("Source-System", "SnL");
+        headersAsMap.put("Destination-System", "CFT");
+        headersAsMap.put("Request-Created-At", "datetimestring");
+        headersAsMap.put("Request-Type", "TypeOfCase");
     }
 
     @Test
@@ -66,7 +66,7 @@ public class UpdateHearingUnitTest {
 
     @Test
     public void testUpdateHearingRequestWithMissingSrcHeader() throws IOException {
-        headersAsMap.remove("Source");
+        headersAsMap.remove("Source-System");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
         thenResponseForMissingHeaderSourceIsReturned(response);
@@ -74,7 +74,7 @@ public class UpdateHearingUnitTest {
 
     @Test
     public void testUpdateHearingRequestWithMissingHeaderDestination() throws IOException {
-        headersAsMap.remove("Destination");
+        headersAsMap.remove("Destination-System");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
         thenResponseForMissingHeaderDestinationIsReturned(response);
@@ -82,7 +82,7 @@ public class UpdateHearingUnitTest {
 
     @Test
     public void testUpdateHearingRequestWithMissingHeaderDateTime() throws IOException {
-        headersAsMap.remove("DateTime");
+        headersAsMap.remove("Request-Created-At");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
         thenResponseForMissingHeaderDateTimeIsReturned(response);
@@ -90,7 +90,7 @@ public class UpdateHearingUnitTest {
 
     @Test
     public void testUpdateHearingRequestWithMissingRequestTypeHeader() throws IOException {
-        headersAsMap.remove("RequestType");
+        headersAsMap.remove("Request-Type");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
         thenResponseForMissingHeaderRequestTypeIsReturned(response);
