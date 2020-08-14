@@ -1,8 +1,8 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.schedule.verify;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify;
 
 import static org.junit.Assert.assertEquals;
 
-import uk.gov.hmcts.futurehearings.hmi.integration.common.TestingUtils;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class ScheduleResponseVerification {
+public class CommonResponseVerification {
 
     public static void verifySessionResponse (Response response) {
 
@@ -41,7 +41,7 @@ public class ScheduleResponseVerification {
 
     }
 
-    public static void verifyScheduleResponse (Response response) {
+    public static void verifyResponse (Response response) {
 
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
         System.out.println(response.getBody().asString());

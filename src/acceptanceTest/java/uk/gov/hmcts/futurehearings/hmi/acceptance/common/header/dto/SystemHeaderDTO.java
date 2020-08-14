@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.delegate.dto;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SystemHeaderDTO {
 
 
