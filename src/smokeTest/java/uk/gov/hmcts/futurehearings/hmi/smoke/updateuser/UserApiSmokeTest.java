@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke.hearing;
+package uk.gov.hmcts.futurehearings.hmi.smoke.updateuser;
 
 import static io.restassured.RestAssured.expect;
 
@@ -14,20 +14,20 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class HearingApiSmokeTest extends SmokeTest {
+public class UserApiSmokeTest extends SmokeTest {
 
-    @Value("${hearingApiRootContext}")
-    private String hearingApiRootContext;
+    @Value("${userApiRootContext}")
+    public String userApiRootContext;
 
     @Test
     @Disabled
-    @DisplayName("Smoke Test to Test the Endpoint for the Hearing Root Context")
-    public void testSuccessfulHearingApiGet() {
+    @DisplayName("Smoke Test to Test the Endpoint for the Get Update Users Root Context")
+    public void testSuccessfulAllSessionsApiGet() {
          expect().that().statusCode(200)
                 .given().contentType("application/json")
                 .headers(headersAsMap)
                 .baseUri(targetInstance)
-                .basePath(hearingApiRootContext)
+                .basePath(userApiRootContext)
                 .when().get();
     }
 }
