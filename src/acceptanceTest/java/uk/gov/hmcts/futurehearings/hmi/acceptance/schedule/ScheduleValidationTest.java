@@ -1,7 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedule;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.delegate.Schedule;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.CommonTest;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.schedule.delegate.Schedule;
 
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ScheduleValidationTest {
+public class ScheduleValidationTest extends CommonTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -39,11 +40,13 @@ public class ScheduleValidationTest {
     public void initialiseValues() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
+        this.setApiSubscriptionKey(targetSubscriptionKey);
+        this.setRelativeURL(hearingAPIRootContext);
     }
 
     @BeforeEach
     public void beforeEach(TestInfo info) {
-        log.debug("Before execute : "+info.getTestMethod().get().getName());
+        log.debug("Before execute : " + info.getTestMethod().get().getName());
         log.debug("The value of the targetInstance "+targetInstance);
     }
 
@@ -52,9 +55,10 @@ public class ScheduleValidationTest {
         log.debug("After execute : "+info.getTestMethod().get().getName());
     }
 
-    @Test
+   /* @Test
     public void test_sucessfull_post() throws Exception {
         scheduleDelegate.test_successfull_post(targetSubscriptionKey,
                 hearingAPIRootContext);
-    }
+    }*/
+
 }
