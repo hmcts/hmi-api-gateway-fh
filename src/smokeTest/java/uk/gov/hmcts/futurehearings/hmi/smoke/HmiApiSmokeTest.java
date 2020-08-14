@@ -1,15 +1,18 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke;
 
-import static io.restassured.RestAssured.expect;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static io.restassured.RestAssured.expect;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
