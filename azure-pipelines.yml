@@ -1,22 +1,40 @@
 ---
 trigger:
-  - none
+  - master
 
 parameters:
-  - name: environment
-    displayName: Environment
-    type: string
-    default: 'sbox'
-    values:
-      - sbox
-      - test
+  - name: environments
+    type: object
+    default: 
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+        dependsOn: UnitTest
+      - name: FunctionalTest
+        command: clean functional
+        dependsOn: SmokeTest
+
+    - name: test
+      subscription: DTS-SHAREDSERVICES-TEST
+      group: HMI-APIM-BUILD-TEST
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+        dependsOn: UnitTest
+      - name: FunctionalTest
+        command: clean functional
+        dependsOn: SmokeTest
 
 variables:
   - group: HMI-APIM-Common
-  - ${{ if eq(parameters.environment, 'sbox') }}:
-    - group: HMI-APIM-BUILD-SBOX
-  - ${{ if eq(parameters.environment, 'test') }}:
-    - group: HMI-APIM-BUILD-TEST
 
 resources:
   containers:
