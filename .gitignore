@@ -10,6 +10,7 @@ backend.tfvars
 
 # Crash log files
 crash.log
+*.hprof
 
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in
@@ -41,6 +42,7 @@ terraform.rc
 .gradle
 build/
 /target/
+/pacts/
 !gradle/wrapper/gradle-wrapper.jar
 /node_modules
 /infrastructure/.terraform/
