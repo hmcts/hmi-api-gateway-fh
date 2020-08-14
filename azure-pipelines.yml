@@ -52,7 +52,7 @@ stages:
     jobs:
       - job: containerjob
         pool:
-          vmImage: 'ubuntu-latest'
+          name: shared-services-pool
         container: owasp_zap_container
         steps:
         - script: |
