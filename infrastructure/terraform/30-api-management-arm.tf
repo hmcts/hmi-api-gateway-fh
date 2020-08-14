@@ -9,6 +9,7 @@ resource "azurerm_template_deployment" "apim-policy" {
     apiName         = azurerm_api_management_api.hmi_apim_api.name
     operationId     = lookup(var.api_policies[count.index], "operationId")
     format          = lookup(var.api_policies[count.index], "format")
+    repoBranch      = var.repo_branch
     templateFile    = lookup(var.api_policies[count.index], "templateFile")
   }
   template_body = <<DEPLOY
@@ -33,11 +34,19 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "repoBaseUrl": {
             "type": "String",
-            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/HMIS-93-UpdateHearing/infrastructure/template/"
+            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/"
+        },
+        "repoBranch": {
+            "type": "String"
+        },
+        "directory": {
+            "type": "String",
+            "defaultValue": "/infrastructure/template/"
         }
     },
     "variables": {
-        "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]"
+        "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
+        "repository": "[concat(parameters('repoBaseUrl'), parameters('repoBranch'), parameters('directory'))]"
     },
     "resources": [
         {
@@ -46,7 +55,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
                 "format": "[parameters('format')]",
-                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
+                "value": "[concat(variables('repository'), parameters('templateFile'))]"
             }
         }
     ],
