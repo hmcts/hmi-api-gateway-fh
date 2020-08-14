@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory;
 
-import uk.gov.hmcts.futurehearings.hmi.acceptance.delegate.dto.BusinessHeaderDTO;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.delegate.dto.SystemHeaderDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHeaderDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +42,26 @@ public class PayloadHeaderDTOFactory {
                 .destination(destination).requestType(requestType).build();
     }
 
-    public static final Map<String,String> buildHeaderWithNullVaules() {
-        return convertToMap(new SystemHeaderDTO(null,null,null,null),
-                new BusinessHeaderDTO(null,null,null,null,null));
+    public static final Map<String,String> buildHeaderWithNullValues() {
+
+        return convertToMap(SystemHeaderDTO.builder().build(),
+                           BusinessHeaderDTO.builder().build());
+
     }
 
-    public static final Map<String,String> buildHeaderWithEmptyVaules() {
-        return convertToMap(new SystemHeaderDTO("","","",""),
-                new BusinessHeaderDTO("","","","",""));
+    public static final Map<String,String> buildHeaderWithEmptyValues() {
+        return convertToMap(SystemHeaderDTO.builder()
+                        .contentType("")
+                        .trace("")
+                        .host("")
+                        .subscriptionKey("").build(),
+                BusinessHeaderDTO.builder()
+                        .companyName("")
+                        .dateTime("")
+                        .source("")
+                        .destination("").requestType("").build());
+
+
     }
 
     public static final Map<String,String> convertToMap (final SystemHeaderDTO systemHeaderDTO,
