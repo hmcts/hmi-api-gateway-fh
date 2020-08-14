@@ -44,7 +44,7 @@ public class HmiApiAcceptanceTest {
         headersAsMap.put("Source", "SnL");
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
-        headersAsMap.put("RequestType", "TypeOfCase");
+        headersAsMap.put("RequestType", "THEFT");
     }
 
     @Test
