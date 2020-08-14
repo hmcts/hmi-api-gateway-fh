@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.schedule;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.CommonTest;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.schedule.delegate.Schedule;
 
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +31,6 @@ public class ScheduleValidationTest extends CommonTest {
 
     @Value("${hearingApiRootContext}")
     private String hearingAPIRootContext;
-
-    @Autowired
-    private Schedule scheduleDelegate;
 
     @BeforeAll
     public void initialiseValues() {
