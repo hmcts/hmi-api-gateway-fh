@@ -50,6 +50,7 @@ stages:
       - job: containerjob
         pool:
           vmImage: 'ubuntu-16.04'
-        container: wiremock_container
+        services: 
+          wiremock: wiremock_container
         steps:
         - script: curl http://localhost:8080/product/p0001
