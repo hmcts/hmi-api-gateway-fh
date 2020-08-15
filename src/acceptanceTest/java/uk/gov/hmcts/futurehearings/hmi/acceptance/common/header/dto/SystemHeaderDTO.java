@@ -19,7 +19,9 @@ public class SystemHeaderDTO {
 
 
     private String subscriptionKey;
-    private String host;
-    private String trace;
+    private String accept;
     private String contentType;
+    private String contentEncoding;
+    private String authorization;
+    private String cacheControl;
 }

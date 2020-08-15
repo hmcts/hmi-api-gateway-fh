@@ -16,9 +16,9 @@ import lombok.experimental.Accessors;
 @ToString
 @EqualsAndHashCode
 public class BusinessHeaderDTO {
-    private String destination;
-    private String companyName;
-    private String source;
-    private String dateTime;
+    private String destinationSystem;
+    private String sourceSystem;
+    private String requestCreatedAt;
+    private String requestProcessedAt;
     private String requestType;
 }
