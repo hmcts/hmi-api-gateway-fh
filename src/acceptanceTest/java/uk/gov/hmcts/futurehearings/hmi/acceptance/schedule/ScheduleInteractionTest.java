@@ -53,7 +53,7 @@ public class ScheduleInteractionTest {
 
         log.debug("The value of the base URI"+RestAssured.baseURI );
         try {
-            wireMock.stubFor(get(urlEqualTo("/product/p0002"))
+            wireMock.stubFor(get(urlEqualTo("/product/xxx"))
                     //.withHeader("Content-Type", equalTo(contentType))
                     .willReturn(aResponse()
                             .withStatus(200)
