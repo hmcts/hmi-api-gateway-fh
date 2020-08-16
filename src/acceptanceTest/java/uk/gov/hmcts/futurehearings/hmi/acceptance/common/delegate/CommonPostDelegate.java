@@ -151,7 +151,7 @@ public class CommonPostDelegate {
                 TestingUtils.readFileContents( INPUT_FILE_PATH + "/" + inputFile);
         shouldExecute(standardHeaderMap,
                 inputPayload,
-                targetURL+"1",
+                targetURL,
                 HttpStatus.NOT_FOUND,
                 HttpMethod.POST);
 
