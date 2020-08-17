@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing.helper;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;

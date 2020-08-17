@@ -1,6 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestTemplate.shouldExecute;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderEmptyFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
@@ -18,12 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
-public class CommonPostDelegate {
+@Component("PostDelegate")
+public class CommonPostDelegate implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
 
-    public static final void test_expected_response_for_supplied_header_in_a_post(final String targetSubscriptionKey,
+    public void test_expected_response_for_supplied_header_in_a_post(final String targetSubscriptionKey,
                                                                 final String targetURL,
                                                                 final String inputFile,
                                                                 final Map<String,String> standardHeaderMap,
@@ -46,7 +46,14 @@ public class CommonPostDelegate {
 
     }
 
-    public static final void test_successful_response_in_a_post(final String targetSubscriptionKey,
+    @Override
+    public void test_successful_response_in_a_post_test(final String targetSubscriptionKey,
+                                                        final String targetURL,
+                                                        final String inputFile) throws IOException {
+
+    }
+
+    public void test_successful_response_in_a_post(final String targetSubscriptionKey,
                                                                 final String targetURL,
                                                                 final String inputFile) throws IOException {
 
@@ -69,7 +76,7 @@ public class CommonPostDelegate {
     }
 
 
-    public static final void test_source_system_removed_in_a_post(final String targetSubscriptionKey,
+    public void test_source_system_removed_in_a_post(final String targetSubscriptionKey,
                                                                     final String targetURL,
                                                                     final String inputFile) throws IOException {
 
@@ -92,9 +99,9 @@ public class CommonPostDelegate {
 
     }
 
-    public static final void test_source_system_nulled_in_a_post(final String targetSubscriptionKey,
-                                                                  final String targetURL,
-                                                                  final String inputFile) throws IOException {
+    public void test_source_system_nulled_in_a_post(final String targetSubscriptionKey,
+                                                    final String targetURL,
+                                                    final String inputFile) throws IOException {
 
         log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
         log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
@@ -115,7 +122,7 @@ public class CommonPostDelegate {
 
     }
 
-    public static final void test_source_system_empty_in_a_post(final String targetSubscriptionKey,
+    public void test_source_system_empty_in_a_post(final String targetSubscriptionKey,
                                                                  final String targetURL,
                                                                  final String inputFile) throws IOException {
 

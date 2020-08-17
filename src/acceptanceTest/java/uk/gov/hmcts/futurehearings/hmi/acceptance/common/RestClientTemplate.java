@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 @Slf4j
-public class RestTemplate {
+public class RestClientTemplate {
 
     public static Response shouldExecute(final Map<String,String> headersAsMap,
                                              final String requestBodyPayload,
