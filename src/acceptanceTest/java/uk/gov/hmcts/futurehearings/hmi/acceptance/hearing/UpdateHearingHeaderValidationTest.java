@@ -39,5 +39,6 @@ public class UpdateHearingHeaderValidationTest extends HearingValidationTest {
         updateHearingRootContext = String.format(updateHearingRootContext,"12345");
         this.setRelativeURL(updateHearingRootContext);
         this.setHttpMethod(HttpMethod.PUT);
+        this.setInputPayloadFileName("hearing-request-standard.json");
     }
 }

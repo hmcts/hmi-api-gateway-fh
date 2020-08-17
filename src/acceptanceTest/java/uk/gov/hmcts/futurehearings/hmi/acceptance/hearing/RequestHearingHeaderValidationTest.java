@@ -39,5 +39,6 @@ public class RequestHearingHeaderValidationTest extends HearingValidationTest {
         super.initialiseValues();
         this.setRelativeURL(hearingAPIRootContext);
         this.setHttpMethod(HttpMethod.POST);
+        this.setInputPayloadFileName("hearing-request-standard.json");
     }
 }
