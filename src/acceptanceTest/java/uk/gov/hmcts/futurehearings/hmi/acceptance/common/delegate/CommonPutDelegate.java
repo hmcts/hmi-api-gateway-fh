@@ -18,7 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-public class CommonPutDelegate implements CommonDelegate {
+@Component("PutDelegate")
+public abstract class CommonPutDelegate implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
 
