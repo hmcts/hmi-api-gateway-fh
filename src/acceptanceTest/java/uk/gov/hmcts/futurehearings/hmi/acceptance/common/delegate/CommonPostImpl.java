@@ -27,8 +27,8 @@ public class CommonPostImpl implements CommonDelegate {
                                                                 final String targetURL,
                                                                 final String inputFile,
                                                                 final Map<String,String> standardHeaderMap,
-                                                                final HttpStatus status,
-                                                                final HttpMethod httpMethod) throws IOException {
+                                                                final HttpMethod httpMethod,
+                                                                final HttpStatus status) throws IOException {
 
         log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
         log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);

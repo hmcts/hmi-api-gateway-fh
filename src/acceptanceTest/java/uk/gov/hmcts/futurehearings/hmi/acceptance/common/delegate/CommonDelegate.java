@@ -16,8 +16,8 @@ public interface CommonDelegate {
                                                            final String targetURL,
                                                            final String inputFile,
                                                            final Map<String,String> standardHeaderMap,
-                                                           final HttpStatus status,
-                                                           final HttpMethod httpMethod) throws IOException;
+                                                           final HttpMethod httpMethod,
+                                                           final HttpStatus status) throws IOException;
 
     public void test_successful_response_in_a_post(final String targetSubscriptionKey,
                                                    final String targetURL,
