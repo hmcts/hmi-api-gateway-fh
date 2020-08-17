@@ -1,10 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderEmptyFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderRemoveFields;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
@@ -44,59 +42,6 @@ public class CommonPostImpl implements CommonDelegate {
         /*verifyResponse(shouldExecutePost(standardHeaderMap,
                 inputPayload,
                 targetURL, HttpStatus.OK));*/
-
-    }
-
-    @Override
-    public void test_successful_response_in_a_post_test(final String targetSubscriptionKey,
-                                                        final String targetURL,
-                                                        final String inputFile) throws IOException {
-
-    }
-
-    public void test_successful_response_in_a_post(final String targetSubscriptionKey,
-                                                                final String targetURL,
-                                                                final String inputFile) throws IOException {
-
-        log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
-        log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
-
-        Map<String,String> standardHeaderMap = createPayloadHeader(targetSubscriptionKey);
-        String inputPayload =
-                TestingUtils.readFileContents( INPUT_FILE_PATH + "/" + inputFile);
-        shouldExecute(standardHeaderMap,
-                inputPayload,
-                targetURL,
-                HttpStatus.OK,
-                HttpMethod.POST);
-
-        /*verifyResponse(shouldExecutePost(standardHeaderMap,
-                inputPayload,
-                targetURL, HttpStatus.OK));*/
-
-    }
-
-
-    public void test_source_system_removed_in_a_post(final String targetSubscriptionKey,
-                                                                    final String targetURL,
-                                                                    final String inputFile) throws IOException {
-
-        log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
-        log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
-
-        Map<String,String> standardHeaderMap = createPayloadHeaderRemoveFields(targetSubscriptionKey,
-                Arrays.asList("Source-System"));
-        String inputPayload =
-                TestingUtils.readFileContents( INPUT_FILE_PATH + "/" + inputFile);
-        shouldExecute(standardHeaderMap,
-                inputPayload,
-                targetURL,
-                HttpStatus.UNAUTHORIZED,
-                HttpMethod.POST);
-
-       /* verifyResponse(shouldExecutePost(standardHeaderMap,
-                inputPayload,
-                targetURL, HttpStatus.UNAUTHORIZED));*/
 
     }
 
