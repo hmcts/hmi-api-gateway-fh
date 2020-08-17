@@ -15,6 +15,11 @@ variable "api_policies" {
       operationId     = "update-hearing"
       format          = "rawxml-link"
       templateFile    = "api-op-update-hearing-policy.xml"
+    },
+    {
+      operationId     = "session"
+      format          = "rawxml-link"
+      templateFile    = "api-op-retreive-hearing-sched-policy.xml"
     }
   ]
 }
