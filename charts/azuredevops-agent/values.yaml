@@ -1,0 +1,30 @@
+replicas: 1
+
+image:
+  repository: ssprivateprod.azurecr.io/hmi/azure-devops-agent
+  tag: latest
+  pullPolicy: Always
+
+resources: {}
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 1
+    memory: 1Gi
+
+cleanRun: false
+
+volumeMounts:
+- name: docker-socket
+  mountPath: /var/run/docker.sock
+  readOnly: false
+
+volumes:
+- name: docker-socket
+  hostPath:
+    path: /var/run/docker.sock
+
+extraEnv: {}
+
+extraContainers: []
