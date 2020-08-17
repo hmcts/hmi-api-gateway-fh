@@ -65,15 +65,23 @@ stages:
             tags: |
               latest
 
-  - stage: OWASP
-    displayName: Tests - OWASP
-    jobs:
-      - job: containerjob
-        pool:
-          name: shared-services-pool
-        container: owasp_zap_container
-        steps:
-        - script: |
-            echo "Initiating Scan"
-            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-            echo "Finished Scan"
+        - template: pipeline/steps/push-img.yaml
+          parameters:
+            registry: 'DTS-SS-ACRPrivate'
+            repository: 'hmi/azure-devops-agent'
+            dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
+            tags: |
+              latest
+
+  # - stage: OWASP
+  #   displayName: Tests - OWASP
+  #   jobs:
+  #     - job: containerjob
+  #       pool:
+  #         name: shared-services-pool
+  #       container: owasp_zap_container
+  #       steps:
+  #       - script: |
+  #           echo "Initiating Scan"
+  #           zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
+  #           echo "Finished Scan"
