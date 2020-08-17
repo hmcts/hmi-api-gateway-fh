@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 public interface CommonDelegate {
@@ -11,11 +12,12 @@ public interface CommonDelegate {
                                                         final String targetURL,
                                                         final String inputFile) throws IOException;
 
-    public void test_expected_response_for_supplied_header_in_a_post(final String targetSubscriptionKey,
-                                                                                  final String targetURL,
-                                                                                  final String inputFile,
-                                                                                  final Map<String,String> standardHeaderMap,
-                                                                                  final HttpStatus status) throws IOException;
+    public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
+                                                           final String targetURL,
+                                                           final String inputFile,
+                                                           final Map<String,String> standardHeaderMap,
+                                                           final HttpStatus status,
+                                                           final HttpMethod httpMethod) throws IOException;
 
     public void test_successful_response_in_a_post(final String targetSubscriptionKey,
                                                    final String targetURL,

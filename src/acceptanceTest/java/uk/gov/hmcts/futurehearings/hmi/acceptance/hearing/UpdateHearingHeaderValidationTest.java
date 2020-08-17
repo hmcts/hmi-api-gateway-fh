@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -23,17 +24,20 @@ import org.springframework.test.context.ActiveProfiles;
 @IncludeTags("Put")
 public class UpdateHearingHeaderValidationTest extends HearingValidationTest {
 
-    @Qualifier("PostDelegate")
+    @Qualifier("CommonDelegate")
     @Autowired(required = true)
-    private CommonDelegate commonDelegate;
+    public CommonDelegate commonDelegate;
 
     @Value("${updateHearingRootContext}")
     private String updateHearingRootContext;
+
+    private HttpMethod httpMethod;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
         updateHearingRootContext = String.format(updateHearingRootContext,"12345");
         this.setRelativeURL(updateHearingRootContext);
+        this.setHttpMethod(HttpMethod.PUT);
     }
 }

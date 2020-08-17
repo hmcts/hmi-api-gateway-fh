@@ -18,16 +18,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component("PostDelegate")
-public class CommonPostDelegate implements CommonDelegate {
+@Component("CommonDelegate")
+public class CommonPostImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
 
-    public void test_expected_response_for_supplied_header_in_a_post(final String targetSubscriptionKey,
+    public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
                                                                 final String targetURL,
                                                                 final String inputFile,
                                                                 final Map<String,String> standardHeaderMap,
-                                                                final HttpStatus status) throws IOException {
+                                                                final HttpStatus status,
+                                                                final HttpMethod httpMethod) throws IOException {
 
         log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
         log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
@@ -38,7 +39,7 @@ public class CommonPostDelegate implements CommonDelegate {
                 inputPayload,
                 targetURL,
                 status,
-                HttpMethod.POST);
+                httpMethod);
 
         /*verifyResponse(shouldExecutePost(standardHeaderMap,
                 inputPayload,
