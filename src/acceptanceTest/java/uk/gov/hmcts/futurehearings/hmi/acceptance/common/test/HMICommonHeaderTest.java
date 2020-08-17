@@ -54,15 +54,15 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), "hearing-request-standard.json");
     }
 
-    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a Null Content Type in the Request Header")
+    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a 'Null Content-Type Header' in the Request Header")
     @Test
     @DisplayName("A Request Hearing message with all Header Values Populated as Nulls")
     public void test_supplied_all_headers_null() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithAllValuesNull(getApiSubscriptionKey()),
-                HttpStatus.UNAUTHORIZED,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Disabled("This Test May have to be done manually as Rest Assured Does not accept a Empty Content Type in the Request Header")
@@ -72,8 +72,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithAllValuesEmpty(getApiSubscriptionKey()),
-                HttpStatus.UNAUTHORIZED,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Test
@@ -84,8 +84,8 @@ public abstract class HMICommonHeaderTest {
                 //Performed a near to the Real URL Transformation
                 "hearing-request-standard.json",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
-                HttpStatus.NOT_FOUND,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.NOT_FOUND);
     }
 
     @Disabled("Test is not working as the API seems to be not accepting CFT as a Source System")
@@ -95,8 +95,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithSourceSystemValueAsCFT(getApiSubscriptionKey()),
-                HttpStatus.OK,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.OK);
     }
 
     @Test
@@ -105,8 +105,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithNullRequestCreatedAt(getApiSubscriptionKey()),
-                HttpStatus.UNAUTHORIZED,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Test
@@ -115,8 +115,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithEmptyRequestCreatedAt(getApiSubscriptionKey()),
-                HttpStatus.UNAUTHORIZED,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Test
@@ -125,8 +125,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithSpacedRequestCreatedAt(getApiSubscriptionKey()),
-                HttpStatus.UNAUTHORIZED,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED);
     }
 
     @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
@@ -136,8 +136,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithSingleCharRequestCreatedAt(getApiSubscriptionKey()),
-                HttpStatus.OK,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.OK);
     }
 
     @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
@@ -147,8 +147,8 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "hearing-request-standard.json",
                 createHeaderWithLongRequestCreatedAt(getApiSubscriptionKey()),
-                HttpStatus.OK,
-                getHttpMethod());
+                getHttpMethod(),
+                HttpStatus.OK);
     }
 
     @Test
