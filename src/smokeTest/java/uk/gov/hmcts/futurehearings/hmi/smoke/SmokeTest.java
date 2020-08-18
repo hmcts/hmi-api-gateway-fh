@@ -1,14 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke;
 
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
@@ -36,5 +35,6 @@ public class SmokeTest {
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
+        headersAsMap.put("Accept", "application/json");
     }
 }

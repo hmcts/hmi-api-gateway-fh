@@ -60,6 +60,7 @@ public class HearingAPITest {
         headersAsMap.put("Destination-System", "CFT");
         headersAsMap.put("Request-Created-At", "datetimestring");
         headersAsMap.put("Request-Type", "THEFT");
+        headersAsMap.put("Accept", "application/json");
 
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
