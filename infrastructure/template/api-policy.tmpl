@@ -12,22 +12,22 @@
         </cors>
         <!-- set a header to enable mocks -->
         ${enableMockHeader}
-        <check-header name="Source-System" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
+        <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
             <value>SnL</value>
         </check-header>
-        <check-header name="Destination-System" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
+        <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
             <value>CFT</value>
         </check-header>
-        <check-header name="Request-Created-At" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true">
+        <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true">
         </check-header>
-        <check-header name="Request-Type" failed-check-httpcode="401" failed-check-error-message="Missing/Invalid Header Request-Type" ignore-case="true">
+        <check-header name="Request-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Type" ignore-case="true">
             <value>THEFT</value>
             <value>ASSAULT</value>
         </check-header>
-        <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Invalid Media Type" ignore-case="true">
+        <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
-            </check-header>
-        <check-header name="Content-Type" failed-check-httpcode="406" failed-check-error-message="Invalid Media Type" ignore-case="true">
+        </check-header>
+        <check-header name="Content-Type" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
         </check-header>
     </inbound>
