@@ -19,6 +19,7 @@ RUN apt-get update \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /azp
 
 COPY ./start.sh .
 RUN chmod +x start.sh
