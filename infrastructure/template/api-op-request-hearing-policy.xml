@@ -16,7 +16,7 @@
             <when condition="@(!((JObject)context.Variables["req"]).ContainsKey("Case Id") || ((JObject)context.Variables["req"]).GetValue("Case Id").Type != JTokenType.String)">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
-                    <set-body>@
+                    <set-body>@{
                         return new JObject(
                         new JProperty("response code", "400"),
                         new JProperty("description", "Malformed request. Missing/Invalid property: 'Case Id'")
