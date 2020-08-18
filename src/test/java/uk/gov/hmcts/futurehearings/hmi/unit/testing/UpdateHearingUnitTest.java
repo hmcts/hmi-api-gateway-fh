@@ -47,6 +47,7 @@ public class UpdateHearingUnitTest {
         headersAsMap.put("Destination-System", "CFT");
         headersAsMap.put("Request-Created-At", "datetimestring");
         headersAsMap.put("Request-Type", "THEFT");
+        headersAsMap.put("Accept", "application/json");
     }
 
     @Test
