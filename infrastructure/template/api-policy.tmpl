@@ -24,6 +24,12 @@
             <value>THEFT</value>
             <value>ASSAULT</value>
         </check-header>
+        <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+            </check-header>
+        <check-header name="Content-Type" failed-check-httpcode="406" failed-check-error-message="Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+        </check-header>
     </inbound>
     <backend>
         <base />
