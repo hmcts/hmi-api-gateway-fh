@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing;
 
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,7 +149,7 @@ public class HmiApiUnitTest {
 
     private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return expect().that().statusCode(400)
-                .given().contentType("application/json").body(payloadBody)
+                .given().contentType("application/json").accept(ContentType.JSON).body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
