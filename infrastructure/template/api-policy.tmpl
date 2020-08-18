@@ -30,6 +30,19 @@
         <check-header name="Content-Type" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
         </check-header>
+        <choose>
+            <when condition="@(context.Request.Headers["Request-Created-At"] == null)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", "400"),
+                            new JProperty("description", "Malformed request. Missing header value for : 'Request-Created-At'")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
     </inbound>
     <backend>
         <base />
