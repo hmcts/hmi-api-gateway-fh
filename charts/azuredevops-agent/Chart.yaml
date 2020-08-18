@@ -1,6 +1,0 @@
-name: azuredevops-agent
-apiVersion: v1
-version: 1
-description: Azure DevOps self hosted agent
-maintainers:
-  - name: HMCTS HMI

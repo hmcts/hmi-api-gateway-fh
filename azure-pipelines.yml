@@ -39,7 +39,7 @@ variables:
 resources:
   containers:
   - container: owasp_zap_container
-    image: hmi/apim-tests-owasp:latest
+    image: hmi/apim-tests-owasp:v1.0
     endpoint: 'DTS-SS-ACRPrivate'
     options: --user 0:0
     ports:
@@ -63,7 +63,7 @@ stages:
             repository: 'hmi/apim-tests-owasp'
             dockerfile: 'pipeline/tests/owasp/Dockerfile'
             tags: |
-              latest
+              v1.0
 
         - template: pipeline/steps/push-img.yaml
           parameters:
@@ -71,7 +71,7 @@ stages:
             repository: 'hmi/azure-devops-agent'
             dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
             tags: |
-              latest
+              v1.0
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
