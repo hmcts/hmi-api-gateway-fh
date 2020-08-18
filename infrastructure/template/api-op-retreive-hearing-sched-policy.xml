@@ -5,12 +5,7 @@
             <when condition="@(context.Request.Method == "GET")">
                 <return-response>
                     <set-status code="200" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("status code", "200"),
-                            new JProperty("description", "The platform has recognised the request type.")
-                        ).ToString();
-                    }</set-body>
+                    <set-body>@{return new JObject(new JProperty("status code", "200"), new JProperty("description", "The platform has recognised the request type.")).ToString();}</set-body>
                 </return-response>
             </when>
         </choose>
