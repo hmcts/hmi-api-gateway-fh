@@ -55,8 +55,8 @@ public class HmiApiUnitTest {
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source-System", "SnL");
-        headersAsMap.put("Destination-System", "CFT");
+        headersAsMap.put("Source-System", "CFT");
+        headersAsMap.put("Destination-System", "S&L");
         headersAsMap.put("Request-Created-At", "datetimestring");
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Accept", "application/json");
