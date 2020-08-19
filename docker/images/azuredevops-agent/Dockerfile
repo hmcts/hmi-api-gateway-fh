@@ -28,10 +28,10 @@ ENV TERRAFORM_VERSION 0.11.0
 ENV HELM_VERSION v2.15.2
 
 COPY ./addons.sh .
-RUN chmod +x addons.sh
-RUN ./addons.sh
-
 COPY ./start.sh .
-RUN chmod +x start.sh
+
+RUN chmod +x addons.sh start.sh
+
+RUN ./addons.sh
 
 CMD ["./start.sh"]
