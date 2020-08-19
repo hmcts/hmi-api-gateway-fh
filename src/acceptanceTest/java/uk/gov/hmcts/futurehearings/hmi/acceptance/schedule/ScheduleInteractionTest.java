@@ -12,7 +12,9 @@ import java.io.IOException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,16 +49,16 @@ public class ScheduleInteractionTest {
         wireMock.resetRequests();
     }
 
+    @Disabled
     @Test
     public void should_work_from_standalone_mock() throws Exception {
 
-
-        log.debug("The value of the base URI"+RestAssured.baseURI );
+        log.debug("The value of the base URI" + RestAssured.baseURI );
         try {
             wireMock.stubFor(get(urlEqualTo("/product/xxx"))
                     //.withHeader("Content-Type", equalTo(contentType))
                     .willReturn(aResponse()
-                            .withStatus(200)
+                    .withStatus(200)
                             //.withHeader("Content-Type", contentType)
                             .withBody(readFileContents(INPUT_FILE_PATH+"/mock-demo-request.json"))));
         } catch (IOException e) {

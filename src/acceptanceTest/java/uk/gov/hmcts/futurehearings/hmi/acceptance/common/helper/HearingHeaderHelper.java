@@ -11,12 +11,13 @@ import org.springframework.http.MediaType;
 
 public class HearingHeaderHelper {
 
+
     public static final Map<String,String> createStandardPayloadHeader (final String targetSubscriptionKey) {
 
         return Collections.unmodifiableMap(
                 convertToMap(
                         buildStandardSytemHeaderPart(MediaType.APPLICATION_JSON_VALUE,
-                                null,
+                                MediaType.APPLICATION_JSON_VALUE,
                                 null,
                                 null,
                                 targetSubscriptionKey,
