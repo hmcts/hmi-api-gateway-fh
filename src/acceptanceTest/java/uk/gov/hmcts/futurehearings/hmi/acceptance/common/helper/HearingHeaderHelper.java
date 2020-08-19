@@ -25,8 +25,8 @@ public class HearingHeaderHelper {
 
                         buildStandardBuinessHeaderPart("dateTime",
                                 "dateTime",
-                                "SnL",
                                 "CFT",
+                                "S&L",
                                 "THEFT")));
     }
 
@@ -69,7 +69,7 @@ public class HearingHeaderHelper {
     public static Map<String,String> createHeaderWithSourceSystemValueAsCFT (final String subscriptionKey) {
 
         return convertToMap(buildStandardSytemHeaderPart(MediaType.APPLICATION_JSON_VALUE,
-                null,
+                MediaType.APPLICATION_JSON_VALUE,
                 null,
                 null,
                 subscriptionKey,
@@ -77,8 +77,8 @@ public class HearingHeaderHelper {
                 buildStandardBuinessHeaderPart("Qwerty",
                         "sampledate",
                         "CFT",
-                        "SnL",
-                        "SomeString"));
+                        "S&L",
+                        "Assault"));
     }
 
     public static Map<String,String> createHeaderWithNullRequestCreatedAt (final String subscriptionKey) {

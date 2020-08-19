@@ -98,7 +98,7 @@ public class PayloadHeaderDTOFactory {
 
         return Collections.unmodifiableMap(convertToMapAfterHeadersRemoved(buildStandardSytemHeaderPart(
                 MediaType.APPLICATION_JSON_VALUE,
-                null,
+                MediaType.APPLICATION_JSON_VALUE,
                 null,
                 null,
                 targetSubscriptionKey,
@@ -106,8 +106,8 @@ public class PayloadHeaderDTOFactory {
 
                 buildStandardBuinessHeaderPart("dateTime",
                         "dateTime",
-                        "SnL",
                         "CFT",
+                        "S&L",
                         "THEFT"),removeHeaderString));
     }
 
@@ -116,7 +116,7 @@ public class PayloadHeaderDTOFactory {
 
         return Collections.unmodifiableMap(convertToMapAfterHeadersRemoved(buildStandardSytemHeaderPart(
                 MediaType.APPLICATION_JSON_VALUE,
-                null,
+                MediaType.APPLICATION_JSON_VALUE,
                 null,
                 null,
                 targetSubscriptionKey,
@@ -150,11 +150,11 @@ public class PayloadHeaderDTOFactory {
     public static final Map<String,String> convertToMap (final SystemHeaderDTO systemHeaderDTO,
                                                            final BusinessHeaderDTO businessHeaderDTO) {
         final Map<String, String>  headerMap = new HashMap<>();
+        headerMap.put("Ocp-Apim-Subscription-Key",systemHeaderDTO.subscriptionKey());
         headerMap.put("Content-Type",systemHeaderDTO.contentType());
         headerMap.put("Accept",systemHeaderDTO.accept());
         //headerMap.put("Content-Encoding",systemHeaderDTO.contentEncoding());
-        headerMap.put("Authorization",systemHeaderDTO.authorization());
-        headerMap.put("Ocp-Apim-Subscription-Key",systemHeaderDTO.subscriptionKey());
+        //headerMap.put("Authorization",systemHeaderDTO.authorization());
 
         headerMap.put("Source-System",businessHeaderDTO.sourceSystem());
         headerMap.put("Destination-System",businessHeaderDTO.destinationSystem());
