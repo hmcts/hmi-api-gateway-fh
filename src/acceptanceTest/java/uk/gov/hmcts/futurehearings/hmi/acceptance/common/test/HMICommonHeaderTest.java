@@ -1,7 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderEmptyFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderRemoveFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithAllValuesEmpty;
@@ -15,6 +13,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHe
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory;
 
 import java.util.Arrays;
 
@@ -41,16 +40,17 @@ public abstract class HMICommonHeaderTest {
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
-    @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
     @Test
     @DisplayName("Message successfully validated")
-    public void test_successful_response_post() throws Exception {
+    public void test_successful_response() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createPayloadHeader(getApiSubscriptionKey()), getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getHttpMethod(),
+                HttpStatus.OK);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with no Source System defined in the Header")
     public void test_source_system_removed() throws Exception {
@@ -83,6 +83,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
     public void test_invalidURL() throws Exception {
@@ -106,6 +107,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.OK);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as Null")
     public void test_supplied_request_created_at_as_null() throws Exception {
@@ -116,6 +118,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as Empty")
     public void test_supplied_request_created_at_as_empty() throws Exception {
@@ -126,6 +129,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as a Space")
     public void test_supplied_request_created_at_as_spaced() throws Exception {
@@ -158,6 +162,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.OK);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a Source System defined in the Header as Null")
     public void test_source_system_nulled() throws Exception {
@@ -169,6 +174,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    @Disabled
     @Test
     @DisplayName("Message with a Source System defined in the Header as Empty")
     public void test_source_system_empty() throws Exception {

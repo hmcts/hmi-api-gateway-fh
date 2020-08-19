@@ -7,10 +7,13 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 import java.util.Map;
 
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+@Slf4j
 public class CommonResponseVerification {
 
     public static void verifySessionResponse (Response response) {
@@ -44,6 +47,7 @@ public class CommonResponseVerification {
     public static void verifyResponse (Response response) {
 
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
+        log.debug(response.getBody().asString());
         System.out.println(response.getBody().asString());
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
