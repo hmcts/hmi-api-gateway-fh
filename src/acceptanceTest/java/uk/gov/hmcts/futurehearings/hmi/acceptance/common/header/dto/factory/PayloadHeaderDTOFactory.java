@@ -75,7 +75,7 @@ public class PayloadHeaderDTOFactory {
 
     }
 
-    public static final Map<String,String> createPayloadHeader (final String targetSubscriptionKey) {
+    public static final Map<String,String> createPayloadHeader(final String targetSubscriptionKey) {
 
         return Collections.unmodifiableMap(
                 convertToMap(
@@ -152,7 +152,7 @@ public class PayloadHeaderDTOFactory {
         final Map<String, String>  headerMap = new HashMap<>();
         headerMap.put("Content-Type",systemHeaderDTO.contentType());
         headerMap.put("Accept",systemHeaderDTO.accept());
-        headerMap.put("Content-Encoding",systemHeaderDTO.contentEncoding());
+        //headerMap.put("Content-Encoding",systemHeaderDTO.contentEncoding());
         headerMap.put("Authorization",systemHeaderDTO.authorization());
         headerMap.put("Ocp-Apim-Subscription-Key",systemHeaderDTO.subscriptionKey());
 
