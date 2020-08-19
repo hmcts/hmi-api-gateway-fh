@@ -33,6 +33,16 @@ parameters:
         command: clean functional
         dependsOn: SmokeTest
 
+  - name: images
+    type: object
+    default:
+    - name: azure_devops_agent
+      repository: 'hmi/azure-devops-agent'
+    - name: owasp_zap_scan
+      repository: 'hmi/apim-tests-owasp'
+    - name: wiremock
+      repository: 'hmi/apim-test-wiremock'
+
 variables:
   - group: HMI-APIM-Common
 
@@ -46,6 +56,7 @@ resources:
     - 80:80
     volumes:
     - /home/vsts/work/1:/zap/wrk:rw
+
 
 stages:
 
@@ -73,15 +84,15 @@ stages:
             tags: |
               v1.0
 
-  # - stage: OWASP
-  #   displayName: Tests - OWASP
-  #   jobs:
-  #     - job: containerjob
-  #       pool:
-  #         name: shared-services-pool
-  #       container: owasp_zap_container
-  #       steps:
-  #       - script: |
-  #           echo "Initiating Scan"
-  #           zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-  #           echo "Finished Scan"
+  - stage: OWASP
+    displayName: Tests - OWASP
+    jobs:
+      - job: containerjob
+        pool:
+          name: hmi-pool
+        container: owasp_zap_container
+        steps:
+        - script: |
+            echo "Initiating Scan"
+            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
+            echo "Finished Scan"
