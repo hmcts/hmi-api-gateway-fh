@@ -1,15 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
-import java.io.IOException;
 import java.util.Map;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 @Slf4j
 public class RestClientTemplate {
 
@@ -30,8 +27,8 @@ public class RestClientTemplate {
                        .expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType(headersAsMap.get("Content-Type"))
-                       .accept(headersAsMap.get("Accept"))
+                       .contentType("application/json")
+                       .accept("application/json")
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()

@@ -13,7 +13,6 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHe
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory;
 
 import java.util.Arrays;
 
@@ -50,7 +49,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.OK);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with no Source System defined in the Header")
     public void test_source_system_removed() throws Exception {
@@ -58,7 +56,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createPayloadHeaderRemoveFields(getApiSubscriptionKey(),
                 Arrays.asList("Source-System")), getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.BAD_REQUEST);
     }
 
     @Disabled("This Test May have to be done manually as Rest Assured Does not accept a 'Null Content-Type Header' in the Request Header")
@@ -83,7 +81,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
     public void test_invalidURL() throws Exception {
@@ -96,7 +93,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.NOT_FOUND);
     }
 
-    @Disabled("Test is not working as the API seems to be not accepting CFT as a Source System")
     @Test
     @DisplayName("Message with a Source System defined with value 'CFT'")
     public void test_supplied_source_system() throws Exception {
@@ -107,7 +103,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.OK);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as Null")
     public void test_supplied_request_created_at_as_null() throws Exception {
@@ -115,10 +110,9 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithNullRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.BAD_REQUEST);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as Empty")
     public void test_supplied_request_created_at_as_empty() throws Exception {
@@ -126,10 +120,9 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithEmptyRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.BAD_REQUEST);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a Request Created At as a Space")
     public void test_supplied_request_created_at_as_spaced() throws Exception {
@@ -137,7 +130,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithSpacedRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.BAD_REQUEST);
     }
 
     @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
@@ -162,7 +155,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.OK);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a Source System defined in the Header as Null")
     public void test_source_system_nulled() throws Exception {
@@ -171,16 +163,15 @@ public abstract class HMICommonHeaderTest {
                 createPayloadHeaderNullFields(getApiSubscriptionKey(),
                         Arrays.asList("Source-System")),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.BAD_REQUEST);
     }
 
-    @Disabled
     @Test
     @DisplayName("Message with a Source System defined in the Header as Empty")
     public void test_source_system_empty() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createPayloadHeaderNullFields(getApiSubscriptionKey(), Arrays.asList("Source-System")),
-                getHttpMethod(), HttpStatus.UNAUTHORIZED);
+                getHttpMethod(), HttpStatus.BAD_REQUEST);
     }
 }
