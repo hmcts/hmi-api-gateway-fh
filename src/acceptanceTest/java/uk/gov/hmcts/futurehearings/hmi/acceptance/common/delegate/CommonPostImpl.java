@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderEmptyFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.CommonResponseVerification.verifyResponse;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
@@ -40,7 +41,7 @@ public class CommonPostImpl implements CommonDelegate {
                 status,
                 httpMethod);
 
-        //verifyResponse(response);
+        verifyResponse(response);
 
     }
 
