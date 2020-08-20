@@ -86,8 +86,7 @@ stages:
 
 
         - script: |
-            which docker
-            whereis docker
+            ls /vsts/agent/_diag | grep Worker || pgrep Agent.Worker
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
