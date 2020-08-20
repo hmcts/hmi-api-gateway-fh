@@ -86,7 +86,8 @@ stages:
 
 
         - script: |
-            docker run hello-world
+            which docker
+            whereis docker
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
