@@ -47,11 +47,12 @@ public class UpdateHearingUnitTest {
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", "S&L");
-        headersAsMap.put("Request-Created-At", "datetimestring");
+        headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
+        headersAsMap.put("Request-Processed-At", "2018-01-29T20:36:01Z");
     }
 
-    //@Test
+    @Test
     public void testUpdateHearingRequestWithCorrectRequest() throws IOException {
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(updateHearingRequest);
