@@ -70,7 +70,7 @@ stages:
         steps:
         - template: pipeline/steps/push-img.yaml
           parameters:
-            registry: 'DTS-SS-ACRPrivate'
+            registry: 'DTS-SHAREDSERVICES-ACR-SBOX'
             repository: 'hmi/apim-tests-owasp'
             dockerfile: 'pipeline/tests/owasp/Dockerfile'
             tags: |
@@ -78,21 +78,24 @@ stages:
 
         - template: pipeline/steps/push-img.yaml
           parameters:
-            registry: 'DTS-SS-ACRPrivate'
+            registry: 'DTS-SHAREDSERVICES-ACR-SBOX'
             repository: 'hmi/azure-devops-agent'
             dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
             tags: |
               v1.0
 
-  - stage: OWASP
-    displayName: Tests - OWASP
-    jobs:
-      - job: containerjob
-        pool:
-          name: hmi-pool
-        container: owasp_zap_container
-        steps:
         - script: |
-            echo "Initiating Scan"
-            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-            echo "Finished Scan"
+            docker run hello-world
+
+  # - stage: OWASP
+  #   displayName: Tests - OWASP
+  #   jobs:
+  #     - job: containerjob
+  #       pool:
+  #         name: hmi-pool
+  #       container: owasp_zap_container
+  #       steps:
+  #       - script: |
+  #           echo "Initiating Scan"
+  #           zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
+  #           echo "Finished Scan"
