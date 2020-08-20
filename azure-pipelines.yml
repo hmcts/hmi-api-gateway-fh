@@ -65,24 +65,25 @@ stages:
     jobs:
       - job: BuildACRimage
         pool:
-          vmImage: 'ubuntu-latest'
+          name: hmi-pool
 
         steps:
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SHAREDSERVICES-ACR-SBOX'
-            repository: 'hmi/apim-tests-owasp'
-            dockerfile: 'pipeline/tests/owasp/Dockerfile'
-            tags: |
-              v1.0
+        # - template: pipeline/steps/push-img.yaml
+        #   parameters:
+        #     registry: 'DTS-SS-ACRPrivate'
+        #     repository: 'hmi/apim-tests-owasp'
+        #     dockerfile: 'pipeline/tests/owasp/Dockerfile'
+        #     tags: |
+        #       v1.0
 
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SHAREDSERVICES-ACR-SBOX'
-            repository: 'hmi/azure-devops-agent'
-            dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
-            tags: |
-              v1.0
+        # - template: pipeline/steps/push-img.yaml
+        #   parameters:
+        #     registry: 'DTS-SS-ACRPrivate'
+        #     repository: 'hmi/azure-devops-agent'
+        #     dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
+        #     tags: |
+        #       v1.0
+
 
         - script: |
             docker run hello-world
