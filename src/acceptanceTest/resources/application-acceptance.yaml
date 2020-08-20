@@ -1,6 +1,10 @@
 targetInstance: ${ENDPOINT_URL}
 targetHost: ${ENDPOINT_HOST}
 targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
-hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
+hearingApiRootContext: /hmi/hearings
+updateHearingRootContext: /hmi/hearings/%s
 spring.flyway.enabled: false
+
+mockServerHost: ${MOCK_SERVER_HOST}
+mockServerPort: ${MOCK_SERVER_PORT}

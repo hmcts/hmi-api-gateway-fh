@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
+@Disabled("For the purpose of adding the acceptance Test initial framework")
 public class UserApiSmokeTest extends SmokeTest {
 
     @Value("${userApiRootContext}")
