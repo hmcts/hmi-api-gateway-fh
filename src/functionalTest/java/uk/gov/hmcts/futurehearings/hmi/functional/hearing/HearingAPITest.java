@@ -18,6 +18,7 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for various endpoints"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
+@Disabled("For the purpose of adding the acceptance Test initial framework")
 public class HearingAPITest {
 
     @Steps
