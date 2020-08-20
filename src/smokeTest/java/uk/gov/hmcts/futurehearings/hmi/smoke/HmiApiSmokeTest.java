@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import static io.restassured.RestAssured.expect;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
+@Disabled("For the purpose of adding the acceptance Test initial framework")
 public class HmiApiSmokeTest extends SmokeTest {
 
     @Value("${hmiApiRootContext}")

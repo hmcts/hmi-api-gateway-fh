@@ -11,7 +11,7 @@ import java.util.Map;
 
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class SmokeTest {
+public abstract class SmokeTest {
 
     @Value("${targetInstance}")
     protected String targetInstance;
