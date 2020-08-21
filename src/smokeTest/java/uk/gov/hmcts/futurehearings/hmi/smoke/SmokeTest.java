@@ -41,7 +41,7 @@ public abstract class SmokeTest {
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", "S&L");
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02T15:00:00Z");
+        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
         headersAsMap.put("Request-Type", "ASSAULT");
     }
 }
