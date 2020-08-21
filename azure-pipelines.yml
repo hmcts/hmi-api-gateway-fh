@@ -71,4 +71,4 @@ stages:
           displayName: Logout of ACR
           inputs:
             command: logout
-            containerRegistry: ${{ parameters.registry }}
+            containerRegistry: 'DTS-SS-ACRPrivate'
