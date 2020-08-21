@@ -85,18 +85,16 @@ stages:
         #       v1.0
 
 
-        - script: |
-            ls /vsts/agent/_diag | grep Worker || pgrep Agent.Worker
 
   # - stage: OWASP
   #   displayName: Tests - OWASP
   #   jobs:
-  #     - job: containerjob
-  #       pool:
-  #         name: hmi-pool
-  #       container: owasp_zap_container
-  #       steps:
-  #       - script: |
-  #           echo "Initiating Scan"
-  #           zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-  #           echo "Finished Scan"
+      - job: containerjob
+        pool:
+          name: hmi-pool
+        container: owasp_zap_container
+        steps:
+        - script: |
+            echo "Initiating Scan"
+            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
+            echo "Finished Scan"
