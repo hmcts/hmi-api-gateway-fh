@@ -92,9 +92,10 @@ stages:
       - job: containerjob
         pool:
           name: hmi-pool
-        container: owasp_zap_container
+        # container: owasp_zap_container
         steps:
         - script: |
-            echo "Initiating Scan"
-            zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-            echo "Finished Scan"
+            docker run hello-world
+        # echo "Initiating Scan"
+        # zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
+        # echo "Finished Scan"
