@@ -80,5 +80,4 @@ stages:
             runInBackground: false
         
         - script: |
-            ls /home/vsts/work/1
-            cat /home/vsts/work/1/report.json
+            ls /home/vsts/work/
