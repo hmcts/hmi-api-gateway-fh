@@ -60,14 +60,14 @@ resources:
 
 stages:
 
-  - stage: TEST
-    displayName: Create ACR Images
-    jobs:
-      - job: BuildACRimage
-        pool:
-          name: hmi-pool
+  # - stage: TEST
+  #   displayName: Create ACR Images
+  #   jobs:
+  #     - job: BuildACRimage
+  #       pool:
+  #         name: hmi-pool
 
-        steps:
+  #       steps:
         # - template: pipeline/steps/push-img.yaml
         #   parameters:
         #     registry: 'DTS-SS-ACRPrivate'
@@ -86,9 +86,9 @@ stages:
 
 
 
-  # - stage: OWASP
-  #   displayName: Tests - OWASP
-  #   jobs:
+  - stage: OWASP
+    displayName: Tests - OWASP
+    jobs:
       - job: containerjob
         pool:
           name: hmi-pool
