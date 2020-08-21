@@ -1,3 +1,5 @@
 FROM owasp/zap2docker-weekly:latest
-RUN chmod -R 777 /home/zap
+USER root
 WORKDIR /home/zap
+COPY ./security.sh .
+RUN chmod +x security.sh
