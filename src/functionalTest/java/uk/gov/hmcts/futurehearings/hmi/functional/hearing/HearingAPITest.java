@@ -58,11 +58,12 @@ public class HearingAPITest {
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Company-Name", "HMCTS");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source-System", "SnL");
-        headersAsMap.put("Destination-System", "CFT");
-        headersAsMap.put("Request-Created-At", "datetimestring");
+        headersAsMap.put("Source-System", "CFT");
+        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Accept", "application/json");
+        headersAsMap.put("Request-Processed-At", "2018-01-29 20:36:01Z");
 
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
