@@ -124,8 +124,8 @@ public class PayloadHeaderDTOFactory {
 
                 buildStandardBuinessHeaderPart("dateTime",
                         "dateTime",
-                        "SnL",
                         "CFT",
+                        "S&L",
                         "THEFT"),nullHeaderString));
     }
 

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
@@ -8,44 +9,20 @@ import java.util.Map;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
-import org.json.JSONException;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 @Slf4j
 public class CommonResponseVerification {
 
-    public static void verifySessionResponse (Response response) {
+    public static void verifyResponse (Response response, String expectedMessage) {
 
-        //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
-        //System.out.println(response.getBody().asString());
-        assertEquals(2,response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        //assertEquals("Morning",response.getBody().jsonPath().getString("$.Session"));
-        //assertEquals("Type",response.getBody().jsonPath().getString("$.Civil"));
-        assertEquals("HMCTS",responseMap.get(("Name")));
-        assertEquals("London",responseMap.get(("Place")));
-
-        //Option 2 - Use a Json Equality based library like JsonAssert
-        try {
-            JSONAssert.assertEquals(
-                    "{\n" +
-                            "    \"Name\": \"HMCTS\",\n" +
-                            "    \"Place\": \"London\"\n" +
-                            "}",
-                    response.getBody().asString(), JSONCompareMode.STRICT);
-        } catch (JSONException jsonException) {
-            throw new AssertionError("Payloads have not matched");
-        }
-
-
-        //Option 3 - Use a better Third Party Specialised Matcher (Hamcrest)
-
+       if(response.getStatusCode() == 200) {
+           verifySuccessResponse(response);
+       } else {
+           verifyFailedResponse(response, expectedMessage);
+       }
     }
 
-    public static void verifyResponse (Response response) {
-
+    public static void verifySuccessResponse(Response response) {
         //Option 1 - Use JsonPath - (Native Matcher to RestAssured and Serenity Rest)
         log.debug(response.getBody().asString());
         System.out.println(response.getBody().asString());
@@ -56,10 +33,13 @@ public class CommonResponseVerification {
 
         //Option 2 - Use a Json Equality based library like JsonAssert
         TestingUtils.comparePayloads("uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/output/mock-demo-response.json",
-                            response);
+                response);
 
         //Option 3 - Use a better Third Party Specialised Matcher (Hamcrest)
+    }
 
+    private static void verifyFailedResponse(Response response, String expectedMessage) {
+        response.then().body("message", equalTo(expectedMessage));
     }
 
 }
