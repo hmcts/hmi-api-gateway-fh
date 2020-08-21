@@ -56,7 +56,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("message", "Missing or invalid header 'Request-Created-At'.")).ToString())</set-body>
+                        new JProperty("description", "Missing or invalid header 'Request-Created-At'.")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
@@ -82,7 +82,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("message", "Missing or invalid header 'Request-Processed-At'.")).ToString())</set-body>
+                        new JProperty("description", "Missing or invalid header 'Request-Processed-At'.")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
