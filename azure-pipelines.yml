@@ -80,4 +80,13 @@ stages:
             runInBackground: false
         
         - script: |
-            ls /home/vsts/work/
+            cd /home/vsts/work/
+
+            echo "Obtaining container key..."
+            KEY=$(az storage account keys list -g azure-devops-sbox --account-name azuredevopssboxsa --query "[0].value" -o tsv)
+
+            echo "Downloading ZAP report..."
+            az storage blob upload --account-name azuredevopssboxsa --account-key $KEY --container-name zap-api-results -f api-report.html -n api-report.html
+            az storage blob upload --account-name azuredevopssboxsa --account-key $KEY --container-name zap-api-results -f report.json -n report.json
+            az storage blob upload --account-name azuredevopssboxsa --account-key $KEY --container-name zap-api-results -fzap.out -n zap.out
+
