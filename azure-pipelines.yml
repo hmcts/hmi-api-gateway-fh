@@ -33,57 +33,26 @@ parameters:
         command: clean functional
         dependsOn: SmokeTest
 
-  - name: images
-    type: object
-    default:
-    - name: azure_devops_agent
-      repository: 'hmi/azure-devops-agent'
-    - name: owasp_zap_scan
-      repository: 'hmi/apim-tests-owasp'
-    - name: wiremock
-      repository: 'hmi/apim-test-wiremock'
-
 variables:
   - group: HMI-APIM-Common
 
-resources:
-  containers:
-  - container: owasp_zap_container
-    image: hmi/apim-tests-owasp:v1.0
-    endpoint: 'DTS-SS-ACRPrivate'
-    options: --user 0:0
-    ports:
-    - 80:80
-    volumes:
-    - /home/vsts/work/1:/zap/wrk:rw
-
-
 stages:
 
-  # - stage: TEST
-  #   displayName: Create ACR Images
-  #   jobs:
-  #     - job: BuildACRimage
-  #       pool:
-  #         name: hmi-pool
+  - stage: TEST
+    displayName: Create ACR Images
+    jobs:
+      - job: BuildACRimage
+        pool:
+          vmImage: 'ubuntu-latest'
 
-  #       steps:
-        # - template: pipeline/steps/push-img.yaml
-        #   parameters:
-        #     registry: 'DTS-SS-ACRPrivate'
-        #     repository: 'hmi/apim-tests-owasp'
-        #     dockerfile: 'pipeline/tests/owasp/Dockerfile'
-        #     tags: |
-        #       v1.0
-
-        # - template: pipeline/steps/push-img.yaml
-        #   parameters:
-        #     registry: 'DTS-SS-ACRPrivate'
-        #     repository: 'hmi/azure-devops-agent'
-        #     dockerfile: 'docker/images/azuredevops-agent/Dockerfile'
-        #     tags: |
-        #       v1.0
-
+        steps:
+        - template: pipeline/steps/push-img.yaml
+          parameters:
+            registry: 'DTS-SS-ACRPrivate'
+            repository: 'hmi/apim-tests-owasp'
+            dockerfile: 'pipeline/tests/owasp/Dockerfile'
+            tags: |
+              v0.1
 
 
   - stage: OWASP
@@ -91,11 +60,9 @@ stages:
     jobs:
       - job: containerjob
         pool:
-          name: hmi-pool
+          vmImage: 'ubuntu-latest'
         # container: owasp_zap_container
         steps:
         - script: |
-            docker run hello-world
-        # echo "Initiating Scan"
-        # zap-api-scan.py -t https://www.example.com/openapi.json -f openapi
-        # echo "Finished Scan"
+            docker run -e TEST_URL=https://www.example.com/openapi.json -e SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf -v /home/vsts/work/1:/zap/wrk:rw ssprivateprod.azurecr.io/hmi/apim-tests-owasp:v0.1 /bin/bash -c ./security.sh
+            ls /home/vsts/work/1
