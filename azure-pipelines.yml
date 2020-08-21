@@ -82,4 +82,5 @@ stages:
             containerCommand: ./security.sh
         
         - script: |
+            docker run -e TEST_URL=https://www.example.com/openapi.json -e SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf -v /home/vsts/work/1:/zap/wrk:rw -it ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1 /bin/bash ./security.sh
             ls -la /home/vsts/work/1/TestResults/
