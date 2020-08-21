@@ -46,7 +46,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.OK, null);
     }
 
     @Test
@@ -56,7 +56,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createPayloadHeaderRemoveFields(getApiSubscriptionKey(),
                 Arrays.asList("Source-System")), getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST, "Missing/Invalid Header Source-System");
     }
 
     @Disabled("This Test May have to be done manually as Rest Assured Does not accept a 'Null Content-Type Header' in the Request Header")
@@ -67,7 +67,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithAllValuesNull(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.UNAUTHORIZED, null);
     }
 
     @Disabled("This Test May have to be done manually as Rest Assured Does not accept a Empty Content Type in the Request Header")
@@ -78,7 +78,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithAllValuesEmpty(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.UNAUTHORIZED, null);
     }
 
     @Test
@@ -90,7 +90,7 @@ public abstract class HMICommonHeaderTest {
                 getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.NOT_FOUND, "Resource not found");
     }
 
     @Test
@@ -100,7 +100,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithSourceSystemValueAsCFT(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.OK, null);
     }
 
     @Test
@@ -110,7 +110,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithNullRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST, "Resource not found");
     }
 
     @Test
@@ -120,7 +120,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithEmptyRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST, "Missing or invalid header 'Request-Created-At'");
     }
 
     @Test
@@ -130,7 +130,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithSpacedRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST, "Resource not found");
     }
 
     @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
@@ -141,7 +141,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithSingleCharRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.OK, "Resource not found");
     }
 
     @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
@@ -152,7 +152,7 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithLongRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.OK, "Resource not found");
     }
 
     @Test
@@ -163,7 +163,7 @@ public abstract class HMICommonHeaderTest {
                 createPayloadHeaderNullFields(getApiSubscriptionKey(),
                         Arrays.asList("Source-System")),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST, "Missing/Invalid Header Source-System");
     }
 
     @Test
@@ -172,6 +172,6 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createPayloadHeaderNullFields(getApiSubscriptionKey(), Arrays.asList("Source-System")),
-                getHttpMethod(), HttpStatus.BAD_REQUEST);
+                getHttpMethod(), HttpStatus.BAD_REQUEST, "Missing/Invalid Header Source-System");
     }
 }
