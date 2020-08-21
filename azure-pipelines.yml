@@ -77,3 +77,7 @@ stages:
               TEST_URL=https://www.example.com/openapi.json
               SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             containerCommand: '/bin/bash ./security.sh'
+        
+        - script: |
+            ls /home/vsts/work/1
+            cat /home/vsts/work/1/report.json
