@@ -72,11 +72,12 @@ stages:
             azureContainerRegistry: ssprivatesbox.azurecr.io
             command: 'Run an image'
             imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1'
-            volumes: '/home/vsts/work/1:/zap/wrk:rw'
+            volumes: '/home/vsts/work/:/zap/wrk/:rw'
             envVars: |
               TEST_URL=https://www.example.com/openapi.json
               SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             containerCommand: '/bin/bash ./security.sh'
+            runInBackground: false
         
         - script: |
             ls /home/vsts/work/1
