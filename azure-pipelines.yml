@@ -82,4 +82,4 @@ stages:
             containerCommand: ./security.sh
         
         - script: |
-            ls -la /home/vsts/work/1
+            ls -la /home/vsts/work/1/TestResults/
