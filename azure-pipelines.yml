@@ -61,7 +61,7 @@ stages:
     jobs:
       - job: containerjob
         pool:
-          vmImage: 'windows-latest'
+          vmImage: 'ubuntu-latest'
 
         steps:
 
@@ -79,22 +79,15 @@ stages:
             containerCommand: '/bin/bash ./security.sh'
             runInBackground: false
 
-        - task: AzureFileCopy@4
-          displayName: 'AzureBlob File Copy'
-          inputs:
-            SourcePath: /home/vsts/work/
-            azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
-            Destination: AzureBlob
-            storage: hmiapimsboxsa
-            ContainerName: 'zap-api-results'
-        # - script: |
-        #     cd /home/vsts/work/
 
-        #     echo "Obtaining container key..."
-        #     KEY=$(az storage account keys list -g hmi-apim-sbox-rg --account-name hmiapimsboxsa --query "[0].value" -o tsv)
+        - script: |
+            cd /home/vsts/work/
 
-        #     echo "Downloading ZAP report..."
-        #     az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f api-report.html -n api-report.html
-        #     az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f report.json -n report.json
-        #     az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f zap.out -n zap.out
+            echo "Obtaining container key..."
+            KEY=$(az storage account keys list -g hmi-apim-sbox-rg --account-name hmiapimsboxsa --query "[0].value" -o tsv)
+
+            echo "Uploading ZAP report..."
+            az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f api-report.html -n api-report.html
+            az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f report.json -n report.json
+            az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f zap.out -n zap.out
 
