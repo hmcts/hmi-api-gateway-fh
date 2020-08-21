@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.updateuser;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.SmokeTest;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
@@ -35,5 +37,6 @@ public class UserApiSmokeTest extends SmokeTest {
             log.info(" The value of the Response Status " + response.getStatusCode());
             log.info(" The value of the Response body " + response.getBody().prettyPrint());
         }
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
     }
 }
