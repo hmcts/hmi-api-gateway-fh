@@ -61,7 +61,7 @@ stages:
     jobs:
       - job: containerjob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'windows-latest'
 
         steps:
 
@@ -78,7 +78,7 @@ stages:
               SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             containerCommand: '/bin/bash ./security.sh'
             runInBackground: false
-            
+
         - task: AzureFileCopy@4
           displayName: 'AzureBlob File Copy'
           inputs:
