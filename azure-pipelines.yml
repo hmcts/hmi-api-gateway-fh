@@ -35,24 +35,25 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
+  - group: HMI-APIM-BUILD-SBOX
 
 stages:
 
-  - stage: TEST
-    displayName: Create ACR Images
-    jobs:
-      - job: BuildACRimage
-        pool:
-          vmImage: 'ubuntu-latest'
+  # - stage: TEST
+  #   displayName: Create ACR Images
+  #   jobs:
+  #     - job: BuildACRimage
+  #       pool:
+  #         vmImage: 'ubuntu-latest'
 
-        steps:
-        - template: pipeline/steps/push-img.yaml
-          parameters:
-            registry: 'DTS-SS-ACRPrivate'
-            repository: 'hmi/apim-tests-owasp'
-            dockerfile: 'pipeline/tests/owasp/Dockerfile'
-            tags: |
-              v0.1
+  #       steps:
+  #       - template: pipeline/steps/push-img.yaml
+  #         parameters:
+  #           registry: 'DTS-SS-ACRPrivate'
+  #           repository: 'hmi/apim-tests-owasp'
+  #           dockerfile: 'pipeline/tests/owasp/Dockerfile'
+  #           tags: |
+  #             v0.1
 
 
   - stage: OWASP
@@ -61,27 +62,18 @@ stages:
       - job: containerjob
         pool:
           vmImage: 'ubuntu-latest'
-        # container: owasp_zap_container
+
         steps:
 
-        # - script: |
-        #     docker run -e TEST_URL=https://www.example.com/openapi.json -e SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf -v /home/vsts/work/1:/zap/wrk:rw owasp/zap2docker-weekly /bin/bash -c ./security.sh
-        #     ls /home/vsts/work/1
-
-        # - task: Docker@0
-        #   displayName: 'Run an image'
-        #   inputs:
-        #     azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
-        #     azureContainerRegistry: '{"loginServer":"ssprivatesbox.azurecr.io", "id" : "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/infra-resource-group/providers/Microsoft.ContainerRegistry/registries/ssprivatesbox"}'
-        #     action: 'Run an image'
-        #     imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1'
-        #     # volumes: '/home/vsts/work/1:/zap/wrk:rw'
-        #     # envVars: |
-        #     #   TEST_URL=https://www.example.com/openapi.json
-        #     #   SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-        #     # containerCommand: ./security.sh
-        
-        - script: |
-            docker login ssprivatesbox.azurecr.io --username $(principal_object_id) --password $(principal_object_secret)
-            docker run -e TEST_URL=https://www.example.com/openapi.json -e SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf -v /home/vsts/work/1:/zap/wrk:rw ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1 /bin/bash ./security.sh
-            ls -la /home/vsts/work/1/
+        - task: Docker@1
+          displayName: 'Run an image'
+          inputs:
+            azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
+            azureContainerRegistry: ssprivatesbox.azurecr.io
+            command: 'Run an image'
+            imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1'
+            volumes: '/home/vsts/work/1:/zap/wrk:rw'
+            envVars: |
+              TEST_URL=https://www.example.com/openapi.json
+              SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            containerCommand: '/bin/bash ./security.sh'
