@@ -14,5 +14,6 @@ public interface CommonDelegate {
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,
                                                            final HttpMethod httpMethod,
-                                                           final HttpStatus status) throws IOException;
+                                                           final HttpStatus status,
+                                                           final String expectedMessage) throws IOException;
 }
