@@ -19,6 +19,19 @@ parameters:
         command: clean functional
         dependsOn: SmokeTest
 
+    - name: dev
+      subscription: DTS-SHAREDSERVICES-DEV
+      group: HMI-APIM-BUILD-DEV
+      tests_gradle:
+      - name: UnitTest 
+        command: clean test
+      - name: SmokeTest
+        command: clean smoke
+        dependsOn: UnitTest
+      - name: FunctionalTest
+        command: clean functional
+        dependsOn: SmokeTest
+
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
@@ -35,9 +48,39 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
-  - group: HMI-APIM-BUILD-SBOX
 
 stages:
+
+- ${{ each environment in parameters.environments }}:
+
+  - stage: ${{ environment.name }}
+    ${{ if environment.condition }}:
+      condition: ${{ environment.condition }}
+    displayName: Build and Test ${{ environment.name }} APIM
+    
+    jobs:
+
+    - template: pipeline/jobs/terraform.yaml
+      parameters:
+        subscription: ${{ environment.subscription }} 
+        group: ${{ environment.group }}
+        displayName: Build infrastructure with Terraform
+
+    - template: pipeline/jobs/export-keyvault.yaml
+      parameters:
+        displayName: Read KeyVault Secret
+        dependsOn: Terraform
+        subscription: ${{ environment.subscription }}
+        keyVaultName: hmi-apim-kv-${{ environment.name }}
+    
+    - template: pipeline/jobs/create-storage.yaml
+      parameters:
+        subscription: ${{ environment.subscription }}
+        resourceGroup:
+        storageAccount:
+        dependsOn: Terraform
+        displayName: Create Storage
+
 
   # - stage: TEST
   #   displayName: Create ACR Images
