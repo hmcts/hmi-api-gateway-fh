@@ -22,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(RequestHearingHeaderValidationTest.class)
 @IncludeTags("Post")
-
 public class RequestHearingHeaderValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")

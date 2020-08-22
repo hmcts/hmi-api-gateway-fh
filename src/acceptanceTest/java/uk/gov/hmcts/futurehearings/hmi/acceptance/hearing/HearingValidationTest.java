@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
 
+import static io.restassured.config.EncoderConfig.encoderConfig;
+
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
 
@@ -27,6 +29,8 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
         this.setApiSubscriptionKey(targetSubscriptionKey);
+        RestAssured.config = RestAssured.config()
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         //this.setRelativeURL(hearingAPIRootContext);
     }
 }
