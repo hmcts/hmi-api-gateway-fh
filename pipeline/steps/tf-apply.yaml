@@ -11,3 +11,10 @@ steps:
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
     commandOptions: -auto-approve tfplan-$(environment)
+
+- task: TerraformCLI@0
+  displayName: Terraform output
+  inputs:
+    command: output
+    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    commandOptions: hmi_apim_gateway_url
