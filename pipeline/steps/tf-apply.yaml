@@ -17,4 +17,4 @@ steps:
   inputs:
     command: output
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-    commandOptions: -state-out=$(environment).tfstate
+    commandOptions: -state=$(environment).tfstate hmi_apim_gateway_url
