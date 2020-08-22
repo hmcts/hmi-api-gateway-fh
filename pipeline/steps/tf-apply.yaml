@@ -10,7 +10,7 @@ steps:
     command: apply
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
-    commandOptions: -auto-approve -state-out=terraform.tfstate tfplan-$(environment)
+    commandOptions: -auto-approve tfplan-$(environment)
 
 - script: |
-    terraform output -state=terraform.tfstate hmi_apim_gateway_url
+    terraform output -state=/.terraform/terraform.tfstate hmi_apim_gateway_url
