@@ -78,6 +78,8 @@ stages:
               az storage container create --name $container --account-name hmiapimsboxsa --account-key $key
               echo "##vso[task.setvariable variable=storagekey;isOutput=true]$key"
               echo "##vso[task.setvariable variable=container;isOutput=true]$container"
+              echo $(storagekey)
+              echo $(container)
 
       - job: apizapscan
         dependsOn:
