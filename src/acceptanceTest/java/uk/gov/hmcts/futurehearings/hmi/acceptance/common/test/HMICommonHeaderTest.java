@@ -1,14 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderRemoveFields;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithAllValuesEmpty;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithAllValuesNull;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithCorruptedHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithEmptyRequestCreatedAt;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithLongRequestCreatedAt;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithNullRequestCreatedAt;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSingleCharRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSourceSystemValueAsCFT;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSourceSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSpacedRequestCreatedAt;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
 
@@ -21,6 +21,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -40,8 +41,10 @@ public abstract class HMICommonHeaderTest {
     public CommonDelegate commonDelegate;
 
     @Test
+    @Order(1)
     @DisplayName("Message successfully validated")
     public void test_successful_response() throws Exception {
+        log.info("Message successfully validated");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -50,40 +53,9 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Message with no Source System defined in the Header")
-    public void test_source_system_removed() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createPayloadHeaderRemoveFields(getApiSubscriptionKey(),
-                Arrays.asList("Source-System")), getHttpMethod(),
-                HttpStatus.BAD_REQUEST, "Missing/Invalid Header Source-System");
-    }
-
-    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a 'Null Content-Type Header' in the Request Header")
-    @Test
-    @DisplayName("Message with all Header Values Populated as Nulls")
-    public void test_supplied_all_headers_null() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithAllValuesNull(getApiSubscriptionKey()),
-                getHttpMethod(),
-                HttpStatus.UNAUTHORIZED, null);
-    }
-
-    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a Empty Content Type in the Request Header")
-    @Test
-    @DisplayName("Message with all Header Values Populated as Nulls")
-    public void test_supplied_all_headers_empty() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithAllValuesEmpty(getApiSubscriptionKey()),
-                getHttpMethod(),
-                HttpStatus.UNAUTHORIZED, null);
-    }
-
-    @Test
+    @Order(2)
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
-    public void test_invalidURL() throws Exception {
+    public void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL().replace("hearings","hearing"),
                 //Performed a near to the Real URL Transformation
@@ -94,13 +66,106 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Message with a Source System defined with value 'CFT'")
-    public void test_supplied_source_system() throws Exception {
+    @Order(3)
+    @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
+    public void test_no_headers_populated() throws Exception {
+        //2 Sets of Headers Tested - Nulls and Empty
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(),
+                getInputPayloadFileName(),
+                createHeaderWithAllValuesEmpty(),
+                //The Content Type Has to be Populated for Rest Assured to function properly
+                //So this Test was manually executed in Postman Manually as well with the same Order Number
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Resource not found");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(),
+                getInputPayloadFileName(),
+                createHeaderWithAllValuesNull(),
+                //The Content Type Has to be Populated for Rest Assured to function properly
+                //So this Test was manually executed in Postman Manually as well with the same Order Number
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Resource not found");
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Message with Subscription Key Truncated in the Header")
+    public void test_subscription_key_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithSourceSystemValueAsCFT(getApiSubscriptionKey()),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                Arrays.asList("Ocp-Apim-Subscription-Key")), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Missing/Invalid Header Source-System");
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Message with Subscription Key Invalid(Null,Empty,Spaced or Wrong Value) Header")
+    public void test_subscription_key_invalid_values() throws Exception {
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(null), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(""), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader("  "), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(
+                getApiSubscriptionKey().substring(0,getApiSubscriptionKey().length()-1),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader("  "), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                "Missing/Invalid Header Source-System");
+    }
+    @Test
+    @Order(6)
+    @DisplayName("Message with Subscription Key Invalid(Null,Empty,Spaced or Wrong Values(S&L,SNL)) Header")
+    public void test_source_system_invalid_values() throws Exception {
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),null),
                 getHttpMethod(),
-                HttpStatus.OK, null);
+                HttpStatus.BAD_REQUEST,
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),""),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey()," "),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),"S&L"),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),"SNL"),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                null);
     }
 
     @Test
@@ -120,7 +185,8 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithEmptyRequestCreatedAt(getApiSubscriptionKey()),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST, "Missing or invalid header 'Request-Created-At'");
+                HttpStatus.BAD_REQUEST,
+                "Missing or invalid header 'Request-Created-At'");
     }
 
     @Test
@@ -172,6 +238,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createPayloadHeaderNullFields(getApiSubscriptionKey(), Arrays.asList("Source-System")),
-                getHttpMethod(), HttpStatus.BAD_REQUEST, "Missing/Invalid Header Source-System");
+                getHttpMethod(), HttpStatus.BAD_REQUEST,
+                "Missing/Invalid Header Source-System");
     }
 }
