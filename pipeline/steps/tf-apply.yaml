@@ -10,7 +10,7 @@ steps:
     command: apply
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
-    commandOptions: -auto-approve tfplan-$(environment)
+    commandOptions: -auto-approve -state-out=terra.tfvars tfplan-$(environment)
 
 - script: |
-    cat $(System.DefaultWorkingDirectory)/infrastructure/terraform/.terraform/terraform.tfstate
+    cat $(System.DefaultWorkingDirectory)/infrastructure/terraform/terra.tfvars
