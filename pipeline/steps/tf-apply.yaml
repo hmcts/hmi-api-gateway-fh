@@ -14,9 +14,6 @@ steps:
 
 - script: |
     ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-    displayName: 'Export KeyVault Variables'
-    name: exportKeyVaultSecret
-
 
 - task: TerraformCLI@0
   displayName: Terraform output
