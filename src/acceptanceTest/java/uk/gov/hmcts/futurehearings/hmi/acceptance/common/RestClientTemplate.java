@@ -27,8 +27,6 @@ public class RestClientTemplate {
                return RestAssured
                        .expect().that().statusCode(expectedHttpStatus.value())
                        .given()
-                       .contentType(ContentType.JSON.getAcceptHeader())
-        .accept(ContentType.JSON.getAcceptHeader())
                        .headers(headersAsMap)
                        .basePath(requestURL)
                        .body(requestBodyPayload)
@@ -38,8 +36,6 @@ public class RestClientTemplate {
                return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType("application/json")
-                       .accept("application/json")
                        .baseUri(RestAssured.baseURI)
                        .basePath(requestURL)
                        .body(requestBodyPayload)
