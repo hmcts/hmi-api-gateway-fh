@@ -59,8 +59,32 @@ stages:
   - stage: OWASP
     displayName: Tests - OWASP
     jobs:
+      - job: createStorage
+        pool:
+          vmImage: 'windows-latest'
+
+        steps:
+        - task: AzureCLI@2
+          displayName: createContainer
+          inputs:
+            azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              echo "Obtaining container key..."
+              key=$(az storage account keys list -g azure-devops-sbox --account-name azuredevopssboxsa --query "[0].value" -o tsv)
+              echo "Creating storage container"
+              container=$("apizapscan-"+(get-date | % {$_.ToString("yyyy/MM/dd)}))
+              az storage container create --name $container --account-name azuredevopssboxsa
+              echo "##vso[task.setvariable variable=storagekey;isOutput=true]$key"
+              echo "##vso[task.setvariable variable=container;isOutput=true]$container"
 
       - job: apizapscan
+        dependsOn:
+        - createStorage
+        variables:
+          storagekey: $[dependencies.createStorage.outputs['createContainer.storagekey']]
+          container: $[dependencies.createStorage.outputs['createContainer.container']]
         pool:
           vmImage: 'ubuntu-latest'
 
@@ -84,12 +108,7 @@ stages:
         - script: |
             cd /home/vsts/work/
 
-            echo "Obtaining container key..."
-            az login --service-principal -u $(principal_object_id) -p $(principal_object_secret) --tenant $(principal_tenant_id)
-            KEY=$(az storage account keys list -g hmi-apim-sbox-rg --account-name hmiapimsboxsa --query "[0].value" -o tsv)
-
-            echo $KEY
-          # echo "Uploading ZAP report..."
-          # az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f api-report.html -n api-report.html
-          # az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f report.json -n report.json
-          # az storage blob upload --account-name hmiapimsboxsa --account-key $KEY --container-name zap-api-results -f zap.out -n zap.out
+            echo "Uploading ZAP report..."
+            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f api-report.html -n api-report.html
+            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f report.json -n report.json
+            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f zap.out -n zap.out
