@@ -13,4 +13,4 @@ steps:
     commandOptions: -auto-approve tfplan-$(environment)
 
 - script: |
-    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/.terraform/
