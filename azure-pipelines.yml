@@ -59,7 +59,8 @@ stages:
   - stage: OWASP
     displayName: Tests - OWASP
     jobs:
-      - job: containerjob
+
+      - job: apizapscan
         pool:
           vmImage: 'ubuntu-latest'
 
@@ -84,6 +85,7 @@ stages:
             cd /home/vsts/work/
 
             echo "Obtaining container key..."
+            az login --service-principal -u $(principal_object_id) -p $(principal_object_secret) --tenant $(principal_tenant_id)
             KEY=$(az storage account keys list -g hmi-apim-sbox-rg --account-name hmiapimsboxsa --query "[0].value" -o tsv)
 
             echo $KEY
