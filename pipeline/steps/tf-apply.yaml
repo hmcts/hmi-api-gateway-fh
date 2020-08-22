@@ -13,4 +13,4 @@ steps:
     commandOptions: -auto-approve tfplan-$(environment)
 
 - script: |
-    terraform output -state=$(System.DefaultWorkingDirectory)/infrastructure/terraform/.terraform/terraform.tfstate hmi_apim_gateway_url
+    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/
