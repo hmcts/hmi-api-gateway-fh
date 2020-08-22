@@ -34,3 +34,9 @@ output "subscription_key" {
   value       = azurerm_api_management_subscription.hmi_apim_subscription.primary_key
   sensitive   = true
 }
+
+output "storage_account" {
+  description = "Storage Account for APIM"
+  value       = azurerm_storage_account.hmi_apim_storage.name
+  sensitive   = true
+}
