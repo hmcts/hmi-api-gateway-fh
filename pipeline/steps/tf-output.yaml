@@ -1,0 +1,18 @@
+parameters:
+  - name: subscription
+    type: string
+
+steps:
+- task: AzureCLI@2
+  displayName: Get Terraform Outputs
+  name: getOutputs
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      echo "Obtaining container key..."
+      key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
+      echo "Creating storage container"
+      az storage blob download --container-name $(prefix)$(product)terraform --file $(prefix)$(product).tfstate --name $(prefix)$(product).tfstate
+      cat $(prefix)$(product).tfstate
