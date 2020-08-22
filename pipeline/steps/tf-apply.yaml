@@ -12,6 +12,12 @@ steps:
     environmentServiceName: ${{ parameters.subscription }}
     commandOptions: -auto-approve -state-out=$(environment).tfstate tfplan-$(environment)
 
+- script: |
+    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/
+    displayName: 'Export KeyVault Variables'
+    name: exportKeyVaultSecret
+
+
 - task: TerraformCLI@0
   displayName: Terraform output
   inputs:
