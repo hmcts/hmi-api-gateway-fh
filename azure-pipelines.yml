@@ -66,6 +66,7 @@ stages:
         steps:
         - task: AzureCLI@2
           displayName: createContainer
+          name: createContainer
           inputs:
             azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
             scriptType: bash
