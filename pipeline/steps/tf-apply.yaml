@@ -10,7 +10,7 @@ steps:
     command: apply
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
-    commandOptions: -auto-approve tfplan-$(environment) -state-out=$(environment).tfstate
+    commandOptions: -auto-approve -state-out=$(environment).tfstate tfplan-$(environment)
 
 - task: TerraformCLI@0
   displayName: Terraform output
