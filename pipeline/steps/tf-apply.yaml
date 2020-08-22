@@ -17,4 +17,3 @@ steps:
   inputs:
     command: output
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-    commandOptions: hmi_apim_gateway_url
