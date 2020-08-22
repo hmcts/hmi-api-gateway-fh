@@ -13,4 +13,5 @@ steps:
     commandOptions: -auto-approve tfplan-$(environment)
 
 - script: |
-    terraform output -state=/.terraform/terraform.tfstate hmi_apim_gateway_url
+    ls -la /.terraform/
+# terraform output -state=/.terraform/terraform.tfstate hmi_apim_gateway_url
