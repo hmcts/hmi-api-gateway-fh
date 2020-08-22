@@ -89,26 +89,28 @@ stages:
           vmImage: 'ubuntu-latest'
 
         steps:
-
-        - task: Docker@1
-          displayName: 'Run an image'
-          inputs:
-            azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
-            azureContainerRegistry: ssprivatesbox.azurecr.io
-            command: 'Run an image'
-            imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1'
-            volumes: '/home/vsts/work/:/zap/wrk/:rw'
-            envVars: |         
-              TEST_URL=https://www.example.com/openapi.json
-              SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-            containerCommand: '/bin/bash ./security.sh'
-            runInBackground: false
-
-
         - script: |
-            cd /home/vsts/work/
+            echo $(storagekey)
+            echo $(container)
+        # - task: Docker@1
+        #   displayName: 'Run an image'
+        #   inputs:
+        #     azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
+        #     azureContainerRegistry: ssprivatesbox.azurecr.io
+        #     command: 'Run an image'
+        #     imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:v0.1'
+        #     volumes: '/home/vsts/work/:/zap/wrk/:rw'
+        #     envVars: |         
+        #       TEST_URL=https://www.example.com/openapi.json
+        #       SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+        #     containerCommand: '/bin/bash ./security.sh'
+        #     runInBackground: false
 
-            echo "Uploading ZAP report..."
-            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f api-report.html -n api-report.html
-            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f report.json -n report.json
-            az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f zap.out -n zap.out
+
+        # - script: |
+        #     cd /home/vsts/work/
+
+        #     echo "Uploading ZAP report..."
+        #     az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f api-report.html -n api-report.html
+        #     az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f report.json -n report.json
+        #     az storage blob upload --account-name hmiapimsboxsa --account-key $(storagekey) --container-name $(container) -f zap.out -n zap.out
