@@ -15,4 +15,4 @@ steps:
       key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
       echo "Creating storage container"
       az storage blob download --container-name $(prefix)$(product)terraform --file $(prefix)$(product).tfstate --name $(prefix)$(product).tfstate --account-name $(devopsStorageAccount) --account-key $key
-      terraform output storage_account -state=$(prefix)$(product).tfstate
+      terraform output -state=$(prefix)$(product).tfstate 
