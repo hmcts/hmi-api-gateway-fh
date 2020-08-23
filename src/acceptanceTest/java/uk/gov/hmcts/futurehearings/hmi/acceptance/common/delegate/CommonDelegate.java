@@ -15,5 +15,6 @@ public interface CommonDelegate {
                                                            final Map<String, String> standardHeaderMap,
                                                            final HttpMethod httpMethod,
                                                            final HttpStatus status,
+                                                           final String apiName,
                                                            final String expectedMessage) throws IOException;
 }

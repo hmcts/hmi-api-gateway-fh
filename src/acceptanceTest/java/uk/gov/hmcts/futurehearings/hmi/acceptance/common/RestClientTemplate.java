@@ -36,12 +36,18 @@ public class RestClientTemplate {
                return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .baseUri(RestAssured.baseURI)
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()
                        .put().then().extract().response();
-
+           case GET:
+               return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                       .given()
+                       .headers(headersAsMap)
+                       .basePath(requestURL)
+                       //.body(requestBodyPayload)
+                       .when()
+                       .get().then().extract().response();
            default :
                throw new IllegalArgumentException("HTTP method not identified");
 

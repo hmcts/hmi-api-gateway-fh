@@ -7,6 +7,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component("CommonDelegate")
 public class CommonPostImpl implements CommonDelegate {
 
-    private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
+    private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
 
     public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
                                                                 final String targetURL,
@@ -26,13 +27,20 @@ public class CommonPostImpl implements CommonDelegate {
                                                                 final Map<String,String> standardHeaderMap,
                                                                 final HttpMethod httpMethod,
                                                                 final HttpStatus status,
-                                                           final String expectedMessage) throws IOException {
+                                                                final String apiName,
+                                                                final String expectedMessage) throws IOException {
 
         log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
         log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
 
-        String inputPayload =
-                TestingUtils.readFileContents( INPUT_FILE_PATH + "/" + inputFile);
+        String inputPayload = null;
+        if (httpMethod.equals(HttpMethod.GET)) {
+            //No Body Only Params
+        } else if (httpMethod.equals(HttpMethod.POST) || httpMethod.equals(HttpMethod.PUT)) {
+            inputPayload =
+                    TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, apiName) + "/" + inputFile);
+        }
+
         Response response = shouldExecute(standardHeaderMap,
                 inputPayload,
                 targetURL,
