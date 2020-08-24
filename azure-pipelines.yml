@@ -28,14 +28,14 @@ parameters:
       tests_gradle:
       - name: UnitTest 
         command: test
-        serenity: true
+        serenity: run
       - name: SmokeTest
         command: smoke
-        serenity: false
+        serenity: skip
         dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
-        serenity: true
+        serenity: run
         dependsOn: SmokeTest
 
     - name: test
