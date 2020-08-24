@@ -3,9 +3,11 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMap;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersRemoved;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,21 @@ public class HearingHeaderHelper {
         );
     }
 
+    public static final Map<String,String> createHeaderWithRemovedHeaderKey (final String subscriptionKey,
+                                                                               final List<String> headersToBeRemoved) {
+
+        return buildHeaderWithValuesWithKeysTruncated(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                "S&L",
+                "Assault",
+                headersToBeRemoved
+        );
+    }
+
     public static Map<String,String> createHeaderWithSourceSystemValue (final String subscriptionKey,
                                                                         final String sourceSystem) {
 
@@ -96,69 +113,18 @@ public class HearingHeaderHelper {
         );
     }
 
-    public static Map<String,String> createHeaderWithNullRequestCreatedAt (final String subscriptionKey) {
+    public static Map<String,String> createHeaderWithRequestCreatedAtSystemValue (final String subscriptionKey,
+                                                                             final String requestCreatedAt) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 subscriptionKey,
-                null,
+                requestCreatedAt,
                 "2012-03-19T07:22:00Z",
                 "CFT",
                 "S&L",
                 "Assault"
         );
-    }
-
-    public static Map<String,String> createHeaderWithEmptyRequestCreatedAt (final String subscriptionKey) {
-
-        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "",
-                "2012-03-19T07:22:00Z",
-                "CFT",
-                "S&L",
-                "Assault"
-        );
-    }
-
-    public static Map<String,String> createHeaderWithSpacedRequestCreatedAt (final String subscriptionKey) {
-
-        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                " ",
-                "2012-03-19T07:22:00Z",
-                "CFT",
-                "S&L",
-                "Assault"
-        );
-    }
-
-    public static Map<String,String> createHeaderWithSingleCharRequestCreatedAt (final String subscriptionKey) {
-
-        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "1",
-                "2012-03-19T07:22:00Z",
-                "CFT",
-                "S&L",
-                "Assault"
-        );
-    }
-
-    public static Map<String,String> createHeaderWithLongRequestCreatedAt (final String subscriptionKey) {
-
-        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "QwertysampledateQwertysampledateQwertysampledateQwerty",
-                "2012-03-19T07:22:00Z",
-                "CFT",
-                "S&L",
-                "Assault"
-                );
     }
 
     private static Map<String,String> buildHeaderWithValues(final String contentType,
@@ -206,5 +172,36 @@ public class HearingHeaderHelper {
                         destinationSystem,
                         requestType),headersToTruncate));
 
+    }
+
+    private static Map<String,String> buildHeaderWithValuesWithKeysRemoved(final String contentType,
+                                                                             final String acceptType,
+                                                                             final String subscriptionKey,
+                                                                             final String requestCreatedDate,
+                                                                             final String requestProcessedAt,
+                                                                             final String sourceSystem,
+                                                                             final String destinationSystem,
+                                                                             final String requestType,
+                                                                             List<String> headersToBeRemoved) {
+        return Collections.unmodifiableMap(convertToMapAfterHeadersRemoved(buildStandardSytemHeaderPart(
+                contentType,
+                acceptType,
+                null,
+                null,
+                subscriptionKey,
+                null),
+                buildStandardBuinessHeaderPart(requestCreatedDate,
+                        requestProcessedAt,
+                        sourceSystem,
+                        destinationSystem,
+                        requestType),headersToBeRemoved));
+
+    }
+
+    public static Map<String, String> buildValidRetrieveScheduleParams() {
+        final Map<String, String>  retrieveScheduleParams = new HashMap<>();
+        retrieveScheduleParams.put("hearing_venue_id ", "234");
+
+        return retrieveScheduleParams;
     }
 }

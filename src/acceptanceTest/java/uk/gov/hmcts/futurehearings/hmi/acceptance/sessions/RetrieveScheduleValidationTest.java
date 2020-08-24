@@ -1,19 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.buildValidRetrieveScheduleParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
 
-import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +40,7 @@ public class RetrieveScheduleValidationTest extends SessionsValidationTest {
         //this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
+        this.setParams(buildValidRetrieveScheduleParams());
     }
 
     @BeforeEach

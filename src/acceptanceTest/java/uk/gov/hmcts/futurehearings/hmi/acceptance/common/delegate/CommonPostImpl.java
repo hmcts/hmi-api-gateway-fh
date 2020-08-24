@@ -1,13 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.CommonResponseVerification.verifyResponse;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +23,7 @@ public class CommonPostImpl implements CommonDelegate {
                                                                 final String targetURL,
                                                                 final String inputFile,
                                                                 final Map<String,String> standardHeaderMap,
+                                                                final Map<String, String> params,
                                                                 final HttpMethod httpMethod,
                                                                 final HttpStatus status,
                                                                 final String apiName,
@@ -44,6 +43,7 @@ public class CommonPostImpl implements CommonDelegate {
         Response response = shouldExecute(standardHeaderMap,
                 inputPayload,
                 targetURL,
+                params,
                 status,
                 httpMethod);
         //Temporarily verifying on the Response Code only...
