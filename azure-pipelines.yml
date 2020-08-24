@@ -82,6 +82,7 @@ stages:
             displayName: ${{ test.name }}
             dependsOn: 
             - Terraform
+            - createStorage
             - ${{ if parameters.dependsOn }}:
               - ${{ parameters.dependsOn }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
