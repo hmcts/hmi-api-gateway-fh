@@ -98,7 +98,9 @@ stages:
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: ${{ test.serenity }}
+            serenity: 
+            - ${{ if test.serenity }}:
+              - ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
