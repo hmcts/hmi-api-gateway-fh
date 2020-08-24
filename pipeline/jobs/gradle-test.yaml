@@ -8,6 +8,9 @@ parameters:
   - name: subscription
     type: string
 
+  - name: storageAccount
+    type: string
+
   - name: subscriptionKey
     type: string
 
