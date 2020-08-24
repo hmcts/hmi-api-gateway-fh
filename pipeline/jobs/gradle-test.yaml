@@ -40,7 +40,7 @@ jobs:
   - template: ../steps/run-gradlew.yaml
     parameters:
       command: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
-  - ${{ if eq(parameters.serenity, true) }}:
+  - ${{ if contains(parameters.serenity, true) }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
         command: ${{ parameters.command }}
