@@ -21,6 +21,7 @@ parameters:
         command: functional
         serenity: true
         dependsOn: SmokeTest
+      # test
 
     # - name: dev
     #   subscription: DTS-SHAREDSERVICES-DEV
