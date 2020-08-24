@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 import java.util.Map;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -27,8 +28,6 @@ public class RestClientTemplate {
                        .expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType("application/json")
-                       .accept("application/json")
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()
@@ -37,13 +36,18 @@ public class RestClientTemplate {
                return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType(headersAsMap.get("Content-Type"))
-                       .accept(headersAsMap.get("Accept"))
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()
                        .put().then().extract().response();
-
+           case GET:
+               return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                       .given()
+                       .headers(headersAsMap)
+                       .basePath(requestURL)
+                       //.body(requestBodyPayload)
+                       .when()
+                       .get().then().extract().response();
            default :
                throw new IllegalArgumentException("HTTP method not identified");
 
