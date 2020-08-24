@@ -37,5 +37,8 @@ jobs:
         echo "Creating storage container"
         container="test-results-"$(date +"%m-%d-%y")
         az storage container create --name $container --account-name ${{ parameters.storageAccount }} --account-key $key
-        echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
-        echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
+
+        echo $key
+        echo $container
+    # echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
+    # echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
