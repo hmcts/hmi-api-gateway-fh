@@ -5,6 +5,9 @@ parameters:
   - name: dependsOn
     type: object
 
+  - name: subscription
+    tyoe: string
+
   - name: subscriptionKey
     type: string
 

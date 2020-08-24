@@ -97,5 +97,5 @@ stages:
             subscriptionKey: $(subscriptionKey)
             storageAccount: $(storageAccount)
             variables: 
-              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscription_key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
