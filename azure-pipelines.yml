@@ -69,10 +69,14 @@ stages:
     - template: pipeline/jobs/create-storage.yaml
       parameters:
         subscription: ${{ environment.subscription }}
-        resourceGroup: $[dependencies.Terraform.outputs['terraformOutputs.resourceGroup']]
-        storageAccount: $[dependencies.Terraform.outputs['terraformOutputs.storageAccount']]
         dependsOn: Terraform
         displayName: Create Storage
+        resourceGroup: $(resourceGroup)
+        storageAccount: $(storageAccount)
+        variables:
+          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+          storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
@@ -89,4 +93,4 @@ stages:
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
             variables: 
-              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutputs.subscription_key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscription_key']]
