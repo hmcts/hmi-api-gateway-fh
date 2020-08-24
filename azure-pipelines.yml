@@ -105,6 +105,8 @@ stages:
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
             storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
             variables: 
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
