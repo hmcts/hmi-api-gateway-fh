@@ -91,11 +91,11 @@ stages:
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            subscription: ${{ environment.subscription }} 
+            subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
             storageAccount: $(storageAccount)
             variables: 
-              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscription_key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
