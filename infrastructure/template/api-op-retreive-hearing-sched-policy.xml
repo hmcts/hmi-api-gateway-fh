@@ -1,6 +1,40 @@
 <policies>
     <inbound>
         <base />
+        <choose>
+            <when condition="@(context.Request.Url.Query.Count > 6)">
+                <mock-response status-code="405" content-type="application/json" />
+            </when>
+        </choose>
+        <set-variable name="invalidKeys" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"hearing_date","hearing_venue_id","hearing_room_id","hearing_session_id_casehq","hearing_case_id_hmcts","hearing_id_casehq"};
+                bool invalidKey = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                        {
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
+                                break;
+                            }
+                        }
+                        if(!keyFound){
+                            invalidKey = true;
+                            break;
+                        }
+                    }
+                }
+
+                return invalidKey;
+            }" />
+        <choose>
+            <when condition="@(context.Request.Url.Query.Count > 6 || (bool)context.Variables["invalidKeys"])">
+                <mock-response status-code="405" content-type="application/json" />
+            </when>
+        </choose>
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/sessions" />
         <mock-response status-code="200" content-type="application/json" />
     </inbound>
