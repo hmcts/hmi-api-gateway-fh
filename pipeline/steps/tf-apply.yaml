@@ -11,7 +11,3 @@ steps:
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
     commandOptions: -auto-approve -state-out=terra.tfvars tfplan-$(environment)
-
-- script: |
-    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/
-    ls -la $(System.DefaultWorkingDirectory)/infrastructure/terraform/.terraform/
