@@ -20,11 +20,11 @@ public class HearingSteps {
 
         //System.out.println("The value of the base path " + basePath);
         Response response = expect().that().statusCode(200)
-                .given().contentType("application/json").body(payloadBody)
+                .given().body(payloadBody)
                 .headers(headersAsMap)
                 //.baseUri(basePath)
                 .basePath(api)
                 .when().post().then().extract().response();
-        verifyHearingResponse(lastResponse());
+        //verifyHearingResponse(lastResponse());
     }
 }

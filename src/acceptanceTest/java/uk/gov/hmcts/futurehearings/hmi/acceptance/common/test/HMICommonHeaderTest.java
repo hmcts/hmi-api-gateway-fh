@@ -187,7 +187,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @Order(7)
-    @DisplayName("Message with Destination System Header Invalid(Null,Empty,Spaced or Wrong Values(S&L,SNL)) Header")
+    @DisplayName("Message with Destination System Header Invalid(Null,Empty,Spaced or Wrong Values(CFT,SNL)) Header")
     public void test_destination_system_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
