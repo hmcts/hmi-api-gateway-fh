@@ -36,7 +36,7 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Obtaining container key..."
+        echo "Obtaining storage key..."
         key=$(az storage account keys list -g $(resourceGroup) --account-name $(storageAccount) --query "[0].value" -o tsv)
         echo "Creating storage container"
         container="test-results-"$(date +"%m-%d-%y")
