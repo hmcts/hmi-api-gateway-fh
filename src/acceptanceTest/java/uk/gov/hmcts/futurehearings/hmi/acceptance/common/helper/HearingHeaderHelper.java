@@ -82,6 +82,20 @@ public class HearingHeaderHelper {
         );
     }
 
+    public static Map<String,String> createHeaderWithDestinationSystemValue (final String subscriptionKey,
+                                                                        final String destinationSystem) {
+
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                destinationSystem,
+                "Assault"
+        );
+    }
+
     public static Map<String,String> createHeaderWithNullRequestCreatedAt (final String subscriptionKey) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
