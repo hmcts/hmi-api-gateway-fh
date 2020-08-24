@@ -32,3 +32,13 @@ jobs:
     parameters:
       command: ${{ parameters.command }}
       runCommand: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
+  - ${{ if parameters.serenity }}:
+    - template: ../steps/zip-test-results.yaml
+      parameters:
+        command: ${{ parameters.command }}
+    - templates: ../publish-test-results.yaml
+      parameters:
+        command: ${{ parameters.command }}
+        subscription: ${{ parameters.subscription }}
+        storageAccount: $(storageAccount)
+        storageContainer: $(storageContainer)

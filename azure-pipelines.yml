@@ -25,11 +25,13 @@ parameters:
       tests_gradle:
       - name: UnitTest 
         command: test
+        serenity: true
       - name: SmokeTest
         command: smoke
         dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
+        serenity: true
         dependsOn: SmokeTest
 
     - name: test
@@ -87,10 +89,13 @@ stages:
             dependsOn: 
             - Terraform
             - createStorage
-            - ${{ if parameters.dependsOn }}:
-              - ${{ parameters.dependsOn }}
+            - ${{ if test.dependsOn }}:
+              - ${{ test.dependsOn }}
+            subscription: ${{ environment.subscription }} 
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
+            storageAccount: $(storageAccount)
             variables: 
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscription_key']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]

@@ -1,0 +1,20 @@
+parameters:
+  - name: subscription
+    type: string
+  - name: command
+    type: string
+  - name: storageAccount
+    type: string
+  - name: storageContainer
+    type: string
+
+
+  - task: AzureFileCopy@4
+    displayName: Publish Serenity Results
+    inputs:
+      SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
+      azureSubscription: ${{ parameters.subscription }}
+      Destination: AzureBlob
+      storage: ${{ parameters.storageAccount }}
+      ContainerName: ${{ parameters.storageContainer }}
+    condition: succeededOrFailed()
