@@ -13,6 +13,7 @@ variable "secret_permissions" {
   default = [
     "get",
     "set",
+    "list",
     "delete"
   ]
 }
