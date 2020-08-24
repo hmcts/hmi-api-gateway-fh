@@ -91,7 +91,7 @@ stages:
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            subscription: ${{ environment.subscription }} 
+            subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
