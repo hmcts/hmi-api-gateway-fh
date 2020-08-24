@@ -38,7 +38,7 @@ jobs:
     parameters:
       command: ${{ parameters.command }}
       runCommand: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
-  - ${{ if parameters.serenity }}:
+  - ${{ if eq(parameters.serenity, true) }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
         command: ${{ parameters.command }}
