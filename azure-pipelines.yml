@@ -11,15 +11,15 @@ parameters:
       group: HMI-APIM-BUILD-SBOX
       tests_gradle:
       - name: UnitTest
-        command: test
+        command: true
         serenity: run
       - name: SmokeTest
         command: smoke
-        serenity: skip
+        serenity: false
         dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
-        serenity: run
+        serenity: true
         dependsOn: SmokeTest
 
     # - name: dev
@@ -98,9 +98,7 @@ stages:
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: 
-            - ${{ if test.serenity }}:
-              - ${{ test.serenity }}
+            serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
