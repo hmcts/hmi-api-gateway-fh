@@ -15,10 +15,18 @@ steps:
       key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
       echo "Creating storage container"
       az storage blob download --container-name $(prefix)$(product)terraform --file $(prefix)$(product).tfstate --name $(prefix)$(product).tfstate --account-name $(devopsStorageAccount) --account-key $key
-      gatewayUrl = $(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
-      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$(gatewayUrl)
-      subscriptionKey = $(terraform output -state=$(prefix)$(product).tfstate subscription_key)
-      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$(subscriptionKey)
-      storageAccount = $(terraform output -state=$(prefix)$(product).tfstate storage_account)
-      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$(storageAccount)
+
+      gateway_url=$(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
+      subscription_key=$(terraform output -state=$(prefix)$(product).tfstate subscription_key)
+      storage_account=$(terraform output -state=$(prefix)$(product).tfstate)
+      echo $gateway_url
+      echo $storage_account
+      echo $subscription_key 
       
+  # gatewayUrl = $(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
+  # echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$(gatewayUrl)
+  # subscriptionKey = $(terraform output -state=$(prefix)$(product).tfstate subscription_key)
+  # echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$(subscriptionKey)
+  # storageAccount = $(terraform output -state=$(prefix)$(product).tfstate storage_account)
+  # echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$(storageAccount)
+  
