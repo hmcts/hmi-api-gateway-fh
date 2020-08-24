@@ -4,8 +4,8 @@ parameters:
 
 steps:
 - task: AzureCLI@2
-  displayName: Get Terraform Outputs
-  name: terraformOutputs
+  displayName: Terraform output
+  name: terraformOutput
   inputs:
     azureSubscription: ${{ parameters.subscription }}
     scriptType: bash
