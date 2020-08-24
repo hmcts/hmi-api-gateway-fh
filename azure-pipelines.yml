@@ -10,7 +10,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       tests_gradle:
-      - name: UnitTest 
+      - name: UnitTest
         command: test
       - name: SmokeTest
         command: smoke

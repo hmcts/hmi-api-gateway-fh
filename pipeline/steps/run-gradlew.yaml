@@ -15,15 +15,15 @@ steps:
       jdkVersionOption: '1.11'
       sonarQubeRunAnalysis: false
 
-
   - task: ArchiveFiles@2
     displayName: Archive Serenity Results
     inputs:
       rootFolderOrFile: '$(System.DefaultWorkingDirectory)/target/site/serenity'
       archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.runCommand }}.zip'
+    condition: succeededOrFailed()
 
   - task: AzureFileCopy@4
-    displayName: Publish gradle output
+    displayName: Publish Serenity Results
     inputs:
       SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.runCommand }}.zip'
       azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
