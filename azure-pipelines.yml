@@ -98,6 +98,7 @@ stages:
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
+            serenity:
             - ${{ if eq(parameters.serenity, true) }}:
               serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
