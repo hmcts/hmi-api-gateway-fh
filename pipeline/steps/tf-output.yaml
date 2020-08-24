@@ -15,7 +15,7 @@ steps:
       key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
       echo "Creating storage container"
       az storage blob download --container-name $(prefix)$(product)terraform --file $(prefix)$(product).tfstate --name $(prefix)$(product).tfstate --account-name $(devopsStorageAccount) --account-key $key
-      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]=$(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
+      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
       echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate subscription_key)
       echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate storage_account)
       
