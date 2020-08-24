@@ -13,6 +13,9 @@ parameters:
   
   - name: displayName
     type: string
+  
+  - name: variables
+    type: object
 
 jobs:
 - job: createStorage
@@ -22,7 +25,8 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
-
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - task: AzureCLI@2
     displayName: createContainer
@@ -32,13 +36,12 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Obtaining container key..."
-        key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
-        echo "Creating storage container"
-        container="test-results-"$(date +"%m-%d-%y")
-        az storage container create --name $container --account-name ${{ parameters.storageAccount }} --account-key $key
-
-        echo $key
-        echo $container
-    # echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
-    # echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
+        echo $(resourceGroup)
+        echo $(storageAccount)
+# echo "Obtaining container key..."
+# key=$(az storage account keys list -g $(resourceGroup) --account-name $(storageAccount) --query "[0].value" -o tsv)
+# echo "Creating storage container"
+# container="test-results-"$(date +"%m-%d-%y")
+# az storage container create --name $container --account-name $(storageAccount) --account-key $key
+# echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
+# echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
