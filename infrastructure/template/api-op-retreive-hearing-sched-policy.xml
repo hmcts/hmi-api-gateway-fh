@@ -32,7 +32,15 @@
             }" />
         <choose>
             <when condition="@(context.Request.Url.Query.Count > 6 || (bool)context.Variables["invalidKeys"])">
-                <mock-response status-code="405" content-type="application/json" />
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 400),
+                            new JProperty("description", "Invalid query parameter/s in the request URL.")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
             </when>
         </choose>
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/sessions" />
