@@ -8,6 +8,7 @@ parameters:
   - name: storageContainer
     type: string
 
+steps:
 
   - task: AzureFileCopy@4
     displayName: Publish Serenity Results
