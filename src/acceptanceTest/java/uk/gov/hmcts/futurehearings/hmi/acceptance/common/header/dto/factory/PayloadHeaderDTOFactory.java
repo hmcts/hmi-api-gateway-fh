@@ -124,8 +124,8 @@ public class PayloadHeaderDTOFactory {
 
                 buildStandardBuinessHeaderPart("dateTime",
                         "dateTime",
-                        "SnL",
                         "CFT",
+                        "S&L",
                         "THEFT"),nullHeaderString));
     }
 
@@ -201,6 +201,24 @@ public class PayloadHeaderDTOFactory {
             headersToEmpty.stream().forEach((o)-> {
                 if (headerMap.containsKey(o)) {
                     headerMap.replace(o,"");
+                };
+            });
+        }
+        return headerMap;
+    }
+
+    public static final Map<String,String> convertToMapAfterTruncatingHeaderKey (final SystemHeaderDTO systemHeaderDTO,
+                                                                          final BusinessHeaderDTO businessHeaderDTO,
+                                                                          final List<String> headersToTruncate) {
+
+        final Map<String, String>  headerMap = convertToMap(systemHeaderDTO,businessHeaderDTO);
+        if (Objects.nonNull(headersToTruncate)) {
+            headersToTruncate.stream().forEach((o)-> {
+                if (headerMap.containsKey(o)) {
+                    String newKey = o.substring(0, o.length()-1);
+                    String newValue = headerMap.get(o);
+                    headerMap.remove(o);
+                    headerMap.put(newKey, newValue);
                 };
             });
         }

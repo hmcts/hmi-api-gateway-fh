@@ -1,4 +1,6 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.schedule;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
@@ -9,10 +11,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -20,8 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
-public class ScheduleValidationTest extends HMICommonHeaderTest {
+public class RetrieveScheduleValidationTest extends SessionsValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -29,15 +35,17 @@ public class ScheduleValidationTest extends HMICommonHeaderTest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hearingApiRootContext}")
-    private String hearingAPIRootContext;
+    @Value("${sessionApiRootContext}")
+    private String sessionAPIRootContext;
 
     @BeforeAll
     public void initialiseValues() {
-        RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();
-        this.setApiSubscriptionKey(targetSubscriptionKey);
-        this.setRelativeURL(hearingAPIRootContext);
+        super.initialiseValues();
+        this.setRelativeURL(sessionAPIRootContext);
+        this.setHttpMethod(HttpMethod.GET);
+        //this.setInputPayloadFileName("hearing-request-standard.json");
+        this.setHttpSucessStatus(HttpStatus.OK);
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
     }
 
     @BeforeEach
@@ -50,11 +58,5 @@ public class ScheduleValidationTest extends HMICommonHeaderTest {
     public void afterEach(TestInfo info) {
         log.debug("After execute : "+info.getTestMethod().get().getName());
     }
-
-   /* @Test
-    public void test_sucessfull_post() throws Exception {
-        scheduleDelegate.test_successfull_post(targetSubscriptionKey,
-                hearingAPIRootContext);
-    }*/
 
 }

@@ -1,20 +1,25 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.session;
 
-import static io.restassured.RestAssured.expect;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.SmokeTest;
 
+import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
+@Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@Disabled("For the purpose of adding the acceptance Test initial framework")
+@Disabled("For as the endpoint for Sessions API is not available")
 public class SessionApiSmokeTest extends SmokeTest {
 
     @Value("${sessionApiRootContext}")
@@ -24,11 +29,16 @@ public class SessionApiSmokeTest extends SmokeTest {
     @Disabled
     @DisplayName("Smoke Test to Test the Endpoint for the Get All Sessions Root Context")
     public void testSuccessfulAllSessionsApiGet() {
-         expect().that().statusCode(200)
-                .given().contentType("application/json")
-                .headers(headersAsMap)
-                .baseUri(targetInstance)
-                .basePath(sessionApiRootContext)
-                .when().get();
+
+        Response response = given()
+        .headers(headersAsMap)
+        .basePath(sessionApiRootContext)
+        .when().get();
+
+        if (response.getStatusCode() != 200) {
+            log.info(" The value of the Response Status " + response.getStatusCode());
+            log.info(" The value of the Response body " + response.getBody().prettyPrint());
+        }
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
     }
 }
