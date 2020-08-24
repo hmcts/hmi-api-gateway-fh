@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.hearing;
 
+import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -18,7 +19,6 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +31,6 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for various endpoints"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@Disabled("For the purpose of adding the acceptance Test initial framework")
 public class HearingAPITest {
 
     @Steps
@@ -39,9 +38,6 @@ public class HearingAPITest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetHost}")
-    private String targetHost;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
@@ -53,18 +49,19 @@ public class HearingAPITest {
 
     @Before
     public void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Ocp-Apim-Trace", "true");
-        headersAsMap.put("Company-Name", "HMCTS");
+
         headersAsMap.put("Content-Type", "application/json");
+        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", "S&L");
-        headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Type", "THEFT");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Request-Processed-At", "2018-01-29 20:36:01Z");
+        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
+        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
+        headersAsMap.put("Request-Type", "ASSAULT");
 
+        RestAssured.config =
+        SerenityRest.config()
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
     }
