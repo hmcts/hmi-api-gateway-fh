@@ -6,7 +6,7 @@ parameters:
     type: object
 
   - name: subscription
-    tyoe: string
+    type: string
 
   - name: subscriptionKey
     type: string
