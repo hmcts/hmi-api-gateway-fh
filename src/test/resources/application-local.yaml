@@ -3,3 +3,4 @@ targetHost:  hmi-apim-svc-test.azure-api.net
 targetSubscriptionKey: sample
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
+sessionsApiRootContext: /hmi/sessions

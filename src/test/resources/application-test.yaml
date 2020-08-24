@@ -3,3 +3,4 @@ targetHost: ${ENDPOINT_HOST}
 targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
+sessionsApiRootContext: /hmi/sessions
