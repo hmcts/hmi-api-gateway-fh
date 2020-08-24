@@ -19,7 +19,6 @@ resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
 
 resource "azurerm_key_vault_secret" "subscription_key" {
   name         = "${var.prefix}-${var.product}-sub-key"
-  depends_on   = [azurerm_key_vault_access_policy.permissions, azurerm_api_management_subscription.hmi_apim_subscription]
   value        = azurerm_api_management_subscription.hmi_apim_subscription.primary_key
   key_vault_id = azurerm_key_vault.hmi_apim_kv.id
   tags         = var.tags
