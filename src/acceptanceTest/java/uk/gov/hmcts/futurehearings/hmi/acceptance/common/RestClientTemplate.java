@@ -3,7 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 import java.util.Map;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -14,6 +13,7 @@ public class RestClientTemplate {
     public static Response shouldExecute(final Map<String,String> headersAsMap,
                                              final String requestBodyPayload,
                                              final String requestURL,
+                                             final Map<String, String> params,
                                              final HttpStatus expectedHttpStatus,
                                              final HttpMethod httpMethod) {
 
@@ -45,6 +45,7 @@ public class RestClientTemplate {
                        .given()
                        .headers(headersAsMap)
                        .basePath(requestURL)
+                       .params(params)
                        //.body(requestBodyPayload)
                        .when()
                        .get().then().extract().response();
