@@ -23,7 +23,7 @@ steps:
       echo $storage_account
       echo $subscription_key 
 
-      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$gateway_url
-      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]12345
-      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$storage_account
+      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$gateway_url"
+      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$subscription_key"
+      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$storage_account"
   
