@@ -1,4 +1,4 @@
-output "hmi_apim_gateway_url" {
+output "gateway_url" {
   description = "The URL of the Gateway for the API Management Service"
   value       = azurerm_api_management.hmi_apim.gateway_url
 }
