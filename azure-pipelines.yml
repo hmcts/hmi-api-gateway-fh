@@ -80,4 +80,4 @@ stages:
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
             variables: 
-              subscriptionKey: $[dependencies.Terraform.outputs['getOutputs.subscription_key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutputs.subscription_key']]

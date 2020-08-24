@@ -5,7 +5,7 @@ parameters:
 steps:
 - task: AzureCLI@2
   displayName: Get Terraform Outputs
-  name: getOutputs
+  name: terraformOutputs
   inputs:
     azureSubscription: ${{ parameters.subscription }}
     scriptType: bash
@@ -16,14 +16,6 @@ steps:
       echo "Creating storage container"
       az storage blob download --container-name $(prefix)$(product)terraform --file $(prefix)$(product).tfstate --name $(prefix)$(product).tfstate --account-name $(devopsStorageAccount) --account-key $key
 
-      gateway_url=$(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
-      subscription_key=$(terraform output -state=$(prefix)$(product).tfstate subscription_key)
-      storage_account=$(terraform output -state=$(prefix)$(product).tfstate)
-      echo $gateway_url
-      echo $storage_account
-      echo $subscription_key 
-
-      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$gateway_url"
-      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$subscription_key"
-      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$storage_account"
-  
+      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)"
+      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate subscription_key)"
+      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$(terraform output -state=$(prefix)$(product).tfstate)"
