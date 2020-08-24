@@ -28,6 +28,7 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-   - template: ../steps/run-gradlew.yaml
-     parameters:
-       runCommand: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: ${{ parameters.command }}
+      runCommand: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}

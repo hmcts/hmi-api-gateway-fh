@@ -1,4 +1,6 @@
 parameters:
+  - name: command
+    type: string
   - name: runCommand
     type: string
 
@@ -19,13 +21,13 @@ steps:
     displayName: Archive Serenity Results
     inputs:
       rootFolderOrFile: '$(System.DefaultWorkingDirectory)/target/site/serenity'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.runCommand }}.zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
     condition: succeededOrFailed()
 
   - task: AzureFileCopy@4
     displayName: Publish Serenity Results
     inputs:
-      SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.runCommand }}.zip'
+      SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
       azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
       Destination: AzureBlob
       storage: hmiapimsboxsa
