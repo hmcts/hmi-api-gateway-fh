@@ -6,7 +6,7 @@ parameters:
     type: object
   
   - name: serenity
-    # type: boolean
+    type: string
 
   - name: subscription
     type: string
