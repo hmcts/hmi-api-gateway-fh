@@ -1,6 +1,4 @@
 parameters:
-  - name: command
-    type: string
   - name: runCommand
     type: string
 
@@ -16,20 +14,3 @@ steps:
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
       sonarQubeRunAnalysis: false
-
-  - task: ArchiveFiles@2
-    displayName: Archive Serenity Results
-    inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/target/site/serenity'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
-    condition: succeededOrFailed()
-
-  - task: AzureFileCopy@4
-    displayName: Publish Serenity Results
-    inputs:
-      SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
-      azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
-      Destination: AzureBlob
-      storage: hmiapimsboxsa
-      ContainerName: test-results-08-24-20
-    condition: succeededOrFailed()
