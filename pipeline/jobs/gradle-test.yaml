@@ -4,6 +4,9 @@ parameters:
 
   - name: dependsOn
     type: object
+  
+  - name: serenity
+    type: boolean
 
   - name: subscription
     type: string
