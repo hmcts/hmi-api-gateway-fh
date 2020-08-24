@@ -44,7 +44,7 @@ jobs:
     - template: ../steps/zip-test-results.yaml
       parameters:
         command: ${{ parameters.command }}
-    - template: ../publish-test-results.yaml
+    - template: ../steps/publish-test-results.yaml
       parameters:
         command: ${{ parameters.command }}
         subscription: ${{ parameters.subscription }}
