@@ -22,11 +22,8 @@ steps:
       echo $gateway_url
       echo $storage_account
       echo $subscription_key 
-      
-  # gatewayUrl = $(terraform output -state=$(prefix)$(product).tfstate hmi_apim_gateway_url)
-  # echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$(gatewayUrl)
-  # subscriptionKey = $(terraform output -state=$(prefix)$(product).tfstate subscription_key)
-  # echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$(subscriptionKey)
-  # storageAccount = $(terraform output -state=$(prefix)$(product).tfstate storage_account)
-  # echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$(storageAccount)
+
+      echo "##vso[task.setvariable variable=apimGatewayUrl;isOutput=true;isSecret=true;]$gateway_url
+      echo "##vso[task.setvariable variable=subscriptionKey;isOutput=true;isSecret=true;]$subscription_key 
+      echo "##vso[task.setvariable variable=storageAccount;isOutput=true;isSecret=true;]$storage_account
   
