@@ -1,0 +1,11 @@
+parameters:
+  - name: command
+    type: string
+
+steps:
+  - task: ArchiveFiles@2
+    displayName: Archive Serenity Results
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/target/site/serenity'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
+    condition: succeededOrFailed()
