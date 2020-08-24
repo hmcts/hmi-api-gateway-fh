@@ -66,13 +66,6 @@ stages:
         group: ${{ environment.group }}
         displayName: Build infrastructure with Terraform
 
-    - template: pipeline/jobs/export-keyvault.yaml
-      parameters:
-        displayName: Read KeyVault Secret
-        dependsOn: Terraform
-        subscription: ${{ environment.subscription }}
-        keyVaultName: $[dependencies.Terraform.outputs['getOutputs.subscription_key']]
-
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
 
@@ -80,11 +73,11 @@ stages:
           parameters:
             displayName: ${{ test.name }}
             dependsOn: 
-            - ExportKeyVault
+            - Terraform
             - ${{ if parameters.dependsOn }}:
               - ${{ parameters.dependsOn }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
             variables: 
-              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['getOutputs.subscription_key']]
