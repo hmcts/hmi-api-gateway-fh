@@ -11,12 +11,12 @@ parameters:
       group: HMI-APIM-BUILD-SBOX
       tests_gradle:
       - name: UnitTest 
-        command: clean test
+        command: test
       - name: SmokeTest
-        command: clean smoke
+        command: smoke
         dependsOn: UnitTest
       - name: FunctionalTest
-        command: clean functional
+        command: functional
         dependsOn: SmokeTest
 
     - name: dev
@@ -24,12 +24,12 @@ parameters:
       group: HMI-APIM-BUILD-DEV
       tests_gradle:
       - name: UnitTest 
-        command: clean test
+        command: test
       - name: SmokeTest
-        command: clean smoke
+        command: smoke
         dependsOn: UnitTest
       - name: FunctionalTest
-        command: clean functional
+        command: functional
         dependsOn: SmokeTest
 
     - name: test
@@ -38,12 +38,12 @@ parameters:
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest 
-        command: clean test
+        command: test
       - name: SmokeTest
-        command: clean smoke
+        command: smoke
         dependsOn: UnitTest
       - name: FunctionalTest
-        command: clean functional
+        command: functional
         dependsOn: SmokeTest
 
 variables:
