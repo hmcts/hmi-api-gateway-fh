@@ -71,7 +71,7 @@ stages:
         displayName: Read KeyVault Secret
         dependsOn: Terraform
         subscription: ${{ environment.subscription }}
-        keyVaultName: hmi-apim-kv-${{ environment.name }}
+        keyVaultName: $[dependencies.Terraform.outputs['getOutputs.subscription_key']]
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
