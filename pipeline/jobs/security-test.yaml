@@ -1,7 +1,10 @@
 parameters:
   - name: displayName
     type: string
-    
+
+  - name: dependsOn
+    type: string
+
   - name: subscription
     type: string
 
