@@ -29,5 +29,3 @@ steps:
     #   echo "Uploading to blob container"
     #   az storage blob upload -n $(Build.BuildId)-${{ parameters.zipName }}.zip -c ${{ parameters.storageContainer }} -f $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip --account-name ${{ parameters.storageAccount }} --account-key $key
     # condition: succeededOrFailed()
-
-
