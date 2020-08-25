@@ -107,30 +107,30 @@ stages:
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
 
-    # - ${{ if environment.tests_security }}:
-    #   - ${{ each test in environment.tests_security }}:
-    #     - template: pipeline/jobs/security-test.yaml
-    #       parameters:
-    #         dependsOn:
-    #         - Terraform
-    #         - createStorage
-    #         - ${{ each functest in environment.tests_gradle }}:
-    #           - ${{ functest.name }}
-    #         displayName: ${{ test.name }}
-    #         subscription: ${{ environment.subscription }}
-    #         registry: ${{ environment.registry }}
-    #         repository: ${{ test.repository }}
-    #         dockerfile: docker/images/${{ test.name }}/Dockerfile
-    #         tags: latest
-    #         hostVolume: /home/vsts/work/zap
-    #         containerVolume: /zap/wrk/:rw
-    #         envVars:
-    #           TEST_URL=https://www.example.com/openapi.json
-    #           SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-    #         resourceGroup: $(resourceGroup)
-    #         storageAccount: $(storageAccount)
-    #         storageContainer: $(storageContainer)
-    #         variables:
-    #           resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-    #           storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-    #           storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+    - ${{ if environment.tests_security }}:
+      - ${{ each test in environment.tests_security }}:
+        - template: pipeline/jobs/security-test.yaml
+          parameters:
+            dependsOn:
+            - Terraform
+            - createStorage
+            - ${{ each functest in environment.tests_gradle }}:
+              - ${{ functest.name }}
+            displayName: ${{ test.name }}
+            subscription: ${{ environment.subscription }}
+            registry: ${{ environment.registry }}
+            repository: ${{ test.repository }}
+            dockerfile: docker/images/${{ test.name }}/Dockerfile
+            tags: latest
+            hostVolume: /home/vsts/work/zap
+            containerVolume: /zap/wrk/:rw
+            envVars:
+              TEST_URL=https://www.example.com/openapi.json
+              SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            resourceGroup: $(resourceGroup)
+            storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
+            variables:
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
