@@ -98,10 +98,12 @@ stages:
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
+            resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
             variables: 
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
 
