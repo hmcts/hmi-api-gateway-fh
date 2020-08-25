@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
+import com.aventstack.extentreports.ExtentTest;
 import io.restassured.response.Response;
 
 import java.util.Map;
@@ -10,46 +11,69 @@ public class UpdateHearingResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
 
-    public static void thenASuccessfulResponseForUpdateIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(201, responseMap.get(("status")));
-        assertEquals("Hearings updated successfully", responseMap.get(("description")));
+    public static void thenASuccessfulResponseForUpdateIsReturned(Response response, ExtentTest objStep) {
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals("Status Code Validation:",201, response.getStatusCode());
+            objStep.pass("Got the expected response code: 201");
+            assertEquals("Status Code Description Validation:","Hearings updated successfully", responseMap.get(("description")));
+            objStep.pass("Got the expected description: " + responseMap.get(("description")));
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
     }
 
-    public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(401, responseMap.get(("statusCode")));
-        assertEquals(MISSING_SUB_KEY_ERROR, responseMap.get(("message")));
+    public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response, ExtentTest objStep) {
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals("Status Code Validation:",401, response.getStatusCode());
+            objStep.pass("Got the expected response code: 401");
+            assertEquals("Status Code Description Validation:",MISSING_SUB_KEY_ERROR, responseMap.get(("message")));
+            objStep.pass("Got the expected description: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
     }
 
-    public static void thenResponseForMissingHeaderSourceIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(400, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Source-System", responseMap.get(("message")));
-    }
-
-    public static void thenResponseForMissingHeaderDestinationIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(400, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Destination-System", responseMap.get(("message")));
-    }
-
-    public static void thenResponseForMissingHeaderDateTimeIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(400, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Request-Created-At", responseMap.get(("message")));
-    }
-
-    public static void thenResponseForMissingHeaderRequestTypeIsReturned(Response response) {
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(400, responseMap.get(("statusCode")));
-        assertEquals("Missing/Invalid Header Request-Type", responseMap.get(("message")));
+    public static void thenValidateUpdateHearingResponse(Response response, String missingField, ExtentTest objStep){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals("Status Code Validation:",400, response.getStatusCode());
+            objStep.pass("Got the expected response code: 400");
+            assertEquals("Status Code Description Validation:","Missing/Invalid Header "+missingField, responseMap.get(("message")));
+            objStep.pass("Got the expected description: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
     }
 
 }
