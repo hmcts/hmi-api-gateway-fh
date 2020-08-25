@@ -7,7 +7,6 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.facto
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +123,34 @@ public class CommonHeaderHelper {
                 "CFT",
                 "S&L",
                 "Assault"
+        );
+    }
+
+    public static Map<String,String> createHeaderWithRequestProcessedAtSystemValue (final String subscriptionKey,
+                                                                                  final String requestProcessedAt) {
+
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                requestProcessedAt,
+                "CFT",
+                "S&L",
+                "Assault"
+        );
+    }
+
+    public static Map<String,String> createHeaderWithRequestTypeAtSystemValue (final String subscriptionKey,
+                                                                                    final String requestType) {
+
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                "S&L",
+                requestType
         );
     }
 

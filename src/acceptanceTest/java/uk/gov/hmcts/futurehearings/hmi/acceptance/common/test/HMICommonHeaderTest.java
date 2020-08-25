@@ -6,12 +6,16 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRemovedHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestProcessedAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import lombok.Getter;
@@ -29,6 +33,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public abstract class HMICommonHeaderTest {
 
+
     private String apiSubscriptionKey;
     private String relativeURL;
     private String relativeURLForNotFound;
@@ -38,11 +43,16 @@ public abstract class HMICommonHeaderTest {
     private String inputPayloadFileName;
     private Map<String, String> urlParams;
 
+    private static final String NULL_CHECK = null ;
+    private static final String EMPTY_VALUE_CHECK = "";
+    private static final String ONE_SPACE_VALUE_CHECK = " ";
+    private static final String RANDOM_VALUE_CHECK = "RANDOMVALUE";
+
+
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
     @Test
-    @Order(1)
     @DisplayName("Message successfully validated")
     public void test_successful_response() throws Exception {
         log.info("Message successfully validated");
@@ -55,7 +65,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(2)
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
     public void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -69,7 +78,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(3)
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
     public void test_no_headers_populated() throws Exception {
         //2 Sets of Headers Tested - Nulls and Empty
@@ -99,7 +107,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(4)
     @DisplayName("Message with Subscription Key Truncated in the Header")
     public void test_subscription_key_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -112,7 +119,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(5)
     @DisplayName("Message with Subscription Key Invalid(Null,Empty,Spaced or Wrong Value) Header")
     public void test_subscription_key_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -200,7 +206,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(7)
     @DisplayName("Message with Destination System Header Invalid(Null,Empty,Spaced or Wrong Values(CFT,SNL)) Header")
     public void test_destination_system_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -246,7 +251,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(8)
     @DisplayName("Message with Request Created At System Header Invalid (Null,Empty,Spaced or Wrong Values Header)")
     public void test_request_created_at_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -347,8 +351,7 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(9)
-    @DisplayName("Message with mandatory Keys Truncated from the Header")
+    @DisplayName("Message with mandatory Keys truncated from the Header")
     public void test_header_keys_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -422,7 +425,6 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @Order(10)
     @DisplayName("Message with mandatory keys removed from the Header")
     public void test_with_keys_removed_from_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -494,5 +496,77 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getApiName(),
                 "Missing/Invalid Header Source-System");
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Processed At' System Header Invalid Values (Null,Empty,Spaced or Incorrect date format values)")
+    public void test_request_processed_at_with_invalid_values() throws Exception {
+        final List<String> requestProcessedTestValues = new ArrayList<String>();
+        requestProcessedTestValues.add(NULL_CHECK);
+        requestProcessedTestValues.add(EMPTY_VALUE_CHECK);
+        requestProcessedTestValues.add(ONE_SPACE_VALUE_CHECK);
+        requestProcessedTestValues.add(RANDOM_VALUE_CHECK);
+        requestProcessedTestValues.add("2002-02-31T10:00:30-05:00Z");
+        requestProcessedTestValues.add("2002-02-31T1000:30-05:00");
+        requestProcessedTestValues.add("2002-02-31T10:00-30-05:00");
+        requestProcessedTestValues.add("2002-10-02T15:00:00*05Z");
+        requestProcessedTestValues.add("2002-10-02 15:00?0005Z");
+
+        for (String testValue : requestProcessedTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Type' System Header Invalid Values(Null,Empty,Spaced or Incorrect value other than Assault or Theft)")
+    public void test_request_type_at_with_invalid_values() throws Exception {
+        final List<String> requestTypeTestValues = new ArrayList<String>();
+        requestTypeTestValues.add(NULL_CHECK);
+        requestTypeTestValues.add(EMPTY_VALUE_CHECK);
+        requestTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
+        requestTypeTestValues.add(RANDOM_VALUE_CHECK);
+
+        for (String testValue : requestTypeTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Content Type' System Header Invalid Values(Null,Empty,Spaced or Incorrect format)")
+    public void test_content_type_at_with_invalid_values() throws Exception {
+        final List<String> contentTypeTestValues = new ArrayList<String>();
+        contentTypeTestValues.add(NULL_CHECK);
+        contentTypeTestValues.add(EMPTY_VALUE_CHECK);
+        contentTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
+        contentTypeTestValues.add(RANDOM_VALUE_CHECK);
+        contentTypeTestValues.add("application/pdf");
+
+        for (String testValue : contentTypeTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
     }
 }

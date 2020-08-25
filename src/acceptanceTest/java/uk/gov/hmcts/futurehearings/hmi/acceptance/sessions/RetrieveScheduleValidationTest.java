@@ -1,11 +1,18 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.helper.SessionsParamsHelper.buildValidRetrieveScheduleParams;
+
 import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +56,19 @@ public class RetrieveScheduleValidationTest extends SessionsValidationTest {
     @AfterEach
     public void afterEach(TestInfo info) {
         log.debug("After execute : "+info.getTestMethod().get().getName());
+    }
+
+    @Test
+
+    @Disabled("Query Paramaters tests WIP")
+    public void test_hearing_date_queryparam_with_value() throws IOException {
+        this.setUrlParams(buildValidRetrieveScheduleParams());
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getApiName(),null);
     }
 
 }
