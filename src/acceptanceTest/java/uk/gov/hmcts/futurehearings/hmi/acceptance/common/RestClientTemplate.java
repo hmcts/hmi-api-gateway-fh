@@ -23,6 +23,7 @@ public class RestClientTemplate {
         log.info("The value of the header : "   + headersAsMap);
         log.info("The value of the HTTP Status : " + expectedHttpStatus.value());
 
+
        switch (httpMethod) {
            case POST:
                return RestAssured
@@ -50,11 +51,12 @@ public class RestClientTemplate {
                            .when()
                            .get().then().extract().response();
                } else {
+                   log.info("Query Params " + params);
                    return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                            .given()
+                           .queryParams(params)
                            .headers(headersAsMap)
                            .basePath(requestURL)
-                           .params(params)
                            .when()
                            .get().then().extract().response();
                }
