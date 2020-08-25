@@ -9,6 +9,7 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
+      registry: DTS-SS-ACRPrivate
       tests_gradle:
       - name: UnitTest
         command: test
@@ -19,6 +20,9 @@ parameters:
       - name: FunctionalTest
         command: functional
         serenity: true
+      tests_security:
+      - name: ApiZapScan
+        repository: hmi/apim-tests-owasp
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
@@ -103,3 +107,13 @@ stages:
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+
+    - ${{ if environment.tests_security }}:
+      - ${{ each test in environment.tests_security }}:
+        - template: pipeline/jobs/security-test.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            registry: ${{ environment.registry }}
+            repository: ${{ test.repository }}
+            dockerfile: docker/images/${{ test.name }}
+            tags: latest

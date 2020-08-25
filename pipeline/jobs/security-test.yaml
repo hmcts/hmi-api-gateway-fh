@@ -1,5 +1,20 @@
 parameters:
+  - name: displayName
+    type: string
+    
   - name: subscription
+    type: string
+
+  - name: registry
+    type: string
+
+  - name: repository
+    type: string
+
+  - name: dockerfile
+    type: string
+
+  - name: tags
     type: string
 
 jobs:
@@ -10,3 +25,12 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
+  steps:
+  - template: ../steps/push-img.yaml
+    parameters:
+      registry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      dockerfile: ${{ parameters.dockerfile }}
+      tags: ${{ parameters.tags }}
+  # - template: ../steps/run_owasp_api_scan.yaml
+  # - template: ../publish-test-results.yaml
