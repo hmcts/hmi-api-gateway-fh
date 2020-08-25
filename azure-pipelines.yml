@@ -99,6 +99,8 @@ stages:
             dependsOn: 
             - Terraform
             - createStorage
+            # - ${{ if test.dependsOn }}:
+            #   - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
@@ -126,7 +128,7 @@ stages:
             repository: ${{ test.repository }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            hostVolume: $(System.DefaultWorkingDirectory)/zap
+            hostVolume: $(System.DefaultWorkingDirectory)
             containerVolume: /zap/wrk/:rw
             envVars:
               TEST_URL=https://www.example.com/openapi.json
