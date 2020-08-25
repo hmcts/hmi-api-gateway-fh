@@ -3,7 +3,7 @@ parameters:
     type: string
 
   - name: dependsOn
-    type: string
+    type: object
 
   - name: subscription
     type: string
