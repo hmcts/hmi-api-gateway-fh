@@ -68,7 +68,7 @@ jobs:
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
-      directory: ${{ parameters.hostVolume }}
+      directory: /zap
   - template: ../steps/publish-test-results.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
