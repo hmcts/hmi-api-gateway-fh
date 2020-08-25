@@ -1,5 +1,5 @@
 parameters:
-  - name: runCommand
+  - name: command
     type: string
 
 steps:
@@ -8,7 +8,7 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
-      tasks: ${{ parameters.runCommand }}
+      tasks: clean ${{ parameters.command }}
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
