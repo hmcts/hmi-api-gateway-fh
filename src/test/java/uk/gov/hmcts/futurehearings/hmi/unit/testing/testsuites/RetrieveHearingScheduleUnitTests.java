@@ -105,7 +105,6 @@ public class RetrieveHearingScheduleUnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for No Parameters")
-    @Disabled("Disabled as there is no validations for Parameters yet")
     public void testRetrieveHearingScheduleRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
         thenASuccessfulResponseForRetrieveIsReturned(response, objStep);
@@ -115,7 +114,6 @@ public class RetrieveHearingScheduleUnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for All Parameters")
-    @Disabled("Disabled as there is no validations for Parameters yet")
     public void testRetrieveHearingScheduleRequestWithCorrectRequestAndAllParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndAllParams();
         thenASuccessfulResponseForRetrieveIsReturned(response, objStep);
