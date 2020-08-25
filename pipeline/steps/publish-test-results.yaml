@@ -23,7 +23,7 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      ls -la $(Build.ArtifactStagingDirectory)
+      ls -la $(System.DefaultWorkingDirectory)
     #   echo "Obtaining storage key..."
     #   key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
     #   echo "Uploading to blob container"
