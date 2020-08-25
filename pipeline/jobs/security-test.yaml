@@ -69,7 +69,7 @@ jobs:
     parameters:
       zipName: ${{ parameters.displayName }}
       directory: ${{ parameters.hostVolume }}
-  - template: ../publish-test-results.yaml
+  - template: ../steps/publish-test-results.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(resourceGroup)
