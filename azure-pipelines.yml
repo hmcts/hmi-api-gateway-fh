@@ -113,6 +113,7 @@ stages:
         - template: pipeline/jobs/security-test.yaml
           parameters:
             displayName: ${{ test.name }}
+            subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
             repository: ${{ test.repository }}
             dockerfile: docker/images/${{ test.name }}
