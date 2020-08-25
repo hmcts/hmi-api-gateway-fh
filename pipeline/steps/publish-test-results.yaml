@@ -1,21 +1,32 @@
 parameters:
   - name: subscription
     type: string
-  - name: command
+
+  - name: resourceGroup
     type: string
+
   - name: storageAccount
     type: string
+
+  - name: zipName
+    type: string
+
   - name: storageContainer
     type: string
 
 steps:
-
-  - task: AzureFileCopy@3
-    displayName: Publish Serenity Results
-    inputs:
-      SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
-      azureSubscription: ${{ parameters.subscription }}
-      Destination: AzureBlob
-      storage: ${{ parameters.storageAccount }}
-      ContainerName: ${{ parameters.storageContainer }}
+- task: AzureCLI@2
+  displayName: Upload Blob
+  name: uploadBlob
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      echo "Obtaining storage key..."
+      key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
+      echo "Uploading to blob container"
+      az storage blob upload -n $(Build.BuildId)-${{ parameters.zipName }}.zip -c ${{ parameters.storageContainer }} -f $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip --account-name ${{ parameters.storageAccount }} --account-key $key
     condition: succeededOrFailed()
+
+

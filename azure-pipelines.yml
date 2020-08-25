@@ -84,7 +84,6 @@ stages:
           resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
           storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
 
-
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
 
@@ -111,6 +110,8 @@ stages:
         - template: pipeline/jobs/security-test.yaml
           parameters:
             dependsOn:
+            - Terraform
+            - createStorage
             - ${{ each functest in environment.tests_gradle }}:
               - ${{ functest.name }}
             displayName: ${{ test.name }}
@@ -124,3 +125,10 @@ stages:
             envVars:
               TEST_URL=https://www.example.com/openapi.json
               SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            resourceGroup: $(resourceGroup)
+            storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
+            variables:
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
