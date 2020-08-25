@@ -1,13 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.cdc.consumer;
 
-import static uk.gov.hmcts.futurehearings.hmi.cdc.consumer.common.TestingUtils.readFileContents;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
@@ -25,6 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.cdc.consumer.common.TestingUtils.readFileContents;
 
 @ActiveProfiles("contract")
 @SpringBootTest(classes = {Application.class})
@@ -49,10 +48,10 @@ public class HearingAPIConsumerTest {
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Company-Name", "HMCTS");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source", "SnL");
-        headersAsMap.put("Destination", "CFT");
-        headersAsMap.put("DateTime", "datetimestring");
-        headersAsMap.put("RequestType", "TypeOfCase");
+        headersAsMap.put("Source-System", "SnL");
+        headersAsMap.put("Destination-System", "CFT");
+        headersAsMap.put("Request-Created-At", "datetimestring");
+        headersAsMap.put("Request-Type", "THEFT");
 
     }
 
