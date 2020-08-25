@@ -94,8 +94,6 @@ stages:
             dependsOn: 
             - Terraform
             - createStorage
-            - ${{ if test.dependsOn }}:
-              - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
@@ -112,6 +110,9 @@ stages:
       - ${{ each test in environment.tests_security }}:
         - template: pipeline/jobs/security-test.yaml
           parameters:
+            dependsOn:
+            - ${{ each test in environment.tests_gradle }}:
+              - ${{ test.name }}
             displayName: ${{ test.name }}
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
