@@ -1,7 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.buildValidRetrieveScheduleParams;
-
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +35,9 @@ public class RetrieveScheduleValidationTest extends SessionsValidationTest {
         super.initialiseValues();
         this.setRelativeURL(sessionAPIRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        //this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
-        this.setParams(buildValidRetrieveScheduleParams());
+        //this.setUrlParams(buildValidRetrieveScheduleParams());
     }
 
     @BeforeEach

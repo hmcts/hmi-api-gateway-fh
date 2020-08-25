@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 
-public class HearingHeaderHelper {
+public class CommonHeaderHelper {
 
 
     public static final Map<String,String> createStandardPayloadHeader (final String subscriptionKey) {
@@ -198,10 +198,4 @@ public class HearingHeaderHelper {
 
     }
 
-    public static Map<String, String> buildValidRetrieveScheduleParams() {
-        final Map<String, String>  retrieveScheduleParams = new HashMap<>();
-        retrieveScheduleParams.put("hearing_venue_id ", "234");
-
-        return retrieveScheduleParams;
-    }
 }
