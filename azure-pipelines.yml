@@ -117,5 +117,5 @@ stages:
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
             repository: ${{ test.repository }}
-            dockerfile: docker/images/${{ test.name }}
+            dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
