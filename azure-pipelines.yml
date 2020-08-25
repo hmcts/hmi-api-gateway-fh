@@ -114,8 +114,6 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
-            - ${{ each functest in environment.tests_gradle }}:
-              - ${{ functest.name }}
             displayName: ${{ test.name }}
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
