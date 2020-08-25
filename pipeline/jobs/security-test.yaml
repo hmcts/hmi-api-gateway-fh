@@ -20,7 +20,10 @@ parameters:
   - name: tags
     type: string
 
-  - name: volumes
+  - name: hostVolume
+    type: string
+
+  - name: containerVolume
     type: string
 
   - name: envVars
@@ -46,7 +49,11 @@ jobs:
       registry: ${{ parameters.registry }}
       repository: ${{ parameters.repository }}
       tags: ${{ parameters.tags }}
-      volumes: ${{ parameters.volumes }}
+      volumes: ${{ parameters.hostVolume }}:${{ parameters.containerVolume }}
       envVars: ${{ parameters.envVars }}
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: ${{ parameters.displayName }}
+      directory: ${{ parameters.hostVolume }}
 
   # - template: ../publish-test-results.yaml
