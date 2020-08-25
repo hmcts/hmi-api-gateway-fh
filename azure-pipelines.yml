@@ -41,7 +41,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest 
         command: test
@@ -119,3 +119,7 @@ stages:
             repository: ${{ test.repository }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
+            volumes: /home/vsts/work/:/zap/wrk/:rw
+            envVars:
+              TEST_URL=https://www.example.com/openapi.json
+              SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
