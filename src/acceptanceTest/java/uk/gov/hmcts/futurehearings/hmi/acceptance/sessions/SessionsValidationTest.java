@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 
@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class HearingValidationTest extends HMICommonHeaderTest {
+public abstract class SessionsValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -31,7 +31,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        //this.setRelativeURL(hearingAPIRootContext);
-        this.setApiName("hearings");
+        this.setApiName("sessions");
     }
 }
