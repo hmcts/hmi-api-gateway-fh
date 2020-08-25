@@ -13,7 +13,7 @@ parameters:
 
   - name: resourceGroup
     type: string
-    
+
   - name: storageAccount
     type: string
 
@@ -55,5 +55,6 @@ jobs:
       parameters:
         zipName: ${{ parameters.displayName }}
         subscription: ${{ parameters.subscription }}
+        resourceGroup: $(resourceGroup)
         storageAccount: $(storageAccount)
         storageContainer: $(storageContainer)
