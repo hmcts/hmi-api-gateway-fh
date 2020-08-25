@@ -111,9 +111,9 @@ stages:
       - ${{ each test in environment.tests_security }}:
         - template: pipeline/jobs/security-test.yaml
           parameters:
-            dependsOn:
-            - Terraform
-            - createStorage
+            # dependsOn:
+            # - Terraform
+            # - createStorage
             # - ${{ each functest in environment.tests_gradle }}:
             #   - ${{ functest.name }}
             displayName: ${{ test.name }}
