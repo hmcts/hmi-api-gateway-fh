@@ -111,8 +111,8 @@ stages:
         - template: pipeline/jobs/security-test.yaml
           parameters:
             dependsOn:
-            - ${{ each test in environment.tests_gradle }}:
-              - ${{ test.name }}
+            - ${{ each functest in environment.tests_gradle }}:
+              - ${{ functest.name }}
             displayName: ${{ test.name }}
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
