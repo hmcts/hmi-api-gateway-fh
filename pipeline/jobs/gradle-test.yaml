@@ -50,7 +50,7 @@ jobs:
         directory: /target/site/serenity
     - template: ../steps/publish-test-results.yaml
       parameters:
-        command: ${{ parameters.command }}
+        zipName: ${{ parameters.displayName }}
         subscription: ${{ parameters.subscription }}
         storageAccount: $(storageAccount)
         storageContainer: $(storageContainer)
