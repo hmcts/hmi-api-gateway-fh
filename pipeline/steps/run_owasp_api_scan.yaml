@@ -1,11 +1,11 @@
 parameters:
-  - name: subscription
-    type: string
-
   - name: registry
     type: string
 
-  - name: image
+  - name: repository
+    type: string
+  
+  - name: tags
     type: string
 
   - name: volumes
@@ -18,11 +18,12 @@ steps:
 - task: Docker@1
   displayName: 'Run an image'
   inputs:
-    azureSubscriptionEndpoint: ${{ parameters.subscription }}
-    azureContainerRegistry: ${{ parameters.registry }}
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: ${{ parameters.registry }}
     command: 'Run an image'
-    imageName: ${{ parameters.image }}
+    imageName: ${{ parameters.repository }}:${{ parameters.tags }}
     volumes: ${{ parameters.volumes }}
-    envVars: |         
-      - ${{ parameters.envVars }}
+    envVars: |
+      - ${{ each var in parameters.envVars }}    
+        - ${{ var }}
     containerCommand: '/bin/bash ./security.sh'
