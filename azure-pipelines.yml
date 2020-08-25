@@ -16,11 +16,9 @@ parameters:
       - name: SmokeTest
         command: smoke
         serenity: false
-        dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
         serenity: true
-        dependsOn: SmokeTest
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
@@ -32,11 +30,9 @@ parameters:
       - name: SmokeTest
         command: smoke
         serenity: false
-        dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
         serenity: true
-        dependsOn: SmokeTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
@@ -49,11 +45,9 @@ parameters:
       - name: SmokeTest
         command: smoke
         serenity: false
-        dependsOn: UnitTest
       - name: FunctionalTest
         command: functional
         serenity: true
-        dependsOn: SmokeTest
 
 variables:
   - group: HMI-APIM-Common
