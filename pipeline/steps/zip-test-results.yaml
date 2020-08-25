@@ -7,7 +7,7 @@ parameters:
 
 steps:
   - script: |
-      ls -la
+      ls -la $(System.DefaultWorkingDirectory)${{ parameters.directory }}
   - task: ArchiveFiles@2
     displayName: Archive Files
     inputs:
