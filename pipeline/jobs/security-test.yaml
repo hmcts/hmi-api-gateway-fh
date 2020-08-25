@@ -8,6 +8,15 @@ parameters:
   - name: subscription
     type: string
 
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
+
+  - name: storageContainer
+    type: string
+
   - name: registry
     type: string
 
@@ -29,6 +38,9 @@ parameters:
   - name: envVars
     type: object
 
+  - name: variables
+    type: object
+
 jobs:
 - job: ${{ parameters.displayName }}
   dependsOn:
@@ -37,6 +49,8 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - template: ../steps/push-img.yaml
     parameters:
@@ -55,5 +69,10 @@ jobs:
     parameters:
       zipName: ${{ parameters.displayName }}
       directory: ${{ parameters.hostVolume }}
-
-  # - template: ../publish-test-results.yaml
+  - template: ../publish-test-results.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      zipName: ${{ parameters.displayName }}
+      storageContainer: $(storageContainer)
