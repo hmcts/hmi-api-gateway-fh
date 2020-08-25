@@ -1,0 +1,28 @@
+parameters:
+  - name: subscription
+    type: string
+
+  - name: registry
+    type: string
+
+  - name: image
+    type: string
+
+  - name: volumes
+    type: string
+
+  - name: envVars
+    type: object
+
+steps:
+- task: Docker@1
+  displayName: 'Run an image'
+  inputs:
+    azureSubscriptionEndpoint: ${{ parameters.subscription }}
+    azureContainerRegistry: ${{ parameters.registry }}
+    command: 'Run an image'
+    imageName: ${{ parameters.image }}
+    volumes: ${{ parameters.volumes }}
+    envVars: |         
+      - ${{ parameters.envVars }}
+    containerCommand: '/bin/bash ./security.sh'

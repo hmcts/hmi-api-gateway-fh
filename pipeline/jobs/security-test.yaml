@@ -1,0 +1,12 @@
+parameters:
+  - name: subscription
+    type: string
+
+jobs:
+- job: ${{ parameters.displayName }}
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
