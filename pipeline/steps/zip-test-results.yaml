@@ -7,7 +7,7 @@ parameters:
 
 steps:
   - task: ArchiveFiles@2
-    displayName: Archive Serenity Results
+    displayName: Archive Files
     inputs:
       rootFolderOrFile: $(System.DefaultWorkingDirectory)${{ parameters.directory }}
       archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip
