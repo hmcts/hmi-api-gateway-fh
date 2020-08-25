@@ -25,3 +25,6 @@ variable "open_api_spec_content_value" {
 variable "service_url" {
   description = "Absolute URL of the backend service implementing this API."
 }
+variable "enable_mock_header_string" {
+  description = "mock header static string for adding development headers injected to requests"
+}
