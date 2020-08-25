@@ -120,7 +120,7 @@ test {
   description = 'Executes unit tests'
   testClassesDirs = sourceSets.test.output.classesDirs
   classpath = sourceSets.test.runtimeClasspath
-  include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
+  include "uk/gov/hmcts/futurehearings/hmi/unit/testing/testsuites/**"
   failFast = false
   testLogging.showStandardStreams = true
   systemProperties System.getProperties()
@@ -362,6 +362,7 @@ dependencies {
   testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
   testCompileOnly 'org.projectlombok:lombok:1.18.12'
   testImplementation "ch.qos.logback:logback-classic:1.2.3"
+  testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
 
