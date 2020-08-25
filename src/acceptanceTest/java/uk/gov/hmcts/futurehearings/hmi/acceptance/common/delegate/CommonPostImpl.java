@@ -1,12 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
+import static org.springframework.http.HttpMethod.GET;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -33,11 +36,13 @@ public class CommonPostImpl implements CommonDelegate {
         log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
 
         String inputPayload = null;
-        if (httpMethod.equals(HttpMethod.GET)) {
-            //No Body Only Params
-        } else if (httpMethod.equals(HttpMethod.POST) || httpMethod.equals(HttpMethod.PUT)) {
-            inputPayload =
-                    TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, apiName) + "/" + inputFile);
+        switch (httpMethod) {
+            case POST:
+            case PUT:
+                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, apiName) + "/" + inputFile);;
+                break;
+            case GET:
+
         }
 
         Response response = shouldExecute(standardHeaderMap,

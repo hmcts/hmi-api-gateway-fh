@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
 import java.util.Map;
+import java.util.Objects;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -41,14 +42,22 @@ public class RestClientTemplate {
                        .when()
                        .put().then().extract().response();
            case GET:
-               return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
-                       .given()
-                       .headers(headersAsMap)
-                       .basePath(requestURL)
-                       .params(params)
-                       //.body(requestBodyPayload)
-                       .when()
-                       .get().then().extract().response();
+               if (Objects.isNull(params) || params.size() == 0) {
+                   return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                           .given()
+                           .headers(headersAsMap)
+                           .basePath(requestURL)
+                           .when()
+                           .get().then().extract().response();
+               } else {
+                   return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                           .given()
+                           .headers(headersAsMap)
+                           .basePath(requestURL)
+                           .params(params)
+                           .when()
+                           .get().then().extract().response();
+               }
            default :
                throw new IllegalArgumentException("HTTP method not identified");
 
