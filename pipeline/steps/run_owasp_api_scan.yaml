@@ -24,6 +24,5 @@ steps:
     imageName: ${{ parameters.repository }}:${{ parameters.tags }}
     volumes: ${{ parameters.volumes }}
     envVars: |
-      - ${{ each var in parameters.envVars }}    
-        - ${{ var }}
+      - ${{ parameters.envVars }}    
     containerCommand: '/bin/bash ./security.sh'
