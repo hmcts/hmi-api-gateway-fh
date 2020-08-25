@@ -122,7 +122,7 @@ stages:
             repository: ${{ test.repository }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            hostVolume: /home/vsts/work/zap
+            hostVolume: $(System.DefaultWorkingDirectory)/zap
             containerVolume: /zap/wrk/:rw
             envVars:
               TEST_URL=https://www.example.com/openapi.json
