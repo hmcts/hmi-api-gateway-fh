@@ -10,5 +10,5 @@ steps:
     displayName: Archive Files
     inputs:
       rootFolderOrFile: $(System.DefaultWorkingDirectory)${{ parameters.directory }}
-      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip
+      archiveFile: $(System.DefaultWorkingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip
     condition: succeededOrFailed()
