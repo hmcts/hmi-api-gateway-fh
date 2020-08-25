@@ -10,7 +10,7 @@ parameters:
 
 steps:
 
-  - task: AzureFileCopy@4
+  - task: AzureFileCopy@3
     displayName: Publish Serenity Results
     inputs:
       SourcePath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.command }}.zip'
