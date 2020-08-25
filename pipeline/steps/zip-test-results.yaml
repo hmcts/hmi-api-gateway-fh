@@ -6,6 +6,8 @@ parameters:
     type: string
 
 steps:
+  - script: |
+      ls $(System.DefaultWorkingDirectory)
   - task: ArchiveFiles@2
     displayName: Archive Files
     inputs:
