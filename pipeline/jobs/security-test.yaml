@@ -20,6 +20,12 @@ parameters:
   - name: tags
     type: string
 
+  - name: volumes
+    type: string
+
+  - name: envVars
+    type: object
+
 jobs:
 - job: ${{ parameters.displayName }}
   dependsOn:
@@ -35,5 +41,12 @@ jobs:
       repository: ${{ parameters.repository }}
       dockerfile: ${{ parameters.dockerfile }}
       tags: ${{ parameters.tags }}
-  # - template: ../steps/run_owasp_api_scan.yaml
+  - template: ../steps/run_owasp_api_scan.yaml
+    parameters:
+      registry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      tags: ${{ parameters.tags }}
+      volumes: ${{ parameters.volumes }}
+      envVars: ${{ parameters.envVars }}
+
   # - template: ../publish-test-results.yaml
