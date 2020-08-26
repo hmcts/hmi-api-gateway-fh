@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
 import java.util.Map;
+import java.util.Objects;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -13,6 +14,7 @@ public class RestClientTemplate {
     public static Response shouldExecute(final Map<String,String> headersAsMap,
                                              final String requestBodyPayload,
                                              final String requestURL,
+                                             final Map<String, String> params,
                                              final HttpStatus expectedHttpStatus,
                                              final HttpMethod httpMethod) {
 
@@ -21,14 +23,13 @@ public class RestClientTemplate {
         log.info("The value of the header : "   + headersAsMap);
         log.info("The value of the HTTP Status : " + expectedHttpStatus.value());
 
+
        switch (httpMethod) {
            case POST:
                return RestAssured
                        .expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType("application/json")
-                       .accept("application/json")
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()
@@ -37,13 +38,28 @@ public class RestClientTemplate {
                return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                        .given()
                        .headers(headersAsMap)
-                       .contentType(headersAsMap.get("Content-Type"))
-                       .accept(headersAsMap.get("Accept"))
                        .basePath(requestURL)
                        .body(requestBodyPayload)
                        .when()
                        .put().then().extract().response();
-
+           case GET:
+               if (Objects.isNull(params) || params.size() == 0) {
+                   return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                           .given()
+                           .headers(headersAsMap)
+                           .basePath(requestURL)
+                           .when()
+                           .get().then().extract().response();
+               } else {
+                   log.info("Query Params " + params);
+                   return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                           .given()
+                           .queryParams(params)
+                           .headers(headersAsMap)
+                           .basePath(requestURL)
+                           .when()
+                           .get().then().extract().response();
+               }
            default :
                throw new IllegalArgumentException("HTTP method not identified");
 

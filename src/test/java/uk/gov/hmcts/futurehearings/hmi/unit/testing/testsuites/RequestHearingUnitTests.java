@@ -1,9 +1,11 @@
-package uk.gov.hmcts.futurehearings.hmi.unit.testing;
+package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,13 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.expect;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.checkResponseForError;
+
+import com.aventstack.extentreports.ExtentTest;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
-public class HmiApiUnitTest {
+@ExtendWith(TestReporter.class)
+@Disabled("Disabled as test is validating against the payload")
+public class RequestHearingUnitTests {
 
     private static final String CASE_TITLE_MISSING_REQ_PATH = "requests/case-title-missing-request.json";
     private static final String CASE_ID_MISSING_REQ_PATH = "requests/case-id-missing-request.json";
@@ -47,9 +56,28 @@ public class HmiApiUnitTest {
     private String hearingApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    static ExtentTest objTestFromUtils, objStep;
+
+
+    @BeforeAll
+    public static void initialiseReport() {
+
+        setupReport();
+        objTestFromUtils =  startReport("RequestHearing Validations");
+
+    }
+
+    @AfterAll
+    public static void finaliseReport() {
+
+        endReport();
+        objTestFromUtils=null;
+        objStep=null;
+
+    }
 
     @BeforeEach
-    public void initialiseValues() {
+    public void initialiseValues(TestInfo info) {
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
@@ -58,86 +86,101 @@ public class HmiApiUnitTest {
         headersAsMap.put("Destination", "CFT");
         headersAsMap.put("DateTime", "datetimestring");
         headersAsMap.put("RequestType", "TypeOfCase");
+        headersAsMap.put("Accept", "application/json");
+
+        objStep = objTestFromUtils.createNode(info.getDisplayName());
+
     }
 
     @Test
+    @DisplayName("Test for missing Case Title")
     public void testRequestValidationWhenCaseTitleMissing() throws IOException{
-        final String input = givenARequesWithMissingField(CASE_TITLE_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(CASE_TITLE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingCaseTitle(response);
+        checkResponseForError(response, "Case Title", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing Case ID")
     public void testRequestValidationWhenCaseIdMissing() throws IOException{
-        final String input = givenARequesWithMissingField(CASE_ID_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(CASE_ID_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingCaseId(response);
+        checkResponseForError(response, "Case Id", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing TransactionIDHMCTS")
     public void testRequestValidationWhenTransactionIDHMCTSMissing() throws IOException{
-        final String input = givenARequesWithMissingField(TRANSACTIONIDHMCTS_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(TRANSACTIONIDHMCTS_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingTransactionIDHMCTS(response);
+        checkResponseForError(response, "TransactionIDHMCTS", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing Venue")
     public void testRequestValidationWhenVenueMissing() throws IOException{
-        final String input = givenARequesWithMissingField(VENUE_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(VENUE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingVenue(response);
+        checkResponseForError(response, "Venue", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing Jurisdiction")
     public void testRequestValidationWhenJurisdictionMissing() throws IOException{
-        final String input = givenARequesWithMissingField(JURISDICTION_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(JURISDICTION_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingJurisdiction(response);
+        checkResponseForError(response, "Jurisdiction", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing Service")
     public void testRequestValidationWhenServiceMissing() throws IOException{
-        final String input = givenARequesWithMissingField(SERVICE_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(SERVICE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingService(response);
+        checkResponseForError(response, "Service", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing CaseType")
     public void testRequestValidationWhenCaseTypeMissing() throws IOException{
-        final String input = givenARequesWithMissingField(CASE_TYPE_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(CASE_TYPE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingCaseType(response);
+        checkResponseForError(response, "Case Type", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing HearingType")
     public void testRequestValidationWhenHearingTypeMissingTest() throws IOException{
-        final String input = givenARequesWithMissingField(HEARING_TYPE_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(HEARING_TYPE_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingHearingType(response);
+        checkResponseForError(response, "Hearing Type", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing HearingChannel")
     public void testRequestValidationWhenHearingChannelMissing() throws IOException{
-        final String input = givenARequesWithMissingField(HEARING_CHANNEl_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(HEARING_CHANNEl_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingHearingChannel(response);
+        checkResponseForError(response, "Hearing channel", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing PrivateHearing")
     public void testRequestValidationWhenPrivateHearingMissing() throws IOException{
-        final String input = givenARequesWithMissingField(PRIVATE_HEARING_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(PRIVATE_HEARING_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingPrivateHearing(response);
+        checkResponseForError(response, "Private Hearing", objStep);
     }
 
     @Test
+    @DisplayName("Test for missing AllocatedListingTeam")
     public void testRequestValidationWhenAllocatedListingTeamMissing() throws IOException{
-        final String input = givenARequesWithMissingField(ALLOCATED_LISTING_TEAM_MISSING_REQ_PATH);
+        final String input = givenARequestWithMissingField(ALLOCATED_LISTING_TEAM_MISSING_REQ_PATH);
         Response response = whenRequestHearingIsInvoked(input);
-        thenResponseHasErrorForMissingAllocatedListingTeam(response);
+        checkResponseForError(response, "Allocated Listing Team", objStep);
     }
 
-    private String givenARequesWithMissingField(final String path) throws IOException {
+    private String givenARequestWithMissingField(final String path) throws IOException {
         return readFileContents(path);
     }
 
@@ -146,8 +189,8 @@ public class HmiApiUnitTest {
     }
 
     private Response requestHearingWithMissingField(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return expect().that().statusCode(400)
-                .given().contentType("application/json").body(payloadBody)
+        return  given()
+                .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
