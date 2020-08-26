@@ -128,10 +128,10 @@ stages:
             repository: ${{ test.repository }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            hostVolume: $(System.DefaultWorkingDirectory)/zap
+            hostVolume: /home/vsts/work/zap/
             containerVolume: /zap/wrk/:rw
-            testUrl: TEST_URL=https://www.example.com/openapi.json 
-            securityRules: SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            testUrl: https://www.example.com/openapi.json 
+            securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
