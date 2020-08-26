@@ -1,5 +1,8 @@
 parameters:
-  - name: registry
+  - name: subscription
+    type: string
+
+  - name: containerRegistry
     type: string
 
   - name: repository
@@ -39,10 +42,10 @@ steps:
     azureSubscriptionEndpoint: ${{ parameters.subscription }}
     azureContainerRegistry: ${{ parameters.containerRegistry }}
     command: 'Run an image'
-    imageName: ${{ parameters.containerRegistry }}/hmi/apim-tests-owasp:latest'
+    imageName: ${{ parameters.containerRegistry }}${{ parameters.repository }}:${{ parameters.tags }}'
     volumes: '/home/vsts/work/:/zap/wrk/:rw'
     envVars: |         
-      TEST_URL=https://www.example.com/openapi.json
-      SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+      TEST_URL=${{ parameters.testUrl }}
+      SecurityRules=${{ parameters.securityRules }}
     containerCommand: '/bin/bash ./security.sh'
     runInBackground: false
