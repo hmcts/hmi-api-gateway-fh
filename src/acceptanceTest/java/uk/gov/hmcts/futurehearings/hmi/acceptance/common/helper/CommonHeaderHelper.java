@@ -154,6 +154,34 @@ public class CommonHeaderHelper {
         );
     }
 
+    public static Map<String,String> createHeaderWithContentTypeAtSystemValue (final String subscriptionKey,
+                                                                               final String contentType) {
+
+        return buildHeaderWithValues(contentType,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                "S&L",
+                "Assault"
+        );
+    }
+
+    public static Map<String,String> createHeaderWithAcceptTypeAtSystemValue (final String subscriptionKey,
+                                                                               final String acceptType) {
+
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                acceptType,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                "S&L",
+                "Assault"
+        );
+    }
+
     private static Map<String,String> buildHeaderWithValues(final String contentType,
                                                             final String acceptType,
                                                             final String subscriptionKey,
