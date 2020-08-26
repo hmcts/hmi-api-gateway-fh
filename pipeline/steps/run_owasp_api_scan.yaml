@@ -12,7 +12,7 @@ parameters:
     type: string
 
   - name: envVars
-    type: object
+    type: string
 
 steps:
 - task: Docker@1
@@ -23,7 +23,6 @@ steps:
     command: 'Run an image'
     imageName: ${{ parameters.repository }}:${{ parameters.tags }}
     volumes: ${{ parameters.volumes }}
-    envVars: |
-      - ${{ parameters.envVars }}    
+    envVars: ${{ parameters.envVars }}    
     containerCommand: '/bin/bash ./security.sh'
     runInBackground: false
