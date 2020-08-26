@@ -4,9 +4,6 @@ parameters:
 
   - name: dependsOn
     type: object
-  
-  - name: serenity
-    type: string
 
   - name: subscription
     type: string
@@ -20,13 +17,25 @@ parameters:
   - name: storageContainer
     type: string
 
-  - name: subscriptionKey
+  - name: registry
     type: string
 
-  - name: apimHost
+  - name: repository
     type: string
 
-  - name: command
+  - name: containerRegistry
+    type: string
+
+  - name: dockerfile
+    type: string
+
+  - name: tags
+    type: string
+
+  - name: testUrl
+    type: string
+    
+  - name: securityRules
     type: string
 
   - name: variables
@@ -43,22 +52,29 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-  - template: ../steps/run-gradlew.yaml
+  - template: ../steps/push-img.yaml
     parameters:
-      command: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
-  - ${{ if contains(parameters.serenity, true) }}:
-    - template: ../steps/zip-test-results.yaml
-      parameters:
-        zipName: ${{ parameters.displayName }}
-        directory: /target/site/serenity
+      registry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      dockerfile: ${{ parameters.dockerfile }}
+      tags: ${{ parameters.tags }}
+  - template: ../steps/run_owasp_api_scan.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+      containerRegistry: ${{ parameters.containerRegistry }}
+      repository: ${{ parameters.repository }}
+      tags: ${{ parameters.tags }}
+      directory: /zap
+      testUrl: ${{ parameters.testUrl }}
+      securityRules: ${{ parameters.securityRules }}
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
-      directory: /reports/tests/${{ parameters.displayName }}
+      directory: /zap
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: ${{ parameters.displayName }}
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(resourceGroup)
       storageAccount: $(storageAccount)
+      zipName: ${{ parameters.displayName }}
       storageContainer: $(storageContainer)
