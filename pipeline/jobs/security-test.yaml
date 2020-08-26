@@ -52,12 +52,12 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-  # - template: ../steps/push-img.yaml
-  #   parameters:
-  #     registry: ${{ parameters.registry }}
-  #     repository: ${{ parameters.repository }}
-  #     dockerfile: ${{ parameters.dockerfile }}
-  #     tags: ${{ parameters.tags }}
+  - template: ../steps/push-img.yaml
+    parameters:
+      registry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      dockerfile: ${{ parameters.dockerfile }}
+      tags: ${{ parameters.tags }}
   - template: ../steps/run_owasp_api_scan.yaml
     parameters:
       subscription: ${{ parameters.subscription }}

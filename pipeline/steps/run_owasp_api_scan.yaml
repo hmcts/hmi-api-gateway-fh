@@ -21,21 +21,6 @@ parameters:
     type: string
 
 steps:
-# - task: Docker@1
-#   displayName: Run an image
-#   inputs:
-#     containerregistrytype: Container Registry
-#     dockerRegistryEndpoint: ${{ parameters.registry }}
-#     command: Run an image
-#     imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
-#     volumes: ${{ parameters.volumes }}
-#     envVars: |
-#      TEST_URL=${{ parameters.testUrl }}
-#      SecurityRules=${{ parameters.securityRules }}
-#     workingDirectory: $(System.DefaultWorkingDirectory)
-#     containerCommand: /bin/bash ./security.sh
-#     runInBackground: false
-
 - task: Docker@1
   displayName: 'Run an image'
   inputs:
