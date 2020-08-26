@@ -130,9 +130,7 @@ stages:
             tags: latest
             hostVolume: $(System.DefaultWorkingDirectory)/zap
             containerVolume: /zap/wrk/:rw
-            envVars:
-              TEST_URL=https://www.example.com/openapi.json
-              SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            envVars: TEST_URL=https://www.example.com/openapi.json SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
