@@ -25,10 +25,10 @@ steps:
     dockerRegistryEndpoint: ${{ parameters.registry }}
     command: 'Run an image'
     imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
-    volumes: '$(System.DefaultWorkingDirectory)/zap:/zap/wrk/:rw'
+    volumes: ${{ parameters.volumes }}
     envVars: |
-     TEST_URL=https://www.example.com/openapi.json 
-     SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+     TEST_URL=${{ parameters.testUrl }}
+     SecurityRules=${{ parameters.securityRules }}
     workingDirectory: '$(System.DefaultWorkingDirectory)'
     containerCommand: '/bin/bash ./security.sh'
     runInBackground: false
