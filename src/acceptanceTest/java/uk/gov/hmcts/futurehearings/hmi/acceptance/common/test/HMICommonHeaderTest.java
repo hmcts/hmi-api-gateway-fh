@@ -27,6 +27,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -123,10 +127,22 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System");
     }
 
-    @Test
-    @DisplayName("Message with Subscription Key Invalid(Null,Empty,Spaced or Wrong Value) Header")
-    public void test_subscription_key_invalid_values() throws Exception {
+    //@Test
+    @DisplayName("Message with Subscription Key Invalid (Null,Empty,Spaced or Wrong Value) in the Header")
+    @ParameterizedTest(name = "Message with Subscription Key Invalid (Null,Empty,Spaced or Wrong Value) in the Header - Param : {0}")
+    @NullAndEmptySource
+    //@ValueSource(strings = { " ","  ", "\t", "\n"})
+    @CsvSource({ "One_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\""})
+    public void test_subscription_key_invalid_values(String param) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(param),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+       /* commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(null),
                 getUrlParams(),
@@ -161,7 +177,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getApiName(),
-                "Missing/Invalid Header Source-System");
+                "Missing/Invalid Header Source-System");*/
     }
 
     @Test
