@@ -11,7 +11,7 @@ parameters:
   - name: tags
     type: string
 
-  - name: volumes
+  - name: directory
     type: string
 
   - name: testUrl

@@ -127,8 +127,6 @@ stages:
             containerRegistry: ${{ test.containerRegistry }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            hostVolume: /home/vsts/work/zap/
-            containerVolume: /zap/wrk/:rw
             testUrl: https://www.example.com/openapi.json 
             securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
