@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -40,5 +41,7 @@ public class UpdateHearingHeaderValidationTest extends HearingValidationTest {
         this.setRelativeURL(updateHearingRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("hearing-request-standard.json");
+        this.setHttpSucessStatus(HttpStatus.CREATED);
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
     }
 }
