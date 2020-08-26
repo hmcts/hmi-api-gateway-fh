@@ -54,7 +54,7 @@ jobs:
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
-      directory: /reports/tests/${{ parameters.displayName }}
+      directory: /reports/tests/${{ parameters.command }}
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
