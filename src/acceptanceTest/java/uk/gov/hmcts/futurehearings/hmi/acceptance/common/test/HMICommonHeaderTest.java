@@ -1,7 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesNull;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithContentTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithCorruptedHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRemovedHeaderKey;
@@ -21,6 +23,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -47,6 +50,8 @@ public abstract class HMICommonHeaderTest {
     private static final String EMPTY_VALUE_CHECK = "";
     private static final String ONE_SPACE_VALUE_CHECK = " ";
     private static final String RANDOM_VALUE_CHECK = "RANDOMVALUE";
+    private static final String REQUEST_TYPE_ASSAULT = "ASSAULT";
+    private static final String REQUEST_TYPE_THEFT = "THEFT";
 
 
     @Autowired(required = false)
@@ -535,7 +540,6 @@ public abstract class HMICommonHeaderTest {
         requestTypeTestValues.add(RANDOM_VALUE_CHECK);
 
         for (String testValue : requestTypeTestValues) {
-            System.out.println(testValue);
             commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                     getRelativeURL(), getInputPayloadFileName(),
                     createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
@@ -548,23 +552,106 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Message with 'Content Type' System Header Invalid Values(Null,Empty,Spaced or Incorrect format)")
     public void test_content_type_at_with_invalid_values() throws Exception {
         final List<String> contentTypeTestValues = new ArrayList<String>();
-        contentTypeTestValues.add(NULL_CHECK);
-        contentTypeTestValues.add(EMPTY_VALUE_CHECK);
-        contentTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
-        contentTypeTestValues.add(RANDOM_VALUE_CHECK);
+        //contentTypeTestValues.add(NULL_CHECK);
+        //contentTypeTestValues.add(EMPTY_VALUE_CHECK);
+        //contentTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
+        //contentTypeTestValues.add(RANDOM_VALUE_CHECK);
         contentTypeTestValues.add("application/pdf");
 
         for (String testValue : contentTypeTestValues) {
-            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithContentTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Accept' System Header Invalid Values(Null,Empty,Spaced or Incorrect format)")
+    public void test_accept_at_with_invalid_values() throws Exception {
+        final List<String> acceptTestValues = new ArrayList<String>();
+        acceptTestValues.add(NULL_CHECK);
+        acceptTestValues.add(EMPTY_VALUE_CHECK);
+        acceptTestValues.add(ONE_SPACE_VALUE_CHECK);
+        acceptTestValues.add(RANDOM_VALUE_CHECK);
+        acceptTestValues.add("application/pdf");
+
+        for (String testValue : acceptTestValues) {
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithAcceptTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.NOT_ACCEPTABLE,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Type' System Header valid values(Assault or Theft)")
+    public void test_request_type_at_with_valid_values() throws Exception {
+        final List<String> requestTypeValidValues = new ArrayList<String>();
+        requestTypeValidValues.add(REQUEST_TYPE_ASSAULT);
+        requestTypeValidValues.add(REQUEST_TYPE_THEFT);
+
+        for (String testValue : requestTypeValidValues) {
             commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                     getRelativeURL(), getInputPayloadFileName(),
                     createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
                     getUrlParams(),
                     getHttpMethod(),
-                    HttpStatus.BAD_REQUEST,
+                    getHttpSucessStatus(),
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Processed At' System Header valid values")
+    public void test_request_processed_at_with_valid_values() throws Exception {
+        final List<String> requestProcessedValidValues = new ArrayList<String>();
+        requestProcessedValidValues.add("2002-10-02T10:00:00-05:00");
+        requestProcessedValidValues.add("2002-10-02T15:00:00Z");
+        requestProcessedValidValues.add("2002-10-02T15:00:00.05Z");
+        requestProcessedValidValues.add("2019-10-12 07:20:50.52Z");
+
+        for (String testValue : requestProcessedValidValues) {
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    getHttpSucessStatus(),
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Created At' System Header valid values")
+    public void test_request_created_at_with_valid_values() throws Exception {
+        final List<String> requestCreatedValidValues = new ArrayList<String>();
+        requestCreatedValidValues.add("2002-10-02T10:00:00-05:00");
+        requestCreatedValidValues.add("2002-10-02T15:00:00Z");
+        requestCreatedValidValues.add("2002-10-02T15:00:00.05Z");
+        requestCreatedValidValues.add("2019-10-12 07:20:50.52Z");
+
+        for (String testValue : requestCreatedValidValues) {
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    getHttpSucessStatus(),
                     getApiName(),
                     null);
         }
