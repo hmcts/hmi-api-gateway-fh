@@ -18,17 +18,31 @@ parameters:
     type: string
 
 steps:
+# - task: Docker@1
+#   displayName: Run an image
+#   inputs:
+#     containerregistrytype: Container Registry
+#     dockerRegistryEndpoint: ${{ parameters.registry }}
+#     command: Run an image
+#     imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
+#     volumes: ${{ parameters.volumes }}
+#     envVars: |
+#      TEST_URL=${{ parameters.testUrl }}
+#      SecurityRules=${{ parameters.securityRules }}
+#     workingDirectory: $(System.DefaultWorkingDirectory)
+#     containerCommand: /bin/bash ./security.sh
+#     runInBackground: false
+
 - task: Docker@1
-  displayName: Run an image
+  displayName: 'Run an image'
   inputs:
-    containerregistrytype: Container Registry
-    dockerRegistryEndpoint: ${{ parameters.registry }}
-    command: Run an image
-    imageName: ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:${{ parameters.tags }}
-    volumes: ${{ parameters.volumes }}
-    envVars: |
-     TEST_URL=${{ parameters.testUrl }}
-     SecurityRules=${{ parameters.securityRules }}
-    workingDirectory: $(System.DefaultWorkingDirectory)
-    containerCommand: /bin/bash ./security.sh
+    azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
+    azureContainerRegistry: ssprivatesbox.azurecr.io
+    command: 'Run an image'
+    imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
+    volumes: '/home/vsts/work/:/zap/wrk/:rw'
+    envVars: |         
+      TEST_URL=https://www.example.com/openapi.json
+      SecurityRules=https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+    containerCommand: '/bin/bash ./security.sh'
     runInBackground: false
