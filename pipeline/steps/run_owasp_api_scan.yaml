@@ -42,7 +42,7 @@ steps:
     azureSubscriptionEndpoint: ${{ parameters.subscription }}
     azureContainerRegistry: ${{ parameters.containerRegistry }}
     command: 'Run an image'
-    imageName: ${{ parameters.containerRegistry }}${{ parameters.repository }}:${{ parameters.tags }}'
+    imageName: ${{ parameters.containerRegistry }}${{ parameters.repository }}:${{ parameters.tags }}
     volumes: '/home/vsts/work/:/zap/wrk/:rw'
     envVars: |         
       TEST_URL=${{ parameters.testUrl }}
