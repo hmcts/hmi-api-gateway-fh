@@ -25,7 +25,7 @@ parameters:
       tests_security:
       - name: ApiZapScan
         containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
+        repository: /hmi/apim-tests-owasp
 
     # - name: dev
     #   subscription: DTS-SHAREDSERVICES-DEV
