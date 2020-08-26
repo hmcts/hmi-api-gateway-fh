@@ -26,3 +26,4 @@ steps:
     envVars: |
       - ${{ parameters.envVars }}    
     containerCommand: '/bin/bash ./security.sh'
+    runInBackground: false
