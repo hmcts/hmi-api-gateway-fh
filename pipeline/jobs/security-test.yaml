@@ -35,7 +35,10 @@ parameters:
   - name: containerVolume
     type: string
 
-  - name: envVars
+  - name: testUrl
+    type: string
+    
+  - name: securityRules
     type: string
 
   - name: variables
@@ -64,7 +67,8 @@ jobs:
       repository: ${{ parameters.repository }}
       tags: ${{ parameters.tags }}
       volumes: ${{ parameters.hostVolume }}:${{ parameters.containerVolume }}
-      envVars: ${{ parameters.envVars }}
+      testUrl: ${{ parameters.testUrl }}
+      securityRules: ${{ parameters.securityRules }}
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
