@@ -32,12 +32,6 @@ parameters:
   - name: tags
     type: string
 
-  - name: hostVolume
-    type: string
-
-  - name: containerVolume
-    type: string
-
   - name: testUrl
     type: string
     
@@ -70,7 +64,7 @@ jobs:
       containerRegistry: ${{ parameters.containerRegistry }}
       repository: ${{ parameters.repository }}
       tags: ${{ parameters.tags }}
-      volumes: ${{ parameters.hostVolume }}:${{ parameters.containerVolume }}
+      directory: /zap
       testUrl: ${{ parameters.testUrl }}
       securityRules: ${{ parameters.securityRules }}
   - template: ../steps/zip-test-results.yaml
