@@ -68,7 +68,6 @@ jobs:
     parameters:
       subscription: ${{ parameters.subscription }}
       containerRegistry: ${{ parameters.containerRegistry }}
-      registry: ${{ parameters.registry }}
       repository: ${{ parameters.repository }}
       tags: ${{ parameters.tags }}
       volumes: ${{ parameters.hostVolume }}:${{ parameters.containerVolume }}
