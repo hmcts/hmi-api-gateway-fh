@@ -26,21 +26,18 @@ parameters:
       - name: ApiZapScan
         repository: hmi/apim-tests-owasp
 
-    - name: dev
-      subscription: DTS-SHAREDSERVICES-DEV
-      group: HMI-APIM-BUILD-DEV
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        serenity: false
-        dependsOn: UnitTest
-      - name: FunctionalTest
-        command: functional
-        serenity: true
-        dependsOn: SmokeTest
+    # - name: dev
+    #   subscription: DTS-SHAREDSERVICES-DEV
+    #   group: HMI-APIM-BUILD-DEV
+    #   tests_gradle:
+    #   - name: UnitTest 
+    #     command: clean test
+    #   - name: SmokeTest
+    #     command: clean smoke
+    #     dependsOn: UnitTest
+    #   - name: FunctionalTest
+    #     command: clean functional
+    #     dependsOn: SmokeTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
