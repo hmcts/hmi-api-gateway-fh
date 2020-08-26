@@ -36,10 +36,10 @@ steps:
 - task: Docker@1
   displayName: 'Run an image'
   inputs:
-    azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
-    azureContainerRegistry: ssprivatesbox.azurecr.io
+    azureSubscriptionEndpoint: ${{ parameters.subscription }}
+    azureContainerRegistry: ${{ parameters.containerRegistry }}
     command: 'Run an image'
-    imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
+    imageName: ${{ parameters.containerRegistry }}/hmi/apim-tests-owasp:latest'
     volumes: '/home/vsts/work/:/zap/wrk/:rw'
     envVars: |         
       TEST_URL=https://www.example.com/openapi.json

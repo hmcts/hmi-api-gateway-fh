@@ -24,6 +24,7 @@ parameters:
         dependsOn: SmokeTest
       tests_security:
       - name: ApiZapScan
+        containerRegistry: ssprivatesbox.azurecr.io
         repository: hmi/apim-tests-owasp
 
     # - name: dev
@@ -123,6 +124,7 @@ stages:
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
             repository: ${{ test.repository }}
+            containerRegistry: ${{ test.containerRegistry }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
             hostVolume: /home/vsts/work/zap/
