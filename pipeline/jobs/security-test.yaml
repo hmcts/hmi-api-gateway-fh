@@ -23,6 +23,9 @@ parameters:
   - name: repository
     type: string
 
+  - name: containerRegistry
+    type: string
+
   - name: dockerfile
     type: string
 
@@ -63,6 +66,8 @@ jobs:
   #     tags: ${{ parameters.tags }}
   - template: ../steps/run_owasp_api_scan.yaml
     parameters:
+      subscription: ${{ parameters.subscription }}
+      containerRegistry: ${{ parameters.containerRegistry }}
       registry: ${{ parameters.registry }}
       repository: ${{ parameters.repository }}
       tags: ${{ parameters.tags }}
