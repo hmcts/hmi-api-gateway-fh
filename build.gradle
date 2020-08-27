@@ -291,7 +291,7 @@ repositories {
 def versions = [
   junit           : '5.6.2',
   junitPlatform   : '1.6.2',
-  reformLogging   : '5.1.5',
+  reformLogging   : '5.1.7',
   springBoot      : springBoot.class.package.implementationVersion,
   springfoxSwagger: '2.9.2',
   pact_version        : '3.6.15',
@@ -375,13 +375,15 @@ dependencies {
     exclude group: 'org.hamcrest', module: 'hamcrest-core'
   }
   smokeTestCompile ("org.springframework.boot:spring-boot-starter-test")
+  smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
+  smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.reformLogging
+  smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging-httpcomponents', version: versions.reformLogging
+  smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
 
   smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
   smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
   smokeTestImplementation 'io.rest-assured:rest-assured:4.2.0'
   smokeTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
-  smokeTestImplementation 'org.apache.httpcomponents:httpclient:4.5.12'
-
 
   smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
   smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
