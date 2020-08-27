@@ -49,11 +49,11 @@ jobs:
   - ${{ if contains(parameters.serenity, true) }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
-        zipName: ${{ parameters.displayName }}
+        zipName: ${{ parameters.displayName }}-serenity
         directory: /target/site/serenity
   - template: ../steps/zip-test-results.yaml
     parameters:
-      zipName: ${{ parameters.displayName }}
+      zipName: ${{ parameters.displayName }}-gradle
       directory: /reports/tests/${{ parameters.command }}
   - template: ../steps/publish-test-results.yaml
     parameters:
