@@ -54,7 +54,11 @@ jobs:
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}-gradle
+<<<<<<< HEAD
       directory: /build/reports/tests/${{ parameters.command }}
+=======
+      directory: /reports/tests/${{ parameters.command }}
+>>>>>>> 486b73171f6690f4f9c2af71aa02bc41cecd77bc
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}
