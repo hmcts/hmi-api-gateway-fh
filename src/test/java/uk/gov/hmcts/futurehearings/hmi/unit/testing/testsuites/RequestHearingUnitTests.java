@@ -28,7 +28,6 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
-@Disabled("Disabled as test is validating against the payload")
 public class RequestHearingUnitTests {
 
     private static final String CASE_TITLE_MISSING_REQ_PATH = "requests/case-title-missing-request.json";
