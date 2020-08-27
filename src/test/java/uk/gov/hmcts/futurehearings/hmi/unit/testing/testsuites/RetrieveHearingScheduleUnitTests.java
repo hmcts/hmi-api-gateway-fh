@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import com.aventstack.extentreports.ExtentTest;
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +25,6 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveHearingS
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
-//@Disabled("Disabled until test design is done")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RetrieveHearingScheduleUnitTests {
