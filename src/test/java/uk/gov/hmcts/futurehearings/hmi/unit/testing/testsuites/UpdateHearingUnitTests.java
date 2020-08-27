@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import com.aventstack.extentreports.ExtentTest;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -16,16 +15,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.endReport;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingResponseVerifier.*;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
-//@Disabled("Disabled until test design is done")
 public class UpdateHearingUnitTests {
 
     public static final String CORRECT_UPDATE_HEARING_REQUEST_JSON = "requests/correct-update-hearing-request.json";
