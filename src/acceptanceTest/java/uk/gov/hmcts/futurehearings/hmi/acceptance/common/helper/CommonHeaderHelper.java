@@ -182,6 +182,34 @@ public class CommonHeaderHelper {
         );
     }
 
+    public static final Map<String,String> createHeaderWithDeprecatedHeaderValue(final String subscriptionKey,
+                                                                                 final String deprecatedHeaderKey,
+                                                                                 final String deprecatedHeaderVal
+    ) {
+        //Set invalid value for specific header key
+        final String acceptType = deprecatedHeaderKey.equalsIgnoreCase("X-Accept")?MediaType.APPLICATION_PDF_VALUE:MediaType.APPLICATION_JSON_VALUE;
+        final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System")?"S&L":"CFT";
+        final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System")?"CFT":"S&L";
+        final String requestType = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Type")?"Robbery":"Assault";
+        final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At")?"2002-10-02T15:00:00*05Z":"2012-03-19T07:22:00Z";
+        final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At")?"2002-10-02T15:00:00*05Z":"2012-03-19T07:22:00Z";
+
+        Map<String,String> headers = convertToMap(buildStandardSytemHeaderPart(
+                MediaType.APPLICATION_JSON_VALUE,
+                acceptType,
+                null,
+                null,
+                subscriptionKey,
+                null),
+                buildStandardBuinessHeaderPart(requestCreatedAt,
+                        requestProcessedAt,
+                        sourceSystem,
+                        destinationSystem,
+                        requestType));
+        headers.put(deprecatedHeaderKey, deprecatedHeaderVal);
+        return Collections.unmodifiableMap(headers);
+    }
+
     private static Map<String,String> buildHeaderWithValues(final String contentType,
                                                             final String acceptType,
                                                             final String subscriptionKey,

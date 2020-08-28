@@ -18,10 +18,10 @@ public class RestClientTemplate {
                                              final HttpStatus expectedHttpStatus,
                                              final HttpMethod httpMethod) {
 
-        log.info("The value of the baseURI : "  + RestAssured.baseURI);
-        log.info("The value of the path : "     + requestURL);
-        log.info("The value of the header : "   + headersAsMap);
-        log.info("The value of the HTTP Status : " + expectedHttpStatus.value());
+        log.debug("The value of the baseURI : "  + RestAssured.baseURI);
+        log.debug("The value of the path : "     + requestURL);
+        log.debug("The value of the header : "   + headersAsMap);
+        log.debug("The value of the HTTP Status : " + expectedHttpStatus.value());
 
 
        switch (httpMethod) {
@@ -51,14 +51,17 @@ public class RestClientTemplate {
                            .when()
                            .get().then().extract().response();
                } else {
-                   log.info("Query Params " + params);
-                   return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                   log.debug("Query Params " + params);
+                   Response response = RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                            .given()
                            .queryParams(params)
                            .headers(headersAsMap)
                            .basePath(requestURL)
                            .when()
                            .get().then().extract().response();
+
+                   log.debug(response.getBody().asString());
+                   return response;
                }
            default :
                throw new IllegalArgumentException("HTTP method not identified");
