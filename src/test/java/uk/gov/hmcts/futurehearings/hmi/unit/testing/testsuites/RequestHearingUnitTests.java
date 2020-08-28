@@ -25,7 +25,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 //@Disabled("Disabled as test is validating against the payload")
 public class RequestHearingUnitTests {
