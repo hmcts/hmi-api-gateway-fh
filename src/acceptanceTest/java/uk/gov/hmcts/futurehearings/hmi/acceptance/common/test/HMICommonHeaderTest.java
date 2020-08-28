@@ -4,6 +4,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesNull;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithCorruptedHeaderKey;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDeprecatedHeaderValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRemovedHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
@@ -44,19 +45,11 @@ public abstract class HMICommonHeaderTest {
     private String inputPayloadFileName;
     private Map<String, String> urlParams;
 
-    private static final String NULL_CHECK = null ;
-    private static final String EMPTY_VALUE_CHECK = "";
-    private static final String ONE_SPACE_VALUE_CHECK = " ";
-    private static final String RANDOM_VALUE_CHECK = "RANDOMVALUE";
-    private static final String REQUEST_TYPE_ASSAULT = "ASSAULT";
-    private static final String REQUEST_TYPE_THEFT = "THEFT";
-
-
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
     @Test
-    @DisplayName("Message successfully validated")
+    @DisplayName("Successfully validated response")
     public void test_successful_response() throws Exception {
         log.info("Message successfully validated");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -68,7 +61,7 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
+    @DisplayName("Incorrect Url with correct Header")
     public void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURLForNotFound(),
@@ -81,7 +74,7 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
+    @DisplayName("Headers with all empty and null values")
     public void test_no_headers_populated() throws Exception {
         //2 Sets of Headers Tested - Nulls and Empty
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -110,8 +103,8 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Message with Subscription Key Truncated in the Header")
-    public void test_subscription_key_truncated() throws Exception {
+    @DisplayName("Subscription Key Truncated in the Header")
+    public void test_subscriptionkey_key_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
@@ -121,7 +114,21 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System");
     }
 
-    @ParameterizedTest(name = "Message with Subscription Key Invalid (Null,Empty,Spaced or Wrong Value) in the Header - Param : {0}")
+    @Test
+    @DisplayName("Subscription Key Value Truncated in the Header")
+    public void test_subscriptionkey_value_truncated() throws Exception {
+        commonDelegate.test_expected_response_for_supplied_header(
+                getApiSubscriptionKey().substring(0,getApiSubscriptionKey().length()-1),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader("  "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+    }
+
+    @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} -> {1}")
     @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\""})
     public void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -132,16 +139,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getApiName(),
                 "Missing/Invalid Header Source-System");
-       /*
-        commonDelegate.test_expected_response_for_supplied_header(
-                getApiSubscriptionKey().substring(0,getApiSubscriptionKey().length()-1),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader("  "),
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.UNAUTHORIZED,
-                getApiName(),
-                "Missing/Invalid Header Source-System");*/
     }
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} -> {1}")
@@ -246,7 +243,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0}")
+    @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} -> {1}")
     @CsvSource({"Null_Value, null", "Invalid_Value, Robbery"})
     public void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
             commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -285,7 +282,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Processed At System Header With Valid Date Format - Param : {0} : {1}")
+    @ParameterizedTest(name = "Request Processed At System Header With Valid Date Format - Param : {0} -> {1}")
     @CsvSource({"Valid_Date_Format,2002-10-02T10:00:00-05:00",
             "Valid_Date_Format,2002-10-02T15:00:00Z",
             "Valid_Date_Format,2002-10-02T15:00:00.05Z",
@@ -302,7 +299,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0}")
+    @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} -> {1}")
     @CsvSource({"Valid_Date_Format, 2012-03-19T07:22:00Z", "Valid_Date_Format, 2002-10-02T15:00:00Z",
             "Valid_Date_Format, 2002-10-02T15:00:00.05Z",
             "Valid_Date_Format, 2019-10-12 07:20:50.52Z"})
@@ -315,6 +312,28 @@ public abstract class HMICommonHeaderTest {
                     getHttpSucessStatus(),
                     getApiName(),
                     null);
+
+    }
+
+    @ParameterizedTest(name = "Deprecated System headers with valid values - Param : {0} -> {1}")
+    @CsvSource({"X-Accept, application/json",
+            "X-Source-System, CFT",
+            "X-Destination-System, S&L",
+            "X-Request-Created-At, 2012-03-19T07:22:00Z",
+            "X-Request-Processed-At, 2012-03-19T07:22:00Z",
+            "X-Request-Type, Assault"
+    })
+    public void test_deprecated_header_values(String deprecatedHeaderKey, String deprecatedHeaderVal) throws Exception {
+        final HttpStatus httpStatus = deprecatedHeaderKey.equalsIgnoreCase("X-Accept")?HttpStatus.NOT_ACCEPTABLE:HttpStatus.BAD_REQUEST;
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithDeprecatedHeaderValue(getApiSubscriptionKey(), deprecatedHeaderKey, deprecatedHeaderVal),
+                getUrlParams(),
+                getHttpMethod(),
+                httpStatus,
+                getApiName(),
+                null);
 
     }
 }
