@@ -1,0 +1,80 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+
+  - name: subscription
+    type: string
+
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
+
+  - name: storageContainer
+    type: string
+
+  - name: registry
+    type: string
+
+  - name: repository
+    type: string
+
+  - name: containerRegistry
+    type: string
+
+  - name: dockerfile
+    type: string
+
+  - name: tags
+    type: string
+
+  - name: testUrl
+    type: string
+    
+  - name: securityRules
+    type: string
+
+  - name: variables
+    type: object
+
+jobs:
+- job: ${{ parameters.displayName }}
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/push-img.yaml
+    parameters:
+      registry: ${{ parameters.registry }}
+      repository: ${{ parameters.repository }}
+      dockerfile: ${{ parameters.dockerfile }}
+      tags: ${{ parameters.tags }}
+  - template: ../steps/run_owasp_api_scan.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+      containerRegistry: ${{ parameters.containerRegistry }}
+      repository: ${{ parameters.repository }}
+      tags: ${{ parameters.tags }}
+      directory: /zap
+      testUrl: ${{ parameters.testUrl }}
+      securityRules: ${{ parameters.securityRules }}
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: ${{ parameters.displayName }}
+      directory: /zap
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      zipName: ${{ parameters.displayName }}
+      storageContainer: $(storageContainer)

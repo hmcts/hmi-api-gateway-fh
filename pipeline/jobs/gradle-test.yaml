@@ -11,6 +11,9 @@ parameters:
   - name: subscription
     type: string
 
+  - name: resourceGroup
+    type: string
+
   - name: storageAccount
     type: string
 
@@ -36,7 +39,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
@@ -46,10 +49,12 @@ jobs:
   - ${{ if contains(parameters.serenity, true) }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
-        command: ${{ parameters.command }}
+        zipName: ${{ parameters.displayName }}
+        directory: /target/site/serenity
     - template: ../steps/publish-test-results.yaml
       parameters:
-        command: ${{ parameters.command }}
+        zipName: ${{ parameters.displayName }}
         subscription: ${{ parameters.subscription }}
+        resourceGroup: $(resourceGroup)
         storageAccount: $(storageAccount)
         storageContainer: $(storageContainer)
