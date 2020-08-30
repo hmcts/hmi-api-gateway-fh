@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesNull;
@@ -21,8 +22,11 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -48,12 +52,46 @@ public abstract class HMICommonHeaderTest {
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
+    @BeforeEach
+    public void beforeEach(TestInfo info) {
+        log.debug("Before execute : " + info.getTestMethod().get().getName());
+    }
+
+    @AfterEach
+    public void afterEach(TestInfo info) {
+        log.debug("After execute : "+info.getTestMethod().get().getName());
+    }
+
     @Test
-    @DisplayName("Successfully validated response")
-    public void test_successful_response() throws Exception {
+    @DisplayName("Successfully validated response with all the header values")
+    public void test_successful_response_with_a_complete_header() throws Exception {
         log.info("Message successfully validated");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
+                createCompletePayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(), getApiName(),null);
+    }
+
+    @Test
+    @DisplayName("Successfully validated response with mandatory header values")
+    public void test_successful_response_with_a_mandatory_header() throws Exception {
+        log.info("Message successfully validated");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(), getApiName(),null);
+    }
+
+    @Test
+    @DisplayName("Successfully validated response with an empty payload")
+    public void test_successful_response_for_empty_json_body() throws Exception {
+        log.info("Message successfully validated");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), "empty-json-payload.json",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
@@ -128,7 +166,7 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System");
     }
 
-    @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} --> {1}")
     @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\""})
     public void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -141,7 +179,7 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System");
     }
 
-    @ParameterizedTest(name = "Source System Header invalid values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
     @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Source_System, S&L"})
     public void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -154,7 +192,7 @@ public abstract class HMICommonHeaderTest {
                 null);
     }
 
-    @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
     @CsvSource({ "Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"})
     public void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -167,7 +205,7 @@ public abstract class HMICommonHeaderTest {
                 null);
     }
 
-    @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} --> {1}")
     @CsvSource({ "Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
             "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
             "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
@@ -223,7 +261,7 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System");
     }
 
-    @ParameterizedTest(name = "Request Processed At System Header With Invalid Values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Request Processed At System Header With Invalid Values - Param : {0} --> {1}")
     @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Invalid_Value, value",
             "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
             "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
@@ -243,7 +281,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Invalid_Value, Robbery"})
     public void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
             commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -256,7 +294,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Accept System Header with invalid format - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Accept System Header with invalid format - Param : {0} --> {1}")
     @CsvSource({ "Invalid_Value, Random", "Invalid_Format, application/pdf", "Invalid_Format, application/text"})
     public void test_accept_at_with_invalid_values(String acceptTypeKey, String acceptTypeVal) throws Exception {
             commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -282,7 +320,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Processed At System Header With Valid Date Format - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Request Processed At System Header With Valid Date Format - Param : {0} --> {1}")
     @CsvSource({"Valid_Date_Format,2002-10-02T10:00:00-05:00",
             "Valid_Date_Format,2002-10-02T15:00:00Z",
             "Valid_Date_Format,2002-10-02T15:00:00.05Z",
@@ -299,7 +337,7 @@ public abstract class HMICommonHeaderTest {
                     null);
     }
 
-    @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} --> {1}")
     @CsvSource({"Valid_Date_Format, 2012-03-19T07:22:00Z", "Valid_Date_Format, 2002-10-02T15:00:00Z",
             "Valid_Date_Format, 2002-10-02T15:00:00.05Z",
             "Valid_Date_Format, 2019-10-12 07:20:50.52Z"})
@@ -315,7 +353,7 @@ public abstract class HMICommonHeaderTest {
 
     }
 
-    @ParameterizedTest(name = "Deprecated System headers with valid values - Param : {0} -> {1}")
+    @ParameterizedTest(name = "Deprecated System headers with valid values - Param : {0} --> {1}")
     @CsvSource({"X-Accept, application/json",
             "X-Source-System, CFT",
             "X-Destination-System, S&L",
