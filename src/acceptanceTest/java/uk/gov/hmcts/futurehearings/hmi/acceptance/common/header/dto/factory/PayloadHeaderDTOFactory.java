@@ -47,15 +47,12 @@ public class PayloadHeaderDTOFactory {
                 .requestType(requestType).build();
     }
 
-    public static final Map<String,String> convertToMap (final SystemHeaderDTO systemHeaderDTO,
-                                                           final BusinessHeaderDTO businessHeaderDTO) {
+    public static final Map<String,String> convertToMapWithMandatoryHeaders(final SystemHeaderDTO systemHeaderDTO,
+                                                                            final BusinessHeaderDTO businessHeaderDTO) {
         final Map<String, String>  headerMap = new HashMap<>();
         headerMap.put("Ocp-Apim-Subscription-Key",systemHeaderDTO.subscriptionKey());
         headerMap.put("Content-Type",systemHeaderDTO.contentType());
         headerMap.put("Accept",systemHeaderDTO.accept());
-        //headerMap.put("Content-Encoding",systemHeaderDTO.contentEncoding());
-        //headerMap.put("Authorization",systemHeaderDTO.authorization());
-
         headerMap.put("Source-System",businessHeaderDTO.sourceSystem());
         headerMap.put("Destination-System",businessHeaderDTO.destinationSystem());
         headerMap.put("Request-Created-At",businessHeaderDTO.requestCreatedAt());
@@ -64,11 +61,19 @@ public class PayloadHeaderDTOFactory {
         return headerMap;
     }
 
+    public static final Map<String,String> convertToMapWithAllHeaders(final SystemHeaderDTO systemHeaderDTO,
+                                                                            final BusinessHeaderDTO businessHeaderDTO) {
+        final Map<String,String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO,businessHeaderDTO);
+        headerMap.put("Cache-Control",systemHeaderDTO.cacheControl());
+        headerMap.put("Content-Encoding",systemHeaderDTO.contentEncoding());
+        return headerMap;
+    }
+
     public static final Map<String,String> convertToMapAfterHeadersRemoved (final SystemHeaderDTO systemHeaderDTO,
                                                          final BusinessHeaderDTO businessHeaderDTO,
                                                          final List<String> headersToRemove) {
 
-        final Map<String, String>  headerMap = convertToMap(systemHeaderDTO,businessHeaderDTO);
+        final Map<String, String>  headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO,businessHeaderDTO);
         if (Objects.nonNull(headersToRemove)) {
             headersToRemove.stream().forEach((o)-> {
                 headerMap.remove(o.trim());
@@ -81,7 +86,7 @@ public class PayloadHeaderDTOFactory {
                                                                           final BusinessHeaderDTO businessHeaderDTO,
                                                                           final List<String> headersToTruncate) {
 
-        final Map<String, String>  headerMap = convertToMap(systemHeaderDTO,businessHeaderDTO);
+        final Map<String, String>  headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO,businessHeaderDTO);
         if (Objects.nonNull(headersToTruncate)) {
             headersToTruncate.stream().forEach((o)-> {
                 if (headerMap.containsKey(o)) {

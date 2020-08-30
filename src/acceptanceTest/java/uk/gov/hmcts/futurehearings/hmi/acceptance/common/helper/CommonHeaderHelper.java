@@ -2,7 +2,8 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMap;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersRemoved;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 
@@ -14,7 +15,20 @@ import org.springframework.http.MediaType;
 
 public class CommonHeaderHelper {
 
+    public static final Map<String,String> createCompletePayloadHeader (final String subscriptionKey) {
 
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "no-cache",
+                null,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                "S&L",
+                "Assault"
+        );
+    }
     public static final Map<String,String> createStandardPayloadHeader (final String subscriptionKey) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
@@ -194,7 +208,7 @@ public class CommonHeaderHelper {
         final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At")?"2002-10-02T15:00:00*05Z":"2012-03-19T07:22:00Z";
         final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At")?"2002-10-02T15:00:00*05Z":"2012-03-19T07:22:00Z";
 
-        Map<String,String> headers = convertToMap(buildStandardSytemHeaderPart(
+        Map<String,String> headers = convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
                 null,
@@ -218,7 +232,7 @@ public class CommonHeaderHelper {
                                                             final String sourceSystem,
                                                             final String destinationSystem,
                                                             final String requestType) {
-        return Collections.unmodifiableMap(convertToMap(buildStandardSytemHeaderPart(
+        return Collections.unmodifiableMap(convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
@@ -230,7 +244,30 @@ public class CommonHeaderHelper {
                         sourceSystem,
                         destinationSystem,
                         requestType)));
-        //buildHeaderWithValuesWithKeysTruncated
+    }
+
+    private static Map<String,String> buildHeaderWithValues(final String contentType,
+                                                            final String acceptType,
+                                                            final String subscriptionKey,
+                                                            final String cacheControl,
+                                                            final String contentEncoding,
+                                                            final String requestCreatedDate,
+                                                            final String requestProcessedAt,
+                                                            final String sourceSystem,
+                                                            final String destinationSystem,
+                                                            final String requestType) {
+        return Collections.unmodifiableMap(convertToMapWithAllHeaders(buildStandardSytemHeaderPart(
+                contentType,
+                acceptType,
+                null,
+                contentEncoding,
+                subscriptionKey,
+                cacheControl),
+                buildStandardBuinessHeaderPart(requestCreatedDate,
+                        requestProcessedAt,
+                        sourceSystem,
+                        destinationSystem,
+                        requestType)));
     }
 
     private static Map<String,String> buildHeaderWithValuesWithKeysTruncated(final String contentType,
