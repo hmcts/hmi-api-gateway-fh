@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
+import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
@@ -19,6 +20,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate
 import java.util.Arrays;
 import java.util.Map;
 
+import io.restassured.RestAssured;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +79,6 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Successfully validated response with all the header values")
     public void test_successful_response_with_a_complete_header() throws Exception {
-        log.info("Message successfully validated response with all the header values");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createCompletePayloadHeader(getApiSubscriptionKey()),
@@ -89,7 +90,6 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Successfully validated response with mandatory header values")
     public void test_successful_response_with_a_mandatory_header() throws Exception {
-        log.info("Message successfully validated response with mandatory header values");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -101,13 +101,27 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Successfully validated response with an empty payload")
     public void test_successful_response_for_empty_json_body() throws Exception {
-        log.info("Message successfully validated response with an empty payload");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "empty-json-payload.json",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
                 getHttpSucessStatus(), getApiName(),null);
+    }
+
+    @Test
+    @DisplayName("Successfully validated response with an empty payload")
+    public void test_successful_response_for_content_type_with_charset_appended() throws Exception {
+        RestAssured.config = RestAssured.config()
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(true));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(), getApiName(),null);
+        RestAssured.config = RestAssured.config()
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
 
     @Test
