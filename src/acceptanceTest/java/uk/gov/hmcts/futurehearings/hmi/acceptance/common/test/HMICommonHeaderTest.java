@@ -1,26 +1,28 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderNullFields;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.createPayloadHeaderRemoveFields;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithAllValuesEmpty;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithAllValuesNull;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithEmptyRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithLongRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithNullRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSingleCharRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSourceSystemValueAsCFT;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createHeaderWithSpacedRequestCreatedAt;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.HearingHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesNull;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithCorruptedHeaderKey;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRemovedHeaderKey;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestProcessedAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestTypeAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -31,10 +33,21 @@ import org.springframework.http.HttpStatus;
 @Getter
 public abstract class HMICommonHeaderTest {
 
+
     private String apiSubscriptionKey;
     private String relativeURL;
+    private String relativeURLForNotFound;
     private HttpMethod httpMethod;
+    private HttpStatus httpSucessStatus;
+    private String apiName;
     private String inputPayloadFileName;
+    private Map<String, String> urlParams;
+
+    private static final String NULL_CHECK = null ;
+    private static final String EMPTY_VALUE_CHECK = "";
+    private static final String ONE_SPACE_VALUE_CHECK = " ";
+    private static final String RANDOM_VALUE_CHECK = "RANDOMVALUE";
+
 
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
@@ -42,136 +55,518 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Message successfully validated")
     public void test_successful_response() throws Exception {
+        log.info("Message successfully validated");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK);
-    }
-
-    @Test
-    @DisplayName("Message with no Source System defined in the Header")
-    public void test_source_system_removed() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createPayloadHeaderRemoveFields(getApiSubscriptionKey(),
-                Arrays.asList("Source-System")), getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a 'Null Content-Type Header' in the Request Header")
-    @Test
-    @DisplayName("Message with all Header Values Populated as Nulls")
-    public void test_supplied_all_headers_null() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithAllValuesNull(getApiSubscriptionKey()),
-                getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
-    }
-
-    @Disabled("This Test May have to be done manually as Rest Assured Does not accept a Empty Content Type in the Request Header")
-    @Test
-    @DisplayName("Message with all Header Values Populated as Nulls")
-    public void test_supplied_all_headers_empty() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithAllValuesEmpty(getApiSubscriptionKey()),
-                getHttpMethod(),
-                HttpStatus.UNAUTHORIZED);
+                getHttpSucessStatus(), getApiName(),null);
     }
 
     @Test
     @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
-    public void test_invalidURL() throws Exception {
+    public void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL().replace("hearings","hearing"),
+                getRelativeURLForNotFound(),
                 //Performed a near to the Real URL Transformation
                 getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.NOT_FOUND, getApiName(),"Resource not found");
     }
 
     @Test
-    @DisplayName("Message with a Source System defined with value 'CFT'")
-    public void test_supplied_source_system() throws Exception {
+    @DisplayName("Message with a proper Header but an Improper URL to replicate a NOT FOUND")
+    public void test_no_headers_populated() throws Exception {
+        //2 Sets of Headers Tested - Nulls and Empty
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithSourceSystemValueAsCFT(getApiSubscriptionKey()),
+                getRelativeURL(),
+                getInputPayloadFileName(),
+                createHeaderWithAllValuesEmpty(),
+                //The Content Type Has to be Populated for Rest Assured to function properly
+                //So this Test was manually executed in Postman Manually as well with the same Order Number
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Resource not found");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(),
+                getInputPayloadFileName(),
+                createHeaderWithAllValuesNull(),
+                //The Content Type Has to be Populated for Rest Assured to function properly
+                //So this Test was manually executed in Postman Manually as well with the same Order Number
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Resource not found");
     }
 
     @Test
-    @DisplayName("Message with a Request Created At as Null")
-    public void test_supplied_request_created_at_as_null() throws Exception {
+    @DisplayName("Message with Subscription Key Truncated in the Header")
+    public void test_subscription_key_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithNullRequestCreatedAt(getApiSubscriptionKey()),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                Arrays.asList("Ocp-Apim-Subscription-Key")), getUrlParams(), getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
     }
 
     @Test
-    @DisplayName("Message with a Request Created At as Empty")
-    public void test_supplied_request_created_at_as_empty() throws Exception {
+    @DisplayName("Message with Subscription Key Invalid(Null,Empty,Spaced or Wrong Value) Header")
+    public void test_subscription_key_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmptyRequestCreatedAt(getApiSubscriptionKey()),
+                createStandardPayloadHeader(null),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(""),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader("  "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(
+                getApiSubscriptionKey().substring(0,getApiSubscriptionKey().length()-1),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader("  "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.UNAUTHORIZED,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
     }
 
     @Test
-    @DisplayName("Message with a Request Created At as a Space")
-    public void test_supplied_request_created_at_as_spaced() throws Exception {
+    @Order(6)
+    @DisplayName("Message with Source System Header Invalid(Null,Empty,Spaced or Wrong Values(S&L,SNL)) Header")
+    public void test_source_system_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithSpacedRequestCreatedAt(getApiSubscriptionKey()),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),null),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),""),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey()," "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),"S&L"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),"SNL"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
     }
 
-    @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
     @Test
-    @DisplayName("Message with a Request Created At as a Single Character")
-    public void test_supplied_request_created_at_as_single_character() throws Exception {
+    @DisplayName("Message with Destination System Header Invalid(Null,Empty,Spaced or Wrong Values(CFT,SNL)) Header")
+    public void test_destination_system_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithSingleCharRequestCreatedAt(getApiSubscriptionKey()),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(),null),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(),""),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey()," "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(),"CFT"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(),"SNL"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
     }
 
-    @Disabled("TODO - Had to Disable this test as the Headers were brought back to Source due to a Pipeline build Overwrite or so")
     @Test
-    @DisplayName("Message with a Request Created At as a Long String")
-    public void test_supplied_request_created_at_as_long_string() throws Exception {
+    @DisplayName("Message with Request Created At System Header Invalid (Null,Empty,Spaced or Wrong Values Header)")
+    public void test_request_created_at_invalid_values() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithLongRequestCreatedAt(getApiSubscriptionKey()),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), null),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK);
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), ""),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), " "),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "value"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-02-31T10:00:30-05:00Z"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-02-31T1000:30-05:00"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-02-31T10:00-30-05:00"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-02-31 10:00-30-05:00"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-10-02T15:00:00*05Z"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-10-02 15:00?0005Z"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), "2002-10-02T15:00:00"),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                null);
     }
 
     @Test
-    @DisplayName("Message with a Source System defined in the Header as Null")
-    public void test_source_system_nulled() throws Exception {
+    @DisplayName("Message with mandatory Keys truncated from the Header")
+    public void test_header_keys_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createPayloadHeaderNullFields(getApiSubscriptionKey(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Content-Type")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Accept")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.NOT_ACCEPTABLE,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
                         Arrays.asList("Source-System")),
+                getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Destination-System")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Created-At")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Processed-At")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Type")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
     }
 
     @Test
-    @DisplayName("Message with a Source System defined in the Header as Empty")
-    public void test_source_system_empty() throws Exception {
+    @DisplayName("Message with mandatory keys removed from the Header")
+    public void test_with_keys_removed_from_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createPayloadHeaderNullFields(getApiSubscriptionKey(), Arrays.asList("Source-System")),
-                getHttpMethod(), HttpStatus.BAD_REQUEST);
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Content-Type")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Accept")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.NOT_ACCEPTABLE,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Source-System")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Destination-System")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Created-At")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Processed-At")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
+                        Arrays.asList("Request-Type")),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getApiName(),
+                "Missing/Invalid Header Source-System");
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Processed At' System Header Invalid Values (Null,Empty,Spaced or Incorrect date format values)")
+    public void test_request_processed_at_with_invalid_values() throws Exception {
+        final List<String> requestProcessedTestValues = new ArrayList<String>();
+        requestProcessedTestValues.add(NULL_CHECK);
+        requestProcessedTestValues.add(EMPTY_VALUE_CHECK);
+        requestProcessedTestValues.add(ONE_SPACE_VALUE_CHECK);
+        requestProcessedTestValues.add(RANDOM_VALUE_CHECK);
+        requestProcessedTestValues.add("2002-02-31T10:00:30-05:00Z");
+        requestProcessedTestValues.add("2002-02-31T1000:30-05:00");
+        requestProcessedTestValues.add("2002-02-31T10:00-30-05:00");
+        requestProcessedTestValues.add("2002-10-02T15:00:00*05Z");
+        requestProcessedTestValues.add("2002-10-02 15:00?0005Z");
+
+        for (String testValue : requestProcessedTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Request Type' System Header Invalid Values(Null,Empty,Spaced or Incorrect value other than Assault or Theft)")
+    public void test_request_type_at_with_invalid_values() throws Exception {
+        final List<String> requestTypeTestValues = new ArrayList<String>();
+        requestTypeTestValues.add(NULL_CHECK);
+        requestTypeTestValues.add(EMPTY_VALUE_CHECK);
+        requestTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
+        requestTypeTestValues.add(RANDOM_VALUE_CHECK);
+
+        for (String testValue : requestTypeTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
+    }
+
+    @Test
+    @DisplayName("Message with 'Content Type' System Header Invalid Values(Null,Empty,Spaced or Incorrect format)")
+    public void test_content_type_at_with_invalid_values() throws Exception {
+        final List<String> contentTypeTestValues = new ArrayList<String>();
+        contentTypeTestValues.add(NULL_CHECK);
+        contentTypeTestValues.add(EMPTY_VALUE_CHECK);
+        contentTypeTestValues.add(ONE_SPACE_VALUE_CHECK);
+        contentTypeTestValues.add(RANDOM_VALUE_CHECK);
+        contentTypeTestValues.add("application/pdf");
+
+        for (String testValue : contentTypeTestValues) {
+            System.out.println(testValue);
+            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                    getRelativeURL(), getInputPayloadFileName(),
+                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), testValue),
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getApiName(),
+                    null);
+        }
     }
 }

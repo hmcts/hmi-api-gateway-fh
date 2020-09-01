@@ -1,13 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.cdc.consumer;
 
-import static uk.gov.hmcts.futurehearings.hmi.cdc.consumer.common.TestingUtils.readFileContents;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
@@ -25,6 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.cdc.consumer.common.TestingUtils.readFileContents;
 
 @ActiveProfiles("contract")
 @SpringBootTest(classes = {Application.class})
@@ -44,16 +43,14 @@ public class HearingAPIConsumerTest {
 
     @BeforeEach
     public void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Ocp-Apim-Trace", "true");
-        headersAsMap.put("Company-Name", "HMCTS");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source", "SnL");
-        headersAsMap.put("Destination", "CFT");
-        headersAsMap.put("DateTime", "datetimestring");
-        headersAsMap.put("RequestType", "TypeOfCase");
-
+        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
+        headersAsMap.put("Source-System", "CFT");
+        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
+        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
+        headersAsMap.put("Request-Type", "ASSAULT");
     }
 
    @Pact(provider = "SandL_API", consumer = "HMI_API")
