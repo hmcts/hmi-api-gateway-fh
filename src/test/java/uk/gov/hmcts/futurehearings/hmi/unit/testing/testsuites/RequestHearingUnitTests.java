@@ -31,7 +31,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 public class RequestHearingUnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/correct-hearing-request-payload.json";
-    private static final String CASE_ID_MISSING_REQ_PATH = "requests/case-id-missing-request.json";
+    private static final String INVALID_PAYLOAD = "requests/invalid-hearing-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -103,7 +103,7 @@ public class RequestHearingUnitTests {
     @Order(3)
     @DisplayName("Test for Correct Headers with Invalid Payload")
     public void testHearingRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
-        final String input = givenAPayload(CASE_ID_MISSING_REQ_PATH);
+        final String input = givenAPayload(INVALID_PAYLOAD);
         final Response response = whenHearingRequestIsInvokedWithCorrectHeaders(input);
         thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
     }
