@@ -43,9 +43,14 @@ stages:
     displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
+    - template: pipeline/jobs/create-storage.yaml
+      parameters:
+        subscription: ${{ environment.subscription }}
+        resourceGroup: hmi-apim-${{ environment.name }}-rg
 
     - template: pipeline/jobs/terraform.yaml
       parameters:
+        dependsOn: deleteResources
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
         displayName: Build infrastructure with Terraform
