@@ -1,0 +1,99 @@
+<policies>
+    <inbound>
+        <base />
+        <cors>
+            <allowed-origins>
+                <origin>*</origin>
+            </allowed-origins>
+            <allowed-methods>
+                <method>GET</method>
+                <method>POST</method>
+            </allowed-methods>
+        </cors>
+        <!-- set a header to enable mocks -->
+        ${enableMockHeader}
+        <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
+            <value>CFT</value>
+        </check-header>
+        <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
+            <value>S&amp;L</value>
+        </check-header>
+        <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true">
+        </check-header>
+        <check-header name="Request-Processed-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Processed-At" ignore-case="true">
+        </check-header>
+        <check-header name="Request-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Type" ignore-case="true">
+            <value>THEFT</value>
+            <value>ASSAULT</value>
+        </check-header>
+        <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+        </check-header>
+        <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+            <value>application/json;charset=UTF-8</value>
+            <value>application/json; charset=UTF-8</value>
+        </check-header>
+        <choose>
+            <when condition="@(context.Request.Headers["Request-Created-At"] == null)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 400),
+                            new JProperty("description", "Malformed request. Missing header value for : 'Request-Created-At'")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <choose>
+            <when condition="@(!Regex.IsMatch(context.Request.Headers.GetValueOrDefault("Request-Created-At",""), @"^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt| ]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500)))">
+                <return-response>
+                    <set-status code="400" reason="Bad request - &apos;Invalid Request-Created-At&apos; http header" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@(
+                        new JObject(new JProperty("statusCode", 400),
+                        new JProperty("description", "Missing or invalid header 'Request-Created-At'.")).ToString())</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <choose>
+            <when condition="@(context.Request.Headers["Request-Processed-At"] == null)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 400),
+                            new JProperty("description", "Malformed request. Missing header value for : 'Request-Processed-At'")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <choose>
+            <when condition="@(!Regex.IsMatch(context.Request.Headers.GetValueOrDefault("Request-Processed-At",""), @"^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt| ]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500)))">
+                <return-response>
+                    <set-status code="400" reason="Bad request - &apos;Invalid Request-Created-At&apos; http header" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@(
+                        new JObject(new JProperty("statusCode", 400),
+                        new JProperty("description", "Missing or invalid header 'Request-Processed-At'.")).ToString())</set-body>
+                </return-response>
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

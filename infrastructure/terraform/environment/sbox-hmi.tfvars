@@ -12,3 +12,4 @@ tags = {
     "application":"hearing-management-interface",
     "environment":"sbox"
   }
+enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"

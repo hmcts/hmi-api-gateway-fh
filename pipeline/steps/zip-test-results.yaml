@@ -1,0 +1,14 @@
+parameters:
+  - name: zipName
+    type: string
+
+  - name: directory
+    type: string
+
+steps:
+  - task: ArchiveFiles@2
+    displayName: Archive Files
+    inputs:
+      rootFolderOrFile: $(System.DefaultWorkingDirectory)${{ parameters.directory }}
+      archiveFile: $(System.DefaultWorkingDirectory)/$(Build.BuildId)-${{ parameters.zipName }}.zip
+    condition: succeededOrFailed()
