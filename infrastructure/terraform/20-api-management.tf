@@ -7,10 +7,10 @@ resource "azurerm_api_management" "hmi_apim" {
   sku_name            = "${var.apim_sku_name}_${var.apim_sku_capacity}"
   tags                = var.tags
 
-  virtual_network_type = "Internal"
+  # virtual_network_type = "Internal"
 
-  virtual_network_configuration {
-    subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
-  }
+  # virtual_network_configuration {
+  #   subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
+  # }
 
 }
