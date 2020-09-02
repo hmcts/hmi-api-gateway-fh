@@ -4,19 +4,22 @@ parameters:
   
   - name: resourceGroup
     type: string
+  
+  - name: apim
+    type: string
 
 jobs:
-- job: deleteResources
+- job: deleteAPIM
   displayName: Delete Resources
   pool:
     vmImage: 'windows-latest'
   steps:
   - task: AzureCLI@2
     displayName: Delete Resource Group
-    name: deleteResourceGroup
+    name: deleteAPIM
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az group delete --resource-group ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
+        az apim delete --name ${{ parameters.apim }} --resource-group ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
