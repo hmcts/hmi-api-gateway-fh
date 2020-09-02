@@ -64,6 +64,7 @@ public class RestClientTemplate {
                    return response;
                }
            default :
+               log.error("Http method not identified :" + httpMethod.name());
                throw new IllegalArgumentException("HTTP method not identified");
 
        }
