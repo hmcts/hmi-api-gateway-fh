@@ -6,7 +6,7 @@ pr:
   - none
 
 schedules:
-- cron: "0 0 * * *"
+- cron: "30 14 * * *"
   displayName: Daily midnight build
   branches:
     include:
@@ -21,14 +21,21 @@ parameters:
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
       tests_gradle:
-      - name: UnitTest 
-        command: clean test
+      - name: UnitTest
+        command: test
+        serenity: true
       - name: SmokeTest
-        command: clean smoke
+        command: smoke
+        serenity: false
         dependsOn: UnitTest
-      - name: FunctionalTest
-        command: clean functional
+      - name: AcceptanceTest
+        command: acceptance
+        serenity: false
         dependsOn: SmokeTest
+      - name: FunctionalTest
+        command: functional
+        serenity: true
+        dependsOn: AcceptanceTest
 
 variables:
   - group: HMI-APIM-Common
@@ -43,7 +50,7 @@ stages:
     displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
-    - template: pipeline/jobs/create-storage.yaml
+    - template: pipeline/jobs/delete-resources.yaml
       parameters:
         subscription: ${{ environment.subscription }}
         resourceGroup: hmi-apim-${{ environment.name }}-rg
@@ -55,12 +62,16 @@ stages:
         group: ${{ environment.group }}
         displayName: Build infrastructure with Terraform
 
-    - template: pipeline/jobs/export-keyvault.yaml
+    - template: pipeline/jobs/create-storage.yaml
       parameters:
-        displayName: Read KeyVault Secret
-        dependsOn: Terraform
+        displayName: Create Storage for Test Results
         subscription: ${{ environment.subscription }}
-        keyVaultName: hmi-apim-kv-${{ environment.name }}
+        dependsOn: Terraform
+        resourceGroup: $(resourceGroup)
+        storageAccount: $(storageAccount)
+        variables:
+          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+          storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
@@ -69,11 +80,44 @@ stages:
           parameters:
             displayName: ${{ test.name }}
             dependsOn: 
-            - ExportKeyVault
-            - ${{ if parameters.dependsOn }}:
-              - ${{ parameters.dependsOn }}
+            - Terraform
+            - createStorage
+            - ${{ if test.dependsOn }}:
+              - ${{ test.dependsOn }}
+            serenity: ${{ test.serenity }}
+            subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             subscriptionKey: $(subscriptionKey)
+            resourceGroup: $(resourceGroup)
+            storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
             variables: 
-              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+
+    - ${{ if environment.tests_security }}:
+      - ${{ each test in environment.tests_security }}:
+        - template: pipeline/jobs/security-test.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn:
+            - Terraform
+            - createStorage
+            subscription: ${{ environment.subscription }}
+            registry: ${{ environment.registry }}
+            repository: ${{ test.repository }}
+            containerRegistry: ${{ test.containerRegistry }}
+            dockerfile: docker/images/${{ test.name }}/Dockerfile
+            tags: latest
+            testUrl: https://www.example.com/openapi.json 
+            securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            resourceGroup: $(resourceGroup)
+            storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
+            variables:
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
