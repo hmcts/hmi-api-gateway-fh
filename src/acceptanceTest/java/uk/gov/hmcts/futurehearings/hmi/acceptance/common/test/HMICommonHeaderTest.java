@@ -28,6 +28,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -98,6 +99,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpSucessStatus(), getApiName(),null);
     }
 
+    @Disabled("Test to be implemented and enabled in another Branch HMIS-283")
     @Test
     @DisplayName("Successfully validated response with an empty payload")
     public void test_successful_response_for_empty_json_body() throws Exception {
@@ -110,7 +112,7 @@ public abstract class HMICommonHeaderTest {
     }
 
     @Test
-    @DisplayName("Successfully validated response with an empty payload")
+    @DisplayName("Successfully validated response with a valid payload but a charset appended to the Content-Type")
     public void test_successful_response_for_content_type_with_charset_appended() throws Exception {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(true));
