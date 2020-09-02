@@ -36,7 +36,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        //this.setRelativeURL(hearingAPIRootContext);
         this.setApiName("hearings");
     }
 
