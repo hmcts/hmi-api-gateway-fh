@@ -43,16 +43,14 @@ public class HearingAPIConsumerTest {
 
     @BeforeEach
     public void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Ocp-Apim-Trace", "true");
-        headersAsMap.put("Company-Name", "HMCTS");
         headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Source-System", "SnL");
-        headersAsMap.put("Destination-System", "CFT");
-        headersAsMap.put("Request-Created-At", "datetimestring");
-        headersAsMap.put("Request-Type", "THEFT");
-
+        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
+        headersAsMap.put("Source-System", "CFT");
+        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
+        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
+        headersAsMap.put("Request-Type", "ASSAULT");
     }
 
    @Pact(provider = "SandL_API", consumer = "HMI_API")
