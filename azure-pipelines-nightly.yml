@@ -54,10 +54,11 @@ stages:
       parameters:
         subscription: ${{ environment.subscription }}
         resourceGroup: hmi-apim-${{ environment.name }}-rg
+        apim: hmi-apim-svc-${{ environment.name }}
 
     - template: pipeline/jobs/terraform.yaml
       parameters:
-        dependsOn: deleteResources
+        dependsOn: deleteAPIM
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
         displayName: Build infrastructure with Terraform
