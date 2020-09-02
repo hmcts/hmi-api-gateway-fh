@@ -35,7 +35,6 @@ parameters:
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
       tests_gradle:
-<<<<<<< HEAD
       - name: UnitTest
         command: test
         serenity: true
@@ -51,16 +50,6 @@ parameters:
         command: functional
         serenity: true
         dependsOn: AcceptanceTest
-=======
-      - name: UnitTest 
-        command: clean test
-      - name: SmokeTest
-        command: clean smoke
-        dependsOn: UnitTest
-      - name: FunctionalTest
-        command: clean functional
-        dependsOn: SmokeTest
->>>>>>> c366d890487db446a64acf3fbfe2df0ecad2754a
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
