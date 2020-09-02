@@ -77,15 +77,15 @@ stages:
 
     - template: pipeline/jobs/terraform.yaml
       parameters:
+        displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
-        displayName: Build infrastructure with Terraform
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
+        displayName: Create Storage for Test Results
         subscription: ${{ environment.subscription }}
         dependsOn: Terraform
-        displayName: Create Storage
         resourceGroup: $(resourceGroup)
         storageAccount: $(storageAccount)
         variables:
@@ -121,10 +121,10 @@ stages:
       - ${{ each test in environment.tests_security }}:
         - template: pipeline/jobs/security-test.yaml
           parameters:
+            displayName: ${{ test.name }}
             dependsOn:
             - Terraform
             - createStorage
-            displayName: ${{ test.name }}
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
             repository: ${{ test.repository }}
