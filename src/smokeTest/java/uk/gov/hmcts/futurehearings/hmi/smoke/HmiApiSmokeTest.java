@@ -32,8 +32,8 @@ public class HmiApiSmokeTest extends SmokeTest {
                 .when().get();
 
         if (response.getStatusCode() != 200) {
-            log.info(" The value of the Response Status " + response.getStatusCode());
-            log.info(" The value of the Response body " + response.getBody().prettyPrint());
+            log.debug(" The value of the Response Status " + response.getStatusCode());
+            log.debug(" The value of the Response body " + response.getBody().prettyPrint());
         }
         assertEquals(HttpStatus.OK.value(),response.getStatusCode());
     }
