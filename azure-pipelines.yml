@@ -101,7 +101,7 @@ stages:
 
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
-            displayName: Run ${{ test.name }}
+            displayName: ${{ test.name }}
             dependsOn: 
             - Terraform
             - createStorage
@@ -125,7 +125,7 @@ stages:
       - ${{ each test in environment.tests_security }}:
         - template: pipeline/jobs/security-test.yaml
           parameters:
-            displayName: Run ${{ test.name }}
+            displayName: ${{ test.name }}
             dependsOn:
             - Terraform
             - createStorage
