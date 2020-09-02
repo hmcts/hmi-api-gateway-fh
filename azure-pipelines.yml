@@ -56,10 +56,14 @@ parameters:
         command: smoke
         serenity: false
         dependsOn: UnitTest
+      - name: AcceptanceTest
+        command: acceptance
+        serenity: false
+        dependsOn: SmokeTest
       - name: FunctionalTest
         command: functional
         serenity: true
-        dependsOn: SmokeTest
+        dependsOn: AcceptanceTest
 
 variables:
   - group: HMI-APIM-Common
