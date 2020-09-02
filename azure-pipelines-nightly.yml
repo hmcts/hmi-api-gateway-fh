@@ -1,56 +1,25 @@
 ---
 trigger:
-  - master
+  - none
+
+pr: 
+  - none
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily midnight build
+  branches:
+    include:
+    - master
+  always: true
 
 parameters:
   - name: environments
     type: object
     default: 
-    - name: sbox
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        serenity: false
-        dependsOn: SmokeTest
-      - name: FunctionalTest
-        command: functional
-        serenity: true
-        dependsOn: AcceptanceTest
-      tests_security:
-      - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
-
-    - name: dev
-      subscription: DTS-SHAREDSERVICES-DEV
-      group: HMI-APIM-BUILD-DEV
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        serenity: false
-        dependsOn: SmokeTest
-
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
         command: test
@@ -81,12 +50,18 @@ stages:
     displayName: Build and Test ${{ environment.name }} APIM
     
     jobs:
+    - template: pipeline/jobs/delete-resources.yaml
+      parameters:
+        subscription: ${{ environment.subscription }}
+        resourceGroup: hmi-apim-${{ environment.name }}-rg
+        apim: hmi-apim-svc-${{ environment.name }}
 
     - template: pipeline/jobs/terraform.yaml
       parameters:
-        displayName: Build infrastructure with Terraform
+        dependsOn: deleteAPIM
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
+        displayName: Build infrastructure with Terraform
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
