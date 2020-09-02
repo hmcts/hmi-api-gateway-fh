@@ -46,10 +46,6 @@ parameters:
         command: acceptance
         serenity: false
         dependsOn: SmokeTest
-      - name: FunctionalTest
-        command: functional
-        serenity: true
-        dependsOn: AcceptanceTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
