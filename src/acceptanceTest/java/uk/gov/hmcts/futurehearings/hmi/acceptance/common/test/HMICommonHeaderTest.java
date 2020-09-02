@@ -99,7 +99,6 @@ public abstract class HMICommonHeaderTest {
                 getHttpSucessStatus(), getApiName(),null);
     }
 
-    @Disabled("Test to be implemented and enabled in another Branch HMIS-283")
     @Test
     @DisplayName("Successfully validated response with an empty payload")
     public void test_successful_response_for_empty_json_body() throws Exception {
