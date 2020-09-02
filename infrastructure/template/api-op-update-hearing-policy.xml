@@ -7,7 +7,6 @@
                 <mock-response status-code="201" content-type="application/json" />
             </when>
         </choose>
-
     </inbound>
     <backend>
         <base />
