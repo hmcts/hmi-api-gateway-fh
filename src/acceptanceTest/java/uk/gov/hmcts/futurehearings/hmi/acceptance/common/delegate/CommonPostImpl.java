@@ -1,15 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
-import static org.springframework.http.HttpMethod.GET;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
