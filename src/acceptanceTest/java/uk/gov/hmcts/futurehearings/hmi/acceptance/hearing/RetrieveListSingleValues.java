@@ -16,8 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 public class RetrieveListSingleValues extends HearingValidationTest {
+
     @Value("${targetInstance}")
     private String targetInstance;
 
