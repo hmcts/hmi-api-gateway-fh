@@ -1,11 +1,9 @@
 {
   "Case Title": "Divorce",
-  "Case Id": "Div-24",
   "TransactionIDHMCTS": "TR123456",
+  "Venue": "Manchester",
   "Jurisdiction": "String",
   "Service": "CFT",
-  "Case Type": "Divore",
-  "Hearing Type": "Civil",
   "Priority": "High",
   "Status of the Listing Request": "String",
   "Ticket Type required ": "String",

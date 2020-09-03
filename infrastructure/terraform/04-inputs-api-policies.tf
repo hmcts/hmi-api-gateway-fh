@@ -12,9 +12,9 @@ variable "api_policies" {
       templateFile = "api-op-health-check-policy.xml"
     },
     {
-      operationId     = "update-hearing"
-      format          = "rawxml-link"
-      templateFile    = "api-op-update-hearing-policy.xml"
+      operationId  = "update-hearing"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-hearing-policy.xml"
     },
     {
       operationId     = "session"
