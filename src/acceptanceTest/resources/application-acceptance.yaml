@@ -3,6 +3,7 @@ targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hmiApiRootContext : /hmi/
 hearingApiRootContext: /hmi/hearings
 updateHearingRootContext: /hmi/hearings/%s
+retrieveIndividualHearingRootContext: /hmi/hearings/%s
 sessionApiRootContext: /hmi/sessions
 spring.flyway.enabled: false
 
