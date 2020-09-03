@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.SessionsValidationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RetrieveListMultipleValues extends SessionsValidationTest {
+public class RetrieveListMultipleValues extends HearingValidationTest {
+
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -33,6 +33,5 @@ public class RetrieveListMultipleValues extends SessionsValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
-        //this.setUrlParams(buildValidRetrieveScheduleParams());
     }
 }
