@@ -1,11 +1,6 @@
 <policies>
     <inbound>
         <base />
-        <choose>
-            <when condition="@(context.Request.Url.Query.Count > 6)">
-                <mock-response status-code="405" content-type="application/json" />
-            </when>
-        </choose>
         <set-variable name="invalidKeys" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
                 string[] allowedKeys = {"hearing_date","hearing_venue_id","hearing_room_id","hearing_session_id_casehq","hearing_case_id_hmcts","hearing_id_casehq"};
