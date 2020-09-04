@@ -3,8 +3,10 @@ targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hmiApiRootContext : /hmi/
 hearingApiRootContext: /hmi/hearings
 updateHearingRootContext: /hmi/hearings/%s
-retrieveIndividualHearingRootContext: /hmi/hearings/%s
 sessionApiRootContext: /hmi/sessions
+resourcesRootContext: /hmi/resources
+resources_idRootContext: /hmi/resources/%s
+
 spring.flyway.enabled: false
 
 mockServerHost: ${MOCK_SERVER_HOST}
