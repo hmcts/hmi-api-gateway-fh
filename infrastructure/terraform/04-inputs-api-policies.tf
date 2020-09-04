@@ -22,14 +22,14 @@ variable "api_policies" {
       templateFile    = "api-op-retreive-hearing-sched-policy.xml"
     },
     {
-      operationId     = "listing-by-id"
+      operationId     = "resource-by-id"
       format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-listing-by-id-policy.xml"
+      templateFile    = "api-op-retrieve-resource-by-id-policy.xml"
     },
     {
-      operationId     = "listings"
+      operationId     = "resources"
       format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-listings-policy.xml"
+      templateFile    = "api-op-retrieve-resources-policy.xml"
     }
   ]
 }
