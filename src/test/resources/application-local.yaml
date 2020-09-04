@@ -4,3 +4,4 @@ targetSubscriptionKey: sample
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
 sessionsApiRootContext: /hmi/sessions
+resourcesApiRootContext: /hmi/resources
