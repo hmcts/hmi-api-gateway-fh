@@ -1,6 +1,7 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.HearingValidationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RetrieveListMultipleValues extends HearingValidationTest {
+public class GETResourcesValidationTest extends ResourceValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -23,15 +24,15 @@ public class RetrieveListMultipleValues extends HearingValidationTest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hearingApiRootContext}")
-    private String hearingAPIRootContext;
+    @Value("${resourcesRootContext}")
+    private String resourcesRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(hearingAPIRootContext);
+        this.setRelativeURL(resourcesRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
     }
 }

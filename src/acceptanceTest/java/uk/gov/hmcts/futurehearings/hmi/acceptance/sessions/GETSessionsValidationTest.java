@@ -29,7 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RetrieveScheduleValidationTest extends SessionsValidationTest {
+public class GETSessionsValidationTest extends SessionsValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;

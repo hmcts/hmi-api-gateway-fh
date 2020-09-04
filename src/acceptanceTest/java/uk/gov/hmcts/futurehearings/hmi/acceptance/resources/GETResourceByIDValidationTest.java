@@ -1,10 +1,10 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.HearingValidationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RetrieveListSingleValues extends HearingValidationTest {
+public class GETResourceByIDValidationTest extends ResourceValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -24,16 +24,16 @@ public class RetrieveListSingleValues extends HearingValidationTest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${retrieveIndividualHearingRootContext}")
-    private String retrieveIndividualHearingAPIRootContext;
+    @Value("${resources_idRootContext}")
+    private String resources_idRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        retrieveIndividualHearingAPIRootContext = String.format(retrieveIndividualHearingAPIRootContext,"12345");
-        this.setRelativeURL(retrieveIndividualHearingAPIRootContext);
+        resources_idRootContext = String.format(resources_idRootContext,"12345");
+        this.setRelativeURL(resources_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
     }
 }

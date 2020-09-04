@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
@@ -21,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class HearingValidationTest extends HMICommonHeaderTest {
+public abstract class ResourceValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -36,18 +36,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setApiName("hearings");
-    }
-
-    @Disabled("Test Failing and giving multiple different Errors while testing - So Disabled- TBC With Lee")
-    @Test
-    @DisplayName("Successfully validated response with an xml payload")
-    public void test_successful_response_for_test_xml_body() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getApiName(),null);
+        this.setApiName("resources");
     }
 }
