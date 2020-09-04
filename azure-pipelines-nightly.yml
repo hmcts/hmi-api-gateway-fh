@@ -39,7 +39,7 @@ parameters:
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: AcceptanceTes
+        dependsOn: AcceptanceTest
 
 variables:
   - group: HMI-APIM-Common
