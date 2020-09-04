@@ -115,7 +115,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean functional -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean functional -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey} -DAPI_LOG_LEVEL=OFF
 ```
 
 ### Running the Smoke Tests
@@ -125,7 +125,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean smoke -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean smoke -DENDPOINT_URL='{url}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey} -DAPI_LOG_LEVEL=DEBUG
 ```
 
 ### Running the Integration Tests
@@ -135,7 +135,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean integration -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean integration -DENDPOINT_URL='{url}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 ### Running the Acceptance Tests
 
@@ -144,7 +144,7 @@ Change Directory to the root folder of the Project:
 Run the following command
 
 ```bash
-  gradle clean acceptance -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean acceptance -DENDPOINT_URL='{url}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey} -DAPI_LOG_LEVEL=DEBUG
 ```
 
 ### Running the Contract Tests
@@ -162,7 +162,7 @@ You can run contract or pact tests as follows:
 Run the following command
 
 ```bash
-  gradle clean contract -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
+  gradle clean contract -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey} -DAPI_LOG_LEVEL=OFF
 ```
 
 PUBLISHING YOUR PACT    
