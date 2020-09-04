@@ -93,6 +93,7 @@ stages:
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
+            logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
