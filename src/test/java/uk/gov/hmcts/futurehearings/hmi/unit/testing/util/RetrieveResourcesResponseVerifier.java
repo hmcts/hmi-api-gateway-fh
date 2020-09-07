@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class RetrieveListingResponseVerifier {
+public class RetrieveResourcesResponseVerifier {
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
 
