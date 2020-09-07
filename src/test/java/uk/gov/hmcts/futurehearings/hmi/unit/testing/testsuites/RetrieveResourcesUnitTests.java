@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveListingResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 
 @Slf4j
@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RetrieveListingUnitTests {
+public class RetrieveResourcesUnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -47,7 +47,7 @@ public class RetrieveListingUnitTests {
     public static void initialiseReport() {
 
         setupReport();
-        objTestFromUtils = startReport("RetrieveList Validations");
+        objTestFromUtils = startReport("Retrieve Resources Validations");
 
     }
 
@@ -80,35 +80,35 @@ public class RetrieveListingUnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRetrieveListingRequestForInvalidResource() {
-        final Response response = whenRetrieveListingIsInvokedForInvalidResource();
+    public void testRetrieveResourcesRequestForInvalidResource() {
+        final Response response = whenRetrieveResourcesIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response, objStep);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for No Parameters")
-    public void testRetrieveListingRequestWithCorrectRequestAndNoParams() {
-        final Response response = whenRetrieveListingIsInvokedWithCorrectHeadersAndNoParams();
+    public void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
+        final Response response = whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForACorrectRequest(response, objStep);
     }
 
     @Test
     @Order(4)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRetrieveListingRequestWithMissingOcpSubKey() {
+    public void testRetrieveResourcesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveListingIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForMissingOcpSubscriptionHeader(response, objStep);
     }
 
     @Test
     @Order(5)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRetrieveListingRequestWithInvalidOcpSubKey() {
+    public void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveListingIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForInvalidOcpSubscription(response, objStep);
     }
 
@@ -116,196 +116,196 @@ public class RetrieveListingUnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Source-System header")
-    public void testRetrieveListingRequestWithMissingSourceSystemHeader() {
+    public void testRetrieveResourcesRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Source-System", objStep);
     }
 
     @Test
     @Order(7)
     @DisplayName("Test for missing Destination-System header")
-    public void testRetrieveListingRequestWithMissingDestinationSystemHeader() {
+    public void testRetrieveResourcesRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
     }
 
     @Test
     @Order(8)
     @DisplayName("Test for missing Request-Type header")
-    public void testRetrieveListingRequestWithMissingRequestTypeHeader() {
+    public void testRetrieveResourcesRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
     }
 
     @Test
     @Order(9)
     @DisplayName("Test for missing Request-Created-At header")
-    public void testRetrieveListingRequestWithMissingRequestCreatedAtHeader() {
+    public void testRetrieveResourcesRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
     @Order(10)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testRetrieveListingRequestWithMissingRequestProcessedAtHeader() {
+    public void testRetrieveResourcesRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
     @Order(11)
     @DisplayName("Test for missing Accept header")
-    public void testRetrieveListingRequestWithMissingAcceptHeader() {
+    public void testRetrieveResourcesRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingAcceptHeader(response, objStep);
     }
 
     @Test
     @Order(12)
     @DisplayName("Test for missing ContentType header")
-    public void testRetrieveListingRequestWithMissingContentTypeHeader() {
+    public void testRetrieveResourcesRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
-        final Response response = whenRetrieveListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
         thenValidateResponseForMissingContentTypeHeader(response, objStep);
     }
 
 
-    private Response whenRetrieveListingIsInvokedForInvalidResource() {
-        return retrieveListingForInvalidResource(resourcesApiRootContext+"get", headersAsMap, targetInstance);
+    private Response whenRetrieveResourcesIsInvokedForInvalidResource() {
+        return retrieveResourcesForInvalidResource(resourcesApiRootContext+"get", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveListingIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveListingWithCorrectRequestAndNoParams(resourcesApiRootContext, headersAsMap, targetInstance);
+    private Response whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams() {
+        return retrieveResourcesWithCorrectRequestAndNoParams(resourcesApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveListingIsInvokedWithMissingOcpSubKey() {
-        return retrieveListingWithAMissingOcpSubKey(resourcesApiRootContext, headersAsMap, targetInstance);
+    private Response whenRetrieveResourcesIsInvokedWithMissingOcpSubKey() {
+        return retrieveResourcesWithAMissingOcpSubKey(resourcesApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveListingIsInvokedWithMissingHeader() {
-        return retrieveListingWithAMissingHeader(resourcesApiRootContext, headersAsMap, targetInstance);
+    private Response whenRetrieveResourcesIsInvokedWithMissingHeader() {
+        return retrieveResourcesWithAMissingHeader(resourcesApiRootContext, headersAsMap, targetInstance);
     }
 
 //INDIVIDUAL RESOURCE TESTS - START
 
     @Test
     @Order(13)
-    @DisplayName("Test for Invalid Resource - Individual Listing")
-    public void testRetrieveIndividualListingRequestForInvalidResource() {
-        final Response response = whenRetrieveIndividualListingIsInvokedForInvalidResource();
+    @DisplayName("Test for Invalid Resource - Individual Resource")
+    public void testRetrieveIndividualResourceRequestForInvalidResource() {
+        final Response response = whenRetrieveIndividualResourceIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response, objStep);
     }
 
     @Test
     @Order(14)
-    @DisplayName("Test for No Parameters - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithCorrectRequestAndNoParams() {
-        final Response response = whenRetrieveIndividualListingIsInvokedWithCorrectHeadersAndNoParams();
+    @DisplayName("Test for No Parameters - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithCorrectRequestAndNoParams() {
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForACorrectRequest(response, objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingOcpSubKey() {
+    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForMissingOcpSubscriptionHeader(response, objStep);
     }
 
     @Test
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithInvalidOcpSubKey() {
+    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForInvalidOcpSubscription(response, objStep);
     }
 
 
     @Test
-    @DisplayName("Test for missing Source-System header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingSourceSystemHeader() {
+    @DisplayName("Test for missing Source-System header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Source-System", objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Destination-System header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingDestinationSystemHeader() {
+    @DisplayName("Test for missing Destination-System header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Request-Type header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingRequestTypeHeader() {
+    @DisplayName("Test for missing Request-Type header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Request-Created-At header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingRequestCreatedAtHeader() {
+    @DisplayName("Test for missing Request-Created-At header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Request-Processed-At header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingRequestProcessedAtHeader() {
+    @DisplayName("Test for missing Request-Processed-At header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
-    @DisplayName("Test for missing Accept header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingAcceptHeader() {
+    @DisplayName("Test for missing Accept header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingAcceptHeader(response, objStep);
     }
 
     @Test
-    @DisplayName("Test for missing ContentType header - Individual Listing")
-    public void testRetrieveIndividualListingRequestWithMissingContentTypeHeader() {
+    @DisplayName("Test for missing ContentType header - Individual Resource")
+    public void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
-        final Response response = whenRetrieveIndividualListingIsInvokedWithMissingHeader();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
         thenValidateResponseForMissingContentTypeHeader(response, objStep);
     }
 
 
-    private Response whenRetrieveIndividualListingIsInvokedForInvalidResource() {
-        return retrieveListingForInvalidResource(resourcesApiRootContext+"get"+"/CASE123432", headersAsMap, targetInstance);
+    private Response whenRetrieveIndividualResourceIsInvokedForInvalidResource() {
+        return retrieveResourcesForInvalidResource(resourcesApiRootContext+"get"+"/CASE123432", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveIndividualListingIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveListingWithCorrectRequestAndNoParams(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
+    private Response whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams() {
+        return retrieveResourcesWithCorrectRequestAndNoParams(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveIndividualListingIsInvokedWithMissingOcpSubKey() {
-        return retrieveListingWithAMissingOcpSubKey(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
+    private Response whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey() {
+        return retrieveResourcesWithAMissingOcpSubKey(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveIndividualListingIsInvokedWithMissingHeader() {
-        return retrieveListingWithAMissingHeader(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
+    private Response whenRetrieveIndividualResourceIsInvokedWithMissingHeader() {
+        return retrieveResourcesWithAMissingHeader(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
     }
 
 
 //INDIVIDUAL RESOURCE TESTS - END
 
-    private Response retrieveListingForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveResourcesForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .headers(headersAsMap)
@@ -314,7 +314,7 @@ public class RetrieveListingUnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveListingWithCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveResourcesWithCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .headers(headersAsMap)
@@ -325,7 +325,7 @@ public class RetrieveListingUnitTests {
 
 
 
-    private Response retrieveListingWithAMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveResourcesWithAMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .headers(headersAsMap)
@@ -334,7 +334,7 @@ public class RetrieveListingUnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveListingWithAMissingHeader(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveResourcesWithAMissingHeader(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .headers(headersAsMap)
