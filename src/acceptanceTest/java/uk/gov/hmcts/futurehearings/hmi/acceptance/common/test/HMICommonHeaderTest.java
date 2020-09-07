@@ -194,7 +194,7 @@ public abstract class HMICommonHeaderTest {
     }
 
     @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\""})
+    @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\"","Wrong_Value,c602c8ed3b8147be910449b563dce008"})
     public void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
