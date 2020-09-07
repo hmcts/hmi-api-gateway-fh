@@ -23,17 +23,21 @@ parameters:
       tests_gradle:
       - name: UnitTest
         command: test
+        logLevel: info
         serenity: true
       - name: SmokeTest
         command: smoke
+        logLevel: debug
         serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
+        logLevel: debug
         serenity: false
         dependsOn: SmokeTest
       - name: FunctionalTest
         command: functional
+        logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
 
@@ -89,6 +93,7 @@ stages:
             subscription: ${{ environment.subscription }}
             apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
+            logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
