@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
@@ -21,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(RequestHearingHeaderValidationTest.class)
+@SelectClasses(POSTHearingsValidationTest.class)
 @IncludeTags("Post")
-public class RequestHearingHeaderValidationTest extends HearingValidationTest {
+public class POSTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
