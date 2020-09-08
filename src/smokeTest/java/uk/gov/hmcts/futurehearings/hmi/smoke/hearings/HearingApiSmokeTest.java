@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke.hearing;
+package uk.gov.hmcts.futurehearings.hmi.smoke.hearings;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -5,4 +5,5 @@ hmiApiRootContext : /hmi/
 sessionApiRootContext : /sessions
 notificationApiRootContext : /notification
 userApiRootContext : /users
+resourcesAPIRootContext : /hmi/resources
 spring.flyway.enabled: false
