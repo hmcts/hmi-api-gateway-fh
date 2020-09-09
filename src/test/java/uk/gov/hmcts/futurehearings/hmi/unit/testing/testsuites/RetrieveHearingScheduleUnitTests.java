@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +39,8 @@ public class RetrieveHearingScheduleUnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${sessionsApiRootContext}")
-    private String sessionsApiRootContext;
+    @Value("${schedulesApiRootContext}")
+    private String schedulesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
@@ -197,23 +198,23 @@ public class RetrieveHearingScheduleUnitTests {
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedForInvalidResource() {
-        return retrieveHearingScheduleForInvalidResource(sessionsApiRootContext+"get", headersAsMap, targetInstance);
+        return retrieveHearingScheduleForInvalidResource(schedulesApiRootContext +"get", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveHearingScheduleWithCorrectRequestAndNoParams(sessionsApiRootContext, headersAsMap, targetInstance);
+        return retrieveHearingScheduleWithCorrectRequestAndNoParams(schedulesApiRootContext, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndAllParams() {
-        return retrieveHearingScheduleWithCorrectRequestAndAllParams(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingScheduleWithCorrectRequestAndAllParams(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey() {
-        return retrieveHearingScheduleWithAMissingOcpSubKey(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingScheduleWithAMissingOcpSubKey(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithMissingHeader() {
-        return retrieveHearingScheduleWithAMissingHeader(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingScheduleWithAMissingHeader(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
 
