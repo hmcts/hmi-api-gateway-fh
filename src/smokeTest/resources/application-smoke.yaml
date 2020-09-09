@@ -2,7 +2,7 @@ targetInstance: ${ENDPOINT_URL}
 targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
-sessionApiRootContext : /schedules
+sessionApiRootContext : /sessions
 notificationApiRootContext : /notification
 userApiRootContext : /users
 spring.flyway.enabled: false
