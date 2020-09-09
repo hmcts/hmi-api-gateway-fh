@@ -3,7 +3,7 @@ targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hmiApiRootContext : /hmi/
 hearingApiRootContext: /hmi/hearings
 updateHearingRootContext: /hmi/hearings/%s
-sessionApiRootContext: /hmi/schedules
+sessionApiRootContext: /hmi/sessions
 resourcesRootContext: /hmi/resources
 resources_idRootContext: /hmi/resources/%s
 
