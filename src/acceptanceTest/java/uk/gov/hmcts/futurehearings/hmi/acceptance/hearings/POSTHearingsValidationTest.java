@@ -29,13 +29,13 @@ public class POSTHearingsValidationTest extends HearingValidationTest {
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
 
-    @Value("${hearingApiRootContext}")
-    private String hearingAPIRootContext;
+    @Value("${hearingsApiRootContext}")
+    private String hearingsApiRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(hearingAPIRootContext);
+        this.setRelativeURL(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.OK);
