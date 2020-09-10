@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 
@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class SessionsValidationTest extends HMICommonHeaderTest {
+public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;

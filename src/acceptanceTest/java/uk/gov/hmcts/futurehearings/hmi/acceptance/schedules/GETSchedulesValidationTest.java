@@ -1,20 +1,17 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.helper.SessionsParamsHelper.buildAllQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.helper.SessionsParamsHelper.buildMultipleQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.helper.SessionsParamsHelper.buildQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildAllQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildMultipleQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,7 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GETSessionsValidationTest extends SessionsValidationTest {
+public class GETSchedulesValidationTest extends SchedulesValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -37,16 +34,16 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${sessionApiRootContext}")
-    private String sessionAPIRootContext;
+    @Value("${schedulesApiRootContext}")
+    private String schedulesApiRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(sessionAPIRootContext);
+        this.setRelativeURL(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("schedules","schedule"));
         //this.setUrlParams(buildValidRetrieveScheduleParams());
     }
 
