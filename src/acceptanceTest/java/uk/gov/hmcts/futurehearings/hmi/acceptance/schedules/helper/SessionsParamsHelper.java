@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.helper;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper;
 
 import java.util.HashMap;
 import java.util.Map;
