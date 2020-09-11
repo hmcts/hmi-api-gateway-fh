@@ -1,4 +1,3 @@
-
 variable "api_policies" {
   default = [
     {
@@ -17,24 +16,19 @@ variable "api_policies" {
       templateFile = "api-op-update-hearing-policy.xml"
     },
     {
-      operationId     = "schedule"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retreive-hearing-sched-policy.xml"
+      operationId  = "schedule"
+      format       = "rawxml-link"
+      templateFile = "api-op-retreive-hearing-sched-policy.xml"
     },
     {
-      operationId     = "resource-by-id"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-resource-by-id-policy.xml"
+      operationId  = "resource-by-id"
+      format       = "rawxml-link"
+      templateFile = "api-op-retrieve-resource-by-id-policy.xml"
     },
     {
-      operationId     = "resources"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-resources-policy.xml"
-    },
-    {
-      operationId     = "delete-hearing"
-      format          = "rawxml-link"
-      templateFile    = "api-op-delete-hearing-policy.xml"
+      operationId  = "resources"
+      format       = "rawxml-link"
+      templateFile = "api-op-retrieve-resources-policy.xml"
     }
   ]
 }
