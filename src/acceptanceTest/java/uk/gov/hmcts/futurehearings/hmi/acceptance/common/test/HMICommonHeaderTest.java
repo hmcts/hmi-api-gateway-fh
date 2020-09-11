@@ -16,6 +16,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMISuccessVerifier;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -57,6 +59,12 @@ public abstract class HMICommonHeaderTest {
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
+    @Autowired(required = false)
+    public HMISuccessVerifier hmiSuccessVerifier;
+
+    @Autowired(required = false)
+    public HMIErrorVerifier hmiErrorVerifier;
+
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
@@ -85,10 +93,10 @@ public abstract class HMICommonHeaderTest {
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(), getApiName(),null);
+                getHttpSucessStatus(), getApiName(), getHmiSuccessVerifier(),null);
     }
 
-    @Test
+    /*@Test
     @DisplayName("Successfully validated response with mandatory header values")
     public void test_successful_response_with_a_mandatory_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -400,5 +408,5 @@ public abstract class HMICommonHeaderTest {
                 getApiName(),
                 null);
 
-    }
+    }*/
 }
