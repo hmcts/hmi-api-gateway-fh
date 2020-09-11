@@ -17,8 +17,7 @@ resource "azurerm_api_management" "hmi_apim" {
     proxy {
         default_ssl_binding = true
         host_name           = var.host_name
-        certificate         = var.certificate_name
-        key_vault_id        = data.azurerm_key_vault.cert_key_vault.id
+        key_vault_id        = replace(data.azurerm_key_vault_secret.certificate_secret.id, "/${data.azurerm_key_vault_secret.certificate_secret.version}", "")
     }
   }
 }
