@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled
 public class GETSchedulesValidationTest extends SchedulesValidationTest {
 
     @Value("${targetInstance}")
@@ -48,7 +50,7 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
 
-    @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
+    /*@ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource({"hearing_date, date", "hearing_date,\" \"", "hearing_date,", "hearing_date, 2002-10-02T10:00:00-05:00"})
     public void test_hearing_date_queryparam_with_value(final String hearingDateKey, final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
@@ -165,5 +167,5 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getApiName(),null);
-    }
+    }*/
 }
