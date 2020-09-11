@@ -28,6 +28,3 @@ variable "service_url" {
 variable "enable_mock_header_string" {
   description = "mock header static string for adding development headers injected to requests"
 }
-variable "host_name" {}
-variable "key_vault_id" {}
-variable "certificate_name" {}
