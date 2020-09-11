@@ -1,9 +1,9 @@
 variable "host_name" {
     default = null
 }
-variable "key_vault_id" {
+variable "key_vault_name" {
     default = null
 }
-variable "certificate_name" {
+variable "key_vault_rg" {
     default = null
 }
