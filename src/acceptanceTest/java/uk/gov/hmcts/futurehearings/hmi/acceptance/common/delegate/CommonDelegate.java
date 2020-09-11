@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -17,5 +19,6 @@ public interface CommonDelegate {
                                                            final HttpMethod httpMethod,
                                                            final HttpStatus status,
                                                            final String apiName,
+                                                           final HMIVerifier hmiVerifier,
                                                            final String expectedMessage) throws IOException;
 }
