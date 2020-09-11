@@ -14,13 +14,11 @@ resource "azurerm_api_management" "hmi_apim" {
   }
 
   hostname_configuration {
-    dynamic "proxy" {
-      for_each = var.hostname_configuration_proxy == null ? [] : ["proxy"]
-      content {
-        default_ssl_binding = local.hostname_configuration_proxy.default_ssl_binding
-        host_name           = local.hostname_configuration_proxy.host_name
-        key_vault_id        = replace(data.azurerm_key_vault_secret.certificate.id, "/${data.azurerm_key_vault_secret.certificate.version}", "")
-      }
+    proxy {
+        default_ssl_binding = true
+        host_name           = var.host_name
+        certificate         = var.certificate_name
+        key_vault_id        = data.azurerm_key_vault.cert_key_vault.id
     }
   }
 }
