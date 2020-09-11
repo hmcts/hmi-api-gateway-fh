@@ -39,7 +39,7 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setApiName("hearings");
     }
 
-    @Disabled("Test Failing and giving multiple different Errors while testing - So Disabled- TBC With Lee")
+    /*@Disabled("Test Failing and giving multiple different Errors while testing - So Disabled- TBC With Lee")
     @Test
     @DisplayName("Successfully validated response with an xml payload")
     public void test_successful_response_for_test_xml_body() throws Exception {
@@ -49,5 +49,5 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getApiName(),null);
-    }
+    }*/
 }

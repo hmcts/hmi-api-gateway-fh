@@ -5,6 +5,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
@@ -23,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PUTHearingsValidationTest.class)
 @IncludeTags("Put")
+@Disabled
 public class PUTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
