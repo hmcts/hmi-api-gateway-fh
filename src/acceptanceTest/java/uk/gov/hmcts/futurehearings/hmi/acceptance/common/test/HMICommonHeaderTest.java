@@ -2,24 +2,12 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesNull;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithCorruptedHeaderKey;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDeprecatedHeaderValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRemovedHeaderKey;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestProcessedAtSystemValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestTypeAtSystemValue;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMISuccessVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import io.restassured.RestAssured;
@@ -30,13 +18,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -52,7 +36,8 @@ public abstract class HMICommonHeaderTest {
     private String relativeURLForNotFound;
     private HttpMethod httpMethod;
     private HttpStatus httpSucessStatus;
-    private String apiName;
+    private String inputFileDirectory;
+    private String outputFileDirectory;
     private String inputPayloadFileName;
     private Map<String, String> urlParams;
 
@@ -93,10 +78,14 @@ public abstract class HMICommonHeaderTest {
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(), getApiName(), getHmiSuccessVerifier(),null);
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                "common",
+                "standard-success-response.json",
+                getHmiSuccessVerifier(),null);
     }
 
-    /*@Test
+    @Test
     @DisplayName("Successfully validated response with mandatory header values")
     public void test_successful_response_with_a_mandatory_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -104,7 +93,9 @@ public abstract class HMICommonHeaderTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(), getApiName(),null);
+                getHttpSucessStatus(), getInputFileDirectory(),
+                "common",
+                "standard-success-response.json",getHmiSuccessVerifier(),null);
     }
 
     @Test
@@ -115,8 +106,11 @@ public abstract class HMICommonHeaderTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(), getApiName(),null);
+                getHttpSucessStatus(), "common",
+                "common",
+                "standard-success-response.json",getHmiSuccessVerifier(),null);
     }
+
 
     @Test
     @DisplayName("Successfully validated response with a valid payload but a charset appended to the Content-Type")
@@ -128,11 +122,13 @@ public abstract class HMICommonHeaderTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(), getApiName(),null);
+                getHttpSucessStatus(), getInputFileDirectory(),
+                "common",
+                "standard-success-response.json",getHmiSuccessVerifier(),null);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
-
+    /*
     @Test
     @DisplayName("Incorrect Url with correct Header")
     public void test_invalid_URL() throws Exception {
