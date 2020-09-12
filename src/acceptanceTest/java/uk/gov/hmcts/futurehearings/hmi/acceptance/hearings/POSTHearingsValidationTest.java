@@ -2,12 +2,10 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMISuccessVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
@@ -26,7 +24,6 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(POSTHearingsValidationTest.class)
 @IncludeTags("Post")
-@Disabled
 public class POSTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class CommonPostImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
+    private static final String OUTPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/output";
 
     public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
                                                            final String targetURL,
@@ -27,7 +28,9 @@ public class CommonPostImpl implements CommonDelegate {
                                                            final Map<String, String> params,
                                                            final HttpMethod httpMethod,
                                                            final HttpStatus status,
-                                                           final String apiName,
+                                                           final String inputFileDirectory,
+                                                           final String outputFileDirectory,
+                                                           final String outputFile,
                                                            final HMIVerifier hmiVerifier,
                                                            final String expectedMessage) throws IOException {
 
@@ -38,7 +41,7 @@ public class CommonPostImpl implements CommonDelegate {
         switch (httpMethod) {
             case POST:
             case PUT:
-                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, apiName) + "/" + inputFile);;
+                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
                 break;
             case GET:
 
@@ -50,8 +53,10 @@ public class CommonPostImpl implements CommonDelegate {
                 params,
                 status,
                 httpMethod);
+
         //Temporarily verifying on the Response Code only...
-        hmiVerifier.verify(status,expectedMessage,response);
+        //hmiVerifier.verify(status,expectedMessage,response);
+        hmiVerifier.verify(String.format(OUTPUT_FILE_PATH, outputFileDirectory) + "/" + outputFile,response);
 
     }
 }
