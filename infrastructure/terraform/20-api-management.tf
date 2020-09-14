@@ -9,8 +9,8 @@ resource "azurerm_api_management" "hmi_apim" {
 
   identity {
     type = "SystemAssigned"
-    principal_id = var.principal_object_id
-    tenant_id =  var.principal_tenant_id
+    # principal_id = var.principal_object_id
+    # tenant_id =  var.principal_tenant_id
   }
   
   virtual_network_type = var.virtual_network_type
