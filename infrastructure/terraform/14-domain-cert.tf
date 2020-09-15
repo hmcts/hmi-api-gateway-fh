@@ -3,7 +3,7 @@ data "azurerm_key_vault" "cert_key_vault" {
   resource_group_name = var.key_vault_rg
 }
 
-resource "azurerm_key_vault_access_policy" "permissions" {
+resource "azurerm_key_vault_access_policy" "infra_kv_permissions" {
   key_vault_id            = data.azurerm_key_vault.cert_key_vault.id
   tenant_id               = azurerm_key_vault.hmi_apim_kv.tenant_id
   object_id               = var.principal_object_id
