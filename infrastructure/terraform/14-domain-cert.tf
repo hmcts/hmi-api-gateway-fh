@@ -14,6 +14,6 @@ resource "azurerm_key_vault_access_policy" "infra_kv_permissions" {
 }
 
 data "azurerm_key_vault_secret" "certificate_secret" {
-  name         = var.certificate_name
+  name         = "STAR-sandbox-platform-hmcts-net"
   key_vault_id = data.azurerm_key_vault.cert_key_vault.id
 }
