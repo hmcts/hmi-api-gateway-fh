@@ -29,10 +29,9 @@ public class TestingUtils {
                     readFileContents(expectedPayloadPath);
             JSONAssert.assertEquals(output,
                     response.getBody().asString(), JSONCompareMode.STRICT);
-        } catch (JSONException jsonException) {
+        } catch (JSONException | IOException comparisonException) {
+            log.error("Payloads have not matched" , comparisonException);
             throw new AssertionError("Payloads have not matched");
-        } catch (IOException ioException ) {
-            throw new AssertionError("Response file cannot be read..");
         }
     }
 }
