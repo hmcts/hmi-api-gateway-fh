@@ -41,7 +41,7 @@
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "Malformed request. Missing header value for : 'Request-Created-At'")
+                            new JProperty("message", "Missing/Invalid Header Request-Created-At")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -56,7 +56,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("message", "Missing or invalid header 'Request-Created-At'.")).ToString())</set-body>
+                        new JProperty("message", "Missing/Invalid Header Request-Created-At")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
@@ -67,7 +67,7 @@
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "Malformed request. Missing header value for : 'Request-Processed-At'")
+                            new JProperty("message", "Missing/Invalid Header Request-Processed-At")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -82,7 +82,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("message", "Missing or invalid header 'Request-Processed-At'.")).ToString())</set-body>
+                        new JProperty("message", "Missing/Invalid Header Request-Processed-At")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
