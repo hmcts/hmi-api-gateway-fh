@@ -19,17 +19,17 @@ parameters:
         command: smoke
         logLevel: debug
         serenity: false
-        # dependsOn: UnitTest
+        dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
         serenity: false
-        # dependsOn: SmokeTest
+        dependsOn: SmokeTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        # dependsOn: AcceptanceTest
+        dependsOn: AcceptanceTest
       tests_security:
       - name: ApiZapScan
         containerRegistry: ssprivatesbox.azurecr.io
