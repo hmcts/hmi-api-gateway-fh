@@ -17,7 +17,7 @@ variable "api_policies" {
       templateFile = "api-op-update-hearing-policy.xml"
     },
     {
-      operationId  = "hearings"
+      operationId  = "retrieve-hearings"
       format       = "rawxml-link"
       templateFile = "api-op-retrieve-hearings-policy.xml"
     },
