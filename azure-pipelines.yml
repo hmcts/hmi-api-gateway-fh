@@ -100,6 +100,7 @@ stages:
         group: ${{ environment.group }}
         shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
         shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
+        certificate_name: "STAR-sandbox-platform-hmcts-net"
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
