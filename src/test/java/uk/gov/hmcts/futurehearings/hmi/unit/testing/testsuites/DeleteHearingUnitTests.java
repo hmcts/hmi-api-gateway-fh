@@ -143,7 +143,7 @@ public class DeleteHearingUnitTests {
     @DisplayName("Test for invalid ContentType header")
     public void testDeleteHearingRequestWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/jsonxml");
+        headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
@@ -253,7 +253,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateHearingResponseForInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -274,7 +274,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateHearingResponseForInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
 
