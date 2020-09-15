@@ -18,6 +18,9 @@ parameters:
   - name: shared_infra_rg
     type: string
 
+  - name: certificate_name
+    type: string
+
 jobs:
 - job: Terraform
   dependsOn:
@@ -38,6 +41,7 @@ jobs:
       subscription: ${{ parameters.subscription }}
       shared_infra_kv: ${{ parameters.shared_infra_kv }}
       shared_infra_rg: ${{ parameters.shared_infra_rg }}
+      certificate_name: ${{ parameters.certificate_name }}
   - template: ../steps/tf-apply.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
