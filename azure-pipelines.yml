@@ -1,6 +1,6 @@
 ---
 trigger:
-  - HMIS-311-Dev
+  - hmi_delete_feature
 
 parameters:
   - name: environments
