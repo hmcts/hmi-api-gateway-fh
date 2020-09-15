@@ -36,6 +36,7 @@ public class CommonPostImpl implements CommonDelegate {
         switch (httpMethod) {
             case POST:
             case PUT:
+            case DELETE:
                 inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, apiName) + "/" + inputFile);;
                 break;
             case GET:
