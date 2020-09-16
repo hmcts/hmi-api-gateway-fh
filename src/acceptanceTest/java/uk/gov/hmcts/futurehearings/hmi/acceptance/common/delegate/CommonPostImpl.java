@@ -55,8 +55,7 @@ public class CommonPostImpl implements CommonDelegate {
                 httpMethod);
 
         //Temporarily verifying on the Response Code only...
-        //hmiVerifier.verify(status,expectedMessage,response);
-        hmiVerifier.verify(String.format(OUTPUT_FILE_PATH, outputFileDirectory) + "/" + outputFile,response);
+        hmiVerifier.verify(status,expectedMessage,response);
 
     }
 }
