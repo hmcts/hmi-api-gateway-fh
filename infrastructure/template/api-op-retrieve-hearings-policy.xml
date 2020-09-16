@@ -1,7 +1,41 @@
 <policies>
    <inbound>
-        <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/request-listings" />
+        <base /> 
+        <choose>
+            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ") != null)">
+                <return-response>
+                    <set-status code="200" />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 200),
+                            new JProperty("message", "Under Construction: Will return single Hearing")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate") != null)">
+                <return-response>
+                    <set-status code="200" />
+                     <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 200),
+                            new JProperty("message", "Under Construction: Will return all Hearings for specified date")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType") != null)">
+                <return-response>
+                    <set-status code="200" />
+                     <set-body>@{
+                        return new JObject(
+                            new JProperty("response code", 200),
+                            new JProperty("message", "Under Construction: Will return all Hearings for specified type")
+                        ).ToString();
+                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
         <mock-response status-code="200" content-type="application/json" />
     </inbound>
     <backend>
