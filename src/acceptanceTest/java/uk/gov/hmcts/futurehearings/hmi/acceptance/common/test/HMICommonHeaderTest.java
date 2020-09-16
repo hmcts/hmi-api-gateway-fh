@@ -82,7 +82,7 @@ public abstract class HMICommonHeaderTest {
                 getInputFileDirectory(),
                 "common",
                 "standard-success-response.json",
-                getHmiSuccessVerifier(),null);
+                getHmiSuccessVerifier(),"The request was received successfully.");
     }
 
     @Test
@@ -95,7 +95,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(), getInputFileDirectory(),
                 "common",
-                "standard-success-response.json",getHmiSuccessVerifier(),null);
+                "standard-success-response.json",getHmiSuccessVerifier(),"The request was received successfully.");
     }
 
     @Test
@@ -108,7 +108,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(), "common",
                 "common",
-                "standard-success-response.json",getHmiSuccessVerifier(),null);
+                "standard-success-response.json",getHmiSuccessVerifier(),"The request was received successfully.");
     }
 
 
@@ -124,7 +124,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(), getInputFileDirectory(),
                 "common",
-                "standard-success-response.json",getHmiSuccessVerifier(),null);
+                "standard-success-response.json",getHmiSuccessVerifier(),"The request was received successfully.");
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
