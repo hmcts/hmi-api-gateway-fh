@@ -46,5 +46,4 @@ public class POSTHearingsValidationTest extends HearingValidationTest {
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
     }
-
 }
