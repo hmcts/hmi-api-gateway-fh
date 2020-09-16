@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.HearingValidationTest;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.resources.verify.GETResourceByIDValidationVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 public class GETResourceByIDValidationTest extends ResourceValidationTest {
 
     @Value("${targetInstance}")
@@ -37,5 +36,7 @@ public class GETResourceByIDValidationTest extends ResourceValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
+        this.setHmiSuccessVerifier(new GETResourceByIDValidationVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 }
