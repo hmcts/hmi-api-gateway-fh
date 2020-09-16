@@ -5,7 +5,7 @@ publisher_email = "dev@hmcts.placeholder"
 protocols = ["http", "https"]
 revision = "1"
 open_api_spec_content_format = "swagger-link-json"
-open_api_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api.json"
+open_api_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/fh-request-hearing.json"
 service_url = ""
 tags = {
     "businessarea":"cross-cutting",
