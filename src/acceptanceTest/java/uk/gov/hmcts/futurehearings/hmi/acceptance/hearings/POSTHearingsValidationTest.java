@@ -2,6 +2,9 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +33,13 @@ public class POSTHearingsValidationTest extends HearingValidationTest {
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
 
-    @Qualifier("HMICommonSuccessVerifier")
+   /* @Qualifier("HMICommonSuccessVerifier")
     @Autowired(required = true)
     private HMISuccessVerifier hmiSuccessVerifier;
+
+    @Qualifier("HMICommonErrorVerifier")
+    @Autowired(required = true)
+    private HMIErrorVerifier hmiErrorVerifier;*/
 
     @Value("${hearingsApiRootContext}")
     private String hearingsApiRootContext;
@@ -45,5 +52,7 @@ public class POSTHearingsValidationTest extends HearingValidationTest {
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 }
