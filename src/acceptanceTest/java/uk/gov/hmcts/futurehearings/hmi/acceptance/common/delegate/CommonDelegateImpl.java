@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component("CommonDelegate")
-public class CommonPostImpl implements CommonDelegate {
+public class CommonDelegateImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
     private static final String OUTPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/output";
@@ -34,8 +34,7 @@ public class CommonPostImpl implements CommonDelegate {
                                                            final HMIVerifier hmiVerifier,
                                                            final String expectedMessage) throws IOException {
 
-        log.debug("The value of TEST SUBSCRIPTION KEY " +System.getProperty("TEST_SUBSCRIPTION_KEY"));
-        log.debug("The value of the targetSubscriptionKey " +targetSubscriptionKey);
+        log.debug("The value of the target header" +standardHeaderMap);
 
         String inputPayload = null;
         switch (httpMethod) {
