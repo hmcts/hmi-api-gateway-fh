@@ -24,7 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PUTHearingsValidationTest.class)
 @IncludeTags("Put")
-@Disabled("Enabling the verifying mechanisms in the Tests")
+//@Disabled("Enabling the verifying mechanisms in the Tests")
 public class PUTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
