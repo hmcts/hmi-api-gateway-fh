@@ -72,9 +72,9 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
-        paramsAsMap.put("hearing_id", "2018-02-29T20:36:01Z");
-        paramsAsMap.put("hearing_type", "roomid");
-        paramsAsMap.put("date_submitted", "2018-02-29T20:36:01Z");
+        paramsAsMap.put("hearingIdCaseHQ", "CASE1234");
+        paramsAsMap.put("hearingType", "THEFT");
+        paramsAsMap.put("hearingDate", "2018-02-29T20:36:01Z");
 
         objStep = objTestFromUtils.createNode(info.getDisplayName());
     }
@@ -88,23 +88,6 @@ public class RetrieveHearingsUnitTests {
         thenValidateHearingResponseForInvalidResource(response, objStep);
     }
 
-    @Test
-    @Order(2)
-    @DisplayName("Test for Correct Headers with All Params")
-    public void testRetrieveHearingsRequestWithCorrectHeadersAndAllParams() {
-
-        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndAllParams();
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
-    }
-
-    @Test
-    @Order(3)
-    @DisplayName("Test for Correct Headers with No Params")
-    public void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
-
-        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams();
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
-    }
 
     @Test
     @Order(4)
@@ -286,17 +269,67 @@ public class RetrieveHearingsUnitTests {
         thenValidateHearingsResponseForAdditionalParam(response, objStep);
     }
 
+    @Test
+    @Order(21)
+    @DisplayName("Test for HearingID Param ")
+    public void testRetrieveHearingsRequestWithHearingIDParam() {
+        paramsAsMap.remove("hearingDate");
+        paramsAsMap.remove("hearingType");
+
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
+        thenValidateHearingsResponse(response, objStep);
+    }
+
+    @Test
+    @Order(22)
+    @DisplayName("Test for HearingDate Param ")
+    public void testRetrieveHearingsRequestWithHearingDateParam() {
+        paramsAsMap.remove("hearingIdCaseHQ");
+        paramsAsMap.remove("hearingType");
+
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
+        thenValidateHearingsResponse(response, objStep);
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("Test for HearingType Param ")
+    public void testRetrieveHearingsRequestWithHearingTypeParam() {
+        paramsAsMap.remove("hearingIdCaseHQ");
+        paramsAsMap.remove("hearingDate");
+
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
+        thenValidateHearingsResponse(response, objStep);
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("Test for Correct Headers and All Params")
+    public void testRetrieveHearingsRequestWithCorrectHeadersAndParams() {
+
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
+        thenValidateHearingsResponse(response, objStep);
+    }
+
+    @Test
+    @Order(25)
+    @DisplayName("Test for Correct Headers with No Params")
+    public void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
+
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams();
+        thenValidateHearingsResponse(response, objStep);
+    }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithAdditionalParam() {
-        return hearingResponseForCorrectHeadersAndAllParams(hearingApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return hearingResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedForInvalidResource() {
         return hearingResponseForInvalidResource(hearingApiRootContext+"get", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndAllParams() {
-        return hearingResponseForCorrectHeadersAndAllParams(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams() {
+        return hearingResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
@@ -320,7 +353,7 @@ public class RetrieveHearingsUnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response hearingResponseForCorrectHeadersAndAllParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response hearingResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
                 .queryParams(paramsAsMap)

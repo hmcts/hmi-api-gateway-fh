@@ -53,6 +53,25 @@ public class ResponseVerifier {
         }
     }
 
+    public static void  thenValidateHearingsResponse(Response response, ExtentTest objStep){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals("Status Code Validation:",200, response.getStatusCode());
+            objStep.pass("Got the expected response code: 200");
+
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
+    }
+
     public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response, ExtentTest objStep){
 
         try{
