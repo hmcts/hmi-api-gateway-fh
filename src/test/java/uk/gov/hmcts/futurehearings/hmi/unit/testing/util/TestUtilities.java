@@ -34,7 +34,6 @@ public class TestUtilities {
             ExtentSparkReporter spark = new ExtentSparkReporter(REPORT_FOLDER_PATH);
             objExtent.attachReporter(spark);
             counter++;
-
         }
     }
 
