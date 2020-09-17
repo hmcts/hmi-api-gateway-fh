@@ -17,11 +17,4 @@ resource "azurerm_api_management" "hmi_apim" {
     subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
   }
 
-  hostname_configuration {
-    proxy {
-      default_ssl_binding = true
-      host_name           = var.host_name
-      key_vault_id        = replace(data.azurerm_key_vault_secret.certificate_secret.id, "/${data.azurerm_key_vault_secret.certificate_secret.version}", "")
-    }
-  }
 }
