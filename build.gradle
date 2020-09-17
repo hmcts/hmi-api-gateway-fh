@@ -243,11 +243,10 @@ sonarqube {
     property "sonar.projectKey", "HMIAPI"
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.organization", "hmcts"
+    property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/contractTest/java,src/functionalTest/java"
     property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
   }
 }
-
-project.tasks['sonarqube'].dependsOn smoke
 project.tasks['sonarqube'].group = "Verification"
 
 // before committing a change, make sure task still works
