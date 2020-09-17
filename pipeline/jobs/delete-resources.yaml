@@ -12,8 +12,10 @@ jobs:
 - job: deleteAPIM
   displayName: Delete Resources
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   steps:
+  - script: |
+      curl -L https://aka.ms/InstallAzureCli | bash
   - task: AzureCLI@2
     displayName: Delete Resource Group
     name: deleteAPIM
