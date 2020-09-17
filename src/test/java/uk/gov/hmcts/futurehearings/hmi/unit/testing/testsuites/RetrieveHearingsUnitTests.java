@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Disabled("Disabled till dev is completed")
+//@Disabled("Disabled till dev is completed")
 public class RetrieveHearingsUnitTests {
 
     @Value("${targetInstance}")
