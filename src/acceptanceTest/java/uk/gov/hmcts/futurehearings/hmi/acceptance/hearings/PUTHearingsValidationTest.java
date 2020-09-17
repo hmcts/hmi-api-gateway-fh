@@ -29,16 +29,16 @@ public class PUTHearingsValidationTest extends HearingValidationTest {
     @Autowired(required = true)
     public CommonDelegate commonDelegate;
 
-    @Value("${updateHearingRootContext}")
-    private String updateHearingRootContext;
+    @Value("${hearings_idRootContext}")
+    private String hearings_idRootContext;
 
     private HttpMethod httpMethod;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        updateHearingRootContext = String.format(updateHearingRootContext,"12345");
-        this.setRelativeURL(updateHearingRootContext);
+        hearings_idRootContext = String.format(hearings_idRootContext,"12345");
+        this.setRelativeURL(hearings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.CREATED);
