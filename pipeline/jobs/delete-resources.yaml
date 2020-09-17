@@ -24,3 +24,4 @@ jobs:
       inlineScript: |
         deployments=$(az deployment group list --resource-group ${{ parameters.resourceGroup }} --query [].name -o tsv)
         echo $deployments
+        for deployment in $deployments; do az deployment group delete --name $deployment --resource-group ${{ parameters.resourceGroup }} }; done
