@@ -22,7 +22,5 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-# az apim delete --name ${{ parameters.apim }} --resource-group ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
         deployments=$(az deployment group list --resource-group ${{ parameters.resourceGroup }} --query [].name -o tsv)
         echo $deployments
-# for deployment in $deployments; do az deployment group delete --name $deployment --resource-group ${{ parameters.resourceGroup }} }; done
