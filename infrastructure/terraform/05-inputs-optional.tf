@@ -1,12 +1,6 @@
-variable "host_name" {
+variable "infra_kv_name" {
   default = null
 }
-variable "key_vault_name" {
-  default = null
-}
-variable "key_vault_rg" {
-  default = null
-}
-variable "certificate_name" {
+variable "infra_kv_rg" {
   default = null
 }
