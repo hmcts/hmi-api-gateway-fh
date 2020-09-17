@@ -38,7 +38,6 @@ public class TestUtilities {
     }
 
     public static ExtentTest startReport(String suiteName) {
-
         return objExtent.createTest(suiteName);
     }
 
