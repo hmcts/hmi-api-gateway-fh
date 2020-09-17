@@ -8,9 +8,10 @@ resource "azurerm_api_management" "hmi_apim" {
   tags                = var.tags
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = data.azurerm_user_assigned_identity.hmi_apim_mi.client_id
   }
-  
+
   virtual_network_type = var.virtual_network_type
   virtual_network_configuration {
     subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
