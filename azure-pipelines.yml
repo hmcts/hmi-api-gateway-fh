@@ -1,6 +1,6 @@
 ---
 trigger:
-  - HMIS-297-TEST
+  - master
 
 parameters:
   - name: environments
