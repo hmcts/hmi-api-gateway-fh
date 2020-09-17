@@ -8,7 +8,7 @@ resource "azurerm_api_management" "hmi_apim" {
   tags                = var.tags
 
   identity {
-    type         = "UserAssigned"
+    type         = "SystemAssigned,UserAssigned"
     identity_ids = [data.azurerm_user_assigned_identity.hmi_apim_mi.id]
   }
 
