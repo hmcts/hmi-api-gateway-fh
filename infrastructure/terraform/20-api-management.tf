@@ -9,7 +9,7 @@ resource "azurerm_api_management" "hmi_apim" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = data.azurerm_user_assigned_identity.hmi_apim_mi.client_id
+    identity_ids = [data.azurerm_user_assigned_identity.hmi_apim_mi.client_id]
   }
 
   virtual_network_type = var.virtual_network_type
