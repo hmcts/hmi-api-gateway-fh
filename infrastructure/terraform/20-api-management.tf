@@ -8,8 +8,7 @@ resource "azurerm_api_management" "hmi_apim" {
   tags                = var.tags
 
   identity {
-    type         = "SystemAssigned,UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.hmi_apim_mi.id]
+    type         = "SystemAssigned"
   }
 
   virtual_network_type = var.virtual_network_type
@@ -17,11 +16,4 @@ resource "azurerm_api_management" "hmi_apim" {
     subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
   }
 
-  hostname_configuration {
-    proxy {
-      default_ssl_binding = true
-      host_name           = var.host_name
-      key_vault_id        = replace(data.azurerm_key_vault_secret.certificate_secret.id, "/${data.azurerm_key_vault_secret.certificate_secret.version}", "")
-    }
-  }
 }
