@@ -36,9 +36,11 @@ public class ResponseVerifier {
 
     public static void  thenASuccessfulResponseForHearingRequestIsReturned(Response response, ExtentTest objStep){
         try{
-
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals("Status Code Validation:",200, response.getStatusCode());
             objStep.pass("Got the expected response code: 200");
+            assertEquals("Status Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
+            objStep.pass("Got the expected description: " + responseMap.get(("description")));
 
         }
         catch (AssertionError e){
@@ -106,6 +108,30 @@ public class ResponseVerifier {
             objStep.pass("Got the expected response code: 400");
             assertEquals("Status Code Description Validation:","Missing/Invalid Header "+missingField, responseMap.get(("message")));
             objStep.pass("Got the expected description: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
+
+    }
+
+
+    public static void  thenValidateHearingResponseForInvalidHeader(Response response, String missingField, ExtentTest objStep){
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals("Status Code Validation:",400, response.getStatusCode());
+            objStep.pass("Got the expected response code: 400");
+            assertEquals("Status Code Description Validation:","Missing or invalid header "+"'"+missingField+"'.", responseMap.get(("description")));
+            objStep.pass("Got the expected description: " + responseMap.get(("description")));
         }
         catch (AssertionError e){
             objStep.fail("Exception in "+e.getMessage());
