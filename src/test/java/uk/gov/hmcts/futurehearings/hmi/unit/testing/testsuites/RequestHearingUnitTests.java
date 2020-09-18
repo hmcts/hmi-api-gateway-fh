@@ -68,7 +68,6 @@ public class RequestHearingUnitTests {
 
     @BeforeEach
     public void initialiseValues(TestInfo info) {
-
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
