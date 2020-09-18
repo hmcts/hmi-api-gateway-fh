@@ -1,6 +1,8 @@
 ---
 trigger:
   - master
+pr:
+  - none
 
 parameters:
   - name: environments
@@ -10,6 +12,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       registry: DTS-SS-PRIVATE-SBOX
+      custom_domain: hmi-apim-sbox.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -38,6 +41,7 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
+      custom_domain: hmi-apim-svc-dev.azure-api.net # change this later to hmcts!
       tests_gradle:
       - name: UnitTest
         command: test
@@ -57,6 +61,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
+      custom_domain: hmi-apim-svc-test.azure-api.net # change this later to hmcts!
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
@@ -100,6 +105,7 @@ stages:
         group: ${{ environment.group }}
         shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
         shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
+        certificate_name: "STAR-sandbox-platform-hmcts-net"
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
@@ -118,21 +124,21 @@ stages:
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
-            dependsOn: 
+            dependsOn:
             - Terraform
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
-            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
-            variables: 
+            variables:
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
