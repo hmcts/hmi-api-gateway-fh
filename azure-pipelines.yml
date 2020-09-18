@@ -128,7 +128,6 @@ stages:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
-            apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
