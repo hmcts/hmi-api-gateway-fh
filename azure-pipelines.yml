@@ -98,6 +98,8 @@ stages:
         displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
+        shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
+        shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
