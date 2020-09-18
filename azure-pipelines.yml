@@ -162,11 +162,11 @@ stages:
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
-    - ${{ if ne(environment.name, 'dev') }}:
-      - template: pipeline/jobs/sonarqubetest.yaml
-        parameters:
-          displayName: 'Sonarcloudtest'
-          dependsOn:
-          - Terraform
-          - createStorage
-          command: sonarqube --stacktrace -$(Sonarcloud_login)       
+    
+    - template: pipeline/jobs/sonarqubetest.yaml
+      parameters:
+        displayName: 'Sonarcloudtest'
+        dependsOn:
+        - Terraform
+        - createStorage
+        command: sonarqube --stacktrace -$(Sonarcloud_login)       
