@@ -8,9 +8,6 @@ parameters:
   - name: shared_infra_rg
     type: string
 
-  - name: certificate_name
-    type: string
-
 steps:
 
 - task: TerraformCLI@0
