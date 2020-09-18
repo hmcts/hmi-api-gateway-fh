@@ -1,8 +1,6 @@
 ---
 trigger:
   - master
-pr:
-  - none
 
 parameters:
   - name: environments
@@ -100,9 +98,6 @@ stages:
         displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
-        shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
-        shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
-        certificate_name: "STAR-sandbox-platform-hmcts-net"
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
@@ -121,21 +116,21 @@ stages:
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
-            dependsOn:
+            dependsOn: 
             - Terraform
             - createStorage
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
-            apimHost: ${{ environment.custom_domain }}
+            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
-            variables:
+            variables: 
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
@@ -155,7 +150,7 @@ stages:
             containerRegistry: ${{ test.containerRegistry }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            testUrl: https://www.example.com/openapi.json
+            testUrl: https://www.example.com/openapi.json 
             securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
