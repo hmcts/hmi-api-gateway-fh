@@ -4,6 +4,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,6 +46,8 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
     @Test
@@ -55,6 +59,9 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.NOT_FOUND, getApiName(),null);
+                HttpStatus.NOT_FOUND, getInputFileDirectory(),
+                null,
+                null,
+                getHmiErrorVerifier(),"Resource not found");
     }
 }

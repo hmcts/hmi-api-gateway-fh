@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
@@ -9,12 +8,8 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTes
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -36,6 +31,6 @@ public abstract class ResourceValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setApiName("resources");
+        this.setInputFileDirectory("resources");
     }
 }

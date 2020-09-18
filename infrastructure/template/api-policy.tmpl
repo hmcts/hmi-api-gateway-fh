@@ -43,8 +43,8 @@
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
                         return new JObject(
-                            new JProperty("response code", 400),
-                            new JProperty("description", "Malformed request. Missing header value for : 'Request-Created-At'")
+                            new JProperty("statusCode", 400),
+                            new JProperty("message", "Missing/Invalid Header Request-Created-At")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -59,7 +59,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("description", "Missing or invalid header 'Request-Created-At'.")).ToString())</set-body>
+                        new JProperty("message", "Missing/Invalid Header Request-Created-At")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
@@ -69,8 +69,8 @@
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
                         return new JObject(
-                            new JProperty("response code", 400),
-                            new JProperty("description", "Malformed request. Missing header value for : 'Request-Processed-At'")
+                            new JProperty("statusCode", 400),
+                            new JProperty("message", "Missing/Invalid Header Request-Processed-At")
                         ).ToString();
                     }</set-body>
                 </return-response>
@@ -85,7 +85,7 @@
                     </set-header>
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
-                        new JProperty("description", "Missing or invalid header 'Request-Processed-At'.")).ToString())</set-body>
+                        new JProperty("message", "Missing/Invalid Header Request-Processed-At")).ToString())</set-body>
                 </return-response>
             </when>
         </choose>
