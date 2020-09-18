@@ -34,12 +34,10 @@ public class TestUtilities {
             ExtentSparkReporter spark = new ExtentSparkReporter(REPORT_FOLDER_PATH);
             objExtent.attachReporter(spark);
             counter++;
-
         }
     }
 
     public static ExtentTest startReport(String suiteName) {
-
         return objExtent.createTest(suiteName);
     }
 

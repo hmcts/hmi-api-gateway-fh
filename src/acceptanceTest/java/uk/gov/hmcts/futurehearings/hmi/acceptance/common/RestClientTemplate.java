@@ -42,6 +42,14 @@ public class RestClientTemplate {
                        .body(requestBodyPayload)
                        .when()
                        .put().then().extract().response();
+           case DELETE:
+               return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                       .given()
+                       .headers(headersAsMap)
+                       .basePath(requestURL)
+                       .body(requestBodyPayload)
+                       .when()
+                       .delete().then().extract().response();
            case GET:
                if (Objects.isNull(params) || params.size() == 0) {
                    return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
