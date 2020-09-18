@@ -29,6 +29,11 @@ variable "api_policies" {
       operationId  = "resources"
       format       = "rawxml-link"
       templateFile = "api-op-retrieve-resources-policy.xml"
+    },
+    {
+      operationId  = "delete-hearing"
+      format       = "rawxml-link"
+      templateFile = "api-op-delete-hearing-policy.xml"
     }
   ]
 }

@@ -16,7 +16,3 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
     content_value  = var.open_api_spec_content_value
   }
 }
-
-
-
-
