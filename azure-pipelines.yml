@@ -1,39 +1,39 @@
 ---
 trigger:
-  master
+  - master
 
 parameters:
   - name: environments
     type: object
     default: 
-    # - name: sbox
-    #   subscription: DTS-SHAREDSERVICES-SBOX
-    #   group: HMI-APIM-BUILD-SBOX
-    #   registry: DTS-SS-PRIVATE-SBOX
-    #   tests_gradle:
-    #   - name: UnitTest
-    #     command: test
-    #     logLevel: info
-    #     serenity: true
-    #   - name: SmokeTest
-    #     command: smoke
-    #     logLevel: debug
-    #     serenity: false
-    #     dependsOn: UnitTest
-    #   - name: AcceptanceTest
-    #     command: acceptance
-    #     logLevel: debug
-    #     serenity: false
-    #     dependsOn: SmokeTest
-    #   - name: FunctionalTest
-    #     command: functional
-    #     logLevel: info
-    #     serenity: true
-    #     dependsOn: AcceptanceTest
-    #   tests_security:
-    #   - name: ApiZapScan
-    #     containerRegistry: ssprivatesbox.azurecr.io
-    #     repository: hmi/apim-tests-owasp
+#    - name: sbox
+#      subscription: DTS-SHAREDSERVICES-SBOX
+#      group: HMI-APIM-BUILD-SBOX
+#      registry: DTS-SS-PRIVATE-SBOX
+#      tests_gradle:
+#      - name: UnitTest
+#        command: test
+#        logLevel: info
+#        serenity: true
+#      - name: SmokeTest
+#        command: smoke
+#        logLevel: debug
+#        serenity: false
+#        dependsOn: UnitTest
+#      - name: AcceptanceTest
+#        command: acceptance
+#        logLevel: debug
+#        serenity: false
+#        dependsOn: SmokeTest
+#      - name: FunctionalTest
+#        command: functional
+#        logLevel: info
+#        serenity: true
+#        dependsOn: AcceptanceTest
+#      tests_security:
+#      - name: ApiZapScan
+#        containerRegistry: ssprivatesbox.azurecr.io
+#        repository: hmi/apim-tests-owasp
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
