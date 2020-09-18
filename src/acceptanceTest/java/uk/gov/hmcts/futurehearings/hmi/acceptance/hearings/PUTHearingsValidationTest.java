@@ -2,9 +2,12 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
@@ -23,6 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PUTHearingsValidationTest.class)
 @IncludeTags("Put")
+//@Disabled("Enabling the verifying mechanisms in the Tests")
 public class PUTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
@@ -43,5 +47,7 @@ public class PUTHearingsValidationTest extends HearingValidationTest {
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.CREATED);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 }
