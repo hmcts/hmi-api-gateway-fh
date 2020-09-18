@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
@@ -9,12 +8,8 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTes
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 
@@ -36,10 +31,10 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setApiName("hearings");
+        this.setInputFileDirectory("hearings");
     }
 
-    @Disabled("Test Failing and giving multiple different Errors while testing - So Disabled- TBC With Lee")
+    /*@Disabled("Test Failing and giving multiple different Errors while testing - So Disabled- TBC With Lee")
     @Test
     @DisplayName("Successfully validated response with an xml payload")
     public void test_successful_response_for_test_xml_body() throws Exception {
@@ -49,5 +44,5 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getApiName(),null);
-    }
+    }*/
 }
