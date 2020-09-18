@@ -253,7 +253,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForInvalidHeader(response, "Request-Created-At", objStep);
+        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -274,7 +274,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForInvalidHeader(response, "Request-Processed-At", objStep);
+        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
     }
 
 
