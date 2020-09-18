@@ -18,7 +18,7 @@ public class UpdateHearingResponseVerifier {
             //assertEquals(2, responseMap.size());
             assertEquals("Status Code Validation:",201, response.getStatusCode());
             objStep.pass("Got the expected response code: 201");
-            assertEquals("Status Code Description Validation:","Hearings updated successfully", responseMap.get(("description")));
+            assertEquals("Status Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
             objStep.pass("Got the expected description: " + responseMap.get(("description")));
         }
         catch (AssertionError e){
