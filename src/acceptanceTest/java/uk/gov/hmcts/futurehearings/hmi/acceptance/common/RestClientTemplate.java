@@ -71,6 +71,13 @@ public class RestClientTemplate {
                    log.debug(response.getBody().asString());
                    return response;
                }
+           case OPTIONS:
+               return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                       .given()
+                       .headers(headersAsMap)
+                       .basePath(requestURL)
+                       .when()
+                       .options().then().extract().response();
            default :
                log.error("Http method not identified :" + httpMethod.name());
                throw new IllegalArgumentException("HTTP method not identified");
