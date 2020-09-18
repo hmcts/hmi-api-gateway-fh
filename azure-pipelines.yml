@@ -1,6 +1,6 @@
 ---
 trigger:
-  - none
+  - master
 
 parameters:
   - name: environments
@@ -90,10 +90,7 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    variables:
-    - group: SonarCloud
-    - name: Sonarcloud_login
-      value: $(Psonar.login) 
+    
     jobs:
 
     - template: pipeline/jobs/terraform.yaml
@@ -170,4 +167,4 @@ stages:
           dependsOn:
           - Terraform
           - createStorage
-          command: sonarqube --stacktrace -$(Sonarcloud_login)       
+          command: sonarqube --stacktrace -$(Psonar.login)       
