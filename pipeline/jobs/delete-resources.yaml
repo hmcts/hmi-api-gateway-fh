@@ -12,8 +12,19 @@ jobs:
 - job: deleteAPIM
   displayName: Delete Resources
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   steps:
+  - script: |
+      sudo apt-get update
+      sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+      curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
+      gpg --dearmor | \
+      sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+      AZ_REPO=$(lsb_release -cs)
+      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+      sudo tee /etc/apt/sources.list.d/azure-cli.list
+      sudo apt-get update
+      sudo apt-get install azure-cli
   - task: AzureCLI@2
     displayName: Delete Resource Group
     name: deleteAPIM
@@ -22,4 +33,11 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az apim delete --name ${{ parameters.apim }} --resource-group ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
+        az apim delete -n ${{ parameters.apim }} -g ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
+        deployments=$(az deployment group list -g ${{ parameters.resourceGroup }} --query [].name -o tsv)
+        for deployment in $deployments
+        do 
+        echo Deleting -n $deployment
+        az deployment group delete -g ${{ parameters.resourceGroup }} -n $deployment
+        done
+      
