@@ -18,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@Disabled("GET method for hearings yet to be implemented")
 public class HearingApiSmokeTest extends SmokeTest {
 
     @Value("${hearingsApiRootContext}")
