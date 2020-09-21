@@ -1,6 +1,12 @@
 parameters:
   - name: command
     type: string
+  - name: sonarAnalysis
+    type: boolean
+    default: false
+  - name: publishJUnitResults
+    type: boolean
+    default: true
 
 steps:
   - task: Gradle@2
@@ -9,8 +15,8 @@ steps:
       gradleWrapperFile: 'gradlew'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
       tasks: clean ${{ parameters.command }}
-      publishJUnitResults: true
+      publishJUnitResults: ${{ parameters.publishJUnitResults }}
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
-      sonarQubeRunAnalysis: false
+      sonarQubeRunAnalysis: ${{ parameters.sonarAnalysis }}

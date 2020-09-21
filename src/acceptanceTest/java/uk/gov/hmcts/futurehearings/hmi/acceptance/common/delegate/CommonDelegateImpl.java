@@ -42,19 +42,24 @@ public class CommonDelegateImpl implements CommonDelegate {
             case PUT:
             case DELETE:
                 inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                hmiVerifier.verify(status,expectedMessage,
+                        performRESTCall(targetURL, standardHeaderMap, params, httpMethod, status, inputPayload));
                 break;
             case GET:
-
+                hmiVerifier.verify(status,expectedMessage,performRESTCall(targetURL, standardHeaderMap, params, httpMethod, status, inputPayload));
+                break;
+            case OPTIONS:
+                performRESTCall(targetURL, standardHeaderMap, params, httpMethod, status, inputPayload);
         }
 
-        Response response = shouldExecute(standardHeaderMap,
-                inputPayload,
-                targetURL,
-                params,
-                status,
-                httpMethod);
-        //Temporarily verifying on the Response Code only...
-        hmiVerifier.verify(status,expectedMessage,response);
+    }
 
+    private Response performRESTCall(final String targetURL, final Map<String, String> standardHeaderMap, final Map<String, String> params, final HttpMethod httpMethod, final HttpStatus status, final String inputPayload) {
+        return shouldExecute(standardHeaderMap,
+                    inputPayload,
+                    targetURL,
+                    params,
+                    status,
+                    httpMethod);
     }
 }
