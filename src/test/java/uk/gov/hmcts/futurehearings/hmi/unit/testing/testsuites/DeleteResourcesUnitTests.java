@@ -94,7 +94,7 @@ public class DeleteResourcesUnitTests {
     public void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForACorrectRequest(response, objStep);
+        thenValidateResponseForACorrectDeleteRequest(response, objStep);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class DeleteResourcesUnitTests {
     public void testDeleteResourcesRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForACorrectRequest(response, objStep);
+        thenValidateResponseForACorrectDeleteRequest(response, objStep);
     }
 
     @Test
@@ -282,15 +282,15 @@ public class DeleteResourcesUnitTests {
     }
 
     private Response whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(final String input) {
-        return hearingResponseForCorrectHeaders(resourcesApiRootContext, headersAsMap, targetInstance, input);
+        return hearingResponseForCorrectHeaders(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
     }
 
     private Response whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(final String input) {
-        return hearingResponseForMissingOcpSubKey(resourcesApiRootContext, headersAsMap, targetInstance, input);
+        return hearingResponseForMissingOcpSubKey(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
     }
 
     private Response whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return hearingResponseForAMissingHeader(resourcesApiRootContext, headersAsMap, targetInstance, input);
+        return hearingResponseForAMissingHeader(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
