@@ -32,7 +32,7 @@ jobs:
   steps:
   - task: AzurePowerShell@5
     inputs:
-      azureSubscription: ${{ parameters.subsctiption }}
+      azureSubscription: ${{ parameters.subscription }}
       ScriptType: 'FilePath'
       ScriptPath: 'script/apply_custom_domain.ps1'
       ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -ResourceGroupName ${{ parameters.resourceGroup }}'
