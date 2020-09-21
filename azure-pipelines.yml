@@ -38,51 +38,51 @@ parameters:
         containerRegistry: ssprivatesbox.azurecr.io
         repository: hmi/apim-tests-owasp
 
-    - name: dev
-      subscription: DTS-SHAREDSERVICES-DEV
-      group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim-svc-dev.azure-api.net # change this later to hmcts!
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        serenity: false
-        dependsOn: SmokeTest
+    # - name: dev
+    #   subscription: DTS-SHAREDSERVICES-DEV
+    #   group: HMI-APIM-BUILD-DEV
+    #   custom_domain: hmi-apim-svc-dev.azure-api.net # change this later to hmcts!
+    #   tests_gradle:
+    #   - name: UnitTest
+    #     command: test
+    #     logLevel: info
+    #     serenity: true
+    #   - name: SmokeTest
+    #     command: smoke
+    #     logLevel: debug
+    #     serenity: false
+    #     dependsOn: UnitTest
+    #   - name: AcceptanceTest
+    #     command: acceptance
+    #     logLevel: debug
+    #     serenity: false
+    #     dependsOn: SmokeTest
 
-    - name: test
-      subscription: DTS-SHAREDSERVICES-TEST
-      group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim-svc-test.azure-api.net # change this later to hmcts!
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        serenity: false
-        dependsOn: SmokeTest
-      - name: FunctionalTest
-        command: functional
-        logLevel: info
-        serenity: true
-        dependsOn: AcceptanceTest
+    # - name: test
+    #   subscription: DTS-SHAREDSERVICES-TEST
+    #   group: HMI-APIM-BUILD-TEST
+    #   custom_domain: hmi-apim-svc-test.azure-api.net # change this later to hmcts!
+    #   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    #   tests_gradle:
+    #   - name: UnitTest
+    #     command: test
+    #     logLevel: info
+    #     serenity: true
+    #   - name: SmokeTest
+    #     command: smoke
+    #     logLevel: debug
+    #     serenity: false
+    #     dependsOn: UnitTest
+    #   - name: AcceptanceTest
+    #     command: acceptance
+    #     logLevel: debug
+    #     serenity: false
+    #     dependsOn: SmokeTest
+    #   - name: FunctionalTest
+    #     command: functional
+    #     logLevel: info
+    #     serenity: true
+    #     dependsOn: AcceptanceTest
 
 variables:
   - group: HMI-APIM-Common
