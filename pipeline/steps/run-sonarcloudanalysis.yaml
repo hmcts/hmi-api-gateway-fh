@@ -10,14 +10,10 @@ steps:
     organization: hmcts
     scannerMode: Other
 
-- task: Gradle@2
-  displayName: Run gradle
-  inputs:
-    gradleWrapperFile: 'gradlew'
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-    tasks: clean ${{ parameters.command }}
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    sonarQubeRunAnalysis: true   
+- template: ../steps/run-gradlew.yaml  
+    parameters:
+      command: ${{ parameters.command }}
+      sonarAnalysis: true
+      publishJUnitResults: false  
 - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
