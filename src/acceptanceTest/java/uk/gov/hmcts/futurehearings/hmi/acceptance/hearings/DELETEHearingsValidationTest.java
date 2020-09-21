@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
@@ -63,5 +64,23 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
                 null,
                 null,
                 getHmiErrorVerifier(),"Resource not found");
+    }
+
+    //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
+    //Confirmed by Product Owner that this should be a Success Scenario.
+    @Test
+    @DisplayName("Successfully validated response with an xml payload")
+    public void test_successful_response_for_test_xml_body() throws Exception {
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), "sample-xml-payload.xml",
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                this.getHttpSucessStatus(),
+                "common",
+                null,
+                null,
+                getHmiSuccessVerifier(),"The request was received successfully.");
     }
 }
