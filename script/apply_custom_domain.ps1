@@ -13,6 +13,7 @@ Param (
 [string] $ResourceGroupName
 )
 
+Install-Module -Name Az.ApiManagement  -Force
 $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 $apim.ProxyCustomHostnameConfiguration = $proxy
