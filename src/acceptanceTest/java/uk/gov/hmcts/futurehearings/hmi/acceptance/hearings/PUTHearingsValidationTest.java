@@ -64,11 +64,10 @@ public class PUTHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 this.getHttpSucessStatus(), "common",
-                null,
-                null,
                 getHmiSuccessVerifier(),"The request was received successfully.");
     }
 }
