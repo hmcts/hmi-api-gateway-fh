@@ -3,7 +3,15 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 import com.aventstack.extentreports.ExtentTest;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,15 +24,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForACorrectDeleteRequest;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForInvalidOcpSubscription;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingOcpSubscriptionHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingHeader;
+
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.setupReport;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.endReport;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.startReport;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@Disabled("Disabled till Dev is completed")
 public class DeleteResourcesUnitTests {
 
 
