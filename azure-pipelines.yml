@@ -2,7 +2,6 @@
 trigger:
   - master
 
-
 parameters:
   - name: environments
     type: object
@@ -91,7 +90,6 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    
     jobs:
 
     - template: pipeline/jobs/terraform.yaml
