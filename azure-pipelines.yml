@@ -109,6 +109,7 @@ stages:
     - ${{ if eq(environment.name, 'sbox') }}:
       - template: pipeline/jobs/apply-hostname.yaml
         parameters:
+          subscription: ${{ environment.subscription }}
           displayName: Apply Custom Domain Configuration
           dependsOn: Terraform
           resourceGroup: $(resourceGroup)
