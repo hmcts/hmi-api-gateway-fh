@@ -2,6 +2,7 @@
 trigger:
   - none
 
+
 parameters:
   - name: environments
     type: object
@@ -170,4 +171,4 @@ stages:
           dependsOn:
           - Terraform
           - createStorage
-          command: sonarqube --stacktrace -$(Sonarcloud_login)       
+          command: sonarqube --stacktrace -$(Psonar.login)       
