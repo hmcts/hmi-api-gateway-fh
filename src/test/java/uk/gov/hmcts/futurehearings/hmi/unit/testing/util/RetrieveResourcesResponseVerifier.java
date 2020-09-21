@@ -35,6 +35,25 @@ public class RetrieveResourcesResponseVerifier {
 
     public static void  thenValidateResponseForACorrectRequest(Response response, ExtentTest objStep){
         try{
+
+            assertEquals("Status Code Validation:",200, response.getStatusCode());
+            objStep.pass("Got the expected response code: 200");
+
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForACorrectDeleteRequest(Response response, ExtentTest objStep){
+        try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals("Status Code Validation:",200, response.getStatusCode());
             objStep.pass("Got the expected response code: 200");
