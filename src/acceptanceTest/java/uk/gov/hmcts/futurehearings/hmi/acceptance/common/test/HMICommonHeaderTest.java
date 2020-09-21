@@ -14,12 +14,14 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeaderWithDuplicateValues;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.restassured.RestAssured;
@@ -77,7 +79,7 @@ public abstract class HMICommonHeaderTest {
 
     @AfterEach
     public void afterEach(TestInfo info) {
-        log.debug("After execution : "+info.getTestMethod().get().getName());
+        log.debug("After execution : " + info.getTestMethod().get().getName());
     }
 
     @AfterAll
@@ -91,13 +93,12 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createCompletePayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
-                null,
-                null,
-                getHmiSuccessVerifier(),"The request was received successfully.");
+                getHmiSuccessVerifier(), "The request was received successfully.");
     }
 
     @Test
@@ -106,11 +107,10 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 getHttpSucessStatus(), getInputFileDirectory(),
-                null,
-                null,
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
@@ -121,11 +121,10 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "empty-json-payload.json",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 getHttpSucessStatus(), "common",
-                null,
-                null,
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
@@ -139,13 +138,12 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
-                null,
-                null,
-                getHmiSuccessVerifier(),"The request was received successfully.");
+                getHmiSuccessVerifier(), "The request was received successfully.");
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
@@ -159,12 +157,11 @@ public abstract class HMICommonHeaderTest {
                 //Performed a near to the Real URL Transformation
                 getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                null,
-                null,
-                getHmiErrorVerifier(),"Resource not found");
+                getHmiErrorVerifier(), "Resource not found");
     }
 
     @Test
@@ -174,12 +171,11 @@ public abstract class HMICommonHeaderTest {
                 getRelativeURL(),
                 getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 HttpMethod.OPTIONS,
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                null,
-                null,
-                getHmiErrorVerifier(),"Resource not found");
+                getHmiErrorVerifier(), "Resource not found");
     }
 
 
@@ -193,12 +189,11 @@ public abstract class HMICommonHeaderTest {
                 createHeaderWithAllValuesEmpty(),
                 //The Content Type Has to be Populated for Rest Assured to function properly
                 //So this Test was manually executed in Postman Manually as well with the same Order Number
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
 
@@ -208,12 +203,11 @@ public abstract class HMICommonHeaderTest {
                 createHeaderWithAllValuesNull(),
                 //The Content Type Has to be Populated for Rest Assured to function properly
                 //So this Test was manually executed in Postman Manually as well with the same Order Number
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
     }
@@ -225,11 +219,10 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
-                Arrays.asList("Ocp-Apim-Subscription-Key")), getUrlParams(), getHttpMethod(),
+                        Arrays.asList("Ocp-Apim-Subscription-Key")), null,
+                getUrlParams(), getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.");
     }
@@ -238,73 +231,69 @@ public abstract class HMICommonHeaderTest {
     @DisplayName("Subscription Key Value Truncated in the Header")
     public void test_subscriptionkey_value_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
-                getApiSubscriptionKey().substring(0,getApiSubscriptionKey().length()-1),
+                getApiSubscriptionKey().substring(0, getApiSubscriptionKey().length() - 1),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader("  "),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
     }
 
 
     @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\"","Wrong_Value,c602c8ed3b8147be910449b563dce008"})
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\"", "Wrong_Value,c602c8ed3b8147be910449b563dce008"})
     public void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(subKeyVal),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
     }
 
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Source_System, S&L"})
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Source_System, S&L"})
     public void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithSourceSystemValue(getApiSubscriptionKey(),sourceSystemVal),
+                createHeaderWithSourceSystemValue(getApiSubscriptionKey(), sourceSystemVal),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Missing/Invalid Header Source-System");
     }
 
 
     @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"})
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"})
     public void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(),destinationSystemVal),
+                createHeaderWithDestinationSystemValue(getApiSubscriptionKey(), destinationSystemVal),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Missing/Invalid Header Destination-System");
     }
 
 
     @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
             "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
             "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
             "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
@@ -316,12 +305,11 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), requestCreatedAtVal),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 "Missing/Invalid Header Request-Created-At");
     }
@@ -338,18 +326,17 @@ public abstract class HMICommonHeaderTest {
         final String expectedErrorMessage =
                 keyToBeTruncated.equalsIgnoreCase("Accept") ||
                         keyToBeTruncated.equalsIgnoreCase("Content-Type") ?
-                        "Missing/Invalid Media Type" : "Missing/Invalid Header " +keyToBeTruncated;
+                        "Missing/Invalid Media Type" : "Missing/Invalid Header " + keyToBeTruncated;
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
                         Arrays.asList(keyToBeTruncated)),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 httpStatus,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 expectedErrorMessage);
     }
@@ -360,29 +347,28 @@ public abstract class HMICommonHeaderTest {
             "Destination-System", "Request-Created-At",
             "Request-Processed-At", "Request-Type"})
     public void test_with_keys_removed_from_header(String keyToBeRemoved) throws Exception {
-        final HttpStatus httpStatus = keyToBeRemoved.equalsIgnoreCase("Accept") ? HttpStatus.NOT_ACCEPTABLE:HttpStatus.BAD_REQUEST;
+        final HttpStatus httpStatus = keyToBeRemoved.equalsIgnoreCase("Accept") ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.BAD_REQUEST;
         final String expectedErrorMessage =
                 keyToBeRemoved.equalsIgnoreCase("Accept") ||
                         keyToBeRemoved.equalsIgnoreCase("Content-Type") ?
-                        "Missing/Invalid Media Type" : "Missing/Invalid Header " +keyToBeRemoved;
+                        "Missing/Invalid Media Type" : "Missing/Invalid Header " + keyToBeRemoved;
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRemovedHeaderKey(getApiSubscriptionKey(),
                         Arrays.asList(keyToBeRemoved)),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 httpStatus,
                 getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),
                 expectedErrorMessage);
     }
 
 
     @ParameterizedTest(name = "Request Processed At System Header With Invalid Values - Param : {0} --> {1}")
-    @CsvSource({ "Null_Value, null","Empty_Space,\" \"", "Invalid_Value, value",
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
             "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
             "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
             "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
@@ -391,68 +377,64 @@ public abstract class HMICommonHeaderTest {
             "Invalid_Date_Format, 2002-10-02T15:00:00",
     })
     public void test_request_processed_at_with_invalid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
-            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    HttpStatus.BAD_REQUEST,
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiErrorVerifier(),
-                    "Missing/Invalid Header Request-Processed-At");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                "Missing/Invalid Header Request-Processed-At");
     }
 
 
     @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Invalid_Value, Robbery"})
     public void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
-            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestTypeVal),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    HttpStatus.BAD_REQUEST,
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiErrorVerifier(),
-                    "Missing/Invalid Header Request-Type");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestTypeVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                "Missing/Invalid Header Request-Type");
     }
 
 
     @ParameterizedTest(name = "Accept System Header with invalid format - Param : {0} --> {1}")
-    @CsvSource({ "Invalid_Value, Random", "Invalid_Format, application/pdf", "Invalid_Format, application/text"})
+    @CsvSource({"Invalid_Value, Random", "Invalid_Format, application/pdf", "Invalid_Format, application/text"})
     public void test_accept_at_with_invalid_values(String acceptTypeKey, String acceptTypeVal) throws Exception {
-            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithAcceptTypeAtSystemValue(getApiSubscriptionKey(), acceptTypeVal),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiErrorVerifier(),
-                    "Missing/Invalid Media Type");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithAcceptTypeAtSystemValue(getApiSubscriptionKey(), acceptTypeVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.NOT_ACCEPTABLE,
+                getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                "Missing/Invalid Media Type");
     }
 
 
     @ParameterizedTest(name = "Request Type System Header with valid values - Value : {0}")
     @ValueSource(strings = {"Assault", "Theft"})
     public void test_request_type_at_with_valid_values(String requestType) throws Exception {
-            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestType),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    getHttpSucessStatus(),
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiSuccessVerifier(),
-                    "The request was received successfully.");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestType),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
 
@@ -463,17 +445,16 @@ public abstract class HMICommonHeaderTest {
             "Valid_Date_Format,2019-10-12 07:20:50.52Z"
     })
     public void test_request_processed_at_with_valid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
-            commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    getHttpSucessStatus(),
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiSuccessVerifier(),
-                    "The request was received successfully.");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} --> {1}")
@@ -481,17 +462,16 @@ public abstract class HMICommonHeaderTest {
             "Valid_Date_Format, 2002-10-02T15:00:00.05Z",
             "Valid_Date_Format, 2019-10-12 07:20:50.52Z"})
     public void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
-      commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                    getRelativeURL(), getInputPayloadFileName(),
-                    createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), requestCreatedAtVal),
-                    getUrlParams(),
-                    getHttpMethod(),
-                    getHttpSucessStatus(),
-                    getInputFileDirectory(),
-                    null,
-                    null,
-                    getHmiSuccessVerifier(),
-                    "The request was received successfully.");
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), requestCreatedAtVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
 
     }
 
@@ -510,16 +490,43 @@ public abstract class HMICommonHeaderTest {
         final String expectedErrorMessage =
                 deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ||
                         deprecatedHeaderKey.equalsIgnoreCase("X-Content-Type") ?
-                        "Missing/Invalid Media Type" : "Missing/Invalid Header " +deprecatedHeaderKey.replace("X-","");
+                        "Missing/Invalid Media Type" : "Missing/Invalid Header " + deprecatedHeaderKey.replace("X-", "");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithDeprecatedHeaderValue(getApiSubscriptionKey(), deprecatedHeaderKey, deprecatedHeaderVal),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 httpStatus,
                 getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                expectedErrorMessage);
+
+    }
+
+    @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
+    @CsvSource(value = {
+            "Source-System,NIL","Source-System,''","Source-System,CFT",
+            "Destination-System,NIL","Destination-System,''","Destination-System,S&L",
+            "Request-Created-At,NIL","Request-Created-At,''","Request-Created-At,2002-10-02T15:00:00Z",
+            "Request-Processed-At,NIL","Request-Processed-At,''","Request-Processed-At,2002-10-02T15:00:00Z",
+            "Request-Type,NIL","Request-Type,''","Request-Type,THEFT","Request-Type,ASSAULT"
+    }, nullValues = "NIL")
+    public void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
+
+        final String expectedErrorMessage =
+                        "Missing/Invalid Header " + duplicateHeaderKey;
+        Map<String,String> duplicateHeaderField  = new HashMap<String,String>();
+        duplicateHeaderField.put(duplicateHeaderKey,duplicateHeaderValue);
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
                 null,
-                null,
+                createStandardPayloadHeaderWithDuplicateValues(getApiSubscriptionKey(),
+                        duplicateHeaderField),
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,
+                getInputFileDirectory(),
                 getHmiErrorVerifier(),
                 expectedErrorMessage);
 

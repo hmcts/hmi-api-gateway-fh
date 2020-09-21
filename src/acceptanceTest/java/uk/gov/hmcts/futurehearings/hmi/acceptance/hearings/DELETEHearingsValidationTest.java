@@ -58,11 +58,10 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "delete-hearing-request-valid.json",
                 createCompletePayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                null,
-                null,
                 getHmiErrorVerifier(),"Resource not found");
     }
 
@@ -75,12 +74,11 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
-                null,
-                null,
                 getHmiSuccessVerifier(),"The request was received successfully.");
     }
 }
