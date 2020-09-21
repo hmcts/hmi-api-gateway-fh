@@ -18,8 +18,7 @@ jobs:
     vmImage: 'Ubuntu-16.04'
   
   steps:
-  - template: ../steps/run-gradlew.yaml
+  - template: ../steps/run-sonarcloudanalysis.yaml
     parameters:
       command: ${{ parameters.command }}
-      sonarAnalysis: true
-      publishJUnitResults: false
+      
