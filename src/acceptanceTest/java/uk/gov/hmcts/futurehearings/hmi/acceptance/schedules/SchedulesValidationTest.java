@@ -31,6 +31,6 @@ public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setApiName("sessions");
+        this.setInputFileDirectory("sessions");
     }
 }
