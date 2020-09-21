@@ -106,7 +106,7 @@ stages:
         shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
         shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
 
-    - ${{ if eq(environment.name 'sbox') }}:
+    - ${{ if eq(environment.name, 'sbox') }}:
       - template: pipeline/jobs/apply-hostname.yaml
         parameters:
           displayName: Apply Custom Domain Configuration
