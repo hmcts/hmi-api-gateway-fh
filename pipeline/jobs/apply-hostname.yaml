@@ -1,0 +1,44 @@
+parameters:
+  - name: subscription
+    type: string
+
+  - name: resourceGroup
+    type: string
+
+  - name: dependsOn
+    type: object
+  
+  - name: displayName
+    type: string
+
+  - name: certificateUrl
+    type: string
+  
+  - name: hostName
+    type: string
+  
+  - name: hostNameType
+    type: string
+    default: "Proxy"
+
+jobs:
+- job: createStorage
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'windows-latest'
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: ${{ parameters.subsctiption }}
+      ScriptType: 'FilePath'
+      ScriptPath: 'script/apply_custom_domain.ps1'
+      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -ResourceGroupName ${{ parameters.resourceGroup }}'
+      azurePowerShellVersion: 'LatestVersion'
+
+
+      
