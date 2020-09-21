@@ -106,6 +106,15 @@ stages:
         shared_infra_kv: hmi-sharedinfra-kv-${{ environment.name }}
         shared_infra_rg: hmi-sharedinfra-${{ environment.name }}-rg
 
+    - ${{ if eq(environment.name 'sbox') }}:
+      - template: pipeline/jobs/apply-hostname.yaml
+        parameters:
+          displayName: Apply Custom Domain Configuration
+          dependsOn: Terraform
+          resourceGroup: $(resourceGroup)
+          certificateUrl: https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert # WIP!
+          hostName: "hmi-apim-sbox.sandbox.platform.hmcts.net"
+
     - template: pipeline/jobs/create-storage.yaml
       parameters:
         displayName: Create Storage for Test Results
