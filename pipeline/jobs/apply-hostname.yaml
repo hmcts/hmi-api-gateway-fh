@@ -38,9 +38,9 @@ jobs:
       # ScriptArguments: '-Hostname ${{ parameters.hostName }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -ResourceGroupName ${{ parameters.resourceGroup }}'
       ScriptType: 'InlineScript'
       Inline: |
-        Install-Module -Name Az.ApiManagement  -Force
+        Install-Module -Name Az.ApiManagement -Force
         $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname ${{ parameters.hostName }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -DefaultSslBinding
-        $apim = Get-AzApiManagement -ResourceGroupName ${{ parameters.resourceGroup }}
+        $apim = Get-AzApiManagement -ResourceGroupName $(resourceGroup)
         $apim.ProxyCustomHostnameConfiguration = $proxy
         Set-AzApiManagement -InputObject $apim -SystemAssignedIdentity
       azurePowerShellVersion: 'LatestVersion'
