@@ -114,6 +114,8 @@ stages:
           resourceGroup: $(resourceGroup)
           certificateUrl: "https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert" # WIP!
           hostName: "hmi-apim-sbox.sandbox.platform.hmcts.net"
+          variables:
+            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
     # - template: pipeline/jobs/create-storage.yaml
     #   parameters:
