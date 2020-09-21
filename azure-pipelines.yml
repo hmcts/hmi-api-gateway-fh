@@ -95,7 +95,6 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    
     jobs:
 
     - template: pipeline/jobs/terraform.yaml
@@ -113,7 +112,7 @@ stages:
           displayName: Apply Custom Domain Configuration
           dependsOn: Terraform
           resourceGroup: $(resourceGroup)
-          certificateUrl: https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert # WIP!
+          certificateUrl: "https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert" # WIP!
           hostName: "hmi-apim-sbox.sandbox.platform.hmcts.net"
 
     - template: pipeline/jobs/create-storage.yaml
@@ -176,3 +175,12 @@ stages:
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+    
+    - ${{ if ne(environment.name, 'dev') }}:
+      - template: pipeline/jobs/sonarqubetest.yaml
+        parameters:
+          displayName: 'Sonarcloudtest'
+          dependsOn:
+          - Terraform
+          - createStorage
+          command: sonarqube --stacktrace -$(Psonar.login)       
