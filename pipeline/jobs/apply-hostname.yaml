@@ -22,7 +22,7 @@ parameters:
     default: "Proxy"
 
 jobs:
-- job: createStorage
+- job: ApplyHostName
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
