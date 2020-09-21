@@ -152,7 +152,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @Test
-    @DisplayName("Incorrect Url with correct Header")
+    @DisplayName("API call with Standard Header but slight Error URL")
     public void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURLForNotFound(),
@@ -161,6 +161,21 @@ public abstract class HMICommonHeaderTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
+                HttpStatus.NOT_FOUND, getInputFileDirectory(),
+                null,
+                null,
+                getHmiErrorVerifier(),"Resource not found");
+    }
+
+    @Test
+    @DisplayName("API call with Standard Header but unimplemented METHOD")
+    public void test_invalid_REST_method() throws Exception {
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(),
+                getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                HttpMethod.OPTIONS,
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
                 null,
                 null,
