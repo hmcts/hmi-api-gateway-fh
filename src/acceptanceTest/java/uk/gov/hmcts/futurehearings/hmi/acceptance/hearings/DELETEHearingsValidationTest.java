@@ -1,9 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,6 +47,8 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
     @Test
@@ -55,6 +60,27 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.NOT_FOUND, getApiName(),null);
+                HttpStatus.NOT_FOUND, getInputFileDirectory(),
+                null,
+                null,
+                getHmiErrorVerifier(),"Resource not found");
+    }
+
+    //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
+    //Confirmed by Product Owner that this should be a Success Scenario.
+    @Test
+    @DisplayName("Successfully validated response with an xml payload")
+    public void test_successful_response_for_test_xml_body() throws Exception {
+
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), "sample-xml-payload.xml",
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                getUrlParams(),
+                getHttpMethod(),
+                this.getHttpSucessStatus(),
+                "common",
+                null,
+                null,
+                getHmiSuccessVerifier(),"The request was received successfully.");
     }
 }
