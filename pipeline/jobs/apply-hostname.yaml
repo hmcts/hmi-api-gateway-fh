@@ -29,8 +29,6 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - task: AzurePowerShell@5
     inputs:
