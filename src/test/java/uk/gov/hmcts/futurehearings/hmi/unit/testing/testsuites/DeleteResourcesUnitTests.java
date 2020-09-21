@@ -24,7 +24,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResource
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Disabled("Disabled till Dev is completed")
+//@Disabled("Disabled till Dev is completed")
 public class DeleteResourcesUnitTests {
 
 
