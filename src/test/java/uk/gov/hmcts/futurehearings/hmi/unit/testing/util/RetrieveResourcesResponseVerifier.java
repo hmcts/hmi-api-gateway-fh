@@ -35,9 +35,11 @@ public class RetrieveResourcesResponseVerifier {
 
     public static void  thenValidateResponseForACorrectRequest(Response response, ExtentTest objStep){
         try{
-
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals("Status Code Validation:",200, response.getStatusCode());
             objStep.pass("Got the expected response code: 200");
+            assertEquals("Status Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
+            objStep.pass("Got the expected description: " + responseMap.get(("description")));
 
         }
         catch (AssertionError e){
