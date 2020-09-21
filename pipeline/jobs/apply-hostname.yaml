@@ -21,6 +21,9 @@ parameters:
     type: string
     default: "Proxy"
 
+  - name: variables
+    type: object
+
 jobs:
 - job: ApplyHostName
   dependsOn:
@@ -29,21 +32,15 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - task: AzurePowerShell@5
     inputs:
       azureSubscription: ${{ parameters.subscription }}
-      # ScriptType: 'FilePath'
-      # ScriptPath: 'script/apply_custom_domain.ps1'
-      # ScriptArguments: '-Hostname ${{ parameters.hostName }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -ResourceGroupName ${{ parameters.resourceGroup }}'
-      ScriptType: 'InlineScript'
-      Inline: |
-        Install-Module -Name Az.ApiManagement -Force
-        $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname ${{ parameters.hostName }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -DefaultSslBinding
-        Write-Host $(resourceGroup)
-    # $apim = Get-AzApiManagement -ResourceGroupName $(resourceGroup)
-    # $apim.ProxyCustomHostnameConfiguration = $proxy
-    # Set-AzApiManagement -InputObject $apim -SystemAssignedIdentity
+      ScriptType: 'FilePath'
+      ScriptPath: 'script/apply_custom_domain.ps1'
+      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultId ${{ parameters.certificateUrl }} -ResourceGroupName $(resourceGroup)'
       azurePowerShellVersion: 'LatestVersion'
 
 
