@@ -238,7 +238,7 @@ public class RetrieveHearingsUnitTests {
         thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
     }
 
-    //@Test
+    @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Created-At header")
     public void testRetrieveHearingsRequestWithInvalidRequestCreatedAtHeader() {
@@ -259,7 +259,7 @@ public class RetrieveHearingsUnitTests {
         thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
     }
 
-    //@Test
+    @Test
     @Order(19)
     @DisplayName("Test for invalid Request-Processed-At header")
     public void testRetrieveHearingsRequestWithInvalidRequestProcessedAtHeader() {
@@ -270,7 +270,7 @@ public class RetrieveHearingsUnitTests {
         thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
     }
 
-    //@Test
+    @Test
     @Order(20)
     @DisplayName("Test for Additional Parameter")
     public void testRetrieveHearingScheduleRequestWithAdditionalParam() {
