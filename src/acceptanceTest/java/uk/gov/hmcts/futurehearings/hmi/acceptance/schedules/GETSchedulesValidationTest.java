@@ -6,11 +6,14 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.Sessio
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.verify.GETSchedulesValidationVerifier;
 
 import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,21 +47,28 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("schedules","schedule"));
-        //this.setUrlParams(buildValidRetrieveScheduleParams());
+        this.setHmiSuccessVerifier(new GETSchedulesValidationVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource({"hearing_date, date", "hearing_date,\" \"", "hearing_date,", "hearing_date, 2002-10-02T10:00:00-05:00"})
-    public void test_hearing_date_queryparam_with_value(final String hearingDateKey, final String hearingDateValue) throws IOException {
+    public void test_hearing_date_queryparam_with_value(final String hearingDateKey,
+                                                        final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK,  getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
+
 
     @ParameterizedTest(name = "Hearing Venue Id with and without value - Param : {0} --> {1}")
     @CsvSource({"hearing_venue_id, 234", "hearing_venue_id,\" \"", "hearing_venue_id,"})
@@ -69,7 +79,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Hearing Room Id with and without value - Param : {0} --> {1}")
@@ -81,7 +95,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Hearing Session Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -93,7 +111,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Hearing Case Id HMCTS with and without value - Param : {0} --> {1}")
@@ -105,7 +127,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -117,7 +143,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Venue_Id & Hearing_Room_Id) with and without value - Param : {0} --> {1}")
@@ -132,7 +162,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Session_Id_CaseHQ, Hearing_Case_Id_Hmcts & Hearing_Id_Casehq) with and without value - Param : {0} --> {1}")
@@ -149,7 +183,11 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
     @Test
     public void test_all_params_with_value() throws IOException {
@@ -164,6 +202,10 @@ public class GETSchedulesValidationTest extends SchedulesValidationTest {
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getApiName(),null);
+                HttpStatus.OK, getInputFileDirectory(),
+                null,
+                null,
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
     }
 }

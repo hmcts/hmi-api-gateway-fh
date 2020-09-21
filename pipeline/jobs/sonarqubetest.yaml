@@ -1,0 +1,24 @@
+parameters:
+  - name: displayName
+    default: ''
+    type: string
+  - name: dependsOn
+    type: object
+  - name: command
+    default: ''
+    type: string
+
+jobs:
+- job: ${{ parameters.displayName }}
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  
+  steps:
+  - template: ../steps/run-sonarcloudanalysis.yaml
+    parameters:
+      command: ${{ parameters.command }}
+      

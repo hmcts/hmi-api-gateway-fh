@@ -2,6 +2,7 @@
 trigger:
   - master
 
+
 parameters:
   - name: environments
     type: object
@@ -159,3 +160,12 @@ stages:
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+    
+    - ${{ if ne(environment.name, 'dev') }}:
+      - template: pipeline/jobs/sonarqubetest.yaml
+        parameters:
+          displayName: 'Sonarcloudtest'
+          dependsOn:
+          - Terraform
+          - createStorage
+          command: sonarqube --stacktrace -$(Psonar.login)       
