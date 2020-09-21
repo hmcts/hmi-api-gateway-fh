@@ -21,5 +21,5 @@ output "storage_account" {
 }
 
 output "apim_id" {
-  value = azurerm_api_management.hmi_apim.identity
+  value = azurerm_api_management.hmi_apim.identity.prindipal_id
 }
