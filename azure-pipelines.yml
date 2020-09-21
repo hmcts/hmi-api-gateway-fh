@@ -1,6 +1,6 @@
 ---
 trigger:
-  - none
+  - master
 
 parameters:
   - name: environments
