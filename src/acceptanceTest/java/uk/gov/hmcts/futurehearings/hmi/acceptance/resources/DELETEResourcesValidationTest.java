@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
@@ -7,6 +7,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.HearingValidationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,41 +29,28 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(DELETEHearingsValidationTest.class)
+@SelectClasses(DELETEResourcesValidationTest.class)
 @IncludeTags("Delete")
-public class DELETEHearingsValidationTest extends HearingValidationTest {
+public class DELETEResourcesValidationTest extends ResourceValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
 
-    @Value("${hearingsApiRootContext}")
-    private String hearingsApiRootContext;
+    @Value("${resources_idRootContext}")
+    private String resources_idRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(hearingsApiRootContext);
+        resources_idRootContext = String.format(resources_idRootContext,"12345");
+        this.setRelativeURL(resources_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
-        this.setInputPayloadFileName("delete-hearing-request-valid.json");
+        this.setInputPayloadFileName("delete-resource-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-    }
-
-    @Test
-    @DisplayName("Delete Hearings Request with Hearing Id in Uri")
-    public void deleteHearingsRequestWithInvalidUri() throws Exception {
-        this.setRelativeURL(hearingsApiRootContext + "/1234");
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), "delete-hearing-request-valid.json",
-                createCompletePayloadHeader(getApiSubscriptionKey()),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                getHmiErrorVerifier(),"Resource not found");
     }
 
     //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.

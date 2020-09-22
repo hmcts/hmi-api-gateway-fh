@@ -63,11 +63,10 @@ public class GETHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK,  getInputFileDirectory(),
-                null,
-                null,
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
@@ -79,11 +78,10 @@ public class GETHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                null,
-                null,
                 new GETHearingsByQueryValidationVerifier(),
                 "The request was received successfully.");
     }
@@ -95,11 +93,10 @@ public class GETHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                null,
-                null,
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
@@ -114,11 +111,10 @@ public class GETHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                null,
-                null,
                 new GETHearingsByQueryValidationVerifier(),
                 "The request was received successfully.");
     }
