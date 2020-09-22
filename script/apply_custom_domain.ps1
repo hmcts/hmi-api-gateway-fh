@@ -13,12 +13,28 @@ Param (
 [string] $ResourceGroupName
 )
 
-Write-Host "Installing Az.ApiManagement Module..."
-Install-Module -Name Az.ApiManagement -Force
-Write-Host "Az.ApiManagement Module successfully installed..."
+if (!(Get-Module -Name Az.ApiManagement)){
+    Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow
+    Install-Module -Name Az.ApiManagement -Force
+    Write-Host "Az.ApiManagement Module successfully installed..."
+    } else {
+        Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
+    }
+
 $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
-$apim.ProxyCustomHostnameConfiguration = $proxy
-Write-Host "Applyig Custom Domain configuration..."
-Set-AzApiManagement -InputObject $apim -SystemAssignedIdentity
-Write-Host "Custom domain successfully applied..."
+try {
+    if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
+        $apim.ProxyCustomHostnameConfiguration = $proxy
+        Write-Host "Applyig Custom Domain configuration..." -ForegroundColor Yellow
+        Set-AzApiManagement -InputObject $apim -SystemAssignedIdentity
+        Write-Host "Custom domain successfully applied..."
+        } else {
+        Write-Host "Listing custom domains..."
+        foreach ($_ in $apim.ProxyCustomHostnameConfiguration.Hostname) {
+            Write-Host $_
+        }
+        Write-Host "Custom domain already applied, skipping..." -ForegroundColor Green
+    }
+}   
+catch {}
