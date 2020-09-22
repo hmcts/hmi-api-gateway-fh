@@ -209,7 +209,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
+                "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.");
     }
 
 
