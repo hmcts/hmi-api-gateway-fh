@@ -1,6 +1,6 @@
 ---
 trigger:
-  - master
+  - none
 
 parameters:
   - name: environments
@@ -166,4 +166,8 @@ stages:
           dependsOn:
           - Terraform
           - createStorage
+          - UnitTest
+          - SmokeTest
+          - AcceptanceTest
+          - FunctionalTest
           command: sonarqube --stacktrace -$(Psonar.login)       
