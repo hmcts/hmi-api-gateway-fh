@@ -34,6 +34,9 @@ parameters:
 #      - name: ApiZapScan
 #        containerRegistry: ssprivatesbox.azurecr.io
 #        repository: hmi/apim-tests-owasp
+#      tests_Sonarcloud:
+#      - name: SonarCloudTest
+#        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
@@ -78,6 +81,9 @@ parameters:
         logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
+      tests_Sonarcloud:
+      - name: SonarCloudTest
+        command: sonarqube
 
 variables:
   - group: HMI-APIM-Common
@@ -159,11 +165,17 @@ stages:
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
     
-    - ${{ if ne(environment.name, 'dev') }}:
-      - template: pipeline/jobs/sonarqubetest.yaml
-        parameters:
-          displayName: 'Sonarcloudtest'
-          dependsOn:
-          - Terraform
-          - createStorage
-          command: sonarqube --stacktrace -$(Psonar.login)       
+    - ${{ if environment.tests_Sonarcloud }}:
+      - ${{ each test in environment.tests_Sonarcloud }}:
+        - template: pipeline/jobs/sonarqubetest.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn:
+            - Terraform
+            - createStorage
+            - UnitTest
+            - SmokeTest
+            - AcceptanceTest
+            - FunctionalTest
+            subscription: ${{ environment.subscription }}
+            command: ${{ test.command }}       
