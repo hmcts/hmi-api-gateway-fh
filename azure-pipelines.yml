@@ -10,7 +10,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       registry: DTS-SS-PRIVATE-SBOX
-     tests_gradle:
+      tests_gradle:
       - name: UnitTest
         command: test
         logLevel: info
