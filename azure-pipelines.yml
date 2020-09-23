@@ -36,6 +36,7 @@ parameters:
         repository: hmi/apim-tests-owasp
       tests_Sonarcloud:
       - name: SonarCloudTest
+        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
@@ -82,6 +83,7 @@ parameters:
         dependsOn: AcceptanceTest
       tests_Sonarcloud:
       - name: SonarCloudTest
+        command: sonarqube
 
 variables:
   - group: HMI-APIM-Common
@@ -167,7 +169,7 @@ stages:
       - ${{ each test in environment.tests_Sonarcloud }}:
         - template: pipeline/jobs/sonarqubetest.yaml
           parameters:
-            displayName: 'Sonarcloudtest'
+            displayName: ${{ test.name }}
             dependsOn:
             - Terraform
             - createStorage
@@ -176,4 +178,4 @@ stages:
             - AcceptanceTest
             - FunctionalTest
             subscription: ${{ environment.subscription }}
-            command: sonarqube --stacktrace -$(Psonar.login)       
+            command: ${{ test.command }}       
