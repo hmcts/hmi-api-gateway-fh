@@ -7,7 +7,7 @@ parameters:
     type: object
     default: 
     - name: sbox
-     subscription: DTS-SHAREDSERVICES-SBOX
+      subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       registry: DTS-SS-PRIVATE-SBOX
      tests_gradle:
