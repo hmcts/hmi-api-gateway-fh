@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.setupReport;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.endReport;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.startReport;
@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.st
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
-public class RetrieveHearingsUnitTests {
+public class GET_hearings_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -96,7 +96,7 @@ public class RetrieveHearingsUnitTests {
     public void testRetrieveHearingsRequestForInvalidResource() {
 
         final Response response = whenRetrieveHearingsRequestIsInvokedForInvalidResource();
-        thenValidateHearingResponseForInvalidResource(response, objStep);
+        thenValidateResponseForInvalidResource(response, objStep);
     }
 
 
@@ -107,7 +107,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Accept");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Accept", "application/jsonxml");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Content-Type");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
     @Test
@@ -139,7 +139,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Content-Type", "application/xml");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 
@@ -150,7 +150,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOcpSubKey();
-        thenResponseForMissingHeaderOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -161,7 +161,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOcpSubKey();
-        thenResponseForInvalidOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -172,7 +172,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Source-System");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Source-System", "A");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -193,7 +193,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Destination-System");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -204,7 +204,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Destination-System", "A");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Request-Type");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -225,7 +225,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Request-Type", "A");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -235,7 +235,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Request-Created-At");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -246,7 +246,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.remove("Request-Processed-At");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -267,7 +267,7 @@ public class RetrieveHearingsUnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -277,7 +277,7 @@ public class RetrieveHearingsUnitTests {
         paramsAsMap.put("Additional-Param","Value");
 
         final Response response = whenRetrieveHearingScheduleIsInvokedWithAdditionalParam();
-        thenValidateHearingsResponseForAdditionalParam(response, objStep);
+        thenValidateResponseForAdditionalParam(response, objStep);
     }
 
     @Test
@@ -288,7 +288,7 @@ public class RetrieveHearingsUnitTests {
         paramsAsMap.remove("hearingType");
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateHearingsResponse(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -299,7 +299,7 @@ public class RetrieveHearingsUnitTests {
         paramsAsMap.remove("hearingType");
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateHearingsResponse(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -310,7 +310,7 @@ public class RetrieveHearingsUnitTests {
         paramsAsMap.remove("hearingDate");
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateHearingsResponse(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -319,7 +319,7 @@ public class RetrieveHearingsUnitTests {
     public void testRetrieveHearingsRequestWithCorrectHeadersAndParams() {
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateHearingsResponse(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -328,7 +328,7 @@ public class RetrieveHearingsUnitTests {
     public void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams();
-        thenValidateHearingsResponse(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedWithAdditionalParam() {

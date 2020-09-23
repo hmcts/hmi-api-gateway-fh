@@ -17,13 +17,13 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.UpdateHearingResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
-public class UpdateHearingUnitTests {
+public class PUT_hearings_UnitTests {
 
     public static final String CORRECT_UPDATE_HEARING_REQUEST_JSON = "requests/correct-update-hearing-request.json";
     @Value("${targetInstance}")
@@ -84,7 +84,7 @@ public class UpdateHearingUnitTests {
 
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(updateHearingRequest);
-        thenASuccessfulResponseForUpdateIsReturned(response, objStep);
+        thenValidateResponseForUpdate(response, objStep);
 
     }
 
@@ -94,7 +94,7 @@ public class UpdateHearingUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingOcSubKey(updateHearingRequest);
-        thenResponseForMissingHeaderOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class UpdateHearingUnitTests {
         headersAsMap.remove("Source-System");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
-        thenValidateUpdateHearingResponse(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class UpdateHearingUnitTests {
         headersAsMap.remove("Destination-System");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
-        thenValidateUpdateHearingResponse(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class UpdateHearingUnitTests {
         headersAsMap.remove("Request-Created-At");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
-        thenValidateUpdateHearingResponse(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class UpdateHearingUnitTests {
         headersAsMap.remove("Request-Type");
         final String updateHearingRequest = givenAnUpdateHearingRequest(CORRECT_UPDATE_HEARING_REQUEST_JSON);
         final Response response = whenUpdateHearingIsInvokedWithMissingHeader(updateHearingRequest);
-        thenValidateUpdateHearingResponse(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
 

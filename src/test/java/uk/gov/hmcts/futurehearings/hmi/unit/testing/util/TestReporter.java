@@ -3,7 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 import com.aventstack.extentreports.ExtentTest;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites.RetrieveHearingScheduleUnitTests.reportStats;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites.GET_schedules_UnitTests.reportStats;
 import org.junit.jupiter.api.extension.TestWatcher;
 import java.util.Optional;
 

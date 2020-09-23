@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 
 import com.aventstack.extentreports.ExtentTest;
@@ -28,7 +28,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 //@Disabled("Disabled as test is validating against the payload")
-public class RequestHearingUnitTests {
+public class POST_hearings_UnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/correct-hearing-request-payload.json";
     private static final String INVALID_PAYLOAD = "requests/invalid-hearing-request-payload.json";
@@ -86,7 +86,7 @@ public class RequestHearingUnitTests {
     public void testHearingRequestForInvalidResource() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedForInvalidResource(input);
-        thenValidateHearingResponseForInvalidResource(response, objStep);
+        thenValidateResponseForInvalidResource(response, objStep);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class RequestHearingUnitTests {
     public void testHearingRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithCorrectHeaders(input);
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class RequestHearingUnitTests {
     public void testHearingRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INVALID_PAYLOAD);
         final Response response = whenHearingRequestIsInvokedWithCorrectHeaders(input);
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 
@@ -132,7 +132,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingOcpSubKey(input);
-        thenResponseForMissingHeaderOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class RequestHearingUnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingOcpSubKey(input);
-        thenResponseForInvalidOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -152,7 +152,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Source-System");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -161,7 +161,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Destination-System");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Request-Type");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Request-Created-At");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class RequestHearingUnitTests {
         headersAsMap.remove("Request-Processed-At");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenHearingRequestIsInvokedWithMissingHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
 

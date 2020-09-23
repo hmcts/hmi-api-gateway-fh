@@ -7,13 +7,13 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class ResponseVerifier {
+public class HearingsResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
 
 
-    public static void  thenValidateHearingResponseForInvalidResource(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForInvalidResource(Response response, ExtentTest objStep){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
@@ -34,7 +34,7 @@ public class ResponseVerifier {
         }
     }
 
-    public static void  thenASuccessfulResponseForHearingRequestIsReturned(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForRequestOrDelete(Response response, ExtentTest objStep){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals("Status Code Validation:",200, response.getStatusCode());
@@ -55,7 +55,28 @@ public class ResponseVerifier {
         }
     }
 
-    public static void  thenValidateHearingsResponse(Response response, ExtentTest objStep){
+    public static void thenValidateResponseForUpdate(Response response, ExtentTest objStep) {
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals("Status Code Validation:",201, response.getStatusCode());
+            objStep.pass("Got the expected response code: 201");
+            assertEquals("Status Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
+            objStep.pass("Got the expected description: " + responseMap.get(("description")));
+        }
+        catch (AssertionError e){
+            objStep.fail("Exception in "+e.getMessage());
+            objStep.info(e);
+            throw e;
+        }
+        catch (Exception e){
+            objStep.fail("Exception: "+e.getClass());
+            objStep.info(e);
+            throw e;
+        }
+    }
+    public static void  thenValidateResponseforRetrieve(Response response, ExtentTest objStep){
         try{
 
             assertEquals("Status Code Validation:",200, response.getStatusCode());
@@ -73,7 +94,8 @@ public class ResponseVerifier {
             throw e;
         }
     }
-    public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response, ExtentTest objStep){
+
+    public static void thenValidateResponseForMissingSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -95,7 +117,7 @@ public class ResponseVerifier {
         }
     }
 
-    public static void  thenResponseForInvalidOcpSubscriptionIsReturned(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForInvalidSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -117,7 +139,7 @@ public class ResponseVerifier {
         }
     }
 
-    public static void  thenValidateHearingResponseForMissingHeader(Response response, String missingField, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidHeader(Response response, String missingField, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -140,31 +162,7 @@ public class ResponseVerifier {
 
     }
 
-
-    public static void  thenValidateHearingResponseForInvalidHeader(Response response, String missingField, ExtentTest objStep){
-
-        try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",400, response.getStatusCode());
-            objStep.pass("Got the expected response code: 400");
-            assertEquals("Status Code Description Validation:","Missing or invalid header "+"'"+missingField+"'.", responseMap.get(("description")));
-            objStep.pass("Got the expected description: " + responseMap.get(("description")));
-        }
-        catch (AssertionError e){
-            objStep.fail("Exception in "+e.getMessage());
-            objStep.info(e);
-            throw e;
-        }
-        catch (Exception e){
-            objStep.fail("Exception: "+e.getClass());
-            objStep.info(e);
-            throw e;
-        }
-
-    }
-
-    public static void  thenValidateHearingResponseForMissingAcceptHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidAcceptHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -186,8 +184,7 @@ public class ResponseVerifier {
         }
     }
 
-
-    public static void  thenValidateHearingResponseForMissingContentTypeHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidContentTypeHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -209,7 +206,7 @@ public class ResponseVerifier {
         }
     }
 
-    public static void  thenValidateHearingsResponseForAdditionalParam(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForAdditionalParam(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");

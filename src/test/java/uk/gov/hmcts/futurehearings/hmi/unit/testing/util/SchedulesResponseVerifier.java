@@ -7,13 +7,13 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class RetrieveHearingScheduleResponseVerifier {
+public class SchedulesResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
 
 
-    public static void  thenAResponseForInvalidResourceIsReturned(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForInvalidResource(Response response, ExtentTest objStep){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
@@ -34,7 +34,7 @@ public class RetrieveHearingScheduleResponseVerifier {
         }
     }
 
-    public static void  thenASuccessfulResponseForRetrieveIsReturned(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseforRetrieve(Response response, ExtentTest objStep){
         try{
 
             assertEquals("Status Code Validation:",200, response.getStatusCode());
@@ -53,7 +53,7 @@ public class RetrieveHearingScheduleResponseVerifier {
         }
     }
 
-    public static void thenResponseForMissingHeaderOcpSubscriptionIsReturned(Response response, ExtentTest objStep){
+    public static void thenValidateResponseForMissingSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -75,7 +75,7 @@ public class RetrieveHearingScheduleResponseVerifier {
         }
     }
 
-    public static void  thenResponseForInvalidOcpSubscriptionIsReturned(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForInvalidSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -97,7 +97,7 @@ public class RetrieveHearingScheduleResponseVerifier {
         }
     }
 
-    public static void  thenValidateUpdateHearingResponseForMissingHeader(Response response, String missingField, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidHeader(Response response, String missingField, ExtentTest objStep){
 
         try{
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -120,7 +120,7 @@ public class RetrieveHearingScheduleResponseVerifier {
 
     }
 
-    public static void  thenValidateUpdateHearingResponseForMissingAcceptHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidAcceptHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -143,7 +143,7 @@ public class RetrieveHearingScheduleResponseVerifier {
     }
 
 
-    public static void  thenValidateUpdateHearingResponseForMissingContentTypeHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidContentTypeHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");

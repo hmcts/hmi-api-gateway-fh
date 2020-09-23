@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 
 @Slf4j
@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RetrieveResourcesUnitTests {
+public class GET_resources_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -90,7 +90,7 @@ public class RetrieveResourcesUnitTests {
     @DisplayName("Test for No Parameters")
     public void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams();
-        thenValidateResponseForACorrectRequest(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
-        thenValidateResponseForMissingOcpSubscriptionHeader(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class RetrieveResourcesUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
-        thenValidateResponseForInvalidOcpSubscription(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -119,7 +119,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -173,7 +173,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveResourcesRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 
@@ -208,7 +208,7 @@ public class RetrieveResourcesUnitTests {
     @DisplayName("Test for No Parameters - Individual Resource")
     public void testRetrieveIndividualResourceRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams();
-        thenValidateResponseForACorrectRequest(response, objStep);
+        thenValidateResponseforRetrieve(response, objStep);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
-        thenValidateResponseForMissingOcpSubscriptionHeader(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -225,7 +225,7 @@ public class RetrieveResourcesUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
-        thenValidateResponseForInvalidOcpSubscription(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -234,7 +234,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -242,7 +242,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -250,7 +250,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -258,7 +258,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -266,7 +266,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -274,7 +274,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -282,7 +282,7 @@ public class RetrieveResourcesUnitTests {
     public void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingHeader();
-        thenValidateResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 

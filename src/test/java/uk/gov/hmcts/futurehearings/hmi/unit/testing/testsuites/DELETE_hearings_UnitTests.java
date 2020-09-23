@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResponseVerifier.thenValidateHearingResponseForMissingHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
@@ -26,7 +25,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DeleteHearingUnitTests {
+public class DELETE_hearings_UnitTests {
 
 
     private static final String CORRECT_DELETE_HEARINGS_PAYLOAD = "requests/correct-delete-hearings-payload.json";
@@ -86,7 +85,7 @@ public class DeleteHearingUnitTests {
     public void testDeleteHearingRequestForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedForInvalidResource(input);
-        thenValidateHearingResponseForInvalidResource(response, objStep);
+        thenValidateResponseForInvalidResource(response, objStep);
     }
 
     @Test
@@ -95,7 +94,7 @@ public class DeleteHearingUnitTests {
     public void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithCorrectHeaders(input);
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -104,7 +103,7 @@ public class DeleteHearingUnitTests {
     public void testDeleteHearingRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INCORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithCorrectHeaders(input);
-        thenASuccessfulResponseForHearingRequestIsReturned(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -114,7 +113,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -125,7 +124,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -135,7 +134,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
     @Test
@@ -146,7 +145,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 
@@ -157,7 +156,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(input);
-        thenResponseForMissingHeaderOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -168,7 +167,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(input);
-        thenResponseForInvalidOcpSubscriptionIsReturned(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -179,7 +178,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Source-System");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -190,7 +189,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Source-System", "A");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -200,7 +199,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Destination-System");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -211,7 +210,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Destination-System", "A");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -221,7 +220,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Request-Type");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -232,7 +231,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Type", "A");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -242,7 +241,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Request-Created-At");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -253,7 +252,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -263,7 +262,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.remove("Request-Processed-At");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -274,7 +273,7 @@ public class DeleteHearingUnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_HEARINGS_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateHearingResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
 

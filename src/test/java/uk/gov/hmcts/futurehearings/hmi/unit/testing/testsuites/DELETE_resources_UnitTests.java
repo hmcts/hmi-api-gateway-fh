@@ -24,13 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForACorrectDeleteRequest;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForInvalidOcpSubscription;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingOcpSubscriptionHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.RetrieveResourcesResponseVerifier.thenValidateResponseForMissingHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.setupReport;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.endReport;
@@ -42,7 +42,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DeleteResourcesUnitTests {
+public class DELETE_resources_UnitTests {
 
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-hearings-payload.json";
@@ -111,7 +111,7 @@ public class DeleteResourcesUnitTests {
     public void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForACorrectDeleteRequest(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class DeleteResourcesUnitTests {
     public void testDeleteResourcesRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForACorrectDeleteRequest(response, objStep);
+        thenValidateResponseForRequestOrDelete(response, objStep);
     }
 
     @Test
@@ -130,7 +130,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingAcceptHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response, objStep);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingContentTypeHeader(response, objStep);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response, objStep);
     }
 
 
@@ -173,7 +173,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(input);
-        thenValidateResponseForMissingOcpSubscriptionHeader(response, objStep);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response, objStep);
     }
 
     @Test
@@ -184,7 +184,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(input);
-        thenValidateResponseForInvalidOcpSubscription(response, objStep);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response, objStep);
     }
 
 
@@ -195,7 +195,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Source-System");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -206,7 +206,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Source-System", "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Source-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System", objStep);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Destination-System");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -227,7 +227,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Destination-System", "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Destination-System", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System", objStep);
     }
 
     @Test
@@ -237,7 +237,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Request-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -248,7 +248,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Request-Type", "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Type", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type", objStep);
     }
 
     @Test
@@ -258,7 +258,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Request-Created-At");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -269,7 +269,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Created-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At", objStep);
     }
 
     @Test
@@ -279,7 +279,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.remove("Request-Processed-At");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
     @Test
@@ -290,7 +290,7 @@ public class DeleteResourcesUnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingHeader(response, "Request-Processed-At", objStep);
+        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At", objStep);
     }
 
 

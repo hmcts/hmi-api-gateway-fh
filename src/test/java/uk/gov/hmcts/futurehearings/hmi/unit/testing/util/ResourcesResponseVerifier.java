@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class RetrieveResourcesResponseVerifier {
+public class ResourcesResponseVerifier {
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
 
@@ -33,7 +33,7 @@ public class RetrieveResourcesResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForACorrectRequest(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseforRetrieve(Response response, ExtentTest objStep){
         try{
 
             assertEquals("Status Code Validation:",200, response.getStatusCode());
@@ -52,7 +52,7 @@ public class RetrieveResourcesResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForACorrectDeleteRequest(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForRequestOrDelete(Response response, ExtentTest objStep){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals("Status Code Validation:",200, response.getStatusCode());
@@ -73,7 +73,7 @@ public class RetrieveResourcesResponseVerifier {
         }
     }
 
-    public static void thenValidateResponseForMissingOcpSubscriptionHeader(Response response, ExtentTest objStep){
+    public static void thenValidateResponseForMissingSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -95,7 +95,7 @@ public class RetrieveResourcesResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForInvalidOcpSubscription(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForInvalidSubscriptionKeyHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -117,7 +117,7 @@ public class RetrieveResourcesResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForMissingHeader(Response response, String missingField, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidHeader(Response response, String missingField, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -140,7 +140,7 @@ public class RetrieveResourcesResponseVerifier {
 
     }
 
-    public static void  thenValidateResponseForMissingAcceptHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidAcceptHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -163,7 +163,7 @@ public class RetrieveResourcesResponseVerifier {
     }
 
 
-    public static void  thenValidateResponseForMissingContentTypeHeader(Response response, ExtentTest objStep){
+    public static void  thenValidateResponseForMissingOrInvalidContentTypeHeader(Response response, ExtentTest objStep){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
