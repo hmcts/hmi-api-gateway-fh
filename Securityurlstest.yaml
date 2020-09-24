@@ -1,0 +1,24 @@
+---
+trigger:
+ - none
+ 
+jobs:
+- job:
+  displayname: 'testurls'
+  pool:
+    vmImage: 'ubuntu-latest'
+  
+  steps:
+  - task: Docker@1
+    displayName: 'Run an image'
+    inputs:
+      azureSubscriptionEndpoint: 'DTS-SHAREDSERVICES-SBOX'
+      azureContainerRegistry: 'ssprivatesbox.azurecr.io'
+      command: 'Run an image'
+      imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
+      volumes: $(System.DefaultWorkingDirectory)/zap:/zap/wrk/:rw
+      envVars: |         
+        TEST_URL= https://www.example.com/openapi.json 
+        SecurityRules= https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+      containerCommand: '/bin/bash ./security.sh'
+      runInBackground: false 
