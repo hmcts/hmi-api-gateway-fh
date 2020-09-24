@@ -18,14 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class SchedulesApiSmokeTest extends SmokeTest {
+ class SchedulesApiSmokeTest extends SmokeTest {
 
     @Value("${schedulesApiRootContext}")
     private String schedulesApiRootContext;
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the Get All Schedules Root Context")
-    public void testSuccessfulAllSchedulesApiGet() {
+     void testSuccessfulAllSchedulesApiGet() {
 
         Response response = given()
         .headers(headersAsMap)
