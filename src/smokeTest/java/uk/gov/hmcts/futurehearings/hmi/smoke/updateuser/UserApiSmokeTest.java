@@ -27,7 +27,7 @@ class UserApiSmokeTest extends SmokeTest {
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the Get Update Users Root Context")
-    public void testSuccessfulAllSessionsApiGet() {
+    void testSuccessfulAllSessionsApiGet() {
         Response response = given()
                 .headers(headersAsMap)
                 .basePath(userApiRootContext)
