@@ -74,7 +74,6 @@ public class HMIApplicationContextInitializer implements
             property.load(fis);
         } catch (IOException ioException) {
             log.error("ERROR while reading the Local Properties", ioException.getLocalizedMessage());
-            return;
         }
 
         try {
@@ -82,7 +81,6 @@ public class HMIApplicationContextInitializer implements
                     property.getProperty("value"));
         } catch (Exception exception) {
             log.error("ERROR while executing the process of the shell file", exception.getLocalizedMessage());
-            exception.printStackTrace();
         }
     }
 }
