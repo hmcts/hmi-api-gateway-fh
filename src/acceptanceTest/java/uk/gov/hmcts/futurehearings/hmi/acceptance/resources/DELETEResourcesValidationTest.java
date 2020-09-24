@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DELETEResourcesValidationTest.class)
 @IncludeTags("Delete")
-public class DELETEResourcesValidationTest extends ResourceValidationTest {
+class DELETEResourcesValidationTest extends ResourceValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
@@ -57,7 +57,7 @@ public class DELETEResourcesValidationTest extends ResourceValidationTest {
     //Confirmed by Product Owner that this should be a Success Scenario.
     @Test
     @DisplayName("Successfully validated response with an xml payload")
-    public void test_successful_response_for_test_xml_body() throws Exception {
+    void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "sample-xml-payload.xml",
