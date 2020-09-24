@@ -196,7 +196,6 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
