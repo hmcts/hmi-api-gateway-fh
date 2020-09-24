@@ -33,7 +33,7 @@ parameters:
     type: string
 
   - name: testUrl
-    type: list
+    type: string
     
     
       
