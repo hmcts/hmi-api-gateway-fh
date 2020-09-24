@@ -157,7 +157,7 @@ stages:
             tags: latest
             testUrl: 
               - https://www.example.com/openapi.json
-              
+              - https://www.example.com/openapitest.json
             securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
