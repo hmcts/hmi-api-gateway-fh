@@ -21,7 +21,7 @@ public class HMICommonSuccessVerifier implements HMISuccessVerifier {
         log.debug(response.getBody().asString());
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(),responseMap.get(("response code")));
+        assertEquals(expectedHttpStatus.value(),Integer.parseInt(responseMap.get(("response code"))));
         assertEquals(expectedMessage,responseMap.get(("description")));
     }
 }
