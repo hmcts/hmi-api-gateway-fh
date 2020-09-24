@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.intializer;
 
+import uk.gov.hmcts.futurehearings.hmi.intializer.exception.HMIProcessException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -21,49 +22,44 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class HMIApplicationContextInitializer implements
         ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    public static final String executeProcess (String key,String value) throws Exception {
+    public static final String executeProcess(String key, String value) throws IOException, InterruptedException, HMIProcessException {
 
         final Path currentDir = Paths.get(".");
-        System.out.println(currentDir.normalize().toAbsolutePath()+"/script");
+        log.debug(currentDir.normalize().toAbsolutePath() + "/script");
 
-        ProcessBuilder processBuilder = new ProcessBuilder("./read-vault.sh",key,value);
+        ProcessBuilder processBuilder = new ProcessBuilder("./read-vault.sh", key, value);
         processBuilder = processBuilder.directory(new File(Paths.get(".")
-                .normalize().toAbsolutePath()+"/script"));
+                .normalize().toAbsolutePath() + "/script"));
         log.info("The Set Path : " + processBuilder.directory().getAbsolutePath());
 
         final Process process = processBuilder.start();
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        final Map<String, String> env = processBuilder.environment();
+        processBuilder.environment();
         final int exitValue = process.waitFor();
 
         if (exitValue != 0) {
             // check for errors
-            final BufferedInputStream bufferedInputStream = new BufferedInputStream(process.getErrorStream());
-            throw new RuntimeException("Execution of script failed! : " +
+            log.error("There was an error while executing the process ");
+            throw new HMIProcessException("Execution of script failed! : " +
                     new String(new BufferedInputStream(process.getErrorStream()).readAllBytes()));
         }
 
         String secretValue = null;
         while (bufferedReader.ready()) {
             secretValue = bufferedReader.readLine();
-            System.out.println("Received from script: " + secretValue);
+            log.info("Received from script: " + secretValue);
         }
         return secretValue;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         HMIApplicationContextInitializer initializer = new HMIApplicationContextInitializer();
         initializer.initialize(null);
     }
 
     private static boolean isLocalMachine() {
-
         final String environment = System.getenv("EXECUTION_ENVIRONMENT");
-        if (Objects.nonNull(environment) &&
-                !environment.equals("local")) {
-            return false;
-        }
-        return true;
+        return Objects.nonNull(environment) && !environment.equals("local");
     }
 
     @Override
@@ -74,22 +70,19 @@ public class HMIApplicationContextInitializer implements
 
         final Properties property = new Properties();
         try (InputStream fis = new FileInputStream(System.getProperty("user.home")
-                +"/lookup_local.properties")) {
+                + "/lookup_local.properties")) {
             property.load(fis);
-        }  catch (IOException ioException) {
-            ioException.printStackTrace();
+        } catch (IOException ioException) {
+            log.error("ERROR while reading the Local Properties", ioException.getLocalizedMessage());
             return;
         }
 
-        final String secretValue;
         try {
-            secretValue = executeProcess(property.getProperty("key"),
-                                            property.getProperty("value"));
+            executeProcess(property.getProperty("key"),
+                    property.getProperty("value"));
         } catch (Exception exception) {
+            log.error("ERROR while executing the process of the shell file", exception.getLocalizedMessage());
             exception.printStackTrace();
-            return;
         }
-        //This Functionality is not Implemented yet.
-        //System.setProperty("TEST_SUBSCRIPTION_KEY" , secretValue);
     }
 }
