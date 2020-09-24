@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
+@Disabled("As we do not have the Wiremock Infrastructure in place till now - TODO -Tests and CodeQualityReview Processes")
 public class ScheduleInteractionTest {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
@@ -49,7 +49,6 @@ public class ScheduleInteractionTest {
         wireMock.resetRequests();
     }
 
-    @Disabled
     @Test
     public void should_work_from_standalone_mock() throws Exception {
 

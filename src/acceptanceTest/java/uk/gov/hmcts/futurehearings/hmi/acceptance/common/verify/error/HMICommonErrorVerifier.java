@@ -1,8 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error;
 
 import static org.junit.Assert.assertEquals;
-
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.Map;
 
@@ -15,12 +14,12 @@ import org.springframework.stereotype.Component;
 @Component("HMICommonErrorVerifier")
 public class HMICommonErrorVerifier implements HMIErrorVerifier {
     public void verify(HttpStatus expectedHttpStatus,
-                String expectedMessage,
-                Response response) {
+                       String expectedMessage,
+                       Response response) {
         log.debug(response.getBody().asString());
-        assertEquals(2,response.getBody().jsonPath().getMap("$").size());
-        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
-        assertEquals(expectedMessage,responseMap.get(("message")));
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
+        assertEquals(expectedHttpStatus.value(), responseMap.get("statusCode"));
+        assertEquals(expectedMessage, responseMap.get(("message")));
     }
 }

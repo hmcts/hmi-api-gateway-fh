@@ -20,14 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @Disabled("For as the endpoint for User API is not available")
-public class UserApiSmokeTest extends SmokeTest {
+class UserApiSmokeTest extends SmokeTest {
 
     @Value("${userApiRootContext}")
     public String userApiRootContext;
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the Get Update Users Root Context")
-    public void testSuccessfulAllSessionsApiGet() {
+    void testSuccessfulAllSessionsApiGet() {
         Response response = given()
                 .headers(headersAsMap)
                 .basePath(userApiRootContext)
