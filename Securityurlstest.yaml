@@ -17,7 +17,8 @@ jobs:
       imageName: 'ssprivatesbox.azurecr.io/hmi/apim-tests-owasp:latest'
       volumes: $(System.DefaultWorkingDirectory)/zap:/zap/wrk/:rw
       envVars: |         
-        TEST_URL= https://www.example.com/openapi.json 
+        TEST_URL= https://www.example.com/openapi.json
+        TEST_URL2= https://www.example.com/openapiTest.json 
         SecurityRules= https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
       containerCommand: '/bin/bash ./security.sh'
       runInBackground: false 
