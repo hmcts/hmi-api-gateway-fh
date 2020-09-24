@@ -33,9 +33,11 @@ parameters:
     type: string
 
   - name: testUrl
-    type: string
+    type: object
     default:
-     - https://www.example.com/openapi.json
+      - https://www.example.com/openapi.json
+      - https://www.example.com/openapitest.json
+     
        
     
   - name: securityRules
