@@ -34,7 +34,7 @@ parameters:
 
   - name: testUrl
     type: string
-    default: ''
+    default: https://www.example.com/openapi.json
     
       
        
