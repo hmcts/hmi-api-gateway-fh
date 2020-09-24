@@ -30,7 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DELETEHearingsValidationTest.class)
 @IncludeTags("Delete")
-public class DELETEHearingsValidationTest extends HearingValidationTest {
+class DELETEHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
@@ -53,7 +53,7 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
 
     @Test
     @DisplayName("Delete Hearings Request with Hearing Id in Uri")
-    public void deleteHearingsRequestWithInvalidUri() throws Exception {
+    void deleteHearingsRequestWithInvalidUri() throws Exception {
         this.setRelativeURL(hearingsApiRootContext + "/1234");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "delete-hearing-request-valid.json",
@@ -69,7 +69,7 @@ public class DELETEHearingsValidationTest extends HearingValidationTest {
     //Confirmed by Product Owner that this should be a Success Scenario.
     @Test
     @DisplayName("Successfully validated response with an xml payload")
-    public void test_successful_response_for_test_xml_body() throws Exception {
+    void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "sample-xml-payload.xml",

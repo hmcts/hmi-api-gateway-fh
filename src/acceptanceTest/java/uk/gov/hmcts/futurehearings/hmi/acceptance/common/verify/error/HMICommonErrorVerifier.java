@@ -20,7 +20,7 @@ public class HMICommonErrorVerifier implements HMIErrorVerifier {
         log.debug(response.getBody().asString());
         assertEquals(2,response.getBody().jsonPath().getMap("$").size());
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
+        assertEquals(expectedHttpStatus.value(),Integer.parseInt(responseMap.get(("statusCode"))));
         assertEquals(expectedMessage,responseMap.get(("message")));
     }
 }

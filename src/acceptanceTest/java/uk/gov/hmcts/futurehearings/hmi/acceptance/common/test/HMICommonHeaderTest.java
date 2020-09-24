@@ -45,6 +45,7 @@ import org.springframework.http.HttpStatus;
 @Slf4j
 @Setter
 @Getter
+@SuppressWarnings("java:S5786")
 public abstract class HMICommonHeaderTest {
 
 
@@ -61,10 +62,8 @@ public abstract class HMICommonHeaderTest {
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
-    //@Autowired(required = false)
     public HMISuccessVerifier hmiSuccessVerifier;
 
-    //@Autowired(required = false)
     public HMIErrorVerifier hmiErrorVerifier;
 
     @BeforeAll
@@ -89,7 +88,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Successfully validated response with all the header values")
-    public void test_successful_response_with_a_complete_header() throws Exception {
+    void test_successful_response_with_a_complete_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createCompletePayloadHeader(getApiSubscriptionKey()),
@@ -103,7 +102,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Successfully validated response with mandatory header values")
-    public void test_successful_response_with_a_mandatory_header() throws Exception {
+    void test_successful_response_with_a_mandatory_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -117,7 +116,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Successfully validated response with an empty payload")
-    public void test_successful_response_for_empty_json_body() throws Exception {
+    void test_successful_response_for_empty_json_body() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "empty-json-payload.json",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -132,7 +131,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Successfully validated response with a valid payload but a charset appended to the Content-Type")
-    public void test_successful_response_for_content_type_with_charset_appended() throws Exception {
+    void test_successful_response_for_content_type_with_charset_appended() throws Exception {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(true));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -151,7 +150,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("API call with Standard Header but slight Error URL")
-    public void test_invalid_URL() throws Exception {
+    void test_invalid_URL() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURLForNotFound(),
                 //Performed a near to the Real URL Transformation
@@ -166,7 +165,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("API call with Standard Header but unimplemented METHOD")
-    public void test_invalid_REST_method() throws Exception {
+    void test_invalid_REST_method() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(),
                 getInputPayloadFileName(),
@@ -181,7 +180,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Headers with all empty and null values")
-    public void test_no_headers_populated() throws Exception {
+    void test_no_headers_populated() throws Exception {
         //2 Sets of Headers Tested - Nulls and Empty
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(),
@@ -215,7 +214,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Subscription Key Truncated in the Header")
-    public void test_subscriptionkey_key_truncated() throws Exception {
+    void test_subscriptionkey_key_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithCorruptedHeaderKey(getApiSubscriptionKey(),
@@ -229,7 +228,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Subscription Key Value Truncated in the Header")
-    public void test_subscriptionkey_value_truncated() throws Exception {
+    void test_subscriptionkey_value_truncated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getApiSubscriptionKey().substring(0, getApiSubscriptionKey().length() - 1),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -246,7 +245,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\"", "Wrong_Value,c602c8ed3b8147be910449b563dce008"})
-    public void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
+    void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(subKeyVal),
@@ -262,7 +261,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Source_System, S&L"})
-    public void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
+    void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithSourceSystemValue(getApiSubscriptionKey(), sourceSystemVal),
@@ -278,7 +277,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"})
-    public void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
+    void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithDestinationSystemValue(getApiSubscriptionKey(), destinationSystemVal),
@@ -301,7 +300,7 @@ public abstract class HMICommonHeaderTest {
             "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
             "Invalid_Date_Format, 2002-10-02T15:00:00",
     })
-    public void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
+    void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), requestCreatedAtVal),
@@ -319,7 +318,7 @@ public abstract class HMICommonHeaderTest {
     @ValueSource(strings = {"Content-Type", "Accept", "Source-System",
             "Destination-System", "Request-Created-At",
             "Request-Processed-At", "Request-Type"})
-    public void test_header_keys_truncated(String keyToBeTruncated) throws Exception {
+    void test_header_keys_truncated(String keyToBeTruncated) throws Exception {
 
         final HttpStatus httpStatus =
                 keyToBeTruncated.equalsIgnoreCase("Accept") ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.BAD_REQUEST;
@@ -346,7 +345,7 @@ public abstract class HMICommonHeaderTest {
     @ValueSource(strings = {"Content-Type", "Accept", "Source-System",
             "Destination-System", "Request-Created-At",
             "Request-Processed-At", "Request-Type"})
-    public void test_with_keys_removed_from_header(String keyToBeRemoved) throws Exception {
+    void test_with_keys_removed_from_header(String keyToBeRemoved) throws Exception {
         final HttpStatus httpStatus = keyToBeRemoved.equalsIgnoreCase("Accept") ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.BAD_REQUEST;
         final String expectedErrorMessage =
                 keyToBeRemoved.equalsIgnoreCase("Accept") ||
@@ -376,7 +375,7 @@ public abstract class HMICommonHeaderTest {
             "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
             "Invalid_Date_Format, 2002-10-02T15:00:00",
     })
-    public void test_request_processed_at_with_invalid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
+    void test_request_processed_at_with_invalid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
@@ -392,7 +391,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Invalid_Value, Robbery"})
-    public void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
+    void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestTypeVal),
@@ -408,7 +407,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Accept System Header with invalid format - Param : {0} --> {1}")
     @CsvSource({"Invalid_Value, Random", "Invalid_Format, application/pdf", "Invalid_Format, application/text"})
-    public void test_accept_at_with_invalid_values(String acceptTypeKey, String acceptTypeVal) throws Exception {
+    void test_accept_at_with_invalid_values(String acceptTypeKey, String acceptTypeVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithAcceptTypeAtSystemValue(getApiSubscriptionKey(), acceptTypeVal),
@@ -424,7 +423,7 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Request Type System Header with valid values - Value : {0}")
     @ValueSource(strings = {"Assault", "Theft"})
-    public void test_request_type_at_with_valid_values(String requestType) throws Exception {
+    void test_request_type_at_with_valid_values(String requestType) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestTypeAtSystemValue(getApiSubscriptionKey(), requestType),
@@ -444,7 +443,7 @@ public abstract class HMICommonHeaderTest {
             "Valid_Date_Format,2002-10-02T15:00:00.05Z",
             "Valid_Date_Format,2019-10-12 07:20:50.52Z"
     })
-    public void test_request_processed_at_with_valid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
+    void test_request_processed_at_with_valid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestProcessedAtSystemValue(getApiSubscriptionKey(), requestProcessedAtVal),
@@ -461,7 +460,7 @@ public abstract class HMICommonHeaderTest {
     @CsvSource({"Valid_Date_Format, 2012-03-19T07:22:00Z", "Valid_Date_Format, 2002-10-02T15:00:00Z",
             "Valid_Date_Format, 2002-10-02T15:00:00.05Z",
             "Valid_Date_Format, 2019-10-12 07:20:50.52Z"})
-    public void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
+    void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(getApiSubscriptionKey(), requestCreatedAtVal),
@@ -484,7 +483,7 @@ public abstract class HMICommonHeaderTest {
             "X-Request-Processed-At, 2012-03-19T07:22:00Z",
             "X-Request-Type, Assault"
     })
-    public void test_deprecated_header_values(String deprecatedHeaderKey, String deprecatedHeaderVal) throws Exception {
+    void test_deprecated_header_values(String deprecatedHeaderKey, String deprecatedHeaderVal) throws Exception {
 
         final HttpStatus httpStatus = deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ? HttpStatus.NOT_ACCEPTABLE : HttpStatus.BAD_REQUEST;
         final String expectedErrorMessage =
@@ -512,7 +511,7 @@ public abstract class HMICommonHeaderTest {
             "Request-Processed-At,NIL","Request-Processed-At,''","Request-Processed-At,2002-10-02T15:00:00Z",
             "Request-Type,NIL","Request-Type,''","Request-Type,THEFT","Request-Type,ASSAULT"
     }, nullValues = "NIL")
-    public void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
+    void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 
         final String expectedErrorMessage =
                         "Missing/Invalid Header " + duplicateHeaderKey;
