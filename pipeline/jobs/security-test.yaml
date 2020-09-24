@@ -33,11 +33,8 @@ parameters:
     type: string
 
   - name: testUrl
-    type: string
-    default:
-    values:
-    - https://www.example.com/openapi.json
-    - https://www.example.com/openapitest.json
+    type: list
+    
     
       
        
