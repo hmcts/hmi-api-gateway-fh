@@ -35,6 +35,7 @@ parameters:
 
   - name: testUrl
     type: string
+    default: []
        
   - name: securityRules
     type: string
