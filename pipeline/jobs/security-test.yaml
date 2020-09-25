@@ -33,7 +33,7 @@ parameters:
   - name: tags
     type: string
   - name: testUrl
-    default: []
+    type: string
        
   - name: securityRules
     type: string
