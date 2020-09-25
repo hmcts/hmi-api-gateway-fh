@@ -156,7 +156,7 @@ stages:
             containerRegistry: ${{ test.containerRegistry }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            testUrl: ["https://www.example.com/openapi.json", "https://www.example.com/openapitest1.json"]
+            testUrl: https://www.example.com/openapi.json
              
             securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
