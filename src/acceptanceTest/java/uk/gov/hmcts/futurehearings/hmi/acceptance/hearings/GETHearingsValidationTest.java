@@ -34,7 +34,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(GETHearingsValidationTest.class)
 @IncludeTags("GET")
-public class GETHearingsValidationTest extends HearingValidationTest {
+class GETHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
@@ -57,7 +57,7 @@ public class GETHearingsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource({"hearingDate, date", "hearingDate,\" \"", "hearingDate,", "hearingDate, 2002-10-02T10:00:00-05:00"})
-    public void test_hearing_date_queryparam_with_value(final String hearingDateKey,
+    void test_hearing_date_queryparam_with_value(final String hearingDateKey,
                                                         final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -73,7 +73,7 @@ public class GETHearingsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
     @CsvSource({"hearingIdCaseHQ, 234", "hearingIdCaseHQ,\" \"", "hearingIdCaseHQ,null"})
-    public void test_hearing_id_casehq_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
+    void test_hearing_id_casehq_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -88,7 +88,7 @@ public class GETHearingsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
     @CsvSource({"hearingType, Theft", "hearingType,\" \"", "hearingType,"})
-    public void test_hearing_type_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
+    void test_hearing_type_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -103,7 +103,7 @@ public class GETHearingsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing_Id_CaseHQ) with and without value - Param : {0} --> {1}")
     @CsvSource({"hearingDate,2002-10-02T10:00:00-05:00,hearingIdCaseHQ,123", "hearingDate,,hearingIdCaseHQ,null"})
-    public void test_multiple_queryparam_with_value(final String hearingVenueIdKey,
+    void test_multiple_queryparam_with_value(final String hearingVenueIdKey,
                                                     final String hearingVenueIdValue,
                                                     final String hearingRoomIdKey,
                                                     final String hearingRoomIdValue) throws IOException {

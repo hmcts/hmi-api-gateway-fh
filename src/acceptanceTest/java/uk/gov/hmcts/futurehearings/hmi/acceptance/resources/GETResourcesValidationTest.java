@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("java:S2187")
 public class GETResourcesValidationTest extends ResourceValidationTest {
 
     @Value("${targetInstance}")
