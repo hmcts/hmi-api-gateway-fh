@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(POSTHearingsValidationTest.class)
 @IncludeTags("Post")
-public class POSTHearingsValidationTest extends HearingValidationTest {
+class POSTHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
@@ -53,20 +53,19 @@ public class POSTHearingsValidationTest extends HearingValidationTest {
     }
 
     //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
-    //Confirmed by Product Owner (Lee Holmes) that this should be a Success Scenario.
+    //Confirmed by Product Owner that this should be a Success Scenario.
     @Test
     @DisplayName("Successfully validated response with an xml payload")
-    public void test_successful_response_for_test_xml_body() throws Exception {
+    void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
                 getUrlParams(),
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
-                null,
-                null,
                 getHmiSuccessVerifier(),"The request was received successfully.");
     }
 }

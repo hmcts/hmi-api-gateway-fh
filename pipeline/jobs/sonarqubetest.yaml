@@ -5,6 +5,9 @@ parameters:
     type: object
   - name: command
     type: string
+  - name: subscription 
+    type: string
+    
 
 jobs:
 - job: ${{ parameters.displayName }}
@@ -25,7 +28,7 @@ jobs:
 
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: ${{ parameters.command }}
+      command: ${{ parameters.command }} --stacktrace -$(Psonar.login)
       sonarAnalysis: true
       publishJUnitResults: false
   

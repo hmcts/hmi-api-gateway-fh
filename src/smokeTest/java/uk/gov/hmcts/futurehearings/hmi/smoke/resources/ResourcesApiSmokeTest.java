@@ -18,14 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class ResourcesApiSmokeTest extends SmokeTest {
+ class ResourcesApiSmokeTest extends SmokeTest {
 
     @Value("${resourcesApiRootContext}")
     private String resourcesApiRootContext;
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the Resources Root Context")
-    public void testSuccessfulHearingApiGet() {
+     void testSuccessfulHearingApiGet() {
 
                 Response response = given()
                 .headers(headersAsMap)
