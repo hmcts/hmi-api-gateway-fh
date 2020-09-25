@@ -17,14 +17,14 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-public class HmiApiSmokeTest extends SmokeTest {
+ class HmiApiSmokeTest extends SmokeTest {
 
     @Value("${hmiApiRootContext}")
     private String hmiApiRootContext;
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
-    public void testSuccessfulHmiApiGet() {
+     void testSuccessfulHmiApiGet() {
 
         Response response = given()
                 .headers(headersAsMap)
