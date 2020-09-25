@@ -16,7 +16,7 @@ parameters:
     type: string
     
   - name: testUrl
-    default: []
+    type: string
 
     
   - name: securityRules
