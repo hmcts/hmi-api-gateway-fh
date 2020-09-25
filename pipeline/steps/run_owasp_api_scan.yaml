@@ -1,5 +1,4 @@
 parameters:
-  testUrl: []
  
   - name: subscription
     type: string
@@ -16,6 +15,8 @@ parameters:
   - name: directory
     type: string
     
+  - name: testUrl
+    default: []
 
     
   - name: securityRules
