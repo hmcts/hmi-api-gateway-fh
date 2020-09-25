@@ -23,7 +23,7 @@ parameters:
     type: string
 
 steps:
-- ${{ each url parameters.testUrl }}:
+- ${{ each url in parameters.testUrl }}:
   - task: Docker@1
     displayName: 'Run an image'
     inputs:
