@@ -1,5 +1,7 @@
 parameters:
-  - testUrl : []
+  - name: testUrl
+    type: string
+    default: []
   - name: displayName
     type: string
 
