@@ -11,5 +11,4 @@ resource "azurerm_key_vault_access_policy" "shared_kv_premissions" {
   key_permissions         = var.key_permissions
   secret_permissions      = var.secret_permissions
   storage_permissions     = var.storage_permissions
-  depends_on              = [azurerm_api_management.hmi_apim]
 }
