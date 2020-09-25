@@ -1,6 +1,5 @@
 parameters:
-    testUrl: []
-  
+    
   - name: displayName
     type: string
 
@@ -33,7 +32,8 @@ parameters:
 
   - name: tags
     type: string
-
+  - name: testUrl
+    default: []
        
   - name: securityRules
     type: string
