@@ -22,17 +22,17 @@ parameters:
         command: smoke
         logLevel: debug
         serenity: false
-        dependsOn: UnitTest
+        # dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
         serenity: false
-        dependsOn: SmokeTest
+        # dependsOn: SmokeTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: AcceptanceTest
+        # dependsOn: AcceptanceTest
       tests_Sonarcloud:
       - name: SonarCloudTest
         command: sonarqube
@@ -116,6 +116,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
+            - ApplyHostName
             subscription: ${{ environment.subscription }}
             registry: ${{ environment.registry }}
             repository: ${{ test.repository }}
@@ -132,17 +133,17 @@ stages:
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
     
-    - ${{ if environment.tests_Sonarcloud }}:
-      - ${{ each test in environment.tests_Sonarcloud }}:
-        - template: pipeline/jobs/sonarqubetest.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn:
-            - Terraform
-            - createStorage
-            - UnitTest
-            - SmokeTest
-            - AcceptanceTest
-            - FunctionalTest
-            subscription: ${{ environment.subscription }}
-            command: ${{ test.command }}
+    # - ${{ if environment.tests_Sonarcloud }}:
+    #   - ${{ each test in environment.tests_Sonarcloud }}:
+    #     - template: pipeline/jobs/sonarqubetest.yaml
+    #       parameters:
+    #         displayName: ${{ test.name }}
+    #         dependsOn:
+    #         - Terraform
+    #         - createStorage
+    #         - UnitTest
+    #         - SmokeTest
+    #         - AcceptanceTest
+    #         - FunctionalTest
+    #         subscription: ${{ environment.subscription }}
+    #         command: ${{ test.command }}
