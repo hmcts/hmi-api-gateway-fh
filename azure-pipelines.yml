@@ -90,6 +90,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
+            - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
