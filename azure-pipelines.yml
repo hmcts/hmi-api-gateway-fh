@@ -34,10 +34,7 @@ parameters:
       - name: ApiZapScan
         containerRegistry: ssprivatesbox.azurecr.io
         repository: hmi/apim-tests-owasp
-        testUrl:
-         values:
-         - https://www.example.com/openapi.json
-         - https://www.example.com/openapitest.json
+        
 #      tests_Sonarcloud:
 #      - name: SonarCloudTest
 #        command: sonarqube
@@ -159,7 +156,7 @@ stages:
             containerRegistry: ${{ test.containerRegistry }}
             dockerfile: docker/images/${{ test.name }}/Dockerfile
             tags: latest
-            testUrl: ${{ test.testUrl }}
+            testUrl: ["https://www.example.com/openapi.json", "https://www.example.com/openapitest1.json"]
              
             securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
             resourceGroup: $(resourceGroup)
