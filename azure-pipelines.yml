@@ -34,7 +34,10 @@ parameters:
       - name: ApiZapScan
         containerRegistry: ssprivatesbox.azurecr.io
         repository: hmi/apim-tests-owasp
-        testUrl: ["https://www.example.com/openapi.json", "https://www.example.com/openapitest1.json"]
+        testUrl:
+         values:
+         - https://www.example.com/openapi.json
+         - https://www.example.com/openapitest.json
 #      tests_Sonarcloud:
 #      - name: SonarCloudTest
 #        command: sonarqube
