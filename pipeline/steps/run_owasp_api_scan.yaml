@@ -15,10 +15,10 @@ parameters:
     type: string
 
   - name: testUrl
-    type: string
+    type: object
     
   - name: securityRules
-    type: object
+    type: string
 
 steps:
 - ${{ each url in parameters.testUrl }}:
