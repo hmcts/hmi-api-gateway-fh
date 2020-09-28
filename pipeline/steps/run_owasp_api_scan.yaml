@@ -18,19 +18,20 @@ parameters:
     type: string
     
   - name: securityRules
-    type: string
+    type: object
 
 steps:
-- task: Docker@1
-  displayName: 'Run an image'
-  inputs:
-    azureSubscriptionEndpoint: ${{ parameters.subscription }}
-    azureContainerRegistry: ${{ parameters.containerRegistry }}
-    command: 'Run an image'
-    imageName: ${{ parameters.containerRegistry }}/${{ parameters.repository }}:${{ parameters.tags }}
-    volumes: $(System.DefaultWorkingDirectory)${{ parameters.directory }}:/zap/wrk/:rw
-    envVars: |         
-      TEST_URL=${{ parameters.testUrl }}
-      SecurityRules=${{ parameters.securityRules }}
-    containerCommand: '/bin/bash ./security.sh'
-    runInBackground: false
+- ${{ each url in parameters.testUrl }}:
+  - task: Docker@1
+    displayName: 'Run an image'
+    inputs:
+      azureSubscriptionEndpoint: ${{ parameters.subscription }}
+      azureContainerRegistry: ${{ parameters.containerRegistry }}
+      command: 'Run an image'
+      imageName: ${{ parameters.containerRegistry }}/${{ parameters.repository }}:${{ parameters.tags }}
+      volumes: $(System.DefaultWorkingDirectory)${{ parameters.directory }}:/zap/wrk/:rw
+      envVars: |         
+        TEST_URL=${{ url }}
+        SecurityRules=${{ parameters.securityRules }}
+      containerCommand: '/bin/bash ./security.sh'
+      runInBackground: false
