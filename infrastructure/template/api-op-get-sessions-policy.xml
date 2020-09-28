@@ -1,6 +1,76 @@
 <policies>
     <inbound>
         <base />
+        <set-variable name="invalidKeys" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"sessionIdCaseHQ","sessionStartDate","sessionEndDate","caseCourt","room-Name"};
+                bool invalidKey = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                        {
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
+                                break;
+                            }
+                        }
+                        if(!keyFound){
+                            invalidKey = true;
+                            break;
+                        }
+                    }
+                }
+                return invalidKey;
+            }" />
+        <choose>
+            <when condition="@(context.Request.Url.Query.Count > 4 || (bool)context.Variables["invalidKeys"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("statusCode", 400),
+                        new JProperty("message", "Invalid query parameter/s in the request URL.")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <set-variable name="sessionIdMissing" value="@{
+                    string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                    string[] allowedKeys = {"caseCourt","room-Name"};
+                    bool invalidKey = false;
+                    bool keyFound = false;
+                    if(context.Request.Url.Query.Count == 1){
+                        if (qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]){
+                            keyFound = true;
+                        }
+                    }
+                    if(context.Request.Url.Query.Count == 2){
+                        if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                            keyFound = true;
+                        }
+                    }
+
+                    if(keyFound){
+                        invalidKey = true;
+                    }
+                    return invalidKey;
+                }" />
+        <choose>
+            <when condition="@((bool)context.Variables["sessionIdMissing"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("statusCode", 400),
+                        new JProperty("message", "You need to provide at least one of the following parameters: 'sessionIdCaseHQ','sessionStartDate', 'sessionEndDate'")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+        </choose>
         <set-backend-service base-url="https://www.hmcts.com/request-hearings/sessions" />
         <mock-response status-code="200" content-type="application/json" />
     </inbound>
