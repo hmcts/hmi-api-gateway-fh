@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /resources - Retrieve Resources")
-public class GET_resources_UnitTests {
+class GET_resources_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -52,7 +52,7 @@ public class GET_resources_UnitTests {
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -67,7 +67,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRetrieveResourcesRequestForInvalidResource() {
+    void testRetrieveResourcesRequestForInvalidResource() {
         final Response response = whenRetrieveResourcesIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
@@ -75,7 +75,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testRetrieveResourcesRequestWithMissingContentTypeHeader() {
+    void testRetrieveResourcesRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -84,7 +84,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testRetrieveResourcesRequestWithInvalidContentTypeHeader() {
+    void testRetrieveResourcesRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
@@ -95,7 +95,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testRetrieveResourcesRequestWithMissingAcceptHeader() {
+    void testRetrieveResourcesRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -104,7 +104,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testRetrieveResourcesRequestWithInvalidAcceptHeader() {
+    void testRetrieveResourcesRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
 
@@ -115,7 +115,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRetrieveResourcesRequestWithMissingOcpSubKey() {
+    void testRetrieveResourcesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
@@ -124,7 +124,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
+    void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
@@ -134,7 +134,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(8)
     @DisplayName("Test for missing Source-System header")
-    public void testRetrieveResourcesRequestWithMissingSourceSystemHeader() {
+    void testRetrieveResourcesRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
@@ -143,7 +143,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(9)
     @DisplayName("Test for invalid Source-System header")
-    public void testRetrieveResourcesRequestWithInvalidSourceSystemHeader() {
+    void testRetrieveResourcesRequestWithInvalidSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
 
@@ -154,7 +154,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for missing Destination-System header")
-    public void testRetrieveResourcesRequestWithMissingDestinationSystemHeader() {
+    void testRetrieveResourcesRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
@@ -163,7 +163,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for invalid Destination-System header")
-    public void testRetrieveResourcesRequestWithInvalidDestinationSystemHeader() {
+    void testRetrieveResourcesRequestWithInvalidDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
 
@@ -174,7 +174,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Request-Created-At header")
-    public void testRetrieveResourcesRequestWithMissingRequestCreatedAtHeader() {
+    void testRetrieveResourcesRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
@@ -183,7 +183,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(13)
     @DisplayName("Test for invalid Request-Created-At header")
-    public void testRetrieveResourcesRequestWithInvalidRequestCreatedAtHeader() {
+    void testRetrieveResourcesRequestWithInvalidRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
 
@@ -195,7 +195,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(14)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testRetrieveResourcesRequestWithMissingRequestProcessedAtHeader() {
+    void testRetrieveResourcesRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
@@ -204,7 +204,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Request-Processed-At header")
-    public void testRetrieveResourcesRequestWithInvalidRequestProcessedAtHeader() {
+    void testRetrieveResourcesRequestWithInvalidRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
 
@@ -215,7 +215,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for missing Request-Type header")
-    public void testRetrieveResourcesRequestWithMissingRequestTypeHeader() {
+    void testRetrieveResourcesRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
@@ -224,7 +224,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Type header")
-    public void testRetrieveResourcesRequestWithInvalidRequestTypeHeader() {
+    void testRetrieveResourcesRequestWithInvalidRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
 
@@ -235,7 +235,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(18)
     @DisplayName("Test for Correct Headers and No Parameters")
-    public void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
+    void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -261,7 +261,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(19)
     @DisplayName("Test for Invalid Resource - Individual Resource")
-    public void testRetrieveIndividualResourceRequestForInvalidResource() {
+    void testRetrieveIndividualResourceRequestForInvalidResource() {
         final Response response = whenRetrieveIndividualResourceIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
@@ -269,7 +269,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(20)
     @DisplayName("Test for missing ContentType header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -277,7 +277,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(21)
     @DisplayName("Test for invalid ContentType header - Individual Resource")
-    public void testRetrieveIndividualResourcesRequestWithInvalidContentTypeHeader() {
+    void testRetrieveIndividualResourcesRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
@@ -288,7 +288,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(22)
     @DisplayName("Test for missing Accept header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -297,7 +297,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(23)
     @DisplayName("Test for invalid Accept header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidAcceptHeader() {
+    void testRetrieveIndividualResourceRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
 
@@ -308,7 +308,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(24)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
+    void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
@@ -317,7 +317,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(25)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
+    void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
@@ -327,7 +327,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(26)
     @DisplayName("Test for missing Source-System header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingSourceSystemHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
@@ -336,7 +336,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(27)
     @DisplayName("Test for invalid Source-System header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidSourceSystemHeader() {
+    void testRetrieveIndividualResourceRequestWithInvalidSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
 
@@ -347,7 +347,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(28)
     @DisplayName("Test for missing Destination-System header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingDestinationSystemHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
@@ -356,7 +356,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(29)
     @DisplayName("Test for invalid Destination-System header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidDestinationSystemHeader() {
+    void testRetrieveIndividualResourceRequestWithInvalidDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
 
@@ -367,7 +367,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(30)
     @DisplayName("Test for missing Request-Created-At header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingRequestCreatedAtHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
@@ -376,7 +376,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(31)
     @DisplayName("Test for invalid Request-Created-At header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidRequestCreatedAtHeader() {
+    void testRetrieveIndividualResourceRequestWithInvalidRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
 
@@ -387,7 +387,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(32)
     @DisplayName("Test for missing Request-Processed-At header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingRequestProcessedAtHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
@@ -396,7 +396,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(33)
     @DisplayName("Test for invalid Request-Processed-At header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithInvalidRequestProcessedAtHeader() {
+    void testRetrieveIndividualResourceRequestWithInvalidRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
 
@@ -407,7 +407,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(34)
     @DisplayName("Test for missing Request-Type header - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithMissingRequestTypeHeader() {
+    void testRetrieveIndividualResourceRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
@@ -416,7 +416,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(35)
     @DisplayName("Test for invalid Request-Type header - Individual Resource")
-    public void testRetrieveIndividualResourcesRequestWithInvalidRequestTypeHeader() {
+    void testRetrieveIndividualResourcesRequestWithInvalidRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
 
@@ -427,7 +427,7 @@ public class GET_resources_UnitTests {
     @Test
     @Order(36)
     @DisplayName("Test for No Parameters - Individual Resource")
-    public void testRetrieveIndividualResourceRequestWithCorrectRequestAndNoParams() {
+    void testRetrieveIndividualResourceRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }

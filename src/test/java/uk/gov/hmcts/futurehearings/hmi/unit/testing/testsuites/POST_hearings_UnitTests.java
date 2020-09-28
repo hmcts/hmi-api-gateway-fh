@@ -37,7 +37,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("POST /hearings - Request Hearings")
-public class POST_hearings_UnitTests {
+class POST_hearings_UnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/correct-hearing-request-payload.json";
     private static final String INVALID_PAYLOAD = "requests/invalid-hearing-request-payload.json";
@@ -57,7 +57,7 @@ public class POST_hearings_UnitTests {
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
@@ -71,7 +71,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRequestHearingsForInvalidResource() throws IOException {
+    void testRequestHearingsForInvalidResource() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -80,7 +80,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testRequestHearingsWithMissingContentTypeHeader() throws IOException {
+    void testRequestHearingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -89,7 +89,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testRequestHearingsWithInvalidContentTypeHeader() throws IOException {
+    void testRequestHearingsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -100,7 +100,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testRequestHearingsWithMissingAcceptHeader() throws IOException {
+    void testRequestHearingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -110,7 +110,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testRequestHearingsWithInvalidAcceptHeader() throws IOException {
+    void testRequestHearingsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -121,7 +121,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRequestHearingsWithMissingOcpSubKey() throws IOException {
+    void testRequestHearingsWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidOcpSubKey(input);
@@ -131,7 +131,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRequestHearingsWithInvalidOcpSubKey()throws IOException {
+    void testRequestHearingsWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -142,7 +142,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(8)
     @DisplayName("Test for missing Source-System header")
-    public void testRequestHearingsWithMissingSourceSystemHeader() throws IOException {
+    void testRequestHearingsWithMissingSourceSystemHeader() throws IOException {
         headersAsMap.remove("Source-System");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -152,7 +152,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(9)
     @DisplayName("Test for invalid Source-System header")
-    public void testRequestHearingsWithInvalidSourceSystemHeader() throws IOException {
+    void testRequestHearingsWithInvalidSourceSystemHeader() throws IOException {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -163,7 +163,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for missing Destination-System header")
-    public void testRequestHearingsWithMissingDestinationSystemHeader() throws IOException {
+    void testRequestHearingsWithMissingDestinationSystemHeader() throws IOException {
         headersAsMap.remove("Destination-System");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -173,7 +173,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for invalid Destination-System header")
-    public void testRequestHearingsWithInvalidDestinationSystemHeader() throws IOException {
+    void testRequestHearingsWithInvalidDestinationSystemHeader() throws IOException {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -184,7 +184,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Request-Created-At header")
-    public void testRequestHearingsWithMissingRequestCreatedAtHeader() throws IOException {
+    void testRequestHearingsWithMissingRequestCreatedAtHeader() throws IOException {
         headersAsMap.remove("Request-Created-At");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -194,7 +194,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(13)
     @DisplayName("Test for invalid Request-Created-At header")
-    public void testRequestHearingsWithInvalidRequestCreatedAtHeader() throws IOException {
+    void testRequestHearingsWithInvalidRequestCreatedAtHeader() throws IOException {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -205,7 +205,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(14)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testRequestHearingsWithMissingRequestProcessedAtHeader() throws IOException {
+    void testRequestHearingsWithMissingRequestProcessedAtHeader() throws IOException {
         headersAsMap.remove("Request-Processed-At");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -215,7 +215,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Request-Processed-At header")
-    public void testRequestHearingsWithInvalidRequestProcessedAtHeader() throws IOException {
+    void testRequestHearingsWithInvalidRequestProcessedAtHeader() throws IOException {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -226,7 +226,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for missing Request-Type header")
-    public void testRequestHearingsWithMissingRequestTypeHeader() throws IOException {
+    void testRequestHearingsWithMissingRequestTypeHeader() throws IOException {
         headersAsMap.remove("Request-Type");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -236,7 +236,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Type header")
-    public void testRequestHearingsWithInvalidRequestTypeHeader() throws IOException {
+    void testRequestHearingsWithInvalidRequestTypeHeader() throws IOException {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -247,7 +247,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(18)
     @DisplayName("Test for Correct Headers with Invalid Payload")
-    public void testRequestHearingsWithCorrectHeadersAndInvalidPayload() throws IOException {
+    void testRequestHearingsWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INVALID_PAYLOAD);
         final Response response = whenRequestHearingsIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
@@ -256,7 +256,7 @@ public class POST_hearings_UnitTests {
     @Test
     @Order(19)
     @DisplayName("Test for Correct Headers")
-    public void testRequestHearingsWithCorrectHeaders() throws IOException {
+    void testRequestHearingsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);

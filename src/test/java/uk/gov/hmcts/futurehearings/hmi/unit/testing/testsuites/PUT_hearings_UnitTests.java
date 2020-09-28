@@ -35,9 +35,9 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /hearings - Update Hearings")
-public class PUT_hearings_UnitTests {
+class PUT_hearings_UnitTests {
 
-    public static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
+    static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -53,7 +53,7 @@ public class PUT_hearings_UnitTests {
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
@@ -69,7 +69,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testUpdateHearingsForInvalidResource() throws IOException {
+    void testUpdateHearingsForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -78,7 +78,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
+    void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -87,7 +87,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
+    void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -98,7 +98,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
+    void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -108,7 +108,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
+    void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -119,7 +119,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing OcpSubKey")
-    public void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
+    void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
@@ -129,7 +129,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testUpdateHearingsRequestWithInvalidOcpSubKey()throws IOException {
+    void testUpdateHearingsRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -140,7 +140,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(8)
     @DisplayName("Test for missing Source-System")
-    public void testUpdateHearingsRequestWithMissingSrcHeader() throws IOException {
+    void testUpdateHearingsRequestWithMissingSrcHeader() throws IOException {
         headersAsMap.remove("Source-System");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -151,7 +151,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(9)
     @DisplayName("Test for invalid Source-System header")
-    public void testUpdateHearingsRequestWithInvalidSourceSystemHeader() throws IOException {
+    void testUpdateHearingsRequestWithInvalidSourceSystemHeader() throws IOException {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -162,7 +162,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for missing Destination-System")
-    public void testUpdateHearingsRequestWithMissingHeaderDestination() throws IOException {
+    void testUpdateHearingsRequestWithMissingHeaderDestination() throws IOException {
         headersAsMap.remove("Destination-System");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -172,7 +172,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for invalid Destination-System header")
-    public void testUpdateHearingsRequestWithInvalidDestinationSystemHeader() throws IOException {
+    void testUpdateHearingsRequestWithInvalidDestinationSystemHeader() throws IOException {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -184,7 +184,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Request-Created-At")
-    public void testUpdateHearingsRequestWithMissingHeaderDateTime() throws IOException {
+    void testUpdateHearingsRequestWithMissingHeaderDateTime() throws IOException {
         headersAsMap.remove("Request-Created-At");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -194,7 +194,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(13)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testUpdateHearingsRequestWithMissingRequestCreatedAtHeader() throws IOException {
+    void testUpdateHearingsRequestWithMissingRequestCreatedAtHeader() throws IOException {
         headersAsMap.remove("Request-Processed-At");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -204,7 +204,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(14)
     @DisplayName("Test for invalid Request-Created-At header")
-    public void testUpdateHearingsRequestWithInvalidRequestCreatedAtHeader() throws IOException {
+    void testUpdateHearingsRequestWithInvalidRequestCreatedAtHeader() throws IOException {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -215,7 +215,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Request-Processed-At header")
-    public void testUpdateHearingsRequestWithInvalidRequestProcessedAtHeader() throws IOException {
+    void testUpdateHearingsRequestWithInvalidRequestProcessedAtHeader() throws IOException {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -227,7 +227,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for missing Request-Type")
-    public void testUpdateHearingsRequestWithMissingRequestTypeHeader() throws IOException {
+    void testUpdateHearingsRequestWithMissingRequestTypeHeader() throws IOException {
         headersAsMap.remove("Request-Type");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -237,7 +237,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Type header")
-    public void testUpdateHearingsRequestWithInvalidRequestTypeHeader() throws IOException {
+    void testUpdateHearingsRequestWithInvalidRequestTypeHeader() throws IOException {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -248,7 +248,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(18)
     @DisplayName("Test for correct Request")
-    public void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
+    void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(input);
