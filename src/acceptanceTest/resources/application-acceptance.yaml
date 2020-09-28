@@ -6,7 +6,8 @@ hearings_idRootContext: /hmi/hearings/%s
 schedulesApiRootContext: /hmi/schedules
 resourcesRootContext: /hmi/resources
 resources_idRootContext: /hmi/resources/%s
-
+sessionsRootContext: /hmi/sessions
+sessions_idRootContext: /hmi/sessions/%s
 spring.flyway.enabled: false
 
 mockServerHost: ${MOCK_SERVER_HOST}
