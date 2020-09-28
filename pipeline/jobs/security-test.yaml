@@ -33,7 +33,7 @@ parameters:
     type: string
 
   - name: testUrl
-    type: string
+    type: object
     
   - name: securityRules
     type: string
