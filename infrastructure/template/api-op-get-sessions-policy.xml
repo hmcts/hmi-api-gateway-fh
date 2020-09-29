@@ -75,7 +75,7 @@
             </when>
         </choose>
         <choose>
-            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault(" sessionIdCaseHQ") != null)">
+            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("sessionIdCaseHQ") != null)">
                 <return-response>
                     <set-status code="200" reason="Successful reesponse."/>
                     <set-header name="Content-Type" exists-action="override">
