@@ -35,7 +35,6 @@
       "entityRoleCode": "DEF",
       "entitySubType": {
         "entityClassCode": "ORG",
-        "entityCompanyName": "Best Company Ltd",
         "entityTitle": "Mr",
         "entityFirstName": "Joe",
         "entityLastName": "Bloggs"
