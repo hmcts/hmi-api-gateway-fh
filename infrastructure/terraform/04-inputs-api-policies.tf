@@ -50,6 +50,11 @@ variable "api_policies" {
       operationId     = "get-sessions"
       format          = "rawxml-link"
       templateFile    = "api-op-get-sessions-policy.xml"
+    },
+    {
+      operationId     = "update-session"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-session-policy.xml"
     }
   ]
 }
