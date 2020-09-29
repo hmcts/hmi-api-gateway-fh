@@ -16,8 +16,6 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.restassured.RestAssured;
 import org.apache.http.entity.ContentType;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +41,9 @@ public class HearingAPIConsumerTest {
     private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/hmcts/hearings";
 
     private Map<String, String> headersAsMap = new HashMap<>();
-    public static final String REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-payload.json";
+    public static final String REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-entity-ind-payload.json";
+    public static final String REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-entity-org-payload.json";
+
     public static final String REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-standard-payload.json";
     public static final String REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-mandatory-payload.json";
     public static final String HEARING_PAYLOAD_SCHEMA_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/postListingRequestMessage.json";
@@ -61,94 +61,87 @@ public class HearingAPIConsumerTest {
         headersAsMap.put("Request-Type", "ASSAULT");
     }
 
-   @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadForRequestHearingAPIPact(
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
+    public RequestResponsePact createCompletePayloadWithIndEntityForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return builder
-                .given("Request Hearing API")
-                .uponReceiving("Provider confirms request received for a Complete Payload")
-                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .method(HttpMethod.POST.toString())
-                .headers(headersAsMap)
-                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH),ContentType.APPLICATION_JSON)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .toPact();
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a Complete Payload",
+                REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadForRequestHearingAPIPact")
-    public void shouldCompletePayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+    @PactTestFor(pactMethod = "createCompletePayloadWithIndEntityForRequestHearingAPIPact")
+    public void shouldCompletePayloadWithIndForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
+    }
 
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
+    public RequestResponsePact createCompletePayloadWithOrgEntityForRequestHearingAPIPact(
+            PactDslWithProvider builder) throws IOException {
 
-        RestAssured
-                .given()
-                .headers(headersAsMap)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(readFileContents(REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH))
-                .when()
-                .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .then()
-                .statusCode(HttpStatus.OK.value());
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a Complete Payload",
+                REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createCompletePayloadWithOrgEntityForRequestHearingAPIPact")
+    public void shouldCompletePayloadWithOrgForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
-
-        return builder
-                .given("Request Hearing API")
-                .uponReceiving("Provider confirms request received for a Standards (Only Outer Elements) Payload")
-                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .method(HttpMethod.POST.toString())
-                .headers(headersAsMap)
-                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH),ContentType.APPLICATION_JSON)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .toPact();
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a Standards (Only Outer Elements) Payload",
+                REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH);
     }
 
     @Test
     @PactTestFor(pactMethod = "createStandardPayloadForRequestHearingAPIPact")
     public void shouldStandardPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
-
-        RestAssured
-                .given()
-                .headers(headersAsMap)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))
-                .when()
-                .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .then()
-                .statusCode(HttpStatus.OK.value());
+        invokeHearingRequest(mockServer, REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH);
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return builder
-                .given("Request Hearing API")
-                .uponReceiving("Provider confirms request received for a Complete Payload")
-                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .method(HttpMethod.POST.toString())
-                .headers(headersAsMap)
-                .body(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH), ContentType.APPLICATION_JSON)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .toPact();
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a Complete Payload",
+                REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH);
     }
 
     @Test
     @PactTestFor(pactMethod = "createMandatoryPayloadForRequestHearingAPIPact")
     public void shouldMandatoryPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+        invokeHearingRequest(mockServer, REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH);
+    }
 
+    private RequestResponsePact buildPactForRequestHearing(final PactDslWithProvider builder,
+                                                           final String pactDescription,
+                                                           final String requestHearingMandatoryPayloadJsonPath) throws IOException {
+        return builder
+                .given("Request Hearing API")
+                .uponReceiving(pactDescription)
+                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
+                .method(HttpMethod.POST.toString())
+                .headers(headersAsMap)
+                .body(readFileContents(requestHearingMandatoryPayloadJsonPath), ContentType.APPLICATION_JSON)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .toPact();
+    }
+
+    private void invokeHearingRequest(final MockServer mockServer,
+                                      final String requestHearingPayload) throws IOException {
         RestAssured
                 .given()
                 .headers(headersAsMap)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH))
+                .body(readFileContents(requestHearingPayload))
                 .when()
                 .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .then()
