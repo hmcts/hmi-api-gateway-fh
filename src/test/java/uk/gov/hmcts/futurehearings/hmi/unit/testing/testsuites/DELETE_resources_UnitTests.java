@@ -35,6 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("DELETE /resources - Delete Resources")
+@SuppressWarnings("java:S2699")
 class DELETE_resources_UnitTests {
 
 

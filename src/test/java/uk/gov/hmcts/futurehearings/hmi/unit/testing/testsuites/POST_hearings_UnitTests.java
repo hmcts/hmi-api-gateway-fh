@@ -37,6 +37,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("POST /hearings - Request Hearings")
+@SuppressWarnings("java:S2699")
 class POST_hearings_UnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/correct-hearing-request-payload.json";

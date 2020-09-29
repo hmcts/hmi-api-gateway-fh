@@ -35,6 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /hearings - Update Hearings")
+@SuppressWarnings("java:S2699")
 class PUT_hearings_UnitTests {
 
     static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
