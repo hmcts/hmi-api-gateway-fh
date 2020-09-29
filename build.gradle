@@ -183,7 +183,7 @@ task contract(type: Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/cdc/consumer/**"
+    include "uk/gov/hmcts/futurehearings/hmi/contract/consumer/**"
     systemProperty 'pact.rootDir', "pacts"
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -288,7 +288,12 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
 }
+
+
 
 def versions = [
         junit           : '5.6.2',
@@ -479,6 +484,8 @@ dependencies {
     contractTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     contractTestImplementation "ch.qos.logback:logback-classic:1.2.3"
 
+    contractTestImplementation group: 'com.github.everit-org.json-schema', name: 'org.everit.json.schema', version: '1.12.1'
+
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
     //Contract Testing Dependencies - FINISH
@@ -503,6 +510,8 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+
+    compile group: 'org.everit.json', name: 'org.everit.json.schema', version: '1.5.1'
     //Functional Testing Dependencies - FINISH
 }
 
@@ -546,7 +555,7 @@ pact {
 
     publish {
         pactDirectory = 'pacts'
-        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        pactBrokerUrl = System.getProperty("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pactVersion
     }
