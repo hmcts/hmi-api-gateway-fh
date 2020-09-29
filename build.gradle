@@ -119,11 +119,13 @@ test {
     description = 'Executes unit tests'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/testsuites/**"
+    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
     failFast = false
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    enableAssertions = true
+    scanForTestClasses = true
 }
 
 gradle.startParameter.continueOnFailure = true
@@ -358,9 +360,16 @@ dependencies {
     testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
-    testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+    //testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+    //testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+    //testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
+
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testImplementation "ch.qos.logback:logback-classic:1.2.3"

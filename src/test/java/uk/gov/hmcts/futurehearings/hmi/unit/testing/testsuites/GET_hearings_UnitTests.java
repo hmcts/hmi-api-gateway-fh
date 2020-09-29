@@ -35,6 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /hearings - Retrieve Hearings")
+@SuppressWarnings("java:S2699")
 class GET_hearings_UnitTests {
 
     @Value("${targetInstance}")

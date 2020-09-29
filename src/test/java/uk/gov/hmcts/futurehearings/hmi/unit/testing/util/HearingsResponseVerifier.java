@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
-import com.aventstack.extentreports.ExtentTest;
-import io.restassured.response.Response;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
 import java.util.Map;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
-import static org.junit.Assert.assertEquals;
+
+import io.restassured.response.Response;
 
 public class HearingsResponseVerifier {
 
@@ -13,13 +13,13 @@ public class HearingsResponseVerifier {
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
 
 
-    public static void  thenValidateResponseForInvalidResource(Response response){
+    public static final void thenValidateResponseForInvalidResource(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",404, response.getStatusCode());
+            assertEquals(404, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 404");
-            assertEquals("Status Code Message Validation:","Resource not found", responseMap.get(("message")));
+            assertEquals("Resource not found", responseMap.get(("message")),"Status Code Message Validation:");
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
         }
         catch (AssertionError e){
@@ -35,7 +35,7 @@ public class HearingsResponseVerifier {
     public static void  thenValidateResponseForRequestOrDelete(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            assertEquals("Response Code Validation:",200, response.getStatusCode());
+            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 200");
             assertEquals("Response Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
             getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
@@ -56,7 +56,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Response Code Validation:",201, response.getStatusCode());
+            assertEquals(201, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 201");
             assertEquals("Response Code Description Validation:","The request was received successfully.", responseMap.get(("description")));
             getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
@@ -73,7 +73,7 @@ public class HearingsResponseVerifier {
     public static void  thenValidateResponseforRetrieve(Response response){
         try{
 
-            assertEquals("Response Code Validation:",200, response.getStatusCode());
+            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 200");
 
         }
@@ -92,7 +92,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",401, response.getStatusCode());
+            assertEquals(401, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 401");
             assertEquals("Status Code Message Validation:",MISSING_SUB_KEY_ERROR, responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
@@ -112,7 +112,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",401, response.getStatusCode());
+            assertEquals(401, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 401");
             assertEquals("Status Code Message Validation:",INVALID_SUB_KEY_ERROR, responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
@@ -132,7 +132,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",400, response.getStatusCode());
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
             assertEquals("Status Code Message Validation:","Missing/Invalid Header "+missingField, responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
@@ -153,7 +153,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",406, response.getStatusCode());
+            assertEquals(406, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 406");
             assertEquals("Status Code Message Validation:","Missing/Invalid Media Type", responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
@@ -173,7 +173,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",400, response.getStatusCode());
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
             assertEquals("Status Code Message Validation:","Missing/Invalid Media Type", responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
@@ -193,7 +193,7 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals("Status Code Validation:",400, response.getStatusCode());
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
             assertEquals("Status Code Message Validation:","Invalid query parameter/s in the request URL.", responseMap.get(("message")));
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
