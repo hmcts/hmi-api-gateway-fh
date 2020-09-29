@@ -9,10 +9,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 import java.io.IOException;
@@ -138,112 +141,25 @@ class PUT_hearings_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System")
-    void testUpdateHearingsRequestWithMissingSrcHeader() throws IOException {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateHearingsWithMissingHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    void testUpdateHearingsRequestWithInvalidSourceSystemHeader() throws IOException {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateHearingsWithInvalidHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("Test for missing Destination-System")
-    void testUpdateHearingsRequestWithMissingHeaderDestination() throws IOException {
-        headersAsMap.remove("Destination-System");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    void testUpdateHearingsRequestWithInvalidDestinationSystemHeader() throws IOException {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At")
-    void testUpdateHearingsRequestWithMissingHeaderDateTime() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for missing Request-Processed-At header")
-    void testUpdateHearingsRequestWithMissingRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for invalid Request-Created-At header")
-    void testUpdateHearingsRequestWithInvalidRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    void testUpdateHearingsRequestWithInvalidRequestProcessedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type")
-    void testUpdateHearingsRequestWithMissingRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    void testUpdateHearingsRequestWithInvalidRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
