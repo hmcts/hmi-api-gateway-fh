@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /hearings - Retrieve Hearings")
-public class GET_hearings_UnitTests {
+class GET_hearings_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -53,7 +53,7 @@ public class GET_hearings_UnitTests {
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -72,7 +72,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRetrieveHearingsRequestForInvalidResource() {
+    void testRetrieveHearingsRequestForInvalidResource() {
 
         final Response response = whenRetrieveHearingsRequestIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
@@ -81,7 +81,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testRetrieveHearingsRequestWithMissingContentTypeHeader() {
+    void testRetrieveHearingsRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -91,7 +91,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testRetrieveHearingsRequestWithInvalidContentTypeHeader() {
+    void testRetrieveHearingsRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
@@ -102,7 +102,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testRetrieveHearingsRequestWithMissingAcceptHeader() {
+    void testRetrieveHearingsRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -112,7 +112,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testRetrieveHearingsRequestWithInvalidAcceptHeader() {
+    void testRetrieveHearingsRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
 
@@ -123,7 +123,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRetrieveHearingsRequestWithMissingOcpSubKey() {
+    void testRetrieveHearingsRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOcpSubKey();
@@ -133,7 +133,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRetrieveHearingsRequestWithInvalidOcpSubKey(){
+    void testRetrieveHearingsRequestWithInvalidOcpSubKey(){
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
@@ -145,7 +145,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(8)
     @DisplayName("Test for missing Source-System header")
-    public void testRetrieveHearingsRequestWithMissingSourceSystemHeader() {
+    void testRetrieveHearingsRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -155,7 +155,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(9)
     @DisplayName("Test for invalid Source-System header")
-    public void testRetrieveHearingsRequestWithInvalidSourceSystemHeader() {
+    void testRetrieveHearingsRequestWithInvalidSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
 
@@ -166,7 +166,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for missing Destination-System header")
-    public void testRetrieveHearingsRequestWithMissingDestinationSystemHeader() {
+    void testRetrieveHearingsRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -176,7 +176,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for invalid Destination-System header")
-    public void testRetrieveHearingsRequestWithInvalidDestinationSystemHeader() {
+    void testRetrieveHearingsRequestWithInvalidDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
 
@@ -187,7 +187,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Request-Created-At header")
-    public void testRetrieveHearingsRequestWithMissingRequestCreatedAtHeader() {
+    void testRetrieveHearingsRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -197,7 +197,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(13)
     @DisplayName("Test for invalid Request-Created-At header")
-    public void testRetrieveHearingsRequestWithInvalidRequestCreatedAtHeader() {
+    void testRetrieveHearingsRequestWithInvalidRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
 
@@ -208,7 +208,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(14)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testRetrieveHearingsRequestWithMissingRequestProcessedAtHeader() {
+    void testRetrieveHearingsRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -218,7 +218,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Request-Processed-At header")
-    public void testRetrieveHearingsRequestWithInvalidRequestProcessedAtHeader() {
+    void testRetrieveHearingsRequestWithInvalidRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
 
@@ -229,7 +229,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for missing Request-Type header")
-    public void testRetrieveHearingsRequestWithMissingRequestTypeHeader() {
+    void testRetrieveHearingsRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -239,7 +239,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Type header")
-    public void testRetrieveHearingsRequestWithInvalidRequestTypeHeader() {
+    void testRetrieveHearingsRequestWithInvalidRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
 
@@ -250,7 +250,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(18)
     @DisplayName("Test for Invalid Parameter")
-    public void testRetrieveHearingScheduleRequestWithAdditionalParam() {
+    void testRetrieveHearingScheduleRequestWithAdditionalParam() {
         paramsAsMap.put("Invalid-Param","Value");
 
         final Response response = whenRetrieveHearingScheduleIsInvokedWithAdditionalParam();
@@ -260,7 +260,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(19)
     @DisplayName("Test for HearingID Parameter")
-    public void testRetrieveHearingsRequestWithHearingIDParam() {
+    void testRetrieveHearingsRequestWithHearingIDParam() {
         paramsAsMap.remove("hearingDate");
         paramsAsMap.remove("hearingType");
 
@@ -271,7 +271,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(20)
     @DisplayName("Test for HearingDate Parameter")
-    public void testRetrieveHearingsRequestWithHearingDateParam() {
+    void testRetrieveHearingsRequestWithHearingDateParam() {
         paramsAsMap.remove("hearingIdCaseHQ");
         paramsAsMap.remove("hearingType");
 
@@ -282,7 +282,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(21)
     @DisplayName("Test for HearingType Parameter")
-    public void testRetrieveHearingsRequestWithHearingTypeParam() {
+    void testRetrieveHearingsRequestWithHearingTypeParam() {
         paramsAsMap.remove("hearingIdCaseHQ");
         paramsAsMap.remove("hearingDate");
 
@@ -293,7 +293,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(22)
     @DisplayName("Test for Correct Headers with No Parameters")
-    public void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
+    void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseforRetrieve(response);
@@ -302,7 +302,7 @@ public class GET_hearings_UnitTests {
     @Test
     @Order(23)
     @DisplayName("Test for Correct Headers and Parameters")
-    public void testRetrieveHearingsRequestWithCorrectHeadersAndParams() {
+    void testRetrieveHearingsRequestWithCorrectHeadersAndParams() {
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseforRetrieve(response);
