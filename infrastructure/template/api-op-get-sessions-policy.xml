@@ -25,7 +25,7 @@
                 return invalidKey;
             }" />
         <choose>
-            <when condition="@(context.Request.Url.Query.Count > 4 || (bool)context.Variables["invalidKeys"])">
+            <when condition="@(context.Request.Url.Query.Count > 5 || (bool)context.Variables["invalidKeys"])">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
