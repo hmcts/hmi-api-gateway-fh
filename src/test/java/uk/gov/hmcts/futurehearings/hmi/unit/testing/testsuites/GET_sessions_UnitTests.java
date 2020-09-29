@@ -63,8 +63,8 @@ public class GET_sessions_UnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
         paramsAsMap.put("sessionIdCaseHQ", "CASE1234");
-        paramsAsMap.put("sessionStartDate", "2018-02-29T20:36:01Z");
-        paramsAsMap.put("sessionEndDate", "2018-02-29T21:36:01Z");
+        paramsAsMap.put("sessionStartDate", "2018-01-29 20:36:01Z");
+        paramsAsMap.put("sessionEndDate", "2018-01-29 21:36:01Z");
         paramsAsMap.put("caseCourt", "oxford");
         paramsAsMap.put("room-Name", "RM012");
 
@@ -218,7 +218,7 @@ public class GET_sessions_UnitTests {
     public void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.remove("sessionIdCaseHQ");
         paramsAsMap.remove("sessionStartDate");
-        paramsAsMap.remove("sessionStartDate");
+        paramsAsMap.remove("sessionEndDate");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
