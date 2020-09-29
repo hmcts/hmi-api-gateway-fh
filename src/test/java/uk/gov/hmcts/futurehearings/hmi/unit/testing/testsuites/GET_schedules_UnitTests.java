@@ -52,7 +52,7 @@ class GET_schedules_UnitTests {
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
         headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
@@ -75,7 +75,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRetrieveHearingSchedulesRequestForInvalidResource() {
+    void testRetrieveHearingSchedulesRequestForInvalidResource() {
         final Response response = whenRetrieveHearingScheduleIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
@@ -83,7 +83,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testRetrieveHearingSchedulesRequestWithMissingContentTypeHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -92,7 +92,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidContentTypeHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
@@ -103,7 +103,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testRetrieveHearingSchedulesRequestWithMissingAcceptHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -112,7 +112,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testDeleteHearingRequestWithInvalidAcceptHeader() {
+    void testDeleteHearingRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/xml");
 
@@ -123,7 +123,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRetrieveHearingSchedulesRequestWithMissingOcpSubKey() {
+    void testRetrieveHearingSchedulesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
@@ -132,7 +132,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidOcpSubKey() {
+    void testRetrieveHearingSchedulesRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final Response response = whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey();
@@ -142,7 +142,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(8)
     @DisplayName("Test for missing Source-System header")
-    public void testRetrieveHearingSchedulesRequestWithMissingSourceSystemHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
@@ -151,7 +151,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(9)
     @DisplayName("Test for invalid Source-System header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidSourceSystemHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidSourceSystemHeader() {
         headersAsMap.remove("Source-System");
         headersAsMap.put("Source-System", "A");
 
@@ -162,7 +162,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for missing Destination-System header")
-    public void testRetrieveHearingSchedulesRequestWithMissingDestinationSystemHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
@@ -171,7 +171,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for invalid Destination-System header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidDestinationSystemHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidDestinationSystemHeader() {
         headersAsMap.remove("Destination-System");
         headersAsMap.put("Destination-System", "A");
 
@@ -182,7 +182,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Request-Created-At header")
-    public void testRetrieveHearingSchedulesRequestWithMissingRequestCreatedAtHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
@@ -191,7 +191,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(13)
     @DisplayName("Test for invalid Request-Processed-At header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidRequestProcessedAtHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
 
@@ -203,7 +203,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(14)
     @DisplayName("Test for missing Request-Processed-At header")
-    public void testRetrieveHearingSchedulesRequestWithMissingRequestProcessedAtHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingRequestProcessedAtHeader() {
         headersAsMap.remove("Request-Processed-At");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
@@ -213,7 +213,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Request-Created-At header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidRequestCreatedAtHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidRequestCreatedAtHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
 
@@ -224,7 +224,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for missing Request-Type header")
-    public void testRetrieveHearingSchedulesRequestWithMissingRequestTypeHeader() {
+    void testRetrieveHearingSchedulesRequestWithMissingRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
@@ -234,7 +234,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(17)
     @DisplayName("Test for invalid Request-Type header")
-    public void testRetrieveHearingSchedulesRequestWithInvalidRequestTypeHeader() {
+    void testRetrieveHearingSchedulesRequestWithInvalidRequestTypeHeader() {
         headersAsMap.remove("Request-Type");
         headersAsMap.put("Request-Type", "A");
 
@@ -245,7 +245,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(18)
     @DisplayName("Test for Correct Headers and No Parameters")
-    public void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
+    void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -253,7 +253,7 @@ class GET_schedules_UnitTests {
     @Test
     @Order(19)
     @DisplayName("Test for Correct Headers and Parameters")
-    public void testRetrieveHearingSchedulesRequestWithCorrectRequestAndAllParams() {
+    void testRetrieveHearingSchedulesRequestWithCorrectRequestAndAllParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndAllParams();
         thenValidateResponseForRetrieve(response);
     }
