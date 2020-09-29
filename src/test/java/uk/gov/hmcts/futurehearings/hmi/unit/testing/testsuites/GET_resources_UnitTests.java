@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -39,9 +41,6 @@ class GET_resources_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetHost}")
-    private String targetHost;
-
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
@@ -52,7 +51,6 @@ class GET_resources_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
@@ -130,105 +128,25 @@ class GET_resources_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System header")
-    void testRetrieveResourcesRequestWithMissingSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveResourcesRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
+
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    void testRetrieveResourcesRequestWithInvalidSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveResourcesRequestWithInvalidHeader(String iteration) {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("Test for missing Destination-System header")
-    void testRetrieveResourcesRequestWithMissingDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    void testRetrieveResourcesRequestWithInvalidDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At header")
-    void testRetrieveResourcesRequestWithMissingRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for invalid Request-Created-At header")
-    void testRetrieveResourcesRequestWithInvalidRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for missing Request-Processed-At header")
-    void testRetrieveResourcesRequestWithMissingRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    void testRetrieveResourcesRequestWithInvalidRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type header")
-    void testRetrieveResourcesRequestWithMissingRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    void testRetrieveResourcesRequestWithInvalidRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
@@ -323,104 +241,25 @@ class GET_resources_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Test
     @Order(26)
-    @DisplayName("Test for missing Source-System header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithMissingSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
+
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
     @Order(27)
-    @DisplayName("Test for invalid Source-System header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
 
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(28)
-    @DisplayName("Test for missing Destination-System header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithMissingDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(29)
-    @DisplayName("Test for invalid Destination-System header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(30)
-    @DisplayName("Test for missing Request-Created-At header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithMissingRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(31)
-    @DisplayName("Test for invalid Request-Created-At header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("Test for missing Request-Processed-At header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithMissingRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(33)
-    @DisplayName("Test for invalid Request-Processed-At header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(34)
-    @DisplayName("Test for missing Request-Type header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithMissingRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(35)
-    @DisplayName("Test for invalid Request-Type header - Individual Resource")
-    void testRetrieveIndividualResourcesRequestWithInvalidRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
