@@ -61,12 +61,9 @@ public class HearingAPIConsumerTest {
         headersAsMap.put("Request-Type", "ASSAULT");
     }
 
-   /* @Pact(provider = "SandL_API", consumer = "HMI_API")
+   @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompletePayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
-
-        final JSONObject requestHearingPayload = new JSONObject(
-                new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH)));
 
         return builder
                 .given("Request Hearing API")
@@ -74,7 +71,7 @@ public class HearingAPIConsumerTest {
                 .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .method(HttpMethod.POST.toString())
                 .headers(headersAsMap)
-                .body(requestHearingPayload)
+                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH),ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .toPact();
@@ -84,31 +81,21 @@ public class HearingAPIConsumerTest {
     @PactTestFor(pactMethod = "createCompletePayloadForRequestHearingAPIPact")
     public void shouldCompletePayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
 
-        final JSONObject hearingSchema = new JSONObject(
-                new JSONTokener(readFileContents(HEARING_PAYLOAD_SCHEMA_PATH)));
-
-        final JSONObject requestHearingPayload = new JSONObject(
-                new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH)));
-
-        performValidation(hearingSchema, requestHearingPayload);
 
         RestAssured
                 .given()
                 .headers(headersAsMap)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(requestHearingPayload)
+                .body(readFileContents(REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH))
                 .when()
                 .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }
-*/
-    /*@Pact(provider = "SandL_API", consumer = "HMI_API")
+
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
-
-        final JSONObject requestHearingPayload = new JSONObject(
-                new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH)));
 
         return builder
                 .given("Request Hearing API")
@@ -116,7 +103,7 @@ public class HearingAPIConsumerTest {
                 .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .method(HttpMethod.POST.toString())
                 .headers(headersAsMap)
-                .body(requestHearingPayload)
+                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH),ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .toPact();
@@ -126,31 +113,20 @@ public class HearingAPIConsumerTest {
     @PactTestFor(pactMethod = "createStandardPayloadForRequestHearingAPIPact")
     public void shouldStandardPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
 
-        final JSONObject hearingSchema = new JSONObject(
-                new JSONTokener(readFileContents(HEARING_PAYLOAD_SCHEMA_PATH)));
-
-        final JSONObject requestHearingPayload = new JSONObject(
-                new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH)));
-
-        performValidation(hearingSchema, requestHearingPayload);
-
         RestAssured
                 .given()
                 .headers(headersAsMap)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(requestHearingPayload)
+                .body(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))
                 .when()
                 .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .then()
                 .statusCode(HttpStatus.OK.value());
-    }*/
+    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createMandaotryPayloadForRequestHearingAPIPact(
+    public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
-
-       /* final JSONObject requestHearingPayload = new JSONObject(
-                new JSONTokener(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH)));*/
 
         return builder
                 .given("Request Hearing API")
@@ -165,16 +141,8 @@ public class HearingAPIConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createMandaotryPayloadForRequestHearingAPIPact")
+    @PactTestFor(pactMethod = "createMandatoryPayloadForRequestHearingAPIPact")
     public void shouldMandatoryPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
-
-        /*final JSONObject hearingSchema = new JSONObject(
-                new JSONTokener(readFileContents(HEARING_PAYLOAD_SCHEMA_PATH)));*/
-
-        //final JSONObject requestHearingPayload = new JSONObject(
-                //new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_PAYLOAD_JSON_PATH)));
-
-        //performValidation(hearingSchema, requestHearingPayload);
 
         RestAssured
                 .given()
@@ -186,17 +154,4 @@ public class HearingAPIConsumerTest {
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }
-
-
-    /*private static final void performValidation(final JSONObject hearingSchema,
-                                                final JSONObject requestHearingPayload) {
-
-        SchemaLoader schemaLoader = SchemaLoader.builder()
-                .schemaJson(hearingSchema)
-                .resolutionScope("classpath:uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/") // setting the default resolution scope
-                .build();
-
-        Schema schema = schemaLoader.load().build();
-        schema.validate(requestHearingPayload);
-    }*/
 }
