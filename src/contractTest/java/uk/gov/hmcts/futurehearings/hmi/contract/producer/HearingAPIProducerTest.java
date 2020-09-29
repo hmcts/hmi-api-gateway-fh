@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.cdc.producer;
+package uk.gov.hmcts.futurehearings.hmi.contract.producer;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
