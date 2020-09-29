@@ -1,5 +1,16 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForNoMandatoryParams;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForRetrieve;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForAdditionalParam;
+
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +20,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,16 +30,6 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseforRetrieve;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForAdditionalParam;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -37,9 +40,6 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 public class GET_sessions_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetHost}")
-    private String targetHost;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
@@ -66,7 +66,7 @@ public class GET_sessions_UnitTests {
         paramsAsMap.put("sessionStartDate", "2018-02-29T20:36:01Z");
         paramsAsMap.put("sessionEndDate", "2018-02-29T21:36:01Z");
         paramsAsMap.put("caseCourt", "oxford");
-        paramsAsMap.put("room-Name", "Room 7");
+        paramsAsMap.put("room-Name", "RM012");
 
     }
 
@@ -142,114 +142,29 @@ public class GET_sessions_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System header")
-    public void testRetrieveSessionsRequestWithMissingSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveSessionsRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    public void testRetrieveSessionsRequestWithInvalidSourceSystemHeader() {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveSessionsRequestWithInvalidHeader(String iteration) {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(10)
-    @DisplayName("Test for missing Destination-System header")
-    public void testRetrieveSessionsRequestWithMissingDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    public void testRetrieveSessionsRequestWithInvalidDestinationSystemHeader() {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At header")
-    public void testRetrieveSessionsRequestWithMissingRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for invalid Request-Created-At header")
-    public void testRetrieveSessionsRequestWithInvalidRequestCreatedAtHeader() {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for missing Request-Processed-At header")
-    public void testRetrieveSessionsRequestWithMissingRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    public void testRetrieveSessionsRequestWithInvalidRequestProcessedAtHeader() {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type header")
-    public void testRetrieveSessionsRequestWithMissingRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    public void testRetrieveSessionsRequestWithInvalidRequestTypeHeader() {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(18)
     @DisplayName("Test for Invalid Parameter")
     public void testRetrieveSessionsRequestWithAdditionalParam() {
         paramsAsMap.put("Invalid-Param","Value");
@@ -259,54 +174,72 @@ public class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(19)
-    @DisplayName("Test for HearingID Parameter")
-    public void testRetrieveSessionsRequestWithHearingIDParam() {
-        paramsAsMap.remove("hearingDate");
-        paramsAsMap.remove("hearingType");
+    @Order(11)
+    @DisplayName("Test for sessionIdCaseHQ Parameter")
+    public void testRetrieveSessionsRequestWithSessionIdCaseHQParam() {
+        paramsAsMap.remove("sessionStartDate");
+        paramsAsMap.remove("sessionEndDate");
+        paramsAsMap.remove("caseCourt");
+        paramsAsMap.remove("room-Name");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseforRetrieve(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
-    @Order(20)
-    @DisplayName("Test for HearingDate Parameter")
-    public void testRetrieveSessionsRequestWithHearingDateParam() {
-        paramsAsMap.remove("hearingIdCaseHQ");
-        paramsAsMap.remove("hearingType");
+    @Order(12)
+    @DisplayName("Test for sessionStartDate Parameter")
+    public void testRetrieveSessionsRequestWithSessionStartDateParam() {
+        paramsAsMap.remove("sessionIdCaseHQ");
+        paramsAsMap.remove("sessionEndDate");
+        paramsAsMap.remove("caseCourt");
+        paramsAsMap.remove("room-Name");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseforRetrieve(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
-    @Order(21)
-    @DisplayName("Test for HearingType Parameter")
-    public void testRetrieveSessionsRequestWithHearingTypeParam() {
-        paramsAsMap.remove("hearingIdCaseHQ");
-        paramsAsMap.remove("hearingDate");
+    @Order(13)
+    @DisplayName("Test for sessionEndDate Parameter")
+    public void testRetrieveSessionsRequestWithSessionEndDateParam() {
+        paramsAsMap.remove("sessionIdCaseHQ");
+        paramsAsMap.remove("sessionStartDate");
+        paramsAsMap.remove("caseCourt");
+        paramsAsMap.remove("room-Name");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseforRetrieve(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
-    @Order(22)
+    @Order(14)
+    @DisplayName("Test with no mandatory parameters")
+    public void testRetrieveSessionsRequestWithNoMandatoryParams() {
+        paramsAsMap.remove("sessionIdCaseHQ");
+        paramsAsMap.remove("sessionStartDate");
+        paramsAsMap.remove("sessionStartDate");
+
+        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
+        thenValidateResponseForNoMandatoryParams(response);
+    }
+
+    @Test
+    @Order(15)
     @DisplayName("Test for Correct Headers with No Parameters")
     public void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
-        thenValidateResponseforRetrieve(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
-    @Order(23)
+    @Order(16)
     @DisplayName("Test for Correct Headers and Parameters")
     public void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseforRetrieve(response);
+        thenValidateResponseForRetrieve(response);
     }
 
 
