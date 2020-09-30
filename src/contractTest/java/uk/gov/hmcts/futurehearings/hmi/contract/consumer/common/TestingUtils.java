@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.cdc.consumer.common;
+package uk.gov.hmcts.futurehearings.hmi.contract.consumer.common;
 
 import java.io.File;
 import java.io.IOException;
