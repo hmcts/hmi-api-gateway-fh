@@ -37,6 +37,7 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /sessions - Retrieve Sessions")
+@SuppressWarnings("java:S2699")
 class GET_sessions_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
