@@ -52,6 +52,17 @@
                         keyFound = true;
                     }
                 }
+                if(context.Request.Url.Query.Count == 3){
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1]) && (qryPrmKeys[2] == allowedKeys[0] || qryPrmKeys[2] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[2] == allowedKeys[0] || qryPrmKeys[2] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                }
                 if(keyFound){
                     invalidKey = true;
                 }
@@ -64,7 +75,7 @@
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "You need to provide at least one of the following parameters: 'sessionStartDate', 'sessionEndDate'")
+                            new JProperty("message", "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'")
                         ).ToString();
                         }</set-body>
                 </return-response>
