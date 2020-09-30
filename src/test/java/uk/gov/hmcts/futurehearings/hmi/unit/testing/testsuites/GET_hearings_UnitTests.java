@@ -1,5 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRetrieve;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
+
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,17 +29,6 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRetrieve;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
-
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -172,34 +171,12 @@ class GET_hearings_UnitTests {
         thenValidateResponseForAdditionalParam(response);
     }
 
-    @Test
     @Order(19)
-    @DisplayName("Test for HearingID Parameter")
-    void testRetrieveHearingsRequestWithHearingIDParam() {
-        paramsAsMap.remove("hearingDate");
-        paramsAsMap.remove("hearingType");
-
-        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
-    }
-
-    @Test
-    @Order(20)
-    @DisplayName("Test for HearingDate Parameter")
-    void testRetrieveHearingsRequestWithHearingDateParam() {
-        paramsAsMap.remove("hearingIdCaseHQ");
-        paramsAsMap.remove("hearingType");
-
-        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
-    }
-
-    @Test
-    @Order(21)
-    @DisplayName("Test for HearingType Parameter")
-    void testRetrieveHearingsRequestWithHearingTypeParam() {
-        paramsAsMap.remove("hearingIdCaseHQ");
-        paramsAsMap.remove("hearingDate");
+    @ParameterizedTest(name = "Test for {0} Parameter")
+    @ValueSource(strings = {"hearingIdCaseHQ","hearingDate","hearingType"})
+    void testRetrieveHearingsRequestWithParam(String iteration) {
+        paramsAsMap.clear();
+        paramsAsMap.put(iteration, "Value");
 
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForRetrieve(response);
