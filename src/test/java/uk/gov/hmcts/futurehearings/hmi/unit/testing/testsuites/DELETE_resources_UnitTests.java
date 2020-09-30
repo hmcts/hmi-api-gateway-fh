@@ -1,24 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForRequestOrDelete;
@@ -29,13 +10,35 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
+import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("DELETE /resources - Delete Resources")
-public class DELETE_resources_UnitTests {
+@SuppressWarnings("java:S2699")
+class DELETE_resources_UnitTests {
 
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-request-payload.json";
@@ -43,9 +46,6 @@ public class DELETE_resources_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetHost}")
-    private String targetHost;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
@@ -56,7 +56,7 @@ public class DELETE_resources_UnitTests {
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -71,7 +71,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testDeleteResourcesRequestForInvalidResource() throws IOException {
+    void testDeleteResourcesRequestForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -80,7 +80,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testDeleteResourcesRequestWithMissingContentTypeHeader() throws IOException {
+    void testDeleteResourcesRequestWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
@@ -90,7 +90,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testDeleteResourcesRequestWithInvalidContentTypeHeader() throws IOException {
+    void testDeleteResourcesRequestWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -101,7 +101,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testDeleteResourcesRequestWithMissingAcceptHeader() throws IOException {
+    void testDeleteResourcesRequestWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
@@ -111,7 +111,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testDeleteResourcesRequestWithInvalidAcceptHeader() throws IOException {
+    void testDeleteResourcesRequestWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -122,7 +122,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testDeleteResourcesRequestWithMissingOcpSubKey() throws IOException {
+    void testDeleteResourcesRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(input);
@@ -132,7 +132,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testDeleteResourcesRequestWithInvalidOcpSubKey()throws IOException {
+    void testDeleteResourcesRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -140,117 +140,31 @@ public class DELETE_resources_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System header")
-    public void testDeleteResourcesRequestWithMissingSourceSystemHeader() throws IOException {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testDeleteResourcesRequestWithMissingHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    public void testDeleteResourcesRequestWithInvalidSourceSystemHeader() throws IOException {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testDeleteResourcesRequestWithInvalidHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("Test for missing Destination-System header")
-    public void testDeleteResourcesRequestWithMissingDestinationSystemHeader() throws IOException {
-        headersAsMap.remove("Destination-System");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    public void testDeleteResourcesRequestWithInvalidDestinationSystemHeader() throws IOException {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At header")
-    public void testDeleteResourcesRequestWithMissingRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for invalid Request-Created-At header")
-    public void testDeleteResourcesRequestWithInvalidRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for missing Request-Processed-At header")
-    public void testDeleteResourcesRequestWithMissingRequestProcessedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    public void testDeleteResourcesRequestWithInvalidRequestProcessedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type header")
-    public void testDeleteResourcesRequestWithMissingRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    public void testDeleteResourcesRequestWithInvalidRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(18)
     @DisplayName("Test for Correct Headers with Invalid Payload")
-    public void testDeleteResourcesRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
+    void testDeleteResourcesRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
@@ -259,7 +173,7 @@ public class DELETE_resources_UnitTests {
     @Test
     @Order(19)
     @DisplayName("Test for Correct Headers and Payload")
-    public void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
+    void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
