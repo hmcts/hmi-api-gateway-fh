@@ -194,7 +194,7 @@ class PUT_hearings_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response updateHearingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {

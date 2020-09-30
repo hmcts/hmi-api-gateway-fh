@@ -162,7 +162,7 @@ public class PUT_resources_user_UnitTests {
 
     @Test
     @Order(18)
-    @DisplayName("Test for correct Request")
+    @DisplayName("Test for correct Headers and Params")
     public void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
@@ -212,7 +212,7 @@ public class PUT_resources_user_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response updateUserResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath,  final String payloadBody) {
@@ -223,7 +223,7 @@ public class PUT_resources_user_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().get().then().extract().response();
+                .when().put().then().extract().response();
     }
 
 
@@ -234,7 +234,7 @@ public class PUT_resources_user_UnitTests {
                 .body(payloadBody)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().get().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response updateUserResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
