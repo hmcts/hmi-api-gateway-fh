@@ -1,8 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildMultipleQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildMultipleQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;

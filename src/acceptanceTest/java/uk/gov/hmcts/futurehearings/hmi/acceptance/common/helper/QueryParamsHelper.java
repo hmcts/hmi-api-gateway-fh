@@ -1,9 +1,9 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SessionsParamsHelper {
+public class QueryParamsHelper {
 
     public static Map<String, String> buildQueryParams(final String paramKey, final String paramValue) {
         final Map<String, String>  queryParams = new HashMap<>();
@@ -26,6 +26,18 @@ public class SessionsParamsHelper {
         queryParams.put(paramKey1, paramValue1);
         queryParams.put(paramKey2, paramValue2);
         queryParams.put(paramKey3, paramValue3);
+        return queryParams;
+    }
+
+    public static Map<String, String> buildMultipleQueryParams(final String paramKey1, final String paramValue1,
+                                                               final String paramKey2, final String paramValue2,
+                                                               final String paramKey3, final String paramValue3,
+                                                               final String paramKey4, final String paramValue4) {
+        final Map<String, String>  queryParams = new HashMap<>();
+        queryParams.put(paramKey1, paramValue1);
+        queryParams.put(paramKey2, paramValue2);
+        queryParams.put(paramKey3, paramValue3);
+        queryParams.put(paramKey4, paramValue4);
         return queryParams;
     }
 

@@ -1,9 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildAllQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildMultipleQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildAllQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildMultipleQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
