@@ -20,14 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @Disabled("For as the endpoint for Notification API is not available")
-public class NotificationApiSmokeTest extends SmokeTest {
+ class NotificationApiSmokeTest extends SmokeTest {
 
     @Value("${notificationApiRootContext}")
     private String notificationApiRootContext;
 
     @Test
     @DisplayName("Smoke Test to Test the Endpoint for the Get Notifications Root Context")
-    public void testSuccessfulAllSessionsApiGet() {
+     void testSuccessfulAllSessionsApiGet() {
         Response response = given()
                 .headers(headersAsMap)
                 .basePath(notificationApiRootContext)

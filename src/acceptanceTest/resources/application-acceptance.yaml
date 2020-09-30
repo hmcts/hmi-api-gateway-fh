@@ -1,9 +1,12 @@
 targetInstance: ${ENDPOINT_URL}
 targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hmiApiRootContext : /hmi/
-hearingApiRootContext: /hmi/hearings
-updateHearingRootContext: /hmi/hearings/%s
-sessionApiRootContext: /hmi/sessions
+hearingsApiRootContext: /hmi/hearings
+hearings_idRootContext: /hmi/hearings/%s
+schedulesApiRootContext: /hmi/schedules
+resourcesRootContext: /hmi/resources
+resources_idRootContext: /hmi/resources/%s
+
 spring.flyway.enabled: false
 
 mockServerHost: ${MOCK_SERVER_HOST}
