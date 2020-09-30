@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.contract.producer;
+package uk.gov.hmcts.futurehearings.hmi.contract.verifier.SnL;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @Slf4j
-public class HearingAPIProducerTest {
+class HearingAPIProducerTest {
 
     @BeforeClass
     void enablePublishingPact() {
@@ -28,9 +28,9 @@ public class HearingAPIProducerTest {
         context.verifyInteraction();
     }
 
-    @State("Request Hearing API")
+    @State("Response Hearing API")
     public void requestHearing() {
-        log.info("Request Hearing verified!");
+        log.info("Response Hearing verified!");
     }
 
 }
