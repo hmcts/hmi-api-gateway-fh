@@ -6,34 +6,37 @@ parameters:
   - name: environments
     type: object
     default: 
-    - name: sbox
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        serenity: false
-        dependsOn: SmokeTest
-      - name: FunctionalTest
-        command: functional
-        logLevel: info
-        serenity: true
-        dependsOn: AcceptanceTest
-      tests_security:
-      - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
+#    - name: sbox
+#      subscription: DTS-SHAREDSERVICES-SBOX
+#      group: HMI-APIM-BUILD-SBOX
+#      registry: DTS-SS-PRIVATE-SBOX
+#      tests_gradle:
+#      - name: UnitTest
+#        command: test
+#        logLevel: info
+#        serenity: true
+#      - name: SmokeTest
+#        command: smoke
+#        logLevel: debug
+#        serenity: false
+#        dependsOn: UnitTest
+#      - name: AcceptanceTest
+#        command: acceptance
+#        logLevel: debug
+#        serenity: false
+#        dependsOn: SmokeTest
+#      - name: FunctionalTest
+#        command: functional
+#        logLevel: info
+#        serenity: true
+#        dependsOn: AcceptanceTest
+#      tests_security:
+#      - name: ApiZapScan
+#        containerRegistry: ssprivatesbox.azurecr.io
+#        repository: hmi/apim-tests-owasp
+#      tests_Sonarcloud:
+#      - name: SonarCloudTest
+#        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
@@ -78,6 +81,9 @@ parameters:
         logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
+      tests_Sonarcloud:
+      - name: SonarCloudTest
+        command: sonarqube
 
 variables:
   - group: HMI-APIM-Common
@@ -90,7 +96,6 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    
     jobs:
 
     - template: pipeline/jobs/terraform.yaml
@@ -159,3 +164,18 @@ stages:
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+    
+    - ${{ if environment.tests_Sonarcloud }}:
+      - ${{ each test in environment.tests_Sonarcloud }}:
+        - template: pipeline/jobs/sonarqubetest.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn:
+            - Terraform
+            - createStorage
+            - UnitTest
+            - SmokeTest
+            - AcceptanceTest
+            - FunctionalTest
+            subscription: ${{ environment.subscription }}
+            command: ${{ test.command }}       

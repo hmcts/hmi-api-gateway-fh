@@ -3,4 +3,5 @@ targetHost:  hmi-apim-svc-sbox.azure-api.net
 targetSubscriptionKey: sample
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
-sessionsApiRootContext: /hmi/sessions
+schedulesApiRootContext: /hmi/schedules
+resourcesApiRootContext: /hmi/resources
