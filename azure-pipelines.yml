@@ -48,8 +48,12 @@ jobs:
 
 - ${{ each environment in parameters.environments }}:
   - ${{ each test in environment.tests_security }}:
-    - $ {{ each url in test.testUrl }}:
-      - job: ${{ url.name }}
-        steps:
-        - script: |
-            echo ${{ url.target }}
+    - job: 
+      steps:
+      - script: |
+          echo ${{ test.name }}
+    # - $ {{ each url in test.testUrl }}:
+    #   - job: ${{ url.name }}
+    #     steps:
+    #     - script: |
+    #         echo ${{ url.target }}
