@@ -1,22 +1,4 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
-import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -27,6 +9,28 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForUpdate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+
+import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -47,6 +51,7 @@ public class PUT_resources_user_UnitTests {
     private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
     public void initialiseValues() {
@@ -59,6 +64,8 @@ public class PUT_resources_user_UnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
+
+        paramsAsMap.put("sessionIdCaseHQ", "CASE1234");
     }
 
     @Test
@@ -132,121 +139,44 @@ public class PUT_resources_user_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System")
-    public void testUpdateUserResourceRequestWithMissingSrcHeader() throws IOException {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateUserResourceWithMissingHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    public void testUpdateUserResourceRequestWithInvalidSourceSystemHeader() throws IOException {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateUserResourceWithInvalidHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("Test for missing Destination-System")
-    public void testUpdateUserResourceRequestWithMissingHeaderDestination() throws IOException {
-        headersAsMap.remove("Destination-System");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    public void testUpdateUserResourceRequestWithInvalidDestinationSystemHeader() throws IOException {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At")
-    public void testUpdateUserResourceRequestWithMissingHeaderDateTime() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for missing Request-Processed-At header")
-    public void testUpdateUserResourceRequestWithMissingRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for invalid Request-Created-At header")
-    public void testUpdateUserResourceRequestWithInvalidRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    public void testUpdateUserResourceRequestWithInvalidRequestProcessedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type")
-    public void testUpdateUserResourceRequestWithMissingRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    public void testUpdateUserResourceRequestWithInvalidRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(18)
     @DisplayName("Test for correct Request")
-    public void testUpdateUserResourceRequestWithCorrectRequest() throws IOException {
+    public void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(input);
+        thenValidateResponseForUpdate(response);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Test for correct Request")
+    public void testUpdateUserResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndNoParams(input);
         thenValidateResponseForUpdate(response);
     }
 
@@ -254,25 +184,30 @@ public class PUT_resources_user_UnitTests {
         return readFileContents(path);
     }
 
-    private Response whenUpdateHearingIsInvokedWithCorrectRequest(final String input) {
-        return updateUserResourceResponseForCorrectRequest(resourcesApiRootContext + "/user", headersAsMap, targetInstance, input);
-    }
-
     private Response whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return updateUserResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/user", headersAsMap, targetInstance, input);
+        return updateUserResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/user", headersAsMap, targetInstance, paramsAsMap, input);
     }
 
     private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateUserResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/user", headersAsMap, targetInstance, input);
+        return updateUserResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/user", headersAsMap, targetInstance, paramsAsMap, input);
     }
 
     private Response whenUpdateUserResourceIsInvokedForInvalidResource(final String input) {
-        return updateUserResourceResponseForInvalidResource(resourcesApiRootContext+"Put", headersAsMap, targetInstance, input);
+        return updateUserResourceResponseForInvalidResource(resourcesApiRootContext+"Put", headersAsMap, targetInstance, paramsAsMap, input);
     }
 
-    private Response updateUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(final String input) {
+        return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user", headersAsMap,  paramsAsMap, targetInstance, input);
+    }
+
+    private Response whenUpdateUserResourceIsInvokedWithCorrectHeadersAndNoParams(final String input) {
+        return updateUserResourceResponseForCorrectHeadersAndNoParams(resourcesApiRootContext+ "/user", headersAsMap, targetInstance, input);
+    }
+
+    private Response updateUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
 
         return given()
+                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -280,17 +215,31 @@ public class PUT_resources_user_UnitTests {
                 .when().post().then().extract().response();
     }
 
-    private Response updateUserResourceResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-        return   given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().put().then().extract().response();
-    }
+    private Response updateUserResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath,  final String payloadBody) {
 
-    private Response updateUserResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
+                .queryParams(paramsAsMap)
+                .body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
+
+
+    private Response updateUserResourceResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
+
+        return given()
+                .headers(headersAsMap)
+                .body(payloadBody)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
+
+    private Response updateUserResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
+        return given()
+                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -298,8 +247,9 @@ public class PUT_resources_user_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateUserResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateUserResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
         return  given()
+                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
