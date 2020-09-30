@@ -45,6 +45,11 @@ variable "api_policies" {
       operationId     = "delete-resource"
       format          = "rawxml-link"
       templateFile    = "api-op-delete-resource-policy.xml"
+    },
+    {
+      operationId     = "update-resource-location"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-resource-location-policy.xml"
     }
   ]
 }
