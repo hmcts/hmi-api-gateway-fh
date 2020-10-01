@@ -66,6 +66,26 @@ public class ResourcesResponseVerifier {
         }
     }
 
+    public static void thenValidateResponseForUpdate(Response response) {
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals(201, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 201");
+            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
+            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
     public static void thenValidateResponseForMissingSubscriptionKeyHeader(Response response){
 
         try{
