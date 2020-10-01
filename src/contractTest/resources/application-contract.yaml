@@ -1,2 +1,1 @@
-targetHost: ${ENDPOINT_HOST}
 targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
