@@ -1,9 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildAllQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildMultipleQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.SessionsParamsHelper.buildQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
@@ -13,7 +11,6 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -150,7 +147,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                                                     final String hearingVenueIdValue,
                                                     final String hearingRoomIdKey,
                                                     final String hearingRoomIdValue) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
+        this.setUrlParams(buildQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -170,7 +167,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                                                     final String paramVal2,
                                                     final String paramKey3,
                                                     final String paramVal3) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -183,7 +180,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
     @Test
     void test_all_params_with_value() throws IOException {
-        this.setUrlParams(buildAllQueryParams("hearing_date", "09/09/1964",
+        this.setUrlParams(buildQueryParams("hearing_date", "09/09/1964",
                                                     "hearing_venue_id", "1",
                                                     "hearing_room_id", null,
                                                     "hearing_session_id_casehq","",

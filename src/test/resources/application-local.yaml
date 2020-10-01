@@ -5,3 +5,4 @@ hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
 schedulesApiRootContext: /hmi/schedules
 resourcesApiRootContext: /hmi/resources
+sessionsApiRootContext: /hmi/sessions
