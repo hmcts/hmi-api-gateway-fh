@@ -1,10 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildMultipleQueryParams;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.verify.GETSessionsValidationVerifier;
 
@@ -51,7 +51,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session EndDate - Param : {0} --> {1}")
-    @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '","sessionStartDate,NIL"}, nullValues= "NIL")
+    @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '", "sessionStartDate,NIL"}, nullValues= "NIL")
     void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -66,7 +66,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Session EndDate without mandatory Session StartDate - Param : {0} --> {1}")
-    @CsvSource({"sessionEndDate, 2018-01-29 20:36:01Z", "sessionEndDate,\" \"", "sessionEndDate,null"})
+    @CsvSource(value = {"sessionEndDate, 2018-01-29 20:36:01Z", "sessionEndDate,''", "sessionEndDate,' '",  "sessionEndDate,NIL"}, nullValues= "NIL")
     void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(sessionEndDateKey, sessionEndDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -81,7 +81,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Session Room Name without mandatory Session StartDate & Session EndDate - Param : {0} --> {1}")
-    @CsvSource({"room-Name, R012", "room-Name,\" \"", "room-Name,null"})
+    @CsvSource(value = {"room-Name, R012", "room-Name,''", "room-Name,' '", "room-Name,NIL"}, nullValues = "NIL")
     void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -96,7 +96,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Session Case Court without mandatory Session StartDate & Session EndDate - Param : {0} --> {1}")
-    @CsvSource({"caseCourt, case01", "caseCourt,\" \"", "caseCourt,null"})
+    @CsvSource(value = {"caseCourt, case01", "caseCourt,''", "caseCourt,' '", "caseCourt,NIL"}, nullValues = "NIL")
     void test_caseCourt_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -118,7 +118,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal2,
                                               final String paramKey3,
                                               final String paramVal3) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -138,7 +138,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal2,
                                               final String paramKey3,
                                               final String paramVal3) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -160,7 +160,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal3,
                                               final String paramKey4,
                                               final String paramVal4) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -171,6 +171,5 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
-
 
 }
