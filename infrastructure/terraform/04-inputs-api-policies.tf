@@ -50,6 +50,11 @@ variable "api_policies" {
       operationId     = "update-resource-location"
       format          = "rawxml-link"
       templateFile    = "api-op-update-resource-location-policy.xml"
+    },
+    {
+      operationId     = "update-resource-user"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-resource-user-policy.xml"
     }
   ]
 }
