@@ -51,7 +51,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session EndDate - Param : {0} --> {1}")
-    @CsvSource({"sessionStartDate, 2018-01-29 20:36:01Z", "sessionStartDate,\" \"", "sessionStartDate,null"})
+    @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '","sessionStartDate,NIL"}, nullValues= "NIL")
     void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
