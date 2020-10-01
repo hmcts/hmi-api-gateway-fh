@@ -505,6 +505,8 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
     @CsvSource(value = {
+            //System Headers of Accept and Content-Type could not be duplicated as Rest Assured seems to remove the Duplication of valid same values.
+            //This should be tested manually using Postman.
             "Source-System,NIL","Source-System,''","Source-System,CFT",
             "Destination-System,NIL","Destination-System,''","Destination-System,S&L",
             "Request-Created-At,NIL","Request-Created-At,''","Request-Created-At,2002-10-02T15:00:00Z",
