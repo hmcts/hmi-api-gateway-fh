@@ -119,11 +119,13 @@ test {
     description = 'Executes unit tests'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/testsuites/**"
+    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
     failFast = false
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    enableAssertions = true
+    scanForTestClasses = true
 }
 
 gradle.startParameter.continueOnFailure = true
@@ -183,7 +185,7 @@ task contract(type: Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/cdc/consumer/**"
+    include "uk/gov/hmcts/futurehearings/hmi/contract/consumer/**"
     systemProperty 'pact.rootDir', "pacts"
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -288,7 +290,12 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
 }
+
+
 
 def versions = [
         junit           : '5.6.2',
@@ -358,9 +365,16 @@ dependencies {
     testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
-    testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+    //testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+    //testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+    //testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
+
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testImplementation "ch.qos.logback:logback-classic:1.2.3"
@@ -479,6 +493,8 @@ dependencies {
     contractTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     contractTestImplementation "ch.qos.logback:logback-classic:1.2.3"
 
+    contractTestImplementation group: 'com.github.everit-org.json-schema', name: 'org.everit.json.schema', version: '1.12.1'
+
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
     //Contract Testing Dependencies - FINISH
@@ -503,6 +519,8 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+
+    compile group: 'org.everit.json', name: 'org.everit.json.schema', version: '1.5.1'
     //Functional Testing Dependencies - FINISH
 }
 
@@ -546,7 +564,7 @@ pact {
 
     publish {
         pactDirectory = 'pacts'
-        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        pactBrokerUrl = System.getProperty("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pactVersion
     }
