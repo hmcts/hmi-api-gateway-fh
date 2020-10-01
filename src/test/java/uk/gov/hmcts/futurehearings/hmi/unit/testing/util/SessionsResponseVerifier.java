@@ -10,7 +10,7 @@ public class SessionsResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
-    private static final String MISSING_MANDATORY_PARAMS = "You need to provide at least one of the following parameters: 'sessionIdCaseHQ','sessionStartDate', 'sessionEndDate'";
+    private static final String MISSING_MANDATORY_PARAMS = "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
 
     public static void  thenValidateResponseForInvalidResource(Response response){
         try{
