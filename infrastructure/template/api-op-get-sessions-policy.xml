@@ -43,12 +43,19 @@
                 bool invalidKey = false;
                 bool keyFound = false;
                 if(context.Request.Url.Query.Count == 1){
-                    if (qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]){
-                            keyFound = true;
-                    }
+                    keyFound = true;
                 }
                 if(context.Request.Url.Query.Count == 2){
                     if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == "sessionStartDate" || qryPrmKeys[1] == "sessionEndDate")){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == "sessionStartDate" || qryPrmKeys[0] == "sessionEndDate") && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
                         keyFound = true;
                     }
                 }

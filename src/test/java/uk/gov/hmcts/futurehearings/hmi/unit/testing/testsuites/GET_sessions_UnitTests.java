@@ -37,7 +37,8 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /sessions - Retrieve Sessions")
-public class GET_sessions_UnitTests {
+@SuppressWarnings("java:S2699")
+class GET_sessions_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -51,7 +52,7 @@ public class GET_sessions_UnitTests {
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -62,7 +63,6 @@ public class GET_sessions_UnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
-        paramsAsMap.put("sessionIdCaseHQ", "CASE1234");
         paramsAsMap.put("sessionStartDate", "2018-01-29 20:36:01Z");
         paramsAsMap.put("sessionEndDate", "2018-01-29 21:36:01Z");
         paramsAsMap.put("caseCourt", "oxford");
@@ -73,7 +73,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testRetrieveSessionsRequestForInvalidResource() {
+    void testRetrieveSessionsRequestForInvalidResource() {
 
         final Response response = whenRetrieveSessionsRequestIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
@@ -82,7 +82,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testRetrieveSessionsRequestWithMissingContentTypeHeader() {
+    void testRetrieveSessionsRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -92,7 +92,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testRetrieveSessionsRequestWithInvalidContentTypeHeader() {
+    void testRetrieveSessionsRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
@@ -103,7 +103,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testRetrieveSessionsRequestWithMissingAcceptHeader() {
+    void testRetrieveSessionsRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
@@ -113,7 +113,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testRetrieveSessionsRequestWithInvalidAcceptHeader() {
+    void testRetrieveSessionsRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
 
@@ -124,21 +124,21 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    public void testRetrieveSessionsRequestWithMissingOcpSubKey() {
+    void testRetrieveSessionsRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testRetrieveSessionsRequestWithInvalidOcpSubKey(){
+    void testRetrieveSessionsRequestWithInvalidOcpSubKey(){
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -166,59 +166,54 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(10)
     @DisplayName("Test for Invalid Parameter")
-    public void testRetrieveSessionsRequestWithAdditionalParam() {
+    void testRetrieveSessionsRequestWithAdditionalParam() {
         paramsAsMap.put("Invalid-Param","Value");
 
         final Response response = whenRetrieveSessionsIsInvokedWithAdditionalParam();
         thenValidateResponseForAdditionalParam(response);
     }
 
-    @Test
+
     @Order(11)
-    @DisplayName("Test for sessionIdCaseHQ Parameter")
-    public void testRetrieveSessionsRequestWithSessionIdCaseHQParam() {
-        paramsAsMap.remove("sessionStartDate");
-        paramsAsMap.remove("sessionEndDate");
-        paramsAsMap.remove("caseCourt");
-        paramsAsMap.remove("room-Name");
+    @ParameterizedTest(name = "Test for mandatory parameter - {0}")
+    @ValueSource(strings = {"sessionStartDate","sessionEndDate"})
+    void testRetrieveSessionsRequestWithDateParams(String iteration) {
+        paramsAsMap.clear();
+        paramsAsMap.put(iteration,"2018-01-29 20:36:01Z");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForNoMandatoryParams(response);
     }
 
     @Test
     @Order(12)
-    @DisplayName("Test for sessionStartDate Parameter")
-    public void testRetrieveSessionsRequestWithSessionStartDateParam() {
-        paramsAsMap.remove("sessionIdCaseHQ");
-        paramsAsMap.remove("sessionEndDate");
-        paramsAsMap.remove("caseCourt");
+    @DisplayName("Test with one non-mandatory and one mandatory parameters")
+    void testRetrieveSessionsRequestWithOneNonMandatoryParams() {
+        paramsAsMap.remove("sessionStartDate");
         paramsAsMap.remove("room-Name");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForNoMandatoryParams(response);
     }
 
     @Test
     @Order(13)
-    @DisplayName("Test for sessionEndDate Parameter")
-    public void testRetrieveSessionsRequestWithSessionEndDateParam() {
-        paramsAsMap.remove("sessionIdCaseHQ");
-        paramsAsMap.remove("sessionStartDate");
-        paramsAsMap.remove("caseCourt");
-        paramsAsMap.remove("room-Name");
+    @DisplayName("Test with two non-mandatory and one mandatory parameters")
+    void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
+        paramsAsMap.remove("sessionEndDate");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForNoMandatoryParams(response);
     }
+
 
     @Test
     @Order(14)
     @DisplayName("Test with no mandatory parameters")
-    public void testRetrieveSessionsRequestWithNoMandatoryParams() {
-        paramsAsMap.remove("sessionIdCaseHQ");
-        paramsAsMap.remove("sessionStartDate");
-        paramsAsMap.remove("sessionEndDate");
+    void testRetrieveSessionsRequestWithNoMandatoryParams() {
+        paramsAsMap.clear();
+        paramsAsMap.put("caseCourt","oxford");
+        paramsAsMap.put("room-Name", "RM012");
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
@@ -227,7 +222,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for Correct Headers with No Parameters")
-    public void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
+    void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
@@ -236,7 +231,7 @@ public class GET_sessions_UnitTests {
     @Test
     @Order(16)
     @DisplayName("Test for Correct Headers and Parameters")
-    public void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
+    void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
 
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForRetrieve(response);
@@ -260,12 +255,134 @@ public class GET_sessions_UnitTests {
         return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveSessionsRequestIsInvokedWithMissingOcpSubKey() {
+    private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
         return retrieveSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader() {
         return retrieveSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+
+    //Sessions By ID
+
+
+    @Test
+    @Order(17)
+    @DisplayName("Test for Invalid Resource - By ID")
+    void testRetrieveSessionsByIDRequestForInvalidResource() {
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedForInvalidResource();
+        thenValidateResponseForInvalidResource(response);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Test for missing ContentType header - By ID")
+    void testRetrieveSessionsByIDRequestWithMissingContentTypeHeader() {
+        headersAsMap.remove("Content-Type");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+
+    @Test
+    @Order(19)
+    @DisplayName("Test for invalid ContentType header - By ID")
+    void testRetrieveSessionsByIDRequestWithInvalidContentTypeHeader() {
+        headersAsMap.remove("Content-Type");
+        headersAsMap.put("Content-Type", "application/xml");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+
+    @Test
+    @Order(20)
+    @DisplayName("Test for missing Accept header - By ID")
+    void testRetrieveSessionsByIDRequestWithMissingAcceptHeader() {
+        headersAsMap.remove("Accept");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(21)
+    @DisplayName("Test for invalid Accept header - By ID")
+    void testRetrieveSessionsByIDRequestWithInvalidAcceptHeader() {
+        headersAsMap.remove("Accept");
+        headersAsMap.put("Accept", "application/jsonxml");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(22)
+    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - By ID")
+    void testRetrieveSessionsByIDRequestWithMissingOcpSubKey() {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        thenValidateResponseForMissingSubscriptionKeyHeader(response);
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
+    void testRetrieveSessionsByIDRequestWithInvalidOcpSubKey(){
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+    }
+
+    @Order(24)
+    @ParameterizedTest(name = "Test for missing {0} header - By ID")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
+    }
+
+    @Order(25)
+    @ParameterizedTest(name = "Test for invalid {0} header - By ID")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveSessionsByIDRequestWithInvalidHeader(String iteration) {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
+    }
+
+    @Test
+    @Order(26)
+    @DisplayName("Test for Correct Headers with No Parameters - By ID")
+    void testRetrieveSessionsByIDRequestWithCorrectHeadersAndNoParams() {
+
+        final Response response = whenRetrieveSessionsByIDIsInvokedWithCorrectHeadersAndNoParams();
+        thenValidateResponseForRetrieve(response);
+    }
+
+    private Response whenRetrieveSessionsByIDRequestIsInvokedForInvalidResource() {
+        return retrieveSessionsResponseForInvalidResource(sessionsApiRootContext+"/CASE1234/get", headersAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveSessionsByIDIsInvokedWithCorrectHeadersAndNoParams() {
+        return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext+"/CASE1234", headersAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
+        return retrieveSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader() {
+        return retrieveSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response retrieveSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
