@@ -1,11 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildMultipleQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsByQueryValidationVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsValidationVerifier;
@@ -107,7 +108,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                                                     final String hearingVenueIdValue,
                                                     final String hearingRoomIdKey,
                                                     final String hearingRoomIdValue) throws IOException {
-        this.setUrlParams(buildMultipleQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
