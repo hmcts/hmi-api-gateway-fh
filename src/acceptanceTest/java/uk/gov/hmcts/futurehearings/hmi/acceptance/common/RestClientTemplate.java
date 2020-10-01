@@ -40,14 +40,27 @@ public class RestClientTemplate {
                         .when()
                         .post().then().extract().response();
             case PUT:
-                return RestAssured
-                        .expect().that().statusCode(expectedHttpStatus.value())
-                        .given()
-                        .headers(headers)
-                        .basePath(requestURL)
-                        .body(requestBodyPayload)
-                        .when()
-                        .put().then().extract().response();
+                if (Objects.isNull(params) || params.size() == 0) {
+                    return RestAssured
+                            .expect().that().statusCode(expectedHttpStatus.value())
+                            .given()
+                            .headers(headers)
+                            .basePath(requestURL)
+                            .body(requestBodyPayload)
+                            .when()
+                            .put().then().extract().response();
+                } else {
+                    log.debug("PUT Query Params " + params);
+                    return RestAssured
+                            .expect().that().statusCode(expectedHttpStatus.value())
+                            .given()
+                            .queryParams(params)
+                            .headers(headers)
+                            .basePath(requestURL)
+                            .body(requestBodyPayload)
+                            .when()
+                            .put().then().extract().response();
+                }
             case DELETE:
                 return RestAssured
                         .expect().that().statusCode(expectedHttpStatus.value())
