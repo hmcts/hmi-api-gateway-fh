@@ -55,8 +55,8 @@ public class SessionsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals(201, response.getStatusCode(),"Response Code Validation:");
-            getObjStep().pass("Got the expected response code: 201");
+            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 200");
             assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
             getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
         }
