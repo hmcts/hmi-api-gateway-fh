@@ -45,6 +45,21 @@ variable "api_policies" {
       operationId     = "delete-resource"
       format          = "rawxml-link"
       templateFile    = "api-op-delete-resource-policy.xml"
+    },
+    {
+      operationId     = "get-sessions"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-sessions-policy.xml"
+    },
+    {
+      operationId     = "update-session"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-session-policy.xml"
+    },
+    {
+      operationId     = "get-session-by-id"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-sessions-by-id-policy.xml"
     }
   ]
 }
