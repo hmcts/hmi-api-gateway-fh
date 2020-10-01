@@ -1,0 +1,16 @@
+{
+  "sessionIdCaseHQ": "abc123",
+  "sessionStartDate": "2018-01-29 20:36:01Z",
+  "sessionEndDate": "2018-01-29 20:36:01Z",
+  "caseCourt": "Milton Keynes",
+  "room-Name": "RM012",
+  "JoH": {
+    "PersonRoleID": "PR012",
+    "PersonID": "P012",
+    "PersonRole": "Judge",
+    "personName": "Marcus Trescothic",
+    "TicketName": ""
+  },
+  "SessionType": "DS",
+  "SessionIDCaseHQ": "SID012"
+}
