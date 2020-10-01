@@ -5,6 +5,7 @@ hearingsApiRootContext: /hmi/hearings
 hearings_idRootContext: /hmi/hearings/%s
 schedulesApiRootContext: /hmi/schedules
 resourcesRootContext: /hmi/resources
+resourcesByLocationRootContext: /hmi/resources/location
 resources_idRootContext: /hmi/resources/%s
 userAsResourceRootContext: /hmi/resources/user
 sessionsRootContext: /hmi/sessions
