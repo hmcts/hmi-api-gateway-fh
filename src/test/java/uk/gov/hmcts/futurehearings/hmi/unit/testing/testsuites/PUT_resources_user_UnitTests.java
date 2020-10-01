@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -161,7 +162,17 @@ public class PUT_resources_user_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(10)
+    @DisplayName("Test for Additional Parameter")
+    void testUpdateUserResourceRequestWithAdditionalParam() throws IOException {
+        paramsAsMap.put("Invalid-Param","Value");
+        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateUserResourceIsInvokedWithAdditionalParameter(input);
+        thenValidateResponseForAdditionalParam(response);
+    }
+
+    @Test
+    @Order(11)
     @DisplayName("Test for correct Headers and Params")
     public void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
 
@@ -171,7 +182,7 @@ public class PUT_resources_user_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(12)
     @DisplayName("Test for correct Request")
     public void testUpdateUserResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
 
@@ -197,6 +208,10 @@ public class PUT_resources_user_UnitTests {
     }
 
     private Response whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(final String input) {
+        return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user", headersAsMap,  paramsAsMap, targetInstance, input);
+    }
+
+    private Response whenUpdateUserResourceIsInvokedWithAdditionalParameter(final String input) {
         return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user", headersAsMap,  paramsAsMap, targetInstance, input);
     }
 
