@@ -7,7 +7,7 @@ schedulesApiRootContext: /hmi/schedules
 resourcesRootContext: /hmi/resources
 resourcesByLocation_idRootContext: /hmi/resources/location/%s
 resources_idRootContext: /hmi/resources/%s
-userAsResourceRootContext: /hmi/resources/user
+userAsResources_idRootContext: /hmi/resources/user
 sessionsRootContext: /hmi/sessions
 sessions_idRootContext: /hmi/sessions/%s
 spring.flyway.enabled: false
