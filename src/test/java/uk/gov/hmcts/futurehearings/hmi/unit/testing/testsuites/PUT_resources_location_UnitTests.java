@@ -38,8 +38,9 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /resources/location - Update Location Resource")
-public class PUT_resources_location_UnitTests {
-    public static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD = "requests/correct-update-location-resource-payload.json";
+@SuppressWarnings("java:S2699")
+class PUT_resources_location_UnitTests {
+    static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD = "requests/correct-update-location-resource-payload.json";
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -53,7 +54,7 @@ public class PUT_resources_location_UnitTests {
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -70,7 +71,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testUpdateLocationResourceForInvalidResource() throws IOException {
+    void testUpdateLocationResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLocationResourceIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -79,7 +80,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testUpdateLocationResourceWithMissingContentTypeHeader() throws IOException {
+    void testUpdateLocationResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
@@ -88,7 +89,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testUpdateLocationResourceWithInvalidContentTypeHeader() throws IOException {
+    void testUpdateLocationResourceWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
@@ -99,7 +100,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testUpdateLocationResourceWithMissingAcceptHeader() throws IOException {
+    void testUpdateLocationResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
@@ -109,7 +110,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testUpdateLocationResourceWithInvalidAcceptHeader() throws IOException {
+    void testUpdateLocationResourceWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
@@ -120,7 +121,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing OcpSubKey")
-    public void testUpdateLocationResourceRequestWithMissingOcpSubKey() throws IOException {
+    void testUpdateLocationResourceRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
@@ -130,7 +131,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testUpdateLocationResourceRequestWithInvalidOcpSubKey()throws IOException {
+    void testUpdateLocationResourceRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
@@ -172,7 +173,7 @@ public class PUT_resources_location_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for correct Headers and Params")
-    public void testUpdateLocationResourceRequestWithCorrectHeadersAndParams() throws IOException {
+    void testUpdateLocationResourceRequestWithCorrectHeadersAndParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndParams(input);
@@ -181,8 +182,8 @@ public class PUT_resources_location_UnitTests {
 
     @Test
     @Order(12)
-    @DisplayName("Test for correct Request")
-    public void testUpdateLocationResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
+    @DisplayName("Test for correct Request and No Params")
+    void testUpdateLocationResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndNoParams(input);

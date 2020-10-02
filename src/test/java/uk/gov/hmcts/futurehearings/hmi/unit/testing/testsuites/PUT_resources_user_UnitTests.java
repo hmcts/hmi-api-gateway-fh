@@ -39,9 +39,10 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /resources/user - Update User Resource")
-public class PUT_resources_user_UnitTests {
+@SuppressWarnings("java:S2699")
+class PUT_resources_user_UnitTests {
 
-    public static final String CORRECT_UPDATE_USER_RESOURCE_PAYLOAD = "requests/correct-update-user-resource-payload.json";
+    static final String CORRECT_UPDATE_USER_RESOURCE_PAYLOAD = "requests/correct-update-user-resource-payload.json";
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -55,7 +56,7 @@ public class PUT_resources_user_UnitTests {
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
+    void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
@@ -72,7 +73,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testUpdateUserResourceForInvalidResource() throws IOException {
+    void testUpdateUserResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -81,7 +82,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testUpdateUserResourceWithMissingContentTypeHeader() throws IOException {
+    void testUpdateUserResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
@@ -90,7 +91,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testUpdateUserResourceWithInvalidContentTypeHeader() throws IOException {
+    void testUpdateUserResourceWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
@@ -101,7 +102,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testUpdateUserResourceWithMissingAcceptHeader() throws IOException {
+    void testUpdateUserResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
@@ -111,7 +112,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testUpdateUserResourceWithInvalidAcceptHeader() throws IOException {
+    void testUpdateUserResourceWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
@@ -122,7 +123,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing OcpSubKey")
-    public void testUpdateUserResourceRequestWithMissingOcpSubKey() throws IOException {
+    void testUpdateUserResourceRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
@@ -132,7 +133,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testUpdateUserResourceRequestWithInvalidOcpSubKey()throws IOException {
+    void testUpdateUserResourceRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
@@ -174,7 +175,7 @@ public class PUT_resources_user_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for correct Headers and Params")
-    public void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
+    void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(input);
@@ -183,8 +184,8 @@ public class PUT_resources_user_UnitTests {
 
     @Test
     @Order(12)
-    @DisplayName("Test for correct Request")
-    public void testUpdateUserResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
+    @DisplayName("Test for correct Request and No Params")
+    void testUpdateUserResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
         final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndNoParams(input);
