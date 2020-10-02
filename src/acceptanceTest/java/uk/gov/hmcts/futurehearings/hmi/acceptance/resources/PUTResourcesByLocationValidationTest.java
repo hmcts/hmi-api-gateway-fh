@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -34,13 +35,14 @@ public class PUTResourcesByLocationValidationTest extends ResourceValidationTest
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${resourcesByLocationRootContext}")
-    private String resourcesByLocationRootContext;
+    @Value("${resourcesByLocation_idRootContext}")
+    private String resourcesByLocation_idRootContext;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(resourcesByLocationRootContext);
+        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,"12345");
+        this.setRelativeURL(resourcesByLocation_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-resource-by-location-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.CREATED);
@@ -48,21 +50,4 @@ public class PUTResourcesByLocationValidationTest extends ResourceValidationTest
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
-
-    @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
-    @CsvSource(value = {"sessionIdCaseHQ, date", "sessionIdCaseHQ,''", "sessionIdCaseHQ,NIL", "sessionIdCaseHQ, 123456"},nullValues = "NIL")
-    void test_hearing_date_queryparam_with_value(final String hearingDateKey,
-                                                 final String hearingDateValue) throws IOException {
-        this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.CREATED,  getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                "The request was received successfully.");
-    }
-
 }
