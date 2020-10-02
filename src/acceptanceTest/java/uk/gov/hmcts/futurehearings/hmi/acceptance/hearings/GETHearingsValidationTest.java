@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
@@ -57,7 +56,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearingDate, date", "hearingDate,\" \"", "hearingDate,", "hearingDate, 2002-10-02T10:00:00-05:00"})
+    @CsvSource(value = {"hearingDate, date", "hearingDate,''", "hearingDate,' '", "hearingDate,NIL", "hearingDate, 2002-10-02T10:00:00-05:00"}, nullValues = "NIL")
     void test_hearing_date_queryparam_with_value(final String hearingDateKey,
                                                         final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
@@ -73,7 +72,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearingIdCaseHQ, 234", "hearingIdCaseHQ,\" \"", "hearingIdCaseHQ,null"})
+    @CsvSource(value = {"hearingIdCaseHQ, 234", "hearingIdCaseHQ,''", "hearingIdCaseHQ,' '"})
     void test_hearing_id_casehq_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -87,8 +86,23 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 "The request was received successfully.");
     }
 
+    @ParameterizedTest(name = "Hearing Id CaseHQ with null value - Param : {0} --> {1}")
+    @CsvSource(value = {"hearingIdCaseHQ,NIL"}, nullValues = "NIL")
+    void test_hearing_id_casehq_queryparam_with_null_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
+        this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
+    }
+
     @ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearingType, Theft", "hearingType,\" \"", "hearingType,"})
+    @CsvSource(value = {"hearingType, Theft", "hearingType,''", "hearingType,' '", "hearingType,NIL"}, nullValues = "NIL")
     void test_hearing_type_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -103,7 +117,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing_Id_CaseHQ) with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearingDate,2002-10-02T10:00:00-05:00,hearingIdCaseHQ,123", "hearingDate,,hearingIdCaseHQ,null"})
+    @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingIdCaseHQ,123", "hearingDate,'',hearingIdCaseHQ,''", "hearingDate,' ',hearingIdCaseHQ,' '"})
     void test_multiple_queryparam_with_value(final String hearingVenueIdKey,
                                                     final String hearingVenueIdValue,
                                                     final String hearingRoomIdKey,
@@ -117,6 +131,24 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 new GETHearingsByQueryValidationVerifier(),
+                "The request was received successfully.");
+    }
+
+    @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing_Id_CaseHQ) with null value - Param : {0} --> {1}")
+    @CsvSource(value = {"hearingDate,NIL,hearingIdCaseHQ,NIL"}, nullValues = "NIL")
+    void test_multiple_queryparam_with_null_value(final String hearingVenueIdKey,
+                                             final String hearingVenueIdValue,
+                                             final String hearingRoomIdKey,
+                                             final String hearingRoomIdValue) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
 }
