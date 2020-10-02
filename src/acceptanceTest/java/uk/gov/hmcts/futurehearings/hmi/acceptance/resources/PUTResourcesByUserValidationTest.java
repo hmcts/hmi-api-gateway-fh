@@ -23,23 +23,24 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(PUTUserAsResourcesValidationTest.class)
+@SelectClasses(PUTResourcesByUserValidationTest.class)
 @IncludeTags("Put")
-class PUTUserAsResourcesValidationTest extends ResourceValidationTest {
+class PUTResourcesByUserValidationTest extends ResourceValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
     public CommonDelegate commonDelegate;
 
-    @Value("${userAsResources_idRootContext}")
-    private String userAsResources_idRootContext;
+    @Value("${resourcesByUser_idRootContext}")
+    private String resourcesByUser_idRootContext;
 
     private HttpMethod httpMethod;
 
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
-        this.setRelativeURL(userAsResources_idRootContext);
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
+        this.setRelativeURL(resourcesByUser_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-user-as-resource-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.CREATED);
