@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -26,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 import java.io.IOException;
@@ -53,7 +51,6 @@ class PUT_resources_user_UnitTests {
     private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @BeforeEach
     void initialiseValues() {
@@ -67,7 +64,6 @@ class PUT_resources_user_UnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
 
-        paramsAsMap.put("sessionIdCaseHQ", "CASE1234");
     }
 
     @Test
@@ -126,7 +122,7 @@ class PUT_resources_user_UnitTests {
     void testUpdateUserResourceRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -137,7 +133,7 @@ class PUT_resources_user_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -163,32 +159,12 @@ class PUT_resources_user_UnitTests {
     }
 
     @Test
-    @Order(10)
-    @DisplayName("Test for Additional Parameter")
-    void testUpdateUserResourceRequestWithAdditionalParam() throws IOException {
-        paramsAsMap.put("Invalid-Param","Value");
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithAdditionalParameter(input);
-        thenValidateResponseForAdditionalParam(response);
-    }
-
-    @Test
     @Order(11)
-    @DisplayName("Test for correct Headers and Params")
-    void testUpdateUserResourceRequestWithCorrectHeadersAndParams() throws IOException {
+    @DisplayName("Test for correct Headers")
+    void testUpdateUserResourceRequestWithCorrectHeaders() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(input);
-        thenValidateResponseForUpdate(response);
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for correct Request and No Params")
-    void testUpdateUserResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
-
-        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeadersAndNoParams(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForUpdate(response);
     }
 
@@ -197,33 +173,24 @@ class PUT_resources_user_UnitTests {
     }
 
     private Response whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return updateUserResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/user", headersAsMap, targetInstance, paramsAsMap, input);
+        return updateUserResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/user/UserID", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateUserResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/user", headersAsMap, targetInstance, paramsAsMap, input);
+    private Response whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
+        return updateUserResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/user/UserID", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateUserResourceIsInvokedForInvalidResource(final String input) {
-        return updateUserResourceResponseForInvalidResource(resourcesApiRootContext+"Put", headersAsMap, targetInstance, paramsAsMap, input);
+        return updateUserResourceResponseForInvalidResource(resourcesApiRootContext+"/UserID/put", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateUserResourceIsInvokedWithCorrectHeadersAndParams(final String input) {
-        return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user", headersAsMap,  paramsAsMap, targetInstance, input);
+    private Response whenUpdateUserResourceIsInvokedWithCorrectHeaders(final String input) {
+        return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user/UserID", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateUserResourceIsInvokedWithAdditionalParameter(final String input) {
-        return updateUserResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/user", headersAsMap,  paramsAsMap, targetInstance, input);
-    }
-
-    private Response whenUpdateUserResourceIsInvokedWithCorrectHeadersAndNoParams(final String input) {
-        return updateUserResourceResponseForCorrectHeadersAndNoParams(resourcesApiRootContext+ "/user", headersAsMap, targetInstance, input);
-    }
-
-    private Response updateUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
+    private Response updateUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -231,10 +198,9 @@ class PUT_resources_user_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateUserResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath,  final String payloadBody) {
+    private Response updateUserResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
 
         return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -242,20 +208,8 @@ class PUT_resources_user_UnitTests {
                 .when().put().then().extract().response();
     }
 
-
-    private Response updateUserResourceResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
-
+    private Response updateUserResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
-                .headers(headersAsMap)
-                .body(payloadBody)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().put().then().extract().response();
-    }
-
-    private Response updateUserResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
-        return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -263,9 +217,8 @@ class PUT_resources_user_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateUserResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
+    private Response updateUserResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
