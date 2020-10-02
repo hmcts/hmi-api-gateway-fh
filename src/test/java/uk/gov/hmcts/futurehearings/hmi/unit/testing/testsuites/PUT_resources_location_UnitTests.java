@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -51,7 +50,7 @@ class PUT_resources_location_UnitTests {
     private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+
 
     @BeforeEach
     void initialiseValues() {
@@ -65,7 +64,7 @@ class PUT_resources_location_UnitTests {
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
 
-        paramsAsMap.put("sessionIdCaseHQ", "CASE1234");
+
     }
 
     @Test
@@ -160,33 +159,14 @@ class PUT_resources_location_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
-    @Order(10)
-    @DisplayName("Test for Additional Parameter")
-    void testUpdateLocationResourceRequestWithAdditionalParam() throws IOException {
-        paramsAsMap.put("Invalid-Param","Value");
-        final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateLocationResourceIsInvokedWithAdditionalParameter(input);
-        thenValidateResponseForAdditionalParam(response);
-    }
 
     @Test
     @Order(11)
-    @DisplayName("Test for correct Headers and Params")
-    void testUpdateLocationResourceRequestWithCorrectHeadersAndParams() throws IOException {
+    @DisplayName("Test for correct Headers")
+    void testUpdateLocationResourceRequestWithCorrectHeaders() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndParams(input);
-        thenValidateResponseForUpdate(response);
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for correct Request and No Params")
-    void testUpdateLocationResourceRequestWithCorrectHeadersAndNoParams() throws IOException {
-
-        final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndNoParams(input);
+        final Response response = whenUpdateLocationResourceIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForUpdate(response);
     }
 
@@ -195,33 +175,24 @@ class PUT_resources_location_UnitTests {
     }
 
     private Response whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return updateLocationResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/location", headersAsMap, targetInstance, paramsAsMap, input);
+        return updateLocationResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/location/loc_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/location", headersAsMap, targetInstance, paramsAsMap, input);
+        return updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/location/loc_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateLocationResourceIsInvokedForInvalidResource(final String input) {
-        return updateLocationResourceResponseForInvalidResource(resourcesApiRootContext+"/locationput", headersAsMap, targetInstance, paramsAsMap, input);
+        return updateLocationResourceResponseForInvalidResource(resourcesApiRootContext+"/location/loc_id/put", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndParams(final String input) {
-        return updateLocationResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/location", headersAsMap,  paramsAsMap, targetInstance, input);
+    private Response whenUpdateLocationResourceIsInvokedWithCorrectHeaders(final String input) {
+        return updateLocationResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/location/loc_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateLocationResourceIsInvokedWithAdditionalParameter(final String input) {
-        return updateLocationResourceResponseForCorrectHeadersAndParams(resourcesApiRootContext+ "/location", headersAsMap,  paramsAsMap, targetInstance, input);
-    }
-
-    private Response whenUpdateLocationResourceIsInvokedWithCorrectHeadersAndNoParams(final String input) {
-        return updateLocationResourceResponseForCorrectHeadersAndNoParams(resourcesApiRootContext+ "/location", headersAsMap, targetInstance, input);
-    }
-
-    private Response updateLocationResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
+    private Response updateLocationResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
 
         return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -229,10 +200,9 @@ class PUT_resources_location_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateLocationResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath,  final String payloadBody) {
+    private Response updateLocationResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap,  final String basePath,  final String payloadBody) {
 
         return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -240,20 +210,8 @@ class PUT_resources_location_UnitTests {
                 .when().put().then().extract().response();
     }
 
-
-    private Response updateLocationResourceResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
-
+    private Response updateLocationResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
         return given()
-                .headers(headersAsMap)
-                .body(payloadBody)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().put().then().extract().response();
-    }
-
-    private Response updateLocationResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
-        return given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -261,9 +219,8 @@ class PUT_resources_location_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final Map<String, String> paramsAsMap, final String payloadBody) {
+    private Response updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
         return  given()
-                .queryParams(paramsAsMap)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
