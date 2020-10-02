@@ -244,7 +244,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Subscription Key with invalid values  - Param : {0} --> {1}")
-    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Tab, \"\\t\"", "Newline, \"\\n\"", "Wrong_Value,c602c8ed3b8147be910449b563dce008"})
+    @CsvSource(value = {"Null_Value, null", "Empty_Space,''", "Tab, \"\\t\"", "Newline, \"\\n\"", "Wrong_Value,c602c8ed3b8147be910449b563dce008"}, nullValues = "NIL")
     void test_subscription_key_invalid_values(String subKey, String subKeyVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -260,7 +260,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
-    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Source_System, S&L"})
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, SNL", "Invalid_Source_System, S&L"}, nullValues = "NIL")
     void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -276,7 +276,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
-    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"})
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, SNL", "Invalid_Destination_System, CFT"}, nullValues = "NIL")
     void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -367,14 +367,14 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Request Processed At System Header With Invalid Values - Param : {0} --> {1}")
-    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, value",
             "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
             "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
             "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
             "Invalid_Date_Format, 2002-10-02T15:00:00*05Z",
             "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
             "Invalid_Date_Format, 2002-10-02T15:00:00",
-    })
+    }, nullValues = "NIL")
     void test_request_processed_at_with_invalid_values(String requestProcessedAtKey, String requestProcessedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -390,7 +390,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Request Type System Header with invalid values - Param : {0} --> {1}")
-    @CsvSource({"Null_Value, null", "Invalid_Value, Robbery"})
+    @CsvSource(value = {"Null_Value, NIL", "Invalid_Value, Robbery"}, nullValues = "NIL")
     void test_request_type_at_with_invalid_values(String requestTypeKey, String requestTypeVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),

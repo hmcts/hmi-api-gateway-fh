@@ -50,7 +50,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
 
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_date, date", "hearing_date,\" \"", "hearing_date,", "hearing_date, 2002-10-02T10:00:00-05:00"})
+    @CsvSource(value = {"hearing_date, date", "hearing_date,''", "hearing_date,' '", "hearing_date,NIL", "hearing_date, 2002-10-02T10:00:00-05:00"}, nullValues = "NIL")
     void test_hearing_date_queryparam_with_value(final String hearingDateKey,
                                                         final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
@@ -67,7 +67,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
 
 
     @ParameterizedTest(name = "Hearing Venue Id with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_venue_id, 234", "hearing_venue_id,\" \"", "hearing_venue_id,"})
+    @CsvSource(value = {"hearing_venue_id, 234", "hearing_venue_id,''", "hearing_venue_id,' '", "hearing_venue_id,NIL"}, nullValues = "NIL")
     void test_hearing_venue_id_queryparam_with_value(final String hearingVenueIdKey, final String hearingVenueIdValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingVenueIdKey, hearingVenueIdValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -82,7 +82,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Room Id with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_room_id, 234", "hearing_room_id,\" \"", "hearing_room_id,"})
+    @CsvSource(value = {"hearing_room_id, 234", "hearing_room_id,''", "hearing_room_id,' '", "hearing_room_id,NIL"}, nullValues = "NIL")
     void test_hearing_room_id_queryparam_with_value(final String hearingRoomIdKey, final String hearingRoomIdValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingRoomIdKey, hearingRoomIdValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -97,7 +97,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Session Id CaseHQ with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_session_id_casehq, 234", "hearing_session_id_casehq,\" \"", "hearing_session_id_casehq,"})
+    @CsvSource(value = {"hearing_session_id_casehq, 234", "hearing_session_id_casehq,''", "hearing_session_id_casehq,' '", "hearing_session_id_casehq,NIL"}, nullValues = "NIL")
     void test_hearing_session_id_casehq_queryparam_with_value(final String hearingSessionIdCaseHQKey, final String hearingSessionIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingSessionIdCaseHQKey, hearingSessionIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -112,7 +112,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Case Id HMCTS with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_case_id_hmcts, 234", "hearing_case_id_hmcts,\" \"", "hearing_case_id_hmcts,"})
+    @CsvSource(value = {"hearing_case_id_hmcts, 234", "hearing_case_id_hmcts,''", "hearing_case_id_hmcts,' '", "hearing_case_id_hmcts,NIL"}, nullValues = "NIL")
     void test_hearing_case_id_hmcts_queryparam_with_value(final String hearingCaseIdHmctsKey, final String hearingCaseIdHmctsValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingCaseIdHmctsKey, hearingCaseIdHmctsValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -127,7 +127,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_id_casehq, 234", "hearing_id_casehq,\" \"", "hearing_id_casehq,"})
+    @CsvSource(value = {"hearing_id_casehq, 234", "hearing_id_casehq,''", "hearing_id_casehq,' '", "hearing_id_casehq,NIL"}, nullValues = "NIL")
     void test_hearing_id_casehq_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -142,7 +142,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Venue_Id & Hearing_Room_Id) with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_venue_id,234,hearing_room_id,123", "hearing_venue_id,,hearing_room_id,"})
+    @CsvSource(value = {"hearing_venue_id,234,hearing_room_id,123", "hearing_venue_id,NIL,hearing_room_id,NIL"}, nullValues = "NIL")
     void test_multiple_queryparam_with_value(final String hearingVenueIdKey,
                                                     final String hearingVenueIdValue,
                                                     final String hearingRoomIdKey,
@@ -160,7 +160,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Session_Id_CaseHQ, Hearing_Case_Id_Hmcts & Hearing_Id_Casehq) with and without value - Param : {0} --> {1}")
-    @CsvSource({"hearing_session_id_casehq,234,hearing_case_id_hmcts,123,hearing_id_casehq,case1", "hearing_session_id_casehq,,hearing_case_id_hmcts,,hearing_id_casehq,"})
+    @CsvSource(value = {"hearing_session_id_casehq,234,hearing_case_id_hmcts,123,hearing_id_casehq,case1", "hearing_session_id_casehq,NIL,hearing_case_id_hmcts,NIL,hearing_id_casehq,NIL"}, nullValues = "NIL")
     void test_multiple_queryparams_with_value(final String paramKey1,
                                                     final String paramVal1,
                                                     final String paramKey2,
