@@ -1,60 +1,6 @@
 <policies>
    <inbound>
         <base /> 
-        <set-variable name="invalidQueryParams" value="@{
-                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                string[] allowedKeys = {"sessionIdCaseHQ"};
-                bool invalidQueryParam = false;
-                if(context.Request.Url.Query.Count &gt; 0){
-                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
-                    {
-                        bool keyFound = false;
-                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
-                        {
-                            if (qryPrmKeys[i] == allowedKeys[j]){
-                                keyFound = true;
-                                break;
-                            }
-                        }
-                        if(!keyFound){
-                            invalidQueryParam = true;
-                            break;
-                        }
-                    }
-                }
-                return invalidQueryParam;
-            }" />
-        <choose>
-            <when condition="@(context.Request.Url.Query.Count > 1 || (bool)context.Variables["invalidQueryParams"])">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("statusCode", 400),
-                            new JProperty("message", "Invalid query parameter/s in the request URL.")
-                        ).ToString();
-                        }
-                    </set-body>
-                </return-response>
-            </when>
-        </choose>
-        <choose>
-            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("sessionIdCaseHQ") != null)">
-                <return-response>
-                    <set-status code="201" />
-                    <set-header name="Content-Type">
-    					<value>application/json</value>
-					</set-header>
-                   	<set-body>@{
-	                   return new JObject(
-	                       new JProperty("response code", 201),
-	                       new JProperty("description", "The request was received successfully.")
-	                   ).ToString();
-	                   }
-            		</set-body>
-                </return-response>
-            </when>
-        </choose>
         <return-response>
         	<set-status code="201" />
             <set-header name="Content-Type">
