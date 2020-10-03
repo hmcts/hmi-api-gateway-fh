@@ -67,7 +67,7 @@ class HearingAPIConsumerTest {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a Complete Payload",
+                "Provider confirms request received for a complete payload for an Individual Sub Entity",
                 REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
     }
 
@@ -83,7 +83,7 @@ class HearingAPIConsumerTest {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a Complete Payload",
+                "Provider confirms request received for a complete payload for an Organisation Sub Entity",
                 REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
     }
 
@@ -98,7 +98,7 @@ class HearingAPIConsumerTest {
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a Standards (Only Outer Elements) Payload",
+                "Provider confirms request received for a standard (only outer elements) payload",
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH);
     }
 
@@ -114,7 +114,7 @@ class HearingAPIConsumerTest {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a Complete Payload",
+                "Provider confirms request received for the most basic mandatory payload",
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH);
     }
 
