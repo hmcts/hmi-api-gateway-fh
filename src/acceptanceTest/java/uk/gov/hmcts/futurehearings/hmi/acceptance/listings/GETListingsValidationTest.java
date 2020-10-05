@@ -50,21 +50,6 @@ public class GETListingsValidationTest extends ListingsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    @ParameterizedTest(name = "Listing Case Id with and without values - Param : {0} --> {1}")
-    @CsvSource(value = {"listing_id_casehq, 1234", "listing_id_casehq,' '", "listing_id_casehq,NIL"}, nullValues= "NIL")
-    void test_listing_id_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
-        this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                LISTINGS_SUCCESS_MSG);
-    }
-
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws IOException {
@@ -96,7 +81,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params - (listing_id_casehq, date_of_listing & hearing_type) - Param : {0} --> {1}")
-    @CsvSource({"listing_id_casehq,1234,date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH", "listing_id_casehq,,date_of_listing,,hearing_type,"})
+    @CsvSource({"date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH", "date_of_listing,,hearing_type,"})
     void test_multiple_queryparams(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
