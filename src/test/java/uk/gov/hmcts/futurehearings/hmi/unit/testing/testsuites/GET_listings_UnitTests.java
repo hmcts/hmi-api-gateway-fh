@@ -63,7 +63,6 @@ class GET_listings_UnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
-        paramsAsMap.put("listing_id_casehq", "L012");
         paramsAsMap.put("date_of_listing", "2018-01-29 21:36:01Z");
         paramsAsMap.put("hearing_type", "VH");
 
@@ -213,6 +212,137 @@ class GET_listings_UnitTests {
     private Response whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader() {
         return retrieveListingsResponseForMissingOrInvalidHeader(listingsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
+
+    //Listings by ID
+
+    @Test
+    @Order(13)
+    @DisplayName("Test for Invalid Resource - By ID")
+    void testRetrieveListingsByIDRequestForInvalidResource() {
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedForInvalidResource();
+        thenValidateResponseForInvalidResource(response);
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("Test for missing ContentType header - By ID")
+    void testRetrieveListingsByIDRequestWithMissingContentTypeHeader() {
+        headersAsMap.remove("Content-Type");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("Test for invalid ContentType header - By ID")
+    void testRetrieveListingsByIDRequestWithInvalidContentTypeHeader() {
+        headersAsMap.remove("Content-Type");
+        headersAsMap.put("Content-Type", "application/xml");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("Test for missing Accept header - By ID")
+    void testRetrieveListingsByIDRequestWithMissingAcceptHeader() {
+        headersAsMap.remove("Accept");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("Test for invalid Accept header - By ID")
+    void testRetrieveListingsByIDRequestWithInvalidAcceptHeader() {
+        headersAsMap.remove("Accept");
+        headersAsMap.put("Accept", "application/jsonxml");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - By ID")
+    void testRetrieveListingsByIDRequestWithMissingOcpSubKey() {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        thenValidateResponseForMissingSubscriptionKeyHeader(response);
+    }
+
+    @Test
+    @Order(19)
+    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
+    void testRetrieveListingsByIDRequestWithInvalidOcpSubKey(){
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+    }
+
+    @Order(20)
+    @ParameterizedTest(name = "Test for missing {0} header - By ID")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
+    }
+
+    @Order(21)
+    @ParameterizedTest(name = "Test for invalid {0} header - By ID")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testRetrieveListingsByIDRequestWithInvalidHeader(String iteration) {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("Test for Correct Headers and Parameters - By ID")
+    void testRetrieveListingsByIDRequestWithCorrectHeadersAndParams() {
+
+        final Response response = whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndParams();
+        thenValidateResponseForRetrieve(response);
+    }
+
+    private Response whenRetrieveListingsByIDIsInvokedWithAdditionalParam() {
+        return retrieveListingsResponseForCorrectHeadersAndParams(listingsApiRootContext+"/list_id", headersAsMap, paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveListingsByIDRequestIsInvokedForInvalidResource() {
+        return retrieveListingsResponseForInvalidResource(listingsApiRootContext+"/list_id"+"/get", headersAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndParams() {
+        return retrieveListingsResponseForCorrectHeadersAndParams(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndNoParams() {
+        return retrieveListingsResponseForCorrectHeadersAndNoParams(listingsApiRootContext+"/list_id", headersAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
+        return retrieveListingsResponseForMissingOrInvalidOcpSubKey(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader() {
+        return retrieveListingsResponseForMissingOrInvalidHeader(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+
+
 
     private Response retrieveListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
