@@ -62,6 +62,11 @@ variable "api_policies" {
       templateFile    = "api-op-update-resource-user-policy.xml"
     },
     {
+      operationId     = "get-listings"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-listing-policy.xml"
+    },
+    {
       operationId     = "get-sessions"
       format          = "rawxml-link"
       templateFile    = "api-op-get-sessions-policy.xml"
