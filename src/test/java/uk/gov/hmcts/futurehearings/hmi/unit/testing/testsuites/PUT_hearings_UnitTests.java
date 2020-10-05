@@ -44,9 +44,6 @@ class PUT_hearings_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetHost}")
-    private String targetHost;
-
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
@@ -57,9 +54,8 @@ class PUT_hearings_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
+
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -198,7 +194,7 @@ class PUT_hearings_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response updateHearingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
