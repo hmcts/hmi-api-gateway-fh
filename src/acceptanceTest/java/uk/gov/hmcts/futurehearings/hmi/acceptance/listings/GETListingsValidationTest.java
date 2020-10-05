@@ -1,0 +1,118 @@
+package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
+
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsValidationVerifier;
+
+import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+
+@Slf4j
+@SpringBootTest(classes = {Application.class})
+@ActiveProfiles("acceptance")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("java:S2187")
+public class GETListingsValidationTest extends ListingsValidationTest {
+
+    @Value("${targetInstance}")
+    private String targetInstance;
+
+    @Value("${targetSubscriptionKey}")
+    private String targetSubscriptionKey;
+
+    @Value("${listingsRootContext}")
+    private String listingsRootContext;
+
+    private static final String LISTINGS_SUCCESS_MSG= "The request was received successfully.";
+
+    @BeforeAll
+    public void initialiseValues() {
+        super.initialiseValues();
+        this.setRelativeURL(listingsRootContext);
+        this.setHttpMethod(HttpMethod.GET);
+        this.setHttpSucessStatus(HttpStatus.OK);
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
+        this.setHmiSuccessVerifier(new GETListingsValidationVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+    }
+
+    @ParameterizedTest(name = "Listing Case Id with and without values - Param : {0} --> {1}")
+    @CsvSource(value = {"listing_id_casehq, 1234", "listing_id_casehq,' '", "listing_id_casehq,NIL"}, nullValues= "NIL")
+    void test_listing_id_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
+        this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                LISTINGS_SUCCESS_MSG);
+    }
+
+    @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
+    @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
+    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws IOException {
+        this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                LISTINGS_SUCCESS_MSG);
+    }
+
+    @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
+    @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues= "NIL")
+    void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws IOException {
+        this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                LISTINGS_SUCCESS_MSG);
+    }
+
+    @ParameterizedTest(name = "Multiple params - (listing_id_casehq, date_of_listing & hearing_type) - Param : {0} --> {1}")
+    @CsvSource({"listing_id_casehq,1234,date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH", "listing_id_casehq,,date_of_listing,,hearing_type,"})
+    void test_roomName_with_multiple_queryparams(final String paramKey1,
+                                              final String paramVal1,
+                                              final String paramKey2,
+                                              final String paramVal2,
+                                              final String paramKey3,
+                                              final String paramVal3) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.");
+    }
+
+}
