@@ -37,7 +37,7 @@ import java.util.Map;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /listings - Retrieve Listings")
 @SuppressWarnings("java:S2699")
-public class GET_listings_UnitTests {
+class GET_listings_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
