@@ -10,6 +10,7 @@ resources_idRootContext: /hmi/resources/%s
 resourcesByUser_idRootContext: /hmi/resources/user/%s
 sessionsRootContext: /hmi/sessions
 sessions_idRootContext: /hmi/sessions/%s
+listingsRootContext: /hmi/listings
 spring.flyway.enabled: false
 
 mockServerHost: ${MOCK_SERVER_HOST}
