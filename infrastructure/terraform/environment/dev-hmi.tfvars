@@ -10,6 +10,6 @@ service_url = ""
 tags = {
     "businessarea":"cross-cutting",
     "application":"hearing-management-interface",
-    "environment":"sbox"
+    "environment":"development"
   }
 enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
