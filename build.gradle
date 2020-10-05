@@ -22,6 +22,7 @@ plugins {
     id 'au.com.dius.pact' version '4.0.10'
 }
 
+apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -213,6 +214,10 @@ task runAndPublishConsumerPactTests(type: Test) {
 }
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+clean {
+    delete System.getProperty("pact.rootDir")+"/*.json"
+}
 
 checkstyle {
     maxWarnings = 0
