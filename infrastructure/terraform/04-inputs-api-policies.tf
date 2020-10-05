@@ -80,6 +80,11 @@ variable "api_policies" {
       operationId     = "get-session-by-id"
       format          = "rawxml-link"
       templateFile    = "api-op-get-sessions-by-id-policy.xml"
-    }
+    },
+    {
+      operationId     = "get-listing-by-id"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-listing-by-id-policy.xml"
+    },
   ]
 }
