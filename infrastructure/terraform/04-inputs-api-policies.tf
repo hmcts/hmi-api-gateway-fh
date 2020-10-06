@@ -44,6 +44,46 @@ variable "api_policies" {
       operationId     = "delete-resource"
       format          = "rawxml-link"
       templateFile    = "api-op-delete-resource-policy.xml"
-    }
+    },
+    {
+      operationId     = "get-listings"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-listing-policy.xml"
+    },
+    {
+      operationId     = "update-resource-location"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-resource-location-policy.xml"
+    },
+    {
+      operationId     = "update-resource-user"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-resource-user-policy.xml"
+    },
+    {
+      operationId     = "get-listings"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-listing-policy.xml"
+    },
+    {
+      operationId     = "get-sessions"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-sessions-policy.xml"
+    },
+    {
+      operationId     = "update-session"
+      format          = "rawxml-link"
+      templateFile    = "api-op-update-session-policy.xml"
+    },
+    {
+      operationId     = "get-session-by-id"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-sessions-by-id-policy.xml"
+    },
+    {
+      operationId     = "get-listing-by-id"
+      format          = "rawxml-link"
+      templateFile    = "api-op-get-listing-by-id-policy.xml"
+    },
   ]
 }

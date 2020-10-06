@@ -1,24 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -29,20 +10,39 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 
+import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /hearings - Update Hearings")
-public class PUT_hearings_UnitTests {
+@SuppressWarnings("java:S2699")
+class PUT_hearings_UnitTests {
 
-    public static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
+    static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetHost}")
-    private String targetHost;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
@@ -53,10 +53,9 @@ public class PUT_hearings_UnitTests {
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
-    public void initialiseValues() {
-        headersAsMap.put("Host", targetHost);
+    void initialiseValues() {
+
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -69,7 +68,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    public void testUpdateHearingsForInvalidResource() throws IOException {
+    void testUpdateHearingsForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
@@ -78,7 +77,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    public void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
+    void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -87,7 +86,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    public void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
+    void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -98,7 +97,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    public void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
+    void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
@@ -108,7 +107,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    public void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
+    void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -119,7 +118,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(6)
     @DisplayName("Test for missing OcpSubKey")
-    public void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
+    void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
@@ -129,7 +128,7 @@ public class PUT_hearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    public void testUpdateHearingsRequestWithInvalidOcpSubKey()throws IOException {
+    void testUpdateHearingsRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -137,118 +136,31 @@ public class PUT_hearings_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Test
     @Order(8)
-    @DisplayName("Test for missing Source-System")
-    public void testUpdateHearingsRequestWithMissingSrcHeader() throws IOException {
-        headersAsMap.remove("Source-System");
+    @ParameterizedTest(name = "Test for missing {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateHearingsWithMissingHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-
-    @Test
     @Order(9)
-    @DisplayName("Test for invalid Source-System header")
-    public void testUpdateHearingsRequestWithInvalidSourceSystemHeader() throws IOException {
-        headersAsMap.remove("Source-System");
-        headersAsMap.put("Source-System", "A");
+    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdateHearingsWithInvalidHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
+        headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Source-System");
-    }
-
-    @Test
-    @Order(10)
-    @DisplayName("Test for missing Destination-System")
-    public void testUpdateHearingsRequestWithMissingHeaderDestination() throws IOException {
-        headersAsMap.remove("Destination-System");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test for invalid Destination-System header")
-    public void testUpdateHearingsRequestWithInvalidDestinationSystemHeader() throws IOException {
-        headersAsMap.remove("Destination-System");
-        headersAsMap.put("Destination-System", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Destination-System");
-    }
-
-
-    @Test
-    @Order(12)
-    @DisplayName("Test for missing Request-Created-At")
-    public void testUpdateHearingsRequestWithMissingHeaderDateTime() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for missing Request-Processed-At header")
-    public void testUpdateHearingsRequestWithMissingRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for invalid Request-Created-At header")
-    public void testUpdateHearingsRequestWithInvalidRequestCreatedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "2018-01-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Created-At");
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("Test for invalid Request-Processed-At header")
-    public void testUpdateHearingsRequestWithInvalidRequestProcessedAtHeader() throws IOException {
-        headersAsMap.remove("Request-Processed-At");
-        headersAsMap.put("Request-Processed-At", "2018-02-29A20:36:01Z");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Processed-At");
-    }
-
-
-    @Test
-    @Order(16)
-    @DisplayName("Test for missing Request-Type")
-    public void testUpdateHearingsRequestWithMissingRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Request-Type header")
-    public void testUpdateHearingsRequestWithInvalidRequestTypeHeader() throws IOException {
-        headersAsMap.remove("Request-Type");
-        headersAsMap.put("Request-Type", "A");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidHeader(response, "Request-Type");
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(18)
     @DisplayName("Test for correct Request")
-    public void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
+    void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
 
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(input);
@@ -282,7 +194,7 @@ public class PUT_hearings_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().put().then().extract().response();
     }
 
     private Response updateHearingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
