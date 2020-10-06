@@ -22,6 +22,7 @@ plugins {
     id 'au.com.dius.pact' version '4.0.10'
 }
 
+apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -214,6 +215,10 @@ task runAndPublishConsumerPactTests(type: Test) {
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
+clean {
+    delete System.getProperty("pact.rootDir")+"/*.json"
+}
+
 checkstyle {
     maxWarnings = 0
     toolVersion = '8.29'
@@ -244,7 +249,7 @@ sonarqube {
         property "sonar.projectKey", "HMIAPI"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.organization", "hmcts"
-        property "sonar.sources", "src/main/java"
+        property "sonar.sources", "src/main/java,pipeline,infrastructure"
         property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/contractTest/java,src/functionalTest/java"
         property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
     }
