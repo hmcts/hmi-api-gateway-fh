@@ -84,9 +84,9 @@ public class GETListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Multiple params - (date_of_listing & hearing_type) - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH",
-                "date_of_listing,'',,hearing_type,''",
-                "date_of_listing' ',,hearing_type,' '",
-                "date_of_listing,,hearing_type,",
+                "date_of_listing,'',hearing_type,''",
+                "date_of_listing,' ',hearing_type,' '",
+                "date_of_listing,NIL,hearing_type,NIL",
                 "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
                 "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
     void test_multiple_queryparams(final String paramKey1,
