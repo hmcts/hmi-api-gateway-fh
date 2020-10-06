@@ -38,7 +38,7 @@ import java.util.Map;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /sessions - Update Sessions")
 @SuppressWarnings("java:S2699")
-public class PUT_sessions_UnitTests {
+class PUT_sessions_UnitTests {
 
     static final String CORRECT_UPDATE_SESSIONS_PAYLOAD = "requests/correct-update-sessions-payload.json";
     @Value("${targetInstance}")
