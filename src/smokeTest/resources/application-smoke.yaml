@@ -6,5 +6,6 @@ schedulesApiRootContext: /hmi/schedules
 notificationApiRootContext : /notification
 resourcesApiRootContext : /hmi/resources
 sessionsApiRootContext: /hmi/sessions
+listingsApiRootContext: /hmi/listings
 userApiRootContext : /users
 spring.flyway.enabled: false
