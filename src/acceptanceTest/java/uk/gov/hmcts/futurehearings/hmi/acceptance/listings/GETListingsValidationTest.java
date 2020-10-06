@@ -40,6 +40,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     private String listingsRootContext;
 
     private static final String LISTINGS_SUCCESS_MSG= "The request was received successfully.";
+    private static final String INVALID_QUERY_PARAMETER_MSG= "Invalid query parameter/s in the request URL.";
 
     @BeforeAll
     public void initialiseValues() {
@@ -50,6 +51,22 @@ public class GETListingsValidationTest extends ListingsValidationTest {
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
         this.setHmiSuccessVerifier(new GETListingsValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+    }
+
+
+    @Test
+    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
+    void test_date_of_listing_with_invalid_queryparam() throws IOException {
+        this.setUrlParams(buildQueryParams("test_param", ""));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
     }
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
@@ -89,7 +106,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 "date_of_listing,NIL,hearing_type,NIL",
                 "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
                 "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
-    void test_multiple_queryparams(final String paramKey1,
+    void test_multiple_query_params(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
                                               final String paramVal2) throws IOException {
@@ -104,4 +121,22 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
+
+    @Test
+    void test_multiple_query_params_with_an_error_parameter() throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams("date_of_listing",
+                "2018-01-29 20:36:01Z",
+                "hearing_type",
+                "VH","test_extra_param",""));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
+    }
+
 }
