@@ -10,6 +10,6 @@ service_url = "https://www.hmcts.com/request-hearings/request-listings"
 tags = {
     "businessarea":"cross-cutting",
     "application":"hearing-management-interface",
-    "environment":"test"
+    "environment":"testing"
   }
 enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
