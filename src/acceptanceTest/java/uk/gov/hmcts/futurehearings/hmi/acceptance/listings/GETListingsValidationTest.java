@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -80,15 +82,18 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 LISTINGS_SUCCESS_MSG);
     }
 
-    @ParameterizedTest(name = "Multiple params - (listing_id_casehq, date_of_listing & hearing_type) - Param : {0} --> {1}")
-    @CsvSource({"date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH", "date_of_listing,,hearing_type,"})
+    @ParameterizedTest(name = "Multiple params - (date_of_listing & hearing_type) - Param : {0} --> {1}")
+    @CsvSource(value = {"date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH",
+                "date_of_listing,'',,hearing_type,''",
+                "date_of_listing' ',,hearing_type,' '",
+                "date_of_listing,,hearing_type,",
+                "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
+                "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
     void test_multiple_queryparams(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
-                                              final String paramVal2,
-                                              final String paramKey3,
-                                              final String paramVal3) throws IOException {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+                                              final String paramVal2) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
@@ -99,5 +104,4 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
     }
-
 }
