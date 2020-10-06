@@ -55,7 +55,7 @@ stages:
         displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
-        shared_infra_kv: hmi-sharedservices-kv-${{ environment.name }}
+        shared_infra_kv: hmi-shared-kv-${{ environment.name }}
         shared_infra_rg: hmi-sharedservices-${{ environment.name }}-rg
 
     - ${{ if eq(environment.name, 'sbox') }}:
