@@ -53,6 +53,22 @@ public class GETListingsValidationTest extends ListingsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
+
+    @Test
+    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
+    void test_date_of_listing_with_invalid_queryparam() throws IOException {
+        this.setUrlParams(buildQueryParams("test_param", ""));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
+    }
+
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws IOException {
@@ -66,21 +82,6 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
                 LISTINGS_SUCCESS_MSG);
-    }
-
-    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
-    @Test
-    void test_date_of_listing_with_invalid_queryparam() throws IOException {
-        this.setUrlParams(buildQueryParams("test_param", ""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
     }
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
