@@ -1,4 +1,3 @@
-
 $RootPath = Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path
 $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
 
