@@ -41,6 +41,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
 
     private static final String START_END_DATE_MANDATORY_ERROR_MSG= "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
     private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
+    private static final String SESSIONS_SUCCESS_MSG= "The request was received successfully.";
 
     @BeforeAll
     public void initialiseValues() {
@@ -145,7 +146,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SESSIONS_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Multiple params - CourtCase with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
@@ -165,7 +166,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SESSIONS_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Test with All Query Parameters - Param : {0} --> {1}")
@@ -187,7 +188,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SESSIONS_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Test with All Query Parameters with extram params - Param : {0} --> {1}")
