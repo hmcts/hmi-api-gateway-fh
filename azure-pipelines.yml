@@ -12,7 +12,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
       registry: DTS-SS-PRIVATE-SBOX
-      custom_domain: hmi-apim-sbox.sandbox.platform.hmcts.net
+      custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -66,7 +66,7 @@ stages:
           dependsOn: Terraform
           resourceGroup: $(resourceGroup)
           certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate # WIP!
-          hostName: "hmi-apim.sandbox.platform.hmcts.net"
+          hostName: ${{ environment.custom_domain }}
           variables:
             resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
