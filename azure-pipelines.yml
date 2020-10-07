@@ -65,7 +65,7 @@ stages:
           displayName: Apply Custom Domain Configuration
           dependsOn: Terraform
           resourceGroup: $(resourceGroup)
-          certificateUrl: "https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert" # WIP!
+          certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate # WIP!
           hostName: "hmi-apim-sbox.sandbox.platform.hmcts.net"
           variables:
             resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
