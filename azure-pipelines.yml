@@ -110,6 +110,30 @@ stages:
 
     - ${{ if environment.tests_security }}:
       - ${{ each test in environment.tests_security }}:
+        - ${{ each url in test.testUrl }}:
+          - template: pipeline/jobs/security-test.yaml
+            parameters:
+              displayName: ${{ url.name }}
+              dependsOn:
+              - Terraform
+              - createStorage
+              - ApplyHostName
+              subscription: ${{ environment.subscription }}
+              registry: ${{ environment.registry }}
+              repository: ${{ test.repository }}
+              containerRegistry: ${{ test.containerRegistry }}
+              dockerfile: docker/images/${{ test.name }}/Dockerfile
+              tags: latest
+              testUrl: ${{ url.target }}
+              securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+              resourceGroup: $(resourceGroup)
+              storageAccount: $(storageAccount)
+              storageContainer: $(storageContainer)
+              variables:
+                resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+                storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+                storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+
         - template: pipeline/jobs/security-test.yaml
           parameters:
             displayName: ${{ test.name }}
@@ -133,17 +157,17 @@ stages:
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
     
-    # - ${{ if environment.tests_Sonarcloud }}:
-    #   - ${{ each test in environment.tests_Sonarcloud }}:
-    #     - template: pipeline/jobs/sonarqubetest.yaml
-    #       parameters:
-    #         displayName: ${{ test.name }}
-    #         dependsOn:
-    #         - Terraform
-    #         - createStorage
-    #         - UnitTest
-    #         - SmokeTest
-    #         - AcceptanceTest
-    #         - FunctionalTest
-    #         subscription: ${{ environment.subscription }}
-    #         command: ${{ test.command }}
+    - ${{ if environment.tests_sonarcloud }}:
+      - ${{ each test in environment.tests_sonarcloud }}:
+        - template: pipeline/jobs/sonarqubetest.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn:
+            - Terraform
+            - createStorage
+            - UnitTest
+            - SmokeTest
+            - AcceptanceTest
+            - FunctionalTest
+            subscription: ${{ environment.subscription }}
+            command: ${{ test.command }}
