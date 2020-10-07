@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -38,6 +40,7 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
     private String sessionsRootContext;
 
     private static final String START_END_DATE_MANDATORY_ERROR_MSG= "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
+    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
 
     @BeforeAll
     public void initialiseValues() {
@@ -48,6 +51,21 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
         this.setHmiSuccessVerifier(new GETSessionsValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+    }
+
+    @Test
+    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
+    void test_invalid_query_param_with_value() throws IOException {
+        this.setUrlParams(buildQueryParams("extra_param_key", " "));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
     }
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session EndDate - Param : {0} --> {1}")
@@ -170,6 +188,31 @@ public class GETSessionsValidationTest extends SessionsValidationTest {
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
                 "The request was received successfully.");
+    }
+
+    @ParameterizedTest(name = "Test with All Query Parameters with extram params - Param : {0} --> {1}")
+    @CsvSource({"sessionStartDate,2018-01-29 20:36:01Z,sessionEndDate,2018-01-29 20:36:01Z,room-Name,R121,caseCourt,case123,extra_params,extra", "sessionStartDate,,sessionEndDate,,room-Name,,caseCourt,,extra_params,,"})
+    void test_all_queryparams_with_extra_params(final String paramKey1,
+                                         final String paramVal1,
+                                         final String paramKey2,
+                                         final String paramVal2,
+                                         final String paramKey3,
+                                         final String paramVal3,
+                                         final String paramKey4,
+                                         final String paramVal4,
+                                         final String paramKey5,
+                                         final String paramVal5
+                                         ) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4, paramKey5, paramVal5));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
     }
 
 }
