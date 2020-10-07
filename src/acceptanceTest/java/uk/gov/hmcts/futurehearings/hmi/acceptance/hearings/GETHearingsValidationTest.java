@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -172,4 +173,67 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHmiSuccessVerifier(),
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG);
     }
+
+    @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing Type) with and without value - Param : {0} --> {1}")
+    @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft", "hearingDate,'',hearingType,''", "hearingDate,' ',hearingType,' '"})
+    void test_multiple_query_params_with_value(final String hearingDateKey,
+                                              final String hearingDateValue,
+                                              final String hearingTypeKey,
+                                              final String hearingTypeValue) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey, hearingDateValue, hearingTypeKey, hearingTypeValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                hmiSuccessVerifier,
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+    }
+
+    @Disabled("Disable because of varied responses based on the hearing_id_casehq - This should be path param endpoint")
+    @ParameterizedTest(name = "All Query params (Hearing_Id_CaseHQ, Hearing_Date & Hearing Type) with and without value - Param : {0} --> {1}")
+    @CsvSource(value = {"hearingIdCaseHQ,1234,hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft", "hearingIdCaseHQ,,hearingDate,'',hearingType,''", "hearingIdCaseHQ,,hearingDate,' ',hearingType,' '"})
+    void test_all_query_params_with_value( final String hearingIdCaseHQKey,
+                                           final String hearingIdCaseHQValue,
+                                           final String hearingDateKey,
+                                           final String hearingDateValue,
+                                           final String hearingTypeKey,
+                                           final String hearingTypeValue) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue, hearingDateKey, hearingDateValue, hearingTypeKey, hearingTypeValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+    }
+
+    @ParameterizedTest(name = "All Query params with extra parameter (Hearing_Id_CaseHQ, Hearing_Date & Hearing Type, Extra Params) with and without value - Param : {0} --> {1}")
+    @CsvSource(value = {"hearingIdCaseHQ,1234,hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft,extra_param,extravalue", "hearingIdCaseHQ,,hearingDate,'',hearingType,'',extra_param,''", "hearingIdCaseHQ,,hearingDate,' ',hearingType,' ',extra_param, ' '"})
+    void test_all_query_params_with_extra_params( final String hearingIdCaseHQKey,
+                                           final String hearingIdCaseHQValue,
+                                           final String hearingDateKey,
+                                           final String hearingDateValue,
+                                           final String hearingTypeKey,
+                                           final String hearingTypeValue,
+                                           final String extraParamKey,
+                                           final String extraParamValue) throws IOException {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue, hearingDateKey, hearingDateValue, hearingTypeKey, hearingTypeValue, extraParamKey, extraParamValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
+    }
+
+
 }
