@@ -34,7 +34,7 @@ parameters:
         serenity: true
         # dependsOn: AcceptanceTest
       tests_Sonarcloud:
-      - name: SonarCloudTest
+      - name: CodeQualityTest
         command: sonarqube
 
 variables:
@@ -133,38 +133,13 @@ stages:
                 resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
                 storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
                 storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
-
-        - template: pipeline/jobs/security-test.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn:
-            - Terraform
-            - createStorage
-            - ApplyHostName
-            subscription: ${{ environment.subscription }}
-            registry: ${{ environment.registry }}
-            repository: ${{ test.repository }}
-            containerRegistry: ${{ test.containerRegistry }}
-            dockerfile: docker/images/${{ test.name }}/Dockerfile
-            tags: latest
-            testUrl: https://www.example.com/openapi.json 
-            securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-            resourceGroup: $(resourceGroup)
-            storageAccount: $(storageAccount)
-            storageContainer: $(storageContainer)
-            variables:
-              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
     
     - ${{ if environment.tests_sonarcloud }}:
       - ${{ each test in environment.tests_sonarcloud }}:
-        - template: pipeline/jobs/sonarqubetest.yaml
+        - template: pipeline/jobs/sonarqube-test.yaml
           parameters:
             displayName: ${{ test.name }}
             dependsOn:
-            - Terraform
-            - createStorage
             - UnitTest
             - SmokeTest
             - AcceptanceTest
