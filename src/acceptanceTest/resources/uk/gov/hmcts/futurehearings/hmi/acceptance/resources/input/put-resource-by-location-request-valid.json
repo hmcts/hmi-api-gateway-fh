@@ -1,0 +1,15 @@
+{
+  "venueId": "",
+  "jurisdictionId": "",
+  "facilityId": "",
+  "locationId": "",
+  "regionId": "",
+  "addressId": "",
+  "venueName": "",
+  "venueType": "",
+  "courtType": "",
+  "status": "",
+  "openingTimes": "",
+  "openToPublic": true,
+  "UPRN": ""
+}
