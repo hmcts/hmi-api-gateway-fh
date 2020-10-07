@@ -2,6 +2,12 @@ parameters:
   - name: subscription
     type: string
 
+  - name: shared_infra_kv
+    type: string
+  
+  - name: shared_infra_rg
+    type: string
+
 steps:
 
 - task: TerraformCLI@0
@@ -10,4 +16,4 @@ steps:
     command: plan
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
-    commandOptions: '-var-file="environment/$(environment)-hmi.tfvars" -out="tfplan-$(environment)" -var "principal_tenant_id=$(principal_tenant_id)" -var "principal_object_id=$(principal_object_id)" -var "prefix=$(prefix)" -var "product=$(product)" -var "environment=$(environment)" -var "location=$(location)" -var "repo_branch=$(Build.SourceVersion)"'
+    commandOptions: '-var-file="environment/$(environment)-hmi.tfvars" -out="tfplan-$(environment)" -var "principal_tenant_id=$(principal_tenant_id)" -var "principal_object_id=$(principal_object_id)" -var "prefix=$(prefix)" -var "product=$(product)" -var "environment=$(environment)" -var "location=$(location)" -var "infra_kv_name=${{ parameters.shared_infra_kv }}" -var "infra_kv_rg=${{ parameters.shared_infra_rg }}" -var "repo_branch=$(Build.SourceVersion)"'

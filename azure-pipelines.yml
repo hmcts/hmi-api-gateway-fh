@@ -1,53 +1,18 @@
 ---
 trigger:
   - master
+pr:
+  - none
 
 parameters:
   - name: environments
     type: object
     default: 
-    # - name: sbox
-    #   subscription: DTS-SHAREDSERVICES-SBOX
-    #   group: HMI-APIM-BUILD-SBOX
-    #   registry: DTS-SS-PRIVATE-SBOX
-    #   tests_gradle:
-    #   - name: UnitTest
-    #     command: test
-    #     logLevel: info
-    #     serenity: true
-    #   - name: SmokeTest
-    #     command: smoke
-    #     logLevel: debug
-    #     serenity: false
-    #     dependsOn: UnitTest
-    #   - name: AcceptanceTest
-    #     command: acceptance
-    #     logLevel: debug
-    #     serenity: false
-    #     dependsOn: SmokeTest
-    #   - name: FunctionalTest
-    #     command: functional
-    #     logLevel: info
-    #     serenity: true
-    #     dependsOn: AcceptanceTest
-    #   tests_security:
-    #   - name: ApiZapScan
-    #     containerRegistry: ssprivatesbox.azurecr.io
-    #     repository: hmi/apim-tests-owasp
-    #     testUrl:
-    #     - name: API1
-    #       target: https://www.example.com/openapi.json
-    #     - name: API2
-    #       target: https://www.example.com/openapitest1.json
-    #     - name: API3
-    #       target: https://www.example.com/openapitest2.json
-    #   tests_Sonarcloud:
-    #   - name: SonarCloudTest
-    #     command: sonarqube
-
-    - name: dev
-      subscription: DTS-SHAREDSERVICES-DEV
-      group: HMI-APIM-BUILD-DEV
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      registry: DTS-SS-PRIVATE-SBOX
+      custom_domain: hmi-apim-sbox.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -57,37 +22,17 @@ parameters:
         command: smoke
         logLevel: debug
         serenity: false
-        dependsOn: UnitTest
+        # dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
         serenity: false
-        dependsOn: SmokeTest
-
-    - name: test
-      subscription: DTS-SHAREDSERVICES-TEST
-      group: HMI-APIM-BUILD-TEST
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-        serenity: true
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        serenity: false
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        serenity: false
-        dependsOn: SmokeTest
+        # dependsOn: SmokeTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: AcceptanceTest
+        # dependsOn: AcceptanceTest
       tests_Sonarcloud:
       - name: SonarCloudTest
         command: sonarqube
@@ -110,6 +55,20 @@ stages:
         displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
+        shared_infra_kv: hmi-shared-kv-${{ environment.name }}
+        shared_infra_rg: hmi-sharedservices-${{ environment.name }}-rg
+
+    - ${{ if eq(environment.name, 'sbox') }}:
+      - template: pipeline/jobs/apply-hostname.yaml
+        parameters:
+          subscription: ${{ environment.subscription }}
+          displayName: Apply Custom Domain Configuration
+          dependsOn: Terraform
+          resourceGroup: $(resourceGroup)
+          certificateUrl: "https://hmi-sharedinfra-kv-sbox.vault.azure.net/secrets/temp-cert" # WIP!
+          hostName: "hmi-apim-sbox.sandbox.platform.hmcts.net"
+          variables:
+            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
@@ -128,21 +87,22 @@ stages:
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
-            dependsOn: 
+            dependsOn:
             - Terraform
             - createStorage
+            - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
-            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
-            variables: 
+            variables:
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
@@ -173,9 +133,32 @@ stages:
                 resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
                 storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
                 storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+
+        - template: pipeline/jobs/security-test.yaml
+          parameters:
+            displayName: ${{ test.name }}
+            dependsOn:
+            - Terraform
+            - createStorage
+            - ApplyHostName
+            subscription: ${{ environment.subscription }}
+            registry: ${{ environment.registry }}
+            repository: ${{ test.repository }}
+            containerRegistry: ${{ test.containerRegistry }}
+            dockerfile: docker/images/${{ test.name }}/Dockerfile
+            tags: latest
+            testUrl: https://www.example.com/openapi.json 
+            securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+            resourceGroup: $(resourceGroup)
+            storageAccount: $(storageAccount)
+            storageContainer: $(storageContainer)
+            variables:
+              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
     
-    - ${{ if environment.tests_Sonarcloud }}:
-      - ${{ each test in environment.tests_Sonarcloud }}:
+    - ${{ if environment.tests_sonarcloud }}:
+      - ${{ each test in environment.tests_sonarcloud }}:
         - template: pipeline/jobs/sonarqubetest.yaml
           parameters:
             displayName: ${{ test.name }}
@@ -187,4 +170,4 @@ stages:
             - AcceptanceTest
             - FunctionalTest
             subscription: ${{ environment.subscription }}
-            command: ${{ test.command }}       
+            command: ${{ test.command }}
