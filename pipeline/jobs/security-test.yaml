@@ -34,7 +34,7 @@ parameters:
 
   - name: testUrl
     type: string
-    
+
   - name: securityRules
     type: string
 
