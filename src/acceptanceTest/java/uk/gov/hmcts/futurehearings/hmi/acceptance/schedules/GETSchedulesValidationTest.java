@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,6 +38,9 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @Value("${schedulesApiRootContext}")
     private String schedulesApiRootContext;
 
+    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
+    private static final String SCHEDULES_SUCCESS_MSG= "The request was received successfully.";
+
     @BeforeAll
     public void initialiseValues() {
         super.initialiseValues();
@@ -48,6 +52,21 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
+
+    @Test
+    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
+    void test_date_of_listing_with_invalid_query_param() throws IOException {
+        this.setUrlParams(buildQueryParams("test_param", ""));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
+    }
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_date, date", "hearing_date,''", "hearing_date,' '", "hearing_date,NIL", "hearing_date, 2002-10-02T10:00:00-05:00"}, nullValues = "NIL")
@@ -62,7 +81,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK,  getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
 
@@ -78,7 +97,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Hearing Room Id with and without value - Param : {0} --> {1}")
@@ -93,7 +112,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Hearing Session Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -108,7 +127,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Hearing Case Id HMCTS with and without value - Param : {0} --> {1}")
@@ -123,7 +142,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -138,7 +157,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Venue_Id & Hearing_Room_Id) with and without value - Param : {0} --> {1}")
@@ -156,7 +175,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Session_Id_CaseHQ, Hearing_Case_Id_Hmcts & Hearing_Id_Casehq) with and without value - Param : {0} --> {1}")
@@ -176,8 +195,9 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
     }
+
     @Test
     void test_all_params_with_value() throws IOException {
         this.setUrlParams(buildQueryParams("hearing_date", "09/09/1964",
@@ -194,6 +214,26 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                SCHEDULES_SUCCESS_MSG);
+    }
+
+    @Test
+    void test_all_params_with_an_invalid_query_param() throws IOException {
+        this.setUrlParams(buildQueryParams("hearing_date", "09/09/1964",
+                "hearing_venue_id", "1",
+                "hearing_room_id", null,
+                "hearing_session_id_casehq","",
+                "hearing_case_id_hmcts"," ",
+                "hearing_id_casehq","",
+                "extra_param",""));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                INVALID_QUERY_PARAMETER_MSG);
     }
 }
