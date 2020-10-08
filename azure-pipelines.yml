@@ -150,7 +150,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
-            - ApplyHostName
+            # - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
@@ -177,7 +177,7 @@ stages:
               dependsOn:
               - Terraform
               - createStorage
-              - ApplyHostName
+              # - ApplyHostName
               subscription: ${{ environment.subscription }}
               registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
