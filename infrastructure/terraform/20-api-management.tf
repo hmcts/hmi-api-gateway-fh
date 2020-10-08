@@ -13,7 +13,7 @@ resource "azurerm_api_management" "hmi_apim" {
 
   virtual_network_type = var.virtual_network_type
   virtual_network_configuration {
-    subnet_id = data.azurerm_subnet.hmi_apim_subnet.id == true ? 1 : 0
+    subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
   }
 
 }
