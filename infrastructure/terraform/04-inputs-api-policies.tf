@@ -94,7 +94,7 @@ variable "api_policies" {
     {
       operationId     = "delete-session"
       format          = "rawxml-link"
-      templateFile    = "api-op-delete-sessions-policy.xml"
+      templateFile    = "api-op-delete-session-policy.xml"
     }
   ]
 }
