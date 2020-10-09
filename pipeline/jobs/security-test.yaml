@@ -34,7 +34,7 @@ parameters:
 
   - name: testUrl
     type: string
-    
+
   - name: securityRules
     type: string
 
@@ -46,7 +46,7 @@ jobs:
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
-  displayName: ${{ parameters.displayName }}
+  displayName: API Security Scan ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
   variables:

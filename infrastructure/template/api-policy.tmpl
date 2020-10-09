@@ -12,6 +12,9 @@
         </cors>
         <!-- set a header to enable mocks -->
         ${enableMockHeader}
+        <!-- set-header name="Accept" exists-action="override">
+            <value>application/json</value>
+        </set-header-->
         <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
             <value>CFT</value>
         </check-header>

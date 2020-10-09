@@ -1,4 +1,3 @@
-
 variable "api_policies" {
   default = [
     {
@@ -22,69 +21,69 @@ variable "api_policies" {
       templateFile = "api-op-retrieve-hearings-policy.xml"
     },
     {
-      operationId     = "schedule"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-hearing-sched-policy.xml"
+      operationId  = "schedule"
+      format       = "rawxml-link"
+      templateFile = "api-op-retrieve-hearing-sched-policy.xml"
     },
     {
-      operationId     = "resource-by-id"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-resource-by-id-policy.xml"
+      operationId  = "resource-by-id"
+      format       = "rawxml-link"
+      templateFile = "api-op-retrieve-resource-by-id-policy.xml"
     },
     {
-      operationId     = "resources"
-      format          = "rawxml-link"
-      templateFile    = "api-op-retrieve-resources-policy.xml"
+      operationId  = "resources"
+      format       = "rawxml-link"
+      templateFile = "api-op-retrieve-resources-policy.xml"
     },
     {
-      operationId     = "delete-hearing"
-      format          = "rawxml-link"
-      templateFile    = "api-op-delete-hearing-policy.xml"
+      operationId  = "delete-hearing"
+      format       = "rawxml-link"
+      templateFile = "api-op-delete-hearing-policy.xml"
     },
     {
-      operationId     = "delete-resource"
-      format          = "rawxml-link"
-      templateFile    = "api-op-delete-resource-policy.xml"
+      operationId  = "delete-resource"
+      format       = "rawxml-link"
+      templateFile = "api-op-delete-resource-policy.xml"
     },
     {
-      operationId     = "get-listings"
-      format          = "rawxml-link"
-      templateFile    = "api-op-get-listing-policy.xml"
+      operationId  = "get-listings"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-listing-policy.xml"
     },
     {
-      operationId     = "update-resource-location"
-      format          = "rawxml-link"
-      templateFile    = "api-op-update-resource-location-policy.xml"
+      operationId  = "update-resource-location"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-resource-location-policy.xml"
     },
     {
-      operationId     = "update-resource-user"
-      format          = "rawxml-link"
-      templateFile    = "api-op-update-resource-user-policy.xml"
+      operationId  = "update-resource-user"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-resource-user-policy.xml"
     },
     {
-      operationId     = "get-listings"
-      format          = "rawxml-link"
-      templateFile    = "api-op-get-listing-policy.xml"
+      operationId  = "get-listings"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-listing-policy.xml"
     },
     {
-      operationId     = "get-sessions"
-      format          = "rawxml-link"
-      templateFile    = "api-op-get-sessions-policy.xml"
+      operationId  = "get-sessions"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-sessions-policy.xml"
     },
     {
-      operationId     = "update-session"
-      format          = "rawxml-link"
-      templateFile    = "api-op-update-session-policy.xml"
+      operationId  = "update-session"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-session-policy.xml"
     },
     {
-      operationId     = "get-session-by-id"
-      format          = "rawxml-link"
-      templateFile    = "api-op-get-sessions-by-id-policy.xml"
+      operationId  = "get-session-by-id"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-sessions-by-id-policy.xml"
     },
     {
-      operationId     = "get-listing-by-id"
-      format          = "rawxml-link"
-      templateFile    = "api-op-get-listing-by-id-policy.xml"
+      operationId  = "get-listing-by-id"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-listing-by-id-policy.xml"
     },
   ]
 }

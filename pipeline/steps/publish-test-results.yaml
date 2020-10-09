@@ -15,16 +15,16 @@ parameters:
     type: string
 
 steps:
-- task: AzureCLI@2
-  displayName: Upload Blob
-  name: uploadBlob
-  inputs:
-    azureSubscription: ${{ parameters.subscription }}
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      echo "Obtaining storage key..."
-      key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
-      echo "Uploading to blob container"
-      for zip in $(Build.BuildId)/*; do az storage blob upload -n $zip -c ${{ parameters.storageContainer }} -f $zip --account-name ${{ parameters.storageAccount }} --account-key $key; done
-    condition: succeededOrFailed()
+  - task: AzureCLI@2
+    displayName: Upload Blob
+    name: uploadBlob
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        echo "Obtaining storage key..."
+        key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
+        echo "Uploading to blob container"
+        for zip in $(Build.BuildId)/*; do az storage blob upload -n $zip -c ${{ parameters.storageContainer }} -f $zip --account-name ${{ parameters.storageAccount }} --account-key $key; done
+      condition: succeededOrFailed()
