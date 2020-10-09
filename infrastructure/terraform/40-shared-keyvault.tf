@@ -1,6 +1,6 @@
 data "azurerm_key_vault" "infra_key_vault" {
-  name                = var.infra_kv_name
-  resource_group_name = var.infra_kv_rg
+  name                = "hmi-shared-kv-${var.environment}"
+  resource_group_name = "hmi-sharedservices-${var.environment}-rg"
 }
 
 resource "azurerm_key_vault_access_policy" "shared_kv_premissions" {
