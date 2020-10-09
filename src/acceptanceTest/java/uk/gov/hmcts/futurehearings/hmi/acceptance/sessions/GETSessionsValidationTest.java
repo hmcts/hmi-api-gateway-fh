@@ -28,7 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2187")
-public class GETSessionsValidationTest extends SessionsValidationTest {
+class GETSessionsValidationTest extends SessionsValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
