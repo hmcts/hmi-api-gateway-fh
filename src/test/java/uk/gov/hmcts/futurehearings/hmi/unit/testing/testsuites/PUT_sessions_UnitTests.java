@@ -41,6 +41,7 @@ import java.util.Map;
 class PUT_sessions_UnitTests {
 
     static final String CORRECT_UPDATE_SESSIONS_PAYLOAD = "requests/correct-update-sessions-payload.json";
+
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -158,7 +159,7 @@ class PUT_sessions_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(10)
     @DisplayName("Test for correct Request")
     void testUpdateSessionsRequestWithCorrectRequest() throws IOException {
 
