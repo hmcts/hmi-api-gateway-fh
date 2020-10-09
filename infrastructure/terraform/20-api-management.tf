@@ -12,8 +12,13 @@ resource "azurerm_api_management" "hmi_apim" {
   }
 
   virtual_network_type = var.virtual_network_type
-  virtual_network_configuration {
-    subnet_id = var.environment == "sbox" ? data.azurerm_subnet.hmi_apim_subnet.id : null
+
+  dynamic "virtual_network_configuration" {
+    for_each = var.environment == "sbox" ? data.azurerm_subnet.hmi_apim_subnet.id : []
+
+    content {
+      subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
+    }
   }
 
 }
