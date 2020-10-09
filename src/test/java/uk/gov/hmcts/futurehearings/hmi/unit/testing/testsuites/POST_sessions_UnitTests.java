@@ -41,7 +41,6 @@ import java.util.Map;
 class POST_sessions_UnitTests {
 
     private static final String CORRECT_CREATE_SESSIONS_PAYLOAD = "requests/correct-create-sessions-payload.json";
-    private static final String INCORRECT_CREATE_SESSIONS_PAYLOAD = "requests/incorrect-create-sessions-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -160,15 +159,6 @@ class POST_sessions_UnitTests {
 
     @Test
     @Order(10)
-    @DisplayName("Test for Correct Headers with Invalid Payload")
-    void testCreateSessionsWithCorrectHeadersAndInvalidPayload() throws IOException {
-        final String input = givenAPayload(INCORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
-    }
-
-    @Test
-    @Order(11)
     @DisplayName("Test for Correct Headers")
     void testCreateSessionsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);

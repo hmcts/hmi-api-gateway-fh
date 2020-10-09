@@ -41,7 +41,6 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 class DELETE_sessions_UnitTests {
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-request-payload.json";
-    private static final String INCORRECT_DELETE_REQUEST_PAYLOAD = "requests/incorrect-delete-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -163,15 +162,6 @@ class DELETE_sessions_UnitTests {
 
     @Test
     @Order(10)
-    @DisplayName("Test for Correct Headers with Invalid Payload")
-    void testDeleteSessionsRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
-        final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
-    }
-
-    @Test
-    @Order(11)
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteSessionsRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);

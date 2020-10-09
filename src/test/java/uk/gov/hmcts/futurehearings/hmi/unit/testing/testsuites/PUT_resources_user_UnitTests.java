@@ -159,7 +159,7 @@ class PUT_resources_user_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(10)
     @DisplayName("Test for correct Headers")
     void testUpdateUserResourceRequestWithCorrectHeaders() throws IOException {
 
