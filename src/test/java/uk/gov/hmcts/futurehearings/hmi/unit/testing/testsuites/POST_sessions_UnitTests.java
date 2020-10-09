@@ -36,7 +36,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName("POST /sessions - Request Sessions")
+@DisplayName("POST /sessions - Create Sessions")
 @SuppressWarnings("java:S2699")
 class POST_sessions_UnitTests {
 
@@ -69,134 +69,134 @@ class POST_sessions_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testRequestSessionsForInvalidResource() throws IOException {
+    void testCreateSessionsForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedForInvalidResource(input);
+        final Response response = whenCreateSessionsIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    void testRequestSessionsWithMissingContentTypeHeader() throws IOException {
+    void testCreateSessionsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    void testRequestSessionsWithInvalidContentTypeHeader() throws IOException {
+    void testCreateSessionsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    void testRequestSessionsWithMissingAcceptHeader() throws IOException {
+    void testCreateSessionsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    void testRequestSessionsWithInvalidAcceptHeader() throws IOException {
+    void testCreateSessionsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRequestSessionsWithMissingOcpSubKey() throws IOException {
+    void testCreateSessionsWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidOcpSubKey(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidOcpSubKey(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRequestSessionsWithInvalidOcpSubKey()throws IOException {
+    void testCreateSessionsWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidOcpSubKey(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidOcpSubKey(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testRequestSessionsWithMissingHeader(String iteration) throws IOException {
+    void testCreateSessionsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testRequestSessionsWithInvalidHeader(String iteration) throws IOException {
+    void testCreateSessionsWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
-    @Order(18)
+    @Order(10)
     @DisplayName("Test for Correct Headers with Invalid Payload")
-    void testRequestSessionsWithCorrectHeadersAndInvalidPayload() throws IOException {
+    void testCreateSessionsWithCorrectHeadersAndInvalidPayload() throws IOException {
         final String input = givenAPayload(INCORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithCorrectHeaders(input);
+        final Response response = whenCreateSessionsIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
     }
 
     @Test
-    @Order(19)
+    @Order(11)
     @DisplayName("Test for Correct Headers")
-    void testRequestSessionsWithCorrectHeaders() throws IOException {
+    void testCreateSessionsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenRequestSessionsIsInvokedWithCorrectHeaders(input);
+        final Response response = whenCreateSessionsIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
     }
 
-    private Response whenRequestSessionsIsInvokedForInvalidResource(final String input) {
-        return requestSessionsResponseForInvalidResource(sessionsApiRootContext+"post", headersAsMap, targetInstance, input);
+    private Response whenCreateSessionsIsInvokedForInvalidResource(final String input) {
+        return createSessionsResponseForInvalidResource(sessionsApiRootContext+"post", headersAsMap, targetInstance, input);
     }
 
-    private Response whenRequestSessionsIsInvokedWithCorrectHeaders(final String input) {
-        return requestSessionsResponseForCorrectHeaders(sessionsApiRootContext, headersAsMap, targetInstance, input);
+    private Response whenCreateSessionsIsInvokedWithCorrectHeaders(final String input) {
+        return createSessionsResponseForCorrectHeaders(sessionsApiRootContext, headersAsMap, targetInstance, input);
     }
 
-    private Response whenRequestSessionsIsInvokedWithMissingOrInvalidOcpSubKey(final String input) {
-        return requestSessionsResponseForMissingOcpSubKey(sessionsApiRootContext, headersAsMap, targetInstance, input);
+    private Response whenCreateSessionsIsInvokedWithMissingOrInvalidOcpSubKey(final String input) {
+        return createSessionsResponseForMissingOcpSubKey(sessionsApiRootContext, headersAsMap, targetInstance, input);
     }
 
-    private Response whenRequestSessionsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return requestSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext, headersAsMap, targetInstance, input);
+    private Response whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(final String input) {
+        return createSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext, headersAsMap, targetInstance, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response requestSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
@@ -206,7 +206,7 @@ class POST_sessions_UnitTests {
                 .when().post().then().extract().response();
     }
 
-    private Response requestSessionsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createSessionsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
@@ -216,7 +216,7 @@ class POST_sessions_UnitTests {
                 .when().post().then().extract().response();
     }
 
-    private Response requestSessionsResponseForMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createSessionsResponseForMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
@@ -226,7 +226,7 @@ class POST_sessions_UnitTests {
                 .when().post().then().extract().response();
     }
 
-    private Response requestSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
+    private Response createSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
