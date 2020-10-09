@@ -40,9 +40,7 @@ import java.util.Map;
 @SuppressWarnings("java:S2699")
 class DELETE_resources_UnitTests {
 
-
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-request-payload.json";
-    private static final String INCORRECT_DELETE_REQUEST_PAYLOAD = "requests/incorrect-delete-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -162,16 +160,7 @@ class DELETE_resources_UnitTests {
     }
 
     @Test
-    @Order(18)
-    @DisplayName("Test for Correct Headers with Invalid Payload")
-    void testDeleteResourcesRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
-        final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
-    }
-
-    @Test
-    @Order(19)
+    @Order(10)
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
