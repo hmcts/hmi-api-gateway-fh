@@ -2,13 +2,13 @@
    <inbound>
         <base /> 
         <return-response>
-        	<set-status code="201" />
+        	<set-status code="200" />
             <set-header name="Content-Type">
 				<value>application/json</value>
 			</set-header>
             <set-body>@{
                return new JObject(
-                   new JProperty("response code", 201),
+                   new JProperty("response code", 200),
                    new JProperty("description", "The request was received successfully.")
                ).ToString();
                }
