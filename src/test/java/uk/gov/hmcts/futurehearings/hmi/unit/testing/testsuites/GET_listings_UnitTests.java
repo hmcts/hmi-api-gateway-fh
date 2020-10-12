@@ -309,24 +309,16 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(24)
-    @DisplayName("Test for Correct Headers and Parameters - By ID")
-    void testRetrieveListingsByIDRequestWithCorrectHeadersAndParams() {
+    @Order(22)
+    @DisplayName("Test for Correct Headers with No Parameters")
+    void testRetrieveListingsByIDRequestWithCorrectHeadersAndNoParams() {
 
-        final Response response = whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndParams();
+        final Response response = whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
-    }
-
-    private Response whenRetrieveListingsByIDIsInvokedWithAdditionalParam() {
-        return retrieveListingsResponseForCorrectHeadersAndParams(listingsApiRootContext+"/list_id", headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIDRequestIsInvokedForInvalidResource() {
         return retrieveListingsResponseForInvalidResource(listingsApiRootContext+"/list_id"+"/get", headersAsMap, targetInstance);
-    }
-
-    private Response whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndParams() {
-        return retrieveListingsResponseForCorrectHeadersAndParams(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndNoParams() {

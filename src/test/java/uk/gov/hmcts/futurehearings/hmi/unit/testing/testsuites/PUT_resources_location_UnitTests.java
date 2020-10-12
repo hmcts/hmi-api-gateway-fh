@@ -39,7 +39,9 @@ import java.util.Map;
 @DisplayName("PUT /resources/location - Update Location Resource")
 @SuppressWarnings("java:S2699")
 class PUT_resources_location_UnitTests {
+
     static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD = "requests/correct-update-location-resource-payload.json";
+
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -50,7 +52,6 @@ class PUT_resources_location_UnitTests {
     private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
-
 
     @BeforeEach
     void initialiseValues() {
@@ -63,7 +64,6 @@ class PUT_resources_location_UnitTests {
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
         headersAsMap.put("Request-Type", "THEFT");
-
 
     }
 
@@ -159,9 +159,8 @@ class PUT_resources_location_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-
     @Test
-    @Order(11)
+    @Order(10)
     @DisplayName("Test for correct Headers")
     void testUpdateLocationResourceRequestWithCorrectHeaders() throws IOException {
 
