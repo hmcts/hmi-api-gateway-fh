@@ -1,10 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,9 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.restassured.RestAssured;
 import org.apache.http.entity.ContentType;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +40,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class HearingAPIConsumerTest {
 
 
+    public static final String POST_HEARING_REQUEST_MESSAGE_JSON = "/postHearingRequestMessage.json";
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
@@ -47,7 +53,7 @@ class HearingAPIConsumerTest {
 
     public static final String REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-standard-payload.json";
     public static final String REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-mandatory-payload.json";
-    public static final String HEARING_PAYLOAD_SCHEMA_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/postListingRequestMessage.json";
+    public static final String HEARING_PAYLOAD_SCHEMA_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/V1.1.0/postListingRequestMessage.json";
 
     @BeforeEach
     public void initialiseValues() {
@@ -73,7 +79,11 @@ class HearingAPIConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "createCompletePayloadWithIndEntityForRequestHearingAPIPact")
-    void shouldCompletePayloadWithIndForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+    void shouldCompletePayloadWithIndForRequestHearingAPIAndReturn200(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH))),
+                POST_HEARING_REQUEST_MESSAGE_JSON);
         invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
@@ -89,10 +99,15 @@ class HearingAPIConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "createCompletePayloadWithOrgEntityForRequestHearingAPIPact")
-    void shouldCompletePayloadWithOrgForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+    void shouldCompletePayloadWithOrgForRequestHearingAPIAndReturn200(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH))),
+                POST_HEARING_REQUEST_MESSAGE_JSON);
         invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
+
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPact(
@@ -104,10 +119,15 @@ class HearingAPIConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "createStandardPayloadForRequestHearingAPIPact")
-    void shouldStandardPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+    void shouldStandardPayloadForRequestHearingAPIAndReturn200(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))),
+                POST_HEARING_REQUEST_MESSAGE_JSON);
         invokeHearingRequest(mockServer, REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
+
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPact(
@@ -120,7 +140,11 @@ class HearingAPIConsumerTest {
 
     @Test
     @PactTestFor(pactMethod = "createMandatoryPayloadForRequestHearingAPIPact")
-    void shouldMandatoryPayloadForRequestHearingAPIAndReturn200(MockServer mockServer) throws IOException {
+    void shouldMandatoryPayloadForRequestHearingAPIAndReturn200(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH))),
+                POST_HEARING_REQUEST_MESSAGE_JSON);
         invokeHearingRequest(mockServer, REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
