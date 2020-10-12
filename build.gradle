@@ -296,7 +296,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url 'https://jitpack.io'
+        url "https://jitpack.io"
     }
 }
 
@@ -524,8 +524,6 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
-
-    compile group: 'org.everit.json', name: 'org.everit.json.schema', version: '1.5.1'
     //Functional Testing Dependencies - FINISH
 }
 
