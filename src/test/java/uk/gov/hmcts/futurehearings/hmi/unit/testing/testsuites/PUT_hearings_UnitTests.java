@@ -158,7 +158,7 @@ class PUT_hearings_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(10)
     @DisplayName("Test for correct Request")
     void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
 

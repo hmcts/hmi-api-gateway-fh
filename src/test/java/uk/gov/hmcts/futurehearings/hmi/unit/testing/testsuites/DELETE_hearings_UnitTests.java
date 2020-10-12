@@ -42,7 +42,6 @@ import org.springframework.test.context.ActiveProfiles;
 class DELETE_hearings_UnitTests {
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-request-payload.json";
-    private static final String INCORRECT_DELETE_REQUEST_PAYLOAD = "requests/incorrect-delete-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -163,16 +162,7 @@ class DELETE_hearings_UnitTests {
     }
 
     @Test
-    @Order(18)
-    @DisplayName("Test for Correct Headers with Invalid Payload")
-    void testDeleteHearingRequestWithCorrectHeadersAndInvalidPayload() throws IOException {
-        final String input = givenAPayload(INCORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteHearingRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
-    }
-
-    @Test
-    @Order(19)
+    @Order(10)
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
