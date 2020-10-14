@@ -18,6 +18,7 @@
       "caseInterpreterRequiredFlag": true
     },
     "listing": {
+      "listingCourt": "300",
       "listingAutoCreateFlag": true,
       "listingPriority": "1",
       "listingSessionType": "DS",
@@ -26,7 +27,8 @@
       "listingEndDate": "2020-11-13T10:00:00+00:00",
       "listingDuration": 30,
       "listingNumberAttendees": 6,
-      "listingCluster": "TV"
+      "listingCluster": "TV",
+      "listingComments": "Ut in irure Lorem est do laboris qui dolore.\",\n\"Elit esse nulla tempor in sit esse labore sint sint do Lorem id nisi.\",\n\"Laborum incididunt nostrud magna deserunt elit.\",\n\"In occaecat non sint ex est amet ea eiusmod nisi aliqua Lorem ad laboris.\",\n\"Proident velit eu aliquip ad aliquip labore reprehenderit in Lorem voluptate esse."
     }
   }
 }
