@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://www.gov.uk/userRequest.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "userRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "reusable.json#/definitions/meta"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "personIdHMCTS": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "personFirstName": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "personRegistry": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "personLastName": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "personSalutation": {
+              "type": "string",
+              "maxLength": 4
+            },
+            "personRoleId": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "personVenueId": {
+              "type": "string",
+              "maxLength": 8
+            },
+            "personActiveDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "personInactiveDate": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "required": [
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "details"
+      ]
+    }
+  },
+  "required": [
+    "userRequest"
+  ]
+}

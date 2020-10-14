@@ -19,7 +19,7 @@ import org.json.JSONTokener;
 @Slf4j
 public class PayloadValidationFactory {
 
-    public static final String HEARING_PAYLOAD_SCHEMA_DIR_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/V1.1.0";
+    public static final String HEARING_PAYLOAD_SCHEMA_DIR_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/V1.2.0";
 
     private PayloadValidationFactory() {
 
