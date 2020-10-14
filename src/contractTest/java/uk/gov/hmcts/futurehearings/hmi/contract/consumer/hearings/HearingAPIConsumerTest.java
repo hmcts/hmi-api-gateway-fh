@@ -40,20 +40,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class HearingAPIConsumerTest {
 
 
-    public static final String POST_HEARING_REQUEST_MESSAGE_JSON = "/postHearingRequestMessage.json";
+    public static final String POST_HEARING_REQUEST_MESSAGE_JSON = "/hearingRequestMessage.json";
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String PROVIDER_REQUEST_HEARING_API = "/hmi/hearings";
     private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/hmcts/hearings";
 
     private Map<String, String> headersAsMap = new HashMap<>();
-    public static final String REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-entity-ind-payload.json";
-    public static final String REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-entity-org-payload.json";
+    public static final String REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-complete-entities-ind-org-payload.json";
+    public static final String REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-standard-no-entities-org-payload.json";
 
     public static final String REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-standard-payload.json";
     public static final String REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/request-hearing-mandatory-payload.json";
-    public static final String HEARING_PAYLOAD_SCHEMA_PATH = "uk/gov/hmcts/futurehearings/hmi/thirdparty/schema/S&L/V1.1.0/postListingRequestMessage.json";
 
     @BeforeEach
     public void initialiseValues() {
@@ -68,43 +66,44 @@ class HearingAPIConsumerTest {
         headersAsMap.put("Request-Type", "ASSAULT");
     }
 
+
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadWithIndEntityForRequestHearingAPIPact(
+    public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a complete payload for an Individual Sub Entity",
-                REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
+                "Provider confirms request received for a complete payload with 2 Entities(Ind and Org) populated",
+                REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH);
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadWithIndEntityForRequestHearingAPIPact")
-    void shouldCompletePayloadWithIndForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPact")
+    void shouldCompletePayloadWithIndOrgEntitiesForRequestHearingAPIAndReturn200(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
-        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH))),
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_JSON);
-        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_IND_PAYLOAD_JSON_PATH);
+        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadWithOrgEntityForRequestHearingAPIPact(
+    public RequestResponsePact createCompletePayloadWithNoEntitiesForRequestHearingAPIPact(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a complete payload for an Organisation Sub Entity",
-                REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
+                "Provider confirms request received for a complete payload with no Entities populated",
+                REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH);
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadWithOrgEntityForRequestHearingAPIPact")
-    void shouldCompletePayloadWithOrgForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadWithNoEntitiesForRequestHearingAPIPact")
+    void shouldCompletePayloadWithNoEntitiesForRequestHearingAPIAndReturn200(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
-        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH))),
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_JSON);
-        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITY_ORG_PAYLOAD_JSON_PATH);
+        invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
 
