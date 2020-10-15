@@ -67,7 +67,7 @@ class ResourcesByLocationAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a complete payload",
+                "Provider confirms request received for a complete payload For Request Listing",
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH);
     }
 
@@ -87,7 +87,7 @@ class ResourcesByLocationAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a complete payload",
+                "Provider confirms request received for a optional payload For Request Listing",
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH);
     }
 
