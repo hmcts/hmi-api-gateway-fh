@@ -27,18 +27,30 @@
       "listingEndDate": "2000-12-19T11:59:59.374Z",
       "listingNumberAttendees": 6,
       "listingCluster": "TV",
-      "listingDuration": 30
+      "listingDuration": 30,
+      "listingCourt": "300"
     },
-    "entity": {
-      "entityHmiId": "12345",
-      "entityTypeCode": "ORG",
-      "entityRoleCode": "DEF",
-      "entitySubType": {
-        "entityClassCode": "ORG",
-        "entityTitle": "Mr",
-        "entityFirstName": "Joe",
-        "entityLastName": "Bloggs"
+    "entities": [
+      {
+        "entityHmiId": "12345",
+        "entityTypeCode": "IND",
+        "entityRoleCode": "DEF",
+        "entitySubType": {
+          "entityClassCode": "IND",
+          "entityTitle": "Mr",
+          "entityFirstName": "Joe",
+          "entityLastName": "Bloggs"
+        }
+      },
+      {
+        "entityHmiId": "12345",
+        "entityTypeCode": "ORG",
+        "entityRoleCode": "DEF",
+        "entitySubType": {
+          "entityClassCode": "ORG",
+          "entityCompanyName": "Company X"
+        }
       }
-    }
+    ]
   }
 }
