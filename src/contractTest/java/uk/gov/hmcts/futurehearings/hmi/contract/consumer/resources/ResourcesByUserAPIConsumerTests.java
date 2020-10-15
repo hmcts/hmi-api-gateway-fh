@@ -68,12 +68,12 @@ public class ResourcesByUserAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap, builder,
-                "Provider confirms request received for a complete payload for an Resource By User",
+                "Provider confirms request received for a complete payload for an Resource By User - POST",
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
                 HttpMethod.POST,
                 HttpStatus.OK,
-                "Request User Resource API"
+                "Resource User API"
                 );
     }
 
@@ -101,12 +101,12 @@ public class ResourcesByUserAPIConsumerTests {
 
         return buildPactForSnL(headersAsMap,
                 builder,
-                "Provider confirms request received for an optional payload for an Resource By User",
+                "Provider confirms request received for an optional payload for an Resource By User - POST",
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
                 HttpMethod.POST,
                 HttpStatus.OK,
-                "Request User Resource API"
+                "Resource User API"
         );
     }
 
@@ -133,12 +133,12 @@ public class ResourcesByUserAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap, builder,
-                "Provider confirms request received for a complete payload for an Resource By User",
+                "Provider confirms request received for a complete payload for an Resource By User - PUT",
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.NO_CONTENT,
-                "Request User Resource API"
+                "Resource User API"
         );
     }
 
@@ -166,12 +166,12 @@ public class ResourcesByUserAPIConsumerTests {
 
         return buildPactForSnL(headersAsMap,
                 builder,
-                "Provider confirms request received for an optional payload for an Resource By User",
+                "Provider confirms request received for an optional payload for an Resource By User - PUT",
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.NO_CONTENT,
-                "Request User Resource API"
+                "Resource User API"
         );
     }
 

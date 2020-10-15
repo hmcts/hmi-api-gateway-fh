@@ -70,11 +70,11 @@ class HearingAPIConsumerTest {
 
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPact(
+    public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap,builder,
-                "Provider confirms request received for a complete payload with 2 Entities(Ind and Org) populated",
+                "Provider confirms request received for a complete payload with 2 Entities(Ind and Org) populated - POST",
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpMethod.POST,
@@ -83,8 +83,8 @@ class HearingAPIConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPact")
-    void shouldCompletePayloadWithIndOrgEntitiesForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPactPOST")
+    void shouldCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
@@ -98,11 +98,11 @@ class HearingAPIConsumerTest {
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadWithNoEntitiesForRequestHearingAPIPact(
+    public RequestResponsePact createCompletePayloadWithNoEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap,builder,
-                "Provider confirms request received for a complete payload with no Entities populated",
+                "Provider confirms request received for a complete payload with no Entities populated - POST",
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpMethod.POST,
@@ -111,8 +111,8 @@ class HearingAPIConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadWithNoEntitiesForRequestHearingAPIPact")
-    void shouldCompletePayloadWithNoEntitiesForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadWithNoEntitiesForRequestHearingAPIPactPOST")
+    void shouldCompletePayloadWithNoEntitiesForRequestHearingAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
@@ -127,11 +127,11 @@ class HearingAPIConsumerTest {
 
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createStandardPayloadForRequestHearingAPIPact(
+    public RequestResponsePact createStandardPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap,builder,
-                "Provider confirms request received for a standard (only outer elements) payload",
+                "Provider confirms request received for a standard (only outer elements) payload - POST",
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpMethod.POST,
@@ -140,8 +140,8 @@ class HearingAPIConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createStandardPayloadForRequestHearingAPIPact")
-    void shouldStandardPayloadForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createStandardPayloadForRequestHearingAPIPactPOST")
+    void shouldStandardPayloadForRequestHearingAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))),
@@ -156,11 +156,11 @@ class HearingAPIConsumerTest {
 
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPact(
+    public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap,builder,
-                "Provider confirms request received for the most basic mandatory payload",
+                "Provider confirms request received for the most basic mandatory payload - POST",
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpMethod.POST,
@@ -169,8 +169,8 @@ class HearingAPIConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createMandatoryPayloadForRequestHearingAPIPact")
-    void shouldMandatoryPayloadForRequestHearingAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createMandatoryPayloadForRequestHearingAPIPactPOST")
+    void shouldMandatoryPayloadForRequestHearingAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH))),

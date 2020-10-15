@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.resources;
 
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -43,7 +45,7 @@ class ResourcesByLocationAPIConsumerTests {
     private String targetSubscriptionKey;
 
     public static final String POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE = "/locationMessage.json";
-    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/hmcts/resources";
+    private static final String PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH = "/rest/hmcts/resources/locations";
 
     private Map<String, String> headersAsMap = new HashMap<>();
     public static final String REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-complete-payload.json";
@@ -63,70 +65,115 @@ class ResourcesByLocationAPIConsumerTests {
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPact(
+    public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a complete payload For Request Listing",
-                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH);
+        return buildPactForSnL(headersAsMap, builder,
+                "Provider confirms request received for a complete payload For Request Resource Location - POST",
+                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpMethod.POST,
+                HttpStatus.OK,
+                "Resource Location API");
     }
 
     @Test
-    @PactTestFor(pactMethod = "createCompletePayloadRequestResourceLocationAPIPact")
-    void shouldCompletePayloadForRequestResourceLocationAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadRequestResourceLocationAPIPactPOST")
+    void shouldCompletePayloadForRequestResourceLocationAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeHearingRequest(mockServer, REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH);
+        invokeSnLAPI(headersAsMap,
+                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
+                HttpMethod.POST, mockServer,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpStatus.OK);
         Assertions.assertTrue(true);
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPact(
+    public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForRequestHearing(builder,
-                "Provider confirms request received for a optional payload For Request Listing",
-                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH);
+        return buildPactForSnL(headersAsMap, builder,
+                "Provider confirms request received for a optional payload For Request Resource Location - POST",
+                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpMethod.POST,
+                HttpStatus.OK,
+                "Resource Location API");
     }
 
     @Test
-    @PactTestFor(pactMethod = "createOptionalPayloadRequestResourceLocationAPIPact")
-    void shouldOptionalPayloadForRequestResourceLocationAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createOptionalPayloadRequestResourceLocationAPIPactPOST")
+    void shouldOptionalPayloadForRequestResourceLocationAPIPOST(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeHearingRequest(mockServer, REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH);
+        invokeSnLAPI(headersAsMap,
+                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
+                HttpMethod.POST, mockServer,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpStatus.OK);
         Assertions.assertTrue(true);
     }
 
-    private RequestResponsePact buildPactForRequestHearing(final PactDslWithProvider builder,
-                                                           final String pactDescription,
-                                                           final String requestHearingMandatoryPayloadJsonPath) throws IOException {
-        return builder
-                .given("Request Hearing API")
-                .uponReceiving(pactDescription)
-                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .method(HttpMethod.POST.toString())
-                .headers(headersAsMap)
-                .body(readFileContents(requestHearingMandatoryPayloadJsonPath), ContentType.APPLICATION_JSON)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .toPact();
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
+    public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPactPUT(
+            PactDslWithProvider builder) throws IOException {
+
+        return buildPactForSnL(headersAsMap, builder,
+                "Provider confirms request received for a complete payload For Request Resource Location - PUT",
+                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpMethod.PUT,
+                HttpStatus.OK,
+                "Resource Location API");
     }
 
-    private void invokeHearingRequest(final MockServer mockServer,
-                                      final String requestHearingPayload) throws IOException {
-        RestAssured
-                .given()
-                .headers(headersAsMap)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(readFileContents(requestHearingPayload))
-                .when()
-                .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
-                .then()
-                .statusCode(HttpStatus.OK.value());
+    @Test
+    @PactTestFor(pactMethod = "createCompletePayloadRequestResourceLocationAPIPactPUT")
+    void shouldCompletePayloadForRequestResourceLocationAPIPUT(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
+                POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
+        invokeSnLAPI(headersAsMap,
+                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
+                HttpMethod.PUT, mockServer,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpStatus.OK);
+        Assertions.assertTrue(true);
     }
+
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
+    public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPactPUT(
+            PactDslWithProvider builder) throws IOException {
+
+        return buildPactForSnL(headersAsMap, builder,
+                "Provider confirms request received for a optional payload For Request Resource Location - PUT",
+                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpMethod.PUT,
+                HttpStatus.OK,
+                "Resource Location API");
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createOptionalPayloadRequestResourceLocationAPIPactPUT")
+    void shouldOptionalPayloadForRequestResourceLocationAPIPUT(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
+                POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
+        invokeSnLAPI(headersAsMap,
+                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
+                HttpMethod.PUT, mockServer,
+                PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
+                HttpStatus.OK);
+        Assertions.assertTrue(true);
+    }
+
 }

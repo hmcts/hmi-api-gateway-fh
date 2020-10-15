@@ -23,7 +23,7 @@ public class PACTFactory {
                                                       final HttpStatus httpStatus,
                                                       final String apiState) throws IOException {
         return builder
-                .given("Request Hearing API")
+                .given(apiState)
                 .uponReceiving(pactDescription)
                 .path(caseHQAPIPath)
                 .method(httpMethod.toString())
