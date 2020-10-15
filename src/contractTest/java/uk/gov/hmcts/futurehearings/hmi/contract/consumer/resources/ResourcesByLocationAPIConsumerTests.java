@@ -17,6 +17,7 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.restassured.RestAssured;
+import org.apache.http.entity.ContentType;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -26,31 +27,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.apache.http.entity.ContentType;
 import org.springframework.http.MediaType;
-
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ActiveProfiles("contract")
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-public class ResourcesByUserAPIConsumerTests {
+class ResourcesByLocationAPIConsumerTests {
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String PROVIDER_REQUEST_HEARING_API = "/hmi/resources/user/1234";
-    private static final String PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH = "/hmcts/resources/user";
+    public static final String POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE = "/locationMessage.json";
+    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/hmcts/resources";
 
     private Map<String, String> headersAsMap = new HashMap<>();
-
-    public static final String RESOURCES_USER_REQUEST_SCHEMA_JSON = "/userMessage.json";
-    public static final String RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/resources-TEMPLATE-user-payload.json";
-    public static final String RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/resources-TEMPLATE-user-empty-payload.json";
+    public static final String REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-complete-payload.json";
+    public static final String REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-optional-payload.json";
 
     @BeforeEach
     public void initialiseValues() {
@@ -62,57 +59,57 @@ public class ResourcesByUserAPIConsumerTests {
         headersAsMap.put("Destination-System", "S&L");
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
+        headersAsMap.put("Request-Type", "THEFT");
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createOptionalPayloadForRequestResourceByUserAPIPact(
+    public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForUserResource(builder,
-                "Provider confirms request received for a complete payload for an Resource By User",
-                RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH);
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a complete payload",
+                REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH);
     }
 
     @Test
-    @PactTestFor(pactMethod = "createOptionalPayloadForRequestResourceByUserAPIPact")
-    void shouldOptionalPayloadForRequestResourceByUserAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createCompletePayloadRequestResourceLocationAPIPact")
+    void shouldCompletePayloadForRequestResourceLocationAPIAndReturn200(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
-        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH))),
-                RESOURCES_USER_REQUEST_SCHEMA_JSON);
-        invokeUserResourceRequest(mockServer, RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH);
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
+                POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
+        invokeHearingRequest(mockServer, REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createEmptyPayloadWithDetailsForRequestResourceByUserAPIPact(
+    public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForUserResource(builder,
-                "Provider confirms request received for an optional payload for an Resource By User",
-                RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH);
+        return buildPactForRequestHearing(builder,
+                "Provider confirms request received for a complete payload",
+                REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH);
     }
 
     @Test
-    @PactTestFor(pactMethod = "createEmptyPayloadWithDetailsForRequestResourceByUserAPIPact")
-    void shouldEmptyPayloadWithDetailsForRequestResourceByUserAPIAndReturn200(MockServer mockServer)
+    @PactTestFor(pactMethod = "createOptionalPayloadRequestResourceLocationAPIPact")
+    void shouldOptionalPayloadForRequestResourceLocationAPIAndReturn200(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
-        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH))),
-                RESOURCES_USER_REQUEST_SCHEMA_JSON);
-        invokeUserResourceRequest(mockServer, RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH);
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
+                POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
+        invokeHearingRequest(mockServer, REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
 
-    private RequestResponsePact buildPactForUserResource(final PactDslWithProvider builder,
+    private RequestResponsePact buildPactForRequestHearing(final PactDslWithProvider builder,
                                                            final String pactDescription,
                                                            final String requestHearingMandatoryPayloadJsonPath) throws IOException {
         return builder
-                .given("Request User Resource API")
+                .given("Request Hearing API")
                 .uponReceiving(pactDescription)
-                .path(PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH)
-                .method(HttpMethod.PUT.toString())
+                .path(PROVIDER_REQUEST_SnL_HEARING_API_PATH)
+                .method(HttpMethod.POST.toString())
                 .headers(headersAsMap)
                 .body(readFileContents(requestHearingMandatoryPayloadJsonPath), ContentType.APPLICATION_JSON)
                 .willRespondWith()
@@ -120,7 +117,7 @@ public class ResourcesByUserAPIConsumerTests {
                 .toPact();
     }
 
-    private void invokeUserResourceRequest(final MockServer mockServer,
+    private void invokeHearingRequest(final MockServer mockServer,
                                       final String requestHearingPayload) throws IOException {
         RestAssured
                 .given()
@@ -128,9 +125,8 @@ public class ResourcesByUserAPIConsumerTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(readFileContents(requestHearingPayload))
                 .when()
-                .put(mockServer.getUrl() + PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH)
+                .post(mockServer.getUrl() + PROVIDER_REQUEST_SnL_HEARING_API_PATH)
                 .then()
                 .statusCode(HttpStatus.OK.value());
     }
 }
-
