@@ -49,8 +49,8 @@ public class ResourcesByUserAPIConsumerTests {
     private Map<String, String> headersAsMap = new HashMap<>();
 
     public static final String RESOURCES_USER_REQUEST_SCHEMA_JSON = "/userMessage.json";
-    public static final String RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/resources-TEMPLATE-user-payload.json";
-    public static final String RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/resources-TEMPLATE-user-empty-payload.json";
+    public static final String RESOURCES_USER_REQUEST_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-user-complete-payload.json";
+    public static final String RESOURCES_USER_REQUEST_EMPTY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-user-optional-payload.json";
 
     @BeforeEach
     public void initialiseValues() {
