@@ -1,0 +1,10 @@
+{
+  "locationRequest": {
+    "meta": {
+      "transactionIdHMCTS": "C_FEFC2424-32A6-4B3A-BD97-023296C7F76D",
+      "timestamp": "2000-12-19T11:59:59.374Z"
+    },
+    "location": {
+    }
+  }
+}
