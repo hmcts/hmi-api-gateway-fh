@@ -38,7 +38,7 @@ import org.springframework.http.MediaType;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-public class ResourcesAPIConsumerTests {
+public class ResourcesByUserAPIConsumerTests {
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;

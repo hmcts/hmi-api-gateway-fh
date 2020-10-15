@@ -40,10 +40,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class HearingAPIConsumerTest {
 
 
-    public static final String POST_HEARING_REQUEST_MESSAGE_JSON = "/hearingRequestMessage.json";
+
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
+    public static final String POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE = "/hearingRequestMessage.json";
     private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/hmcts/hearings";
 
     private Map<String, String> headersAsMap = new HashMap<>();
@@ -82,7 +83,7 @@ class HearingAPIConsumerTest {
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
-                POST_HEARING_REQUEST_MESSAGE_JSON);
+                POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
@@ -102,7 +103,7 @@ class HearingAPIConsumerTest {
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
-                POST_HEARING_REQUEST_MESSAGE_JSON);
+                POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeHearingRequest(mockServer, REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
@@ -122,7 +123,7 @@ class HearingAPIConsumerTest {
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))),
-                POST_HEARING_REQUEST_MESSAGE_JSON);
+                POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeHearingRequest(mockServer, REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
@@ -143,7 +144,7 @@ class HearingAPIConsumerTest {
             throws IOException, URISyntaxException, JSONException {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH))),
-                POST_HEARING_REQUEST_MESSAGE_JSON);
+                POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeHearingRequest(mockServer, REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH);
         Assertions.assertTrue(true);
     }
