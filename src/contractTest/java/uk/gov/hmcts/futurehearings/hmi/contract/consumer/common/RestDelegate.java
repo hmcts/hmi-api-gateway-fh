@@ -33,6 +33,17 @@ public class RestDelegate {
                         .then()
                         .statusCode(httpStatus.value());
                 break;
+            case PUT:
+                RestAssured
+                        .given()
+                        .headers(headersAsMap)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .body(readFileContents(requestPayloadPath))
+                        .when()
+                        .put(mockServer.getUrl() + apiURIPath)
+                        .then()
+                        .statusCode(httpStatus.value());
+                break;
             default:
                 break;
         }
