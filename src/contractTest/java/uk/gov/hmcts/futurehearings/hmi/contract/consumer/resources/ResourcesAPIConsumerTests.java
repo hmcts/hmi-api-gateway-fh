@@ -37,7 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-class ResourcesAPIConsumerTests {
+class ResourcesByLocationAPIConsumerTests {
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
