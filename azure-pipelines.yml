@@ -72,7 +72,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
       custom_domain: hmi-apim-svc-test.azure-api.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
         command: test
@@ -101,7 +101,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
       custom_domain: hmi-apim-svc-test.azure-api.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
 variables:
