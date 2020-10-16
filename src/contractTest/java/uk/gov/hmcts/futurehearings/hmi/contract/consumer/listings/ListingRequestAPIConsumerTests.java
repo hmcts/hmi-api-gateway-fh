@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.contract.consumer.listing;
+package uk.gov.hmcts.futurehearings.hmi.contract.consumer.listings;
 
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
@@ -47,9 +47,10 @@ public class ListingRequestAPIConsumerTests {
     private Map<String, String> headersAsMap = new HashMap<>();
 
     public static final String RESOURCES_LISTING_REQUEST_SCHEMA_JSON = "/listingRequestMessage.json";
-    public static final String RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listing/request-listing-complete-payload-with-entities.json";
-    public static final String RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listing/request-listing-mandatory-payload.json";
-    public static final String RESOURCES_LISTING_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listing/request-listing-optional-payload-without-entities.json";
+    public static final String RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-complete-payload-with-entities.json";
+    public static final String RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-mandatory-payload.json";
+    public static final String RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-no-entities-payload.json";
+    public static final String RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-payload.json";
 
     @BeforeEach
     public void initialiseValues() {
@@ -130,13 +131,13 @@ public class ListingRequestAPIConsumerTests {
     }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
-    public RequestResponsePact createOptionalPUTPayloadForRequestListingPact(
+    public RequestResponsePact createStandardWithNoEntitiesPUTPayloadForRequestListingPact(
             PactDslWithProvider builder) throws IOException {
 
         return buildPactForSnL(headersAsMap,
                 builder,
-                "Provider confirms request received for an optional payload for an Request Listing - PUT",
-                RESOURCES_LISTING_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
+                "Provider confirms request received for an standard with no entities payload for an Request Listing - PUT",
+                RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
                 PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.ACCEPTED,
@@ -145,15 +146,48 @@ public class ListingRequestAPIConsumerTests {
     }
 
     @Test
-    @PactTestFor(pactMethod = "createOptionalPUTPayloadForRequestListingPact")
-    void shouldPUTOptionalPayloadForRequestListingAPI(MockServer mockServer)
+    @PactTestFor(pactMethod = "createStandardWithNoEntitiesPUTPayloadForRequestListingPact")
+    void shouldPUTStandardWithNoEntitiesPayloadForRequestListingAPI(MockServer mockServer)
             throws IOException, URISyntaxException, JSONException {
 
-        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH))),
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH))),
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                RESOURCES_LISTING_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
+                RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
+                HttpMethod.PUT,
+                mockServer,
+                PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH,
+                HttpStatus.ACCEPTED);
+
+        Assertions.assertTrue(true);
+    }
+
+    @Pact(provider = "SandL_API", consumer = "HMI_API")
+    public RequestResponsePact createStandardPUTPayloadForRequestListingPact(
+            PactDslWithProvider builder) throws IOException {
+
+        return buildPactForSnL(headersAsMap,
+                builder,
+                "Provider confirms request received for an standard payload for an Request Listing - PUT",
+                RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
+                PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH,
+                HttpMethod.PUT,
+                HttpStatus.ACCEPTED,
+                "Resource User API"
+        );
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "createStandardPUTPayloadForRequestListingPact")
+    void shouldStandardPUTPayloadForRequestListingAPI(MockServer mockServer)
+            throws IOException, URISyntaxException, JSONException {
+
+        validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH))),
+                RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
+
+        invokeSnLAPI(headersAsMap,
+                RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
                 PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH,
