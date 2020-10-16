@@ -97,6 +97,13 @@ parameters:
       - name: CodeQualityTest
         command: sonarqube
 
+    - name: stg
+      subscription: DTS-SHAREDSERVICES-STG
+      group: HMI-APIM-BUILD-STG
+      custom_domain: hmi-apim-svc-test.azure-api.net
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+
 variables:
   - group: HMI-APIM-Common
 
