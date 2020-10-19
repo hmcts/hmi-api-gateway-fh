@@ -27,9 +27,9 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
+@Disabled("To be enabled when the real OAuth Implementation is ready for Testing....")
 @SuppressWarnings("java:S2187")
-class OAuthTest {
+class OAuthTokenGeneratorTest {
 
     @Value("${token_apiURL}")
     private String token_apiURL;
@@ -90,20 +90,7 @@ class OAuthTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, scope);
 
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(httpStatus.value())
-                .given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
+        callTokenGeneratorEndpoint(bodyForToken, httpStatus);
     }
 
     @ParameterizedTest(name = "Invalid grant Type - Param : {0}")
@@ -115,20 +102,7 @@ class OAuthTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 value, clientID, clientSecret, scope);
 
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(HttpStatus.BAD_REQUEST.value())
-                .given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
+        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
     }
 
     @ParameterizedTest(name = "Invalid client id - Param : {0}")
@@ -140,20 +114,7 @@ class OAuthTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, value, clientSecret, scope);
 
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(HttpStatus.BAD_REQUEST.value())
-                .given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
+        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
     }
 
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
@@ -165,20 +126,7 @@ class OAuthTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, value, scope);
 
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(HttpStatus.UNAUTHORIZED.value())
-                .given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
+        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.UNAUTHORIZED);
     }
 
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
@@ -190,10 +138,14 @@ class OAuthTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, value);
 
+        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
+    }
+
+    private void callTokenGeneratorEndpoint(final String bodyForToken, final HttpStatus badRequest) {
         log.debug("The value of the Body : " + bodyForToken);
         log.debug("The value of the Target URL : " + token_apiURL);
 
-        Response response = expect().that().statusCode(HttpStatus.BAD_REQUEST.value())
+        Response response = expect().that().statusCode(badRequest.value())
                 .given()
                 .body(bodyForToken)
                 .contentType(ContentType.URLENC)
