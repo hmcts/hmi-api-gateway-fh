@@ -33,9 +33,6 @@ public class TestUtilities {
 
         return response.jsonPath().getString("access_token");
 
-        //client id: 4f031a30-e71e-43e0-a7fe-3dc598e8ee65
-        //secret: hhA_Yb1uLL.1rG_m8v5YxlpK94ld1r0gv-
-
     }
 
 }
