@@ -7,3 +7,11 @@ schedulesApiRootContext: /hmi/schedules
 resourcesApiRootContext: /hmi/resources
 sessionsApiRootContext: /hmi/sessions
 listingsApiRootContext: /hmi/listings
+secureApiRootContext: /hmi/secure
+grantType: client_credentials
+clientID: 9912f05e-21f6-4a6a-9ca1-db101306db45
+clientSecret: 2FMv~.IwICb5XnpATc47t1A.-8-Uh~63Hj
+tokenURL: https://login.microsoftonline.com/4cdea387-4a31-46b1-b99a-c9e41aa989a3/oauth2/v2.0/token
+scope: api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default
+invalidClientID: 4f031a30-e71e-43e0-a7fe-3dc598e8ee65
+invalidClientSecret: hhA_Yb1uLL.1rG_m8v5YxlpK94ld1r0gv-
