@@ -199,6 +199,7 @@ task acceptance(type: Test) {
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
     include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
+    //include "uk/gov/hmcts/futurehearings/hmi/acceptance/common/test/security/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -210,7 +211,6 @@ task runAndPublishConsumerPactTests(type: Test) {
     logger.lifecycle("Runs pact Tests")
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
-
 }
 
 runAndPublishConsumerPactTests.finalizedBy pactPublish
