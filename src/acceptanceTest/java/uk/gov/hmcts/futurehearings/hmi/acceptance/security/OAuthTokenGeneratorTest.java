@@ -64,20 +64,7 @@ class OAuthTokenGeneratorTest {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, scope);
 
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(200).
-                given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
+        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.OK);
     }
 
     @ParameterizedTest(name = "TenantId negative scenarios - Param : {0}")
