@@ -1,0 +1,26 @@
+<policies>
+    <inbound>
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Access denied due to invalid OAuth information">
+            <openid-config url="https://sts.windows.net/4cdea387-4a31-46b1-b99a-c9e41aa989a3/.well-known/openid-configuration" />
+            <audiences>
+                <audience>api://be6f8454-a584-41f7-bd74-ea6c4032c3a4</audience>
+            </audiences>
+            <required-claims>
+                <claim name="roles" match="all">
+                    <value>hmiGateway</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+        <set-backend-service base-url="https://www.hmcts.com/oauth/get-secure" />
+        <mock-response status-code="200" content-type="application/json" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
