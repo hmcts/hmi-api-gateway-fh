@@ -1,5 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
+
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -17,18 +21,12 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.Map;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
-
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("GET /Secure - Retrieve Secure")
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2699")
 class GET_secure_UnitTests {
 
@@ -80,7 +78,6 @@ class GET_secure_UnitTests {
                                             .header("Ocp-Apim-Subscription-Key", targetSubscriptionKey)
                                             .baseUri(targetInstance)
                                             .basePath(secureApiRootContext)
-                                            .log().all()
                                     .when()
                                             .get();
 
