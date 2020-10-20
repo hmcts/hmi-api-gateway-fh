@@ -72,7 +72,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
       custom_domain: hmi-apim-svc-test.azure-api.net
-      # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
         command: test
@@ -101,7 +101,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
       custom_domain: hmi-apim-svc-test.azure-api.net
-      # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
 variables:
@@ -135,20 +135,20 @@ stages:
           variables:
             resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
-    - template: pipeline/jobs/create-storage.yaml
-      parameters:
-        displayName: Create Storage for Test Results
-        subscription: ${{ environment.subscription }}
-        dependsOn: Terraform
-        resourceGroup: $(resourceGroup)
-        storageAccount: $(storageAccount)
-        variables:
-          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-          storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+    - ${{ if environment.tests_gradle }}:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: ${{ environment.subscription }}
+          dependsOn: Terraform
+          resourceGroup: $(resourceGroup)
+          storageAccount: $(storageAccount)
+          variables:
+            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+            storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
-
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
