@@ -4,7 +4,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.expect;
 import org.springframework.util.ResourceUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
