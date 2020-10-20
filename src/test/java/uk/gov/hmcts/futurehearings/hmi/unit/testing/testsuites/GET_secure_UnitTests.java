@@ -65,6 +65,12 @@ class GET_secure_UnitTests {
         @Value("${expiredAccessToken}")
         private String expiredAccessToken;
 
+        @Value("${invalidTokenURL}")
+        private String invalidTokenURL;
+
+        @Value("${invalidScope}")
+        private String invalidScope;
+
         @Test
         @Order(1)
         @DisplayName("Test for Valid OAuth Token")
@@ -90,7 +96,7 @@ class GET_secure_UnitTests {
         @DisplayName("Test for Invalid Role in OAuth Token")
         void testSecureRequestForInvalidOAuthTokenRole() {
 
-                accessToken = TestUtilities.getToken(grantType,invalidClientID,invalidClientSecret,tokenURL,scope);
+                accessToken = TestUtilities.getToken(grantType,invalidClientID,invalidClientSecret,invalidTokenURL,invalidScope);
                 Response response =
                                         given()
                                                 .auth()
@@ -108,7 +114,6 @@ class GET_secure_UnitTests {
         @Order(3)
         @DisplayName("Test for Invalid OAuth Token")
         void testSecureRequestForInvalidOAuthToken() {
-
 
                 Response response =
                                         given()
