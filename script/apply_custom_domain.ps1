@@ -21,6 +21,10 @@ if (!(Get-Module -Name Az.ApiManagement)){
         Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
     }
 
+Write-Host "Obtaining Key Vault Permissions"
+$sp = (Get-AzContext).Account.Id
+$spid = (Get-AzADServicePrincipal -ApplicationId $sp)
+Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultId -ObjectId $(getspid.spid) -PermissionsToSecrets Backup,Delete,Get,List,Purge,Recover,Restore,Set
 $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 try {
