@@ -1,8 +1,8 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-hearing" />
-        <mock-response status-code="200" content-type="application/json" />
+        <rewrite-uri template="/delete-hearing" copy-unmatched-params="true" />
+        <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
     </inbound>
     <backend>
         <base />
