@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled("To be enabled when the real OAuth Implementation is ready for Testing....")
+@DisplayName("Test to Check the JWT Token Generator for OAuth, Note : In case of tests breaking - The client secret may change once a year")
 @SuppressWarnings("java:S2187")
 class OAuthTokenGeneratorTest {
 
