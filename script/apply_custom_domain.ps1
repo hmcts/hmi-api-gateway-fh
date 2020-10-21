@@ -24,7 +24,7 @@ if (!(Get-Module -Name Az.ApiManagement)){
 Write-Host "Obtaining Key Vault Permissions"
 $sp = (Get-AzContext).Account.Id
 $spid = (Get-AzADServicePrincipal -ApplicationId $sp)
-Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultId -ObjectId $spid -PermissionsToSecrets Backup,Delete,Get,List,Purge,Recover,Restore,Set
+Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultId -ObjectId $spid.Id -PermissionsToSecrets Backup,Delete,Get,List,Purge,Recover,Restore,Set
 $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 try {
