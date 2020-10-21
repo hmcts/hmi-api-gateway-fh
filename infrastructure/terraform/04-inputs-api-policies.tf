@@ -94,6 +94,11 @@ variable "api_policies" {
       operationId     = "delete-session"
       format          = "rawxml-link"
       templateFile    = "api-op-delete-session-policy.xml"
+    },
+    {
+      operationId     = "test-wiremock-connection"
+      format          = "rawxml-link"
+      templateFile    = "api-op-test-wiremock-policy.xml"
     }
   ]
 }
