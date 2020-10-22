@@ -106,7 +106,7 @@ variable "api_policies" {
       templateFile    = "api-op-create-resource-location-policy.xml"
     },
     {
-      operationId     = "create-resource-location"
+      operationId     = "create-resource-user"
       format          = "rawxml-link"
       templateFile    = "api-op-create-resource-user-policy.xml"
     }
