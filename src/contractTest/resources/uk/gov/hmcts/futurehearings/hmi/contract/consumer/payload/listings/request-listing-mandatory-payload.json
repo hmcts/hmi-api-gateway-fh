@@ -1,23 +1,20 @@
 {
-  "hearingRequest": {
+  "listingRequest": {
     "meta": {
       "transactionIdHMCTS": "C_FEFC2424-32A6-4B3A-BD97-023296C7F76D",
-      "timestamp": "2020-11-13T20:20:39+00:00"
+      "timestamp": "2000-12-19T11:59:59.374Z"
     },
     "_case": {
       "caseIdHMCTS": "LA5f6b137a19a1502ff13dd339",
-      "caseListingRequestId": "HMI97b0fc7",
       "caseTitle": "Gill Vs Stanley",
       "caseJurisdiction": "CRI",
-      "caseSubType": "79",
       "caseCourt": "9",
       "caseRegistered": "2015-12-11T19:28:30.45Z"
     },
     "listing": {
-      "listingPriority": "1",
-      "listingSessionType": "DS",
       "listingType": "DECNIS",
-      "listingCluster": "TV"
+      "listingStartTime": "11:59:59.374Z",
+      "listingDuration": 4
     }
   }
 }
