@@ -7,6 +7,7 @@ import java.util.Map;
 
 import au.com.dius.pact.consumer.MockServer;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,16 +15,16 @@ import org.springframework.http.MediaType;
 public class RestDelegate {
     private RestDelegate () {}
 
-    public static final void invokeSnLAPI (final Map<String, String> headersAsMap,
-                                           final String requestPayloadPath,
-                                           final HttpMethod httpMethod,
-                                           final MockServer mockServer,
-                                           final String apiURIPath,
-                                           final HttpStatus httpStatus) throws IOException {
+    public static final Response invokeSnLAPI (final Map<String, String> headersAsMap,
+                                               final String requestPayloadPath,
+                                               final HttpMethod httpMethod,
+                                               final MockServer mockServer,
+                                               final String apiURIPath,
+                                               final HttpStatus httpStatus) throws IOException {
 
         switch (httpMethod) {
             case POST:
-                RestAssured
+                return RestAssured
                         .given()
                         .headers(headersAsMap)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -31,10 +32,10 @@ public class RestDelegate {
                         .when()
                         .post(mockServer.getUrl() + apiURIPath)
                         .then()
-                        .statusCode(httpStatus.value());
-                break;
+                        .statusCode(httpStatus.value())
+                        .extract().response();
             case PUT:
-                RestAssured
+                return RestAssured
                         .given()
                         .headers(headersAsMap)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -42,11 +43,21 @@ public class RestDelegate {
                         .when()
                         .put(mockServer.getUrl() + apiURIPath)
                         .then()
-                        .statusCode(httpStatus.value());
-                break;
+                        .statusCode(httpStatus.value())
+                        .extract().response();
+            case GET:
+                return RestAssured
+                        .given()
+                        .headers(headersAsMap)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .when()
+                        .get(mockServer.getUrl() + apiURIPath)
+                        .then()
+                        .statusCode(httpStatus.value())
+                        .extract().response();
             default:
-                break;
-        }
+                return null;
 
+        }
     }
 }
