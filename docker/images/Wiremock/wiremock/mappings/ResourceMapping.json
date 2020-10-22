@@ -7,7 +7,7 @@
   "response":
   {
     "status": 200,
-    "bodyFileName" : "common/standard-success-response.json",
+    "body" : "{\n  \"response code \": 200,\n  \"description\": \"The request was received successfully.\"\n}",
     "headers":
     {
       "Content-Type" : "application/json"

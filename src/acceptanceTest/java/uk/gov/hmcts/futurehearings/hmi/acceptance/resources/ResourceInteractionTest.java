@@ -64,8 +64,8 @@ public class ResourceInteractionTest {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
         //wireMock = new WireMock(mockServerHost, Integer.parseInt(mockServerPort));
-        wireMock = new WireMock("localhost", Integer.parseInt("8080"));
-        wireMock.resetRequests();
+        //wireMock = new WireMock("localhost", Integer.parseInt("8080"));
+        //wireMock.resetRequests();
 
         /*super.initialiseValues();
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
