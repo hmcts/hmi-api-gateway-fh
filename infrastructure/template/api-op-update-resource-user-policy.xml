@@ -1,8 +1,8 @@
 <policies>
    <inbound>
-        <base />
-       <rewrite-uri template="/casehqapi/rest/hmcts/resources/users/{userIdCaseHQ}" copy-unmatched-params="true"/>
-       <set-backend-service base-url="http://hmi-wiremock.sandbox.platform.hmcts.net/casehqapi/rest/hmcts/resources/users" />
+       <base />
+       <rewrite-uri template="/casehqapi/rest/hmcts/resources/users/{userIdCaseHQ}" copy-unmatched-params="true" />
+       <set-backend-service base-url="http://hmi-wiremock.sandbox.platform.hmcts.net" />
     </inbound>
     <backend>
         <base />
