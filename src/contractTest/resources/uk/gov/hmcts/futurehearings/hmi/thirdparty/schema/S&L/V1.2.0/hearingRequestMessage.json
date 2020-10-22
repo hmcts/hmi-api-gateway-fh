@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://www.gov.uk/hearingRequest.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "hearingRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "reusable.json#/definitions/meta"
+        },
+        "_case": {
+          "$ref": "reusable.json#/definitions/_case"
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "reusable.json#/definitions/entity"
+          }
+        },
+        "listing": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "listingAutoCreateFlag": {
+              "type": "boolean"
+            },
+            "listingStartDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "listingEndDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "listingDuration": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "listingSessionType": {
+              "type": "string",
+              "maxLength": 10
+            },
+            "listingType": {
+              "type": "string"
+            },
+            "listingPriority": {
+              "type": "string"
+            },
+            "listingNumberAttendees": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "listingCluster": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "listingCourt": {
+              "type": "string",
+              "maxLength": 8
+            },
+            "listingComments": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "listingType",
+            "listingPriority",
+            "listingSessionType",
+            "listingCourt"
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "_case",
+        "listing"
+      ]
+    }
+  },
+  "required": [
+    "hearingRequest"
+  ]
+}

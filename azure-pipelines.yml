@@ -8,45 +8,45 @@ parameters:
   - name: environments
     type: object
     default:
-#    - name: sbox
-#      subscription: DTS-SHAREDSERVICES-SBOX
-#      group: HMI-APIM-BUILD-SBOX
-#      registry: DTS-SS-PRIVATE-SBOX
-#      custom_domain: hmi-apim.sandbox.platform.hmcts.net
-#      tests_gradle:
-#      - name: UnitTest
-#        command: test
-#        logLevel: info
-#        serenity: true
-#      - name: SmokeTest
-#        command: smoke
-#        logLevel: debug
-#        serenity: false
-#        dependsOn: UnitTest
-#      - name: AcceptanceTest
-#        command: acceptance
-#        logLevel: debug
-#        serenity: false
-#        dependsOn: SmokeTest
-#      - name: FunctionalTest
-#        command: functional
-#        logLevel: info
-#        serenity: true
-#        dependsOn: AcceptanceTest
-#      tests_security:
-#      - name: ApiZapScan
-#        containerRegistry: ssprivatesbox.azurecr.io
-#        repository: hmi/apim-tests-owasp
-#        testUrl:
-#        - name: API1
-#          target: https://www.example.com/openapi.json
-#        - name: API2
-#          target: https://www.example.com/openapitest1.json
-#        - name: API3
-#          target: https://www.example.com/openapitest2.json
-#      tests_sonarcloud:
-#      - name: CodeQualityTest
-#        command: sonarqube
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+      registry: DTS-SS-PRIVATE-SBOX
+      custom_domain: hmi-apim.sandbox.platform.hmcts.net
+      tests_gradle:
+      - name: UnitTest
+        command: test
+        logLevel: info
+        serenity: true
+      - name: SmokeTest
+        command: smoke
+        logLevel: debug
+        serenity: false
+        dependsOn: UnitTest
+      - name: AcceptanceTest
+        command: acceptance
+        logLevel: debug
+        serenity: false
+        dependsOn: SmokeTest
+      - name: FunctionalTest
+        command: functional
+        logLevel: info
+        serenity: true
+        dependsOn: AcceptanceTest
+      tests_security:
+      - name: ApiZapScan
+        containerRegistry: ssprivatesbox.azurecr.io
+        repository: hmi/apim-tests-owasp
+        testUrl:
+        - name: API1
+          target: https://www.example.com/openapi.json
+        - name: API2
+          target: https://www.example.com/openapitest1.json
+        - name: API3
+          target: https://www.example.com/openapitest2.json
+      tests_sonarcloud:
+      - name: CodeQualityTest
+        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
