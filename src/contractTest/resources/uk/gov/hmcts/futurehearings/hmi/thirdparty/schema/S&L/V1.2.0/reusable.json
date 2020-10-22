@@ -1,0 +1,159 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://www.gov.uk/reusable.json",
+	"definitions": {
+		"meta": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"transactionIdHMCTS": {
+					"type": "string",
+					"maxLength": 40
+				},
+				"timestamp": {
+					"type": "string",
+					"format": "date-time"
+				}
+			},
+			"required": [
+				"transactionIdHMCTS",
+				"timestamp"
+			]
+		},
+		"entityClassCode": {
+			"type": "string",
+			"maxLength": 10
+		},
+		"_case": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"caseIdHMCTS": {
+					"type": "string",
+					"maxLength": 30
+				},
+				"caseListingRequestId": {
+					"type": "string",
+					"maxLength": 10
+				},
+				"caseTitle": {
+					"type": "string",
+					"maxLength": 500
+				},
+				"caseJurisdiction": {
+					"type": "string",
+					"maxLength": 4
+				},
+				"caseSubType": {
+					"type": "string",
+					"maxLength": 8
+				},
+				"caseCourt": {
+					"type": "string",
+					"maxLength": 8
+				},
+				"caseRegistered": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"caseComments": {
+					"type": "string",
+					"maxLength": 5000
+				},
+				"caseAdditionalSecurityFlag": {
+					"type": "boolean"
+				},
+				"caseRestrictedFlag": {
+					"type": "boolean"
+				},
+				"caseInterpreterRequiredFlag": {
+					"type": "boolean"
+				},
+				"caseRelatedCaseIdHMCTS": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"caseIdHMCTS",
+				"caseTitle",
+				"caseJurisdiction",
+				"caseCourt",
+				"caseRegistered"
+			]
+		},
+		"entity": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"entityHmiId": {
+					"type": "string",
+					"maxLength": 15
+				},
+				"entityRoleCode": {
+					"type": "string",
+					"maxLength": 6
+				},
+				"entityTypeCode": {
+					"type": "string",
+					"maxLength": 6
+				},
+				"entitySubType": {
+					"oneOf": [
+						{
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"entityClassCode": {
+									"$ref": "#/definitions/entityClassCode"
+								},
+								"entityTitle": {
+									"type": "string",
+									"maxLength": 40
+								},
+								"entityFirstName": {
+									"type": "string",
+									"maxLength": 100
+								},
+								"entityLastName": {
+									"type": "string",
+									"maxLength": 730
+								}
+							},
+							"required": [
+								"entityClassCode",
+								"entityFirstName",
+								"entityLastName"
+							]
+						},
+						{
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"entityClassCode": {
+									"$ref": "#/definitions/entityClassCode"
+								},
+								"entityCompanyName": {
+									"type": "string",
+									"maxLength": 2000
+								}
+							},
+							"required": [
+								"entityClassCode",
+								"entityCompanyName"
+							]
+						}
+					]
+				}
+			},
+			"required": [
+				"entityHmiId",
+				"entityRoleCode",
+				"entityTypeCode",
+				"entitySubType"
+			]
+		}
+	}
+}
