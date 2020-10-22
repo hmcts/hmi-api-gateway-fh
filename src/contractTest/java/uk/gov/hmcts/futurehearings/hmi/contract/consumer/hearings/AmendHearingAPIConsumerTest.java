@@ -44,7 +44,7 @@ class AmendHearingAPIConsumerTest {
     private String targetSubscriptionKey;
 
     public static final String PUT_AMEND_HEARING_REQUEST_MESSAGE_SCHEMA_FILE = "/hearingRequestMessage.json";
-    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/rest/hmcts/resources/hearings/1234";
+    private static final String PROVIDER_AMEND_SnL_HEARING_API_PATH = "/casehqapi/rest/hmcts/resources/hearings/1234";
 
     private Map<String, String> headersAsMap = new HashMap<>();
     public static final String AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/hearings/amend/amend-hearing-complete-entities-ind-org-payload.json";
@@ -74,7 +74,7 @@ class AmendHearingAPIConsumerTest {
         return buildPactForSnL(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a complete payload with 2 Entities(Ind and Org) populated - PUT",
                 AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.OK,
                 "Amend Hearing API");
@@ -90,7 +90,7 @@ class AmendHearingAPIConsumerTest {
         invokeSnLAPI(headersAsMap,
                 AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
     }
@@ -102,7 +102,7 @@ class AmendHearingAPIConsumerTest {
         return buildPactForSnL(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a complete payload with no Entities populated - PUT",
                 AMEND_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.OK,
                 "Amend Hearing API");
@@ -118,7 +118,7 @@ class AmendHearingAPIConsumerTest {
         invokeSnLAPI(headersAsMap,
                 AMEND_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
     }
@@ -131,7 +131,7 @@ class AmendHearingAPIConsumerTest {
         return buildPactForSnL(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a standard (only outer elements) payload - PUT",
                 AMEND_HEARING_STANDARD_PAYLOAD_JSON_PATH,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.OK,
                 "Amend Hearing API");
@@ -147,7 +147,7 @@ class AmendHearingAPIConsumerTest {
         invokeSnLAPI(headersAsMap,
                 AMEND_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
     }
@@ -160,7 +160,7 @@ class AmendHearingAPIConsumerTest {
         return buildPactForSnL(headersAsMap,builder,
                 "Provider confirms amend hearing request received for the most basic mandatory payload - PUT",
                 AMEND_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpMethod.PUT,
                 HttpStatus.OK,
                 "Amend Hearing API");
@@ -176,7 +176,7 @@ class AmendHearingAPIConsumerTest {
         invokeSnLAPI(headersAsMap,
                 AMEND_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
-                PROVIDER_REQUEST_SnL_HEARING_API_PATH,
+                PROVIDER_AMEND_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
     }

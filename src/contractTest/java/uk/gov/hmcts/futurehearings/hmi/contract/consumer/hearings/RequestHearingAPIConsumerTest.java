@@ -44,7 +44,7 @@ class RequestHearingAPIConsumerTest {
     private String targetSubscriptionKey;
 
     public static final String POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE = "/hearingRequestMessage.json";
-    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/rest/hmcts/resources/hearings";
+    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/casehqapi/rest/hmcts/resources/hearings";
 
     private Map<String, String> headersAsMap = new HashMap<>();
     public static final String REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/hearings/request-hearing-complete-entities-ind-org-payload.json";
