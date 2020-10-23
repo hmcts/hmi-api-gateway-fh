@@ -74,7 +74,7 @@ public class GetSessionsAPIConsumerTests {
                 PROVIDER_SnL_GET_SESSION_API_PATH,
                 HttpMethod.GET,
                 HttpStatus.OK,
-                "Get Sessions API"
+                "Sessions API"
                 );
     }
 
@@ -106,7 +106,7 @@ public class GetSessionsAPIConsumerTests {
                 PROVIDER_SnL_GET_SESSION_API_PATH,
                 HttpMethod.GET,
                 HttpStatus.OK,
-                "Get Sessions API"
+                "Sessions API"
         );
     }
 
