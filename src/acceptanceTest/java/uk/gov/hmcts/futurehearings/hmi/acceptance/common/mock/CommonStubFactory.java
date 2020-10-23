@@ -21,7 +21,7 @@ public class CommonStubFactory {
         Headers headers = new Headers(List.of(header));
 
         shouldExecute(headers,
-                null,
+                "{}",
                 requestURL,
                 null,
                 HttpStatus.OK,
