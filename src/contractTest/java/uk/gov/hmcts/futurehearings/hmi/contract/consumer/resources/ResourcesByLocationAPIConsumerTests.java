@@ -45,7 +45,7 @@ class ResourcesByLocationAPIConsumerTests {
     private String targetSubscriptionKey;
 
     public static final String POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE = "/locationMessage.json";
-    private static final String PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH = "/rest/hmcts/resources/locations";
+    private static final String PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH = "/casehqapi/rest/hmcts/resources/location";
 
     private Map<String, String> headersAsMap = new HashMap<>();
     public static final String REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-complete-payload.json";
