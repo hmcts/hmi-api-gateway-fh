@@ -28,18 +28,23 @@ parameters:
         logLevel: debug
         serenity: false
         dependsOn: SmokeTest
+      - name: ContractTest
+        command: contract
+        logLevel: info
+        serenity: false
+        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: AcceptanceTest
-      # tests_security:
-      # - name: ApiZapScan
-      #   containerRegistry: ssprivatesbox.azurecr.io
-      #   repository: hmi/apim-tests-owasp
-      #   testUrl:
-      #   - name: API1
-      #     target: https://www.example.com/openapi.json
+        dependsOn: ContractTest
+      tests_security:
+      - name: ApiZapScan
+        containerRegistry: ssprivatesbox.azurecr.io
+        repository: hmi/apim-tests-owasp
+        testUrl:
+        - name: API1
+          target: https://www.example.com/openapi.json
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
