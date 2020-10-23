@@ -49,6 +49,9 @@ jobs:
   - ${{ if contains(parameters.command, 'contract') }}:
     - template: ../steps/run-gradlew.yaml
       parameters:
+      command: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey)
+    - template: ../steps/run-gradlew.yaml
+      parameters:
         command: pactPublish -DPACT_BROKER_FULL_URL=http://hmi-pact.sandbox.platform.hmcts.net/
   - template: ../steps/run-gradlew.yaml
     parameters:
