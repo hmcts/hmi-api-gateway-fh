@@ -18,7 +18,6 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
-import io.restassured.RestAssured;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -30,7 +29,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -38,7 +36,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-class HearingAPIConsumerTest {
+class RequestHearingAPIConsumerTest {
 
 
 
@@ -46,7 +44,7 @@ class HearingAPIConsumerTest {
     private String targetSubscriptionKey;
 
     public static final String POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE = "/hearingRequestMessage.json";
-    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/rest/hmcts/resources/hearings";
+    private static final String PROVIDER_REQUEST_SnL_HEARING_API_PATH = "/casehqapi/rest/hmcts/resources/hearings";
 
     private Map<String, String> headersAsMap = new HashMap<>();
     public static final String REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/hearings/request-hearing-complete-entities-ind-org-payload.json";
