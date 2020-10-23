@@ -69,7 +69,7 @@ public class GetSessionsAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildResponsePactFromSnL(headersAsMap, builder,
-                "Provider confirms complete response received for Get Sessions",
+                "Provider confirms complete response received for the GET Sessions",
                 GET_SESSION_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_SnL_GET_SESSION_API_PATH,
                 HttpMethod.GET,
@@ -101,7 +101,7 @@ public class GetSessionsAPIConsumerTests {
             PactDslWithProvider builder) throws IOException {
 
         return buildResponsePactFromSnL(headersAsMap, builder,
-                "Provider confirms complete response received for Get Sessions",
+                "Provider confirms only mandatory response received for GET Sessions",
                 GET_SESSION_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_SnL_GET_SESSION_API_PATH,
                 HttpMethod.GET,
