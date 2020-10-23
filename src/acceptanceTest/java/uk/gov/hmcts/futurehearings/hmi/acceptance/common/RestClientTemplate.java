@@ -23,9 +23,12 @@ public class RestClientTemplate {
 
         log.debug("The value of the baseURI : " + RestAssured.baseURI);
         log.debug("The value of the path : " + requestURL);
-        log.debug("The value of the header : " + headers.size());
-        headers.asList().forEach(header ->
-                log.debug("The Key of the header" + header.getName() + "The value of the Header" + header.getValue()));
+        if (Objects.nonNull(headers)) {
+            log.debug("The value of the header : " + headers.size());
+            headers.asList().forEach(header ->
+                    log.debug("The Key of the header" + header.getName() + "The value of the Header" + header.getValue()));
+        }
+
         log.debug("The value of the HTTP Status : " + expectedHttpStatus.value());
 
 
