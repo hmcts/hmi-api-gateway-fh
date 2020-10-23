@@ -42,7 +42,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-latest'
+    name: hmi-pool
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
