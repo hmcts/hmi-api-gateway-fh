@@ -1,0 +1,54 @@
+{
+  "mappings" : [ {
+    "request" : {
+      "urlPattern" : "/casehqapi/rest/hmcts/resources/users/12345",
+      "method" : "POST"
+    },
+    "response" : {
+      "status" : 200,
+      "body" : "{\n  \"response code\": 200,\n  \"description\": \"The request was received successfully.\"\n}",
+      "headers" : {
+        "Content-Type" : "application/json"
+      }
+    }
+  }, {
+    "request" : {
+      "urlPattern" : "/casehqapi/rest/hmcts/resources/users/12345",
+      "method" : "PUT"
+    },
+    "response" : {
+      "status" : 200,
+      "body" : "{\n  \"response code\": 200,\n  \"description\": \"The request was received successfully.\"\n}",
+      "headers" : {
+        "Content-Type" : "application/json"
+      }
+    }
+  }, {
+    "request" : {
+      "urlPattern" : "/casehqapi/rest/hmcts/resources/users/12345",
+      "method" : "GET"
+    },
+    "response" : {
+      "status" : 200,
+      "body" : "{\n  \"response code\": 200,\n  \"description\": \"The request was received successfully.\"\n}",
+      "headers" : {
+        "Content-Type" : "application/json"
+      }
+    }
+  }, {
+    "request" : {
+      "urlPattern" : "/product/p0001",
+      "method" : "GET"
+    },
+    "response" : {
+      "status" : 200,
+      "bodyFileName" : "hearings/TimeResponse.json",
+      "headers" : {
+        "Content-Type" : "application/json"
+      }
+    }
+  } ],
+  "meta" : {
+    "total" : 4
+  }
+}

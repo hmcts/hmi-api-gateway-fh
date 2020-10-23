@@ -6,6 +6,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.mock.CommonStubFactory.resetMocks;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.mock.CommonStubFactory.uploadCommonMocks;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
@@ -36,7 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 public class ResourceInteractionTest {
 
-    private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/common/input";
+    private static final String COMMON_MOCK_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/common/mock";
 
     private WireMock wireMock;
 
@@ -110,6 +112,8 @@ public class ResourceInteractionTest {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        resetMocks(mockServerHost + "/__admin/mappings/reset");
+        uploadCommonMocks(mockServerHost + "/__admin/mappings/reset",readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
 
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
         commonDelegate.test_expected_response_for_supplied_header(targetSubscriptionKey,
