@@ -30,19 +30,19 @@ resource "null_resource" "clean-apim-api" {
   provisioner "local-exec" {
     command = "az rest -m delete -u \"https://management.azure.com/subscriptions/${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.hmi_apim_rg.name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.hmi_apim.name}/apis/echo-api?api-version=2019-01-01\""
   }
-  depends_on = ["azurerm_api_management.apim"]
+  depends_on = [azurerm_api_management.hmi_apim]
 }
 
 resource "null_resource" "clean-apim-product-starter" {
   provisioner "local-exec" {
     command = "az rest -m delete -u \"https://management.azure.com/subscriptions/${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.hmi_apim_rg.name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.hmi_apim.name}/products/Starter?api-version=2019-01-01\""
   }
-  depends_on = ["azurerm_api_management.apim"]
+  depends_on = [azurerm_api_management.hmi_apim]
 }
 
 resource "null_resource" "clean-apim-product-unlimited" {
   provisioner "local-exec" {
     command = "az rest -m delete -u \"https://management.azure.com/subscriptions/${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.hmi_apim_rg.name}/providers/Microsoft.ApiManagement/service/${azurerm_api_management.hmi_apim.name}/products/Unlimited?api-version=2019-01-01\""
   }
-  depends_on = ["azurerm_api_management.apim"]
+  depends_on = [azurerm_api_management.hmi_apim]
 }
