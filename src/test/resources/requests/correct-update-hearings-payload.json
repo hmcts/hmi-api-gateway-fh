@@ -1,35 +1,15 @@
 {
-  "apiVersion": "V1.00103",
-  "transactionIdHmcts": "5f2bffce09fb0feadaf7b906",
-  "timeStamp": "12:15:22",
-  "source": "T",
-  "Destination": "SL",
-  "apiKey": "372ab28b-5830-45a6-916f-d73b03366af5",
-  "apiAuthToken": "kjlhsdg74iah2894648>IUH8hs@39Hi",
-  "corrolationID": "5f2bffce7bfb7bd35546964e",
-  "caseObject": {
-    "caseIdHmcts": 1.2904144820148569e+23,
-    "caseTitle": "Marcie Ross \"vs\" Phyllis Guzman",
-    "caseJurisdiction": "this.source",
-    "caseService": "MatterCat2",
-    "CaseType": "MatterCode2",
-    "caseSubType": "MatterType1",
-    "caseCourt": "Spennymoor,County Durham,England",
-    "caseRegistered": "2015-08-20T02:06:45 -01:00",
-    "caseComments": "Mollit excepteur elit duis adipisicing mollit. Adipisicing veniam deserunt commodo pariatur aute do. Et nulla excepteur quis anim sit. Cillum aliqua et id adipisicing ut ea veniam Lorem dolore sunt culpa duis. Tempor dolor veniam laborum deserunt ullamco id officia elit nisi. Et reprehenderit est eu reprehenderit consequat non excepteur aliquip aute ullamco voluptate. Commodo ex id irure culpa ut mollit Lorem.\r\nPariatur consectetur quis commodo labore consectetur ullamco irure qui et consectetur deserunt ad. Magna cillum ipsum aliqua velit reprehenderit excepteur. Tempor incididunt voluptate et dolor. Aute et adipisicing cillum dolor sint duis proident reprehenderit minim est adipisicing quis reprehenderit occaecat. Veniam ut Lorem ex id ea reprehenderit.\r\nMagna minim elit eiusmod duis voluptate. Commodo qui nulla sunt aute cillum sint officia. Anim exercitation incididunt nisi eiusmod laborum ullamco exercitation esse elit est reprehenderit aliquip nulla minim.\r\n",
-    "caseSource": "",
-    "caseKind": "Kind_3",
-    "caseRelatedCaseIdHmcts": "",
-    "UpdateObject": "Update is to send hearing outcome"
-  },
-  "listing": {
-    "listingId": "5f2bffceaab99eababcf7f0d",
-    "listingStartDate": "2018-02-19T02:41:04 -00:00",
-    "listingEndDate": "2014-11-26T12:03:38 -00:00",
-    "listingDuration": 120,
-    "listingType": "new",
-    "listingPriority": "High",
-    "listingNumberAttendees": 5,
-    "listingPartiesMethod": "Video Conf"
-  }
+  "listingRequestId": "L012",
+  "hearingIdCaseHQ": "H012",
+  "hearingType": "Crime",
+  "hearingDate": "2020-09-18",
+  "hearingStartTime": "11:45",
+  "hearingEndTime": "12:45",
+  "hearingCaseIdHMCTS": "5f2bffcee0b6aa870e82f007",
+  "hearingSessionIdCaseHQ": "5f2bffceef36b0eaf339d884",
+  "hearingTranslatorRequired": "No",
+  "hearingCreatedDate": "2020-09-17",
+  "hearingCreatedBy": "Russel Crowe",
+  "hearingVenueId": "V012",
+  "hearingRoomId": "R012"
 }
