@@ -113,7 +113,7 @@ public class ResourceInteractionTest {
             e.printStackTrace();
         }*/
         resetMocks(mockServerHost + "/__admin/mappings/reset");
-        uploadCommonMocks(mockServerHost + "/__admin/mappings/reset",readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
+        uploadCommonMocks(mockServerHost + "/__admin/mappings",readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
 
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
         commonDelegate.test_expected_response_for_supplied_header(targetSubscriptionKey,
