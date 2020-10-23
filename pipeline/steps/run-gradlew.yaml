@@ -20,4 +20,3 @@ steps:
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'
       sonarQubeRunAnalysis: ${{ parameters.sonarAnalysis }}
-    continueOnError: true

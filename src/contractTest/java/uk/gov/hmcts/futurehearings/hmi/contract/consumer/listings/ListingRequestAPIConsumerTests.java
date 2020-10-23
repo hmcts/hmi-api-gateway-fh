@@ -42,7 +42,7 @@ public class ListingRequestAPIConsumerTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH = "/rest/hmcts/resources/listings/1234";
+    private static final String PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH = "/casehqapi/rest/hmcts/resources/listings/1234";
 
     private Map<String, String> headersAsMap = new HashMap<>();
 
