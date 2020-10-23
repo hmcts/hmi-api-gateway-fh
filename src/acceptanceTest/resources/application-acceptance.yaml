@@ -14,11 +14,11 @@ listingsRootContext: /hmi/listings
 listings_idRootContext: /hmi/listings/%s
 
 grantType: client_credentials
-clientID: 49e9c094-4267-4137-828e-06626fb6fec1
-clientSecret: 0254e211-e6a7-49c1-8957-e35428245ef3
-token_apiTenantId : 4cdea387-4a31-46b1-b99a-c9e41aa989a3
-token_apiURL : https://login.microsoftonline.com/%s/oauth2/v2.0/token
-scope: api://9b6e8260-abef-4874-8978-ef4b4058edf8/.default
+clientID: b085c529-1b29-4075-969c-32ebfaddb1e4
+clientSecret: 4b3eca29-2ff6-4419-8061-2b23cef9e756
+token_apiTenantId: 531ff96d-0ae9-462a-8d2d-bec7c0b42082
+token_apiURL: https://login.microsoftonline.com/%s/oauth2/v2.0/token
+scope: api://d49d7fa2-6904-4223-a907-3b8992af4190/.default
 
 spring.flyway.enabled: false
 

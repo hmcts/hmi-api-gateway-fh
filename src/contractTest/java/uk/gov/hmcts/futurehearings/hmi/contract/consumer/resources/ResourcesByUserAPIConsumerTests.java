@@ -42,7 +42,7 @@ public class ResourcesByUserAPIConsumerTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    private static final String PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH = "/rest/hmcts/resources/user";
+    private static final String PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH = "/casehqapi/rest/hmcts/resources/user";
 
     private Map<String, String> headersAsMap = new HashMap<>();
 
