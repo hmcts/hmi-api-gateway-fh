@@ -34,13 +34,13 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(TestReporter.class)
-@DisplayName("DELETE /sessions - Delete Sessions")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName("POST /resources/user - Create User Resource")
 @SuppressWarnings("java:S2699")
-class DELETE_sessions_UnitTests {
+class POST_resources_user_UnitTests {
 
-    private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/delete-request-payload.json";
+    private static final String CORRECT_CREATE_USER_RESOURCE_PAYLOAD = "requests/create-resources-user-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -48,14 +48,13 @@ class DELETE_sessions_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${sessionsApiRootContext}")
-    private String sessionsApiRootContext;
+    @Value("${resourcesApiRootContext}")
+    private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
     void initialiseValues() {
-
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
@@ -64,169 +63,167 @@ class DELETE_sessions_UnitTests {
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
-
     }
 
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testDeleteSessionsRequestForInvalidResource() throws Exception {
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedForInvalidResource(input);
+    void testCreateUserResourceForInvalidResource() throws IOException {
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    void testDeleteSessionsRequestWithMissingContentTypeHeader() throws IOException {
+    void testCreateUserResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
-
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    void testDeleteSessionsRequestWithInvalidContentTypeHeader() throws IOException {
+    void testCreateUserResourceWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    void testDeleteSessionsRequestWithMissingAcceptHeader() throws IOException {
+    void testCreateUserResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    void testDeleteSessionsRequestWithInvalidAcceptHeader() throws IOException {
+    void testCreateUserResourceWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(6)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testDeleteSessionsRequestWithMissingOcpSubKey() throws IOException {
+    void testCreateUserResourceWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidOcpSubKey(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testDeleteSessionsRequestWithInvalidOcpSubKey() throws IOException {
+    void testCreateUserResourceWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key", "invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(input);
+        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidOcpSubKey(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testDeleteSessionsRequestWithMissingHeader(String iteration) throws IOException {
+    void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testDeleteSessionsRequestWithInvalidHeader(String iteration) throws IOException {
+    void testCreateUserResourceWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(10)
-    @DisplayName("Test for Correct Headers and Payload")
-    void testDeleteSessionsRequestWithCorrectHeaders() throws IOException {
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithCorrectHeaders(input);
+    @DisplayName("Test for Correct Headers")
+    void testCreateUserResourceWithCorrectHeaders() throws IOException {
+        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenCreateUserResourceIsInvokedWithCorrectHeaders(input);
         thenValidateResponseForRequestOrDelete(response);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedForInvalidResource(final String input) {
-        return deleteSessionsResponseForInvalidResource(sessionsApiRootContext+"/session_id/" + "delete", headersAsMap, targetInstance, input);
+    private Response whenCreateUserResourceIsInvokedForInvalidResource(final String input) {
+        return createUserResourceResponseForInvalidResource(resourcesApiRootContext+"/user"+"post", headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedWithCorrectHeaders(final String input) {
-        return deleteSessionsResponseForCorrectHeaders(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
+    private Response whenCreateUserResourceIsInvokedWithCorrectHeaders(final String input) {
+        return createUserResourceResponseForCorrectHeaders(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(final String input) {
-        return deleteSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
+    private Response whenCreateUserResourceIsInvokedWithMissingOrInvalidOcpSubKey(final String input) {
+        return createUserResourceResponseForMissingOcpSubKey(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return deleteSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
+    private Response whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
+        return createUserResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response deleteSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().delete().then().extract().response();
+                .when().post().then().extract().response();
     }
 
-    private Response deleteSessionsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createUserResourceResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().delete().then().extract().response();
+                .when().post().then().extract().response();
     }
 
-    private Response deleteSessionsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createUserResourceResponseForMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().delete().then().extract().response();
+                .when().post().then().extract().response();
     }
 
-    private Response deleteSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response createUserResourceResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().delete().then().extract().response();
+                .when().post().then().extract().response();
 
     }
 }
