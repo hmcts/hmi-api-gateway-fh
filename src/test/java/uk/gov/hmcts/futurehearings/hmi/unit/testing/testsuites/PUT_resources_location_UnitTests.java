@@ -40,7 +40,7 @@ import java.util.Map;
 @SuppressWarnings("java:S2699")
 class PUT_resources_location_UnitTests {
 
-    static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD = "requests/correct-update-location-resource-payload.json";
+    static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD = "requests/update-resources-location-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
