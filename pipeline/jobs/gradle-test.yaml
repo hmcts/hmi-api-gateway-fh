@@ -46,6 +46,14 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - task: JavaToolInstaller@0
+    displayName: 'Use Java 11'
+    inputs:
+      versionSpec: 11
+      jdkArchitectureOption: x64
+      jdkSourceOption: LocalDirectory
+      jdkFile: '/azp/openjdk-11_linux-x64_bin.tar.gz'
+      jdkDestinationDirectory: jdk
   - ${{ if contains(parameters.command, 'contract') }}:
     - template: ../steps/run-gradlew.yaml
       parameters:
