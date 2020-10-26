@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,6 +39,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /schedules - Retrieve Hearing Schedules")
 @SuppressWarnings("java:S2699")
 class GET_schedules_UnitTests {
@@ -51,6 +55,28 @@ class GET_schedules_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -201,6 +227,8 @@ class GET_schedules_UnitTests {
     private Response retrieveHearingSchedulesResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
          return given()
+                 .auth()
+                 .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -210,6 +238,8 @@ class GET_schedules_UnitTests {
     private Response retrieveHearingSchedulesResponseForCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
           return given()
+                  .auth()
+                  .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -219,6 +249,8 @@ class GET_schedules_UnitTests {
     private Response retrieveHearingSchedulesResponseForCorrectRequestAndAllParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
          return given()
+                 .auth()
+                 .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -229,6 +261,8 @@ class GET_schedules_UnitTests {
     private Response retrieveHearingSchedulesResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap,final String basePath) {
 
          return given()
+                 .auth()
+                 .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -239,6 +273,8 @@ class GET_schedules_UnitTests {
     private Response retrieveHearingSchedulesResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap,final String basePath) {
 
              return given()
+                     .auth()
+                     .oauth2(accessToken)
                     .queryParams(paramsAsMap)
                     .headers(headersAsMap)
                     .baseUri(basePath)

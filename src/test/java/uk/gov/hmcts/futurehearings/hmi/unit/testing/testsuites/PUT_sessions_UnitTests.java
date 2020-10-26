@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +40,7 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /sessions - Update Sessions")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2699")
 class PUT_sessions_UnitTests {
 
@@ -52,6 +56,28 @@ class PUT_sessions_UnitTests {
     private String sessionsApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -191,6 +217,8 @@ class PUT_sessions_UnitTests {
     private Response updateSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -200,6 +228,8 @@ class PUT_sessions_UnitTests {
 
     private Response updateSessionsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return   given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -209,6 +239,8 @@ class PUT_sessions_UnitTests {
 
     private Response updateSessionsResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -218,6 +250,8 @@ class PUT_sessions_UnitTests {
 
     private Response updateSessionsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)

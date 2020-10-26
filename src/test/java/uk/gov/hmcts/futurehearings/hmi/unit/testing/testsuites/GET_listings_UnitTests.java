@@ -19,6 +19,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +38,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /listings - Retrieve Listings")
 @SuppressWarnings("java:S2699")
 class GET_listings_UnitTests {
@@ -50,6 +54,28 @@ class GET_listings_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -339,6 +365,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -348,6 +376,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -359,6 +389,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -368,6 +400,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -378,6 +412,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)

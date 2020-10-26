@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,12 +33,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /hearings - Request Hearings")
 @SuppressWarnings("java:S2699")
 class POST_hearings_UnitTests {
@@ -53,6 +57,28 @@ class POST_hearings_UnitTests {
     private String hearingApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -190,6 +216,8 @@ class POST_hearings_UnitTests {
     private Response requestHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -200,6 +228,8 @@ class POST_hearings_UnitTests {
     private Response requestHearingsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -210,6 +240,8 @@ class POST_hearings_UnitTests {
     private Response requestHearingsResponseForMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -220,6 +252,8 @@ class POST_hearings_UnitTests {
     private Response requestHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)

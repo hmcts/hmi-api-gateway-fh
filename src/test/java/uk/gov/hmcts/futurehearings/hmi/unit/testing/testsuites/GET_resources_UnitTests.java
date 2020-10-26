@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +37,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /resources - Retrieve Resources")
 @SuppressWarnings("java:S2699")
 class GET_resources_UnitTests {
@@ -48,6 +52,28 @@ class GET_resources_UnitTests {
     private String resourcesApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -292,6 +318,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -301,6 +329,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -312,6 +342,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForAMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -321,6 +353,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
