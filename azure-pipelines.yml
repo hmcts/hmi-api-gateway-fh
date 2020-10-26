@@ -28,16 +28,11 @@ parameters:
         logLevel: debug
         serenity: false
         dependsOn: SmokeTest
-      - name: ContractTest
-        command: contract
-        logLevel: info
-        serenity: false
-        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: ContractTest
+        dependsOn: AcceptanceTest
       tests_security:
       - name: ApiZapScan
         containerRegistry: ssprivatesbox.azurecr.io
