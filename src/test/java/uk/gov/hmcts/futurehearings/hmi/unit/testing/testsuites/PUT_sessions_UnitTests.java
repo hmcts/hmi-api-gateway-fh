@@ -40,7 +40,7 @@ import java.util.Map;
 @SuppressWarnings("java:S2699")
 class PUT_sessions_UnitTests {
 
-    static final String CORRECT_UPDATE_SESSIONS_PAYLOAD = "requests/correct-update-sessions-payload.json";
+    static final String CORRECT_UPDATE_SESSIONS_PAYLOAD = "requests/update-sessions-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
