@@ -119,7 +119,7 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
 
-    - templaye: pipeline/jobs/remove-default-apis.yaml
+    - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: ${{ environment.subscription }}
