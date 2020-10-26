@@ -119,6 +119,12 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
 
+    - templaye: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: ${{ environment.subscription }}
+        dependsOn: Terraform
+
     - ${{ if eq(environment.name, 'sbox') }}:
       - template: pipeline/jobs/apply-hostname.yaml
         parameters:

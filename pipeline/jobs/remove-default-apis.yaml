@@ -1,0 +1,26 @@
+parameters:
+  - name: subscription
+    type: string
+
+jobs:
+- job: RemoveDefaultAPIS
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription:  ${{ parameters.subscription }}
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      arguments: $(environment)
+      inlineScript: |
+        subscription=$(az account show --query id -o tsv)
+        resourcegroup="hmi-apim-$1-rg"
+        apim="hmi-apim-svc-$1"
+        az rest -m delete -u https://management.azure.com/subscriptions/$subscription/resourceGroups/$resourcegroup/providers/Microsoft.ApiManagement/service/$apim/apis/echo-api?api-version=2019-01-01
+        az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "starter" --delete-subscriptions true
+        az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "unlimited" --delete-subscriptions true
