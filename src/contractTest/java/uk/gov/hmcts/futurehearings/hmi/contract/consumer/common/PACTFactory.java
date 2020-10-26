@@ -33,4 +33,24 @@ public class PACTFactory {
                 .status(httpStatus.value())
                 .toPact();
     }
+
+    public static final RequestResponsePact buildResponsePactFromSnL(final Map<String, String> headersAsMap,
+                                                            final PactDslWithProvider builder,
+                                                            final String pactDescription,
+                                                            final String responseJsonPath,
+                                                            final String caseHQAPIPath,
+                                                            final HttpMethod httpMethod,
+                                                            final HttpStatus httpStatus,
+                                                            final String apiState) throws IOException {
+        return builder
+                .given(apiState)
+                .uponReceiving(pactDescription)
+                .path(caseHQAPIPath)
+                .method(httpMethod.toString())
+                .headers(headersAsMap)
+                .willRespondWith()
+                .body(readFileContents(responseJsonPath), ContentType.APPLICATION_JSON)
+                .status(httpStatus.value())
+                .toPact();
+    }
 }
