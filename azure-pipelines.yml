@@ -123,6 +123,7 @@ stages:
       parameters:
         displayName: Remove default APIS
         subscription: ${{ environment.subscription }}
+        environment: ${{ environment.name }}
         dependsOn: Terraform
 
     - ${{ if eq(environment.name, 'sbox') }}:
