@@ -2,6 +2,12 @@ parameters:
   - name: subscription
     type: string
 
+  - name: dependsOn
+    type: object
+
+  - name: displayName
+    type: string
+
 jobs:
 - job: RemoveDefaultAPIS
   dependsOn:
