@@ -1,0 +1,21 @@
+{
+  "sessionsResponse": {
+    "sessions": [
+      {
+        "sessionIdCaseHQ": "973434",
+        "sessionType": "ADHOC",
+        "sessionJudgeType": "MEM",
+        "sessionJudges": [
+          {
+            "sessionJudgeId": "shawn.smith@hmcts.net",
+            "isPresiding": true
+          }
+        ],
+        "sessionStartTime": "2020-09-25T00:00:00Z",
+        "sessionDuration": 360,
+        "sessionVenueId": "300",
+        "sessionRoomId": "301"
+      }
+    ]
+  }
+}
