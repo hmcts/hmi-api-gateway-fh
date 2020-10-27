@@ -1,30 +1,30 @@
 <policies>
     <inbound>
         <base />
-            <set-variable name="invalidQueryParams" value="@{
-                    string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                    string[] allowedKeys = {"hearingIdCaseHQ","hearingDate","hearingType"};
-                    bool invalidQueryParam = false;
-                    if(context.Request.Url.Query.Count &gt; 0){
-                        for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+        <set-variable name="invalidQueryParams" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"hearingIdCaseHQ","hearingDate","hearingType"};
+                bool invalidQueryParam = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
                         {
-                            bool keyFound = false;
-                            for (int j = 0; j &lt; allowedKeys.Count(); j++)
-                            {
-                                if (qryPrmKeys[i] == allowedKeys[j]){
-                                    keyFound = true;
-                                    break;
-                                }
-                            }
-                            if(!keyFound){
-                                invalidQueryParam = true;
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
                                 break;
                             }
                         }
+                        if(!keyFound){
+                            invalidQueryParam = true;
+                            break;
+                        }
                     }
+                }
 
-                    return invalidQueryParam;
-                }" />
+                return invalidQueryParam;
+            }" />
             <choose>
                 <when condition="@(context.Request.Url.Query.Count > 3 || (bool)context.Variables["invalidQueryParams"])">
                     <return-response>
@@ -38,8 +38,25 @@
                     </return-response>
                 </when>
             </choose>
-        <rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-        <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
+            <choose>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
+				</when>
+			</choose>
+			<choose>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
+				</when>
+			</choose>
+			<choose>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
+				</when>
+			</choose>
+			#{mockResponse}#
     </inbound>
     <backend>
         <base />
