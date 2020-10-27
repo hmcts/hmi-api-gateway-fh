@@ -1,0 +1,22 @@
+{
+  "locationHMCTSId" : "HM12",
+  "locationCaseHQId": "1234",
+  "locationId": "45",
+  "locationDescription" : "",
+  "locationAddress" : "merton road",
+  "locationCluster": "",
+  "LocationPostCode": "hp2rwl",
+  "locationPrimaryFlag": "flag",
+  "locationParentCode": "code",
+  "locationActiveFrom": "date",
+  "locationActiveTo": "date",
+  "locationSecurityGuardFlag": "flag",
+  "locationVideoConfFlag": "flag",
+  "locationSeatingCapacity": "capactiy",
+  "locationRecordingEqFlag": "flag",
+  "locationVCSite": "site",
+  "locationVCSiteAddress": "siteAddress",
+  "locationVCNumber": "vcnumber",
+  "locationVCContactPhone": "phone",
+  "locationVCEmail": "email"
+}
