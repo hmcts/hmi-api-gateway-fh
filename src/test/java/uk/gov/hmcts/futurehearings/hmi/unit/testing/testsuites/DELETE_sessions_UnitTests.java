@@ -40,7 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @SuppressWarnings("java:S2699")
 class DELETE_sessions_UnitTests {
 
-    private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/correct-delete-request-payload.json";
+    private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/delete-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
