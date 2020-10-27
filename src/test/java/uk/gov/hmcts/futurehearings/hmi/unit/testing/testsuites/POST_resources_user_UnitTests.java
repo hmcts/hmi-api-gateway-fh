@@ -171,15 +171,15 @@ class POST_resources_user_UnitTests {
     }
 
     private Response whenCreateUserResourceIsInvokedWithCorrectHeaders(final String input) {
-        return createUserResourceResponseForCorrectHeaders(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
+        return createUserResourceResponseForCorrectHeaders(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
     }
 
     private Response whenCreateUserResourceIsInvokedWithMissingOrInvalidOcpSubKey(final String input) {
-        return createUserResourceResponseForMissingOcpSubKey(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
+        return createUserResourceResponseForMissingOcpSubKey(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
     }
 
     private Response whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return createUserResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/user/user_id", headersAsMap, targetInstance, input);
+        return createUserResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
     }
 
     private String givenAPayload(final String path) throws IOException {

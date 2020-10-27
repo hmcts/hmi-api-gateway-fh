@@ -171,15 +171,15 @@ class POST_resources_location_UnitTests {
     }
 
     private Response whenCreateLocationResourceIsInvokedWithCorrectHeaders(final String input) {
-        return createLocationResourceResponseForCorrectHeaders(resourcesApiRootContext+"/location/loc_id", headersAsMap, targetInstance, input);
+        return createLocationResourceResponseForCorrectHeaders(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
     }
 
     private Response whenCreateLocationResourceIsInvokedWithMissingOrInvalidOcpSubKey(final String input) {
-        return createLocationResourceResponseForMissingOcpSubKey(resourcesApiRootContext+"/location/loc_id", headersAsMap, targetInstance, input);
+        return createLocationResourceResponseForMissingOcpSubKey(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
     }
 
     private Response whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return createLocationResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/location/loc_id", headersAsMap, targetInstance, input);
+        return createLocationResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
