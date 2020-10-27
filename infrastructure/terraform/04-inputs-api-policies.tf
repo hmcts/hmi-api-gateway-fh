@@ -99,6 +99,12 @@ variable "api_policies" {
       operationId  = "secure"
       format       = "rawxml-link"
       templateFile = "api-op-get-secure-policy.xml"
+    },
+    {
+      operationId  = "update-listing"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-listing-policy.xml"
     }
+
   ]
 }
