@@ -1,6 +1,6 @@
 # HMI API Gateway
 
-[![Build Status](https://dev.azure.com/hmcts/Shared%20Services/_apis/build/status/hmcts.hmi-api-gateway-fh?branchName=master)](https://dev.azure.com/hmcts/Shared%20Services/_apis/build/status/hmcts.hmi-api-gateway-fh?branchName=master)
+[![Build Status](https://dev.azure.com/hmcts/Shared%20Services/_apis/build/status/hmcts.hmi-api-gateway-fh?branchName=master)](https://dev.azure.com/hmcts/Shared%20Services/_build/latest?definitionId=356&branchName=master)
 
 ## Purpose
 
