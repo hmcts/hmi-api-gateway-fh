@@ -99,6 +99,16 @@ variable "api_policies" {
       operationId  = "secure"
       format       = "rawxml-link"
       templateFile = "api-op-get-secure-policy.xml"
+    },
+    {
+      operationId     = "create-resource-location"
+      format          = "rawxml-link"
+      templateFile    = "api-op-create-resource-location-policy.xml"
+    },
+    {
+      operationId     = "create-resource-user"
+      format          = "rawxml-link"
+      templateFile    = "api-op-create-resource-user-policy.xml"
     }
   ]
 }
