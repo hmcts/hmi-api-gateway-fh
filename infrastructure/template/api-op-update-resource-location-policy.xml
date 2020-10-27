@@ -1,8 +1,12 @@
 <policies>
     <inbound>
         <base/>
-        <rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true"/>
-        <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/"/>
+        <choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/resources/" />
+			</when>
+		</choose>
     </inbound>
     <backend>
         <base/>
