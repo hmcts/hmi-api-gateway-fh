@@ -29,7 +29,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @SuppressWarnings("java:S2699")
 class PUT_hearings_UnitTests {
 
-    static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/correct-update-hearings-payload.json";
+    static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/update-hearings-payload.json";
     @Value("${targetInstance}")
     private String targetInstance;
 
