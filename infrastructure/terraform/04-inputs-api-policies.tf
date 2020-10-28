@@ -109,6 +109,11 @@ variable "api_policies" {
       operationId     = "create-resource-user"
       format          = "rawxml-link"
       templateFile    = "api-op-create-resource-user-policy.xml"
+    },
+    {
+      operationId  = "update-listing"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-listing-policy.xml"
     }
   ]
 }
