@@ -1,0 +1,13 @@
+{
+  "sessionsResponse": {
+    "sessions": [
+      {
+        "sessionIdCaseHQ": "973434",
+        "sessionType": "ADHOC",
+        "sessionStartTime": "2020-09-25T00:00:00Z",
+        "sessionDuration": 360,
+        "sessionVenueId": "300"
+      }
+    ]
+  }
+}
