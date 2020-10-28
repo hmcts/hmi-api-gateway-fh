@@ -7,10 +7,6 @@ resource "azurerm_api_management" "hmi_apim" {
   sku_name            = "${var.apim_sku_name}_${var.apim_sku_capacity}"
   tags                = var.tags
 
-  identity {
-    type = "SystemAssigned"
-  }
-
   virtual_network_type = var.virtual_network_type
 
   dynamic "virtual_network_configuration" {
