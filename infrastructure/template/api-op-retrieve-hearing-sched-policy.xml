@@ -44,6 +44,18 @@
 				<set-backend-service base-url="http://#{hostName}#/schedules/" />
 			</when>
 		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CFT")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/schedules/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CRIME")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/schedules/" />
+			</when>
+		</choose>
     </inbound>
     <backend>
         <base />
