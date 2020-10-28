@@ -3,7 +3,8 @@ parameters:
     type: string
 
 variables:
-  hostName: 'hmi-casehqemulator.sandbox.platform.hmcts.net'
+  - name: hostName
+    value: 'hmi-casehqemulator.sandbox.platform.hmcts.net'
   
 steps:
 
