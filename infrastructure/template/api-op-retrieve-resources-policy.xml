@@ -7,6 +7,18 @@
 				<set-backend-service base-url="http://#{hostName}#/resources/" />
 			</when>
 		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+				<rewrite-uri template="/retrieve-resources" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/resources/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+				<rewrite-uri template="/retrieve-resources" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/resources/" />
+			</when>
+		</choose>
     </inbound>
     <backend>
         <base />

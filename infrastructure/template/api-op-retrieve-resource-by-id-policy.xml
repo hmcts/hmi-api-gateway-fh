@@ -1,8 +1,20 @@
 <policies>
     <inbound>
         <base />
-         <choose>
+        <choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "S&L")">
+				<rewrite-uri template="/retrieve-resources/{resourceId}" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/resources/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CFT")">
+				<rewrite-uri template="/retrieve-resources/{resourceId}" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{hostName}#/resources/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CRIME")">
 				<rewrite-uri template="/retrieve-resources/{resourceId}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://#{hostName}#/resources/" />
 			</when>
