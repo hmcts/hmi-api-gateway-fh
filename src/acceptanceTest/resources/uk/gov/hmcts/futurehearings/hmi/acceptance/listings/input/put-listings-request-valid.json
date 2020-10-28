@@ -1,0 +1,41 @@
+{
+  "_case": {
+    "caseIdHMCTS": "CaseId",
+    "caseListingRequestId": "ReqId",
+    "caseTitle": "Title",
+    "caseJurisdiction": "FAM",
+    "caseRegistered": "2020-09-14T20:20:39+00:00",
+    "caseCourt": "1",
+    "caseComments": "Some comments",
+    "caseRestrictedFlag": true,
+    "caseInterpreterRequiredFlag": true
+  },
+  "listing": {
+    "listingType": "type",
+    "listingDuration": 60,
+    "listingStartTime": "14:00:00"
+
+  },
+  "entities": [
+    {
+      "entityHmiId": "Abc123",
+      "entityTypeCode": "IND",
+      "entityRoleCode": "DEF",
+      "entitySubType": {
+        "entityClassCode": "PERSON",
+        "entityTitle": "Mr",
+        "entityFirstName": "James",
+        "entityLastName": "Bond"
+      }
+    },
+    {
+      "entityHmiId": "Def123",
+      "entityTypeCode":"ORG",
+    "entityRoleCode":"DEF",
+    "entitySubType":{
+      "entityClassCode": "ORG",
+      "entityCompanyName": "company name"
+    }
+   }
+  ]
+}
