@@ -41,7 +41,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
       pool: hmi-dev
-      custom_domain: hmi-apim.dev.platform.hmcts.net
+      custom_domain: hmi-apim.preview.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -62,7 +62,7 @@ parameters:
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
       pool: hmi-test
-      custom_domain: hmi-apim.test.platform.hmcts.net
+      custom_domain: hmi-apim.perftest.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest

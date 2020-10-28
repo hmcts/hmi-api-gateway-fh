@@ -27,7 +27,7 @@ try {
     if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
         $apim.ProxyCustomHostnameConfiguration = $proxy
         Write-Host "Applyig Custom Domain configuration..." -ForegroundColor Yellow
-        Set-AzApiManagement -InputObject $apim -SystemAssignedIdentity -Verbose
+        Set-AzApiManagement -InputObject $apim -Verbose
         Write-Host "Custom domain successfully applied..."
         Write-Host "Listing custom domains..."
         foreach ($_ in $apim.ProxyCustomHostnameConfiguration.Hostname) {
