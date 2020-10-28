@@ -2,10 +2,6 @@ parameters:
   - name: subscription
     type: string
 
-variables:
-  - name: hostName
-    value: 'hmi-casehqemulator.sandbox.platform.hmcts.net'
-  
 steps:
 
 - task: replacetokens@3
