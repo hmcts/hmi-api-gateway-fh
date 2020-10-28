@@ -88,6 +88,15 @@ sourceSets {
         }
         resources.srcDir file('src/acceptanceTest/resources')
     }
+
+    commonTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/commonTest/java')
+        }
+        resources.srcDir file('src/commonTest/resources')
+    }
 }
 
 tasks.withType(JavaCompile) {
@@ -103,6 +112,9 @@ tasks.withType(Test) {
 }
 
 configurations {
+
+    commonTestCompile.extendsFrom testCompile
+    commonTestRuntime.extendsFrom testRuntime
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestCompile.extendsFrom testCompile
@@ -385,8 +397,6 @@ dependencies {
     testImplementation "ch.qos.logback:logback-classic:1.2.3"
     testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
-    smokeTestImplementation sourceSets.main.runtimeClasspath
-
     //Smoke Test Dependencies - START
     smokeTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
@@ -413,6 +423,7 @@ dependencies {
     smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     smokeTestImplementation "ch.qos.logback:logback-classic:1.2.3"
 
+    //smokeTestImplementation project(':commonTest')
     smokeTestImplementation sourceSets.main.runtimeClasspath
     //Smoke Test Dependencies - FINISH
 
