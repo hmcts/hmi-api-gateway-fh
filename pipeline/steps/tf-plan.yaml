@@ -2,6 +2,9 @@ parameters:
   - name: subscription
     type: string
 
+variables:
+  hostName: 'hmi-casehqemulator.sandbox.platform.hmcts.net'
+  
 steps:
 
 - task: replacetokens@3
@@ -15,6 +18,7 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
+    variableFiles: 'pipeline/variables/policy-variables.json'
     enableTelemetry: true
 
 - task: TerraformCLI@0
