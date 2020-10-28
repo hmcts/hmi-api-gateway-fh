@@ -11,7 +11,7 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
+      pool: hmi-pool
       custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
@@ -33,13 +33,6 @@ parameters:
         logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
-      tests_security:
-      - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
-        testUrl:
-        - name: API1
-          target: https://www.example.com/openapi.json
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
@@ -47,7 +40,8 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim-svc-dev.azure-api.net
+      pool: hmi-dev
+      custom_domain: hmi-apim.dev.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -67,7 +61,8 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim-svc-test.azure-api.net
+      pool: hmi-test
+      custom_domain: hmi-apim.test.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
@@ -93,12 +88,6 @@ parameters:
       - name: CodeQualityTest
         command: sonarqube
 
-    - name: stg
-      subscription: DTS-SHAREDSERVICES-STG
-      group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim-svc-test.azure-api.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-
 
 variables:
   - group: HMI-APIM-Common
@@ -119,17 +108,16 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
 
-    - ${{ if eq(environment.name, 'sbox') }}:
-      - template: pipeline/jobs/apply-hostname.yaml
-        parameters:
-          subscription: ${{ environment.subscription }}
-          displayName: Apply Custom Domain Configuration
-          dependsOn: Terraform
-          resourceGroup: $(resourceGroup)
-          certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
-          hostName: ${{ environment.custom_domain }}
-          variables:
-            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        subscription: ${{ environment.subscription }}
+        displayName: Apply Custom Domain Configuration
+        dependsOn: Terraform
+        resourceGroup: $(resourceGroup)
+        certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
+        hostName: ${{ environment.custom_domain }}
+        variables:
+          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
     - ${{ if environment.tests_gradle }}:
       - template: pipeline/jobs/create-storage.yaml
