@@ -108,6 +108,13 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
 
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: ${{ environment.subscription }}
+        environment: ${{ environment.name }}
+        dependsOn: Terraform
+
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         subscription: ${{ environment.subscription }}
@@ -139,7 +146,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
-            # - ApplyHostName
+            - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
@@ -166,7 +173,7 @@ stages:
               dependsOn:
               - Terraform
               - createStorage
-              # - ApplyHostName
+              - ApplyHostName
               subscription: ${{ environment.subscription }}
               registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
