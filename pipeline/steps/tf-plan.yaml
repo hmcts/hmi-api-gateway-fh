@@ -4,7 +4,7 @@ parameters:
 
 steps:
 
-- task: replacetokens@0
+- task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
     targetFiles: '**/*-policy.xml'
@@ -17,7 +17,7 @@ steps:
     useLegacyPattern: false
     enableTelemetry: true
 
-- task: TerraformCLI@1
+- task: TerraformCLI@0
   displayName: Terraform plan
   inputs:
     command: plan
