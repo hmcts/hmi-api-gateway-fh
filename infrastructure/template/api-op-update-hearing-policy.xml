@@ -19,7 +19,7 @@
 				<set-backend-service base-url="http://#{hostName}#/hearings/" />
 			</when>
 		</choose>
-		#{mockResponse}#
+		#{mockEndpoint}#
 	</inbound>
 	<backend>
 		<base />
