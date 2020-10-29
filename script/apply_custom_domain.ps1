@@ -1,13 +1,13 @@
 [CmdletBinding()]
 Param (
 [Parameter(Mandatory=$true)]
+[string] $Environment,
+
+[Parameter(Mandatory=$true)]
 [string] $Hostname,
 
 [Parameter(Mandatory=$true)]
 [string] $HostnameType,
-
-[Parameter(Mandatory=$true)]
-[string] $KeyVaultName,
 
 [Parameter(Mandatory=$true)]
 [string] $ResourceGroupName
@@ -20,6 +20,7 @@ if (!(Get-Module -Name Az.ApiManagement)){
     } else {
         Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
     }
+$KeyVaultName = "hmi-shared-kv-$Environment"
 $KeyVaultId = "https://$KeyVaultName.vault.azure.net/secrets/apim-hostname-certificate"
 $proxy = (New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding)
 $apim = (Get-AzApiManagement -ResourceGroupName $ResourceGroupName)
@@ -27,7 +28,7 @@ if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname
     $apim.ProxyCustomHostnameConfiguration = $proxy
     Write-Host "Applying Custom Domain configuration..." $proxy.Hostname -ForegroundColor Yellow
     $apimObjectId = ($apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId)
-    az keyvault set-policy --name $KeyVaultName --object-id $apimObjectId --secret-permissions get, list
+    az keyvault set-policy --name $KeyVaultName -g "hmi-shared-kv-$Environment" --object-id $apimObjectId --secret-permissions get, list
     # Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ObjectId $apimObjectId -PermissionsToSecrets Get,List -Force -Confirm:$false
     Set-AzApiManagement -InputObject $apim -Verbose -Debug
     Write-Host "Custom domain successfully applied..."
