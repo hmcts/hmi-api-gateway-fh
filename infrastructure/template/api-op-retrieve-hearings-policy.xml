@@ -56,7 +56,6 @@
 					<set-backend-service base-url="http://#{hostName}#/hearings/" />
 				</when>
 			</choose>
-			#{mockEndpoint}#
     </inbound>
     <backend>
         <base />
