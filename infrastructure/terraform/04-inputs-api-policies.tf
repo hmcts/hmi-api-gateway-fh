@@ -114,6 +114,11 @@ variable "api_policies" {
       operationId     = "test-wiremock-connection"
       format          = "rawxml-link"
       templateFile    = "api-op-test-wiremock-policy.xml"
+    },
+    {
+      operationId  = "update-listing"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-listing-policy.xml"
     }
   ]
 }
