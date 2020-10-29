@@ -132,7 +132,7 @@ stages:
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
         resourceGroup: $(resourceGroup)
-        environment: ${{ environment.name }}
+        keyVault: hmi-shared-kv-${{ environment.name }}
         hostName: ${{ environment.custom_domain }}
         variables:
           resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
