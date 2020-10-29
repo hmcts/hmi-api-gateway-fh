@@ -188,7 +188,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                hmiSuccessVerifier,
+                getHmiSuccessVerifier(),
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG);
     }
 
