@@ -16,10 +16,10 @@
 		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/create-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
+				<set-backend-service base-url="http://#{hostName}#/hearings/" />
 			</when>
 		</choose>
-		<mock-response status-code="200" content-type="application/json" />
+		#{mockEndpoint}#
 	</inbound>
 	<backend>
 		<base />

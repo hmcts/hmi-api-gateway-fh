@@ -1,0 +1,4 @@
+{ 
+    "hostName":  "hmi-casehqemulator.sandbox.platform.hmcts.net",
+    "mockEndpoint": "<mock-response status-code=\"200\" content-type=\"application/json\" />"
+}
