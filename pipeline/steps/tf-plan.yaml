@@ -15,7 +15,7 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: 'pipeline/variables/policy-variables.json'
+    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
     enableTelemetry: true
 
 - task: TerraformCLI@0
