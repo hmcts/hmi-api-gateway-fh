@@ -121,7 +121,7 @@ stages:
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
         resourceGroup: $(resourceGroup)
-        certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
+        keyVault: hmi-shared-kv-${{ environment.name }}
         hostName: ${{ environment.custom_domain }}
         variables:
           resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
