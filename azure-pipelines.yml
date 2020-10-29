@@ -11,7 +11,7 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
-      pool: hmi-pool
+      registry: DTS-SS-PRIVATE-SBOX
       custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
@@ -33,6 +33,13 @@ parameters:
         logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
+      tests_security:
+      - name: ApiZapScan
+        containerRegistry: ssprivatesbox.azurecr.io
+        repository: hmi/apim-tests-owasp
+        testUrl:
+        - name: API1
+          target: https://www.example.com/openapi.json
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
@@ -40,8 +47,7 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      pool: hmi-dev
-      custom_domain: hmi-apim.preview.platform.hmcts.net
+      custom_domain: hmi-apim-svc-dev.azure-api.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -61,8 +67,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      pool: hmi-test
-      custom_domain: hmi-apim.perftest.platform.hmcts.net
+      custom_domain: hmi-apim-svc-test.azure-api.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
@@ -87,6 +92,12 @@ parameters:
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
+
+    - name: stg
+      subscription: DTS-SHAREDSERVICES-STG
+      group: HMI-APIM-BUILD-STG
+      custom_domain: hmi-apim-svc-test.azure-api.net
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
 variables:
@@ -115,6 +126,7 @@ stages:
         environment: ${{ environment.name }}
         dependsOn: Terraform
 
+<<<<<<< HEAD
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         subscription: ${{ environment.subscription }}
@@ -125,6 +137,19 @@ stages:
         hostName: ${{ environment.custom_domain }}
         variables:
           resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+=======
+    - ${{ if eq(environment.name, 'sbox') }}:
+      - template: pipeline/jobs/apply-hostname.yaml
+        parameters:
+          subscription: ${{ environment.subscription }}
+          displayName: Apply Custom Domain Configuration
+          dependsOn: Terraform
+          resourceGroup: $(resourceGroup)
+          certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
+          hostName: ${{ environment.custom_domain }}
+          variables:
+            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+>>>>>>> a29b83251639c9739b2ebe6452428cc0595afe74
 
     - ${{ if environment.tests_gradle }}:
       - template: pipeline/jobs/create-storage.yaml
@@ -146,7 +171,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
-            - ApplyHostName
+            # - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
@@ -173,7 +198,7 @@ stages:
               dependsOn:
               - Terraform
               - createStorage
-              - ApplyHostName
+              # - ApplyHostName
               subscription: ${{ environment.subscription }}
               registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
