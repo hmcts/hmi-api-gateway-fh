@@ -26,6 +26,7 @@ $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
     $apim.ProxyCustomHostnameConfiguration = $proxy
     Write-Host "Applying Custom Domain configuration..." $proxy.Hostname -ForegroundColor Yellow
+    Write-Host $apim
     $apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId
     $apimObjectId = ($apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId)
     Write-Host $apimObjectId
