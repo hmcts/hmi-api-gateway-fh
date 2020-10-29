@@ -28,7 +28,7 @@ if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname
     Write-Host "Applying Custom Domain configuration..." $proxy.Hostname -ForegroundColor Yellow
     $apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId
     $apimObjectId = ($apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId)
-    Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName -ObjectId $apimObjectId -PermissionsToSecrets Get,List -Verbose -Debug
+    Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName -ObjectId $apimObjectId -PermissionsToSecrets Get,List -Verbose -Force
     Set-AzApiManagement -InputObject $apim -Verbose -Debug
     Write-Host "Custom domain successfully applied..."
     Write-Host "Listing custom domains..."
