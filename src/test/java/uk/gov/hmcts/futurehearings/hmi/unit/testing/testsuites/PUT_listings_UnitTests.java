@@ -1,8 +1,23 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,28 +31,25 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
-
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayName("PUT /hearings - Update Hearings")
+@DisplayName("PUT /listings - Update Listings")
 @SuppressWarnings("java:S2699")
-class PUT_hearings_UnitTests {
+class PUT_listings_UnitTests {
 
-    static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/update-hearings-payload.json";
+    static final String CORRECT_UPDATE_LISTINGS_PAYLOAD = "requests/update-listings-payload.json";
+
     @Value("${targetInstance}")
     private String targetInstance;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hearingApiRootContext}")
-    private String hearingApiRootContext;
+    @Value("${listingsApiRootContext}")
+    private String listingsApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
@@ -57,59 +69,59 @@ class PUT_hearings_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testUpdateHearingsForInvalidResource() throws IOException {
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedForInvalidResource(input);
+    void testUpdateListingsForInvalidResource() throws IOException {
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedForInvalidResource(input);
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
+    void testUpdateListingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
+    void testUpdateListingsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
+    void testUpdateListingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
+    void testUpdateListingsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(6)
     @DisplayName("Test for missing OcpSubKey")
-    void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
+    void testUpdateListingsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
@@ -117,10 +129,10 @@ class PUT_hearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testUpdateHearingsRequestWithInvalidOcpSubKey()throws IOException {
+    void testUpdateListingsRequestWithInvalidOcpSubKey()throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
@@ -128,30 +140,30 @@ class PUT_hearings_UnitTests {
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testUpdateHearingsWithMissingHeader(String iteration) throws IOException {
+    void testUpdateListingsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
-    void testUpdateHearingsWithInvalidHeader(String iteration) throws IOException {
+    void testUpdateListingsWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(10)
     @DisplayName("Test for correct Request")
-    void testUpdateHearingsRequestWithCorrectRequest() throws IOException {
+    void testUpdateListingsRequestWithCorrectRequest() throws IOException {
 
-        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
         final Response response = whenUpdateHearingIsInvokedWithCorrectRequest(input);
         thenValidateResponseForUpdate(response);
     }
@@ -161,32 +173,32 @@ class PUT_hearings_UnitTests {
     }
 
     private Response whenUpdateHearingIsInvokedWithCorrectRequest(final String input) {
-        return updateHearingsResponseForCorrectRequest(hearingApiRootContext + "/H012", headersAsMap, targetInstance, input);
+        return updateListingsResponseForCorrectRequest(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return updateHearingsResponseForAMissingOrInvalidHeader(hearingApiRootContext + "/CASE123432", headersAsMap, targetInstance, input);
+    private Response whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(final String input) {
+        return updateListingsResponseForAMissingOrInvalidHeader(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateHearingsResponseForAMissingOrInvalidOcpSubKey(hearingApiRootContext + "/CASE123432", headersAsMap, targetInstance, input);
+        return updateListingsResponseForAMissingOrInvalidOcpSubKey(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingsIsInvokedForInvalidResource(final String input) {
-        return updateHearingsResponseForInvalidResource(hearingApiRootContext+"Put", headersAsMap, targetInstance, input);
+    private Response whenUpdateListingsIsInvokedForInvalidResource(final String input) {
+        return updateListingsResponseForInvalidResource(listingsApiRootContext+"/list_id/"+"put", headersAsMap, targetInstance, input);
     }
 
-    private Response updateHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().put().then().extract().response();
+                .when().post().then().extract().response();
     }
 
-    private Response updateHearingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateListingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return   given()
                 .body(payloadBody)
                 .headers(headersAsMap)
@@ -195,7 +207,7 @@ class PUT_hearings_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateHearingsResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateListingsResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
                 .body(payloadBody)
                 .headers(headersAsMap)
@@ -204,7 +216,7 @@ class PUT_hearings_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateHearingsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateListingsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
                 .body(payloadBody)
                 .headers(headersAsMap)
@@ -212,6 +224,4 @@ class PUT_hearings_UnitTests {
                 .basePath(api)
                 .when().put().then().extract().response();
     }
-
-
 }

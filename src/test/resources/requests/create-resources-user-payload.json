@@ -1,0 +1,11 @@
+{
+  "personIdHMCTS":"PIDHMCTS012",
+  "personFirstName":"Marcus",
+  "personLastName":"Aurelius",
+  "personSalutation":"Emperor",
+  "personRoleId":"E012",
+  "personVenueId":"V012",
+  "personActiveDate":"2018-01-29T20:36:01Z",
+  "personInactiveDate":"2018-01-29T20:36:01Z",
+  "personRegistry":"PRG012"
+}
