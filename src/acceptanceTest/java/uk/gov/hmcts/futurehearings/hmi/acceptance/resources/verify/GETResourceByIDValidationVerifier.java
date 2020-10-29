@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.resources.verify;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
@@ -20,7 +21,7 @@ public class GETResourceByIDValidationVerifier implements HMISuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertEquals(22, response.getBody().jsonPath().getMap("$").size());
+        assertTrue(response.getBody().jsonPath().getMap("$").size() > 0);
         /*Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
         assertEquals(expectedMessage,responseMap.get(("message")));*/

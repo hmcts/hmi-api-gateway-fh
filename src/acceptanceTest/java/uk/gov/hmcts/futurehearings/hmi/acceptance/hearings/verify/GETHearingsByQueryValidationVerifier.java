@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,6 +18,6 @@ public class GETHearingsByQueryValidationVerifier implements HMISuccessVerifier 
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getList("$").size() > 0);
+        assertEquals(expectedHttpStatus.value(), response.getStatusCode());
     }
 }
