@@ -4,19 +4,19 @@
         <choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 		</choose>
 		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 		</choose>
 		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 		</choose>
     </inbound>
