@@ -35,14 +35,14 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        spid=$(az apim show -n hmi-apim-svc-${{ parameters.environment }} -g hmi-apim-${{ parameters.environment }}-rg --query "identity.principalId" -o tsv)
-        az keyvault set-policy --name hmi-shared-kv-${{ parameters.environment }} --object-id $spid --secret-permissions get list
+  # - task: AzureCLI@2
+  #   inputs:
+  #     azureSubscription: ${{ parameters.subscription }}
+  #     scriptType: 'bash'
+  #     scriptLocation: 'inlineScript'
+  #     inlineScript: |
+  #       spid=$(az apim show -n hmi-apim-svc-${{ parameters.environment }} -g hmi-apim-${{ parameters.environment }}-rg --query "identity.principalId" -o tsv)
+  #       az keyvault set-policy --name hmi-shared-kv-${{ parameters.environment }} --object-id $spid --secret-permissions get list
 
   - task: AzurePowerShell@5
     inputs:
