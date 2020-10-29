@@ -1,13 +1,13 @@
 [CmdletBinding()]
 Param (
 [Parameter(Mandatory=$true)]
-[string] $Environment,
-
-[Parameter(Mandatory=$true)]
 [string] $Hostname,
 
 [Parameter(Mandatory=$true)]
 [string] $HostnameType,
+
+[Parameter(Mandatory=$true)]
+[string] $KeyVaultName,
 
 [Parameter(Mandatory=$true)]
 [string] $ResourceGroupName
@@ -20,7 +20,6 @@ if (!(Get-Module -Name Az.ApiManagement)){
     } else {
         Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
     }
-$KeyVaultName = "hmi-shared-kv-$Environment"
 $KeyVaultId = "https://$KeyVaultName.vault.azure.net/secrets/apim-hostname-certificate"
 $proxy = (New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding)
 $apim = (Get-AzApiManagement -ResourceGroupName $ResourceGroupName)
