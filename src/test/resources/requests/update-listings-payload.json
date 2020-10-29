@@ -1,0 +1,38 @@
+{
+  "_Case": {
+    "caseIdHMCTS": "CHMCTS012",
+    "caseListingRequestId": "CLR012",
+    "caseTitle": "CT012",
+    "caseJurisdiction": "CJ012",
+    "caseCourt": "CC012",
+    "caseRegistered": "CR012",
+    "caseComments": "COMMENT",
+    "caseAdditionalSecurityFlag": "F",
+    "caseRestrictedFlag": "T",
+    "caseInterpreterRequiredFlag": "F"
+  },
+  "Entity": {
+    "entityHmiId": "EH012",
+    "entityTypeCode": "ETC012",
+    "entityRoleCode": "ERC012"
+  },
+  "Subtype": {
+    "entityClassCode": "ECC012",
+    "entityTitle": "ET012",
+    "entityFirstName": "FIRST",
+    "entityLastName": "SURNAME",
+    "entityCompanyName": "HMCTS"
+  },
+  "Listing": {
+    "listingAutoCreateFlag": "T",
+    "listingStartDate": "2018-01-29T20:36:01Z",
+    "listingEndDate": "2018-01-29T20:36:01Z",
+    "listingDuration": "2H",
+    "listingSessionType": "Crime",
+    "listingType": "LT012",
+    "listingPriority": "High",
+    "listingNumberAttendees": "20",
+    "listingComment": "comment",
+    "listingCourt": "LC012"
+  }
+}
