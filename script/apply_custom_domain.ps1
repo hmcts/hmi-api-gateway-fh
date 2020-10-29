@@ -7,7 +7,7 @@ Param (
 [string] $HostnameType,
 
 [Parameter(Mandatory=$true)]
-[string] $KeyVaultId,
+[string] $KeyVaultName,
 
 [Parameter(Mandatory=$true)]
 [string] $ResourceGroupName
@@ -20,13 +20,15 @@ if (!(Get-Module -Name Az.ApiManagement)){
     } else {
         Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
     }
-
+$KeyVaultId = "https://$KeyVaultName.vault.azure.net/secrets/apim-hostname-certificate"
 $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
     $apim.ProxyCustomHostnameConfiguration = $proxy
     Write-Host "Applying Custom Domain configuration..." -ForegroundColor Yellow
     try {
+    $apimObjectId = ($apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId)
+    Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName -ObjectId $apimObjectId -PermissionsToSecrets Get,List
     Set-AzApiManagement -InputObject $apim -Verbose
     } catch {}
     Write-Host "Custom domain successfully applied..."
