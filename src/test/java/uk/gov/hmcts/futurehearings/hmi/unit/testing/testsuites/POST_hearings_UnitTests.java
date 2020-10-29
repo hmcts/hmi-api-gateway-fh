@@ -45,7 +45,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 @SuppressWarnings("java:S2699")
 class POST_hearings_UnitTests {
 
-    private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/correct-hearing-request-payload.json";
+    private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/create-hearing-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;

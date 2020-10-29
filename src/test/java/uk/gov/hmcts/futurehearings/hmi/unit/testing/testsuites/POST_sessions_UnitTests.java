@@ -44,7 +44,7 @@ import java.util.Map;
 @SuppressWarnings("java:S2699")
 class POST_sessions_UnitTests {
 
-    private static final String CORRECT_CREATE_SESSIONS_PAYLOAD = "requests/correct-create-sessions-payload.json";
+    private static final String CORRECT_CREATE_SESSIONS_PAYLOAD = "requests/create-sessions-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
