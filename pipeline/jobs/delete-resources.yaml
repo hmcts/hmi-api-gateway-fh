@@ -26,7 +26,7 @@ jobs:
       sudo apt-get update
       sudo apt-get install azure-cli
   - task: AzureCLI@2
-    displayName: Delete Resource Group
+    displayName: Delete Deployments
     name: deleteAPIM
     inputs:
       azureSubscription: ${{ parameters.subscription }}
