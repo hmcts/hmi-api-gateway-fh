@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.verify;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
@@ -15,7 +16,7 @@ public class GETSchedulesValidationVerifier implements HMISuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getList("$").size()>0);
+        assertEquals(expectedHttpStatus.value(), response.getStatusCode());
         /*Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
         assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
         assertEquals(expectedMessage,responseMap.get(("message")));*/

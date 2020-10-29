@@ -32,6 +32,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -116,6 +117,7 @@ public abstract class HMICommonHeaderTest {
 
     @Test
     @DisplayName("Successfully validated response with an empty payload")
+    @Disabled("As the S&L Mock by the Developers Cannot support this....")
     void test_successful_response_for_empty_json_body() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getRelativeURL(), "empty-json-payload.json",
