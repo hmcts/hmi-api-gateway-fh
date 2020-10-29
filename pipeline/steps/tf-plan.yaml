@@ -4,20 +4,6 @@ parameters:
 
 steps:
 
-- task: replacetokens@3
-  displayName: Replace Tokens in Policy files
-  inputs:
-    targetFiles: '**/*-policy.xml'
-    encoding: 'auto'
-    writeBOM: true
-    actionOnMissing: 'warn'
-    keepToken: false
-    tokenPrefix: '#{'
-    tokenSuffix: '}#'
-    useLegacyPattern: false
-    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
-    enableTelemetry: true
-
 - task: TerraformCLI@0
   displayName: Terraform plan
   inputs:
