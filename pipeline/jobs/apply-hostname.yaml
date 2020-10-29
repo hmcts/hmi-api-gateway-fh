@@ -11,7 +11,7 @@ parameters:
   - name: displayName
     type: string
 
-  - name: keyVault
+  - name: environment
     type: string
   
   - name: hostName
@@ -35,12 +35,21 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        spid=$(az apim show -n hmi-apim-svc-${{ parameters.environment }} -g hmi-apim-${{ parameters.environment }}-rg --query "identity.principalId" -o tsv)
+        az keyvault set-policy --name hmi-shared-kv-${{ parameters.environment }} --object-id $spid --secret-permissions get list
+
   - task: AzurePowerShell@5
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       ScriptType: 'FilePath'
       ScriptPath: 'script/apply_custom_domain.ps1'
-      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName ${{ parameters.keyVault }} -ResourceGroupName $(resourceGroup)'
+      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup)'
       azurePowerShellVersion: 'LatestVersion'
 
 
