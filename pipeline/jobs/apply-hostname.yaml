@@ -37,7 +37,7 @@ jobs:
   steps:
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'DTS-SHAREDSERVICES-SBOX'
+      azureSubscription: ${{ parameters.subscription }}
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
