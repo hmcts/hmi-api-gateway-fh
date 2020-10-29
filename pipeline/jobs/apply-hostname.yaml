@@ -11,9 +11,9 @@ parameters:
   - name: displayName
     type: string
 
-  - name: keyVault
+  - name: environment
     type: string
-  
+
   - name: hostName
     type: string
   
@@ -40,7 +40,7 @@ jobs:
       azureSubscription: ${{ parameters.subscription }}
       ScriptType: 'FilePath'
       ScriptPath: 'script/apply_custom_domain.ps1'
-      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName ${{ parameters.keyVault }} -ResourceGroupName $(resourceGroup)'
+      ScriptArguments: '-Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -Environment ${{ parameters.environment }} -ResourceGroupName $(resourceGroup)'
       azurePowerShellVersion: 'LatestVersion'
 
 
