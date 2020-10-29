@@ -38,8 +38,24 @@
                 </return-response>
             </when>
         </choose>
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/sessions" />
-        <mock-response status-code="200" content-type="application/json" />
+        <choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+		</choose>
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+		</choose>
     </inbound>
     <backend>
         <base />

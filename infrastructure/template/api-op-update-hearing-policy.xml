@@ -2,19 +2,19 @@
 	<inbound>
 		<base />
 		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CFT")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 			</when>
 		</choose>
 		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "S&L")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 			</when>
 		</choose>
 		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CRIME")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 			</when>
