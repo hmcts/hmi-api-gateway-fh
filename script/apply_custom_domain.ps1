@@ -25,7 +25,7 @@ $proxy = New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -Hos
 $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
 if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
     $apim.ProxyCustomHostnameConfiguration = $proxy
-    Write-Host "Applying Custom Domain configuration..." -ForegroundColor Yellow
+    Write-Host "Applying Custom Domain configuration..." $proxy.Hostname -ForegroundColor Yellow
     try {
     $apimObjectId = ($apim | Select-Object -Expand Identity | Select -ExpandProperty PrincipalId)
     Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName -ObjectId $apimObjectId -PermissionsToSecrets Get,List -Verbose -Debug
@@ -33,6 +33,7 @@ if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname
     } catch {}
     Write-Host "Custom domain successfully applied..."
     Write-Host "Listing custom domains..."
+    $apim = Get-AzApiManagement -ResourceGroupName $ResourceGroupName
     foreach ($_ in $apim.ProxyCustomHostnameConfiguration.Hostname) {
         Write-Host $_
     }
