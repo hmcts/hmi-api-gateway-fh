@@ -44,7 +44,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     private static final String SESSIONS_SUCCESS_MSG= "The request was received successfully.";
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception{
         super.initialiseValues();
         this.setRelativeURL(sessionsRootContext);
         this.setHttpMethod(HttpMethod.GET);
@@ -59,6 +59,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     void test_invalid_query_param_with_value() throws IOException {
         this.setUrlParams(buildQueryParams("extra_param_key", " "));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -74,6 +75,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -89,6 +91,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(sessionEndDateKey, sessionEndDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -104,6 +107,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -119,6 +123,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     void test_caseCourt_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -139,6 +144,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal3) throws IOException {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -159,6 +165,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal3) throws IOException {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -181,6 +188,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramVal4) throws IOException {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -206,6 +214,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                          ) throws IOException {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4, paramKey5, paramVal5));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
