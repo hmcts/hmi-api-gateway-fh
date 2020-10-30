@@ -16,6 +16,7 @@ public class RestDelegate {
     private RestDelegate () {}
 
     public static final Response invokeSnLAPI (final Map<String, String> headersAsMap,
+                                               final String authorizationToken,
                                                final String requestPayloadPath,
                                                final HttpMethod httpMethod,
                                                final MockServer mockServer,
