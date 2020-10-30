@@ -36,4 +36,4 @@ jobs:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash |
-      PowerShell -ExecutionPolicy Unrestricted -File $(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1 -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup)
+      PowerShell -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup)
