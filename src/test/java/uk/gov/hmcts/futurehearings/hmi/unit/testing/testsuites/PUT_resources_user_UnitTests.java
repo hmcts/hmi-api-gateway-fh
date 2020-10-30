@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
@@ -8,6 +10,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -72,6 +75,18 @@ class PUT_resources_user_UnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
 
     @BeforeAll
     void setToken(){
@@ -148,7 +163,7 @@ class PUT_resources_user_UnitTests {
     void testUpdateUserResourceRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -159,7 +174,7 @@ class PUT_resources_user_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -194,6 +209,29 @@ class PUT_resources_user_UnitTests {
         thenValidateResponseForUpdate(response);
     }
 
+
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testUpdateUserResourceRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testUpdateUserResourceRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_UPDATE_USER_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -202,8 +240,8 @@ class PUT_resources_user_UnitTests {
         return updateUserResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/user/UserID", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateUserResourceIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateUserResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/user/UserID", headersAsMap, targetInstance, input);
+    private Response whenUpdateUserResourceIsInvokedWithMissingAccessToken(final String input) {
+        return updateUserResourceResponseFForMissingAccessToken(resourcesApiRootContext + "/user/UserID", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateUserResourceIsInvokedForInvalidResource(final String input) {
@@ -249,7 +287,7 @@ class PUT_resources_user_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateUserResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateUserResourceResponseFForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
                 .auth()
                 .oauth2(accessToken)

@@ -7,6 +7,8 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -94,6 +96,7 @@ class DELETE_hearings_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
+        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -157,23 +160,23 @@ class DELETE_hearings_UnitTests {
 
     @Test
     @Order(6)
-    @DisplayName("Test for missing Access Token")
-    void testDeleteHearingRequestWithMissingOcpSubKey() throws IOException {
+    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
+    void testDeleteResourcesRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(input);
-        thenValidateResponseForMissingOrInvalidAccessToken(response);
+        final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
     @Order(7)
-    @DisplayName("Test for invalid Access Token")
-    void testDeleteHearingRequestWithInvalidOcpSubKey() throws IOException {
-        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
+    void testDeleteResourcesRequestWithInvalidOcpSubKey()throws IOException {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingOrInvalidAccessToken(response);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
     @Order(8)
@@ -206,6 +209,27 @@ class DELETE_hearings_UnitTests {
         thenValidateResponseForRequestOrDelete(response);
     }
 
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteHearingRequestIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private Response whenDeleteHearingRequestIsInvokedForInvalidResource(final String input) {
         return deleteHearingsResponseForInvalidResource(hearingApiRootContext + "delete", headersAsMap, targetInstance, input);
     }
@@ -214,7 +238,7 @@ class DELETE_hearings_UnitTests {
         return deleteHearingsResponseForCorrectHeaders(hearingApiRootContext, headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(final String input) {
+    private Response whenDeleteHearingRequestIsInvokedWithMissingAccessToken(final String input) {
         return deleteHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap, targetInstance, input);
     }
 

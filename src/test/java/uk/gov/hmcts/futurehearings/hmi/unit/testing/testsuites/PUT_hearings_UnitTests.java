@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -9,6 +11,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +75,18 @@ class PUT_hearings_UnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
 
     @BeforeAll
     void setToken(){
@@ -147,7 +162,7 @@ class PUT_hearings_UnitTests {
     void testUpdateHearingsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -158,7 +173,7 @@ class PUT_hearings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -193,6 +208,29 @@ class PUT_hearings_UnitTests {
         thenValidateResponseForUpdate(response);
     }
 
+
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void WithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
+        final Response response = whenUpdateHearingsIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void WithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
+        final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -205,8 +243,8 @@ class PUT_hearings_UnitTests {
         return updateHearingsResponseForAMissingOrInvalidHeader(hearingApiRootContext + "/CASE123432", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateHearingsResponseForAMissingOrInvalidOcpSubKey(hearingApiRootContext + "/CASE123432", headersAsMap, targetInstance, input);
+    private Response whenUpdateHearingsIsInvokedWithMissingAccessToken(final String input) {
+        return updateHearingsResponseForMissingAccessToken(hearingApiRootContext + "/CASE123432", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateHearingsIsInvokedForInvalidResource(final String input) {
@@ -247,7 +285,7 @@ class PUT_hearings_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateHearingsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
                 .auth()
                 .oauth2(accessToken)

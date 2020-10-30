@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
@@ -8,6 +10,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -73,6 +76,18 @@ class PUT_resources_location_UnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
 
     @BeforeAll
     void setToken(){
@@ -149,7 +164,7 @@ class PUT_resources_location_UnitTests {
     void testUpdateLocationResourceRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -160,7 +175,7 @@ class PUT_resources_location_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -195,6 +210,29 @@ class PUT_resources_location_UnitTests {
         thenValidateResponseForUpdate(response);
     }
 
+
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testUpdateLocationResourceRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateLocationResourceIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testUpdateLocationResourceRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
+        final Response response = whenUpdateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -203,8 +241,8 @@ class PUT_resources_location_UnitTests {
         return updateLocationResourceResponseForAMissingOrInvalidHeader(resourcesApiRootContext + "/location/loc_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(resourcesApiRootContext + "/location/loc_id", headersAsMap, targetInstance, input);
+    private Response whenUpdateLocationResourceIsInvokedWithMissingAccessToken(final String input) {
+        return updateLocationResourceResponseForMissingAccessToken(resourcesApiRootContext + "/location/loc_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateLocationResourceIsInvokedForInvalidResource(final String input) {
@@ -250,10 +288,8 @@ class PUT_resources_location_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateLocationResourceResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
+    private Response updateLocationResourceResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
         return  given()
-                .auth()
-                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)

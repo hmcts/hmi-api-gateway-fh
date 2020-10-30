@@ -8,6 +8,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -74,6 +75,18 @@ class DELETE_resources_UnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
 
     @BeforeAll
     void setToken(){
@@ -150,7 +163,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(input);
+        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -161,7 +174,7 @@ class DELETE_resources_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(input);
+        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -195,6 +208,26 @@ class DELETE_resources_UnitTests {
         thenValidateResponseForRequestOrDelete(response);
     }
 
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testDeleteResourcesRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testDeleteResourcesRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
 
     private Response whenDeleteResourcesRequestIsInvokedForInvalidResource(final String input) {
         return deleteResourcesResponseForInvalidResource(resourcesApiRootContext+"delete", headersAsMap, targetInstance, input);
@@ -204,8 +237,8 @@ class DELETE_resources_UnitTests {
         return deleteResourcesResponseForCorrectHeaders(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteResourcesRequestIsInvokedWithMissingOcpSubKey(final String input) {
-        return deleteResourcesResponseForMissingOrInvalidOcpSubKey(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
+    private Response whenDeleteResourcesRequestIsInvokedWithMissingAccessToken(final String input) {
+        return deleteHearingsResponseForMissingAccessToken(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
     }
 
     private Response whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
@@ -240,11 +273,9 @@ class DELETE_resources_UnitTests {
                 .when().delete().then().extract().response();
     }
 
-    private Response deleteResourcesResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
-                .auth()
-                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)

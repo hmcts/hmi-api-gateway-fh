@@ -8,6 +8,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier.thenValidateResponseForRetrieve;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -72,6 +73,18 @@ class GET_schedules_UnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
 
     @BeforeAll
     void setToken(){
@@ -152,7 +165,7 @@ class GET_schedules_UnitTests {
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
     void testRetrieveHearingSchedulesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -162,7 +175,7 @@ class GET_schedules_UnitTests {
     void testRetrieveHearingSchedulesRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -188,7 +201,7 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(10)
     @DisplayName("Test for Correct Headers and No Parameters")
     void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
@@ -196,11 +209,29 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(19)
+    @Order(11)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveHearingSchedulesRequestWithCorrectRequestAndAllParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndAllParams();
         thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveHearingSchedulesRequestWithMissingAccessToken() {
+        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(13)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveHearingSchedulesRequestWithInvalidAccessToken()  {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedForInvalidResource() {
@@ -215,8 +246,8 @@ class GET_schedules_UnitTests {
         return retrieveHearingSchedulesResponseForCorrectRequestAndAllParams(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
-    private Response whenRetrieveHearingScheduleIsInvokedWithMissingOcpSubKey() {
-        return retrieveHearingSchedulesResponseForMissingOrInvalidOcpSubKey(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+    private Response whenRetrieveHearingSchedulesIsInvokedWithMissingAccessToken() {
+        return retrieveHearingSchedulesResponseForMissingAccessToken(schedulesApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader() {
@@ -258,12 +289,10 @@ class GET_schedules_UnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveHearingSchedulesResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap,final String basePath) {
+    private Response retrieveHearingSchedulesResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap,final String basePath) {
 
          return given()
-                 .auth()
-                 .oauth2(accessToken)
-                .queryParams(paramsAsMap)
+                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)

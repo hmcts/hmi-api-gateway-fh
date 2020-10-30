@@ -8,6 +8,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -74,6 +75,19 @@ class DELETE_sessions_UnitTests {
 
     private static String accessToken;
 
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
@@ -82,6 +96,7 @@ class DELETE_sessions_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
+        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -149,7 +164,7 @@ class DELETE_sessions_UnitTests {
     void testDeleteSessionsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(input);
+        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -160,7 +175,7 @@ class DELETE_sessions_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key", "invalidocpsubkey");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(input);
+        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -194,6 +209,27 @@ class DELETE_sessions_UnitTests {
         thenValidateResponseForRequestOrDelete(response);
     }
 
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteHearingRequestIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private Response whenDeleteSessionsRequestIsInvokedForInvalidResource(final String input) {
         return deleteSessionsResponseForInvalidResource(sessionsApiRootContext+"/session_id/" + "delete", headersAsMap, targetInstance, input);
     }
@@ -202,8 +238,8 @@ class DELETE_sessions_UnitTests {
         return deleteSessionsResponseForCorrectHeaders(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedWithMissingOcpSubKey(final String input) {
-        return deleteSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
+    private Response whenDeleteHearingRequestIsInvokedWithMissingAccessToken(final String input) {
+        return deleteSessionsResponseForMissingAccessToken(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
@@ -238,11 +274,9 @@ class DELETE_sessions_UnitTests {
                 .when().delete().then().extract().response();
     }
 
-    private Response deleteSessionsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
-                .auth()
-                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
