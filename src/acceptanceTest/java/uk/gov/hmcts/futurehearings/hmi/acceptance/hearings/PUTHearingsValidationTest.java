@@ -42,7 +42,7 @@ class PUTHearingsValidationTest extends HearingValidationTest {
     private HttpMethod httpMethod;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         hearings_idRootContext = String.format(hearings_idRootContext,"12345");
         this.setRelativeURL(hearings_idRootContext);
@@ -61,6 +61,7 @@ class PUTHearingsValidationTest extends HearingValidationTest {
     void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
