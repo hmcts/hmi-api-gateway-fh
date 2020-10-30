@@ -1,12 +1,8 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-hearing" />
-        <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                <mock-response status-code="200" content-type="application/json" />
-            </when>
-        </choose>
+        <rewrite-uri template="/casehqapi/rest/hmcts/hearings/{hearing-id}" copy-unmatched-params="true" />
+        <set-backend-service base-url="http://hmi-wiremock.sandbox.platform.hmcts.net" />
     </inbound>
     <backend>
         <base />

@@ -1,8 +1,8 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-session" />
-        <mock-response status-code="200" content-type="application/json" />
+        <rewrite-uri template="/casehqapi/rest/hmcts/sessions/{sessionIdCaseHQ}" copy-unmatched-params="true" />
+        <set-backend-service base-url="http://hmi-wiremock.sandbox.platform.hmcts.net" />
     </inbound>
     <backend>
         <base />
