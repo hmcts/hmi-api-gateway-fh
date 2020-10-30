@@ -37,24 +37,58 @@
                         }</set-body>
                 </return-response>
             </when>
-        </choose>
-        <choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "S&L")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/schedules/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
 			</when>
-		</choose>
-		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CFT")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/schedules/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
 			</when>
-		</choose>
-		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System" == "CRIME")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{hostName}#/schedules/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
 			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+					<return-response>
+	                    <set-status code="200" />
+	                    <set-header name="Content-Type">
+	    					<value>application/json</value>
+						</set-header>
+	                    <set-body>@{
+	                        var data = new JArray();
+	                        JObject recordOne = new JObject(
+	                            new JProperty("apiVersion", "V1.00103"),
+								new JProperty("transactionIdCaseHQ", "5f2bffce09fb0feadaf7b906"),
+  								new JProperty("transactionIdHMCTS", "5f2bffcea47aedacc86d35cf"),
+  								new JProperty("timeStamp", "12:15:22"),
+  								new JProperty("listingId", "5f2bffcec0d5d73e929923fa"),
+  								new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7488"),
+  								new JProperty("hearingType", "Crime"),
+  								new JProperty("hearingPriority", "High"),
+  								new JProperty("hearingDate", "2020-01-28T07:57:08 -00:00"),
+  								new JProperty("hearingStartTime", "08:45"),
+  								new JProperty("hearingEndTime", "09:00"),
+  								new JProperty("hearingWelshLanguage", "No"),
+  								new JProperty("hearingPrivate", "Yes"),
+  								new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+  								new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+  								new JProperty("hearingTranslatorRequired", "No"),
+  								new JProperty("hearingTranslatorLanguage", "n/a"),
+  								new JProperty("hearingOutcome", "To be hanged till death"),
+  								new JProperty("hearingCreatedDate", "2019-12-28T07:57:08 -00:00"),
+  								new JProperty("hearingCreatedBy", "Dimitry Mascaranhus"),
+  								new JProperty("hearingParticipantId", "5f2bffce90a69eb81aaec725"),
+  								new JProperty("hearingVenueId", "V3455"),
+  								new JProperty("hearingRoomId", "R2345"),
+  								new JProperty("hearingJudgeId", "HJ123")
+	                            
+	                        );
+	                        data.Add(recordOne);
+	                        return data.ToString();
+	                    }</set-body>
+	                </return-response>
+                </when>
 		</choose>
     </inbound>
     <backend>
