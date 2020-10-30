@@ -39,7 +39,7 @@ public class PUTResourcesByLocationValidationTest extends ResourceValidationTest
     private String resourcesByLocation_idRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,"12345");
         this.setRelativeURL(resourcesByLocation_idRootContext);

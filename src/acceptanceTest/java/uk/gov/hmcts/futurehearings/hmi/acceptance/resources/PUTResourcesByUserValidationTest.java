@@ -37,7 +37,7 @@ class PUTResourcesByUserValidationTest extends ResourceValidationTest {
     private HttpMethod httpMethod;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
         this.setRelativeURL(resourcesByUser_idRootContext);
