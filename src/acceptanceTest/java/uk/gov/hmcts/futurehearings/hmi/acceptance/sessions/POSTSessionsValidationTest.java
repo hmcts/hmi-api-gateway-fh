@@ -35,7 +35,7 @@ class POSTSessionsValidationTest extends SessionsValidationTest {
     private String sessionsRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(sessionsRootContext);
         this.setHttpMethod(HttpMethod.POST);
@@ -53,6 +53,7 @@ class POSTSessionsValidationTest extends SessionsValidationTest {
     void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
