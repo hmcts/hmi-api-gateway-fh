@@ -6,18 +6,29 @@
 				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
-		</choose>
-		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
-		</choose>
-		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+					<return-response>
+	                    <set-status code="200" />
+	                    <set-header name="Content-Type">
+	    					<value>application/json</value>
+						</set-header>
+						<set-body>@{
+		               return new JObject(
+		                   new JProperty("response code", 200),
+		                   new JProperty("description", "The request was received successfully.")
+		               ).ToString();
+		               }
+		       		</set-body>
+		        </return-response>
+		    </when>
 		</choose>
     </inbound>
     <backend>
