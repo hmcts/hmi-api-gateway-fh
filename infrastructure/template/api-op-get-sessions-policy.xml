@@ -88,35 +88,8 @@
                 </return-response>
             </when>
         </choose>
-        <choose>
-            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("sessionIdCaseHQ") != null)">
-                <return-response>
-                    <set-status code="200" reason="Successful reesponse." />
-                    <set-header name="Content-Type" exists-action="override">
-                        <value>application/json</value>
-                    </set-header>
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("sessionStartDate", "2018-01-29 20:36:01Z"),
-                            new JProperty("sessionEndDate", "2018-01-29 20:36:01Z"),
-                            new JProperty("caseCourt", "Milton Keynes"),
-                            new JProperty("room-Name", "RM012"),
-                            new JProperty("JoH", new JObject(
-                                new JProperty("PersonRoleID", "PR012"),
-                                new JProperty("PersonID", "P012"),
-                                new JProperty("PersonRole", "Judge"),
-                                new JProperty("personName", "Marcus Trescothic"),
-                                new JProperty("TicketName", "T123")
-                             )),
-                            new JProperty("SessionType", "DS"),
-                            new JProperty("SessionIDCaseHQ", "SID012")
-                        ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
-        </choose>
-        <set-backend-service base-url="https://www.hmcts.com/sessions/get-sessions" />
-        <mock-response status-code="200" content-type="application/json" />
+        <rewrite-uri template="/casehqapi/rest/hmcts/resources/sessions" copy-unmatched-params="true" />
+        <set-backend-service base-url="http://hmi-wiremock.sandbox.platform.hmcts.net" />
     </inbound>
     <backend>
         <base />
