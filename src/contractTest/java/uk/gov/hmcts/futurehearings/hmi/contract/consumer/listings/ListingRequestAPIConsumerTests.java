@@ -6,11 +6,10 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
@@ -22,10 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -37,33 +34,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-public class ListingRequestAPIConsumerTests {
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
+public class ListingRequestAPIConsumerTests extends ContractTest {
 
     private static final String PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH = "/casehqapi/rest/hmcts/resources/listings/1234";
-
-    private Map<String, String> headersAsMap = new HashMap<>();
 
     public static final String RESOURCES_LISTING_REQUEST_SCHEMA_JSON = "/listingRequestMessage.json";
     public static final String RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-complete-payload-with-entities.json";
     public static final String RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-mandatory-payload.json";
     public static final String RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-no-entities-payload.json";
     public static final String RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-payload.json";
-
-    @BeforeEach
-    public void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        //Only Commenting out in this step as this is not required as of the moment for the McGirr Deployment
-        //headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
-        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
-    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompletePUTPayloadWithEntitiesForRequestListingPact(
@@ -88,6 +67,7 @@ public class ListingRequestAPIConsumerTests {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
+                authorizationToken,
                 RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -121,6 +101,7 @@ public class ListingRequestAPIConsumerTests {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
+                authorizationToken,
                 RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -154,6 +135,7 @@ public class ListingRequestAPIConsumerTests {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
+                authorizationToken,
                 RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -187,6 +169,7 @@ public class ListingRequestAPIConsumerTests {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
+                authorizationToken,
                 RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
