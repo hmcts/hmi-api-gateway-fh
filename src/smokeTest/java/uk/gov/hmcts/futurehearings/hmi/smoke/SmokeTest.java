@@ -59,7 +59,7 @@ public abstract class SmokeTest {
 
     protected Map<String, Object> headersAsMap = new HashMap<>();
 
-     String authorizationToken = null;
+    protected String authorizationToken;
 
     @BeforeAll
     public void beforeAll(TestInfo info) {
@@ -73,6 +73,7 @@ public abstract class SmokeTest {
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
+
         this.authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,
                 grantType, clientID,
