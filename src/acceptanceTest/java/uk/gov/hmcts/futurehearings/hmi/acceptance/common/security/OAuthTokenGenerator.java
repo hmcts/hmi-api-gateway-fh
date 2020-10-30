@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @Slf4j
 public class OAuthTokenGenerator {
 
-    public static final void generateOAuthToken(final String token_apiURL,
+    public static final String generateOAuthToken(final String token_apiURL,
                                                 final String token_apiTenantId,
                                                 final String grantType,
                                                 final String clientID,
@@ -22,10 +22,11 @@ public class OAuthTokenGenerator {
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, scope);
 
-        callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
+        Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
+        return response.jsonPath().getString("access_token");
     }
 
-    public static final void callTokenGeneratorEndpoint(final String bodyForToken,
+    public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
                                                          final HttpStatus badRequest,
                                                          final String full_token_apiURL) {
 
@@ -43,5 +44,6 @@ public class OAuthTokenGenerator {
                 .extract()
                 .response();
         log.debug(response.prettyPrint());
+        return response;
     }
 }
