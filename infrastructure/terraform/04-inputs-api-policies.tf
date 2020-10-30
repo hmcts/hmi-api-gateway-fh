@@ -86,19 +86,34 @@ variable "api_policies" {
       templateFile = "api-op-get-listing-by-id-policy.xml"
     },
     {
-      operationId     = "create-session"
-      format          = "rawxml-link"
-      templateFile    = "api-op-create-session-policy.xml"
+      operationId  = "create-session"
+      format       = "rawxml-link"
+      templateFile = "api-op-create-session-policy.xml"
     },
     {
-      operationId     = "delete-session"
-      format          = "rawxml-link"
-      templateFile    = "api-op-delete-session-policy.xml"
+      operationId  = "delete-session"
+      format       = "rawxml-link"
+      templateFile = "api-op-delete-session-policy.xml"
     },
     {
-      operationId     = "secure"
+      operationId  = "secure"
+      format       = "rawxml-link"
+      templateFile = "api-op-get-secure-policy.xml"
+    },
+    {
+      operationId     = "create-resource-location"
       format          = "rawxml-link"
-      templateFile    = "api-op-get-secure-policy.xml"
+      templateFile    = "api-op-create-resource-location-policy.xml"
+    },
+    {
+      operationId     = "create-resource-user"
+      format          = "rawxml-link"
+      templateFile    = "api-op-create-resource-user-policy.xml"
+    },
+    {
+      operationId  = "update-listing"
+      format       = "rawxml-link"
+      templateFile = "api-op-update-listing-policy.xml"
     }
   ]
 }
