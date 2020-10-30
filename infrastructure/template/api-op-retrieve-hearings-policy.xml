@@ -37,24 +37,62 @@
                             }</set-body>
                     </return-response>
                 </when>
-            </choose>
-            <choose>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
 				</when>
-			</choose>
-			<choose>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
 				</when>
-			</choose>
-			<choose>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
+					<set-backend-service base-url="http://#{hostName}#/hearings/" />
 				</when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+					<return-response>
+	                    <set-status code="200" />
+	                    <set-header name="Content-Type">
+	    					<value>application/json</value>
+						</set-header>
+	                    <set-body>@{
+	                        var data = new JArray();
+	                        JObject recordOne = new JObject(
+	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
+	                            new JProperty("hearingType", "Traffic"),
+	                            new JProperty("hearingDate", "2020-09-16"),
+	                            new JProperty("hearingStartTime", "08:45"),
+	                            new JProperty("hearingEndTime", "10:45"),
+	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+	                            new JProperty("hearingTranslatorRequired", "No"),
+	                            new JProperty("hearingCreatedDate", "2020-09-16"),
+	                            new JProperty("hearingCreatedBy", "Donald Duck"),
+	                            new JProperty("hearingVenueId", "V3455"),
+	                            new JProperty("hearingRoomId", "R2345")
+	                        );
+	                        JObject recordTwo = new JObject(
+	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
+	                            new JProperty("hearingType", "Traffic"),
+	                            new JProperty("hearingDate", "2020-09-16"),
+	                            new JProperty("hearingStartTime", "08:45"),
+	                            new JProperty("hearingEndTime", "10:45"),
+	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+	                            new JProperty("hearingTranslatorRequired", "No"),
+	                            new JProperty("hearingCreatedDate", "2020-09-16"),
+	                            new JProperty("hearingCreatedBy", "Donald Duck"),
+	                            new JProperty("hearingVenueId", "V3455"),
+	                            new JProperty("hearingRoomId", "R2345")
+	                        );
+	                        data.Add(recordOne);
+	                        data.Add(recordTwo);
+	                        return data.ToString();
+	                    }</set-body>
+	                </return-response>
+                </when>
 			</choose>
     </inbound>
     <backend>
