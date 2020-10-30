@@ -40,10 +40,6 @@ parameters:
         testUrl:
         - name: API1
           target: https://www.example.com/openapi.json
-        - name: API2
-          target: https://www.example.com/openapitest1.json
-        - name: API3
-          target: https://www.example.com/openapitest2.json
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
@@ -97,6 +93,13 @@ parameters:
       - name: CodeQualityTest
         command: sonarqube
 
+    - name: stg
+      subscription: DTS-SHAREDSERVICES-STG
+      group: HMI-APIM-BUILD-STG
+      custom_domain: hmi-apim-svc-test.azure-api.net
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+
 variables:
   - group: HMI-APIM-Common
 
@@ -116,6 +119,13 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
 
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: ${{ environment.subscription }}
+        environment: ${{ environment.name }}
+        dependsOn: Terraform
+
     - ${{ if eq(environment.name, 'sbox') }}:
       - template: pipeline/jobs/apply-hostname.yaml
         parameters:
@@ -128,20 +138,20 @@ stages:
           variables:
             resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
-    - template: pipeline/jobs/create-storage.yaml
-      parameters:
-        displayName: Create Storage for Test Results
-        subscription: ${{ environment.subscription }}
-        dependsOn: Terraform
-        resourceGroup: $(resourceGroup)
-        storageAccount: $(storageAccount)
-        variables:
-          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-          storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+    - ${{ if environment.tests_gradle }}:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: ${{ environment.subscription }}
+          dependsOn: Terraform
+          resourceGroup: $(resourceGroup)
+          storageAccount: $(storageAccount)
+          variables:
+            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+            storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
-
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
