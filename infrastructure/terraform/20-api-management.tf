@@ -1,13 +1,3 @@
-data "azurerm_key_vault" "infra_key_vault" {
-  name                = "hmi-shared-kv-${var.environment}"
-  resource_group_name = "hmi-sharedservices-${var.environment}-rg"
-}
-
-data "azurerm_key_vault_secret" "certificate_secret" {
-  name         = "apim-hostname-certificate"
-  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
-}
-
 resource "azurerm_api_management" "hmi_apim" {
   name                = "${var.prefix}-${var.product}-svc-${var.environment}"
   location            = azurerm_resource_group.hmi_apim_rg.location
@@ -31,21 +21,4 @@ resource "azurerm_api_management" "hmi_apim" {
     }
   }
 
-  hostname_configuration {
-    proxy {
-      default_ssl_binding = true
-      host_name           = var.hostname
-      key_vault_id        = replace(data.azurerm_key_vault_secret.certificate_secret.id, "/${data.azurerm_key_vault_secret.certificate_secret.version}", "")
-    }
-  }
-}
-
-resource "azurerm_key_vault_access_policy" "shared_kv_premissions" {
-  key_vault_id            = data.azurerm_key_vault.infra_key_vault.id
-  tenant_id               = azurerm_key_vault.hmi_apim_kv.tenant_id
-  object_id               = azurerm_api_management.hmi_apim.identity[0].principal_id
-  certificate_permissions = var.certificate_permissions
-  key_permissions         = var.key_permissions
-  secret_permissions      = var.secret_permissions
-  storage_permissions     = var.storage_permissions
 }
