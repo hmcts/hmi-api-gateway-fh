@@ -13,13 +13,13 @@ Param (
 [string] $ResourceGroupName,
 
 [Parameter(Mandatory=$true)]
-[string] $tenant
+[string] $Tenant
 )
 
 Install-Module -Name Az.Accounts -Force -Verbose
 
 $Credential = Get-Credential
-Connect-AzAccount -Credential $Credential -Tenant $tenant -ServicePrincipal
+Connect-AzAccount -Credential $Credential -Tenant $Tenant -ServicePrincipal
 
 if (!(Get-Module -Name Az.ApiManagement)){
     Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow
