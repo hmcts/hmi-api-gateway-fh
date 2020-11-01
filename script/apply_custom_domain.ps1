@@ -13,6 +13,7 @@ Param (
 [string] $ResourceGroupName
 )
 
+Install-Module -Name Az.Accounts
 $tenant = (Get-AzTenant).Id
 $Credential = Get-Credential
 Connect-AzAccount -Credential $Credential -Tenant $tenant -ServicePrincipal
