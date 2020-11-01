@@ -1,0 +1,1 @@
+FROM dius/pact-broker:2.60.0.0

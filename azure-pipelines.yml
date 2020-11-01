@@ -2,58 +2,12 @@
 trigger:
   - none
 
-parameters:
-  - name: environments
-    type: object
-    default: 
-    - name: sbox
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
-      tests_security:
-      - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
-        testUrl:
-        - name: API1
-          target: https://www.example.com/openapi.json
-        - name: API2
-          target: https://www.example.com/openapitest1.json
-        - name: API3
-          target: https://www.example.com/openapitest2.json
+steps:
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-
-jobs:
-  - job: "echo"
-    steps:
-    - script: |
-        echo Build.SourceVersion $(Build.SourceVersion)
-        echo Build.Repository.Git.SubmoduleCheckout $(Build.Repository.Git.SubmoduleCheckout)
-        echo Build.DefinitionName $(Build.DefinitionName)
-        echo Build.Reason $(Build.Reason)
-        echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
-        ls $(Build.Repository.LocalPath)/infrastructure/template/
-        echo ""
-        cat $(Build.Repository.LocalPath)/infrastructure/template/api-op-health-check-policy.xml
-        echo Build.Repository.Name $(Build.Repository.Name)
-        echo Build.SourceBranch $(Build.SourceBranch)
-        echo Build.SourceBranchName $(Build.SourceBranchName)
-        echo Build.SourcesDirectory $(Build.SourcesDirectory)
-        ls $(Build.SourcesDirectory)/infrastructure/template/
-        echo ""
-        cat $(Build.SourcesDirectory)/infrastructure/template/api-op-health-check-policy.xml
-        echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
-        echo ""
-        ls /home/vsts/work/1/s/infrastructure/template/
-
-- ${{ each environment in parameters.environments }}:
-  - ${{ each test in environment.tests_security }}:
-    - job: 
-      steps:
-      - script: |
-          echo ${{ test.name }}
-    # - $ {{ each url in test.testUrl }}:
-    #   - job: ${{ url.name }}
-    #     steps:
-    #     - script: |
-    #         echo ${{ url.target }}
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
