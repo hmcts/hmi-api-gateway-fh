@@ -13,3 +13,4 @@ tags = {
     "environment":"staging"
   }
 enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
+hostname = "hmi-apim.staging.platform.hmcts.net"
