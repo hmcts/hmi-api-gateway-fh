@@ -19,3 +19,11 @@ output "storage_account" {
   value       = azurerm_storage_account.hmi_apim_storage.name
   sensitive   = true
 }
+
+output "apim_id" {
+  value = azurerm_api_management.hmi_apim.identity.*.principal_id
+}
+
+output "apim_said" {
+  value = azurerm_api_management.hmi_apim.identity[0].principal_id
+}
