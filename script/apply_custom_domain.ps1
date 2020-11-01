@@ -18,8 +18,7 @@ Param (
 
 Install-Module -Name Az.Accounts -Force -Verbose
 
-$Credential = Get-Credential
-Connect-AzAccount -Credential $Credential -Tenant $Tenant -ServicePrincipal
+Connect-AzAccount -Tenant $Tenant -ServicePrincipal
 
 if (!(Get-Module -Name Az.ApiManagement)){
     Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow
