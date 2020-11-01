@@ -10,7 +10,7 @@ Param (
 [string] $KeyVaultName,
 
 [Parameter(Mandatory=$true)]
-[string] $ResourceGroupName
+[string] $ResourceGroupName,
 
 [Parameter(Mandatory=$true)]
 [string] $tenant
