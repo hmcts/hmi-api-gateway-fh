@@ -52,6 +52,9 @@ class DELETE_hearings_UnitTests {
     @Value("${hearingApiRootContext}")
     private String hearingApiRootContext;
 
+    @Value("${destinationSystem}")
+    private String destinationSystem;
+
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @BeforeEach
@@ -60,7 +63,7 @@ class DELETE_hearings_UnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Source-System", "CFT");
+        headersAsMap.put("Source-System", destinationSystem);
         headersAsMap.put("Destination-System", "S&L");
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
