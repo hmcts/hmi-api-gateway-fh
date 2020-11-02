@@ -4,6 +4,7 @@ import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.hearing.steps.HearingSteps;
 
 import java.io.IOException;
@@ -31,39 +32,14 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for various endpoints"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class HearingAPITest {
+public class HearingAPITest extends FunctionalTest {
 
     @Steps
     HearingSteps hearingSteps;
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
-    @Value("${hearingApiRootContext}")
-    private String hearingApiRootContext;
-
-    Map<String, Object> headersAsMap = new HashMap<>();
-
     @Before
-    public void initialiseValues() {
-
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
-        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
-
-        RestAssured.config =
-        SerenityRest.config()
-                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        RestAssured.baseURI = targetInstance;
-        SerenityRest.useRelaxedHTTPSValidation();
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
     }
 
 
@@ -76,6 +52,7 @@ public class HearingAPITest {
                 readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/mock-demo-request.json");
         hearingSteps.requestHearing(hearingApiRootContext,
                                     headersAsMap,
+                                    getAuthorizationToken(),
                                     input);
     }
 
