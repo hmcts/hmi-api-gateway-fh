@@ -16,7 +16,10 @@ Param (
 [string] $ServicePrincipalId,
 
 [Parameter(Mandatory=$true)]
-[string] $ServicePrincipalSecret
+[string] $ServicePrincipalSecret,
+
+[Parameter(Mandatory=$true)]
+[string] $SubscriptionId
 )
 
 
@@ -25,6 +28,8 @@ Install-Module -Name Az.Accounts -Force -Verbose
 $SPSecretSecure = ConvertTo-SecureString -String $ServicePrincipalSecret -AsPlainText -Force
 $psCred = New-Object System.Management.Automation.PSCredential($ServicePrincipalId, $SPSecretSecure)
 Connect-AzAccount -Credential $psCred -TenantId $Tenant -ServicePrincipal
+
+Set-AzContext -SubscriptionId $SubscriptionId
 
 $KeyVaultName = "hmi-shared-kv-$Environment"
 $ResourceGroupName = "hmi-apim-$Environment-rg"
