@@ -8,12 +8,17 @@ parameters:
   - name: hostName
     type: string
   
+  - name: group
+    type: string
+  
   - name: hostNameType
     type: string
     default: "Proxy"
 
 jobs:
 - job: ApplyHostName
+  variables:
+  - group: ${{ parameters.group }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}

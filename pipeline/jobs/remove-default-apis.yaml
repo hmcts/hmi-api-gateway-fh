@@ -8,8 +8,13 @@ parameters:
   - name: displayName
     type: string
 
+  - name: group
+    type: string
+    
 jobs:
 - job: RemoveDefaultAPIS
+  variables:
+  - group: ${{ parameters.group }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
