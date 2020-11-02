@@ -7,10 +7,7 @@ Param (
 [string] $HostnameType,
 
 [Parameter(Mandatory=$true)]
-[string] $KeyVaultName,
-
-[Parameter(Mandatory=$true)]
-[string] $ResourceGroupName,
+[string] $Environment,
 
 [Parameter(Mandatory=$true)]
 [string] $Tenant,
@@ -29,6 +26,8 @@ $SPSecretSecure = ConvertTo-SecureString -String $ServicePrincipalSecret -AsPlai
 $psCred = New-Object System.Management.Automation.PSCredential($ServicePrincipalId, $SPSecretSecure)
 Connect-AzAccount -Credential $psCred -TenantId $Tenant -ServicePrincipal
 
+$KeyVaultName = "hmi-shared-kv-$Environment"
+$ResourceGroupName = "hmi-apim-$Environment-rg"
 
 if (!(Get-Module -Name Az.ApiManagement)){
     Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow

@@ -2,9 +2,6 @@ parameters:
   - name: subscription
     type: string
 
-  - name: resourceGroup
-    type: string
-
   - name: dependsOn
     type: object
   
@@ -31,9 +28,17 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
-      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup) -Tenant $(tenant_id) -ServicePrincipalId $(sp_id_sbox) -ServicePrincipalSecret $(sp_secret_sbox)
+      curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
+      gpg --dearmor | \
+      sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+      AZ_REPO=$(lsb_release -cs)
+      echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+      sudo tee /etc/apt/sources.list.d/azure-cli.list
+      sudo apt-get update
+      sudo apt-get install azure-cli
+      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -Environment ${{ parameters.environment }} -Tenant $(tenant_id) -ServicePrincipalId $(sp_id_sbox) -ServicePrincipalSecret $(sp_secret_sbox)
