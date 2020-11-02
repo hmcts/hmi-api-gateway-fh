@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 public class RestClientTemplate {
 
     public static Response shouldExecute(final Headers headers,
+                                         final String authorizationToken,
                                          final String requestBodyPayload,
                                          final String requestURL,
                                          final Map<String, String> params,

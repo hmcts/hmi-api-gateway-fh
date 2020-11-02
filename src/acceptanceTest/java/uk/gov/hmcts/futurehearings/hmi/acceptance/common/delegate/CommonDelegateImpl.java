@@ -46,13 +46,14 @@ public class CommonDelegateImpl implements CommonDelegate {
         } else {
             standardWireMockHeaders = headers;
         }
-        handleRestCall(targetURL, inputFile, standardWireMockHeaders, params, httpMethod, status, inputFileDirectory, hmiVerifier, expectedMessage);
+        handleRestCall(targetURL, inputFile, standardWireMockHeaders, authorizationToken, params, httpMethod, status, inputFileDirectory, hmiVerifier, expectedMessage);
 
     }
 
     private void handleRestCall(final String targetURL,
                                 final String inputFile,
                                 final Headers headers,
+                                final String authorizationToken,
                                 final Map<String, String> params,
                                 final HttpMethod httpMethod,
                                 final HttpStatus status,
@@ -67,24 +68,26 @@ public class CommonDelegateImpl implements CommonDelegate {
             case DELETE:
                 inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
                 hmiVerifier.verify(status, expectedMessage,
-                        performRESTCall(targetURL, headers, params, httpMethod, status, inputPayload));
+                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;
             case GET:
-                hmiVerifier.verify(status, expectedMessage, performRESTCall(targetURL, headers, params, httpMethod, status, inputPayload));
+                hmiVerifier.verify(status, expectedMessage, performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;
             case OPTIONS:
-                performRESTCall(targetURL, headers, params, httpMethod, status, inputPayload);
+                performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload);
         }
     }
 
     private Response performRESTCall(final String targetURL,
                                      final Headers headers,
+                                     final String authorizationToken,
                                      final Map<String, String> params,
                                      final HttpMethod httpMethod,
                                      final HttpStatus status,
                                      final String inputPayload) {
         return shouldExecute(
                 headers,
+                authorizationToken,
                 inputPayload,
                 targetURL,
                 params,

@@ -1,7 +1,7 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke;
+package uk.gov.hmcts.futurehearings.hmi.functional.common.test;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGenerator.generateOAuthToken;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
@@ -12,13 +12,9 @@ import io.restassured.RestAssured;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInfo;
+import net.serenitybdd.rest.SerenityRest;
+import org.junit.Before;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,9 +25,9 @@ import org.springframework.test.context.ActiveProfiles;
 @Getter(AccessLevel.PUBLIC)
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("smoke")
+@ActiveProfiles("functional")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class SmokeTest {
+public abstract class FunctionalTest {
 
     @Value("${targetInstance}")
     protected String targetInstance;
@@ -39,40 +35,39 @@ public abstract class SmokeTest {
     @Value("${targetSubscriptionKey}")
     protected String targetSubscriptionKey;
 
+    @Value("${hearingApiRootContext}")
+    protected String hearingApiRootContext;
+
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    protected String token_apiURL;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    protected String token_apiTenantId;
 
     @Value("${grantType}")
-    private String grantType;
+    protected String grantType;
 
     @Value("${clientID}")
-    private String clientID;
+    protected String clientID;
 
     @Value("${clientSecret}")
-    private String clientSecret;
+    protected String clientSecret;
 
     @Value("${scope}")
-    private String scope;
+    protected String scope;
 
     protected Map<String, Object> headersAsMap = new HashMap<>();
 
     protected String authorizationToken;
 
-    @BeforeAll
-    public void beforeAll(TestInfo info) {
-        log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
-    }
-
-    @BeforeAll
+    @Before
     public void initialiseValues() throws Exception {
 
+        RestAssured.config =
+                SerenityRest.config()
+                        .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         RestAssured.baseURI = targetInstance;
-        RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
-                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
+        SerenityRest.useRelaxedHTTPSValidation();
 
         this.authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,
@@ -90,20 +85,8 @@ public abstract class SmokeTest {
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
         headersAsMap.put("Request-Type", "ASSAULT");
-    }
 
-    @BeforeEach
-    public void beforeEach(TestInfo info) {
-        log.debug("Before execution : " + info.getTestMethod().get().getName());
-    }
 
-    @AfterEach
-    public void afterEach(TestInfo info) {
-        log.debug("After execution : "+info.getTestMethod().get().getName());
-    }
 
-    @AfterAll
-    public void afterAll(TestInfo info) {
-        log.debug("Test execution Class Completed: " + info.getTestClass().get().getName());
     }
 }
