@@ -16,10 +16,6 @@ Param (
 [string] $Tenant
 )
 
-Install-Module -Name Az.Accounts -Force -Verbose
-
-Connect-AzAccount -Tenant $Tenant -ServicePrincipal
-
 if (!(Get-Module -Name Az.ApiManagement)){
     Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow
     Install-Module -Name Az.ApiManagement -Force -Verbose
