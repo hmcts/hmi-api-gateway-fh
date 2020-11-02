@@ -1,6 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.common.test;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -9,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +21,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +66,8 @@ public abstract class SmokeTest {
 
     protected String authorizationToken;
 
+    protected String rootContext;
+
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
@@ -74,7 +81,7 @@ public abstract class SmokeTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
 
-        this.authorizationToken = generateOAuthToken (token_apiURL,
+        this.authorizationToken = generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType, clientID,
                 clientSecret,
@@ -99,11 +106,28 @@ public abstract class SmokeTest {
 
     @AfterEach
     public void afterEach(TestInfo info) {
-        log.debug("After execution : "+info.getTestMethod().get().getName());
+        log.debug("After execution : " + info.getTestMethod().get().getName());
     }
 
     @AfterAll
     public void afterAll(TestInfo info) {
         log.debug("Test execution Class Completed: " + info.getTestClass().get().getName());
+    }
+
+    @Test
+    @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
+    void testSuccessfulHmiApiGet() {
+
+        Response response = given()
+                .headers(headersAsMap)
+                .auth().oauth2(getAuthorizationToken())
+                .basePath(getRootContext())
+                .when().get();
+
+        if (response.getStatusCode() != 200) {
+            log.debug(" The value of the Response Status " + response.getStatusCode());
+            log.debug(" The value of the Response body " + response.getBody().prettyPrint());
+        }
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }

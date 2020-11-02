@@ -6,7 +6,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -62,7 +62,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -91,7 +91,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -120,7 +120,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT, mockServer,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -149,7 +149,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT, mockServer,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,

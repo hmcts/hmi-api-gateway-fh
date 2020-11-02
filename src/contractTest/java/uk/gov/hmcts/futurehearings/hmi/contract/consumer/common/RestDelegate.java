@@ -28,6 +28,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(readFileContents(requestPayloadPath))
                         .when()
@@ -39,6 +40,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(readFileContents(requestPayloadPath))
                         .when()
@@ -50,6 +52,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when()
                         .get(mockServer.getUrl() + apiURIPath)

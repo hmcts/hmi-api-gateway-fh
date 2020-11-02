@@ -7,7 +7,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -66,7 +66,7 @@ public class GetSessionsAPIConsumerTests extends ContractTest {
                 GET_SESSION_RESPONSE_SCHEMA_JSON);
 
         Response response = invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 GET_SESSION_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.GET,
                 mockServer,
@@ -99,7 +99,7 @@ public class GetSessionsAPIConsumerTests extends ContractTest {
                 GET_SESSION_RESPONSE_SCHEMA_JSON);
 
         Response response = invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 GET_SESSION_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.GET,
                 mockServer,
