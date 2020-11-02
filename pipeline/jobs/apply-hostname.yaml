@@ -27,4 +27,4 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - bash: |
-      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -Environment $(environment) -Tenant $(principal_tenant_id) -ServicePrincipalId $(sp_id_sbox) -ServicePrincipalSecret $(sp_secret_sbox) -SubscriptionId $(subscription_id)
+      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -Environment $(environment) -Tenant $(tenant_id) -ServicePrincipalId $(sp_id_sbox) -ServicePrincipalSecret $(sp_secret_sbox) -SubscriptionId $(subscription_id)
