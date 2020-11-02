@@ -30,7 +30,7 @@ public class POSTResourcesByLocationValidationTest extends ResourceValidationTes
     private String resourcesByLocationRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(resourcesByLocationRootContext);
         this.setHttpMethod(HttpMethod.POST);
