@@ -123,15 +123,12 @@ stages:
       parameters:
         displayName: Remove default APIS
         subscription: ${{ environment.subscription }}
-        environment: ${{ environment.name }}
         dependsOn: Terraform
 
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
-        subscription: ${{ environment.subscription }}
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
-        environment: ${{ environment.name }}
         hostName: ${{ environment.custom_domain }}
 
     - ${{ if environment.tests_gradle }}:

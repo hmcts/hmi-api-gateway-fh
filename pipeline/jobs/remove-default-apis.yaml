@@ -2,9 +2,6 @@ parameters:
   - name: subscription
     type: string
 
-  - name: environment
-    type: string
-
   - name: dependsOn
     type: object
 
@@ -27,8 +24,8 @@ jobs:
       scriptLocation: 'inlineScript'
       inlineScript: |
         subscription=$(az account show --query id -o tsv)
-        resourcegroup="hmi-apim-${{ parameters.environment }}-rg"
-        apim="hmi-apim-svc-${{ parameters.environment }}"
+        resourcegroup="hmi-apim-$(environment)-rg"
+        apim="hmi-apim-svc-$(environment)"
         az rest -m delete -u https://management.azure.com/subscriptions/$subscription/resourceGroups/$resourcegroup/providers/Microsoft.ApiManagement/service/$apim/apis/echo-api?api-version=2019-01-01
         az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "starter" --delete-subscriptions true --yes
         az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "unlimited" --delete-subscriptions true --yes
