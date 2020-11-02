@@ -88,15 +88,6 @@ sourceSets {
         }
         resources.srcDir file('src/acceptanceTest/resources')
     }
-
-    commonTest {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir file('src/commonTest/java')
-        }
-        resources.srcDir file('src/commonTest/resources')
-    }
 }
 
 tasks.withType(JavaCompile) {
@@ -113,8 +104,6 @@ tasks.withType(Test) {
 
 configurations {
 
-    commonTestCompile.extendsFrom testCompile
-    commonTestRuntime.extendsFrom testRuntime
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestCompile.extendsFrom testCompile
@@ -211,7 +200,6 @@ task acceptance(type: Test) {
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
     include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
-    //include "uk/gov/hmcts/futurehearings/hmi/acceptance/common/test/security/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -228,7 +216,7 @@ task runAndPublishConsumerPactTests(type: Test) {
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 clean {
-    delete System.getProperty("pact.rootDir")+"/*.json"
+    delete System.getProperty("pact.rootDir") + "/*.json"
 }
 
 checkstyle {
@@ -311,7 +299,6 @@ repositories {
         url "https://jitpack.io"
     }
 }
-
 
 
 def versions = [
@@ -422,8 +409,6 @@ dependencies {
     smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     smokeTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-
-    //smokeTestImplementation project(':commonTest')
     smokeTestImplementation sourceSets.main.runtimeClasspath
     //Smoke Test Dependencies - FINISH
 
