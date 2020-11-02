@@ -13,8 +13,18 @@ Param (
 [string] $ResourceGroupName,
 
 [Parameter(Mandatory=$true)]
-[string] $Tenant
+[string] $Tenant,
+
+[Parameter(Mandatory=$true)]
+[string] $ServicePrincipalId,
+
+[Parameter(Mandatory=$true)]
+[string] $ServicePrincipalSecret
 )
+
+$psCred = New-Object System.Management.Automation.PSCredential($ServicePrincipalId , $ServicePrincipalSecret)
+Connect-AzAccount -Credential $psCred -TenantId $Tenant -ServicePrincipal
+
 
 if (!(Get-Module -Name Az.ApiManagement)){
     Write-Host "Installing Az.ApiManagement Module..." -ForegroundColor Yellow

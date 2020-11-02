@@ -36,6 +36,4 @@ jobs:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
-      $psCred = New-Object System.Management.Automation.PSCredential($(sp_id_sbox) , $(sp_secret_sbox))
-      Connect-AzAccount -Credential $psCred -TenantId $(tenant_id) -ServicePrincipal
-      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup) -Tenant $(tenant_id)
+      pwsh -ExecutionPolicy Unrestricted -File "$(System.DefaultWorkingDirectory)/script/apply_custom_domain.ps1" -Hostname ${{ parameters.hostname }} -HostnameType ${{ parameters.hostNameType }} -KeyVaultName "hmi-shared-kv-${{ parameters.environment }}" -ResourceGroupName $(resourceGroup) -Tenant $(tenant_id) -ServicePrincipalId ($(sp_id_sbox) -ServicePrincipalSecret $(sp_secret_sbox)
