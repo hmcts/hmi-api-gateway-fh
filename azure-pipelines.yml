@@ -131,11 +131,8 @@ stages:
         subscription: ${{ environment.subscription }}
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
-        resourceGroup: $(resourceGroup)
         environment: ${{ environment.name }}
         hostName: ${{ environment.custom_domain }}
-        variables:
-          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
     - ${{ if environment.tests_gradle }}:
       - template: pipeline/jobs/create-storage.yaml

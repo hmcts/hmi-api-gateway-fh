@@ -18,9 +18,6 @@ parameters:
     type: string
     default: "Proxy"
 
-  - name: variables
-    type: object
-
 jobs:
 - job: ApplyHostName
   dependsOn:
@@ -29,8 +26,6 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
       curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
