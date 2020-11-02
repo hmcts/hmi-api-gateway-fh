@@ -25,8 +25,8 @@ Param (
 
 Install-Module -Name Az.Accounts -Force -Verbose
 
-$ServicePrincipalSecret = ConvertTo-SecureString -String $ServicePrincipalSecret -AsPlainText -Force
-$psCred = New-Object System.Management.Automation.PSCredential($ServicePrincipalId, $ServicePrincipalSecret)
+$SPSecretSecure = ConvertTo-SecureString -String $ServicePrincipalSecret -AsPlainText -Force
+$psCred = New-Object System.Management.Automation.PSCredential($ServicePrincipalId, $SPSecretSecure)
 Connect-AzAccount -Credential $psCred -TenantId $Tenant -ServicePrincipal
 
 
