@@ -30,7 +30,7 @@ public class GETSessionsByIDValidationTest extends SessionsValidationTest {
     private String sessions_idRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         sessions_idRootContext = String.format(sessions_idRootContext,"12345");
         this.setRelativeURL(sessions_idRootContext);

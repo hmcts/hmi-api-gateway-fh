@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 public class RestClientTemplate {
 
     public static Response shouldExecute(final Headers headers,
+                                         final String authorizationToken,
                                          final String requestBodyPayload,
                                          final String requestURL,
                                          final Map<String, String> params,
@@ -23,6 +24,7 @@ public class RestClientTemplate {
 
         log.debug("The value of the baseURI : " + RestAssured.baseURI);
         log.debug("The value of the path : " + requestURL);
+        log.debug("The value of the Authorization Token : " + authorizationToken);
         log.debug("The value of the header : " + headers.size());
         headers.asList().forEach(header ->
                 log.debug("The Key of the header" + header.getName() + "The value of the Header" + header.getValue()));
@@ -35,6 +37,8 @@ public class RestClientTemplate {
                         .expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
+                        .auth()
+                        .oauth2(authorizationToken)
                         .basePath(requestURL)
                         .body(requestBodyPayload)
                         .when()
@@ -44,6 +48,8 @@ public class RestClientTemplate {
                             .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
+                            .auth()
+                            .oauth2(authorizationToken)
                             .basePath(requestURL)
                             .body(requestBodyPayload)
                             .when()
@@ -53,6 +59,8 @@ public class RestClientTemplate {
                         .expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
+                        .auth()
+                        .oauth2(authorizationToken)
                         .basePath(requestURL)
                         .body(requestBodyPayload)
                         .when()
@@ -62,6 +70,8 @@ public class RestClientTemplate {
                     return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
+                            .auth()
+                            .oauth2(authorizationToken)
                             .basePath(requestURL)
                             .when()
                             .get().then().extract().response();
@@ -72,6 +82,8 @@ public class RestClientTemplate {
                             .given()
                             .queryParams(params)
                             .headers(headers)
+                            .auth()
+                            .oauth2(authorizationToken)
                             .basePath(requestURL)
                             .when()
                             .get().then().extract().response();
@@ -82,6 +94,8 @@ public class RestClientTemplate {
                 return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
+                        .auth()
+                        .oauth2(authorizationToken)
                         .basePath(requestURL)
                         .when()
                         .options().then().extract().response();
