@@ -6,7 +6,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -67,7 +67,7 @@ public class ListingRequestAPIConsumerTests extends ContractTest {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -101,7 +101,7 @@ public class ListingRequestAPIConsumerTests extends ContractTest {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -135,7 +135,7 @@ public class ListingRequestAPIConsumerTests extends ContractTest {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -169,7 +169,7 @@ public class ListingRequestAPIConsumerTests extends ContractTest {
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,

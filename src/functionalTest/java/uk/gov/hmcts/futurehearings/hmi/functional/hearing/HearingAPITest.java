@@ -52,6 +52,7 @@ public class HearingAPITest extends FunctionalTest {
                 readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/mock-demo-request.json");
         hearingSteps.requestHearing(hearingApiRootContext,
                                     headersAsMap,
+                                    getAuthorizationToken(),
                                     input);
     }
 

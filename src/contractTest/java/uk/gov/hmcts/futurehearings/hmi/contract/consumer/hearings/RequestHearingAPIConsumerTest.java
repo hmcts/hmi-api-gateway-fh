@@ -6,7 +6,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -67,7 +67,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -96,7 +96,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
