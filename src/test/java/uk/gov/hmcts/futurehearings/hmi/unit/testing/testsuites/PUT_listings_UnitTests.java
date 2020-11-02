@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
@@ -8,6 +10,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -19,6 +22,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,6 +42,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /listings - Update Listings")
 @SuppressWarnings("java:S2699")
 class PUT_listings_UnitTests {
@@ -52,6 +59,40 @@ class PUT_listings_UnitTests {
     private String listingsApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -122,7 +163,7 @@ class PUT_listings_UnitTests {
     void testUpdateListingsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -133,7 +174,7 @@ class PUT_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -168,6 +209,29 @@ class PUT_listings_UnitTests {
         thenValidateResponseForUpdate(response);
     }
 
+
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testUpdateListingsRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testUpdateListingsRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
+        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -180,8 +244,8 @@ class PUT_listings_UnitTests {
         return updateListingsResponseForAMissingOrInvalidHeader(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateListingsResponseForAMissingOrInvalidOcpSubKey(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
+    private Response whenUpdateListingsIsInvokedWithMissingAccessToken(final String input) {
+        return updateListingsResponseForMissingAccessToken(listingsApiRootContext + "/list_id", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateListingsIsInvokedForInvalidResource(final String input) {
@@ -191,6 +255,8 @@ class PUT_listings_UnitTests {
     private Response updateListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -200,6 +266,8 @@ class PUT_listings_UnitTests {
 
     private Response updateListingsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return   given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -209,6 +277,8 @@ class PUT_listings_UnitTests {
 
     private Response updateListingsResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -216,7 +286,7 @@ class PUT_listings_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateListingsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateListingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
                 .body(payloadBody)
                 .headers(headersAsMap)

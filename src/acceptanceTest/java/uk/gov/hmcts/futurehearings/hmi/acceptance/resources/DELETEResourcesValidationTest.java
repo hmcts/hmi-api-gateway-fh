@@ -41,7 +41,7 @@ class DELETEResourcesValidationTest extends ResourceValidationTest {
     private String resources_idRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         resources_idRootContext = String.format(resources_idRootContext,"12345");
         this.setRelativeURL(resources_idRootContext);
@@ -60,6 +60,7 @@ class DELETEResourcesValidationTest extends ResourceValidationTest {
     void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,

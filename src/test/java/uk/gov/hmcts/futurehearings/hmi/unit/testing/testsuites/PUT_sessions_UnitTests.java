@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
@@ -8,6 +10,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import io.restassured.response.Response;
@@ -19,6 +22,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,6 +43,7 @@ import java.util.Map;
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("PUT /sessions - Update Sessions")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2699")
 class PUT_sessions_UnitTests {
 
@@ -52,6 +59,40 @@ class PUT_sessions_UnitTests {
     private String sessionsApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -122,7 +163,7 @@ class PUT_sessions_UnitTests {
     void testUpdateSessionsRequestWithMissingOcpSubKey() throws IOException {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -133,7 +174,7 @@ class PUT_sessions_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
         final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
-        final Response response = whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(input);
+        final Response response = whenUpdateSessionsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -168,6 +209,29 @@ class PUT_sessions_UnitTests {
         thenValidateResponseForUpdate(response);
     }
 
+
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testUpdateSessionsRequestWithMissingAccessToken() throws IOException {
+
+        final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
+        final Response response = whenUpdateSessionsIsInvokedWithMissingAccessToken(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testUpdateSessionsRequestWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
+        final Response response = whenUpdateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
@@ -180,8 +244,8 @@ class PUT_sessions_UnitTests {
         return updateSessionsResponseForAMissingOrInvalidHeader(sessionsApiRootContext + "/CASE1234", headersAsMap, targetInstance, input);
     }
 
-    private Response whenUpdateHearingIsInvokedWithMissingOrInvalidOcSubKey(final String input) {
-        return updateSessionsResponseForAMissingOrInvalidOcpSubKey(sessionsApiRootContext + "/CASE1234", headersAsMap, targetInstance, input);
+    private Response whenUpdateSessionsIsInvokedWithMissingAccessToken(final String input) {
+        return updateSessionsResponseForMissingAccessToken(sessionsApiRootContext + "/CASE1234", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdateSessionsIsInvokedForInvalidResource(final String input) {
@@ -191,6 +255,8 @@ class PUT_sessions_UnitTests {
     private Response updateSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -200,6 +266,8 @@ class PUT_sessions_UnitTests {
 
     private Response updateSessionsResponseForCorrectRequest(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return   given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -209,6 +277,8 @@ class PUT_sessions_UnitTests {
 
     private Response updateSessionsResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -216,7 +286,7 @@ class PUT_sessions_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response updateSessionsResponseForAMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response updateSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
                 .body(payloadBody)
                 .headers(headersAsMap)

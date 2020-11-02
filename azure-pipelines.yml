@@ -11,7 +11,6 @@ parameters:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
       custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
@@ -47,7 +46,7 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim-svc-dev.azure-api.net
+      custom_domain: hmi-apim.preview.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -67,7 +66,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim-svc-test.azure-api.net
+      custom_domain: hmi-apim.perftest.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
@@ -96,7 +95,7 @@ parameters:
     - name: stg
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim-svc-test.azure-api.net
+      custom_domain: hmi-apim.staging.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
@@ -111,8 +110,8 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    jobs:
 
+    jobs:
     - template: pipeline/jobs/terraform.yaml
       parameters:
         displayName: Build infrastructure with Terraform
@@ -180,7 +179,7 @@ stages:
               dependsOn:
               - Terraform
               - createStorage
-              # - ApplyHostName
+              - ApplyHostName
               subscription: ${{ environment.subscription }}
               registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
