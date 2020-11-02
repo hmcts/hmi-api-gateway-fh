@@ -213,6 +213,8 @@ class GET_resources_UnitTests {
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
+
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
     }
 
 

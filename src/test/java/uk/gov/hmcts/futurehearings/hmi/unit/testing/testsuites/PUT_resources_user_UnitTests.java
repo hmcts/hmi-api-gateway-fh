@@ -289,8 +289,6 @@ class PUT_resources_user_UnitTests {
 
     private Response updateUserResourceResponseFForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
         return  given()
-                .auth()
-                .oauth2(accessToken)
                 .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)

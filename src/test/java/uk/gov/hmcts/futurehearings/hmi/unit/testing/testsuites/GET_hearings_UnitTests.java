@@ -241,7 +241,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(14)
     @DisplayName("Test for missing Access Token")
     void testDeleteHearingRequestWithMissingAccessToken() {
 
@@ -250,7 +250,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(15)
     @DisplayName("Test for invalid Access Token")
     void testDeleteHearingRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

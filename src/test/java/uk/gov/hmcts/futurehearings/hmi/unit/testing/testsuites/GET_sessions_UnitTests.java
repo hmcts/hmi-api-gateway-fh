@@ -295,6 +295,8 @@ class GET_sessions_UnitTests {
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
+
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
     }
 
 
@@ -328,7 +330,7 @@ class GET_sessions_UnitTests {
 
 
     @Test
-    @Order(17)
+    @Order(19)
     @DisplayName("Test for Invalid Resource - By ID")
     void testRetrieveSessionsByIDRequestForInvalidResource() {
 
@@ -337,7 +339,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(20)
     @DisplayName("Test for missing ContentType header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -347,7 +349,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(19)
+    @Order(21)
     @DisplayName("Test for invalid ContentType header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -358,7 +360,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(20)
+    @Order(22)
     @DisplayName("Test for missing Accept header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -368,7 +370,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(21)
+    @Order(23)
     @DisplayName("Test for invalid Accept header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -379,7 +381,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(22)
+    @Order(24)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
@@ -389,7 +391,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(23)
+    @Order(25)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidOcpSubKey(){
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
@@ -399,7 +401,7 @@ class GET_sessions_UnitTests {
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Order(24)
+    @Order(26)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
@@ -409,7 +411,7 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(25)
+    @Order(27)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveSessionsByIDRequestWithInvalidHeader(String iteration) {
@@ -421,7 +423,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(26)
+    @Order(28)
     @DisplayName("Test for Correct Headers with No Parameters - By ID")
     void testRetrieveSessionsByIDRequestWithCorrectHeadersAndNoParams() {
 
@@ -430,7 +432,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(17)
+    @Order(29)
     @DisplayName("Test for missing Access Token")
     void testRetrieveSessionsByIDRequestWithMissingAccessToken() {
         final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingAccessToken();
@@ -438,7 +440,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(30)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveSessionsByIDRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

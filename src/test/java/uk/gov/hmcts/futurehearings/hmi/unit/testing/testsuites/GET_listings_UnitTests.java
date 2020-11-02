@@ -246,6 +246,7 @@ class GET_listings_UnitTests {
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
     }
 
     private Response whenRetrieveListingsIsInvokedWithAdditionalParam() {
