@@ -8,6 +8,7 @@ import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,24 +20,16 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
+@DisplayName("Smoke Test for the HMI Users Context")
 @Disabled("For as the endpoint for User API is not available")
 class UserApiSmokeTest extends SmokeTest {
 
     @Value("${userApiRootContext}")
     public String userApiRootContext;
 
-    @Test
-    @DisplayName("Smoke Test to Test the Endpoint for the Get Update Users Root Context")
-    void testSuccessfulAllSessionsApiGet() {
-        Response response = given()
-                .headers(headersAsMap)
-                .basePath(userApiRootContext)
-                .when().get();
-
-        if (response.getStatusCode() != 200) {
-            log.info(" The value of the Response Status " + response.getStatusCode());
-            log.info(" The value of the Response body " + response.getBody().prettyPrint());
-        }
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+        setRootContext(userApiRootContext);
     }
 }

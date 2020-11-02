@@ -6,7 +6,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.ContractTest;
+import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -65,7 +65,7 @@ public class ResourcesByUserAPIConsumerTests extends ContractTest {
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,
                 mockServer,
@@ -99,7 +99,7 @@ public class ResourcesByUserAPIConsumerTests extends ContractTest {
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,
                 mockServer,
@@ -132,7 +132,7 @@ public class ResourcesByUserAPIConsumerTests extends ContractTest {
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,
@@ -166,7 +166,7 @@ public class ResourcesByUserAPIConsumerTests extends ContractTest {
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
         invokeSnLAPI(headersAsMap,
-                authorizationToken,
+                getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
                 mockServer,

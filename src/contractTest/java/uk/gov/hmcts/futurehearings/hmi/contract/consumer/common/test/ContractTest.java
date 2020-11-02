@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.contract.consumer.common;
+package uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test;
 
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.security.OAuthTokenGenerator.generateOAuthToken;
 
@@ -38,7 +38,7 @@ public abstract class ContractTest {
     private String scope;
 
     protected Map<String, String> headersAsMap = new HashMap<>();
-    protected String authorizationToken = null;
+    protected String authorizationToken;
 
     @BeforeEach
     public void initialiseValues() throws Exception {
@@ -60,5 +60,6 @@ public abstract class ContractTest {
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
         headersAsMap.put("Request-Type", "ASSAULT");
+        headersAsMap.put("Authorization", "Bearer "+getAuthorizationToken());
     }
 }

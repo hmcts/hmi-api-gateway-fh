@@ -18,7 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,8 +72,8 @@ class OAuthTokenGeneratorTest {
     }
 
     @ParameterizedTest(name = "TenantId negative scenarios - Param : {0}")
-    @NullAndEmptySource
-    @ValueSource(strings = {"", "trial_value", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
+    @NullSource
+    @ValueSource(strings = {"trial_value", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_tenant_scenarios(final String tenantId) throws Exception {
         final HttpStatus httpStatus = tenantId != null && tenantId.trim().equals("") ?
                 HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
