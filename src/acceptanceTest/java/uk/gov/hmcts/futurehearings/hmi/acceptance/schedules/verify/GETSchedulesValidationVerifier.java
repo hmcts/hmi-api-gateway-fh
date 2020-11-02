@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.helper.verify;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.verify;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

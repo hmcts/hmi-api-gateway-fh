@@ -82,6 +82,27 @@ public class SchedulesResponseVerifier {
         }
     }
 
+    public static void  thenValidateResponseForMissingOrInvalidAccessToken(Response response){
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals(401, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 401");
+            assertEquals("Access denied due to invalid OAuth information", responseMap.get(("message")),"Status Code Message Validation:");
+            getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+
+    }
+
     public static void thenValidateResponseForMissingOrInvalidHeader(Response response, String missingField) {
 
         try {

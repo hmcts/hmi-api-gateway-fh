@@ -2,6 +2,8 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.security;
 
 import static io.restassured.RestAssured.expect;
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.callTokenGeneratorEndpoint;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
@@ -16,7 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,90 +63,77 @@ class OAuthTokenGeneratorTest {
     @Test
     @DisplayName("Successfully validated response with an xml payload")
     void test_get_token_successfully() throws Exception {
-
-        token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, clientID, clientSecret, scope);
-
-        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.OK);
+        generateOAuthToken(token_apiURL,
+                token_apiTenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                HttpStatus.OK);
     }
 
     @ParameterizedTest(name = "TenantId negative scenarios - Param : {0}")
-    @NullAndEmptySource
-    @ValueSource(strings = {"","trial_value","9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_tenant_scenarios(String value) throws Exception {
-
-        final HttpStatus httpStatus = value != null && value.trim().equals("") ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
-        token_apiURL = String.format(token_apiURL, value);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, clientID, clientSecret, scope);
-
-        callTokenGeneratorEndpoint(bodyForToken, httpStatus);
+    @NullSource
+    @ValueSource(strings = {"trial_value", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
+    void test_get_token_with_negative_tenant_scenarios(final String tenantId) throws Exception {
+        final HttpStatus httpStatus = tenantId != null && tenantId.trim().equals("") ?
+                HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
+        generateOAuthToken(token_apiURL,
+                tenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                httpStatus);
     }
 
     @ParameterizedTest(name = "Invalid grant Type - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"","authorization_code","9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_grant_type(String value) throws Exception {
+    @ValueSource(strings = {"", "authorization_code", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
+    void test_get_token_with_negative_grant_type(final String grantType) throws Exception {
 
-        token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                value, clientID, clientSecret, scope);
-
-        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
+        generateOAuthToken(token_apiURL,
+                token_apiTenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                HttpStatus.BAD_REQUEST);
     }
 
     @ParameterizedTest(name = "Invalid client id - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"","test_id","9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_client_id(String value) throws Exception {
+    @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
+    void test_get_token_with_negative_client_id(final String clientID) throws Exception {
 
-        token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, value, clientSecret, scope);
-
-        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
+        generateOAuthToken(token_apiURL,
+                token_apiTenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                HttpStatus.BAD_REQUEST);
     }
 
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"","test_id","9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_client_secret(String value) throws Exception {
+    @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
+    void test_get_token_with_negative_client_secret(final String clientSecret) throws Exception {
 
-        token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, clientID, value, scope);
-
-        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.UNAUTHORIZED);
+        generateOAuthToken(token_apiURL,
+                token_apiTenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                HttpStatus.UNAUTHORIZED);
     }
 
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"","test_id","api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default"})
-    void test_get_token_with_negative_scope(String value) throws Exception {
+    @ValueSource(strings = {"", "test_id", "api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default"})
+    void test_get_token_with_negative_scope(final String scope) throws Exception {
 
-        token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, clientID, clientSecret, value);
-
-        callTokenGeneratorEndpoint(bodyForToken, HttpStatus.BAD_REQUEST);
+        generateOAuthToken(token_apiURL,
+                token_apiTenantId,
+                grantType,clientID,
+                clientSecret,
+                scope,
+                HttpStatus.BAD_REQUEST);
     }
-
-    private void callTokenGeneratorEndpoint(final String bodyForToken, final HttpStatus badRequest) {
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + token_apiURL);
-
-        Response response = expect().that().statusCode(badRequest.value())
-                .given()
-                .body(bodyForToken)
-                .contentType(ContentType.URLENC)
-                .baseUri(token_apiURL)
-                .when()
-                .post()
-                .then()
-                .extract()
-                .response();
-        log.debug(response.prettyPrint());
-    }
-
 }

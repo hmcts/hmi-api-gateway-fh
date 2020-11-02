@@ -43,7 +43,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     private static final String INVALID_QUERY_PARAMETER_MSG= "Invalid query parameter/s in the request URL.";
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(listingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
@@ -59,6 +59,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     void test_date_of_listing_with_invalid_queryparam() throws IOException {
         this.setUrlParams(buildQueryParams("test_param", ""));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -74,6 +75,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws IOException {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -89,6 +91,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -112,6 +115,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                                               final String paramVal2) throws IOException {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -129,6 +133,7 @@ public class GETListingsValidationTest extends ListingsValidationTest {
                 "hearing_type",
                 "VH","test_extra_param",""));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
