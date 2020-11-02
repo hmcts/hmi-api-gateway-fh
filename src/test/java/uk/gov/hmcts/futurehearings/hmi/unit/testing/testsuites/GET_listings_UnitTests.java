@@ -9,6 +9,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRetrieve;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +29,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /listings - Retrieve Listings")
 @SuppressWarnings("java:S2699")
 class GET_listings_UnitTests {
@@ -50,6 +55,40 @@ class GET_listings_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -125,7 +164,7 @@ class GET_listings_UnitTests {
     void testRetrieveListingsRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -136,7 +175,7 @@ class GET_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
-        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -169,6 +208,7 @@ class GET_listings_UnitTests {
 
         final Response response = whenRetrieveListingsIsInvokedWithAdditionalParam();
         thenValidateResponseForAdditionalParam(response);
+        paramsAsMap.remove("Invalid-Param");
     }
 
     @Test
@@ -189,6 +229,26 @@ class GET_listings_UnitTests {
         thenValidateResponseForRetrieve(response);
     }
 
+    @Test
+    @Order(13)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveListingsRequestWithMissingAccessToken() {
+
+        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveListingsRequestWithInvalidAccessToken() {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
+
     private Response whenRetrieveListingsIsInvokedWithAdditionalParam() {
         return retrieveListingsResponseForCorrectHeadersAndParams(listingsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
@@ -205,8 +265,8 @@ class GET_listings_UnitTests {
         return retrieveListingsResponseForCorrectHeadersAndNoParams(listingsApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
-        return retrieveListingsResponseForMissingOrInvalidOcpSubKey(listingsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    private Response whenRetrieveListingsRequestIsInvokedWithMissingAccessToken() {
+        return retrieveListingsResponseForMissingAccessToken(listingsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader() {
@@ -272,7 +332,7 @@ class GET_listings_UnitTests {
     void testRetrieveListingsByIDRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -283,7 +343,7 @@ class GET_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
-        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -310,11 +370,30 @@ class GET_listings_UnitTests {
 
     @Test
     @Order(22)
-    @DisplayName("Test for Correct Headers with No Parameters")
+    @DisplayName("Test for Correct Headers with No Parameters - By ID")
     void testRetrieveListingsByIDRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveListingsByIDIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("Test for missing Access Token - By ID")
+    void testRetrieveListingsByIDRequestWithMissingAccessToken() {
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("Test for invalid Access Token - By ID")
+    void testRetrieveListingsByIDRequestWithInvalidAccessToken() {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     private Response whenRetrieveListingsByIDRequestIsInvokedForInvalidResource() {
@@ -325,20 +404,19 @@ class GET_listings_UnitTests {
         return retrieveListingsResponseForCorrectHeadersAndNoParams(listingsApiRootContext+"/list_id", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
-        return retrieveListingsResponseForMissingOrInvalidOcpSubKey(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
+    private Response whenRetrieveListingsByIDRequestIsInvokedWithMissingAccessToken() {
+        return retrieveListingsResponseForMissingAccessToken(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader() {
         return retrieveListingsResponseForMissingOrInvalidHeader(listingsApiRootContext+"/list_id", headersAsMap,  paramsAsMap, targetInstance);
     }
 
-
-
-
     private Response retrieveListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -348,6 +426,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -359,13 +439,15 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveListingsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response retrieveListingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
                 .queryParams(paramsAsMap)
@@ -378,6 +460,8 @@ class GET_listings_UnitTests {
     private Response retrieveListingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
