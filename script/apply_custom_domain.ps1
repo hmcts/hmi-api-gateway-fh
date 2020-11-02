@@ -38,7 +38,7 @@ if (!(Get-Module -Name Az.ApiManagement)){
     }
 $KeyVaultId = "https://$KeyVaultName.vault.azure.net/secrets/apim-hostname-certificate"
 $proxy = (New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding)
-$apim = (Get-AzApiManagement -ResourceGroupName $ResourceGroupName)
+$apim = (Get-AzApiManagement -ResourceGroupName $ResourceGroupName -Debug)
 if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
     $apim.ProxyCustomHostnameConfiguration = $proxy
     Write-Host "Applying Custom Domain configuration..." $proxy.Hostname -ForegroundColor Yellow
