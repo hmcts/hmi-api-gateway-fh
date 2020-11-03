@@ -10,8 +10,8 @@ parameters:
     default:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
       registry: DTS-SS-PRIVATE-SBOX
+      group: HMI-APIM-BUILD-SBOX
       custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
@@ -33,13 +33,13 @@ parameters:
         logLevel: info
         serenity: true
         dependsOn: AcceptanceTest
-      tests_security:
-      - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
-        repository: hmi/apim-tests-owasp
-        testUrl:
-        - name: API1
-          target: https://www.example.com/openapi.json
+      # tests_security:
+      # - name: ApiZapScan
+      #   containerRegistry: ssprivatesbox.azurecr.io
+      #   repository: hmi/apim-tests-owasp
+      #   testUrl:
+      #   - name: API1
+      #     target: https://www.example.com/openapi.json
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
@@ -47,7 +47,7 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim-svc-dev.azure-api.net
+      custom_domain: hmi-apim.preview.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -67,7 +67,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim-svc-test.azure-api.net
+      custom_domain: hmi-apim.perftest.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
@@ -96,7 +96,7 @@ parameters:
     - name: stg
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim-svc-test.azure-api.net
+      custom_domain: hmi-apim.staging.platform.hmcts.net
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
@@ -111,8 +111,8 @@ stages:
     ${{ if environment.condition }}:
       condition: ${{ environment.condition }}
     displayName: Build and Test ${{ environment.name }} APIM
-    jobs:
 
+    jobs:
     - template: pipeline/jobs/terraform.yaml
       parameters:
         displayName: Build infrastructure with Terraform
@@ -123,20 +123,15 @@ stages:
       parameters:
         displayName: Remove default APIS
         subscription: ${{ environment.subscription }}
-        environment: ${{ environment.name }}
         dependsOn: Terraform
+        group: ${{ environment.group }}
 
-    - ${{ if eq(environment.name, 'sbox') }}:
-      - template: pipeline/jobs/apply-hostname.yaml
-        parameters:
-          subscription: ${{ environment.subscription }}
-          displayName: Apply Custom Domain Configuration
-          dependsOn: Terraform
-          resourceGroup: $(resourceGroup)
-          certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
-          hostName: ${{ environment.custom_domain }}
-          variables:
-            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: Terraform
+        hostName: ${{ environment.custom_domain }}
+        group: ${{ environment.group }}
 
     - ${{ if environment.tests_gradle }}:
       - template: pipeline/jobs/create-storage.yaml
@@ -158,7 +153,7 @@ stages:
             dependsOn:
             - Terraform
             - createStorage
-            # - ApplyHostName
+            - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
@@ -185,7 +180,7 @@ stages:
               dependsOn:
               - Terraform
               - createStorage
-              # - ApplyHostName
+              - ApplyHostName
               subscription: ${{ environment.subscription }}
               registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
