@@ -1,21 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;<<<<<<<HEAD
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForUpdate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;=======
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;>>>>>>>master
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,6 +55,9 @@ class PUT_hearings_UnitTests {
 
 	@Value("${hearingApiRootContext}")
 	private String hearingApiRootContext;
+
+	@Value("${destinationSystem}")
+	private String destinationSystem;
 
 	private final Map<String, Object> headersAsMap = new HashMap<>();
 
@@ -101,7 +102,7 @@ class PUT_hearings_UnitTests {
 		headersAsMap.put("Content-Type", "application/json");
 		headersAsMap.put("Accept", "application/json");
 		headersAsMap.put("Source-System", "CFT");
-		headersAsMap.put("Destination-System", "S&L");
+		headersAsMap.put("Destination-System", destinationSystem);
 		headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
 		headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 		headersAsMap.put("Request-Type", "THEFT");
@@ -297,4 +298,4 @@ class PUT_hearings_UnitTests {
                 .when().put().then().extract().response();
     }
 
-}>>>>>>>master
+}
