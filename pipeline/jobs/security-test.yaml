@@ -17,13 +17,7 @@ parameters:
   - name: storageContainer
     type: string
 
-  - name: registry
-    type: string
-
   - name: repository
-    type: string
-
-  - name: containerRegistry
     type: string
 
   - name: dockerfile
@@ -38,6 +32,9 @@ parameters:
   - name: securityRules
     type: string
 
+  - name: group
+    type: string
+
   - name: variables
     type: object
 
@@ -50,6 +47,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   variables:
+  - group: ${{ parameters.group }}
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - template: ../steps/push-img.yaml

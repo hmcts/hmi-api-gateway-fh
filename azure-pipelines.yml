@@ -10,7 +10,6 @@ parameters:
     default:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
       group: HMI-APIM-BUILD-SBOX
       custom_domain: hmi-apim.sandbox.platform.hmcts.net
       tests_gradle:
@@ -41,7 +40,6 @@ parameters:
         dependsOn: ContractTest
       tests_security:
       - name: ApiZapScan
-        containerRegistry: ssprivatesbox.azurecr.io
         repository: hmi/apim-tests-owasp
         testUrl:
         - name: API1
@@ -157,7 +155,6 @@ stages:
           parameters:
             displayName: ${{ test.name }}
             dependsOn:
-            - Terraform
             - createStorage
             - ApplyHostName
             - ${{ if test.dependsOn }}:
@@ -186,13 +183,10 @@ stages:
             parameters:
               displayName: ${{ url.name }}
               dependsOn:
-              - Terraform
-              - createStorage
               - ApplyHostName
               subscription: ${{ environment.subscription }}
-              registry: ${{ environment.registry }}
               repository: ${{ test.repository }}
-              containerRegistry: ${{ test.containerRegistry }}
+              group: ${{ environment.group }}
               dockerfile: docker/images/${{ test.name }}/Dockerfile
               tags: latest
               testUrl: ${{ url.target }}
