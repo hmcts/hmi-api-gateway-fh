@@ -48,6 +48,9 @@ class GET_listings_UnitTests {
     @Value("${listingsApiRootContext}")
     private String listingsApiRootContext;
 
+    @Value("${destinationSystem}")
+    private String destinationSystem;
+
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
 
@@ -58,7 +61,7 @@ class GET_listings_UnitTests {
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
