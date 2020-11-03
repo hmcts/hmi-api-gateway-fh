@@ -117,14 +117,10 @@ stages:
 
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
-        subscription: ${{ environment.subscription }}
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
-        resourceGroup: $(resourceGroup)
-        certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
         hostName: ${{ environment.custom_domain }}
-        variables:
-          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+        group: ${{ environment.group }}
 
     - ${{ if environment.tests_gradle }}:
       - template: pipeline/jobs/create-storage.yaml
