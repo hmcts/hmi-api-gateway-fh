@@ -1,5 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForNoMandatoryParams;
@@ -10,6 +12,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForAdditionalParam;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +42,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /sessions - Retrieve Sessions")
 @SuppressWarnings("java:S2699")
 class GET_sessions_UnitTests {
@@ -53,6 +60,40 @@ class GET_sessions_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -130,7 +171,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -141,7 +182,7 @@ class GET_sessions_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -174,6 +215,7 @@ class GET_sessions_UnitTests {
 
         final Response response = whenRetrieveSessionsIsInvokedWithAdditionalParam();
         thenValidateResponseForAdditionalParam(response);
+        paramsAsMap.remove("Invalid-Param");
     }
 
 
@@ -240,6 +282,26 @@ class GET_sessions_UnitTests {
         thenValidateResponseForRetrieve(response);
     }
 
+    @Test
+    @Order(17)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveSessionsRequestWithMissingAccessToken() {
+        final Response response = whenRetrieveSessionsIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveSessionsRequestWithInvalidAccessToken()  {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
+
 
 
     private Response whenRetrieveSessionsIsInvokedWithAdditionalParam() {
@@ -258,8 +320,8 @@ class GET_sessions_UnitTests {
         return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
-        return retrieveSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {
+        return retrieveSessionsResponseForMissingAccessToken(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader() {
@@ -271,7 +333,7 @@ class GET_sessions_UnitTests {
 
 
     @Test
-    @Order(17)
+    @Order(19)
     @DisplayName("Test for Invalid Resource - By ID")
     void testRetrieveSessionsByIDRequestForInvalidResource() {
 
@@ -280,7 +342,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(20)
     @DisplayName("Test for missing ContentType header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -290,7 +352,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(19)
+    @Order(21)
     @DisplayName("Test for invalid ContentType header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -301,7 +363,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(20)
+    @Order(22)
     @DisplayName("Test for missing Accept header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -311,7 +373,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(21)
+    @Order(23)
     @DisplayName("Test for invalid Accept header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -322,27 +384,27 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(22)
+    @Order(24)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveSessionsByIDRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
-    @Order(23)
+    @Order(25)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveSessionsByIDRequestWithInvalidOcpSubKey(){
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey();
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Order(24)
+    @Order(26)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
@@ -352,7 +414,7 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(25)
+    @Order(27)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveSessionsByIDRequestWithInvalidHeader(String iteration) {
@@ -364,12 +426,30 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(26)
+    @Order(28)
     @DisplayName("Test for Correct Headers with No Parameters - By ID")
     void testRetrieveSessionsByIDRequestWithCorrectHeadersAndNoParams() {
 
         final Response response = whenRetrieveSessionsByIDIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(29)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveSessionsByIDRequestWithMissingAccessToken() {
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(30)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveSessionsByIDRequestWithInvalidAccessToken()  {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     private Response whenRetrieveSessionsByIDRequestIsInvokedForInvalidResource() {
@@ -380,8 +460,8 @@ class GET_sessions_UnitTests {
         return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext+"/CASE1234", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidOcpSubKey() {
-        return retrieveSessionsResponseForMissingOrInvalidOcpSubKey(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
+    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingAccessToken() {
+        return retrieveSessionsResponseForMissingAccessToken(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader() {
@@ -391,6 +471,8 @@ class GET_sessions_UnitTests {
     private Response retrieveSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -400,6 +482,8 @@ class GET_sessions_UnitTests {
     private Response retrieveSessionsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -411,13 +495,15 @@ class GET_sessions_UnitTests {
     private Response retrieveSessionsResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveSessionsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response retrieveSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
                 .queryParams(paramsAsMap)
@@ -430,6 +516,8 @@ class GET_sessions_UnitTests {
     private Response retrieveSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
