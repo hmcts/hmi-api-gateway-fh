@@ -4,10 +4,14 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.smoke.SmokeTest;
+import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import io.restassured.response.Response;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,24 +22,15 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
+@DisplayName("Smoke Test for the HMI Sessions Context")
  class SessionsApiSmokeTest extends SmokeTest {
 
     @Value("${sessionsApiRootContext}")
     private String sessionsApiRootContext;
 
-    @Test
-    @DisplayName("Smoke Test to Test the Endpoint for the Get All Sessions Root Context")
-     void testSuccessfulAllSessionsApiGet() {
-
-        Response response = given()
-        .headers(headersAsMap)
-        .basePath(sessionsApiRootContext)
-        .when().get();
-
-        if (response.getStatusCode() != 200) {
-            log.debug(" The value of the Response Status " + response.getStatusCode());
-            log.debug(" The value of the Response body " + response.getBody().prettyPrint());
-        }
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+        setRootContext(sessionsApiRootContext);
     }
 }
