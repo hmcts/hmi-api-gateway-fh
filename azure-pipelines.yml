@@ -140,6 +140,7 @@ stages:
           parameters:
             displayName: ${{ test.name }}
             dependsOn:
+            - Terraform
             - createStorage
             - ApplyHostName
             - ${{ if test.dependsOn }}:
@@ -165,6 +166,7 @@ stages:
             parameters:
               displayName: ${{ url.name }}
               dependsOn:
+              - Terraform
               - createStorage
               - ApplyHostName
               subscription: ${{ environment.subscription }}
