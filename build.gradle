@@ -103,6 +103,7 @@ tasks.withType(Test) {
 }
 
 configurations {
+
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestCompile.extendsFrom testCompile
@@ -199,7 +200,6 @@ task acceptance(type: Test) {
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
     include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
-    //include "uk/gov/hmcts/futurehearings/hmi/acceptance/common/test/security/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -216,7 +216,7 @@ task runAndPublishConsumerPactTests(type: Test) {
 runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 clean {
-    delete System.getProperty("pact.rootDir")+"/*.json"
+    delete System.getProperty("pact.rootDir") + "/*.json"
 }
 
 checkstyle {
@@ -299,7 +299,6 @@ repositories {
         url "https://jitpack.io"
     }
 }
-
 
 
 def versions = [
@@ -385,8 +384,6 @@ dependencies {
     testImplementation "ch.qos.logback:logback-classic:1.2.3"
     testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
-    smokeTestImplementation sourceSets.main.runtimeClasspath
-
     //Smoke Test Dependencies - START
     smokeTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
@@ -412,7 +409,6 @@ dependencies {
     smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     smokeTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-
     smokeTestImplementation sourceSets.main.runtimeClasspath
     //Smoke Test Dependencies - FINISH
 

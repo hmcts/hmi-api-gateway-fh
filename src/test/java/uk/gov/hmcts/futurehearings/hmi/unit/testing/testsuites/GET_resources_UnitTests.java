@@ -8,6 +8,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +38,7 @@ import java.util.Map;
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /resources - Retrieve Resources")
 @SuppressWarnings("java:S2699")
 class GET_resources_UnitTests {
@@ -51,6 +56,40 @@ class GET_resources_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+
+    @Value("${tokenURL}")
+    private String tokenURL;
+
+    @Value("${clientID}")
+    private String clientID;
+
+    @Value("${clientSecret}")
+    private String clientSecret;
+
+    @Value("${scope}")
+    private String scope;
+
+    @Value("${grantType}")
+    private String grantType;
+
+    private static String accessToken;
+
+    @Value("${invalidTokenURL}")
+    private String invalidTokenURL;
+
+    @Value("${invalidScope}")
+    private String invalidScope;
+
+    @Value("${invalidClientID}")
+    private String invalidClientID;
+
+    @Value("${invalidClientSecret}")
+    private String invalidClientSecret;
+
+    @BeforeAll
+    void setToken(){
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
 
     @BeforeEach
     void initialiseValues() {
@@ -117,7 +156,7 @@ class GET_resources_UnitTests {
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
     void testRetrieveResourcesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
@@ -127,7 +166,7 @@ class GET_resources_UnitTests {
     void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
@@ -153,12 +192,34 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(10)
     @DisplayName("Test for Correct Headers and No Parameters")
     void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }
+
+    @Test
+    @Order(11)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveResourcesRequestWithMissingAccessToken() {
+
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveResourcesRequestWithInvalidAccessToken() {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+
+        accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+    }
+
 
     private Response whenRetrieveResourcesIsInvokedForInvalidResource() {
         return retrieveResourcesResponseForInvalidResource(resourcesApiRootContext+"get", headersAsMap, targetInstance);
@@ -168,8 +229,8 @@ class GET_resources_UnitTests {
         return retrieveResourcesResponseForCorrectRequestAndNoParams(resourcesApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveResourcesIsInvokedWithMissingOcpSubKey() {
-        return retrieveResourcesResponseForAMissingOcpSubKey(resourcesApiRootContext, headersAsMap, targetInstance);
+    private Response whenRetrieveResourcesIsInvokedWithMissingAccessToken() {
+        return retrieveResourcesResponseForMissingAccessToken(resourcesApiRootContext, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader() {
@@ -179,7 +240,7 @@ class GET_resources_UnitTests {
 //INDIVIDUAL RESOURCE TESTS - START
 
     @Test
-    @Order(19)
+    @Order(11)
     @DisplayName("Test for Invalid Resource - Individual Resource")
     void testRetrieveIndividualResourceRequestForInvalidResource() {
         final Response response = whenRetrieveIndividualResourceIsInvokedForInvalidResource();
@@ -187,7 +248,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(20)
+    @Order(12)
     @DisplayName("Test for missing ContentType header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -195,7 +256,7 @@ class GET_resources_UnitTests {
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
-    @Order(21)
+    @Order(13)
     @DisplayName("Test for invalid ContentType header - Individual Resource")
     void testRetrieveIndividualResourcesRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -206,7 +267,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(22)
+    @Order(14)
     @DisplayName("Test for missing Accept header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -215,7 +276,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(23)
+    @Order(15)
     @DisplayName("Test for invalid Accept header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -226,25 +287,25 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(24)
+    @Order(16)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingSubscriptionKeyHeader(response);
     }
 
     @Test
-    @Order(25)
+    @Order(17)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey();
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForInvalidSubscriptionKeyHeader(response);
     }
 
-    @Order(26)
+    @Order(18)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
@@ -254,7 +315,7 @@ class GET_resources_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(27)
+    @Order(19)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
     void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
@@ -266,11 +327,30 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(36)
+    @Order(20)
     @DisplayName("Test for No Parameters - Individual Resource")
     void testRetrieveIndividualResourceRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("Test for missing Access Token")
+    void testRetrieveIndividualResourcesRequestWithMissingAccessToken() {
+
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingAccessToken();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("Test for invalid Access Token")
+    void testRetrieveIndividualResourcesRequestWithInvalidAccessToken() {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedForInvalidResource() {
@@ -281,8 +361,8 @@ class GET_resources_UnitTests {
         return retrieveResourcesResponseForCorrectRequestAndNoParams(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveIndividualResourceIsInvokedWithMissingOcpSubKey() {
-        return retrieveResourcesResponseForAMissingOcpSubKey(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
+    private Response whenRetrieveIndividualResourceIsInvokedWithMissingAccessToken() {
+        return retrieveResourcesResponseForMissingAccessToken(resourcesApiRootContext+ "/CASE123432", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader() {
@@ -295,6 +375,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -304,6 +386,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
@@ -312,7 +396,7 @@ class GET_resources_UnitTests {
 
 
 
-    private Response retrieveResourcesResponseForAMissingOcpSubKey(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveResourcesResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .headers(headersAsMap)
@@ -324,6 +408,8 @@ class GET_resources_UnitTests {
     private Response retrieveResourcesResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)

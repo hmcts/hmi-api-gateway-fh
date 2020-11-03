@@ -40,7 +40,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     private String hearingsApiRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
@@ -56,6 +56,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     void deleteHearingsRequestWithInvalidUri() throws Exception {
         this.setRelativeURL(hearingsApiRootContext + "/1234");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "delete-hearing-request-valid.json",
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 null,
@@ -72,6 +73,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
