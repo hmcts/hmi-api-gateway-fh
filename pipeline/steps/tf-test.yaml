@@ -11,7 +11,7 @@ steps:
     ScriptType: 'InlineScript'
     Inline: |
       Install-Module -Name Pester -MaximumVersion 4.99.99 -Force -Verbose -Scope CurrentUser
-      Invoke-Pester ./pipeline/scripts -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
+      Invoke-Pester $(System.DefaultWorkingDirectory)/script -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
     azurePowerShellVersion: 'LatestVersion'
 
 - task: PublishTestResults@2
