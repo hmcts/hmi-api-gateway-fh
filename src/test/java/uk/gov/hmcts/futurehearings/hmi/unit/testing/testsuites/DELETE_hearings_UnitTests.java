@@ -2,14 +2,23 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
+<<<<<<<HEAD=======
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+
+>>>>>>>master
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +29,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -37,6 +48,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(TestReporter.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /hearings - Delete Hearings")
 @SuppressWarnings("java:S2699")
 class DELETE_hearings_UnitTests {
@@ -52,10 +64,41 @@ class DELETE_hearings_UnitTests {
 	@Value("${hearingApiRootContext}")
 	private String hearingApiRootContext;
 
-	@Value("${destinationSystem}")
-	private String destinationSystem;
+	@Value("${tokenURL}")
+	private String tokenURL;
+
+	@Value("${clientID}")
+	private String clientID;
+
+	@Value("${clientSecret}")
+	private String clientSecret;
+
+	@Value("${scope}")
+	private String scope;
+
+	@Value("${grantType}")
+	private String grantType;
+
+	private static String accessToken;
 
 	private final Map<String, Object> headersAsMap = new HashMap<>();
+
+	@Value("${invalidTokenURL}")
+	private String invalidTokenURL;
+
+	@Value("${invalidScope}")
+	private String invalidScope;
+
+	@Value("${invalidClientID}")
+	private String invalidClientID;
+
+	@Value("${invalidClientSecret}")
+	private String invalidClientSecret;
+
+	@BeforeAll
+	void setToken() {
+		accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+	}
 
 	@BeforeEach
 	void initialiseValues() {
@@ -64,7 +107,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.put("Content-Type", "application/json");
 		headersAsMap.put("Accept", "application/json");
 		headersAsMap.put("Source-System", "CFT");
-		headersAsMap.put("Destination-System", destinationSystem);
+		headersAsMap.put("Destination-System", "S&L");
 		headersAsMap.put("Request-Type", "THEFT");
 		headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
 		headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
@@ -125,21 +168,21 @@ class DELETE_hearings_UnitTests {
 	@Test
 	@Order(6)
 	@DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-	void testDeleteHearingRequestWithMissingOcpSubKey() throws IOException {
+	void testDeleteResourcesRequestWithMissingOcpSubKey() throws IOException {
 		headersAsMap.remove("Ocp-Apim-Subscription-Key");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(input);
+		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
 		thenValidateResponseForMissingSubscriptionKeyHeader(response);
 	}
 
 	@Test
 	@Order(7)
 	@DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-	void testDeleteHearingRequestWithInvalidOcpSubKey() throws IOException {
+	void testDeleteResourcesRequestWithInvalidOcpSubKey() throws IOException {
 		headersAsMap.remove("Ocp-Apim-Subscription-Key");
 		headersAsMap.put("Ocp-Apim-Subscription-Key", "invalidocpsubkey");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(input);
+		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
 		thenValidateResponseForInvalidSubscriptionKeyHeader(response);
 	}
 
@@ -173,6 +216,27 @@ class DELETE_hearings_UnitTests {
 		thenValidateResponseForRequestOrDelete(response);
 	}
 
+	@Test
+	@Order(11)
+	@DisplayName("Test for missing Access Token")
+	void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
+
+		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+		final Response response = whenDeleteHearingRequestIsInvokedWithMissingAccessToken(input);
+		thenValidateResponseForMissingOrInvalidAccessToken(response);
+	}
+
+	@Test
+	@Order(12)
+	@DisplayName("Test for invalid Access Token")
+	void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
+		accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+
+		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		thenValidateResponseForMissingOrInvalidAccessToken(response);
+	}
+
 	private Response whenDeleteHearingRequestIsInvokedForInvalidResource(final String input) {
 		return deleteHearingsResponseForInvalidResource(hearingApiRootContext + "delete", headersAsMap, targetInstance, input);
 	}
@@ -181,8 +245,8 @@ class DELETE_hearings_UnitTests {
 		return deleteHearingsResponseForCorrectHeaders(hearingApiRootContext, headersAsMap, targetInstance, input);
 	}
 
-	private Response whenDeleteHearingRequestIsInvokedWithMissingOcpSubKey(final String input) {
-		return deleteHearingsResponseForMissingOrInvalidOcpSubKey(hearingApiRootContext, headersAsMap, targetInstance, input);
+	private Response whenDeleteHearingRequestIsInvokedWithMissingAccessToken(final String input) {
+		return deleteHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap, targetInstance, input);
 	}
 
 	private Response whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
@@ -197,6 +261,8 @@ class DELETE_hearings_UnitTests {
 			final String basePath, final String payloadBody) {
 
 		return given()
+				.auth()
+				.oauth2(accessToken)
 				.body(payloadBody)
 				.headers(headersAsMap)
 				.baseUri(basePath)
@@ -208,6 +274,8 @@ class DELETE_hearings_UnitTests {
 			final String basePath, final String payloadBody) {
 
 		return given()
+				.auth()
+				.oauth2(accessToken)
 				.body(payloadBody)
 				.headers(headersAsMap)
 				.baseUri(basePath)
@@ -215,7 +283,7 @@ class DELETE_hearings_UnitTests {
 				.when().delete().then().extract().response();
 	}
 
-	private Response deleteHearingsResponseForMissingOrInvalidOcpSubKey(final String api, final Map<String, Object> headersAsMap,
+	private Response deleteHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap,
 			final String basePath, final String payloadBody) {
 
 		return given()
@@ -226,15 +294,16 @@ class DELETE_hearings_UnitTests {
 				.when().delete().then().extract().response();
 	}
 
-	private Response deleteHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,
-			final String basePath, final String payloadBody) {
+	private Response deleteHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
 
-		return given()
-				.body(payloadBody)
-				.headers(headersAsMap)
-				.baseUri(basePath)
-				.basePath(api)
-				.when().delete().then().extract().response();
+        return given()
+                .auth()
+                .oauth2(accessToken)
+                .body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().delete().then().extract().response();
 
-	}
-}>>>>>>>hmi_forwarding_feature
+    }
+}>>>>>>>master

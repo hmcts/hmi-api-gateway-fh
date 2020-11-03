@@ -20,6 +20,7 @@ parameters:
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
+      custom_domain: hmi-apim.perftest.platform.hmcts.net
       tests_gradle:
       - name: UnitTest
         command: test
@@ -66,6 +67,24 @@ stages:
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
         displayName: Build infrastructure with Terraform
+
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: ${{ environment.subscription }}
+        environment: ${{ environment.name }}
+        dependsOn: Terraform
+
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        subscription: ${{ environment.subscription }}
+        displayName: Apply Custom Domain Configuration
+        dependsOn: Terraform
+        resourceGroup: $(resourceGroup)
+        certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
+        hostName: ${{ environment.custom_domain }}
+        variables:
+          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
