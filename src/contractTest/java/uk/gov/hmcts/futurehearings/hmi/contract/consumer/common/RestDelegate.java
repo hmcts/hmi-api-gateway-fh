@@ -16,6 +16,7 @@ public class RestDelegate {
     private RestDelegate () {}
 
     public static final Response invokeSnLAPI (final Map<String, String> headersAsMap,
+                                               final String authorizationToken,
                                                final String requestPayloadPath,
                                                final HttpMethod httpMethod,
                                                final MockServer mockServer,
@@ -27,6 +28,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(readFileContents(requestPayloadPath))
                         .when()
@@ -38,6 +40,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(readFileContents(requestPayloadPath))
                         .when()
@@ -49,6 +52,7 @@ public class RestDelegate {
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when()
                         .get(mockServer.getUrl() + apiURIPath)
