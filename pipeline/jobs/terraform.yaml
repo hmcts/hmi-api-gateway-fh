@@ -24,9 +24,9 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - template: ../steps/tf-install.yaml
-  #- template: ../steps/tf-test.yaml
-   # parameters:
-   #   subscription: ${{ parameters.subscription }}
+  - template: ../steps/tf-test.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
   - template: ../steps/tf-init.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
