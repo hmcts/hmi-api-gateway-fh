@@ -21,6 +21,7 @@ public class CommonStubFactory {
         Header header = new Header("Content-Type", "application/json");
         Headers headers = new Headers(List.of(header));
         shouldExecute(headers,
+                null,
                 "{}",
                 requestURL,
                 null,
@@ -36,6 +37,7 @@ public class CommonStubFactory {
         Header header = new Header("Content-Type", "application/json");
         Headers headers = new Headers(List.of(header));
         shouldExecute(headers,
+                null,
                 payload,
                 requestURL,
                 null,

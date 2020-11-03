@@ -33,22 +33,12 @@ public class RestClientTemplate {
         log.debug("The value of the Authorization Token : " + authorizationToken);
         log.debug("The value of the header : " + headers.size());
         headers.asList().forEach(header ->
-                    log.debug("The Key of the header" + header.getName() + "The value of the Header" + header.getValue()));
+                log.debug("The Key of the header" + header.getName() + "The value of the Header" + header.getValue()));
         log.debug("The value of the HTTP Status : " + expectedHttpStatus.value());
 
         switch (httpMethod) {
             case POST:
-                return RestAssured
-                        .expect().that().statusCode(expectedHttpStatus.value())
-                        .given()
-                        .headers(headers)
-                        .auth()
-                        .oauth2(authorizationToken)
-                        .basePath(requestURL)
-                        .body(requestBodyPayload)
-                        .when()
-                        .post().then().extract().response();
-            case PUT:
+                if (Objects.nonNull(authorizationToken)) {
                     return RestAssured
                             .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
@@ -58,7 +48,28 @@ public class RestClientTemplate {
                             .basePath(requestURL)
                             .body(requestBodyPayload)
                             .when()
-                            .put().then().extract().response();
+                            .post().then().extract().response();
+                } else {
+                    return RestAssured
+                            .expect().that().statusCode(expectedHttpStatus.value())
+                            .given()
+                            .headers(headers)
+                            .basePath(requestURL)
+                            .body(requestBodyPayload)
+                            .when()
+                            .post().then().extract().response();
+                }
+            case PUT:
+                return RestAssured
+                        .expect().that().statusCode(expectedHttpStatus.value())
+                        .given()
+                        .headers(headers)
+                        .auth()
+                        .oauth2(authorizationToken)
+                        .basePath(requestURL)
+                        .body(requestBodyPayload)
+                        .when()
+                        .put().then().extract().response();
             case DELETE:
                 return RestAssured
                         .expect().that().statusCode(expectedHttpStatus.value())

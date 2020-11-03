@@ -1,7 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.mock.CommonStubFactory.resetMocks;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.mock.CommonStubFactory.uploadCommonMocks;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -23,8 +26,13 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 public abstract class HearingValidationTest extends HMICommonHeaderTest {
 
+    private static final String COMMON_MOCK_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/common/mock";
+
     @Value("${targetInstance}")
     private String targetInstance;
+
+    @Value("${mockServerHost}")
+    private String mockServerHost;
 
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
@@ -62,5 +70,13 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
+
+       /* RestAssured.baseURI = mockServerHost;
+        log.debug("The value of the base URI" + RestAssured.baseURI);
+
+        resetMocks("/__admin/mappings/reset");
+        uploadCommonMocks("/__admin/mappings/import",
+                readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
+        RestAssured.baseURI = targetInstance;*/
     }
 }
