@@ -35,7 +35,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 public class ResourceInteractionTest {
 
     private static final String COMMON_MOCK_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/common/mock";
@@ -69,7 +68,7 @@ public class ResourceInteractionTest {
 
         RestAssured.baseURI = mockServerHost;
         log.debug("The value of the base URI" + RestAssured.baseURI);
-<<<<<<< HEAD
+
         /*try {
             wireMock.stubFor(get(urlEqualTo("/casehqapi/rest/hmcts/resources/users"))
                     //.withHeader("Content-Type", equalTo(contentType))
