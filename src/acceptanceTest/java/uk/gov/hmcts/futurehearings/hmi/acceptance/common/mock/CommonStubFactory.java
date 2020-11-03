@@ -17,6 +17,7 @@ public class CommonStubFactory {
 
     public static void resetMocks (String requestURL) {
 
+        log.debug("The value of the RequestURL "+requestURL);
         Header header = new Header("Content-Type", "application/json");
         Headers headers = new Headers(List.of(header));
         shouldExecute(headers,
@@ -28,7 +29,7 @@ public class CommonStubFactory {
     }
 
     public static void uploadCommonMocks (String requestURL, String payload) {
-        
+
         log.debug("The value of the RequestURL "+requestURL);
         log.debug("The value of the body " +payload);
 

@@ -45,9 +45,6 @@ public class ResourceInteractionTest {
     @Value("${mockServerHost}")
     private String mockServerHost;
 
-    @Value("${mockServerPort}")
-    private String mockServerPort;
-
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -63,45 +60,16 @@ public class ResourceInteractionTest {
 
     @BeforeAll
     public void initialiseValues() {
-        RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        //wireMock = new WireMock(mockServerHost, Integer.parseInt(mockServerPort));
-        //wireMock = new WireMock("localhost", Integer.parseInt("8080"));
-        //wireMock.resetRequests();
-
-        /*super.initialiseValues();
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
-        this.setRelativeURL(resourcesByUser_idRootContext);
-        this.setHttpMethod(HttpMethod.PUT);
-        this.setInputPayloadFileName("put-user-as-resource-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/user","resource/user"));
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());*/
-
     }
-
-    /*@Test
-    public void should_work_from_standalone_mock() throws Exception {
-
-        log.debug("The value of the base URI" + RestAssured.baseURI);
-        try {
-            wireMock.stubFor(get(urlEqualTo("/casehqapi/rest/hmcts/resources/users"))
-                    //.withHeader("Content-Type", equalTo(contentType))
-                    .willReturn(aResponse()
-                            .withStatus(200)
-                            //.withHeader("Content-Type", contentType)
-                            .withBody(readFileContents(INPUT_FILE_PATH+"/standard-success-response.json"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Test
     @DisplayName("Successfully validated response with all the header values")
     void test_successful_response_with_a_complete_header() throws Exception {
 
+        RestAssured.baseURI = mockServerHost;
         log.debug("The value of the base URI" + RestAssured.baseURI);
+<<<<<<< HEAD
         /*try {
             wireMock.stubFor(get(urlEqualTo("/casehqapi/rest/hmcts/resources/users"))
                     //.withHeader("Content-Type", equalTo(contentType))
@@ -114,7 +82,13 @@ public class ResourceInteractionTest {
         }*/
        /* resetMocks(mockServerHost + "/__admin/mappings/reset");
         uploadCommonMocks(mockServerHost + "/__admin/mappings/reset",readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
+=======
+        resetMocks("/__admin/mappings/reset");
+        uploadCommonMocks("/__admin/mappings/import",
+                readFileContents(COMMON_MOCK_PATH+"/common-mock-responses.json"));
+>>>>>>> b22b629... Added all the code for the possibility of the refactor of the Wiremock stubbing....
 
+        RestAssured.baseURI = targetInstance;
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"12345");
         commonDelegate.test_expected_response_for_supplied_header(targetSubscriptionKey,
 
