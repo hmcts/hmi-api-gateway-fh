@@ -11,14 +11,10 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
-<<<<<<<HEAD=======
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
->>>>>>>master
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +36,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 
 @Slf4j
 @SpringBootTest(classes = { Application.class })
@@ -63,6 +57,9 @@ class DELETE_hearings_UnitTests {
 
 	@Value("${hearingApiRootContext}")
 	private String hearingApiRootContext;
+
+	@Value("${destinationSystem}")
+	private String destinationSystem;
 
 	@Value("${tokenURL}")
 	private String tokenURL;
@@ -107,7 +104,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.put("Content-Type", "application/json");
 		headersAsMap.put("Accept", "application/json");
 		headersAsMap.put("Source-System", "CFT");
-		headersAsMap.put("Destination-System", "S&L");
+		headersAsMap.put("Destination-System", destinationSystem);
 		headersAsMap.put("Request-Type", "THEFT");
 		headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
 		headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
@@ -306,4 +303,4 @@ class DELETE_hearings_UnitTests {
                 .when().delete().then().extract().response();
 
     }
-}>>>>>>>master
+}
