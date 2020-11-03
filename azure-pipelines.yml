@@ -26,7 +26,6 @@ parameters:
         dependsOn: SmokeTest
       - name: ContractTest
         command: contract
-        brokerUrl: http://hmi-pact.sandbox.platform.hmcts.net/
         logLevel: info
         dependsOn: AcceptanceTest
       - name: FunctionalTest
@@ -147,13 +146,11 @@ stages:
             - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
+            group: ${{ environment.group }}
             apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
-            ${{ if test.contract }}:
-              brokerUrl: ${{ test.contract.brokerUrl }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
