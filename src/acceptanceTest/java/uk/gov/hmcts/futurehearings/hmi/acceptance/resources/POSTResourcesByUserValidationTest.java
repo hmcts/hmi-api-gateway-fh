@@ -37,7 +37,7 @@ class POSTResourcesByUserValidationTest extends ResourceValidationTest {
     private HttpMethod httpMethod;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(resourcesByUserRootContext);
         this.setHttpMethod(HttpMethod.POST);

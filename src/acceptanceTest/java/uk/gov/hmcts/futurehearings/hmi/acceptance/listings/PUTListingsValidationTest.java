@@ -37,7 +37,7 @@ class PUTListingsValidationTest extends ListingsValidationTest {
     private HttpMethod httpMethod;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         listings_idRootContext = String.format(listings_idRootContext,"12345");
         this.setRelativeURL(listings_idRootContext);

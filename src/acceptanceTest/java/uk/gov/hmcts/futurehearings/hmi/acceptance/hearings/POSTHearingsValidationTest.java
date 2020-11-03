@@ -41,7 +41,7 @@ class POSTHearingsValidationTest extends HearingValidationTest {
     private String hearingsApiRootContext;
 
     @BeforeAll
-    public void initialiseValues() {
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeURL(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
@@ -59,6 +59,7 @@ class POSTHearingsValidationTest extends HearingValidationTest {
     void test_successful_response_for_test_xml_body() throws Exception {
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
