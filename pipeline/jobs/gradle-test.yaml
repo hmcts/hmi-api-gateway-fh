@@ -26,9 +26,6 @@ parameters:
   - name: apimHost
     type: string
 
-  - name: brokerUrl
-    type: string
-
   - name: command
     type: string
 
