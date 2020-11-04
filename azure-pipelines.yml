@@ -166,7 +166,7 @@ stages:
             apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
-            pactBrokerUlr: $(pactBrokerUrl)
+            pactBrokerUrl: $(pactBrokerUrl)
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
