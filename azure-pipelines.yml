@@ -84,7 +84,6 @@ parameters:
         command: contract
         logLevel: info
         brokerUrl: http://hmi-pact.test.platform.hmcts.net
-        serenity: false
         dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
