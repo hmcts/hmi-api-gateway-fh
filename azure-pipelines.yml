@@ -17,21 +17,23 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
+      - name: ContractTest
+        command: contract
+        logLevel: info
+        brokerUrl: http://hmi-pact.sandbox.platform.hmcts.net
+        serenity: false
+        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
-        serenity: true
         dependsOn: AcceptanceTest
       # tests_security:
       # - name: ApiZapScan
@@ -52,16 +54,13 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
 
     - name: test
@@ -73,21 +72,22 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
+      - name: ContractTest
+        command: contract
+        logLevel: info
+        brokerUrl: http://hmi-pact.test.platform.hmcts.net
+        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
-        serenity: true
         dependsOn: AcceptanceTest
       tests_sonarcloud:
       - name: CodeQualityTest
@@ -156,11 +156,12 @@ stages:
             - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
+            pool: hmi-${{ environment.name }}
             apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
+            pactBrokerUrl: ${{ test.brokerUrl }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)

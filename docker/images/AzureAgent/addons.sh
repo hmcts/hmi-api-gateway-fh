@@ -3,6 +3,7 @@
 
 apt-get install --fix-missing -y --no-install-recommends \
         wget \
+        zip \
         unzip \
         software-properties-common
 
