@@ -31,6 +31,7 @@ parameters:
       - name: ContractTest
         command: contract
         logLevel: info
+        brokerUrl: http://hmi-pact.sandbox.platform.hmcts.net
         serenity: false
         dependsOn: AcceptanceTest
       - name: FunctionalTest
@@ -92,6 +93,7 @@ parameters:
       - name: ContractTest
         command: contract
         logLevel: info
+        brokerUrl: http://hmi-pact.test.platform.hmcts.net
         serenity: false
         dependsOn: AcceptanceTest
       - name: FunctionalTest
@@ -172,7 +174,7 @@ stages:
             apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
-            pactBrokerUrl: $(pactBrokerUrl)
+            pactBrokerUrl: ${{ test.brokerUrl }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
