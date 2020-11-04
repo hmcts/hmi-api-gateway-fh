@@ -17,16 +17,13 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
       - name: ContractTest
         command: contract
@@ -37,8 +34,7 @@ parameters:
       - name: FunctionalTest
         command: functional
         logLevel: info
-        serenity: true
-        dependsOn: ContractTest
+        dependsOn: AcceptanceTest
       # tests_security:
       # - name: ApiZapScan
       #   containerRegistry: ssprivatesbox.azurecr.io
@@ -58,16 +54,13 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
 
     - name: test
@@ -79,16 +72,13 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
       - name: ContractTest
         command: contract
@@ -99,8 +89,7 @@ parameters:
       - name: FunctionalTest
         command: functional
         logLevel: info
-        serenity: true
-        dependsOn: ContractTest
+        dependsOn: AcceptanceTest
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
@@ -168,7 +157,6 @@ stages:
             - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
             pool: hmi-${{ environment.name }}
             apimHost: ${{ environment.custom_domain }}
