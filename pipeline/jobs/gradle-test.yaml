@@ -4,9 +4,6 @@ parameters:
 
   - name: dependsOn
     type: object
-  
-  - name: serenity
-    type: string
 
   - name: subscription
     type: string
@@ -34,6 +31,12 @@ parameters:
 
   - name: variables
     type: object
+  
+  - name: pactBrokerUrl
+    type: string
+  
+  - name: pool
+    type: string
 
 jobs:
 - job: ${{ parameters.displayName }}
@@ -42,18 +45,40 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-latest'
+    name: ${{ parameters.pool }}
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - bash: |
+      wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz -O /azp/openjdk-11_linux-x64_bin.tar.gz
+  - task: JavaToolInstaller@0
+    displayName: 'Use Java 11'
+    inputs:
+      versionSpec: 11
+      jdkArchitectureOption: x64
+      jdkSourceOption: LocalDirectory
+      jdkFile: '/azp/openjdk-11_linux-x64_bin.tar.gz'
+      jdkDestinationDirectory: jdk
+  - ${{ if contains(parameters.command, 'contract') }}:
+    - template: ../steps/run-gradlew.yaml
+      parameters:
+        command: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey)
+    - template: ../steps/run-gradlew.yaml
+      parameters:
+        command: pactPublish -DPACT_BROKER_FULL_URL=${{ parameters.pactBrokerUrl }}
   - template: ../steps/run-gradlew.yaml
     parameters:
       command: ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DMOCK_SERVER_HOST=localhost -DMOCK_SERVER_PORT=80 -DAPI_LOG_LEVEL=${{ parameters.logLevel }}
-  - ${{ if contains(parameters.serenity, true) }}:
+  - ${{ if contains(parameters.command, 'functional') }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
         zipName: ${{ parameters.displayName }}_serenity
         directory: /target/site/serenity
+  - ${{ if contains(parameters.command, 'test') }}:
+    - template: ../steps/zip-test-results.yaml
+      parameters:
+        zipName: ${{ parameters.displayName }}_unittests
+        directory: /build/reports/unittests
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}_gradle
