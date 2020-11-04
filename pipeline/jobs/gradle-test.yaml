@@ -74,7 +74,7 @@ jobs:
       parameters:
         zipName: ${{ parameters.displayName }}_serenity
         directory: /target/site/serenity
-  - ${{ if contains(parameters.command, 'unit') }}:
+  - ${{ if contains(parameters.command, 'test') }}:
     - template: ../steps/zip-test-results.yaml
       parameters:
         zipName: ${{ parameters.displayName }}_unittests
