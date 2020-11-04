@@ -89,11 +89,16 @@ parameters:
         logLevel: debug
         serenity: false
         dependsOn: SmokeTest
+      - name: ContractTest
+        command: contract
+        logLevel: info
+        serenity: false
+        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
         serenity: true
-        dependsOn: AcceptanceTest
+        dependsOn: ContractTest
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
