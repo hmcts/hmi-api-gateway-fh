@@ -163,6 +163,7 @@ stages:
               - ${{ test.dependsOn }}
             serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
+            pool: hmi-${{ environment.name }}
             apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
