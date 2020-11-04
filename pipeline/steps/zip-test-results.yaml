@@ -6,6 +6,9 @@ parameters:
     type: string
 
 steps:
-  - script: |
-      zip $(System.DefaultWorkingDirectory)/$(Build.BuildId)/$(Build.BuildId)-${{ parameters.zipName }}.zip $(System.DefaultWorkingDirectory)${{ parameters.directory }}
+  - task: ArchiveFiles@2
+    displayName: Archive Files
+    inputs:
+      rootFolderOrFile: $(System.DefaultWorkingDirectory)${{ parameters.directory }}
+      archiveFile: $(System.DefaultWorkingDirectory)/$(Build.BuildId)/$(Build.BuildId)-${{ parameters.zipName }}.zip
     condition: succeededOrFailed()
