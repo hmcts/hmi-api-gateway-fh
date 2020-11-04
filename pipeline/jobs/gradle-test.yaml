@@ -52,6 +52,8 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - bash: |
+      wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz -O /azp/openjdk-11_linux-x64_bin.tar.gz
   - task: JavaToolInstaller@0
     displayName: 'Use Java 11'
     inputs:
