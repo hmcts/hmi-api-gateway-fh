@@ -37,6 +37,9 @@ parameters:
   
   - name: pactBrokerUrl
     type: string
+  
+  - name: pool
+    type: string
 
 jobs:
 - job: ${{ parameters.displayName }}
@@ -45,7 +48,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
-    name: hmi-$(environment)
+    name: ${{ parameters.pool }}
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
