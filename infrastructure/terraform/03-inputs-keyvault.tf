@@ -1,7 +1,7 @@
-variable "principal_tenant_id" {
+variable "tenant_id" {
   description = "The Tenant ID for the principal we're giving permission to."
 }
-variable "principal_object_id" {
+variable "sp_object_id" {
   description = "The Object ID for the principal we're giving permission to."
 }
 variable "kv_sku_name" {
