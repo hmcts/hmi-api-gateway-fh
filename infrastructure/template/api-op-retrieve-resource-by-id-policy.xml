@@ -21,8 +21,7 @@
 	    					<value>application/json</value>
 						</set-header>
 	                    <set-body>@{
-	                        var data = new JArray();
-	                        JObject recordOne = new JObject(
+	                        return new JObject(
 	                            new JProperty("VenueID", "V123"),
 	                            new JProperty("JurisdictionID", "J123"),
 	                            new JProperty("FacilityID", "F123"),
@@ -45,9 +44,7 @@
          						new JProperty("Status", "Open"),
          						new JProperty("OpeningTimes", "0800 - 1600"),
          						new JProperty("OpenToPublic", "N")
-	                        );
-	                        data.Add(recordOne);
-	                        return data.ToString();
+	                        ).ToString();
 	                    }</set-body>
 	                </return-response>
                 </when>
