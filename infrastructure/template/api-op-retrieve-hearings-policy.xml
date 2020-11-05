@@ -50,48 +50,165 @@
 					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-					<return-response>
-	                    <set-status code="200" />
-	                    <set-header name="Content-Type">
-	    					<value>application/json</value>
-						</set-header>
-	                    <set-body>@{
-	                        var data = new JArray();
-	                        JObject recordOne = new JObject(
-	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
-	                            new JProperty("hearingType", "Traffic"),
-	                            new JProperty("hearingDate", "2020-09-16"),
-	                            new JProperty("hearingStartTime", "08:45"),
-	                            new JProperty("hearingEndTime", "10:45"),
-	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-	                            new JProperty("hearingTranslatorRequired", "No"),
-	                            new JProperty("hearingCreatedDate", "2020-09-16"),
-	                            new JProperty("hearingCreatedBy", "Donald Duck"),
-	                            new JProperty("hearingVenueId", "V3455"),
-	                            new JProperty("hearingRoomId", "R2345")
-	                        );
-	                        JObject recordTwo = new JObject(
-	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
-	                            new JProperty("hearingType", "Traffic"),
-	                            new JProperty("hearingDate", "2020-09-16"),
-	                            new JProperty("hearingStartTime", "08:45"),
-	                            new JProperty("hearingEndTime", "10:45"),
-	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-	                            new JProperty("hearingTranslatorRequired", "No"),
-	                            new JProperty("hearingCreatedDate", "2020-09-16"),
-	                            new JProperty("hearingCreatedBy", "Donald Duck"),
-	                            new JProperty("hearingVenueId", "V3455"),
-	                            new JProperty("hearingRoomId", "R2345")
-	                        );
-	                        data.Add(recordOne);
-	                        data.Add(recordTwo);
-	                        return data.ToString();
-	                    }</set-body>
-	                </return-response>
+					<choose>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
+		                         return new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ")),
+		                            new JProperty("hearingType", "Crime"),
+		                            new JProperty("hearingDate", "2020-01-28"),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        ).ToString();
+		                    }</set-body>
+		                </return-response>
+		            </when>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
+		                        var data = new JArray();
+		                        JObject recordOne = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
+		                            new JProperty("hearingType", "Crime"),
+		                            new JProperty("hearingDate", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate")),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        JObject recordTwo = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
+		                            new JProperty("hearingType", "Crime"),
+		                            new JProperty("hearingDate", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate")),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        data.Add(recordOne);
+		                        data.Add(recordTwo);
+		                        return data.ToString();
+		                    }</set-body>
+		                </return-response>
+		            </when>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
+		                        var data = new JArray();
+		                        JObject recordOne = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
+		                            new JProperty("hearingType", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType")),
+		                            new JProperty("hearingDate", "2020-09-16"),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        JObject recordTwo = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
+		                            new JProperty("hearingType", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType")),
+		                            new JProperty("hearingDate", "2020-09-16"),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        data.Add(recordOne);
+		                        data.Add(recordTwo);
+		                        return data.ToString();
+		                    }</set-body>
+		                </return-response>
+		            </when>
+		            <otherwise>
+		            	<return-response>
+		                	<set-status code="200" />
+		                    <set-header name="Content-Type">
+		    					<value>application/json</value>
+							</set-header>
+		                    <set-body>@{
+		                        var data = new JArray();
+		                        JObject recordOne = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
+		                            new JProperty("hearingType", "Traffic"),
+		                            new JProperty("hearingDate", "2020-09-16"),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        JObject recordTwo = new JObject(
+		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
+		                            new JProperty("hearingType", "Traffic"),
+		                            new JProperty("hearingDate", "2020-09-16"),
+		                            new JProperty("hearingStartTime", "08:45"),
+		                            new JProperty("hearingEndTime", "10:45"),
+		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+		                            new JProperty("hearingTranslatorRequired", "No"),
+		                            new JProperty("hearingCreatedDate", "2020-09-16"),
+		                            new JProperty("hearingCreatedBy", "Donald Duck"),
+		                            new JProperty("hearingVenueId", "V3455"),
+		                            new JProperty("hearingRoomId", "R2345")
+		                        );
+		                        data.Add(recordOne);
+		                        data.Add(recordTwo);
+		                        return data.ToString();
+		                    }</set-body>
+		                </return-response>
+		            </otherwise>
+		        </choose>
                 </when>
 			</choose>
     </inbound>
