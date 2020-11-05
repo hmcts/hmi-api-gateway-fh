@@ -16,17 +16,16 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>
-	                    <set-status code="200" />
+	                    <set-status code="204" />
 	                    <set-header name="Content-Type">
 	    					<value>application/json</value>
 						</set-header>
 						<set-body>@{
 		               return new JObject(
-		                   new JProperty("response code", 200),
+		                   new JProperty("response code", 204),
 		                   new JProperty("description", "The request was received successfully.")
 		               ).ToString();
-		               }
-		       		</set-body>
+		              }</set-body>
 		        </return-response>
 		    </when>
 		</choose>
