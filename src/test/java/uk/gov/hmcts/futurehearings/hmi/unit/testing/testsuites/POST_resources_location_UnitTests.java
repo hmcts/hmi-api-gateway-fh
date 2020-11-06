@@ -9,7 +9,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForCreate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
@@ -58,6 +58,9 @@ class POST_resources_location_UnitTests {
     @Value("${resourcesApiRootContext}")
     private String resourcesApiRootContext;
 
+    @Value("${destinationSystem}")
+    private String destinationSystem;
+
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
@@ -100,7 +103,7 @@ class POST_resources_location_UnitTests {
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
@@ -204,7 +207,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenCreateLocationResourceIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
+        thenValidateResponseForCreate(response);
     }
 
     @Test
