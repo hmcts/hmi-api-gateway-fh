@@ -210,7 +210,7 @@ class DELETE_listings_UnitTests {
     @Test
     @Order(11)
     @DisplayName("Test for missing Access Token")
-    void testDeleteResourcesRequestWithMissingAccessToken() throws IOException {
+    void testDeleteListingsRequestWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteListingsRequestIsInvokedWithMissingAccessToken(input);
@@ -220,7 +220,7 @@ class DELETE_listings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for invalid Access Token")
-    void testDeleteResourcesRequestWithInvalidAccessToken() throws IOException {
+    void testDeleteListingsRequestWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
 
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
