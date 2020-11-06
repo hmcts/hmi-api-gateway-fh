@@ -54,14 +54,10 @@ parameters:
       - name: UnitTest
         command: test
         logLevel: info
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        dependsOn: SmokeTest
+        dependsOn: UnitTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
@@ -92,13 +88,6 @@ parameters:
       tests_sonarcloud:
       - name: CodeQualityTest
         command: sonarqube
-
-    - name: stg
-      subscription: DTS-SHAREDSERVICES-STG
-      group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim.staging.platform.hmcts.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-
 
 variables:
   - group: HMI-APIM-Common
