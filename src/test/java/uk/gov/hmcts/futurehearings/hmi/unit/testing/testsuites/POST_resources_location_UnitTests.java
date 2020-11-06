@@ -9,7 +9,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForCreate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
@@ -207,7 +207,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenCreateLocationResourceIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
+        thenValidateResponseForCreate(response);
     }
 
     @Test

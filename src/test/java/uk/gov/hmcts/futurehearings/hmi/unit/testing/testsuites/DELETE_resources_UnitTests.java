@@ -2,7 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForDelete;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
@@ -208,7 +208,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
+        thenValidateResponseForDelete(response);
     }
 
     @Test
