@@ -32,7 +32,26 @@ public class HearingsResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForRequestOrDelete(Response response){
+    public static void  thenValidateResponseForCreate(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(202, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 202");
+            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
+            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
+
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForDelete(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(200, response.getStatusCode(),"Response Code Validation:");
@@ -56,8 +75,8 @@ public class HearingsResponseVerifier {
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             //assertEquals(2, responseMap.size());
-            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
-            getObjStep().pass("Got the expected response code: 200");
+            assertEquals(202, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 202");
             assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
             getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
         }
