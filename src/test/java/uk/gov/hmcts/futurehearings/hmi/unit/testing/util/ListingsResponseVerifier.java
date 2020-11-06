@@ -55,12 +55,8 @@ public class ListingsResponseVerifier {
     public static void thenValidateResponseForUpdate(Response response) {
 
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            //assertEquals(2, responseMap.size());
-            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
-            getObjStep().pass("Got the expected response code: 200");
-            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
-            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
+            assertEquals(204, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 204");
         }
         catch (AssertionError e){
             getObjStep().fail("Exception in "+e.getMessage());
