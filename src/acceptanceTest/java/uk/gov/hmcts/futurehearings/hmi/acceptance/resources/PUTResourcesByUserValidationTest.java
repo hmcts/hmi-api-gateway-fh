@@ -43,7 +43,7 @@ class PUTResourcesByUserValidationTest extends ResourceValidationTest {
         this.setRelativeURL(resourcesByUser_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-user-as-resource-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
+        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/user","resource/user"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
