@@ -5,9 +5,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,7 +44,7 @@ class POSTHearingsValidationTest extends HearingValidationTest {
         this.setRelativeURL(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("hearing-request-standard.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
+        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
