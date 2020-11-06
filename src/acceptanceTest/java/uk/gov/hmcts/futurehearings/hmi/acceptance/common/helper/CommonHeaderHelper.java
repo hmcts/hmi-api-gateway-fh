@@ -19,7 +19,7 @@ public class CommonHeaderHelper {
 
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
     private static final String SNL_DESTINATION_SYSTEM = "S&L";
-    private static final String DESTINATION_SYSTEM = SNL_DESTINATION_SYSTEM;
+    private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
     public static final Map<String, String> createCompletePayloadHeader(final String subscriptionKey) {
 
