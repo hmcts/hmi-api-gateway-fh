@@ -21,26 +21,31 @@ parameters:
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
       custom_domain: hmi-apim.perftest.platform.hmcts.net
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
       tests_gradle:
       - name: UnitTest
         command: test
         logLevel: info
-        serenity: true
       - name: SmokeTest
         command: smoke
         logLevel: debug
-        serenity: false
         dependsOn: UnitTest
       - name: AcceptanceTest
         command: acceptance
         logLevel: debug
-        serenity: false
         dependsOn: SmokeTest
+      - name: ContractTest
+        command: contract
+        logLevel: info
+        brokerUrl: http://hmi-pact.test.platform.hmcts.net
+        dependsOn: AcceptanceTest
       - name: FunctionalTest
         command: functional
         logLevel: info
-        serenity: true
         dependsOn: AcceptanceTest
+      tests_sonarcloud:
+      - name: CodeQualityTest
+        command: sonarqube
 
 variables:
   - group: HMI-APIM-Common
@@ -64,27 +69,23 @@ stages:
     - template: pipeline/jobs/terraform.yaml
       parameters:
         dependsOn: deleteAPIM
+        displayName: Build infrastructure with Terraform
         subscription: ${{ environment.subscription }} 
         group: ${{ environment.group }}
-        displayName: Build infrastructure with Terraform
 
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: ${{ environment.subscription }}
-        environment: ${{ environment.name }}
         dependsOn: Terraform
+        group: ${{ environment.group }}
 
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
-        subscription: ${{ environment.subscription }}
         displayName: Apply Custom Domain Configuration
         dependsOn: Terraform
-        resourceGroup: $(resourceGroup)
-        certificateUrl: https://hmi-shared-kv-${{ environment.name }}.vault.azure.net/secrets/apim-hostname-certificate
         hostName: ${{ environment.custom_domain }}
-        variables:
-          resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+        group: ${{ environment.group }}
 
     - template: pipeline/jobs/create-storage.yaml
       parameters:
@@ -99,25 +100,26 @@ stages:
 
     - ${{ if environment.tests_gradle }}:
       - ${{ each test in environment.tests_gradle }}:
-
         - template: pipeline/jobs/gradle-test.yaml
           parameters:
             displayName: ${{ test.name }}
-            dependsOn: 
+            dependsOn:
             - Terraform
             - createStorage
+            - ApplyHostName
             - ${{ if test.dependsOn }}:
               - ${{ test.dependsOn }}
-            serenity: ${{ test.serenity }}
             subscription: ${{ environment.subscription }}
-            apimHost: hmi-apim-svc-${{ environment.name }}.azure-api.net
+            pool: hmi-${{ environment.name }}
+            apimHost: ${{ environment.custom_domain }}
             command: ${{ test.command }}
             logLevel: ${{ test.logLevel }}
+            pactBrokerUrl: ${{ test.brokerUrl }}
             subscriptionKey: $(subscriptionKey)
             resourceGroup: $(resourceGroup)
             storageAccount: $(storageAccount)
             storageContainer: $(storageContainer)
-            variables: 
+            variables:
               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
@@ -125,24 +127,39 @@ stages:
 
     - ${{ if environment.tests_security }}:
       - ${{ each test in environment.tests_security }}:
-        - template: pipeline/jobs/security-test.yaml
+        - ${{ each url in test.testUrl }}:
+          - template: pipeline/jobs/security-test.yaml
+            parameters:
+              displayName: ${{ url.name }}
+              dependsOn:
+              - Terraform
+              - createStorage
+              - ApplyHostName
+              subscription: ${{ environment.subscription }}
+              registry: ${{ environment.registry }}
+              repository: ${{ test.repository }}
+              containerRegistry: ${{ test.containerRegistry }}
+              dockerfile: docker/images/${{ test.name }}/Dockerfile
+              tags: latest
+              testUrl: ${{ url.target }}
+              securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
+              resourceGroup: $(resourceGroup)
+              storageAccount: $(storageAccount)
+              storageContainer: $(storageContainer)
+              variables:
+                resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
+                storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+                storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+    
+    - ${{ if environment.tests_sonarcloud }}:
+      - ${{ each test in environment.tests_sonarcloud }}:
+        - template: pipeline/jobs/sonarqube-test.yaml
           parameters:
             displayName: ${{ test.name }}
             dependsOn:
-            - Terraform
-            - createStorage
+            - UnitTest
+            - SmokeTest
+            - AcceptanceTest
+            - FunctionalTest
             subscription: ${{ environment.subscription }}
-            registry: ${{ environment.registry }}
-            repository: ${{ test.repository }}
-            containerRegistry: ${{ test.containerRegistry }}
-            dockerfile: docker/images/${{ test.name }}/Dockerfile
-            tags: latest
-            testUrl: https://www.example.com/openapi.json 
-            securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-            resourceGroup: $(resourceGroup)
-            storageAccount: $(storageAccount)
-            storageContainer: $(storageContainer)
-            variables:
-              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+            command: ${{ test.command }}
