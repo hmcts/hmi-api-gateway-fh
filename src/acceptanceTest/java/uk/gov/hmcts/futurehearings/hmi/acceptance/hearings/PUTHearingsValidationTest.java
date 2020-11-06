@@ -9,7 +9,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,7 +47,7 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         this.setRelativeURL(hearings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("hearing-request-standard.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
+        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());

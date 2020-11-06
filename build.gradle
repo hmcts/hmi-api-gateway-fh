@@ -190,6 +190,7 @@ task contract(type: Test) {
     include "uk/gov/hmcts/futurehearings/hmi/contract/consumer/**"
     systemProperty 'pact.rootDir', "pacts"
     systemProperties System.getProperties()
+    delete 'pacts/HMI_API-SandL_API.json'
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
@@ -251,7 +252,7 @@ sonarqube {
         property "sonar.organization", "hmcts"
         property "sonar.sources", "src/main/java,pipeline,infrastructure"
         property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/contractTest/java,src/functionalTest/java"
-        property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
+        //property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
     }
 }
 project.tasks['sonarqube'].group = "Verification"
