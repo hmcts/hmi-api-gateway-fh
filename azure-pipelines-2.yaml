@@ -1,0 +1,32 @@
+---
+trigger:
+  - master
+pr:
+  - none
+
+parameters:
+  - name: environments
+    type: object
+    default:
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+    
+    - name: dev
+      subscription: DTS-SHAREDSERVICES-DEV
+
+stages:
+
+- ${{ each environment in parameters.environments }}:
+
+  - stage: ${{ environment.name }}
+    ${{ if environment.condition }}:
+      condition: ${{ environment.condition }}
+    displayName: Build and Test ${{ environment.name }} APIM
+
+    jobs:
+    - job:
+      displayName: "Job1"
+      steps:
+        task:
+          script: |
+            echo ${{ environment.name }}
