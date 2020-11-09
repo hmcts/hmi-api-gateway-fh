@@ -107,6 +107,13 @@ stages:
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
 
+  - stage: Plan
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        script: |
+          echo "Hello"
+
 # - ${{ each environment in parameters.environments }}:
 
 #   - stage: ${{ environment.name }}
