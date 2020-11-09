@@ -119,6 +119,11 @@ variable "api_policies" {
       operationId  = "update-listing"
       format       = "rawxml-link"
       templateFile = "api-op-update-listing-policy.xml"
+    },
+    {
+      operationId  = "delete-listing"
+      format       = "rawxml-link"
+      templateFile = "api-op-delete-listing-policy.xml"
     }
   ]
 }
