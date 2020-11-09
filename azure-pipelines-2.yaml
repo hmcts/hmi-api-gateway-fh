@@ -14,15 +14,12 @@ parameters:
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
 
-stages:
 
 - ${{ each environment in parameters.environments }}:
 
-  - stage: ${{ environment.name }}
-    displayName: Build and Test ${{ environment.name }} APIM
-
     jobs:
     - job:
+      displayName: Build and Test ${{ environment.name }} APIM
       steps:
       - bash: |
           echo ${{ environment.name }}
