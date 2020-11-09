@@ -24,6 +24,5 @@ stages:
     jobs:
     - job:
       steps:
-      - task: Task1
-        script: |
+      - bash: |
           echo ${{ environment.name }}
