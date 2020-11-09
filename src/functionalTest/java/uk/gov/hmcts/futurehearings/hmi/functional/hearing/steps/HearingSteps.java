@@ -20,7 +20,7 @@ public class HearingSteps {
                                 final String payloadBody) {
 
         //System.out.println("The value of the base path " + basePath);
-        Response response = expect().that().statusCode(200)
+        Response response = expect().that().statusCode(202)
                 .given().body(payloadBody)
                 .headers(headersAsMap)
                 .auth().oauth2(authorizationToken)

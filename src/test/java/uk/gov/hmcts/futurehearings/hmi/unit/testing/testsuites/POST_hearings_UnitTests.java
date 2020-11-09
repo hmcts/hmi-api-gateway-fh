@@ -3,7 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 import org.springframework.beans.factory.annotation.Value;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRequestOrDelete;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForCreate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
@@ -59,6 +59,9 @@ class POST_hearings_UnitTests {
     @Value("${hearingApiRootContext}")
     private String hearingApiRootContext;
 
+    @Value("${destinationSystem}")
+    private String destinationSystem;
+
     private final Map<String, Object> headersAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
@@ -101,7 +104,7 @@ class POST_hearings_UnitTests {
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
         headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
@@ -205,7 +208,7 @@ class POST_hearings_UnitTests {
     void testRequestHearingsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
         final Response response = whenRequestHearingsIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRequestOrDelete(response);
+        thenValidateResponseForCreate(response);
     }
 
     @Test

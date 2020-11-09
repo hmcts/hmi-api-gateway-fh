@@ -8,6 +8,7 @@ resourcesApiRootContext: /hmi/resources
 sessionsApiRootContext: /hmi/sessions
 listingsApiRootContext: /hmi/listings
 secureApiRootContext: /hmi/secure
+destinationSystem: MOCK
 tokenURL: https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token
 grantType: client_credentials
 clientID: b085c529-1b29-4075-969c-32ebfaddb1e4

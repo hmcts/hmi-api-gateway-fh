@@ -68,6 +68,9 @@ public abstract class SmokeTest {
 
     protected String rootContext;
 
+    private final String DESTINATION_SYSTEM_MOCK = "MOCK";
+    private final String DESTINATION_SYSTEM = DESTINATION_SYSTEM_MOCK;
+
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
@@ -93,7 +96,7 @@ public abstract class SmokeTest {
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
+        headersAsMap.put("Destination-System", DESTINATION_SYSTEM);
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
         headersAsMap.put("Request-Type", "ASSAULT");
