@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
+import io.restassured.response.Response;
 
 import java.util.Map;
 
-import io.restassured.response.Response;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
 public class HearingsResponseVerifier {
 
@@ -34,12 +34,8 @@ public class HearingsResponseVerifier {
 
     public static void  thenValidateResponseForCreate(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(202, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 202");
-            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
-            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
-
         }
         catch (AssertionError e){
             getObjStep().fail("Exception in "+e.getMessage());
@@ -53,12 +49,8 @@ public class HearingsResponseVerifier {
 
     public static void  thenValidateResponseForDelete(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(200, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 200");
-            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
-            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
-
         }
         catch (AssertionError e){
             getObjStep().fail("Exception in "+e.getMessage());
