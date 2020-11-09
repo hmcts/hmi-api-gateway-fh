@@ -24,9 +24,8 @@ stages:
     displayName: Build and Test ${{ environment.name }} APIM
 
     jobs:
-    - job:
-      displayName: "Job1"
-      steps:
-        task:
-          script: |
-            echo ${{ environment.name }}
+      - job:
+        steps:
+          - task:
+            script: |
+              echo ${{ environment.name }}
