@@ -8,12 +8,15 @@ parameters:
   - name: displayName
     type: string
 
+  - name: environment
+    type: string
+
   - name: dependsOn
     type: string
     default: ''
 
 jobs:
-- job: Terraform
+- job: Terraform${{ parameters.environment }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}

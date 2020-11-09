@@ -105,6 +105,7 @@ stages:
           displayName: Validate ${{ environment.name }}
           subscription: ${{ environment.subscription }} 
           group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
 # - ${{ each environment in parameters.environments }}:
 
