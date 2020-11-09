@@ -1,0 +1,29 @@
+parameters:
+  - name: subscription
+    type: string
+
+  - name: group
+    type: string
+
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: string
+    default: ''
+
+jobs:
+- job: Terraform
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  variables:
+  - group: ${{ parameters.group }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: ../steps/tf-install.yaml
+  - template: ../steps/tf-test.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
