@@ -25,8 +25,8 @@ jobs:
   steps:
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-test.yaml
-   parameters:
-     subscription: ${{ parameters.subscription }}
+    parameters:
+      subscription: ${{ parameters.subscription }}
   - template: ../steps/tf-init.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
