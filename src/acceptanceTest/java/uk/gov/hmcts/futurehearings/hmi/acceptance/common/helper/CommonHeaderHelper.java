@@ -6,18 +6,20 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.facto
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMultiMapWithRequiredHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Multimap;
 import io.restassured.http.Headers;
 import org.springframework.http.MediaType;
 
 public class CommonHeaderHelper {
+
+    private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
+    private static final String SNL_DESTINATION_SYSTEM = "S&L";
+    private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
     public static final Map<String, String> createCompletePayloadHeader(final String subscriptionKey) {
 
@@ -29,7 +31,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -42,7 +44,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -58,7 +60,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault",
                 duplicateHeaderValues
         );
@@ -99,7 +101,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault",
                 headersToBeTruncated
         );
@@ -114,7 +116,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault",
                 headersToBeRemoved
         );
@@ -129,7 +131,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 sourceSystem,
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -157,7 +159,7 @@ public class CommonHeaderHelper {
                 requestCreatedAt,
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -171,7 +173,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 requestProcessedAt,
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -185,7 +187,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 requestType
         );
     }
@@ -199,7 +201,7 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                "S&L",
+                DESTINATION_SYSTEM,
                 "Assault"
         );
     }
@@ -211,7 +213,7 @@ public class CommonHeaderHelper {
         //Set invalid value for specific header key
         final String acceptType = deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ? MediaType.APPLICATION_PDF_VALUE : MediaType.APPLICATION_JSON_VALUE;
         final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System") ? "S&L" : "CFT";
-        final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CFT" : "S&L";
+        final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CFT" : DESTINATION_SYSTEM;
         final String requestType = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Type") ? "Robbery" : "Assault";
         final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
         final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
