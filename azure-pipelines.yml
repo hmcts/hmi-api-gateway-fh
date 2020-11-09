@@ -99,8 +99,12 @@ variables:
 stages:
   - stage: Validate
     jobs:
-    ${{ each environment in parameters.environments }}
-    - template: pipelines/steps/tf-install.yaml
+    - ${{ each environment in parameters.environments }}:
+      - template: pipeline/jobs/terraform-validate.yaml
+        parameters:
+          displayName: Build infrastructure with Terraform
+          subscription: ${{ environment.subscription }} 
+          group: ${{ environment.group }}
 
 # - ${{ each environment in parameters.environments }}:
 
