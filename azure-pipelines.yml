@@ -99,8 +99,8 @@ variables:
 stages:
   - stage: Validate
     jobs:
-    - ${{ each environment in parameters.environments }}
-      template: pipelines/steps/tf-install.yaml
+    ${{ each environment in parameters.environments }}
+    - template: pipelines/steps/tf-install.yaml
 
 # - ${{ each environment in parameters.environments }}:
 
