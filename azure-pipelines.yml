@@ -41,7 +41,7 @@ stages:
             environment: ${{ environment.name }}
 
   - ${{ each environment in parameters.environments }}:
-    - stage: Plan
+    - stage: Plan${{ environment.name }}
       dependsOn: Validate
       jobs:
       - template: pipeline/jobs/terraform-plan.yaml
