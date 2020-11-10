@@ -5,6 +5,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.rea
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
+import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
 
 import java.io.IOException;
 
@@ -28,34 +29,60 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("functional")
 public class ResourcesAPITest extends FunctionalTest {
 
-    public static final String HEARINGS_INPUT_PATH = "uk/gov/hmcts/futurehearings/hmi/functional/hearings/input";
+    public static final String RESOURCES_INPUT_PATH = "uk/gov/hmcts/futurehearings/hmi/functional/resources/input";
 
-    @Value("${hearings_rootContext}")
-    protected String hearings_rootContext;
+    @Value("${resourcesByUserRootContext}")
+    protected String resourcesByUserRootContext;
 
-    @Value("${hearingsByID_rootContext}")
-    protected String hearingsByID_rootContext;
+    @Value("${resourcesByUser_idRootContext}")
+    protected String resourcesByUser_idRootContext;
+
+    @Value("${resourcesByLocationRootContext}")
+    protected String resourcesByLocationRootContext;
+
+    @Value("${resourcesByLocation_idRootContext}")
+    protected String resourcesByLocation_idRootContext;
 
     @Steps
-    HearingsSteps hearingsSteps;
+    ResourcesSteps resourceSteps;
 
     @Test
-    @Pending
     public void testRequestAndAmendAResourceByUser() throws IOException {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
-        String inputBodyForRequestHearing =
-                String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), "615");
-        hearingsSteps.shouldRequestAHearing(hearings_rootContext,
+        String inputBodyForCreateResources =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), "615");
+        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
-                inputBodyForRequestHearing);
+                inputBodyForCreateResources);
 
-        String inputBodyForAmendHearing =
-                String.format(readFileContents(HEARINGS_INPUT_PATH + "/PUT-hearing-payload.json"), "615", "615");
-        hearingsSteps.shouldAmendAHearing(hearings_rootContext,
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"615");
+        String inputBodyForAmendResources =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), "615");
+        resourceSteps.shouldUpdateAnUser(resourcesByUser_idRootContext,
                 headersAsMap,
                 authorizationToken,
-                inputBodyForAmendHearing);
+                inputBodyForAmendResources);
+    }
+
+    @Test
+    public void testRequestAndAmendAResourceByLocation() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        String inputBodyForCreateResourcesByLocation =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), "615","615");
+        resourceSteps.shouldCreateAnUser(resourcesByLocationRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForCreateResourcesByLocation);
+
+        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,"615");
+        String inputBodyForAmendResourcesByLocation =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-location-payload.json"), "615","615");
+        resourceSteps.shouldUpdateAnUser(resourcesByLocation_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForAmendResourcesByLocation);
     }
 }
