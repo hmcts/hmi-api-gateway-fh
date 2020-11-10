@@ -111,8 +111,9 @@ stages:
     jobs:
     - ${{ each environment in parameters.environments }}:
       - job:
-        script: |
-          echo "Hello"
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
 
 # - ${{ each environment in parameters.environments }}:
 
