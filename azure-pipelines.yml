@@ -52,7 +52,7 @@ stages:
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
 
-  - stage: BuildSandbox
+  - stage: BuildSbox
     dependsOn: Plan
     jobs:
       - job: BuildSbox
@@ -102,7 +102,7 @@ stages:
 
   - stage: BuildProd
     dependsOn: 
-      - TestSandbox
+      - TestSbox
       - TestDev
       - TestTest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
