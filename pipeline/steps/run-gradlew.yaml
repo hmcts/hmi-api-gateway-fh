@@ -14,7 +14,7 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
-      tasks: clean ${{ parameters.command }}
+      tasks: ${{ parameters.command }}
       publishJUnitResults: ${{ parameters.publishJUnitResults }}
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
