@@ -8,89 +8,22 @@ parameters:
   - name: environments
     type: object
     default:
+
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
       group: HMI-APIM-BUILD-SBOX
-      custom_domain: hmi-apim.sandbox.platform.hmcts.net
-      tests_gradle:
-      - name: UnitTest
-        command: test
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
-      - name: ContractTest
-        command: contract
-        brokerUrl: http://hmi-pact.sandbox.platform.hmcts.net
-        serenity: false
-        dependsOn: AcceptanceTest
-      - name: FunctionalTest
-        command: functional
-        dependsOn: AcceptanceTest
-      # tests_security:
-      # - name: ApiZapScan
-      #   containerRegistry: ssprivatesbox.azurecr.io
-      #   repository: hmi/apim-tests-owasp
-      #   testUrl:
-      #   - name: API1
-      #     target: https://www.example.com/openapi.json
-      tests_sonarcloud:
-      - name: CodeQualityTest
-        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim.preview.platform.hmcts.net
-      tests_gradle:
-      - name: UnitTest
-        command: test
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim.perftest.platform.hmcts.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      tests_gradle:
-      - name: UnitTest
-        command: test
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
-      - name: ContractTest
-        command: contract
-        brokerUrl: http://hmi-pact.test.platform.hmcts.net
-        dependsOn: AcceptanceTest
-      - name: FunctionalTest
-        command: functional
-        dependsOn: AcceptanceTest
-      tests_sonarcloud:
-      - name: CodeQualityTest
-        command: sonarqube
 
     - name: stg
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim.staging.platform.hmcts.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
 
 variables:
@@ -118,24 +51,61 @@ stages:
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
 
-  - ${{ each environment in parameters.environments }}:
-    - stage: BuildNonProd
-      dependsOn: Plan
-      jobs:
-      - job:
+
+  - stage: BuildSandbox
+    dependsOn: Plan
+    jobs:
+      - job: BuildSbox
         steps:
           - bash: |
-              echo "Hello ${{ environment.name }}"
+              echo "Hello sandbox"
 
-  - stage: TestNonProd
-    dependsOn: BuildNonProd
+  - stage: BuildDev
+    dependsOn: Plan
     jobs:
-    - template: pipeline/jobs/test-unit.yaml
+      - job: BuildDev
+        steps:
+          - bash: |
+              echo "Hello dev"
+
+  - stage: BuildTest
+    dependsOn: Plan
+    jobs:
+      - job: BuildTest
+        steps:
+          - bash: |
+              echo "Hello test"
+
+  - stage: TestSbox
+    dependsOn: BuildSbox
+    jobs:
+      - job: TestSbox
+        steps:
+          - bash: |
+              echo "Hello sandbox"
+
+  - stage: TestDev
+    dependsOn: BuildDev
+    jobs:
+      - job: TestSbox
+        steps:
+          - bash: |
+              echo "Hello dev"
+
+  - stage: TestTest
+    dependsOn: BuildTest
+    jobs:
+      - job: TestTest
+        steps:
+          - bash: |
+              echo "Hello test"
 
   - stage: BuildProd
     dependsOn: 
-      - BuildNonProd
-      - TestNonProd
+      - TestSandbox
+      - TestDev
+      - TestTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - ${{ each environment in parameters.environments }}:
       - job:
