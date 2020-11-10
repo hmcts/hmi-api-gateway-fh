@@ -141,7 +141,7 @@ task functional(type: Test) {
     description = 'Executes functional tests'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/functional/hearing/**"
+    include "uk/gov/hmcts/futurehearings/hmi/functional/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
