@@ -8,18 +8,12 @@ parameters:
   - name: displayName
     type: string
 
-  - name: environment
-    type: string
-
   - name: dependsOn
     type: string
     default: ''
 
 jobs:
-- job: Terraform${{ parameters.environment }}
-  dependsOn:
-  - ${{ if parameters.dependsOn }}:
-    - ${{ parameters.dependsOn }}
+- job: Terraform
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
@@ -34,9 +28,8 @@ jobs:
     artifact: $(environment)-hmi.tfvars
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Pipeline.Workspace)/${{ parameters.environment }}${{ parameters.component }}${{ parameters.build }}plan'
-      targetFolder: '$(Pipeline.Workspace)/drop/components/${{ parameters.component }}'
-  
+      sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment)'
+      targetFolder: '$(Pipeline.Workspace)/drop/infrastructure/terraform/'
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-init.yaml
     parameters:
