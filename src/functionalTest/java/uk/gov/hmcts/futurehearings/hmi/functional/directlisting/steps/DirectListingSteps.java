@@ -16,7 +16,7 @@ public class DirectListingSteps {
 
     private String actor;
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User makes a request to Get the Sessions for relevant search parameters on the Sessions API")
     public String getSessionIdForDirectListing(final String apiURL,
                                                final Map<String, Object> headersAsMap,
                                                final String authorizationToken,
@@ -28,7 +28,7 @@ public class DirectListingSteps {
                 queryParameters, HttpStatus.OK));
     }
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User makes a request to List a Hearing Request Directly (PUT in the Listing API)")
     public void performDirectListingForGivenSessionId(final String apiURL,
                                                         final Map<String, Object> headersAsMap,
                                                         final String authorizationToken,
