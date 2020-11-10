@@ -115,7 +115,6 @@ stages:
           displayName: Plan ${{ environment.name }}
           subscription: ${{ environment.subscription }} 
           group: ${{ environment.group }}
-          environment: ${{ environment.name }}
 
   - stage: BuildNonProd
     dependsOn: Plan
