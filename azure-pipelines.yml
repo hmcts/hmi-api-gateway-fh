@@ -125,11 +125,23 @@ stages:
           - bash: |
               echo "Hello test"
 
-  - stage: BuildProd
+  - stage: BuildStg
     dependsOn: 
+      - PlanStg
       - TestSbox
       - TestDev
       - TestTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
+
+  - stage: BuildProd
+    dependsOn: 
+      - BuildStg
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - ${{ each environment in parameters.environments }}:
