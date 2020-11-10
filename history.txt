@@ -1,0 +1,1000 @@
+ 1057  git push 
+ 1058  gradle --version
+ 1059  java --version
+ 1060  sudo apt-get install gradle
+ 1061  git checkout master
+ 1062  git pull
+ 1063  git stash
+ 1064  git status
+ 1065  git pull origin master
+ 1066  ./gradlew clean functional
+ 1067  git pull origin master
+ 1068  git checkout master
+ 1069  git checkout -b "HMIS_524_Contract_test"
+ 1070  git add .
+ 1071  git commit -m "try pact publish condition"
+ 1072  git push 
+ 1073  git push --set-upstream origin HMIS_524_Contract_test
+ 1074  cd docker/images/PactBroker/
+ 1075  docker build -t "ssprivatetest.azurecr.io/hmi/apim-tests-pact:v0.1" .
+ 1076  docker push -t "ssprivatetest.azurecr.io/hmi/apim-tests-pact:v0.1" .
+ 1077  docker push "ssprivatetest.azurecr.io/hmi/apim-tests-pact:v0.1" .
+ 1078  docker push "ssprivatetest.azurecr.io/hmi/apim-tests-pact:v0.1" 
+ 1079  az acr login -n ssprivatetest
+ 1080  docker push "ssprivatetest.azurecr.io/hmi/apim-tests-pact:v0.1" 
+ 1081  git checkout -b "nsg-patch"
+ 1082  git add environments/shared.tfvars environments/
+ 1083  git commit -m "rm 80 any rule"
+ 1084  git push 
+ 1085  git push --set-upstream origin nsg-patch
+ 1086  git checkout master
+ 1087  git checkout -b "nsg-quick-patch"
+ 1088  git commit -m "rm 80 any rule"
+ 1089  git add .
+ 1090  git checkout -b "nsg-quick-patch"
+ 1091  git commit -m "rm 80 any rule"
+ 1092  git push --set-upstream origin nsg-quick-patch
+ 1093  git checkout master
+ 1094  git pull
+ 1095  git checkout master
+ 1096  git pull
+ 1097  kubectl -n hmi rollout restart deployment hmi-wiremock
+ 1098  kubectl get context
+ 1099  az aks get-credentials -g ss-test-00-rg -n ss-test-00-aks --subscription DTS-SHAREDSERVICES-TEST --admin
+ 1100  kubectl -n hmi rollout restart deployment hmi-wiremock
+ 1101  kubectl describe ingress hmi-wiremock -n hmi
+ 1102  kubectl describe ingress hmi-pactbroker -n hmi
+ 1103  kubectl describe ingress traefik -n hmi
+ 1104  kubectl describe ingress traefik 
+ 1105  kubectl describe ingress traefik -n admin
+ 1106  helm install wiremock k8s/release/hmi/hmi-wiremock/
+ 1107  helm uninstall wiremock 
+ 1108  helm uninstall hmi-wiremock 
+ 1109  helm uninstall hmi-wiremock -n hmi
+ 1110  helm install hmi-wiremock k8s/release/hmi/hmi-wiremock/ -n hmi
+ 1111  git status
+ 1112  git checkout master
+ 1113  git checkout  HMIS_524_Contract_test
+ 1114  git checkout Remove_starter_API 
+ 1115  git status
+ 1116  git add infrastructure/terraform/20-api-management.tf 
+ 1117  git add azure-pipelines.yml 
+ 1118  git add pipeline/jobs/remove-default-apis.yaml 
+ 1119  git commit -m "remove apis with azcli"
+ 1120  git push 
+ 1121  git add azure-pipelines.yml 
+ 1122  git commit -m "typo"
+ 1123  git push
+ 1124  git add azure-pipelines.yml 
+ 1125  git add pipeline/jobs/remove-default-apis.yaml 
+ 1126  git commit -m "params"
+ 1127  git push 
+ 1128  git add pipeline/jobs/remove-default-apis.yaml 
+ 1129  git commit -m "change env var"
+ 1130  git push 
+ 1131  git add pipeline/jobs/remove-default-apis.yaml 
+ 1132  git commit -m "change env var"
+ 1133  git push 
+ 1134  git add azure-pipelines.yml 
+ 1135  git commit -m "change env var"
+ 1136  git push 
+ 1137  git add pipeline/jobs/remove-default-apis.yaml 
+ 1138  git commit -m "add autoconfirm
+ 1139  "
+ 1140  git push 
+ 1141  git checkout  HMIS_524_Contract_test
+ 1142  git pull origin master
+ 1143  git push
+ 1144  git checkout -b "patch_remove_http_80"
+ 1145  git add infrastructure/terraform/environment/
+ 1146  git commit -m "remove http"
+ 1147  git push
+ 1148  git pull origin master
+ 1149  git push --set-upstream origin patch_remove_http_80
+ 1150  git checkout master 
+ 1151  git pull
+ 1152  git checkout "patch_remove_http_80"
+ 1153  git checkout master -- pipeline/jobs/gradle-test.yaml
+ 1154  git pull
+ 1155  git checkout master -- azure-pipelines.yml
+ 1156  git status
+ 1157  git add azure-pipelines pipeline/jobs/
+ 1158  git add azure-pipelines.yml 
+ 1159  git add pipeline/jobs/
+ 1160  git commit -m "pull from master"
+ 1161  git push
+ 1162  git pull
+ 1163  git status
+ 1164  git add pipeline/jobs/
+ 1165  git add azure-pipelines.yml 
+ 1166  git commit -m "pull from master"
+ 1167  git push
+ 1168  git pull origin master
+ 1169  git push
+ 1170  git checkout master
+ 1171  git pull
+ 1172  git status
+ 1173  git add README.md 
+ 1174  git commit -m "Add build status"
+ 1175  git push
+ 1176  git checkout patch_remove_http_80 
+ 1177  git add pipeline/steps/publish-test-results.yaml 
+ 1178  git commit -m "indent"
+ 1179  git push
+ 1180  git status
+ 1181  git checkout  HMIS_524_Contract_test
+ 1182  git status
+ 1183  git add pipeline/
+ 1184  git commit -m "change gradle"
+ 1185  git push 
+ 1186  git checkout master
+ 1187  git add README.md 
+ 1188  git commit -m "Add build status"
+ 1189  git push
+ 1190  git status
+ 1191  git add pipeline/steps/publish-test-results.yaml 
+ 1192  git commit -m "hotfix - publish test condition"
+ 1193  git push
+ 1194  curl hmcts-uat.casehq.net/casehqapi/rest/hmcts/resources/hearings
+ 1195  curl http://hmcts-uat.casehq.net/casehqapi/rest/hmcts/resources/hearings
+ 1196  curl https://hmcts-uat.casehq.net/casehqapi/rest/hmcts/resources/hearings
+ 1197  curl -u HmiApiUser:HMI_API_QDX77581 https://hmcts-uat.casehq.net/casehqapi/rest/hmcts/resources/sessions\?requestStartDate\=1980-11-13T20%3A20%3A39%2B00%3A00\&requestEndDate\=2020-11-13T20%3A20%3A39%2B00%3A00\&requestSessionType\=ADHOC
+ 1198  cd ~/Documents/FutureHearings/
+ 1199  cd azure-public-dns/
+ 1200  code .
+ 1201  cd ../azure-private-dns/
+ 1202  code .
+ 1203  cd ..
+ 1204  cd azure-platform-terraform/
+ 1205  code .
+ 1206  cd ..
+ 1207  rm -rf azure-private-dns/
+ 1208  rm -rf azure-public-dns/
+ 1209  rm -rf azure-platform-terraform/
+ 1210  git clone git@github.com:hmcts/azure-public-dns.git
+ 1211  cd azure-public-dns/
+ 1212  code .
+ 1213  cd ..
+ 1214  git clone git@github.com:hmcts/azure-private-dns.git
+ 1215  cd azure-private-dns/
+ 1216  code .
+ 1217  curl -L -H "Accept: application/json" -H "Content-Type: application/json" -H "Source-System: CFT" -H "Destination-System: S&L" -H "Request-Created-At :018-01-29T20:36:01Z" -H "Request-Type: THEFT" -H "Request-Processed-At: 2018-01-29T20:36:01Z" -H "Ocp-Apim-Subscription-Key: 024b1ae331bf4f4e8bd1e5c84e5cdedc" -k https://hmi-apim.sandbox.platform.hmcts.net/hmi/schedules
+ 1218  cd ..
+ 1219  cd shared-services-flux/
+ 1220  code .
+ 1221  git checkout -b "hmiaat-fix"
+ 1222  git add environments/stg/stg.tfvars 
+ 1223  git commit -m "rm hmi entry to fix pipeline"
+ 1224  git push
+ 1225  git push --set-upstream origin hmiaat-fix
+ 1226  git status
+ 1227  git pull origin master
+ 1228  git status
+ 1229  git add .
+ 1230  git commit -m "add to-hmi-prod"
+ 1231  git push
+ 1232  git pull
+ 1233  git status
+ 1234  git push
+ 1235  git status
+ 1236  git checkout master
+ 1237  git pull
+ 1238  git status
+ 1239  git checkout -b "hmi_prod"
+ 1240  git add .
+ 1241  git commit -m "add hmi prod"
+ 1242  git push 
+ 1243  git push --set-upstream origin hmi_prod
+ 1244  git add environments/prod/prod.tfvars 
+ 1245  git commit -m "correct * cert"
+ 1246  git push 
+ 1247  git checkout master
+ 1248  git pull
+ 1249  git status
+ 1250  git checkout -b "hmi_apim_prod"
+ 1251  git status
+ 1252  git add .
+ 1253  git commit -m "add hmi apim prod"
+ 1254  git push
+ 1255  git push --set-upstream origin hmi_apim_prod
+ 1256  git status
+ 1257  git checkout master
+ 1258  git pull 
+ 1259  git status
+ 1260  git stash
+ 1261  git status
+ 1262  git diff
+ 1263  git add .
+ 1264  git commit -m "add hmi apim prod entry"
+ 1265  git push
+ 1266  cd ~/Documents/FutureHearings/azure-platform-terraform/
+ 1267  code .
+ 1268  cd ..
+ 1269  cd azure-private-dns/
+ 1270  code .
+ 1271  cd ../azure-public-dns/
+ 1272  code .
+ 1273  cd ../hmi-shared-infrastructure
+ 1274  code .
+ 1275  cd ../rdo-terraform-hub-dmz/
+ 1276  code .
+ 1277  cd ..
+ 1278  cd ops-peerings/
+ 1279  code .
+ 1280  cd ..
+ 1281  cd hmi-api-gateway-fh/
+ 1282  code .
+ 1283  cd shared-services-flux/
+ 1284  cd ../shared-services-flux/
+ 1285  code .
+ 1286  cd ../case-hq-emulator/
+ 1287  code .
+ 1288  git checkout master 
+ 1289  git pull 
+ 1290  docker build -t "sdshmctspublic.azurecr.io/hmi/case-hq-emulator:v0.1" .
+ 1291  az acr login -n sdshmctspublic
+ 1292  docker push "sdshmctspublic.azurecr.io/hmi/case-hq-emulator:v0.1"
+ 1293  git status
+ 1294  git add .
+ 1295  git commit -m "rm library files"
+ 1296  git push 
+ 1297  git status
+ 1298  git checkout master
+ 1299  git pull
+ 1300  git status
+ 1301  git add .
+ 1302  git commit -m "az login with sp"
+ 1303  git push 
+ 1304  git add .
+ 1305  git commit -m "uncomment apply hostname"
+ 1306  git push 
+ 1307  az login
+ 1308  git add pipeline/jobs/
+ 1309  git commit -m "connect-azaccount"
+ 1310  git push 
+ 1311  git add .
+ 1312  git commit -m "connect-azaccount"
+ 1313  git push 
+ 1314  git add .
+ 1315  git commit -m "typo"
+ 1316  git push 
+ 1317  git add .
+ 1318  git commit -m "typo"
+ 1319  git push 
+ 1320  git status
+ 1321  git add .
+ 1322  git commit -m "convert string to sec string"
+ 1323  git push 
+ 1324  git add .
+ 1325  git commit -m "convert string to sec string"
+ 1326  git push 
+ 1327  git add .
+ 1328  git commit -m "correct kv/rg"
+ 1329  git push 
+ 1330  git add .
+ 1331  git commit -m "correct kv/rg"
+ 1332  git push 
+ 1333  git add .
+ 1334  git commit -m "debug get apim"
+ 1335  git push 
+ 1336  git add .
+ 1337  git commit -m "add context"
+ 1338  git push 
+ 1339  git status
+ 1340  git add .
+ 1341  git commit -m "rm params vs vars"
+ 1342  git push 
+ 1343  git add .
+ 1344  git commit -m "read group"
+ 1345  git push
+ 1346  git add .
+ 1347  git commit -m "read group"
+ 1348  git push
+ 1349  git status
+ 1350  git add .
+ 1351  git commit -m "renamed sp"
+ 1352  git push 
+ 1353  git pull origin master
+ 1354  git status
+ 1355  git add pipeline/jobs/terraform.yaml 
+ 1356  git add azure-pipelines.yml 
+ 1357  cd infrastructure/terraform/
+ 1358  terraform validate
+ 1359  terraform fmt
+ 1360  cd ../..
+ 1361  git status
+ 1362  git add .
+ 1363  git commit -m "add internal network"
+ 1364  git push
+ 1365  git pull origin master
+ 1366  git push
+ 1367  git checkout master
+ 1368  git pull
+ 1369  git checkout -b "hmis_546_remove_serenity"
+ 1370  git checkout network 
+ 1371  git add 
+ 1372  git add .
+ 1373  git commit -m "rm serenity"
+ 1374  git push 
+ 1375  git push --set-upstream origin hmis_546_remove_serenity
+ 1376  git checkout network 
+ 1377  git status
+ 1378  git add .
+ 1379  git commit -m "disable sec scan"
+ 1380  git push 
+ 1381  git status
+ 1382  git pull origin master
+ 1383  git fetch
+ 1384  git push
+ 1385  git add infrastructure/terraform/
+ 1386  git commit -m "update policy from master"
+ 1387  git push 
+ 1388  cd infrastructure/terraform/
+ 1389  terraform fmt
+ 1390  git status
+ 1391  git add 04-inputs-api-policies.tf 
+ 1392  git commit -m "tffmt"
+ 1393  git push 
+ 1394  git fetch
+ 1395  git rebase origin/master
+ 1396  git status
+ 1397  git add .
+ 1398  git commit -m "rebase"
+ 1399  git status
+ 1400  cd ../..
+ 1401  git add .
+ 1402  git sttaus
+ 1403  git status
+ 1404  git add .
+ 1405  git rebase --continue 
+ 1406  git status
+ 1407  git add .
+ 1408  git rebase --continue 
+ 1409  git add .
+ 1410  git rebase --continue 
+ 1411  git status
+ 1412  git add script/.
+ 1413  git commit -m "rebase
+ 1414  "
+ 1415  git rebase --continue 
+ 1416  git add .
+ 1417  git rebase --continue 
+ 1418  git add .
+ 1419  git rebase --continue 
+ 1420  git add .
+ 1421  git rebase --continue 
+ 1422  git status
+ 1423  git rebase --continue
+ 1424  git add .
+ 1425  git rebase --continue
+ 1426  git rebase --skip
+ 1427  git rebase --continue
+ 1428  git add .
+ 1429  git rebase --continue
+ 1430  git status
+ 1431  git rebase --continue
+ 1432  git rebase --skip
+ 1433  git rebase --abort
+ 1434  git checkout HMIS_524_Contract_test 
+ 1435  git fetch
+ 1436  git rebase origin/master
+ 1437  git status
+ 1438  git add .
+ 1439  git rebase --continue
+ 1440  git status
+ 1441  git pull origin master
+ 1442  git status
+ 1443  git push
+ 1444  git pull origin master
+ 1445  git pull
+ 1446  git sttaus
+ 1447  git status
+ 1448  git checkout network 
+ 1449  git status
+ 1450  git add .
+ 1451  git checkout network 
+ 1452  git commit -m "contract wip"
+ 1453  git checkout network 
+ 1454  git status
+ 1455  git add pipeline/jobs/apply-hostname.yaml 
+ 1456  git commit -m "correct sp for envs"
+ 1457  git push 
+ 1458  git status
+ 1459  git add .
+ 1460  git commit -m "echo var from group"
+ 1461  git push 
+ 1462  git add .
+ 1463  git commit -m "echo var from group"
+ 1464  git push 
+ 1465  git add .
+ 1466  git checkout HMIS_524_Contract_test 
+ 1467  git stash
+ 1468  git checkout HMIS_524_Contract_test 
+ 1469  git pull origin master
+ 1470  git git status
+ 1471  git status
+ 1472  git add .
+ 1473  git commit -m "use shared registry" 
+ 1474  git push 
+ 1475  git add .
+ 1476  git commit -m "rm serenity"
+ 1477  git push 
+ 1478  git status
+ 1479  git add .
+ 1480  git commit -m "broker url from group"
+ 1481  git push 
+ 1482  git add .
+ 1483  git commit -m "broker url from group"
+ 1484  git add .
+ 1485  git push 
+ 1486  git add .
+ 1487  git commit -m "rm serenity param"
+ 1488  git push 
+ 1489  git checkout master
+ 1490  git checkout -b "HMIS-254"
+ 1491  git checkout -b "HMIS-546"
+ 1492  git pull origin master
+ 1493  git status
+ 1494  git add .
+ 1495  git commit -m "rm serenity from unit test"
+ 1496  git push
+ 1497  git push --set-upstream origin HMIS-546
+ 1498  ./gradlew clean test -DENDPOINT_SUBSCRIPTION_KEY=f57e6ff4dd7b4476acb03e3baf406cc6 -DENDPOINT_URL=https://hmi-apim.sandbox.platform.hmcts.net -DENDPOINT_HOST=hmi-apim.sandbox.platform.hmcts.net
+ 1499  git status
+ 1500  git add .
+ 1501  git commit -m "separate unittest"
+ 1502  git push
+ 1503  git pull origin master
+ 1504  git add .
+ 1505  git commit -m "enable hostame config"
+ 1506  git push
+ 1507  git fetch
+ 1508  git rebase origin master
+ 1509  git status
+ 1510  git checkout "HMIS-546"
+ 1511  git stash
+ 1512  git checkout "HMIS-546"
+ 1513  git fetch && git rebase origin/master
+ 1514  git status
+ 1515  git add azure-pipelines.yml 
+ 1516  git rebase --continue
+ 1517  git push
+ 1518  git pull 
+ 1519  git status
+ 1520  git push
+ 1521  git add .
+ 1522  git commit -m "rebase gone wrong"
+ 1523  git push 
+ 1524  git checkout master
+ 1525  git pull
+ 1526  git fetch
+ 1527  git checkout HMIS-546
+ 1528  git pull origin master
+ 1529  git fetch 
+ 1530  git diff master
+ 1531  git status
+ 1532  git checkout master infrastructure/template/*
+ 1533  git status
+ 1534  git push
+ 1535  git checkout master
+ 1536  git status
+ 1537  git checkout -b "update_nightly_build"
+ 1538  git add .
+ 1539  git commit -m "update nightly build"
+ 1540  git push 
+ 1541  git push --set-upstream origin update_nightly_build
+ 1542  git checkout HMIS-546
+ 1543  git add .
+ 1544  git commit -m "fix dependency"
+ 1545  git push
+ 1546  git checkout master azure-pipelines.yml
+ 1547  git checkout pipeline/jobs/gradle-test.yaml
+ 1548  git checkout master pipeline/jobs/gradle-test.yaml
+ 1549  git add .
+ 1550  git commit -m "functional serenity"
+ 1551  git push
+ 1552  git checkout karanotts-patch-2-1 
+ 1553  git pull
+ 1554  terraform fmt
+ 1555  cd prod-intsvc/
+ 1556  terraform validate
+ 1557  terraform fmt
+ 1558  git checkout karanotts-patch-1
+ 1559  git pull
+ 1560  git log
+ 1561  git revert a4e3ecd8ad663eaa10b16f80493e7fdd7ddcbc9d
+ 1562  git status
+ 1563  git add hub-prod-intsvc/to-hmi-stg.tf 
+ 1564  git status
+ 1565  git commit -m "readd hmi stg"
+ 1566  git push 
+ 1567  git checkout karanotts-patch-
+ 1568  git checkout karanotts-patch-1 
+ 1569  git pull
+ 1570  git add .
+ 1571  git status
+ 1572  git add .
+ 1573  git commit -m "add hmistg"
+ 1574  git push 
+ 1575  git checkout master 
+ 1576  git pull
+ 1577  git status
+ 1578  git pull
+ 1579  git checkout -b "refactor_pipeline"
+ 1580  git add .
+ 1581  git commit -m "refactoring pipeline to use one registry"
+ 1582  git push 
+ 1583  git push
+ 1584  git push --set-upstream origin refactor_pipeline
+ 1585  git add .
+ 1586  git commit -m "more friendly display names"
+ 1587  git push
+ 1588  cd terraform/
+ 1589  terraform fmt
+ 1590  terraform validate
+ 1591  cd deployments/
+ 1592  cd sbox/
+ 1593  terraform validate
+ 1594  terraform init
+ 1595  terraform validate
+ 1596  git status
+ 1597  git add .
+ 1598  git commit -m "rm appins"
+ 1599  git push 
+ 1600  git add .
+ 1601  git commit -m "rm dependency"
+ 1602  cd ../..
+ 1603  cd ..
+ 1604  git add .
+ 1605  git commit -m "rm appins"
+ 1606  git statsus
+ 1607  git status
+ 1608  git push
+ 1609  git add .
+ 1610  git commit -m "rm dependency"
+ 1611  git push 
+ 1612  mv terraform/modules/app-insights/ ~/Documents/FutureHearings/
+ 1613  git add .
+ 1614  git commit -m "rm appins module"
+ 1615  git push
+ 1616  git checkout master
+ 1617  git pull
+ 1618  git checkout -b "refactor"
+ 1619  git push
+ 1620  git push --set-upstream origin refactor
+ 1621  git status
+ 1622  git add .
+ 1623  git commit -m "rm var files"
+ 1624  git status
+ 1625  git push
+ 1626  git add .
+ 1627  git commit -m "rm var files"
+ 1628  git push
+ 1629  git add .
+ 1630  git commit -m "appins > other"
+ 1631  git push
+ 1632  git add .
+ 1633  git commit -m "add prod"
+ 1634  git push 
+ 1635  git add .
+ 1636  git commit -m "checkout self"
+ 1637  git push 
+ 1638  git add .
+ 1639  git commit -m "checkout self"
+ 1640  git push 
+ 1641  git checkout hmiprod-patch-1 
+ 1642  git add .
+ 1643  git commit -m "add hmi prod vnet"
+ 1644  git push 
+ 1645  git checkout master 
+ 1646  git pull
+ 1647  git status
+ 1648  git pull
+ 1649  git statsu
+ 1650  git status 
+ 1651  git checkout network 
+ 1652  git add azure-pipelines-nightly.yml 
+ 1653  git commit -m "mod nightly"
+ 1654  git push 
+ 1655  git add azure-pipelines-nightly.yml 
+ 1656  git commit -m "mod nightly"
+ 1657  git push 
+ 1658  git checkout HMIS_524_Contract_test 
+ 1659  git stash
+ 1660  git checkout HMIS_524_Contract_test 
+ 1661  git log
+ 1662  git revert b28446d60e8208fde4dccb4eb00c0e1b629fa69a
+ 1663  git revert -m b28446d60e8208fde4dccb4eb00c0e1b629fa69a
+ 1664  git revert b28446d60e8208fde4dccb4eb00c0e1b629fa69a -m
+ 1665  git revert b28446d60e8208fde4dccb4eb00c0e1b629fa69a 
+ 1666  git revert -m 1 HEAD
+ 1667  git revert -m 4 HEAD
+ 1668  git revert -m 3 HEAD
+ 1669  git revert -m 2 HEAD
+ 1670  git revert  HEAD
+ 1671  git checkout master
+ 1672  git pull
+ 1673  git checkout -b HMIS_524
+ 1674  git add .
+ 1675  git commit -m "add contract"
+ 1676  git push 
+ 1677  git push --set-upstream origin HMIS_524
+ 1678  git add .
+ 1679  git commit -m "typo"
+ 1680  git push 
+ 1681  git add .
+ 1682  git commit -m "correct pool"
+ 1683  git push
+ 1684  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1685  docker run "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" /bin/bash
+ 1686  docker exec "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" /bin/bash
+ 1687  docker ps
+ 1688  docker run "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1689  docker run -e AZP_URL="https://dev.azure.com/hmcts" "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1690  docker run -e AZP_URL="https://dev.azure.com/hmcts" -e AZP_TOKEN="Ynhudmtucm40cXlnaGt5c3I1b21ldWRiZW8yZmZwd3ZqdnA2b2Z2bWw1YnZiY3h5cHViYQ==" "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1691  docker images ls
+ 1692  docker images
+ 1693  docker build -t "tempagent:v0.1" docker/images/AzureAgent/
+ 1694  docker run tempagent
+ 1695  docker run tempagent:v0.1
+ 1696  docekr ps
+ 1697  docker ps
+ 1698  docker psexec tempagent:v0.1 /bin/bash
+ 1699  docker exec tempagent:v0.1 /bin/bash
+ 1700  docker build -t "tempagent" docker/images/AzureAgent/
+ 1701  docker run tempagent
+ 1702  docker ps
+ 1703  git checkout HMIS_524_Contract_test 
+ 1704  git stash
+ 1705  git checkout HMIS_524_Contract_test 
+ 1706  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1707  git stash
+ 1708  git checkout HMIS_524
+ 1709  git status
+ 1710  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1711  wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz
+ 1712  tar xzvf openjdk-11_linux-x64_bin.tar.gz
+ 1713  echo "===> Installing Java 11..."     && wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz \ 
+ 1714  echo "===> Installing Java 11..."     && wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz \ 
+ 1715  echo "===> Installing Java 11..."     && wget https://download.java.net/java/ga/jdk${DEFAULT_JDK_VERSION}/openjdk-${DEFAULT_JDK_VERSION}_linux-x64_bin.tar.gz \ 
+ 1716  wget https://download.java.net/java/ga/jdk${DEFAULT_JDK_VERSION}/openjdk-${DEFAULT_JDK_VERSION}_linux-x64_bin.tar.gz \ 
+ 1717  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1718  git stash
+ 1719  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1720  docker images
+ 1721  docker images rm 7759fd50d686
+ 1722  docker image rm  7759fd50d686
+ 1723  docker image rm -f 7759fd50d686
+ 1724  docker images
+ 1725  docker image prune -a
+ 1726  docker images
+ 1727  docker ps -a -q | xargs docker rm
+ 1728  docker images -a -q | xargs docker rmi -f
+ 1729  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1730  wget https://download.java.net/java/ga/jdk11/openjdk-11_linux-x64_bin.tar.gz -O docker/openjdk-11_linux-x64_bin.tar.gz
+ 1731  docker push "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1732  az acr login -n sdshmctspublic
+ 1733  docker push "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1734  git status
+ 1735  git add .
+ 1736  git commit -m "wget java before installing on agent"
+ 1737  git push 
+ 1738  zip
+ 1739  zip docker/images/Wiremock/Dockerfile docker.zip
+ 1740  zip docker.zip docker/images/Wiremock/Dockerfile 
+ 1741  git add pipeline/steps/zip-test-results.yaml 
+ 1742  git commit -m "zip from bash"
+ 1743  git push
+ 1744  git add pipeline/steps/zip-test-results.yaml 
+ 1745  git commit -m "zip from bash"
+ 1746  git push
+ 1747  git log
+ 1748  git revertf3411766f2ff0ad7eb53ba3bc490b7ea87e5a97e
+ 1749  git revert f3411766f2ff0ad7eb53ba3bc490b7ea87e5a97e
+ 1750  git push
+ 1751  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1752  docker push "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1753  git status
+ 1754  git add .
+ 1755  git commit -m "add zip"
+ 1756  git push
+ 1757  docker build -t "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1" docker/images/AzureAgent/
+ 1758  docker push "sdshmctspublic.azurecr.io/hmi/azure-devops-agent:v0.1"
+ 1759  git status
+ 1760  git add docker/images/AzureAgent/Dockerfile 
+ 1761  git commit -m "add zip"
+ 1762  git push 
+ 1763  git status
+ 1764  git add azure-pipelines.yml 
+ 1765  git commit -m "add contract in test"
+ 1766  git push 
+ 1767  ../gradlew clean contract -DENDPOINT_SUBSCRIPTION_KEY=3dd510f299df46c88ef81499c5dbfe55
+ 1768  ./gradlew clean contract -DENDPOINT_SUBSCRIPTION_KEY=3dd510f299df46c88ef81499c5dbfe55
+ 1769  ./gradlew pactPublish -DPACT_BROKER_FULL_URL=http://hmi-pact.sandbox.platform.hmcts.net
+ 1770  git status
+ 1771  git add azure-pipelines.yml 
+ 1772  git commit -m "add broker url"
+ 1773  git push
+ 1774  git stash
+ 1775  git status
+ 1776  git merge origin HMIS-546 
+ 1777  git status
+ 1778  git add .
+ 1779  git status
+ 1780  git add .
+ 1781  git commit -m "remove serenity & add unittest zip"
+ 1782  git push
+ 1783  git statuss
+ 1784  git status
+ 1785  git add .
+ 1786  git commit -m "remove serenity param"
+ 1787  git push
+ 1788  git add .
+ 1789  git commit -m "correct test name"
+ 1790  git push 
+ 1791  ssh kara@51.11.38.181
+ 1792  git status
+ 1793  git pull
+ 1794  git pull origin master
+ 1795  git status
+ 1796  git fetch
+ 1797  git push
+ 1798  ssh  kara@51.132.190.137
+ 1799  git status
+ 1800  git checkout master
+ 1801  git pull
+ 1802  git status
+ 1803  git add .
+ 1804  git checkout -b "nightly_fix"
+ 1805  git commit -m "fix nightly build"
+ 1806  git push
+ 1807  git push --set-upstream origin nightly_fix
+ 1808  git checkout HMIS-418-Feature
+ 1809  git checkout HMIS-418-Feature-REDO 
+ 1810  git status
+ 1811  git add .
+ 1812  git commit -m "adding mock url to command"
+ 1813  git push
+ 1814  git status
+ 1815  git add .
+ 1816  git commit -m "default: localhost"
+ 1817  git push 
+ 1818  git checkout master
+ 1819  git pull
+ 1820  git checkout -b "fix_stg"
+ 1821  git add 
+ 1822  git add .
+ 1823  git commit -m "remove network from stg"
+ 1824  git push
+ 1825  git push --set-upstream origin fix_stg
+ 1826  git status
+ 1827  git checkout master
+ 1828  git pull
+ 1829  git checkout -b "Add_app_ins"
+ 1830  git stash
+ 1831  git status
+ 1832  git add .
+ 1833  git commit -m "link to appins"
+ 1834  git push 
+ 1835  git push --set-upstream origin Add_app_ins
+ 1836  git add .
+ 1837  git commit -m "change logger name"
+ 1838  git push 
+ 1839  git add .
+ 1840  git commit -m "enable logging on api"
+ 1841  git push
+ 1842  git add .
+ 1843  git commit -m "enable logging on api"
+ 1844  git push
+ 1845  git add .
+ 1846  git commit -m "bump provider"
+ 1847  git push 
+ 1848  cd infrastructure/terraform/
+ 1849  terrafor validate
+ 1850  terraform validate
+ 1851  terraform init
+ 1852  terraform validate
+ 1853  git add .
+ 1854  git commit -m "add identifier"
+ 1855  git push 
+ 1856  cd ~/Documents/FutureHearings/ops-peerings/
+ 1857  git pull
+ 1858  code .
+ 1859  cd ../azure-platform-terraform/
+ 1860  code .
+ 1861  cd ../azure-private-dns/
+ 1862  code .
+ 1863  cd ..
+ 1864  cd rdo-terraform-hub-dmz/
+ 1865  code .
+ 1866  git status
+ 1867  git add .
+ 1868  git commit -m "enable prod"
+ 1869  git push 
+ 1870  git add .
+ 1871  git commit -m "enable prod"
+ 1872  git push 
+ 1873  git add environments/prod.tfvars -f
+ 1874  git status
+ 1875  git commit -m "enable prod"
+ 1876  git push 
+ 1877  git status
+ 1878  git pull origin master
+ 1879  az aks get-credentials -g ss-dev-00-rg -n ss-dev-00-aks --subscription DTS-SHAREDSERVICES-DEV --admin
+ 1880  kubectl create -f k8s/secret.yaml 
+ 1881  kubectl get secrets -n hmi
+ 1882  git status
+ 1883  git checkout -b "fix_mi_rename"
+ 1884  git status
+ 1885  git add k8s/environments/
+ 1886  git commit -m "changed mi data"
+ 1887  git push 
+ 1888  git push --set-upstream origin fix_mi_rename
+ 1889  git status
+ 1890  git checkout master
+ 1891  git pull
+ 1892  git checkout fix_stg
+ 1893  git pull origin master
+ 1894  git add .
+ 1895  git commit -m "try prod"
+ 1896  git push
+ 1897  git checkout master
+ 1898  git stash
+ 1899  git pull
+ 1900  git add .
+ 1901  git commit -m "prod tfvars"
+ 1902  git push 
+ 1903  git log
+ 1904  git revert 00eeb8efa40d317713791ea6d7f4c25263dbfb03
+ 1905  git push 
+ 1906  git checkout fix_stg 
+ 1907  git add infrastructure/terraform/environment/
+ 1908  git commit -m "add prod tfvars"
+ 1909  git push 
+ 1910  git add .
+ 1911  git commit -m "prod-hmi tfvars"
+ 1912  git push
+ 1913  git add script/apply_custom_domain.ps1 
+ 1914  git commit -m "debug"
+ 1915  git push 
+ 1916  git add script/apply_custom_domain.ps1 
+ 1917  git commit -m "remove debug"
+ 1918  git push 
+ 1919  git add .
+ 1920  git commit -m "reenable network for stg"
+ 1921  git push
+ 1922  git checkout master
+ 1923  git pull 
+ 1924  git checkout HMIS_524
+ 1925  git pull origin master
+ 1926  git status
+ 1927  git checkout fix_stg
+ 1928  git stash
+ 1929  git checkout fix_stg
+ 1930  git add .
+ 1931  git -m "debug stg"
+ 1932  git commit -m "debug stg"
+ 1933  git push 
+ 1934  git add .
+ 1935  git commit -m "change staging to aat"
+ 1936  git push
+ 1937  cd ~/Documents/FutureHearings/shared-services-flux/
+ 1938  code .
+ 1939  cd ..
+ 1940  cd azure-private-dns/
+ 1941  code .
+ 1942  cd ../azure-public-dns/
+ 1943  code .
+ 1944  curl -L -H "Accept: application/json" -H "Content-Type: application/json" -H "Source-System: CFT" -H "Destination-System: S&L" -H "Request-Created-At :018-01-29T20:36:01Z" -H "Request-Type: THEFT" -H "Request-Processed-At: 2018-01-29T20:36:01Z" -H "Ocp-Apim-Subscription-Key: 79ce3edc20744fc68412f7ccde2e01d3" -k https://hmi-apim.aat.platform.hmcts.net/hmi/schedules
+ 1945  cd ../azure-platform-terraform/
+ 1946  code .
+ 1947  git checkout master
+ 1948  git pull
+ 1949  git checkout -b "refactor_pipeline"
+ 1950  touch azure-pipelines-2.yaml
+ 1951  git add azure-pipelines-2.yaml 
+ 1952  git commit -m "test refactor"
+ 1953  git push 
+ 1954  git push --set-upstream origin refactor_pipeline
+ 1955  git pull
+ 1956  git status
+ 1957  git add azure-pipelines.yml pipeline/jobs/terraform-validate.yaml 
+ 1958  git commit -m "decouple stages"
+ 1959  git stash
+ 1960  git push
+ 1961  git pull
+ 1962  git add .
+ 1963  git commit -m "test"
+ 1964  git push
+ 1965  git add .
+ 1966  git commit -m "test echo"
+ 1967  git push 
+ 1968  git status
+ 1969  git add environments/
+ 1970  git commit -m "correct prod domain"
+ 1971  git push 
+ 1972  git add environments/
+ 1973  git commit -m "correct pa domain"
+ 1974  git push 
+ 1975  az aks get-credentials -g ss-sbox-00-rg -n ss-sbox-00-aks --subscription DTS-SHAREDSERVICES-SBOX --admin
+ 1976  kubectl create -f k8s/release/hmi/hmi-casehqemulator/templates/secret.yaml 
+ 1977  kubectl delete secret storage-secret -n hmi
+ 1978  kubectl create -f k8s/release/hmi/hmi-casehqemulator/templates/secret.yaml 
+ 1979  git status
+ 1980  git add .
+ 1981  git commit -m "correct sa name"
+ 1982  git push 
+ 1983  git add terraform/deployments/
+ 1984  git commit -m "rm appins"
+ 1985  git push 
+ 1986  git checkout master 
+ 1987  git diff
+ 1988  git stash
+ 1989  git checkout master
+ 1990  git pull
+ 1991  cd ~/Documents/FutureHearings/case-hq-emulator/
+ 1992  code .
+ 1993  cd ../rdo-terraform-hub-dmz/
+ 1994  code .
+ 1995  git add azure-pipelines.yml 
+ 1996  git commit -m "echo"
+ 1997  git push 
+ 1998  cd infrastructure/terraform/
+ 1999  terraform fmt
+ 2000  git add .
+ 2001  git commit -m "fmt tf"
+ 2002  git push
+ 2003  git add .
+ 2004  git commit -m "multi stage test"
+ 2005  cd ../..
+ 2006  git add .
+ 2007  git commit -m "multi stage test"
+ 2008  git push
+ 2009  dig hmi-wiremock.dev.platform.hmcts.net
+ 2010  git status
+ 2011  git add .
+ 2012  git commit -m "decouple tf plan"
+ 2013  git push 
+ 2014  git add .
+ 2015  git commit -m "decouple tf plan"
+ 2016  git push 
+ 2017  git add .
+ 2018  git commit -m "decouple tf plan"
+ 2019  git push 
+ 2020  git status
+ 2021  git commit -m "decouple tf plan"
+ 2022  git add .
+ 2023  git commit -m "decouple tf plan"
+ 2024  git push 
+ 2025  git add .
+ 2026  git commit -m "decouple tf plan"
+ 2027  git push 
+ 2028  git push -f
+ 2029  git add .
+ 2030  git commit -m "key1"
+ 2031  git push
+ 2032  git add .
+ 2033  git commit -m "run validate and plan"
+ 2034  git push
+ 2035  git add pipeline/steps/tf-plan.yaml 
+ 2036  git commit -m "artifact"
+ 2037  git push
+ 2038  git add pipeline/jobs/terraform-plan.yaml 
+ 2039  git add pipeline/steps/tf-plan.yaml 
+ 2040  git commit -m "correct afteract dir"
+ 2041  git push
+ 2042  git commit -m "draft plan"
+ 2043  git add azure-pipelines.yml 
+ 2044  git commit -m "draft plan"
+ 2045  git push
+ 2046  got status
+ 2047  git status
+ 2048  git add .
+ 2049  git commit -m "add tests - refactor"
+ 2050  git push
+ 2051  git add 
+ 2052  git add .
+ 2053  git commit -m "move stage params"
+ 2054  git push 
+ 2055* 
+ 2056  history > history.txt
