@@ -41,16 +41,14 @@ stages:
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
 
-  - stage: Plan
+  - stage: PlanSbox
     dependsOn: Validate
     jobs:
-    - ${{ each environment in parameters.environments }}:
-      - template: pipeline/jobs/terraform-plan.yaml
-        parameters:
-          displayName: Plan ${{ environment.name }}
-          subscription: ${{ environment.subscription }} 
-          group: ${{ environment.group }}
-          environment: ${{ environment.name }}
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
+        group: HMI-APIM-BUILD-SBOX
 
   - stage: BuildSbox
     dependsOn: Plan

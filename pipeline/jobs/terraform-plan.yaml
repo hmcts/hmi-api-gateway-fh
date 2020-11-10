@@ -8,18 +8,8 @@ parameters:
   - name: displayName
     type: string
 
-  - name: environment
-    type: string
-
-  - name: dependsOn
-    type: string
-    default: ''
-
 jobs:
-- job: Terraform${{ parameters.environment }}
-  dependsOn:
-  - ${{ if parameters.dependsOn }}:
-    - ${{ parameters.dependsOn }}
+- job: Terraform
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
