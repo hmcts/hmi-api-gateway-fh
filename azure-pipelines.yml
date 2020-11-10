@@ -91,10 +91,11 @@ stages:
   - stage: BuildSbox
     dependsOn: PlanSbox
     jobs:
-      - job: BuildSbox
-        steps:
-          - bash: |
-              echo "Hello sandbox"
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Plan SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
+        group: HMI-APIM-BUILD-SBOX
 
   - stage: BuildDev
     dependsOn: PlanDev
