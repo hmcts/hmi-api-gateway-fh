@@ -72,7 +72,7 @@ public class ResourcesAPITest extends FunctionalTest {
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         String inputBodyForCreateResourcesByLocation =
                 String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), "615","615");
-        resourceSteps.shouldCreateAnUser(resourcesByLocationRootContext,
+        resourceSteps.shouldCreateALocation(resourcesByLocationRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForCreateResourcesByLocation);
@@ -80,7 +80,7 @@ public class ResourcesAPITest extends FunctionalTest {
         resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,"615");
         String inputBodyForAmendResourcesByLocation =
                 String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-location-payload.json"), "615","615");
-        resourceSteps.shouldUpdateAnUser(resourcesByLocation_idRootContext,
+        resourceSteps.shouldUpdateALocation(resourcesByLocation_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForAmendResourcesByLocation);
