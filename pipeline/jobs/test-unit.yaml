@@ -37,7 +37,7 @@ jobs:
   steps:
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=info
+      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}_unittests
