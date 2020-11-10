@@ -105,7 +105,6 @@ stages:
           displayName: Validate ${{ environment.name }}
           subscription: ${{ environment.subscription }} 
           group: ${{ environment.group }}
-          environment: ${{ environment.name }}
 
   - stage: Plan
     dependsOn: Validate
