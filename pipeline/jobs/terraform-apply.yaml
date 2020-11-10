@@ -25,11 +25,11 @@ jobs:
     artifact: drop
   - download: current
     displayName: 'Download tfplan'
-    artifact: $(environment)-hmi.tfvars
+    artifact: tfplan-$(environment)
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment)'
-      targetFolder: '$(Pipeline.Workspace)/drop/infrastructure/terraform/'
+      targetFolder: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-init.yaml
     parameters:
