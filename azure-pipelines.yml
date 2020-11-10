@@ -93,7 +93,7 @@ stages:
     jobs:
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
-        displayName: Plan SBOX
+        displayName: Build SBOX
         subscription: DTS-SHAREDSERVICES-SBOX
         group: HMI-APIM-BUILD-SBOX
 
