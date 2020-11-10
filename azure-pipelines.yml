@@ -26,31 +26,31 @@ parameters:
       group: HMI-APIM-BUILD-STG
 
 
+
 variables:
   - group: HMI-APIM-Common
 
 stages:
-  - ${{ each environment in parameters.environments }}:
-    - stage: Validate${{ environment.name }}
-      jobs:
-        - template: pipeline/jobs/terraform-validate.yaml
-          parameters:
-            displayName: Validate ${{ environment.name }}
-            subscription: ${{ environment.subscription }} 
-            group: ${{ environment.group }}
-            environment: ${{ environment.name }}
+  - stage: Validate
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - template: pipeline/jobs/terraform-validate.yaml
+        parameters:
+          displayName: Validate ${{ environment.name }}
+          subscription: ${{ environment.subscription }} 
+          group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
-  - ${{ each environment in parameters.environments }}:
-    - stage: Plan${{ environment.name }}
-      dependsOn: Validate
-      jobs:
+  - stage: Plan
+    dependsOn: Validate
+    jobs:
+    - ${{ each environment in parameters.environments }}:
       - template: pipeline/jobs/terraform-plan.yaml
         parameters:
           displayName: Plan ${{ environment.name }}
           subscription: ${{ environment.subscription }} 
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
-
 
   - stage: BuildSandbox
     dependsOn: Plan
@@ -112,7 +112,6 @@ stages:
         steps:
           - bash: |
               echo "Hello ${{ environment.name }}"
-
 
 # - ${{ each environment in parameters.environments }}:
 
