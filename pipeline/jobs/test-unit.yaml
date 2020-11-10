@@ -1,0 +1,60 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+
+  - name: subscription
+    type: string
+
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
+
+  - name: storageContainer
+    type: string
+
+  - name: subscriptionKey
+    type: string
+
+  - name: apimHost
+    type: string
+
+  - name: command
+    type: string
+
+  - name: logLevel
+    type: string
+
+jobs:
+- job: ${{ parameters.displayName }}
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    name: ${{ parameters.pool }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: clean ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=${{ parameters.logLevel }}
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: ${{ parameters.displayName }}_unittests
+      directory: /build/reports/unittests
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: ${{ parameters.displayName }}_gradle
+      directory: /build/reports/tests/${{ parameters.command }}
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: ${{ parameters.displayName }}
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      storageContainer: $(storageContainer)

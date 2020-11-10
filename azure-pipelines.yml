@@ -147,14 +147,6 @@ stages:
           - bash: |
               echo "Hello ${{ environment.name }}"
 
-  - stage: BuildProd
-    dependsOn: BuildNonProd
-    jobs:
-    - ${{ each environment in parameters.environments }}:
-      - job:
-        steps:
-          - bash: |
-              echo "Hello ${{ environment.name }}"
 
 # - ${{ each environment in parameters.environments }}:
 
