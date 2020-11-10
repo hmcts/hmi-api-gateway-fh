@@ -4,6 +4,7 @@ parameters:
 
   - name: dependsOn
     type: object
+    default: ''
 
   - name: subscription
     type: string
@@ -23,12 +24,6 @@ parameters:
   - name: apimHost
     type: string
 
-  - name: command
-    type: string
-
-  - name: logLevel
-    type: string
-
 jobs:
 - job: ${{ parameters.displayName }}
   dependsOn:
@@ -42,7 +37,7 @@ jobs:
   steps:
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=${{ parameters.logLevel }}
+      command: clean ${{ parameters.command }} -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=info
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: ${{ parameters.displayName }}_unittests
