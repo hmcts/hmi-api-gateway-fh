@@ -8,7 +8,7 @@ steps:
   displayName: Replace Tokens in Policy files
   inputs:
     rootDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
-    targetFiles: '**/*-policy.xml'
+    targetFiles: '*-policy.xml'
     encoding: 'auto'
     writeBOM: true
     actionOnMissing: 'warn'
