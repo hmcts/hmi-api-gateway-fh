@@ -108,6 +108,24 @@ stages:
           environment: ${{ environment.name }}
 
   - stage: Plan
+    dependsOn: Validate
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
+
+  - stage: BuildNonProd
+    dependsOn: Plan
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
+  - stage: BuildProd
+    dependsOn: BuildNonProd
     jobs:
     - ${{ each environment in parameters.environments }}:
       - job:
