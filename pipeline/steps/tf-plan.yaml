@@ -12,5 +12,5 @@ steps:
     environmentServiceName: ${{ parameters.subscription }}
     commandOptions: '-var-file="environment/$(environment)-hmi.tfvars" -out="tfplan-$(environment)" -var "tenant_id=$(tenant_id)" -var "sp_object_id=$(sp_object_id)" -var "prefix=$(prefix)" -var "product=$(product)" -var "environment=$(environment)" -var "location=$(location)" -var "repo_branch=$(Build.SourceVersion)"'
 
-- publish: $(System.DefaultWorkingDirectory)/infrastructure/terraform/environment/$(environment)-hmi.tfvars
-  artifact: $(environment)-hmi.tfvars
+- publish: $(System.DefaultWorkingDirectory)/infrastructure/terraform/tfplan-$(environment)
+  artifact: tfplan-$(environment)
