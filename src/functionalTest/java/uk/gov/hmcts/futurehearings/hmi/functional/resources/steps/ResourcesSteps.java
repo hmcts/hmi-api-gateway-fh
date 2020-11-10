@@ -14,7 +14,7 @@ public class ResourcesSteps {
 
     private String resourcesUser;
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User performs the creation of a user using the Resources API")
     public void shouldCreateAnUser(final String apiURL,
                                    final Map<String, Object> headersAsMap,
                                    final String authorizationToken,
@@ -30,8 +30,40 @@ public class ResourcesSteps {
 
     }
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User performs the amend of a user using the Resources API")
     public void shouldUpdateAnUser(final String apiURL,
+                                   final Map<String, Object> headersAsMap,
+                                   final String authorizationToken,
+                                   final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                HttpMethod.PUT,
+                HttpStatus.NO_CONTENT);
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatusCode());
+
+    }
+
+    @Step("User performs the creation of a location using the Resources API")
+    public void shouldCreateALocation(final String apiURL,
+                                   final Map<String, Object> headersAsMap,
+                                   final String authorizationToken,
+                                   final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                HttpMethod.POST,
+                HttpStatus.CREATED);
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+
+    }
+
+    @Step("User performs the amend of a location using the Resources API")
+    public void shouldUpdateALocation(final String apiURL,
                                    final Map<String, Object> headersAsMap,
                                    final String authorizationToken,
                                    final String body) {
