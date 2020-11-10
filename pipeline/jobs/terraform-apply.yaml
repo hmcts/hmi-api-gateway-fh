@@ -21,9 +21,6 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - download: current
-    displayName: 'Download artifacts'
-    artifact: drop
-  - download: current
     displayName: 'Download tfplan'
     artifact: tfplan-$(environment)
   - task: CopyFiles@2
