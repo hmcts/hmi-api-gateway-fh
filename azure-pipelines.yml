@@ -25,7 +25,9 @@ parameters:
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
 
-
+    - name: prod
+      subscription: DTS-SHAREDSERVICES-PROD
+      group: HMI-APIM-BUILD-PROD
 
 variables:
   - group: HMI-APIM-Common
