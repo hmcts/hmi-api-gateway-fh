@@ -77,6 +77,15 @@ stages:
         subscription: DTS-SHAREDSERVICES-STG
         group: HMI-APIM-BUILD-STG
 
+  - stage: PlanPROD
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+        group: HMI-APIM-BUILD-PROD
+
   - stage: BuildSbox
     dependsOn: PlanSbox
     jobs:
@@ -141,6 +150,7 @@ stages:
 
   - stage: BuildProd
     dependsOn: 
+      - PlanProd
       - BuildStg
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
