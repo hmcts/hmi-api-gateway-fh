@@ -16,7 +16,7 @@ public class HearingsSteps {
 
     private String hearingUser;
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User creates a Hearing request")
     public void shouldRequestAHearing(final String apiURL,
                                                final Map<String, Object> headersAsMap,
                                                final String authorizationToken,
@@ -32,7 +32,7 @@ public class HearingsSteps {
 
     }
 
-    @Step("#actor routes to {0} in order to get invoke {1}")
+    @Step("User amends a Hearing request")
     public void shouldAmendAHearing(final String apiURL,
                                       final Map<String, Object> headersAsMap,
                                       final String authorizationToken,
