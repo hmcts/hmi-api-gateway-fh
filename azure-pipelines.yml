@@ -105,34 +105,36 @@ stages:
           displayName: Validate ${{ environment.name }}
           subscription: ${{ environment.subscription }} 
           group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
-  # - stage: Plan
-  #   dependsOn: Validate
-  #   jobs:
-  #   - ${{ each environment in parameters.environments }}:
-  #     - template: pipeline/jobs/terraform-plan.yaml
-  #       parameters:
-  #         displayName: Plan ${{ environment.name }}
-  #         subscription: ${{ environment.subscription }} 
-  #         group: ${{ environment.group }}
+  - stage: Plan
+    dependsOn: Validate
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - template: pipeline/jobs/terraform-plan.yaml
+        parameters:
+          displayName: Plan ${{ environment.name }}
+          subscription: ${{ environment.subscription }} 
+          group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
-  # - stage: BuildNonProd
-  #   dependsOn: Plan
-  #   jobs:
-  #   - ${{ each environment in parameters.environments }}:
-  #     - job:
-  #       steps:
-  #         - bash: |
-  #             echo "Hello ${{ environment.name }}"
+  - stage: BuildNonProd
+    dependsOn: Plan
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
 
-  # - stage: BuildProd
-  #   dependsOn: BuildNonProd
-  #   jobs:
-  #   - ${{ each environment in parameters.environments }}:
-  #     - job:
-  #       steps:
-  #         - bash: |
-  #             echo "Hello ${{ environment.name }}"
+  - stage: BuildProd
+    dependsOn: BuildNonProd
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - job:
+        steps:
+          - bash: |
+              echo "Hello ${{ environment.name }}"
 
 # - ${{ each environment in parameters.environments }}:
 
