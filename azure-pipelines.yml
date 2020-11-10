@@ -41,7 +41,7 @@ stages:
           group: ${{ environment.group }}
           environment: ${{ environment.name }}
 
-  - stage: PlanSbox
+  - stage: PlanSBOX
     dependsOn: Validate
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
@@ -50,8 +50,35 @@ stages:
         subscription: DTS-SHAREDSERVICES-SBOX
         group: HMI-APIM-BUILD-SBOX
 
+  - stage: PlanDEV
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+        group: HMI-APIM-BUILD-DEV
+
+  - stage: PlanTEST
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+        group: HMI-APIM-BUILD-TEST
+
+  - stage: PlanSTG
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan STG
+        subscription: DTS-SHAREDSERVICES-STG
+        group: HMI-APIM-BUILD-STG
+
   - stage: BuildSbox
-    dependsOn: Plan
+    dependsOn: PlanSbox
     jobs:
       - job: BuildSbox
         steps:
@@ -59,7 +86,7 @@ stages:
               echo "Hello sandbox"
 
   - stage: BuildDev
-    dependsOn: Plan
+    dependsOn: PlanDev
     jobs:
       - job: BuildDev
         steps:
@@ -67,7 +94,7 @@ stages:
               echo "Hello dev"
 
   - stage: BuildTest
-    dependsOn: Plan
+    dependsOn: PlanTest
     jobs:
       - job: BuildTest
         steps:
