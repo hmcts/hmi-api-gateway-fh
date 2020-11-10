@@ -15,3 +15,9 @@ listings_idRootContext: /hmi/listings/%s
 
 hearingsApiRootContext: /hmi/hearings
 hearings_idRootContext: /hmi/hearings/%s
+
+resourcesByLocationRootContext: /hmi/resources/location/
+resourcesByLocation_idRootContext: /hmi/resources/location/%s
+
+resourcesByUserRootContext: /hmi/resources/user/
+resourcesByUser_idRootContext: /hmi/resources/user/%s
