@@ -44,10 +44,9 @@ public class HearingAPITest extends FunctionalTest {
 
 
     @Test
-    public void testSuccessfullPostToHearing() throws IOException {
+    public void testSuccessfulPostToHearing() throws IOException {
 
         log.info("Post hearing request to target Instance" + targetInstance);
-
         String input =
                 readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/hearing/input/mock-demo-request.json");
         hearingSteps.requestHearing(hearingApiRootContext,
