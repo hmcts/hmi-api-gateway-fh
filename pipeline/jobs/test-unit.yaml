@@ -12,9 +12,6 @@ parameters:
   - name: variables
     type: object
 
-  - name: apimHost
-    type: string
-
   - name: subscriptionKey
     type: string
 
