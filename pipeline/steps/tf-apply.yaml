@@ -7,8 +7,7 @@ steps:
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
-    rootDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
-    targetFiles: '**/*-policy.xml'
+    targetFiles: '**/*-policy.xml => $(System.DefaultWorkingDirectory)/infrastructure/terraform/*.xml'
     encoding: 'auto'
     writeBOM: true
     actionOnMissing: 'warn'
