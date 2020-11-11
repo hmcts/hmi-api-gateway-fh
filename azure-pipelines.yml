@@ -109,30 +109,56 @@ stages:
         hostName: hmi-apim.sandbox.platform.hmcts.net
         group: HMI-APIM-BUILD-SBOX
 
-  - stage: BuildDev
+  - stage: BuildDEV
     dependsOn: PlanDev
     jobs:
-      - job: BuildDev
-        steps:
-          - bash: |
-              echo "Hello dev"
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+        group: HMI-APIM-BUILD-DEV
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: TerraformApply
+        group: HMI-APIM-BUILD-DEV
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+        hostName: hmi-apim.preview.platform.hmcts.net
+        group: HMI-APIM-BUILD-DEV
 
-  - stage: BuildTest
+  - stage: BuildTEST
     dependsOn: PlanTest
     jobs:
-      - job: BuildTest
-        steps:
-          - bash: |
-              echo "Hello test"
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+        group: HMI-APIM-BUILD-TEST
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+        group: HMI-APIM-BUILD-TEST
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+        hostName: hmi-apim.perftest.platform.hmcts.net
+        group: HMI-APIM-BUILD-TEST
 
-  - stage: TestSbox
+  - stage: TestSBOX
     dependsOn: BuildSbox
     pool: hmi-sbox
     variables:
       subscription: DTS-SHAREDSERVICES-SBOX
       resourceGroup: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.resourceGroup']]
       storageAccount: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.storageAccount']]
-      subscriptionKey: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.subscriptionKey']]
+      subscriptionKey: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.subscriptionKey']]
       apimHost: hmi-apim.sandbox.platform.hmcts.net
     jobs:
       - template: pipeline/jobs/create-storage.yaml
