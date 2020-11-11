@@ -172,7 +172,7 @@ stages:
           displayName: Unit Test SBOX
           dependsOn: 
           - CreateStorage
-          - UpdateAgent
+          # - UpdateAgent
           subscription: ${{ variables.subscription }}
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
