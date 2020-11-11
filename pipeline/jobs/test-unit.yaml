@@ -23,7 +23,7 @@ jobs:
   steps:
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(apimHost) -DENDPOINT_HOST=$(apimHost)
+      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_unittests
@@ -35,7 +35,7 @@ jobs:
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: unit_tests
-      subscription: $(subscription)
-      resourceGroup: $(resourceGroup)
-      storageAccount: $(storageAccount)
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: ${{ parameters.resourceGroup }}
+      storageAccount: ${{ parameters.storageAccount }}
       storageContainer: $(storageContainer)
