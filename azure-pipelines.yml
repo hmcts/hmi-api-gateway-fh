@@ -155,18 +155,12 @@ stages:
     dependsOn: BuildSbox
     pool: hmi-sbox
     variables:
-      subscription: DTS-SHAREDSERVICES-SBOX
-      resourceGroup: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.resourceGroup']]
-      storageAccount: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.storageAccount']]
-      subscriptionKey: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.subscriptionKey']]
       apimHost: hmi-apim.sandbox.platform.hmcts.net
     jobs:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
-          subscription: ${{ variables.subscription }}
-          resourceGroup: ${{ variables.resourceGroup }}
-          storageAccount: ${{ variables.storageAccount }}
+          group: HMI-APIM-BUILD-SBOX
 
       - template: pipeline/jobs/update-agent.yaml
         parameters:
