@@ -18,6 +18,9 @@ parameters:
   - name: subscriptionKey
     type: string
 
+  - name: subscription
+    type: string
+
 jobs:
 - job: UnitTest
   dependsOn:
@@ -41,7 +44,7 @@ jobs:
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: unit_tests
-      subscription: $(subscription)
+      subscription: ${{ parameters.subscription }}
       resourceGroup: $(resourceGroup)
       storageAccount: $(storageAccount)
       storageContainer: $(storageContainer)
