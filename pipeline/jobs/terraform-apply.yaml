@@ -13,7 +13,7 @@ parameters:
     default: ''
 
 jobs:
-- job: Terraform
+- job: TerraformApply
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
