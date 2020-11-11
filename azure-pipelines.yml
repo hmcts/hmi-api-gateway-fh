@@ -168,10 +168,16 @@ stages:
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
 
+      - template: pipeline/jobs/update-agent.yaml
+        parameters:
+          displayName: Update Java on DevOps Agent
+
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test SBOX
-          dependsOn: CreateStorage
+          dependsOn: 
+          - CreateStorage
+          - UpdateAgent
           subscription: ${{ variables.subscription }}
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
