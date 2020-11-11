@@ -166,7 +166,7 @@ stages:
           dependsOn: 
           - CreateStorage
           - ExportKeyVault
-          apimHost: ${{ variables.apimHost }}
+          subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
           variables:
