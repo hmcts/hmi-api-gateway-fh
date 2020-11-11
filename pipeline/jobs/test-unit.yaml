@@ -12,6 +12,14 @@ parameters:
   - name: variables
     type: object
 
+  - name: subscription
+    type: string
+
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
 jobs:
 - job: UnitTest
   dependsOn:
