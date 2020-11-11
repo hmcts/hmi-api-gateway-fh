@@ -5,11 +5,17 @@ parameters:
   - name: dependsOn
     type: object
     default: ''
+
+  - name: storageContainer
+    type: string
   
   - name: variables
     type: object
 
   - name: apimHost
+    type: string
+
+  - name: subscriptionKey
     type: string
 
 jobs:
