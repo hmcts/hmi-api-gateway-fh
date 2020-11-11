@@ -5,7 +5,10 @@ parameters:
 
   - name: displayName
     type: string
-  
+ 
+  - name: subscription
+    type: string
+
   - name: group
     type: string
 
@@ -24,7 +27,7 @@ jobs:
     displayName: createContainer
     name: createContainer
     inputs:
-      azureSubscription: $(subscription)
+      azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
