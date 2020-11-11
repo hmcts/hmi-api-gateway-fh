@@ -1,11 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 import static uk.gov.hmcts.futurehearings.hmi.functional.directlisting.process.DirectListingResponseProcess.getSessionId;
 
 import java.util.Map;
+import java.util.Objects;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
@@ -22,10 +24,12 @@ public class DirectListingSteps {
                                                final String authorizationToken,
                                                final Map<String, String> queryParameters) {
 
-        return getSessionId(callRestEndpointWithQueryParams(apiURL,
+        String sessionIdCaseHQ = getSessionId(callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
                 queryParameters, HttpStatus.OK));
+        assertTrue(Objects.nonNull(sessionIdCaseHQ) && !sessionIdCaseHQ.trim().equals(""));
+        return sessionIdCaseHQ;
     }
 
     @Step("User makes a request to List a Hearing Request Directly (PUT in the Listing API)")

@@ -5,8 +5,8 @@
       "timestamp": "2020-11-13T20:20:39+00:00"
     },
     "_case": {
-      "caseIdHMCTS": "SW/90006",
-      "caseListingRequestId": "H100006",
+      "caseIdHMCTS": "616",
+      "caseListingRequestId": "616",
       "caseTitle": "Smith vs Best Company PL",
       "caseJurisdiction": "FAM",
       "caseSubType": "79",
@@ -18,7 +18,7 @@
       "caseInterpreterRequiredFlag": true
     },
     "listing": {
-      "listingCourt": "300",
+      "listingCourt": "301",
       "listingAutoCreateFlag": true,
       "listingPriority": "1",
       "listingSessionType": "DS",
