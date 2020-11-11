@@ -134,19 +134,15 @@ stages:
       parameters:
         displayName: Build TEST
         subscription: DTS-SHAREDSERVICES-TEST
-        group: HMI-APIM-BUILD-TEST
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-TEST
         dependsOn: TerraformApply
-        group: HMI-APIM-BUILD-TEST
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
-        hostName: hmi-apim.perftest.platform.hmcts.net
-        group: HMI-APIM-BUILD-TEST
 
   - stage: TestSBOX
     dependsOn: BuildSbox
