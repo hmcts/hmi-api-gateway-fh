@@ -2,9 +2,6 @@ parameters:
   - name: subscription
     type: string
 
-  - name: group
-    type: string
-
   - name: displayName
     type: string
 
@@ -14,8 +11,6 @@ parameters:
 
 jobs:
 - job: TerraformApply
-  variables:
-  - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-latest'
