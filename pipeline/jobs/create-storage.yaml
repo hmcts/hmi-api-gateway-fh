@@ -5,6 +5,9 @@ parameters:
 
   - name: displayName
     type: string
+  
+  - name: subscription
+    type: string
 
 jobs:
 - job: CreateStorage
