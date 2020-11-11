@@ -142,13 +142,17 @@ stages:
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
 
-      # - template: pipeline/jobs/test-unit.yaml
-      #   parameters:
-      #     displayName: Unit Test SBOX
-      #     dependsOn: CreateStorage
-      #     storageContainer: $(storageContainer)
-      #     variables:
-      #       storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test SBOX
+          dependsOn: CreateStorage
+          subscription: ${{ variables.subscription }}
+          resourceGroup: ${{ variables.resourceGroup }}
+          storageAccount: ${{ variables.storageAccount }}
+          apimHost: ${{ variables.apimHost }}
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
 
 
   - stage: TestDev
