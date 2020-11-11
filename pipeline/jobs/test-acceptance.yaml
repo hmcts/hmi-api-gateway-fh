@@ -1,0 +1,43 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: storageContainer
+    type: string
+
+  - name: variables
+    type: object
+
+  - name: subscriptionKey
+    type: string
+
+  - name: subscription
+    type: string
+
+jobs:
+- job: AcceptanceTest
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: clean acceptance -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName) -DAPI_LOG_LEVEL=DEBUG
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_acceptance
+      directory: /build/reports/tests/acceptance
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: acceptance_tests
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      storageContainer: $(storageContainer)
