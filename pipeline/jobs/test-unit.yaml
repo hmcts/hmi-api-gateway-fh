@@ -28,11 +28,11 @@ jobs:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
-      echo $(subscription)
-      echo $(subscriptionKey)
-      echo $(storageContainer)
-      echo $(resourceGroup)
-      echo $(storageAccount)
+      echo 'sub $(subscription) or ${{ variables.subscription }}'
+      echo 'key $(subscriptionKey) or ${{ variables.subscriptionKey }}'
+      echo 'container $(storageContainer) or ${{ variables.storageContainer }}'
+      echo 'rg $(resourceGroup) or ${{ variables.resourceGroup }}'
+      echo 'storage acc$(storageAccount) or ${{ variables.torageAccount }}'
   # - template: ../steps/run-gradlew.yaml
   #   parameters:
   #     command: clean test -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}

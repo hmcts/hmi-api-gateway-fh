@@ -175,6 +175,7 @@ stages:
           dependsOn: 
           - CreateStorage
           - ExportKeyVault
+          group: HMI-APIM-BUILD-SBOX
           apimHost: ${{ variables.apimHost }}
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
