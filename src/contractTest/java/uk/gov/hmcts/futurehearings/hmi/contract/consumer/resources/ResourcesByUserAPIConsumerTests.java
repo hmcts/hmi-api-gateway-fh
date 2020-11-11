@@ -34,7 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
-public class ResourcesByUserAPIConsumerTests extends ContractTest {
+class ResourcesByUserAPIConsumerTests extends ContractTest {
 
     private static final String PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH = "/casehqapi/rest/hmcts/resources/user";
 
