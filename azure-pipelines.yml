@@ -139,6 +139,8 @@ stages:
         parameters:
           displayName: Create Storage for Test Results
           subscription: ${{ variables.subscription }}
+          resourceGroup: ${{ variables.resourceGroup }}
+          storageAccount: ${{ variables.storageAccount }}
 
       # - template: pipeline/jobs/test-unit.yaml
       #   parameters:
