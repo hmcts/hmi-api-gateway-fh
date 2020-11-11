@@ -5,20 +5,11 @@ parameters:
   - name: dependsOn
     type: object
     default: ''
-
-  - name: storageContainer
-    type: string
   
   - name: variables
     type: object
 
   - name: apimHost
-    type: string
-
-  - name: subscriptionKey
-    type: string
-
-  - name: group
     type: string
 
 jobs:
@@ -28,7 +19,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   variables:
-  - group: ${{ parameters.group }}
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
       echo 'sub $(subscription) or ${{ variables.subscription }}'
