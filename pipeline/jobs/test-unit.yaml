@@ -18,6 +18,9 @@ parameters:
   - name: subscriptionKey
     type: string
 
+  - name: group
+    type: string
+
 jobs:
 - job: UnitTest
   dependsOn:
