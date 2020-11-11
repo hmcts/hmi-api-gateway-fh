@@ -18,7 +18,7 @@ parameters:
     type: object
 
 jobs:
-- job: createStorage
+- job: CreateStorage
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
