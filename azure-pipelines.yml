@@ -155,7 +155,7 @@ stages:
     dependsOn: BuildSbox
     pool: hmi-sbox
     variables:
-      apimHost: hmi-apim.sandbox.platform.hmcts.net
+      - group: HMI-APIM-BUILD-SBOX
     jobs:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
@@ -178,7 +178,6 @@ stages:
           apimHost: ${{ variables.apimHost }}
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
-          group: HMI-APIM-BUILD-SBOX
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
