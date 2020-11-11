@@ -28,6 +28,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   variables:
+  - group: ${{ parameters.group }}
     ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
