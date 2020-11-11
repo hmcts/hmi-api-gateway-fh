@@ -27,27 +27,21 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-  - bash: |
-      echo 'sub $(subscription) or ${{ variables.subscription }}'
-      echo 'key $(subscriptionKey) or ${{ variables.subscriptionKey }}'
-      echo 'container $(storageContainer) or ${{ variables.storageContainer }}'
-      echo 'rg $(resourceGroup) or ${{ variables.resourceGroup }}'
-      echo 'storage acc$(storageAccount) or ${{ variables.torageAccount }}'
-  # - template: ../steps/run-gradlew.yaml
-  #   parameters:
-  #     command: clean test -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
-  # - template: ../steps/zip-test-results.yaml
-  #   parameters:
-  #     zipName: test_unittests
-  #     directory: /build/reports/unittests
-  # - template: ../steps/zip-test-results.yaml
-  #   parameters:
-  #     zipName: test_gradle
-  #     directory: /build/reports/tests/test
-  # - template: ../steps/publish-test-results.yaml
-  #   parameters:
-  #     zipName: unit_tests
-  #     subscription: ${{ parameters.subscription }}
-  #     resourceGroup: ${{ parameters.resourceGroup }}
-  #     storageAccount: ${{ parameters.storageAccount }}
-  #     storageContainer: $(storageContainer)
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName)
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_unittests
+      directory: /build/reports/unittests
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_gradle
+      directory: /build/reports/tests/test
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: unit_tests
+      subscription: $(subscription)
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      storageContainer: $(storageContainer)
