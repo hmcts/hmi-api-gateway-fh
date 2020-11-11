@@ -4,6 +4,15 @@ parameters:
 
 steps:
 
+- task: AzurePowerShell@5
+  displayName: Replace Tokens
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'FilePath'
+    ScriptPath: '$(System.DefaultWorkingDirectory)/script/replace-token.ps1'
+    errorActionPreference: 'continue'
+    azurePowerShellVersion: 'LatestVersion'
+
 - task: TerraformCLI@0
   displayName: Terraform plan
   inputs:
