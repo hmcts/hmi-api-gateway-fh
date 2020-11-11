@@ -5,10 +5,11 @@ Foreach-Object {
     $file = Get-Content $_.FullName
     $containsWord = $file | %{$_ -match "#{hostName}#"}
     if ($containsWord -contains $true) {
-      (Get-Content $_.FullName) -replace  '#{hostName}#','http://milan.org' | Set-Content $_.FullName
-        Write-Host "** Updated Token in File:  " $_.FullName
-
-        Write-Host 'After'  (Get-Content $_.FullName)
+      $content = Get-Content $_.FullName
+      Write-Host 'Before' $content
+      $content -replace  '#{hostName}#','http://milan.org' | Set-Content $_.FullName
+      Write-Host "** Updated Token in File:  " $_.FullName
+      Write-Host 'After' $content
     } 
 }
 Write-Host 'Replacement complete.'
