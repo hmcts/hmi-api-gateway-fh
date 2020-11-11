@@ -7,7 +7,7 @@ parameters:
     default: ''
 
 jobs:
-- job: ${{ parameters.displayName }}
+- job: CodeQualityTest
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
