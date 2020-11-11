@@ -135,17 +135,10 @@ stages:
       subscriptionKey: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.subscriptionKey']]
       apimHost: hmi-apim.sandbox.platform.hmcts.net
     jobs:
-    - job:
-      steps:
-      - script: |
-          echo $(subscription)
-          echo $(resourceGroup)
-          echo $(storageAccount)
-          echo $(apimHost)
-      # - template: pipeline/jobs/create-storage.yaml
-      #   parameters:
-      #     displayName: Create Storage for Test Results
-      #     subscription: $(subscription)
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: ${{ variables.subscription }}
 
       # - template: pipeline/jobs/test-unit.yaml
       #   parameters:
@@ -159,7 +152,7 @@ stages:
   - stage: TestDev
     dependsOn: BuildDev
     jobs:
-      - job: TestSbox
+      - job: TestDev
         steps:
           - bash: |
               echo "Hello dev"
