@@ -23,6 +23,9 @@ parameters:
 
   - name: apimHost
     type: string
+  
+  - name: variables
+    type: object
 
 jobs:
 - job: ${{ parameters.displayName }}
