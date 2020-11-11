@@ -23,10 +23,10 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - template: ../steps/tf-install.yaml
   - template: ../steps/replace-token.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
+  - template: ../steps/tf-install.yaml
   - template: ../steps/tf-test.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
