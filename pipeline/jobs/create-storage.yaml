@@ -1,22 +1,10 @@
 parameters:
-  - name: subscription
-    type: string
-
-  - name: resourceGroup
-    type: string
-
-  - name: storageAccount
-    type: string
-
   - name: dependsOn
     type: object
     default: ''
 
   - name: displayName
     type: string
-  
-  - name: variables
-    type: object
 
 jobs:
 - job: CreateStorage
@@ -26,14 +14,12 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - task: AzureCLI@2
     displayName: createContainer
     name: createContainer
     inputs:
-      azureSubscription: ${{ parameters.subscription }}
+      azureSubscription: $(subscription)
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
