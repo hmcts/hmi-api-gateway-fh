@@ -8,7 +8,6 @@ parameters:
   - name: environments
     type: object
     default:
-
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
       group: HMI-APIM-BUILD-SBOX
@@ -90,48 +89,46 @@ stages:
 
   - stage: BuildSbox
     dependsOn: PlanSbox
+    variables:
+      - group: HMI-APIM-BUILD-SBOX
     jobs:
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
         displayName: Build SBOX
         subscription: DTS-SHAREDSERVICES-SBOX
-        group: HMI-APIM-BUILD-SBOX
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-SBOX
         dependsOn: TerraformApply
-        group: HMI-APIM-BUILD-SBOX
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
-        hostName: hmi-apim.sandbox.platform.hmcts.net
-        group: HMI-APIM-BUILD-SBOX
 
   - stage: BuildDEV
     dependsOn: PlanDev
+    variables:
+      - group: HMI-APIM-BUILD-DEV
     jobs:
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
         displayName: Build DEV
         subscription: DTS-SHAREDSERVICES-DEV
-        group: HMI-APIM-BUILD-DEV
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-DEV
         dependsOn: TerraformApply
-        group: HMI-APIM-BUILD-DEV
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
-        hostName: hmi-apim.preview.platform.hmcts.net
-        group: HMI-APIM-BUILD-DEV
 
   - stage: BuildTEST
     dependsOn: PlanTest
+    variables:
+      - group: HMI-APIM-BUILD-TEST
     jobs:
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
