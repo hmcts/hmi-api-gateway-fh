@@ -8,7 +8,7 @@ parameters:
 
   - name: storageContainer
     type: string
-  
+
   - name: variables
     type: object
 
