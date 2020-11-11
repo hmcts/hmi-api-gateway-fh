@@ -9,7 +9,7 @@ parameters:
     type: string
 
 jobs:
-- job: Terraform
+- job: TerraformPlan
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
