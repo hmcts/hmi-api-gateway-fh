@@ -5,17 +5,9 @@ parameters:
 
   - name: displayName
     type: string
- 
-  - name: subscription
-    type: string
-
-  - name: group
-    type: string
 
 jobs:
 - job: CreateStorage
-  variables:
-  - group: ${{ parameters.group }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
@@ -27,7 +19,7 @@ jobs:
     displayName: createContainer
     name: createContainer
     inputs:
-      azureSubscription: ${{ parameters.subscription }}
+      azureSubscription: $(subscription)
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
