@@ -1,0 +1,52 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: storageContainer
+    type: string
+  
+  - name: variables
+    type: object
+
+  - name: subscription
+    type: string
+
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
+
+  - name: apimHost
+    type: string
+
+  - name: subscriptionKey
+    type: string
+
+jobs:
+- job: SmokeTest
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: clean smoke -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=DEBUG
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_smoke
+      directory: /build/reports/tests/smoke
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: smoke_tests
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: ${{ parameters.resourceGroup }}
+      storageAccount: ${{ parameters.storageAccount }}
+      storageContainer: $(storageContainer)
