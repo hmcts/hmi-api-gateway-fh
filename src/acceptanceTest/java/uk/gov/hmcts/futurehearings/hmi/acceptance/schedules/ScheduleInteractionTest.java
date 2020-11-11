@@ -26,7 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Disabled("As we do not have the Wiremock Infrastructure in place till now - TODO -Tests and CodeQualityReview Processes")
-public class ScheduleInteractionTest {
+class ScheduleInteractionTest {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/schedule/input";
 
