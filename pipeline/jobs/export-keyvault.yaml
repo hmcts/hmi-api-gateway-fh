@@ -1,21 +1,16 @@
 parameters:
-  - name: subscription
-    type: string
-
   - name: dependsOn
     type: object
     default: ''
-  
+
   - name: displayName
     type: string
-
-  - name: group
+ 
+  - name: subscription
     type: string
 
 jobs:
 - job: ExportKeyVault
-  variables:
-  - group: ${{ parameters.group }}
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
