@@ -27,7 +27,7 @@ jobs:
     displayName: 'Export Secrets from KeyVault'
     inputs:
       azureSubscription: ${{ parameters.subscription }}
-      keyVaultName: hmi-apim-kv-${{ variables.environment}}
+      keyVaultName: hmi-apim-kv-$(environment)
       secretsFilter: 'hmi-apim-sub-key'
   - script: |
       echo "##vso[task.setvariable variable=hmi-apim-sub-key;isOutput=true;isSecret=true]$(hmi-apim-sub-key)"
