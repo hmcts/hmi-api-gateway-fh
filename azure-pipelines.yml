@@ -127,32 +127,25 @@ stages:
 
   - stage: TestSbox
     dependsOn: BuildSbox
+    pool: hmi-sbox
+    variables:
+      subscription: DTS-SHAREDSERVICES-SBOX
+      resourceGroup: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.resourceGroup']]
+      storageAccount: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.storageAccount']]
+      subscriptionKey: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.subscriptionKey']]
+      apimHost: hmi-apim.sandbox.platform.hmcts.net
     jobs:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
-          subscription: DTS-SHAREDSERVICES-SBOX
-          resourceGroup: $(resourceGroup)
-          storageAccount: $(storageAccount)
-          variables:
-            resourceGroup: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.resourceGroup']]
-            storageAccount: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.storageAccount']]
 
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test SBOX
-          subscription: DTS-SHAREDSERVICES-SBOX
           dependsOn: CreateStorage
-          apimHost: hmi-apim.sandbox.platform.hmcts.net
-          subscriptionKey: $(subscriptionKey)
-          resourceGroup: $(resourceGroup)
-          storageAccount: $(storageAccount)
           storageContainer: $(storageContainer)
           variables:
-            subscriptionKey: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.subscriptionKey']]
-            resourceGroup: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.resourceGroup']]
-            storageAccount: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.storageAccount']]
-            storageContainer: $[dependencies.BuildSbox.createStorage.outputs['createContainer.container']]
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
 
 
   - stage: TestDev
