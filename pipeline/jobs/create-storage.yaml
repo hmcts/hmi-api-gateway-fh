@@ -9,6 +9,12 @@ parameters:
   - name: subscription
     type: string
 
+  - name: resourceGroup
+    type: string
+
+  - name: storageAccount
+    type: string
+
 jobs:
 - job: CreateStorage
   dependsOn:
