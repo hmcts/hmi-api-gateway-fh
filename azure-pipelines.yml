@@ -128,10 +128,32 @@ stages:
   - stage: TestSbox
     dependsOn: BuildSbox
     jobs:
-      - job: TestSbox
-        steps:
-          - bash: |
-              echo "Hello sandbox"
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-SBOX
+          resourceGroup: $(resourceGroup)
+          storageAccount: $(storageAccount)
+          variables:
+            resourceGroup: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.resourceGroup']]
+            storageAccount: $[dependencies.BuildSbox.TerraformApply.outputs['terraformOutput.storageAccount']]
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test SBOX
+          subscription: DTS-SHAREDSERVICES-SBOX
+          dependsOn: CreateStorage
+          apimHost: hmi-apim.sandbox.platform.hmcts.net
+          subscriptionKey: $(subscriptionKey)
+          resourceGroup: $(resourceGroup)
+          storageAccount: $(storageAccount)
+          storageContainer: $(storageContainer)
+          variables:
+            subscriptionKey: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.subscriptionKey']]
+            resourceGroup: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.resourceGroup']]
+            storageAccount: $[dependencies.BuildSbox.Terraform.outputs['terraformOutput.storageAccount']]
+            storageContainer: $[dependencies.BuildSbox.createStorage.outputs['createContainer.container']]
+
 
   - stage: TestDev
     dependsOn: BuildDev
