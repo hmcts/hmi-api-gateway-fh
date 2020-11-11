@@ -163,9 +163,9 @@ stages:
           subscription: DTS-SHAREDSERVICES-SBOX
           group: HMI-APIM-BUILD-SBOX
 
-      - template: pipeline/jobs/update-agent.yaml
-        parameters:
-          displayName: Update Java on DevOps Agent
+      # - template: pipeline/jobs/update-agent.yaml
+      #   parameters:
+      #     displayName: Update Java on DevOps Agent
 
       - template: pipeline/jobs/test-unit.yaml
         parameters:
