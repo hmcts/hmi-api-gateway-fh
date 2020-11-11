@@ -162,7 +162,7 @@ stages:
 
       - template: pipeline/jobs/test-unit.yaml
         parameters:
-          displayName: Unit Test SBOX
+          displayName: Unit Test
           dependsOn: 
           - CreateStorage
           - ExportKeyVault
@@ -175,7 +175,7 @@ stages:
             
       - template: pipeline/jobs/test-smoke.yaml
         parameters:
-          displayName: Unit Test SBOX
+          displayName: Smoke Test
           dependsOn: 
           - UnitTest
           - ExportKeyVault
@@ -186,10 +186,36 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      # - template: pipeline/jobs/test-acceptance.yaml
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
       # - template: pipeline/jobs/test-contract.yaml
-      # - template: pipeline/jobs/test-functional.yaml
-      # - template: pipeline/jobs/test-codequality.yaml
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
 
   - stage: TestDev
     dependsOn: BuildDev
