@@ -175,13 +175,13 @@ stages:
           dependsOn: 
           - CreateStorage
           - ExportKeyVault
-          group: HMI-APIM-BUILD-SBOX
           apimHost: ${{ variables.apimHost }}
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            group: HMI-APIM-BUILD-SBOX
 
       # - template: pipeline/jobs/test-smoke.yaml
       #   parameters:
