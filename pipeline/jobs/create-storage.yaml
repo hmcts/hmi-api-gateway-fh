@@ -5,6 +5,9 @@ parameters:
 
   - name: displayName
     type: string
+ 
+  - name: subscription
+    type: string
 
 jobs:
 - job: CreateStorage
@@ -19,7 +22,7 @@ jobs:
     displayName: createContainer
     name: createContainer
     inputs:
-      azureSubscription: ${{ variables.subscription }}
+      azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
