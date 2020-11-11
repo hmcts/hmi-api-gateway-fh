@@ -96,6 +96,18 @@ stages:
         displayName: Build SBOX
         subscription: DTS-SHAREDSERVICES-SBOX
         group: HMI-APIM-BUILD-SBOX
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
+        group: HMI-APIM-BUILD-SBOX
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+        hostName: hmi-apim.sandbox.platform.hmcts.net
+        group: HMI-APIM-BUILD-SBOX
 
   - stage: BuildDev
     dependsOn: PlanDev
