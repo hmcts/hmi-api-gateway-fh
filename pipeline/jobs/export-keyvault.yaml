@@ -2,9 +2,6 @@ parameters:
   - name: subscription
     type: string
 
-  - name: keyVaultName
-    type: string
-
   - name: dependsOn
     type: object
   
