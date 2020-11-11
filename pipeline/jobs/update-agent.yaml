@@ -12,3 +12,4 @@ jobs:
       jdkSourceOption: LocalDirectory
       jdkFile: '/azp/openjdk-11_linux-x64_bin.tar.gz'
       jdkDestinationDirectory: jdk
+  - bash: echo $JAVA_HOME_11_X64
