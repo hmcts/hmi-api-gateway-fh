@@ -13,7 +13,7 @@ parameters:
     type: object
 
 jobs:
-- job: ${{ parameters.displayName }}
+- job: UnitTest
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
