@@ -29,7 +29,6 @@ jobs:
   displayName: ${{ parameters.displayName }}
   variables:
   - group: ${{ parameters.group }}
-  - ${{ insert }}: ${{ parameters.variables }}
   steps:
   - bash: |
       echo 'sub $(subscription) or ${{ variables.subscription }}'
