@@ -12,15 +12,6 @@ parameters:
   - name: variables
     type: object
 
-  - name: subscription
-    type: string
-
-  - name: resourceGroup
-    type: string
-
-  - name: storageAccount
-    type: string
-
   - name: apimHost
     type: string
 
@@ -36,21 +27,27 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
-  - template: ../steps/run-gradlew.yaml
-    parameters:
-      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
-  - template: ../steps/zip-test-results.yaml
-    parameters:
-      zipName: test_unittests
-      directory: /build/reports/unittests
-  - template: ../steps/zip-test-results.yaml
-    parameters:
-      zipName: test_gradle
-      directory: /build/reports/tests/test
-  - template: ../steps/publish-test-results.yaml
-    parameters:
-      zipName: unit_tests
-      subscription: ${{ parameters.subscription }}
-      resourceGroup: ${{ parameters.resourceGroup }}
-      storageAccount: ${{ parameters.storageAccount }}
-      storageContainer: $(storageContainer)
+  - bash: |
+      echo $(subscription)
+      echo $(subscriptionKey)
+      echo $(storageContainer)
+      echo $(resourceGroup)
+      echo $(storageAccount)
+  # - template: ../steps/run-gradlew.yaml
+  #   parameters:
+  #     command: clean test -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }}
+  # - template: ../steps/zip-test-results.yaml
+  #   parameters:
+  #     zipName: test_unittests
+  #     directory: /build/reports/unittests
+  # - template: ../steps/zip-test-results.yaml
+  #   parameters:
+  #     zipName: test_gradle
+  #     directory: /build/reports/tests/test
+  # - template: ../steps/publish-test-results.yaml
+  #   parameters:
+  #     zipName: unit_tests
+  #     subscription: ${{ parameters.subscription }}
+  #     resourceGroup: ${{ parameters.resourceGroup }}
+  #     storageAccount: ${{ parameters.storageAccount }}
+  #     storageContainer: $(storageContainer)

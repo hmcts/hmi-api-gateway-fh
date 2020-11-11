@@ -16,7 +16,7 @@ parameters:
 
 steps:
   - task: AzureCLI@2
-    displayName: Upload Blob
+    displayName: Upload Test Results
     name: uploadBlob
     inputs:
       azureSubscription: ${{ parameters.subscription }}
