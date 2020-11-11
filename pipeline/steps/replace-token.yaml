@@ -1,0 +1,14 @@
+parameters:
+  - name: subscription
+    type: string
+
+steps:
+
+- task: AzurePowerShell@5
+  displayName: Replace Tokens
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'FilePath'
+    ScriptPath: '$(System.DefaultWorkingDirectory)/script/replace-token.ps1'
+    errorActionPreference: 'continue'
+    azurePowerShellVersion: 'LatestVersion'
