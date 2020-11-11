@@ -21,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
-@Narrative(text = {"In order to test that the Direct Listing Functionality is working properly",
+@Narrative(text = {"In order to test that the Hearing Functionality is working properly",
         "As a tester",
-        "I want to be able to execute the tests for Direct Listing a Hearing Request into a known Session"})
+        "I want to be able to execute the tests for Hearings API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 public class HearingsAPITest extends FunctionalTest {
