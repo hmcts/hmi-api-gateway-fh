@@ -26,7 +26,7 @@ jobs:
   - task: AzureKeyVault@1
     displayName: 'Export Secrets from KeyVault'
     inputs:
-      azureSubscription: ${{ variables.subscription }}
+      azureSubscription: ${{ parameters.subscription }}
       keyVaultName: hmi-apim-kv-${{ variables.environment}}
       secretsFilter: 'hmi-apim-sub-key'
   - script: |
