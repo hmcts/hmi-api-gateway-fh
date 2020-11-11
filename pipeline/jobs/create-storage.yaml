@@ -22,7 +22,7 @@ jobs:
     displayName: createContainer
     name: createContainer
     inputs:
-      azureSubscription: $(subscription)
+      azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
