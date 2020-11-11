@@ -160,8 +160,6 @@ stages:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
-          subscription: DTS-SHAREDSERVICES-SBOX
-          group: HMI-APIM-BUILD-SBOX
       
       - template: pipeline/jobs/export-keyvault.yaml
         parameters:
