@@ -138,6 +138,7 @@ stages:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
+          subscription: $(subscription)
 
       - template: pipeline/jobs/test-unit.yaml
         parameters:
