@@ -202,7 +202,7 @@ stages:
       # - template: pipeline/jobs/test-contract.yaml
       - template: pipeline/jobs/test-functional.yaml
         parameters:
-          displayName: Acceptance Test
+          displayName: Functional Test
           dependsOn: 
           - SmokeTest
           - ExportKeyVault
@@ -216,6 +216,8 @@ stages:
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
+          dependsOn: 
+          - FunctionalTest # disable when more agents available
 
   - stage: TestDev
     dependsOn: BuildDev
