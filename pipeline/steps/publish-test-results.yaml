@@ -25,6 +25,6 @@ steps:
       inlineScript: |
         echo "Obtaining storage key..."
         key=$(az storage account keys list -g $(resourceGroup) --account-name $(storageAccount) --query "[0].value" -o tsv)
-        echo "Uploading to blob container"
+        echo "Uploading to blob container ${{ parameters.storageContainer }}"
         for zip in $(Build.BuildId)/*; do az storage blob upload -n $zip -c ${{ parameters.storageContainer }} -f $zip --account-name ${{ parameters.storageAccount }} --account-key $key; done
     condition: succeededOrFailed()
