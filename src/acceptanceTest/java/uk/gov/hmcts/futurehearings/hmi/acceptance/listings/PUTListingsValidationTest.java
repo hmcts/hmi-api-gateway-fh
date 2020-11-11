@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PUTListingsValidationTest.class)
 @IncludeTags("Put")
+@SuppressWarnings("java:S2187")
 class PUTListingsValidationTest extends ListingsValidationTest {
 
     @Qualifier("CommonDelegate")

@@ -5,20 +5,20 @@
       "timestamp": "2020-11-13T20:20:39+00:00"
     },
     "_case": {
-      "caseIdHMCTS": "SW/90006",
-      "caseListingRequestId": "H100006",
+      "caseIdHMCTS": "616",
+      "caseListingRequestId": "616",
       "caseTitle": "Smith vs Best Company PL",
       "caseJurisdiction": "FAM",
       "caseSubType": "79",
       "caseRegistered": "2021-11-13T20:20:39+00:00",
-      "caseCourt": "1",
+      "caseCourt": "9",
       "caseComments": "Ut in irure Lorem est do laboris qui dolore.\",\n\"Elit esse nulla tempor in sit esse labore sint sint do Lorem id nisi.\",\n\"Laborum incididunt nostrud magna deserunt elit.\",\n\"In occaecat non sint ex est amet ea eiusmod nisi aliqua Lorem ad laboris.\",\n\"Proident velit eu aliquip ad aliquip labore reprehenderit in Lorem voluptate esse.",
       "caseRelatedCaseIdHMCTS": ["1","2"],
       "caseRestrictedFlag": true,
       "caseInterpreterRequiredFlag": true
     },
     "listing": {
-      "listingCourt": "300",
+      "listingCourt": "301",
       "listingAutoCreateFlag": true,
       "listingPriority": "1",
       "listingSessionType": "DS",

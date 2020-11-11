@@ -5,8 +5,8 @@
       "timestamp": "2000-12-19T11:59:59.374Z"
     },
     "_case": {
-      "caseIdHMCTS": "LA5f6b137a733aa23121a7069c",
-      "caseListingRequestId": "H10000689",
+      "caseIdHMCTS": "616",
+      "caseListingRequestId": "616",
       "caseTitle": "Smith vs Best Company PL",
       "caseJurisdiction": "FAM",
       "caseSubType": "79",
@@ -28,7 +28,7 @@
       "listingNumberAttendees": 6,
       "listingCluster": "TV",
       "listingDuration": 30,
-      "listingCourt": "300"
+      "listingCourt": "301"
     },
     "entities": []
   }

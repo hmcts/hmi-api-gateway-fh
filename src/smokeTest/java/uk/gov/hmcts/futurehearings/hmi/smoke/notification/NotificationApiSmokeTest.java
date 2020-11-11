@@ -27,6 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Notification Context")
 @Disabled("For as the endpoint for Notification API is not available")
+@SuppressWarnings("java:S2187")
 class NotificationApiSmokeTest extends SmokeTest {
 
     @Value("${notificationApiRootContext}")

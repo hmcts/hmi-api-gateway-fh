@@ -12,7 +12,7 @@
       "locationCluster": "TV",
       "locationPostCode": "MK9 2DT",
       "locationPrimaryFlag": true,
-      "locationParentCode": "CRT77",
+      "locationParentCode": "101",
       "locationActiveFrom": "2000-12-19T11:59:59.374Z",
       "locationActiveTo": "2000-12-19T11:59:59.374Z",
       "locationSecurityGuardFlag": false,

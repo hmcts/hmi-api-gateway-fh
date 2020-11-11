@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.security;
 
 import static io.restassured.RestAssured.expect;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -23,6 +24,7 @@ public class OAuthTokenGenerator {
                 grantType, clientID, clientSecret, scope);
 
         Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
+        assertEquals(httpStatus.value(),response.getStatusCode());
         return response.jsonPath().getString("access_token");
     }
 

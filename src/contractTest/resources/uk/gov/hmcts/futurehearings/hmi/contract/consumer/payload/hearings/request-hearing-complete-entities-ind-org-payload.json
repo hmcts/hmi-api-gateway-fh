@@ -28,7 +28,7 @@
       "listingNumberAttendees": 6,
       "listingCluster": "TV",
       "listingDuration": 30,
-      "listingCourt": "300"
+      "listingCourt": "301"
     },
     "entities": [
       {
@@ -36,7 +36,7 @@
         "entityTypeCode": "IND",
         "entityRoleCode": "DEF",
         "entitySubType": {
-          "entityClassCode": "IND",
+          "entityClassCode": "PERSON",
           "entityTitle": "Mr",
           "entityFirstName": "Joe",
           "entityLastName": "Bloggs"
