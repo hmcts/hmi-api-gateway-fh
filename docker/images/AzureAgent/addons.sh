@@ -62,7 +62,9 @@ echo "===> Installing Java..." \
     && add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ \
     && apt-get update \
     && apt-get install adoptopenjdk-${DEFAULT_JDK_VERSION}-openj9 -y \
-    && java -version
+    && echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" | tee -a /etc/environment \
+    && echo "JAVA_HOME_11_x64=/usr/lib/jvm/java-11-openjdk-amd64" | tee -a /etc/environment \
+    && java --version
 
 # Install Ant
 echo "===> Installing Ant..." \
