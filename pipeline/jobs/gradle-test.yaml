@@ -20,9 +20,6 @@ parameters:
   - name: subscriptionKey
     type: string
 
-  - name: apimHost
-    type: string
-
   - name: command
     type: string
 
