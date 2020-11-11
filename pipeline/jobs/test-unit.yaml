@@ -24,6 +24,9 @@ parameters:
   - name: apimHost
     type: string
 
+  - name: subscriptionKey
+    type: string
+
 jobs:
 - job: UnitTest
   dependsOn:

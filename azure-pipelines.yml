@@ -179,10 +179,11 @@ stages:
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
           apimHost: ${{ variables.apimHost }}
+          subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
   - stage: TestDev
     dependsOn: BuildDev
