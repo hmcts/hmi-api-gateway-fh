@@ -162,17 +162,19 @@ stages:
           displayName: Create Storage for Test Results
           subscription: DTS-SHAREDSERVICES-SBOX
           group: HMI-APIM-BUILD-SBOX
-
-      # - template: pipeline/jobs/update-agent.yaml
-      #   parameters:
-      #     displayName: Update Java on DevOps Agent
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-SBOX
+          group: HMI-APIM-BUILD-SBOX
 
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test SBOX
           dependsOn: 
           - CreateStorage
-          # - UpdateAgent
+          - ExportKeyVault
           subscription: ${{ variables.subscription }}
           resourceGroup: ${{ variables.resourceGroup }}
           storageAccount: ${{ variables.storageAccount }}
