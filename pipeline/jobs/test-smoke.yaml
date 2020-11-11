@@ -8,23 +8,14 @@ parameters:
 
   - name: storageContainer
     type: string
-  
+
   - name: variables
     type: object
 
-  - name: subscription
-    type: string
-
-  - name: resourceGroup
-    type: string
-
-  - name: storageAccount
-    type: string
-
-  - name: apimHost
-    type: string
-
   - name: subscriptionKey
+    type: string
+
+  - name: subscription
     type: string
 
 jobs:
@@ -38,7 +29,7 @@ jobs:
   steps:
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean smoke -DENDPOINT_SUBSCRIPTION_KEY=${{ parameters.subscription }} -DENDPOINT_URL=https://${{ parameters.apimHost }} -DENDPOINT_HOST=${{ parameters.apimHost }} -DAPI_LOG_LEVEL=DEBUG
+      command: clean smoke -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName) -DAPI_LOG_LEVEL=DEBUG
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_smoke
@@ -47,6 +38,6 @@ jobs:
     parameters:
       zipName: smoke_tests
       subscription: ${{ parameters.subscription }}
-      resourceGroup: ${{ parameters.resourceGroup }}
-      storageAccount: ${{ parameters.storageAccount }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
       storageContainer: $(storageContainer)
