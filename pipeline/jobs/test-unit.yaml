@@ -20,6 +20,10 @@ parameters:
 
   - name: storageAccount
     type: string
+
+  - name: apimHost
+    type: string
+
 jobs:
 - job: UnitTest
   dependsOn:
