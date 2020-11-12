@@ -11,9 +11,7 @@
                 </claim>
             </required-claims>
         </validate-jwt>
-        <!-- 
-            #{hostName}# 
-        -->
+        <!--  http://milan.org -->
         <set-backend-service base-url="https://www.hmcts.com/oauth/get-secure" />
         <mock-response status-code="200" content-type="application/json" />
     </inbound>
