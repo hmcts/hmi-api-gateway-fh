@@ -1,6 +1,4 @@
 {
   "deleteMethod": "C",
-  "deleteMessage": "Cancel the request as no longer needed settled out of court",
-  "listingRequestId": "lrq123",
-  "hearingIdCaseHQ": "hidchq123"
+  "deleteMessage": "Cancel Listings"
 }
