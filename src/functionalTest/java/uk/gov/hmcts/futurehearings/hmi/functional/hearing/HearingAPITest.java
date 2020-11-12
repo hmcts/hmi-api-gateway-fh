@@ -32,6 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for various endpoints"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
+@SuppressWarnings("java:S2699")
 public class HearingAPITest extends FunctionalTest {
 
     @Steps
