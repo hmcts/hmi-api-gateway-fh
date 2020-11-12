@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.sessions;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildResponsePactFromSnL;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
@@ -110,11 +111,11 @@ class GetSessionsAPIConsumerTests extends ContractTest {
     }
 
     private void verifyMandatoryResponse(Response response) {
-        assertNotNull(response.getBody().asString().contains("sessionIdCaseHQ"));
-        assertNotNull(response.getBody().asString().contains("sessionType"));
-        assertNotNull(response.getBody().asString().contains("sessionStartTime"));
-        assertNotNull(response.getBody().asString().contains("sessionDuration"));
-        assertNotNull(response.getBody().asString().contains("sessionVenueId"));
+        assertTrue(response.getBody().asString().contains("sessionIdCaseHQ"));
+        assertTrue(response.getBody().asString().contains("sessionType"));
+        assertTrue(response.getBody().asString().contains("sessionStartTime"));
+        assertTrue(response.getBody().asString().contains("sessionDuration"));
+        assertTrue(response.getBody().asString().contains("sessionVenueId"));
     }
 }
 

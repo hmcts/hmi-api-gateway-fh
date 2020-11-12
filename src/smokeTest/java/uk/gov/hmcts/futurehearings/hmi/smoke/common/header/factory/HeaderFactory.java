@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 @Slf4j
 public class HeaderFactory {
 
-    public static Map<String,Object> createStandardHMIHeader(final String targetSubscriptionID,
+    public static Map<String,String> createStandardHMIHeader(final String targetSubscriptionID,
             final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
@@ -32,6 +32,7 @@ public class HeaderFactory {
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         headersAsMap.put("Request-Processed-At", requestProcessedAt);
         headersAsMap.put("Request-Type", "ASSAULT");
-        return Collections.unmodifiableMap(headersAsMap);
+        return headersAsMap;
+        //return Collections.unmodifiableMap(headersAsMap);
     }
 }
