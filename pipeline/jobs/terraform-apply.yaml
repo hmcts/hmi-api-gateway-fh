@@ -29,6 +29,3 @@ jobs:
   - template: ../steps/tf-apply.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
-  - template: ../steps/tf-output.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
