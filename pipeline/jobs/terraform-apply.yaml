@@ -1,0 +1,31 @@
+parameters:
+  - name: subscription
+    type: string
+
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: string
+    default: ''
+
+jobs:
+- job: TerraformApply
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - download: current
+    displayName: 'Download tfplan'
+    artifact: tfplan-$(environment)
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment)'
+      targetFolder: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
+  - template: ../steps/tf-install.yaml
+  - template: ../steps/tf-init.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+  - template: ../steps/tf-apply.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}

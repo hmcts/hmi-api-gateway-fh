@@ -1,32 +1,22 @@
 parameters:
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: displayName
+    type: string
+ 
   - name: subscription
     type: string
 
-  - name: resourceGroup
-    type: string
-
-  - name: storageAccount
-    type: string
-
-  - name: dependsOn
-    type: object
-  
-  - name: displayName
-    type: string
-  
-  - name: variables
-    type: object
-
 jobs:
-- job: createStorage
+- job: CreateStorage
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - task: AzureCLI@2
     displayName: createContainer

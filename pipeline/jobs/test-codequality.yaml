@@ -1,23 +1,16 @@
 parameters:
   - name: displayName
     type: string
+
   - name: dependsOn
     type: object
-  - name: command
-    type: string
-  - name: subscription 
-    type: string
-    
+    default: ''
 
 jobs:
-- job: ${{ parameters.displayName }}
+- job: CodeQualityTest
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
-
-  pool:
-    vmImage: 'ubuntu-latest'
-  
   steps:
   - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
     displayName: 'Prepare analysis on SonarCloud'
@@ -28,7 +21,7 @@ jobs:
 
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: ${{ parameters.command }} --stacktrace -$(Psonar.login)
+      command: clean sonarqube --stacktrace
       sonarAnalysis: true
       publishJUnitResults: false
   
