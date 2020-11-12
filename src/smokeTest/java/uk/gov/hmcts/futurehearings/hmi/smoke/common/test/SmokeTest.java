@@ -36,6 +36,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("java:S5786")
 public abstract class SmokeTest {
 
     @Value("${targetInstance}")
@@ -62,7 +63,7 @@ public abstract class SmokeTest {
     @Value("${scope}")
     private String scope;
 
-    protected Map<String, Object> headersAsMap = new HashMap<>();
+    protected Map<String, String> headersAsMap = new HashMap<String,String>();
 
     protected String authorizationToken;
 

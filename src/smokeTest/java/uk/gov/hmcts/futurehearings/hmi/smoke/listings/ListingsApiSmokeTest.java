@@ -23,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Listing Context")
+@SuppressWarnings("java:S2187")
 class ListingsApiSmokeTest extends SmokeTest {
 
     @Value("${listingsApiRootContext}")
