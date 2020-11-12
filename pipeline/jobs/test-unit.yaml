@@ -1,0 +1,47 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: storageContainer
+    type: string
+
+  - name: variables
+    type: object
+
+  - name: subscriptionKey
+    type: string
+
+  - name: subscription
+    type: string
+
+jobs:
+- job: UnitTest
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/run-gradlew.yaml
+    parameters:
+      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName)
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_unit_unittests
+      directory: /build/reports/unittests
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_unit_gradle
+      directory: /build/reports/tests/test
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: unit_tests
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(resourceGroup)
+      storageAccount: $(storageAccount)
+      storageContainer: $(storageContainer)

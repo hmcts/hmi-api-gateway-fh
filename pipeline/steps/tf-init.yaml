@@ -16,9 +16,3 @@ steps:
     backendAzureRmStorageAccountName: $(devopsStorageAccount)
     backendAzureRmContainerName: $(prefix)$(product)terraform
     backendAzureRmKey: $(prefix)$(product).tfstate
-
-- task: TerraformCLI@0
-  displayName: Terraform validate
-  inputs:
-    command: validate
-    workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
