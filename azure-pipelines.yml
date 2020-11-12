@@ -87,7 +87,7 @@ stages:
         subscription: DTS-SHAREDSERVICES-PROD
         group: HMI-APIM-BUILD-PROD
 
-  - stage: BuildSbox
+  - stage: BuildSBOX
     dependsOn: PlanSbox
     variables:
       - group: HMI-APIM-BUILD-SBOX
@@ -235,7 +235,7 @@ stages:
           displayName: Code Quality Test
       
 
-  - stage: TestDev
+  - stage: TestDEV
     dependsOn: BuildDev
     pool:
       vmImage: 'ubuntu-latest'
@@ -294,7 +294,7 @@ stages:
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
 
-  - stage: TestTest
+  - stage: TestTEST
     dependsOn: BuildTest
     pool:
       vmImage: 'ubuntu-latest'
@@ -385,134 +385,49 @@ stages:
           displayName: Code Quality Test
 
 
-  - stage: BuildStg
+  - stage: BuildSTG
     dependsOn: 
       - PlanStg
       - TestSbox
       - TestDev
       - TestTest
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    variables:
+      - group: HMI-APIM-BUILD-STG
     jobs:
-    - ${{ each environment in parameters.environments }}:
-      - job:
-        steps:
-          - bash: |
-              echo "Hello ${{ environment.name }}"
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build STG
+        subscription: DTS-SHAREDSERVICES-STG
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
 
-  - stage: BuildProd
+
+  - stage: BuildPROD
     dependsOn: 
       - PlanProd
       - BuildStg
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    variables:
+      - group: HMI-APIM-BUILD-PROD
     jobs:
-    - ${{ each environment in parameters.environments }}:
-      - job:
-        steps:
-          - bash: |
-              echo "Hello ${{ environment.name }}"
-
-# - ${{ each environment in parameters.environments }}:
-
-#   - stage: ${{ environment.name }}
-#     ${{ if environment.condition }}:
-#       condition: ${{ environment.condition }}
-#     displayName: Build and Test ${{ environment.name }} APIM
-
-#     jobs:
-#     - template: pipeline/jobs/terraform.yaml
-#       parameters:
-#         displayName: Build infrastructure with Terraform
-#         subscription: ${{ environment.subscription }} 
-#         group: ${{ environment.group }}
-
-#     - template: pipeline/jobs/remove-default-apis.yaml
-#       parameters:
-#         displayName: Remove default APIS
-#         subscription: ${{ environment.subscription }}
-#         dependsOn: Terraform
-#         group: ${{ environment.group }}
-
-#     - template: pipeline/jobs/apply-hostname.yaml
-#       parameters:
-#         displayName: Apply Custom Domain Configuration
-#         dependsOn: Terraform
-#         hostName: ${{ environment.custom_domain }}
-#         group: ${{ environment.group }}
-
-#     - ${{ if environment.tests_gradle }}:
-#       - template: pipeline/jobs/create-storage.yaml
-#         parameters:
-#           displayName: Create Storage for Test Results
-#           subscription: ${{ environment.subscription }}
-#           dependsOn: Terraform
-#           resourceGroup: $(resourceGroup)
-#           storageAccount: $(storageAccount)
-#           variables:
-#             resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-#             storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-
-#     - ${{ if environment.tests_gradle }}:
-#       - ${{ each test in environment.tests_gradle }}:
-#         - template: pipeline/jobs/gradle-test.yaml
-#           parameters:
-#             displayName: ${{ test.name }}
-#             dependsOn:
-#             - Terraform
-#             - createStorage
-#             - ApplyHostName
-#             - ${{ if test.dependsOn }}:
-#               - ${{ test.dependsOn }}
-#             subscription: ${{ environment.subscription }}
-#             pool: hmi-${{ environment.name }}
-#             apimHost: ${{ environment.custom_domain }}
-#             command: ${{ test.command }}
-#             logLevel: ${{ test.logLevel }}
-#             pactBrokerUrl: ${{ test.brokerUrl }}
-#             subscriptionKey: $(subscriptionKey)
-#             resourceGroup: $(resourceGroup)
-#             storageAccount: $(storageAccount)
-#             storageContainer: $(storageContainer)
-#             variables:
-#               subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
-#               resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-#               storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-#               storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
-
-#     - ${{ if environment.tests_security }}:
-#       - ${{ each test in environment.tests_security }}:
-#         - ${{ each url in test.testUrl }}:
-#           - template: pipeline/jobs/security-test.yaml
-#             parameters:
-#               displayName: ${{ url.name }}
-#               dependsOn:
-#               - Terraform
-#               - createStorage
-#               - ApplyHostName
-#               subscription: ${{ environment.subscription }}
-#               registry: ${{ environment.registry }}
-#               repository: ${{ test.repository }}
-#               containerRegistry: ${{ test.containerRegistry }}
-#               dockerfile: docker/images/${{ test.name }}/Dockerfile
-#               tags: latest
-#               testUrl: ${{ url.target }}
-#               securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-#               resourceGroup: $(resourceGroup)
-#               storageAccount: $(storageAccount)
-#               storageContainer: $(storageContainer)
-#               variables:
-#                 resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-#                 storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-#                 storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
-    
-#     - ${{ if environment.tests_sonarcloud }}:
-#       - ${{ each test in environment.tests_sonarcloud }}:
-#         - template: pipeline/jobs/sonarqube-test.yaml
-#           parameters:
-#             displayName: ${{ test.name }}
-#             dependsOn:
-#             - UnitTest
-#             - SmokeTest
-#             - AcceptanceTest
-#             - FunctionalTest
-#             subscription: ${{ environment.subscription }}
-#             command: ${{ test.command }}
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
