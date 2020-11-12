@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.common.test;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory.HeaderFactory.createStandardHMIHeader;
 import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -15,7 +16,6 @@ import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -92,14 +92,15 @@ public abstract class SmokeTest {
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
 
-        headersAsMap.put("Content-Type", "application/json");
+        /*headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", DESTINATION_SYSTEM);
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
+        headersAsMap.put("Request-Type", "ASSAULT");*/
+        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
     }
 
     @BeforeEach

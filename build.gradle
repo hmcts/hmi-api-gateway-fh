@@ -141,7 +141,7 @@ task functional(type: Test) {
     description = 'Executes functional tests'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/functional/hearing/**"
+    include "uk/gov/hmcts/futurehearings/hmi/functional/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -252,7 +252,6 @@ sonarqube {
         property "sonar.organization", "hmcts"
         property "sonar.sources", "src/main/java,pipeline,infrastructure"
         property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/contractTest/java,src/functionalTest/java"
-        //property "sonar.login", project.gradle.startParameter.projectProperties.get("sonar.login")
     }
 }
 project.tasks['sonarqube'].group = "Verification"

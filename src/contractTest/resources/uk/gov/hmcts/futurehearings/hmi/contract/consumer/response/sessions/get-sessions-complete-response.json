@@ -2,19 +2,46 @@
   "sessionsResponse": {
     "sessions": [
       {
-        "sessionIdCaseHQ": "973434",
+        "sessionIdCaseHQ": "446877047",
         "sessionType": "ADHOC",
-        "sessionJudgeType": "MEM",
         "sessionJudges": [
           {
-            "sessionJudgeId": "shawn.smith@hmcts.net",
+            "sessionJudgeId": "oli.button@hmcts.net",
             "isPresiding": true
           }
         ],
-        "sessionStartTime": "2020-09-25T00:00:00Z",
+        "sessionStartTime": "2020-11-11T10:00:00Z",
         "sessionDuration": 360,
-        "sessionVenueId": "300",
-        "sessionRoomId": "301"
+        "sessionVenueId": "318",
+        "sessionRoomId": "318"
+      },
+      {
+        "sessionIdCaseHQ": "446867331",
+        "sessionType": "ADHOC",
+        "sessionJudges": [
+          {
+            "sessionJudgeId": "gcastner",
+            "isPresiding": true
+          }
+        ],
+        "sessionStartTime": "2020-10-02T09:00:00Z",
+        "sessionDuration": 360,
+        "sessionVenueId": "318",
+        "sessionRoomId": "318"
+      },
+      {
+        "sessionIdCaseHQ": "446875393",
+        "sessionType": "ADHOC",
+        "sessionJudges": [
+          {
+            "sessionJudgeId": "joh7",
+            "isPresiding": true
+          }
+        ],
+        "sessionStartTime": "2020-11-05T10:00:00Z",
+        "sessionDuration": 360,
+        "sessionVenueId": "318",
+        "sessionRoomId": "318"
       }
     ]
   }
