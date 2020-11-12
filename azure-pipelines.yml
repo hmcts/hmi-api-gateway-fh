@@ -178,7 +178,7 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn: 
-          # - UnitTest
+          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -238,11 +238,62 @@ stages:
 
   - stage: TestDev
     dependsOn: BuildDev
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: HMI-APIM-BUILD-DEV
     jobs:
-      - job: TestDev
-        steps:
-          - bash: |
-              echo "Hello dev"
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-DEV
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-DEV
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn: 
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn: 
+          - UnitTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
 
   - stage: TestTest
     dependsOn: BuildTest
