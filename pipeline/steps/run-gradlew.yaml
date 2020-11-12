@@ -1,9 +1,11 @@
 parameters:
   - name: command
     type: string
+
   - name: sonarAnalysis
     type: boolean
     default: false
+
   - name: publishJUnitResults
     type: boolean
     default: true
