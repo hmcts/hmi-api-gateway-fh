@@ -32,7 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Test to Check the JWT Token Generator for OAuth, Note : In case of tests breaking - The client secret may change once a year")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"java:S2187","java:S5786","java:S2699"})
 class OAuthTokenGeneratorTest {
 
     @Value("${token_apiURL}")
