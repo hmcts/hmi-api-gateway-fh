@@ -19,7 +19,9 @@ parameters:
     type: string
 
 jobs:
-- job: UnitTest
+- job: ContractTest
+  pool:
+    name: hmi-$(environment)
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
