@@ -37,7 +37,7 @@ jobs:
       command: pactPublish -DPACT_BROKER_FULL_URL=$(pactBrokerUrl)
   # - template: ../steps/run-gradlew-agent.yaml
   #   parameters:
-  #     command: pactVerify -Ppact.verifier.publishResults=true -DPACT_BROKER_FULL_URL=$(pactBrokerUrl)
+  #     command: pactVerify -Ppact.verifier.publishResults=true
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_contract_gradle
