@@ -32,7 +32,7 @@ jobs:
       command: clean functional -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName)
   - template: ../steps/zip-test-results.yaml
     parameters:
-      zipName: test_functional
+      zipName: test_functional_gradle
       directory: /build/reports/tests/functional
   - template: ../steps/zip-test-results.yaml
     parameters:

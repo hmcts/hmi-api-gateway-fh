@@ -192,7 +192,7 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn: 
-          # - SmokeTest
+          - SmokeTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -202,12 +202,26 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      # - template: pipeline/jobs/test-contract.yaml
+      - template: pipeline/jobs/test-contract.yaml
+        parameters:
+          displayName: Contract Test
+          dependsOn: 
+          - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
           dependsOn: 
-          # - ContractTest
+          - ContractTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -220,8 +234,7 @@ stages:
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
-          dependsOn: 
-          # - FunctionalTest # disable when more agents available
+      
 
   - stage: TestDev
     dependsOn: BuildDev
