@@ -25,9 +25,18 @@ stages:
           subscription: DTS-SHAREDSERVICES-TEST
           group: HMI-APIM-BUILD-TEST
           environment: test
-  
-  - stage: PlanTEST
+
+  - stage: DeleteAPIM
     dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/delete-resources.yaml
+      parameters:
+        subscription: DTS-SHAREDSERVICES-TEST
+        resourceGroup: hmi-apim-test-rg
+        apim: hmi-apim-svc-test
+
+  - stage: PlanTEST
+    dependsOn: DeleteAPIM
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
