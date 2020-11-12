@@ -10,203 +10,424 @@ parameters:
     default:
     - name: sbox
       subscription: DTS-SHAREDSERVICES-SBOX
-      registry: DTS-SS-PRIVATE-SBOX
       group: HMI-APIM-BUILD-SBOX
-      custom_domain: hmi-apim.sandbox.platform.hmcts.net
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
-      - name: ContractTest
-        command: contract
-        logLevel: info
-        brokerUrl: http://hmi-pact.sandbox.platform.hmcts.net
-        serenity: false
-        dependsOn: AcceptanceTest
-      - name: FunctionalTest
-        command: functional
-        logLevel: info
-        dependsOn: AcceptanceTest
-      # tests_security:
-      # - name: ApiZapScan
-      #   containerRegistry: ssprivatesbox.azurecr.io
-      #   repository: hmi/apim-tests-owasp
-      #   testUrl:
-      #   - name: API1
-      #     target: https://www.example.com/openapi.json
-      tests_sonarcloud:
-      - name: CodeQualityTest
-        command: sonarqube
 
     - name: dev
       subscription: DTS-SHAREDSERVICES-DEV
       group: HMI-APIM-BUILD-DEV
-      custom_domain: hmi-apim.preview.platform.hmcts.net
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
 
     - name: test
       subscription: DTS-SHAREDSERVICES-TEST
       group: HMI-APIM-BUILD-TEST
-      custom_domain: hmi-apim.perftest.platform.hmcts.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-      tests_gradle:
-      - name: UnitTest
-        command: test
-        logLevel: info
-      - name: SmokeTest
-        command: smoke
-        logLevel: debug
-        dependsOn: UnitTest
-      - name: AcceptanceTest
-        command: acceptance
-        logLevel: debug
-        dependsOn: SmokeTest
-      - name: ContractTest
-        command: contract
-        logLevel: info
-        brokerUrl: http://hmi-pact.test.platform.hmcts.net
-        dependsOn: AcceptanceTest
-      - name: FunctionalTest
-        command: functional
-        logLevel: info
-        dependsOn: AcceptanceTest
-      tests_sonarcloud:
-      - name: CodeQualityTest
-        command: sonarqube
 
     - name: stg
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
-      custom_domain: hmi-apim.staging.platform.hmcts.net
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
+    - name: prod
+      subscription: DTS-SHAREDSERVICES-PROD
+      group: HMI-APIM-BUILD-PROD
 
 variables:
   - group: HMI-APIM-Common
 
 stages:
-
-- ${{ each environment in parameters.environments }}:
-
-  - stage: ${{ environment.name }}
-    ${{ if environment.condition }}:
-      condition: ${{ environment.condition }}
-    displayName: Build and Test ${{ environment.name }} APIM
-
+  - stage: Validate
     jobs:
-    - template: pipeline/jobs/terraform.yaml
-      parameters:
-        displayName: Build infrastructure with Terraform
-        subscription: ${{ environment.subscription }} 
-        group: ${{ environment.group }}
+    - ${{ each environment in parameters.environments }}:
+      - template: pipeline/jobs/terraform-validate.yaml
+        parameters:
+          displayName: Validate ${{ environment.name }}
+          subscription: ${{ environment.subscription }} 
+          group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
+  - stage: PlanSBOX
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
+        group: HMI-APIM-BUILD-SBOX
+
+  - stage: PlanDEV
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+        group: HMI-APIM-BUILD-DEV
+
+  - stage: PlanTEST
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+        group: HMI-APIM-BUILD-TEST
+
+  - stage: PlanSTG
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan STG
+        subscription: DTS-SHAREDSERVICES-STG
+        group: HMI-APIM-BUILD-STG
+
+  - stage: PlanPROD
+    dependsOn: Validate
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+        group: HMI-APIM-BUILD-PROD
+
+  - stage: BuildSBOX
+    dependsOn: PlanSbox
+    variables:
+      - group: HMI-APIM-BUILD-SBOX
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
-        subscription: ${{ environment.subscription }}
-        dependsOn: Terraform
-        group: ${{ environment.group }}
-
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         displayName: Apply Custom Domain Configuration
-        dependsOn: Terraform
-        hostName: ${{ environment.custom_domain }}
-        group: ${{ environment.group }}
+        dependsOn: TerraformApply
 
-    - ${{ if environment.tests_gradle }}:
+  - stage: BuildDEV
+    dependsOn: PlanDev
+    variables:
+      - group: HMI-APIM-BUILD-DEV
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+
+  - stage: BuildTEST
+    dependsOn: PlanTest
+    variables:
+      - group: HMI-APIM-BUILD-TEST
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+
+  - stage: TestSBOX
+    dependsOn: BuildSbox
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: HMI-APIM-BUILD-SBOX
+    jobs:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
-          subscription: ${{ environment.subscription }}
-          dependsOn: Terraform
-          resourceGroup: $(resourceGroup)
-          storageAccount: $(storageAccount)
+          subscription: DTS-SHAREDSERVICES-SBOX
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-SBOX
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn: 
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
           variables:
-            resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-            storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn: 
+          - UnitTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-    - ${{ if environment.tests_gradle }}:
-      - ${{ each test in environment.tests_gradle }}:
-        - template: pipeline/jobs/gradle-test.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn:
-            - Terraform
-            - createStorage
-            - ApplyHostName
-            - ${{ if test.dependsOn }}:
-              - ${{ test.dependsOn }}
-            subscription: ${{ environment.subscription }}
-            pool: hmi-${{ environment.name }}
-            apimHost: ${{ environment.custom_domain }}
-            command: ${{ test.command }}
-            logLevel: ${{ test.logLevel }}
-            pactBrokerUrl: ${{ test.brokerUrl }}
-            subscriptionKey: $(subscriptionKey)
-            resourceGroup: $(resourceGroup)
-            storageAccount: $(storageAccount)
-            storageContainer: $(storageContainer)
-            variables:
-              subscriptionKey: $[dependencies.Terraform.outputs['terraformOutput.subscriptionKey']]
-              resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-              storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-              storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-    - ${{ if environment.tests_security }}:
-      - ${{ each test in environment.tests_security }}:
-        - ${{ each url in test.testUrl }}:
-          - template: pipeline/jobs/security-test.yaml
-            parameters:
-              displayName: ${{ url.name }}
-              dependsOn:
-              - Terraform
-              - createStorage
-              - ApplyHostName
-              subscription: ${{ environment.subscription }}
-              registry: ${{ environment.registry }}
-              repository: ${{ test.repository }}
-              containerRegistry: ${{ test.containerRegistry }}
-              dockerfile: docker/images/${{ test.name }}/Dockerfile
-              tags: latest
-              testUrl: ${{ url.target }}
-              securityRules: https://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf
-              resourceGroup: $(resourceGroup)
-              storageAccount: $(storageAccount)
-              storageContainer: $(storageContainer)
-              variables:
-                resourceGroup: $[dependencies.Terraform.outputs['terraformOutput.resourceGroup']]
-                storageAccount: $[dependencies.Terraform.outputs['terraformOutput.storageAccount']]
-                storageContainer: $[dependencies.createStorage.outputs['createContainer.container']]
-    
-    - ${{ if environment.tests_sonarcloud }}:
-      - ${{ each test in environment.tests_sonarcloud }}:
-        - template: pipeline/jobs/sonarqube-test.yaml
-          parameters:
-            displayName: ${{ test.name }}
-            dependsOn:
-            - UnitTest
-            - SmokeTest
-            - AcceptanceTest
-            - FunctionalTest
-            subscription: ${{ environment.subscription }}
-            command: ${{ test.command }}
+      - template: pipeline/jobs/test-contract.yaml
+        parameters:
+          displayName: Contract Test
+          dependsOn: 
+          - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Functional Test
+          dependsOn: 
+          - ContractTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+      
+
+  - stage: TestDEV
+    dependsOn: BuildDev
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: HMI-APIM-BUILD-DEV
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-DEV
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-DEV
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn: 
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn: 
+          - UnitTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+
+  - stage: TestTEST
+    dependsOn: BuildTest
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: HMI-APIM-BUILD-TEST
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-TEST
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-TEST
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn: 
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn: 
+          - UnitTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn: 
+          - SmokeTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-contract.yaml
+        parameters:
+          displayName: Contract Test
+          dependsOn: 
+          - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Functional Test
+          dependsOn: 
+          - ContractTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+
+
+  - stage: BuildSTG
+    dependsOn: 
+      - PlanStg
+      - TestSbox
+      - TestDev
+      - TestTest
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    variables:
+      - group: HMI-APIM-BUILD-STG
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build STG
+        subscription: DTS-SHAREDSERVICES-STG
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+
+
+  - stage: BuildPROD
+    dependsOn: 
+      - PlanProd
+      - BuildStg
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    variables:
+      - group: HMI-APIM-BUILD-PROD
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
