@@ -21,7 +21,7 @@ jobs:
 
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean sonarqube --stacktrace -$(Psonar.login)
+      command: clean sonarqube --stacktrace
       sonarAnalysis: true
       publishJUnitResults: false
   
