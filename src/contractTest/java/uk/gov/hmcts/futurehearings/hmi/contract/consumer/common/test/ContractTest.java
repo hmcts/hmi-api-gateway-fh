@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test;
 
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.header.factory.HeaderFactory.createStandardSnLHeader;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public abstract class ContractTest {
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
 
-        headersAsMap.put("Content-Type", "application/json");
+       /* headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         //Only Commenting out in this step as this is not required as of the moment for the McGirr Deployment
         //headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
@@ -60,6 +61,7 @@ public abstract class ContractTest {
         headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
         headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
         headersAsMap.put("Request-Type", "ASSAULT");
-        headersAsMap.put("Authorization", "Bearer "+getAuthorizationToken());
+        headersAsMap.put("Authorization", "Bearer "+getAuthorizationToken());*/
+        headersAsMap = createStandardSnLHeader(getAuthorizationToken(),"S&L");
     }
 }

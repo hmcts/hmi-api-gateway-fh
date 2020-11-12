@@ -49,12 +49,8 @@ public class ResourcesResponseVerifier {
 
     public static void  thenValidateResponseForCreate(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(201, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 201");
-            assertEquals("The request was received successfully.", responseMap.get(("description")),"Response Code Description Validation:");
-            getObjStep().pass("Got the expected description: " + responseMap.get(("description")));
-
         }
         catch (AssertionError e){
             getObjStep().fail("Exception in "+e.getMessage());

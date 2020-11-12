@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.test;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -68,6 +69,7 @@ public abstract class FunctionalTest {
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
+        this.setTargetSubscriptionKey(targetSubscriptionKey);
 
         this.authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,
@@ -76,17 +78,6 @@ public abstract class FunctionalTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "MOCK");
-        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
-
-
-
+        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
     }
 }

@@ -53,7 +53,6 @@ public class ListingsResponseVerifier {
     }
 
     public static void thenValidateResponseForUpdate(Response response) {
-
         try{
             assertEquals(204, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 204");
