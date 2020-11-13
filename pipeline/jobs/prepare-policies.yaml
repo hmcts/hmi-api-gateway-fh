@@ -15,8 +15,6 @@ jobs:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
   steps:
   - template: ../steps/replace-token.yaml
   - template: ../steps/file-copy.yaml
