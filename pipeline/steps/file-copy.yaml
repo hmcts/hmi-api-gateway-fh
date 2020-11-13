@@ -3,27 +3,11 @@ parameters:
     type: string
 
 steps:
-  - task: AzureCLI@2
-    displayName: Upload Test Results
-    name: uploadBlob
-    inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        echo "Obtaining storage key..."
-        key=$(az storage account keys list -g $(devopsResourceGroup) --account-name hmiapimpolicies$(environment) --query "[0].value" -o tsv)
-        echo "Uploading to blob container"
-        container="policy-"$(Build.BuildId)
-        az storage container create --name $container --account-name hmiapimpolicies$(environment) --public-access blob --account-key $key
-        for policy in $(System.DefaultWorkingDirectory)/infrastructure/template/*; do az storage blob upload -n $policy -c $container -f $policy --account-name hmiapimpolicies$(environment) --account-key $key; done
-
-# steps:
-# - task: AzureFileCopy@4
-#   inputs:
-#     SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/*'
-#     azureSubscription: ${{ parameters.subscription }}
-#     Destination: 'AzureBlob'
-#     storage: 'hmiapimpolicies$(environment)'
-#     ContainerName: 'policy-$(Build.BuildId)'
-#     sasTokenTimeOutInMinutes: '120'
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/'
+    azureSubscription: ${{ parameters.subscription }}
+    Destination: 'AzureBlob'
+    storage: 'hmiapimpolicies$(environment)'
+    ContainerName: 'policy-$(Build.BuildId)'
+    sasTokenTimeOutInMinutes: '120'
