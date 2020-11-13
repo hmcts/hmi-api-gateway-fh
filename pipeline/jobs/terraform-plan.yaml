@@ -8,15 +8,8 @@ parameters:
   - name: displayName
     type: string
 
-  - name: dependsOn
-    type: string
-    default: ''
-
 jobs:
-- job: Terraform
-  dependsOn:
-  - ${{ if parameters.dependsOn }}:
-    - ${{ parameters.dependsOn }}
+- job: TerraformPlan
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
@@ -24,18 +17,9 @@ jobs:
     vmImage: 'ubuntu-18.04'
   steps:
   - template: ../steps/tf-install.yaml
-  #- template: ../steps/tf-test.yaml
-   # parameters:
-   #   subscription: ${{ parameters.subscription }}
   - template: ../steps/tf-init.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
   - template: ../steps/tf-plan.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
-  - template: ../steps/tf-apply.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
-  - template: ../steps/tf-output.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
