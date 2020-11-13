@@ -1,0 +1,103 @@
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="invalidKeys" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"hearing_date","hearing_venue_id","hearing_room_id","hearing_session_id_casehq","hearing_case_id_hmcts","hearing_id_casehq"};
+                bool invalidKey = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                        {
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
+                                break;
+                            }
+                        }
+                        if(!keyFound){
+                            invalidKey = true;
+                            break;
+                        }
+                    }
+                }
+
+                return invalidKey;
+            }" />
+        <choose>
+            <when condition="@(context.Request.Url.Query.Count > 6 || (bool)context.Variables["invalidKeys"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("statusCode", 400),
+                            new JProperty("message", "Invalid query parameter/s in the request URL.")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+					<return-response>
+	                    <set-status code="200" />
+	                    <set-header name="Content-Type">
+	    					<value>application/json</value>
+						</set-header>
+	                    <set-body>@{
+	                        var data = new JArray();
+	                        JObject recordOne = new JObject(
+	                            new JProperty("apiVersion", "V1.00103"),
+								new JProperty("transactionIdCaseHQ", "5f2bffce09fb0feadaf7b906"),
+  								new JProperty("transactionIdHMCTS", "5f2bffcea47aedacc86d35cf"),
+  								new JProperty("timeStamp", "12:15:22"),
+  								new JProperty("listingId", "5f2bffcec0d5d73e929923fa"),
+  								new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7488"),
+  								new JProperty("hearingType", "Crime"),
+  								new JProperty("hearingPriority", "High"),
+  								new JProperty("hearingDate", "2020-01-28T07:57:08 -00:00"),
+  								new JProperty("hearingStartTime", "08:45"),
+  								new JProperty("hearingEndTime", "09:00"),
+  								new JProperty("hearingWelshLanguage", "No"),
+  								new JProperty("hearingPrivate", "Yes"),
+  								new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+  								new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+  								new JProperty("hearingTranslatorRequired", "No"),
+  								new JProperty("hearingTranslatorLanguage", "n/a"),
+  								new JProperty("hearingOutcome", "To be hanged till death"),
+  								new JProperty("hearingCreatedDate", "2019-12-28T07:57:08 -00:00"),
+  								new JProperty("hearingCreatedBy", "Dimitry Mascaranhus"),
+  								new JProperty("hearingParticipantId", "5f2bffce90a69eb81aaec725"),
+  								new JProperty("hearingVenueId", "V3455"),
+  								new JProperty("hearingRoomId", "R2345"),
+  								new JProperty("hearingJudgeId", "HJ123")
+	                            
+	                        );
+	                        data.Add(recordOne);
+	                        return data.ToString();
+	                    }</set-body>
+	                </return-response>
+                </when>
+		</choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

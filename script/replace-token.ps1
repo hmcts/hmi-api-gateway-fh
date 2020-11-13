@@ -9,8 +9,7 @@ Foreach-Object {
       Write-Host 'Before' $content
       $content -replace  '#{hostName}#','http://milan.org' | Set-Content $_.FullName
       Write-Host "** Updated Token in File:  " $_.FullName
-      $afterContent = Get-Content $_.FullName
-      Write-Host 'After' $afterContent
+      Write-Host 'After' $content
     } 
 }
 Write-Host 'Replacement complete.'

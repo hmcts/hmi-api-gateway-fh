@@ -1,0 +1,16 @@
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service base-url="https://www.hmcts.com/request-hearings/health-check" />
+        <mock-response status-code="200" content-type="application/json" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
