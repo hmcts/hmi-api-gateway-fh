@@ -92,7 +92,7 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
-    - template: prepare-policies.yaml
+    - template: pipeline/jobs/prepare-policies.yaml
       parameters:
         displayName: Prepare API Policies
         subscription: DTS-SHAREDSERVICES-SBOX 
@@ -116,7 +116,7 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
-    - template: prepare-policies.yaml
+    - template: pipeline/jobs/prepare-policies.yaml
       parameters:
         displayName: Prepare API Policies
         subscription: DTS-SHAREDSERVICES-DEV
@@ -140,7 +140,7 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
-    - template: prepare-policies.yaml
+    - template: pipeline/jobs/prepare-policies.yaml
       parameters:
         displayName: Prepare API Policies
         subscription: DTS-SHAREDSERVICES-TEST
