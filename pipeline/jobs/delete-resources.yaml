@@ -12,7 +12,7 @@ jobs:
 - job: deleteAPIM
   displayName: Delete Resources
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   steps:
   - script: |
       sudo apt-get update
