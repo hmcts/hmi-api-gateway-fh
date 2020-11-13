@@ -5,7 +5,7 @@ parameters:
 steps:
 - task: AzureFileCopy@4
   inputs:
-    SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/'
+    SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/*'
     azureSubscription: ${{ parameters.subscription }}
     Destination: 'AzureBlob'
     storage: 'hmiapimpolicies$(environment)'
