@@ -15,6 +15,9 @@ jobs:
   pool:
     vmImage: 'ubuntu-18.04'
   steps:
+  - template: ../steps/replace-token.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
   - download: current
     displayName: 'Download tfplan'
     artifact: tfplan-$(environment)
