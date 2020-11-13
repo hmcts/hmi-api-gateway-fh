@@ -13,7 +13,7 @@ jobs:
 - job: TerraformApply
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   steps:
   - download: current
     displayName: 'Download tfplan'
