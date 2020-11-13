@@ -42,7 +42,7 @@ resource "azurerm_template_deployment" "apim-policy" {
     },
     "variables": {
         "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
-        "repository": "[concat(parameters('repoBaseUrl'), parameters('buildId'), '/'')]"
+        "repository": "[concat(parameters('repoBaseUrl'), parameters('buildId'), '/')]"
     },
     "resources": [
         {
