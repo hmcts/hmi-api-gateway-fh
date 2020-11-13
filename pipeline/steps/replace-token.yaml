@@ -4,11 +4,16 @@ parameters:
 
 steps:
 
-- task: AzurePowerShell@5
-  displayName: Replace Tokens
+- task: replacetokens@3
+  displayName: Replace Tokens in Policy files
   inputs:
-    azureSubscription: ${{ parameters.subscription }}
-    ScriptType: 'FilePath'
-    ScriptPath: '$(System.DefaultWorkingDirectory)/script/replace-token.ps1'
-    errorActionPreference: 'continue'
-    azurePowerShellVersion: 'LatestVersion'
+    targetFiles: '**/*-policy.xml'
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'warn'
+    keepToken: false
+    tokenPrefix: '#{'
+    tokenSuffix: '}#'
+    useLegacyPattern: false
+    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
+    enableTelemetry: true
