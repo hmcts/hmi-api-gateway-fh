@@ -147,7 +147,7 @@ stages:
   - stage: TestSBOX
     dependsOn: BuildSbox
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-18.04'
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
@@ -238,7 +238,7 @@ stages:
   - stage: TestDEV
     dependsOn: BuildDev
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-18.04'
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
@@ -297,7 +297,7 @@ stages:
   - stage: TestTEST
     dependsOn: BuildTest
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'ubuntu-18.04'
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
