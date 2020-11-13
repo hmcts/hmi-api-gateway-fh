@@ -24,7 +24,7 @@ jobs:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   steps:
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-test.yaml
