@@ -15,6 +15,8 @@ jobs:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
   displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'windows-latest'
   steps:
   - template: ../steps/replace-token.yaml
   - template: ../steps/file-copy.yaml
