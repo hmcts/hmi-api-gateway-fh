@@ -34,7 +34,7 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "repoBaseUrl": {
             "type": "String",
-            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/"
+            "defaultValue": "https://hmiapimpoliciessbox.blob.core.windows.net/policy-1/"
         },
         "repoBranch": {
             "type": "String"
@@ -55,7 +55,7 @@ resource "azurerm_template_deployment" "apim-policy" {
             "name": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'), '/policy')]",
             "properties": {
                 "format": "[parameters('format')]",
-                "value": "[concat(variables('repository'), parameters('templateFile'))]"
+                "value": "[concat(parameters('repoBaseUrl'), parameters('templateFile'))]"
             }
         }
     ],
