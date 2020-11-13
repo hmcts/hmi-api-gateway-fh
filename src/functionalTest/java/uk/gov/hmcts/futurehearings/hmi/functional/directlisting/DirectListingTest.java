@@ -33,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for Direct Listing a Hearing Request into a known Session"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
+@SuppressWarnings("java:S2699")
 public class DirectListingTest extends FunctionalTest {
 
     @Value("${sessionsRootContext}")

@@ -16,9 +16,9 @@ steps:
     inputs:
       gradleWrapperFile: 'gradlew'
       workingDirectory: '$(System.DefaultWorkingDirectory)'
-      tasks: clean ${{ parameters.command }}
+      tasks: ${{ parameters.command }}
       publishJUnitResults: ${{ parameters.publishJUnitResults }}
       testResultsFiles: '**/TEST-*.xml'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
+      javaHomeOption: 'Path'
+      jdkDirectory: '/usr/lib/jvm/adoptopenjdk-11-openj9-amd64/'
       sonarQubeRunAnalysis: ${{ parameters.sonarAnalysis }}

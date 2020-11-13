@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PUTResourcesByUserValidationTest.class)
 @IncludeTags("Put")
+@SuppressWarnings("java:S2187")
 class PUTResourcesByUserValidationTest extends ResourceValidationTest {
 
     @Qualifier("CommonDelegate")
