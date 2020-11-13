@@ -92,10 +92,15 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
+    - template: prepare-policies.yaml
+      parameters:
+        displayName: Prepare API Policies
+        subscription: DTS-SHAREDSERVICES-SBOX 
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
         displayName: Build SBOX
         subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: PreparePolicies
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
@@ -111,10 +116,15 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
+    - template: prepare-policies.yaml
+      parameters:
+        displayName: Prepare API Policies
+        subscription: DTS-SHAREDSERVICES-DEV
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
         displayName: Build DEV
         subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: PreparePolicies
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
@@ -130,10 +140,15 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
+    - template: prepare-policies.yaml
+      parameters:
+        displayName: Prepare API Policies
+        subscription: DTS-SHAREDSERVICES-TEST
     - template: pipeline/jobs/terraform-apply.yaml
       parameters:
         displayName: Build TEST
         subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: PreparePolicies
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS

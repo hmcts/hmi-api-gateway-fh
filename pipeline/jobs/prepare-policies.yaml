@@ -1,0 +1,24 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: subscription
+    type: string
+
+jobs:
+- job: PreparePolicies
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
+  steps:
+  - template: ../steps/replace-token.yaml
+  - template: ../steps/file-copy.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}

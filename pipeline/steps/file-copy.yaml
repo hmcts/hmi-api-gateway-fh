@@ -1,0 +1,13 @@
+parameters:
+  - name: subscription
+    type: string
+
+steps:
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/'
+    azureSubscription: ${{ parameters.subscription }}
+    Destination: 'AzureBlob'
+    storage: 'hmiapimpolicies$(environment)'
+    ContainerName: 'policy-$(Build.BuildId)'
+    sasTokenTimeOutInMinutes: '120'
