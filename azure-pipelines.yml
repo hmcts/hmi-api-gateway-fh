@@ -2,12 +2,25 @@
 trigger:
   - none
 
-stages:
-  - stage: One
-    variables: 
-      my_var: "MY Variable"
-    jobs:
-    - job:
-      steps:
-      - script: |
-          echo $(my_var)
+jobs:
+  - job:
+    steps:
+    - script: |
+        echo Build.SourceVersion $(Build.SourceVersion)
+        echo Build.Repository.Git.SubmoduleCheckout $(Build.Repository.Git.SubmoduleCheckout)
+        echo Build.DefinitionName $(Build.DefinitionName)
+        echo Build.Reason $(Build.Reason)
+        echo Build.Repository.LocalPath $(Build.Repository.LocalPath)
+        ls $(Build.Repository.LocalPath)/infrastructure/template/
+        echo ""
+        cat $(Build.Repository.LocalPath)/infrastructure/template/api-op-health-check-policy.xml
+        echo Build.Repository.Name $(Build.Repository.Name)
+        echo Build.SourceBranch $(Build.SourceBranch)
+        echo Build.SourceBranchName $(Build.SourceBranchName)
+        echo Build.SourcesDirectory $(Build.SourcesDirectory)
+        ls $(Build.SourcesDirectory)/infrastructure/template/
+        echo ""
+        cat $(Build.SourcesDirectory)/infrastructure/template/api-op-health-check-policy.xml
+        echo Build.TriggeredBy.DefinitionName $(Build.TriggeredBy.DefinitionName)
+        echo ""
+        ls /home/vsts/work/1/s/infrastructure/template/
