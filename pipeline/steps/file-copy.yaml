@@ -5,7 +5,11 @@ parameters:
 steps:
 - task: AzureFileCopy@4
   inputs:
+<<<<<<< HEAD
     SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/'
+=======
+    SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/*'
+>>>>>>> parent of 09947f5... use script not filecopy
     azureSubscription: ${{ parameters.subscription }}
     Destination: 'AzureBlob'
     storage: 'hmiapimpolicies$(environment)'
