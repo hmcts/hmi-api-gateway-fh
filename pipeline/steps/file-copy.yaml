@@ -16,7 +16,7 @@ steps:
         echo "Uploading to blob container"
         container="policy-"$(Build.BuildId)
         az storage container create --name $container --account-name hmiapimpolicies$(environment) --public-access blob --account-key $key
-        for policy in $(Build.BuildId)/*; do az storage blob upload -n $policy -c $container -f $policy --account-name hmiapimpolicies$(environment) --account-key $key; done
+        for policy in $(System.DefaultWorkingDirectory)/infrastructure/template/*; do az storage blob upload -n $policy -c $container -f $policy --account-name hmiapimpolicies$(environment) --account-key $key; done
 
 # steps:
 # - task: AzureFileCopy@4
