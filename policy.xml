@@ -1,0 +1,18 @@
+<policies>
+    <inbound>
+        <set-header name="Company-Name" exists-action="override">
+            <value>HMCTS</value>
+        </set-header>
+        <base />
+        <set-backend-service base-url="https://www.hmcts.com/request-hearings/health-check" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
