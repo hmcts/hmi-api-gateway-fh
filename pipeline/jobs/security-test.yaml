@@ -48,7 +48,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   displayName: API Security Scan ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
