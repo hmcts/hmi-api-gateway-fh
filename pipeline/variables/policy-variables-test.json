@@ -1,4 +1,9 @@
 { 
     "sAndLHost":  "hmcts-uat.casehq.net",
+    "sAndLRootCtx": "casehqapi/rest/hmcts",
+    "crimeHost":  "hmcts-uat.casehq.net",
+    "crimeRootCtx": "casehqapi/rest/hmcts",
+    "cftHost":  "hmcts-uat.casehq.net",
+    "cftRootCtx": "casehqapi/rest/hmcts",
     "mockEndpoint": ""
 }
