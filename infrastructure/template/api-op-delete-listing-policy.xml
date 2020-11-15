@@ -4,15 +4,15 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
                 <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/rest/hmcts/resources/listings/" />
+                <set-backend-service base-url="http://#{sAndLHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
                 <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/rest/hmcts/resources/listings/" />
+                <set-backend-service base-url="http://#{sAndLHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/rest/hmcts/resources/listings/" />
+                <set-backend-service base-url="http://#{sAndLHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-listing" />
