@@ -1,6 +1,6 @@
 { 
     "sAndLHost":  "hmi-casehqemulator.sandbox.platform.hmcts.net",
-    "sAndLRootCtx": "casehqapi/rest/hmcts",
+    "sAndLRootCtx": "",
     "crimeHost":  "hmcts-uat.casehq.net",
     "crimeRootCtx": "casehqapi/rest/hmcts",
     "cftHost":  "hmcts-uat.casehq.net",
