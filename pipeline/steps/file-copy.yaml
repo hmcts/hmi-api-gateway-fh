@@ -8,6 +8,6 @@ steps:
     SourcePath: '$(System.DefaultWorkingDirectory)/infrastructure/template/*'
     azureSubscription: ${{ parameters.subscription }}
     Destination: 'AzureBlob'
-    storage: 'hmiapimpolicies$(environment)'
+    storage: 'hmiapimpolicies$(environment)sa'
     ContainerName: 'policy-$(Build.BuildId)'
     sasTokenTimeOutInMinutes: '120'
