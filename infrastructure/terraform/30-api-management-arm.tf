@@ -9,7 +9,7 @@ resource "azurerm_template_deployment" "apim-policy" {
     apiName         = azurerm_api_management_api.hmi_apim_api.name
     operationId     = lookup(var.api_policies[count.index], "operationId")
     format          = lookup(var.api_policies[count.index], "format")
-    repoBranch      = var.repo_branch
+    buildId         = var.build_id
     templateFile    = lookup(var.api_policies[count.index], "templateFile")
   }
   template_body = <<DEPLOY
@@ -34,19 +34,15 @@ resource "azurerm_template_deployment" "apim-policy" {
         },
         "repoBaseUrl": {
             "type": "String",
-            "defaultValue": "https://raw.githubusercontent.com/hmcts/hmi-api-gateway-fh/"
+            "defaultValue": "https://hmiapimpoliciessbox.blob.core.windows.net/policy-"
         },
-        "repoBranch": {
+        "buildId": {
             "type": "String"
-        },
-        "directory": {
-            "type": "String",
-            "defaultValue": "/infrastructure/template/"
         }
     },
     "variables": {
         "operationName": "[concat(parameters('apimServiceName'), '/', parameters('apiName'), '/', parameters('operationId'))]",
-        "repository": "[concat(parameters('repoBaseUrl'), parameters('repoBranch'), parameters('directory'))]"
+        "repository": "[concat(parameters('repoBaseUrl'), parameters('buildId'), '/')]"
     },
     "resources": [
         {

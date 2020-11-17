@@ -1,9 +1,4 @@
-parameters:
-  - name: subscription
-    type: string
-
 steps:
-
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:

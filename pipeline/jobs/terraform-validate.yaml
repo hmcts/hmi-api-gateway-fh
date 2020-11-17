@@ -26,9 +26,6 @@ jobs:
   pool:
     vmImage: 'ubuntu-18.04'
   steps:
-  - template: ../steps/replace-token.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-test.yaml
     parameters:
