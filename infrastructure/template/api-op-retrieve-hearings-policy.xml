@@ -39,15 +39,15 @@
                 </when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{sAndLHost}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{sAndLHost}##{sAndLRootCtx}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net#{sAndLRootCtx}#/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{sAndLHost}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<choose>
