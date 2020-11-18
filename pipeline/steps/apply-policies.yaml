@@ -1,0 +1,19 @@
+parameters:
+  - name: subscription
+    type: string
+    
+steps:
+- task: AzurePowerShell@5
+  displayName: Run tests
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'InlineScript'
+    Inline: |
+      $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
+      $policies = Get-ChildItem $(System.DefaultWorkingDirectory)\infrastructure\template\ -Recurse *.xml
+      foreach ($_ in $policies) {
+        Write-Host "Applying $_.FullName"
+        #  Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $_.FullName"
+      }
+
+    azurePowerShellVersion: 'LatestVersion'
