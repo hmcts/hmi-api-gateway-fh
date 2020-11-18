@@ -1,0 +1,129 @@
+{
+  "policies": [
+    {
+      "operationId"  : "request-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-request-hearing-policy.xml"
+    },
+    {
+      "operationId"  : "health-check",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-health-check-policy.xml"
+    },
+    {
+      "operationId"  : "update-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-hearing-policy.xml"
+    },
+    {
+      "operationId"  : "retrieve-hearings",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-hearings-policy.xml"
+    },
+    {
+      "operationId"  : "schedule",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-hearing-sched-policy.xml"
+    },
+    {
+      "operationId"  : "resource-by-id",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-resource-by-id-policy.xml"
+    },
+    {
+      "operationId"  : "resources",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-resources-policy.xml"
+    },
+    {
+      "operationId"  : "delete-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-hearing-policy.xml"
+    },
+    {
+      "operationId"  : "delete-resource",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-resource-policy.xml"
+    },
+    {
+      "operationId"  : "get-listings",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-listing-policy.xml"
+    },
+    {
+      "operationId"  : "update-resource-location",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-resource-location-policy.xml"
+    },
+    {
+      "operationId"  : "update-resource-user",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-resource-user-policy.xml"
+    },
+    {
+      "operationId"  : "get-listings",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-listing-policy.xml"
+    },
+    {
+      "operationId"  : "get-sessions",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-sessions-policy.xml"
+    },
+    {
+      "operationId"  : "update-session",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-session-policy.xml"
+    },
+    {
+      "operationId"  : "get-session-by-id",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-sessions-by-id-policy.xml"
+    },
+    {
+      "operationId"  : "get-listing-by-id",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-listing-by-id-policy.xml"
+    },
+    {
+      "operationId"  : "create-session",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-session-policy.xml"
+    },
+    {
+      "operationId"  : "delete-session",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-session-policy.xml"
+    },
+    {
+      "operationId"  : "secure",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-secure-policy.xml"
+    },
+    {
+      "operationId"  : "test-wiremock-connection",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-test-wiremock-policy.xml"
+    },
+    {
+      "operationId"  : "create-resource-location",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-resource-location-policy.xml"
+    },
+    {
+      "operationId"  : "create-resource-user",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-resource-user-policy.xml"
+    },
+    {
+      "operationId"  : "update-listing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-listing-policy.xml"
+    },
+    {
+      "operationId"  : "delete-listing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-listing-policy.xml"
+    }
+  ]
+}

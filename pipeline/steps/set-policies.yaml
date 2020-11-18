@@ -10,9 +10,9 @@ steps:
     ScriptType: 'InlineScript'
     Inline: |
       $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
-      $policies = Get-ChildItem $(System.DefaultWorkingDirectory)\infrastructure\template\ -Recurse *.xml
+      $policies = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\policies.json -Raw | ConvertFrom-Json).policies
       foreach ($_ in $policies) {
-        Write-Host "Applying $_"
-        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format application/vnd.ms-azure-apim.policy.raw+xml -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_ -Verbose
+        Write-Host "Applying $_.operationId"
+        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $_.format -OperationId $_.operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_.templateFile -Verbose
       }
     azurePowerShellVersion: 'LatestVersion'
