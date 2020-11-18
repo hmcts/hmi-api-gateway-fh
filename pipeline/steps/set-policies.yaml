@@ -13,6 +13,6 @@ steps:
       $policies = Get-ChildItem $(System.DefaultWorkingDirectory)\infrastructure\template\ -Recurse *.xml
       foreach ($_ in $policies) {
         Write-Host "Applying $_"
-        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_"
+        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_ -Verbose
       }
     azurePowerShellVersion: 'LatestVersion'
