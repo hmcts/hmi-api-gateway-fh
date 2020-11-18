@@ -96,6 +96,11 @@ stages:
       parameters:
         displayName: Build SBOX
         subscription: DTS-SHAREDSERVICES-SBOX
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS

@@ -1,4 +1,3 @@
-
 parameters:
   - name: displayName
     type: string
@@ -20,6 +19,6 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - template: ../steps/replace-token.yaml
-  - template: ../steps/file-copy.yaml
+  - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
