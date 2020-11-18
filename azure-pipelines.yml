@@ -414,6 +414,11 @@ stages:
       parameters:
         displayName: Build STG
         subscription: DTS-SHAREDSERVICES-STG
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
@@ -437,6 +442,11 @@ stages:
       parameters:
         displayName: Build PROD
         subscription: DTS-SHAREDSERVICES-PROD
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
