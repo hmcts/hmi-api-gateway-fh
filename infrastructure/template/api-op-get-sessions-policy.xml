@@ -1,6 +1,5 @@
 <policies>
     <inbound>
-        <base />
         <set-variable name="invalidKeys" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
                 string[] allowedKeys = {"sessionStartDate","sessionEndDate","caseCourt","room-Name"};
@@ -122,7 +121,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
                 <rewrite-uri template="/" copy-unmatched-params="true" />
-                 <set-query-parameter name="requestSessionType" exists-action="skip">
+                <set-query-parameter name="requestSessionType" exists-action="skip">
                     <value>@(context.Request.Url.Query.GetValueOrDefault("sessionType","ADHOC"))</value>
                 </set-query-parameter>
                 <set-query-parameter name="requestStartDate" exists-action="skip">
@@ -142,6 +141,7 @@
                 <mock-response status-code="200" content-type="application/json" />
             </when>
         </choose>
+        <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
     </inbound>
     <backend>
         <base />
