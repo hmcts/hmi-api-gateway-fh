@@ -15,5 +15,4 @@ steps:
         Write-Host "Applying $_.FullName"
         #  Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $_.FullName"
       }
-
     azurePowerShellVersion: 'LatestVersion'
