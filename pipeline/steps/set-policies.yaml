@@ -4,7 +4,7 @@ parameters:
     
 steps:
 - task: AzurePowerShell@5
-  displayName: SetPolicies
+  displayName: Apply Policies to APIM API
   inputs:
     azureSubscription: ${{ parameters.subscription }}
     ScriptType: 'InlineScript'
@@ -12,7 +12,7 @@ steps:
       $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
       $policies = Get-ChildItem $(System.DefaultWorkingDirectory)\infrastructure\template\ -Recurse *.xml
       foreach ($_ in $policies) {
-        Write-Host "Applying $(System.DefaultWorkingDirectory)\infrastructure\template\$_"
-        #  Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_"
+        Write-Host "Applying $_"
+        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$_"
       }
     azurePowerShellVersion: 'LatestVersion'
