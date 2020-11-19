@@ -8,7 +8,7 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
+				<set-backend-service base-url="http://#{sAndLHost}#/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
