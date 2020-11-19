@@ -99,7 +99,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
-                getHmiSuccessVerifier(), "The request was received successfully.");
+                getHmiSuccessVerifier(), "The request was received successfully.",null);
     }
 
     @Test
@@ -114,7 +114,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(), getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
     }
 
     @Test
@@ -129,7 +129,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(), "common",
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
     }
 
 
@@ -147,7 +147,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
-                getHmiSuccessVerifier(), "The request was received successfully.");
+                getHmiSuccessVerifier(), "The request was received successfully.",null);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
@@ -166,7 +166,7 @@ public abstract class HMICommonHeaderTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                getHmiErrorVerifier(), "Resource not found");
+                getHmiErrorVerifier(), "Resource not found",null);
     }
 
     @Test
@@ -181,7 +181,7 @@ public abstract class HMICommonHeaderTest {
                 getUrlParams(),
                 HttpMethod.OPTIONS,
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                getHmiErrorVerifier(), "Resource not found");
+                getHmiErrorVerifier(), "Resource not found",null);
     }
 
 
@@ -202,7 +202,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
+                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.",null);
 
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -217,7 +217,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.");
+                "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.",null);
     }
 
 
@@ -233,7 +233,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.");
+                "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.",null);
     }
 
     @Test
@@ -250,7 +250,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
+                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.",null);
     }
 
 
@@ -267,7 +267,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.UNAUTHORIZED,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.");
+                "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.",null);
     }
 
 
@@ -284,7 +284,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Source-System");
+                "Missing/Invalid Header Source-System",null);
     }
 
 
@@ -301,7 +301,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Destination-System");
+                "Missing/Invalid Header Destination-System",null);
     }
 
 
@@ -325,7 +325,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Request-Created-At");
+                "Missing/Invalid Header Request-Created-At",null);
     }
 
 
@@ -353,7 +353,7 @@ public abstract class HMICommonHeaderTest {
                 httpStatus,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                expectedErrorMessage);
+                expectedErrorMessage,null);
     }
 
 
@@ -379,7 +379,7 @@ public abstract class HMICommonHeaderTest {
                 httpStatus,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                expectedErrorMessage);
+                expectedErrorMessage,null);
     }
 
 
@@ -403,7 +403,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Request-Processed-At");
+                "Missing/Invalid Header Request-Processed-At",null);
     }
 
 
@@ -420,7 +420,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Request-Type");
+                "Missing/Invalid Header Request-Type",null);
     }
 
 
@@ -437,7 +437,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.NOT_ACCEPTABLE,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Media Type");
+                "Missing/Invalid Media Type",null);
     }
 
 
@@ -454,7 +454,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
     }
 
 
@@ -475,7 +475,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
     }
 
     @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} --> {1}")
@@ -493,7 +493,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpSucessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
 
     }
 
@@ -523,7 +523,7 @@ public abstract class HMICommonHeaderTest {
                 httpStatus,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                expectedErrorMessage);
+                expectedErrorMessage,null);
 
     }
 
@@ -554,7 +554,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                expectedErrorMessage);
+                expectedErrorMessage,null);
 
     }
 }
