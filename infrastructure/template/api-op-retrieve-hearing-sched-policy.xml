@@ -39,7 +39,7 @@
             </when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/schedules/" />
+				<set-backend-service base-url="http://#{sAndLHost}#/schedules/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
