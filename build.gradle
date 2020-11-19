@@ -88,6 +88,15 @@ sourceSets {
         }
         resources.srcDir file('src/acceptanceTest/resources')
     }
+
+    snlacceptanceTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/snlacceptanceTest/java')
+        }
+        resources.srcDir file('src/snlacceptanceTest/resources')
+    }
 }
 
 tasks.withType(JavaCompile) {
@@ -112,6 +121,8 @@ configurations {
     contractTestRuntime.extendsFrom testRuntime
     acceptanceTestCompile.extendsFrom testCompile
     acceptanceTestRuntime.extendsFrom testRuntime
+    snlacceptanceTestCompile.extendsFrom testCompile
+    snlacceptanceTestRuntime.extendsFrom testRuntime
 }
 
 
@@ -201,6 +212,20 @@ task acceptance(type: Test) {
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
     include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    enableAssertions = true
+    scanForTestClasses = true
+}
+
+task snlacceptance(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Runs the QA Acceptance for SNL tests'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.snlacceptanceTest.output.classesDirs
+    classpath = sourceSets.snlacceptanceTest.runtimeClasspath
+    include "uk/gov/hmcts/futurehearings/snl/acceptance/**"
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -521,6 +546,36 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
     //Functional Testing Dependencies - FINISH
+
+    //Snl Acceptance Test Dependencies - START
+    snlacceptanceTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    snlacceptanceTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter', {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    snlacceptanceTestCompile("org.springframework.boot:spring-boot-starter-test")
+    snlacceptanceTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+    snlacceptanceTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
+    snlacceptanceTestImplementation 'io.rest-assured:rest-assured:4.2.0'
+    snlacceptanceTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
+
+    snlacceptanceTestImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
+    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
+    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
+    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
+    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
+
+    snlacceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    snlacceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+    snlacceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+    snlacceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
+    snlacceptanceTestImplementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
+
+    snlacceptanceTestImplementation sourceSets.main.runtimeClasspath
+    snlacceptanceTestImplementation sourceSets.test.runtimeClasspath
+    //Acceptance Test Dependencies - FINISH
 }
 
 mainClassName = 'uk.gov.hmcts.reform.demo.Application'
