@@ -1,6 +1,5 @@
 <policies>
     <inbound>
-        <base />
         <set-variable name="invalidKeys" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
                 string[] allowedKeys = {"sessionStartDate","sessionEndDate","caseCourt","room-Name"};
@@ -115,8 +114,57 @@
                 </return-response>
             </when>
         </choose>
-        <set-backend-service base-url="https://www.hmcts.com/sessions/get-sessions" />
-        <mock-response status-code="200" content-type="application/json" />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+	                        var data = new JArray();
+	                        JObject recordOne = new JObject(
+	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
+	                            new JProperty("hearingType", "Traffic"),
+	                            new JProperty("hearingDate", "2020-09-16"),
+	                            new JProperty("hearingStartTime", "08:45"),
+	                            new JProperty("hearingEndTime", "10:45"),
+	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+	                            new JProperty("hearingTranslatorRequired", "No"),
+	                            new JProperty("hearingCreatedDate", "2020-09-16"),
+	                            new JProperty("hearingCreatedBy", "Donald Duck"),
+	                            new JProperty("hearingVenueId", "V3455"),
+	                            new JProperty("hearingRoomId", "R2345")
+	                        );
+	                        JObject recordTwo = new JObject(
+	                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
+	                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
+	                            new JProperty("hearingType", "Traffic"),
+	                            new JProperty("hearingDate", "2020-09-16"),
+	                            new JProperty("hearingStartTime", "08:45"),
+	                            new JProperty("hearingEndTime", "10:45"),
+	                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
+	                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
+	                            new JProperty("hearingTranslatorRequired", "No"),
+	                            new JProperty("hearingCreatedDate", "2020-09-16"),
+	                            new JProperty("hearingCreatedBy", "Donald Duck"),
+	                            new JProperty("hearingVenueId", "V3455"),
+	                            new JProperty("hearingRoomId", "R2345")
+	                        );
+	                        data.Add(recordOne);
+	                        data.Add(recordTwo);
+	                        return data.ToString();
+	                    }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
     </inbound>
     <backend>
         <base />
