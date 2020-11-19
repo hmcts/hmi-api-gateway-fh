@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
 
 import java.io.IOException;
 import java.util.Map;
 
-import com.google.common.collect.Multimap;
 import io.restassured.http.Headers;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,5 +24,6 @@ public interface CommonDelegate {
                                                            final HttpStatus status,
                                                            final String inputFileDirectory,
                                                            final HMIVerifier hmiVerifier,
-                                                           final String expectedMessage) throws IOException;
+                                                           final String expectedMessage,
+                                                           final DelegateDTO delegateDT0) throws IOException;
 }
