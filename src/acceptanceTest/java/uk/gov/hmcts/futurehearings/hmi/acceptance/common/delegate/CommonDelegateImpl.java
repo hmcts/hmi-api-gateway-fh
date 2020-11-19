@@ -1,8 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateFlyweightDT0;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
 
 import java.io.IOException;
@@ -36,7 +38,8 @@ public class CommonDelegateImpl implements CommonDelegate {
                                                            final HttpStatus status,
                                                            final String inputFileDirectory,
                                                            final HMIVerifier hmiVerifier,
-                                                           final String expectedMessage) throws IOException {
+                                                           final String expectedMessage,
+                                                           final DelegateDTO delegateFlyweightDT0) throws IOException {
 
         log.debug("The value of the target header (Header Map) : " + standardHeaderMap);
         log.debug("The value of the target header (Wiremock Header) :" + standardHeaderMap);
