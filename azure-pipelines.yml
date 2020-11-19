@@ -5,6 +5,21 @@ pr:
   - none
 
 parameters:
+
+  - name: stage
+    displayName: Stage to Run
+    type: string
+    default: ALL
+    values:
+      - SBOX
+      - DEV
+      - TEST
+      - STG
+      - PROD
+      - NONPROD
+      - PRODUCTION
+      - ALL
+
   - name: environments
     type: object
     default:
@@ -44,6 +59,7 @@ stages:
 
   - stage: PlanSBOX
     dependsOn: Validate
+    condition: or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -53,6 +69,7 @@ stages:
 
   - stage: PlanDEV
     dependsOn: Validate
+    condition: or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -62,6 +79,7 @@ stages:
 
   - stage: PlanTEST
     dependsOn: Validate
+    condition: or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -71,6 +89,7 @@ stages:
 
   - stage: PlanSTG
     dependsOn: Validate
+    condition: and(or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -80,6 +99,7 @@ stages:
 
   - stage: PlanPROD
     dependsOn: Validate
+    condition: and(or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -89,6 +109,7 @@ stages:
 
   - stage: BuildSBOX
     dependsOn: PlanSbox
+    condition: or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
@@ -113,6 +134,7 @@ stages:
 
   - stage: BuildDEV
     dependsOn: PlanDev
+    condition: or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
@@ -137,6 +159,7 @@ stages:
 
   - stage: BuildTEST
     dependsOn: PlanTest
+    condition: or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
@@ -161,6 +184,7 @@ stages:
 
   - stage: TestSBOX
     dependsOn: BuildSbox
+    condition: or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -252,6 +276,7 @@ stages:
 
   - stage: TestDEV
     dependsOn: BuildDev
+    condition: or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -311,6 +336,7 @@ stages:
 
   - stage: TestTEST
     dependsOn: BuildTest
+    condition: or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -406,7 +432,7 @@ stages:
       - TestSbox
       - TestDev
       - TestTest
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
@@ -434,7 +460,7 @@ stages:
     dependsOn: 
       - PlanProd
       - BuildStg
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-PROD
     jobs:
