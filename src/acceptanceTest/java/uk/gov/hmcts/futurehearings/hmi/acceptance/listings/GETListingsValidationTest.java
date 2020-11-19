@@ -67,7 +67,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
@@ -83,7 +83,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                LISTINGS_SUCCESS_MSG);
+                LISTINGS_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
@@ -99,7 +99,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                LISTINGS_SUCCESS_MSG);
+                LISTINGS_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params - (date_of_listing & hearing_type) - Param : {0} --> {1}")
@@ -123,7 +123,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.");
+                "The request was received successfully.",null);
     }
 
     @Test
@@ -141,7 +141,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
 }
