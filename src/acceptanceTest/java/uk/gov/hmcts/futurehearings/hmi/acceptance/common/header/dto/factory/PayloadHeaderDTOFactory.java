@@ -121,6 +121,15 @@ public class PayloadHeaderDTOFactory {
         return headerMap;
     }
 
+    public static final Map<String, String> convertToMapAfterHeadersAdded(final SystemHeaderDTO systemHeaderDTO,
+                                                                            final BusinessHeaderDTO businessHeaderDTO,
+                                                                            final Map<String,String> headersToAdd) {
+
+        final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
+        headerMap.putAll(headersToAdd);
+        return headerMap;
+    }
+
     public static final Map<String, String> convertToMapAfterHeadersRemoved(final SystemHeaderDTO systemHeaderDTO,
                                                                             final BusinessHeaderDTO businessHeaderDTO,
                                                                             final List<String> headersToRemove) {
@@ -132,13 +141,6 @@ public class PayloadHeaderDTOFactory {
             });
         }
         return headerMap;
-    }
-
-    public static final Multimap<String, String> convertToMapAfterExtraMapFieldsAdded(final SystemHeaderDTO systemHeaderDTO,
-                                                                                 final BusinessHeaderDTO businessHeaderDTO,
-                                                                                 final Map<String, String> extraHeadersToAdd) {
-
-        return convertToMultiMapWithRequiredHeaders(systemHeaderDTO, businessHeaderDTO, extraHeadersToAdd);
     }
 
     public static final Map<String, String> convertToMapAfterTruncatingHeaderKey(final SystemHeaderDTO systemHeaderDTO,

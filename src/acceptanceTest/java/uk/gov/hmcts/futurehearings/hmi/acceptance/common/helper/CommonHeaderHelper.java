@@ -2,13 +2,16 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersAdded;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersRemoved;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMultiMapWithRequiredHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -150,6 +153,28 @@ public class CommonHeaderHelper {
         );
     }
 
+    public static Map<String, String> createHeaderWithEmulatorValues(final String subscriptionKey,
+                                                                     final String destinationSystem,
+                                                                     final String returnHttpCode,
+                                                                     final String returnErrorCode,
+                                                                     final String returnDescription) {
+
+        Map<String,String> emulatorHeaderValues = new HashMap<String,String>();
+        emulatorHeaderValues.put("returnHttpCode",returnHttpCode);
+        emulatorHeaderValues.put("returnErrorCode",returnErrorCode);
+        emulatorHeaderValues.put("returnDescription",returnDescription);
+
+        return buildHeaderWithEmulatorValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                subscriptionKey,
+                "2012-03-19T07:22:00Z",
+                "2012-03-19T07:22:00Z",
+                "CFT",
+                destinationSystem,
+                "Assault",emulatorHeaderValues
+        );
+    }
+
     public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String subscriptionKey,
                                                                                   final String requestCreatedAt) {
 
@@ -254,6 +279,29 @@ public class CommonHeaderHelper {
                         sourceSystem,
                         destinationSystem,
                         requestType)));
+    }
+
+    private static Map<String, String> buildHeaderWithEmulatorValues(final String contentType,
+                                                                     final String acceptType,
+                                                                     final String subscriptionKey,
+                                                                     final String requestCreatedDate,
+                                                                     final String requestProcessedAt,
+                                                                     final String sourceSystem,
+                                                                     final String destinationSystem,
+                                                                     final String requestType,
+                                                                     final Map<String, String> emulatorHeaders) {
+        return Collections.unmodifiableMap(convertToMapAfterHeadersAdded(buildStandardSytemHeaderPart(
+                contentType,
+                acceptType,
+                null,
+                null,
+                subscriptionKey,
+                null),
+                buildStandardBuinessHeaderPart(requestCreatedDate,
+                        requestProcessedAt,
+                        sourceSystem,
+                        destinationSystem,
+                        requestType),emulatorHeaders));
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
