@@ -19,8 +19,7 @@ steps:
         try { 
           Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose
           } catch {
-            Write-Host $Error
-            Break
+            Write-Error $Error[0] -ErrorAction Stop
           }
         }
     azurePowerShellVersion: 'LatestVersion'
