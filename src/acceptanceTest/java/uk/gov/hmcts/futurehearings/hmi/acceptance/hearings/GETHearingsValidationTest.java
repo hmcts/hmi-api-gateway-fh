@@ -74,7 +74,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
@@ -91,7 +91,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK,  getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -107,7 +107,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 new GETHearingsByQueryValidationVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     //This test is put in separately as the hearingIdCaseHQ =  null would return a list of Hearing Results....
@@ -124,7 +124,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
@@ -140,7 +140,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing_Id_CaseHQ) with and without value - Param : {0} --> {1}")
@@ -159,7 +159,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 new GETHearingsByQueryValidationVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing_Id_CaseHQ) with null value - Param : {0} --> {1}")
@@ -178,7 +178,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing Type) with and without value - Param : {0} --> {1}")
@@ -197,7 +197,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 hmiSuccessVerifier,
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @Disabled("Disable because of varied responses based on the hearing_id_casehq - This should be path param endpoint")
@@ -219,7 +219,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
     }
 
     @ParameterizedTest(name = "All Query params with extra parameter (Hearing_Id_CaseHQ, Hearing_Date & Hearing Type, Extra Params) with and without value - Param : {0} --> {1}")
@@ -242,7 +242,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
 
