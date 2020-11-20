@@ -1,17 +1,26 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,4 +76,36 @@ class POSTHearingsValidationTest extends HearingValidationTest {
                 "common",
                 getHmiSuccessVerifier(),"The request was received successfully.",null);
     }
+
+    //@Test
+    //@Tag("sbox")
+    //@Tag("test")
+    //@DisplayName("Successfully validated response with all the header values from a Wiremock Instance")
+    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
+    @CsvSource(value = {"S&L,400,1000,Invalid LOV Value"}, nullValues = "NIL")
+    void test_successful_response_from_the_wiremock_stub(final String destinationSystem,
+                                                         final String returnHttpCode,
+                                                         final String returnErrorCode,
+                                                         final String returnDescription) throws Exception {
+
+        final HttpStatus httpStatus =
+                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), "hearing-request-standard.json",
+                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                        destinationSystem,
+                        returnHttpCode,
+                        returnErrorCode,
+                        returnDescription),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                httpStatus,
+                getInputFileDirectory(),
+                new CaseHQCommonErrorVerifier(),
+                returnDescription,
+                null);
+    }
+
 }

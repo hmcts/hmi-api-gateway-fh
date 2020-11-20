@@ -17,6 +17,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeaderWithDuplicateValues;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.factory.DelegateDTOFactory;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
@@ -90,6 +92,16 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Successfully validated response with all the header values")
     void test_successful_response_with_a_complete_header() throws Exception {
+        DelegateDTO delegateDTO = DelegateDTOFactory.buildDelegateDTO(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createCompletePayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                getHmiSuccessVerifier(), "The request was received successfully.");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),

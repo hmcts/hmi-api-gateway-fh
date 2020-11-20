@@ -79,7 +79,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @DisplayName("Successfully validated response with an xml payload")
     void test_successful_response_for_test_xml_body() throws Exception {
 
-        DelegateDTO delegateDTO = DelegateDTOFactory.buildDelegateDTO(getAuthorizationToken(),
+        DelegateDTO delegateDTO = DelegateDTOFactory.buildDelegateDTO(getApiSubscriptionKey(),getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
                 createStandardPayloadHeader(getApiSubscriptionKey()),
                 null,
