@@ -67,7 +67,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session EndDate - Param : {0} --> {1}")
@@ -83,7 +83,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                START_END_DATE_MANDATORY_ERROR_MSG);
+                START_END_DATE_MANDATORY_ERROR_MSG,null);
     }
 
     @ParameterizedTest(name = "Session EndDate without mandatory Session StartDate - Param : {0} --> {1}")
@@ -99,7 +99,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                START_END_DATE_MANDATORY_ERROR_MSG);
+                START_END_DATE_MANDATORY_ERROR_MSG,null);
     }
 
     @ParameterizedTest(name = "Session Room Name without mandatory Session StartDate & Session EndDate - Param : {0} --> {1}")
@@ -115,7 +115,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                START_END_DATE_MANDATORY_ERROR_MSG);
+                START_END_DATE_MANDATORY_ERROR_MSG,null);
     }
 
     @ParameterizedTest(name = "Session Case Court without mandatory Session StartDate & Session EndDate - Param : {0} --> {1}")
@@ -131,7 +131,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                START_END_DATE_MANDATORY_ERROR_MSG);
+                START_END_DATE_MANDATORY_ERROR_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params - RoomName with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
@@ -152,7 +152,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG);
+                SESSIONS_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params - CourtCase with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
@@ -173,7 +173,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG);
+                SESSIONS_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Test with All Query Parameters - Param : {0} --> {1}")
@@ -196,7 +196,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG);
+                SESSIONS_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Test with All Query Parameters with extram params - Param : {0} --> {1}")
@@ -222,7 +222,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
 }

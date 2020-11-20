@@ -62,6 +62,6 @@ class DELETESessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
-                getHmiSuccessVerifier(),"The request was received successfully.");
+                getHmiSuccessVerifier(),"The request was received successfully.",null);
     }
 }
