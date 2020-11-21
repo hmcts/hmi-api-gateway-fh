@@ -90,8 +90,17 @@
         </choose>
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{sAndLHost}#/rest/hmcts/resources/sessions/" />
+                <rewrite-uri template="/" copy-unmatched-params="true" /> 
+                <set-query-parameter name="requestSessionType" exists-action="skip">
+                    <value>@(context.Request.Url.Query.GetValueOrDefault("sessionType","ADHOC"))</value>
+                </set-query-parameter>
+                <set-query-parameter name="requestStartDate" exists-action="skip">
+                    <value>@(context.Request.Url.Query.GetValueOrDefault("sessionStartDate",""))</value>
+                </set-query-parameter>
+                <set-query-parameter name="requestEndDate" exists-action="skip">
+                    <value>@(context.Request.Url.Query.GetValueOrDefault("sessionEndDate",""))</value>
+                </set-query-parameter>
+                <set-backend-service base-url="https://hmcts-uat.casehq.net/casehqapi/rest/hmcts/resources/sessions" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <return-response>
@@ -138,6 +147,7 @@
                 </return-response>
             </when>
         </choose>
+        <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
     </inbound>
     <backend>
         <base />
