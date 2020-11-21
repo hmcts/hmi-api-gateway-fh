@@ -3,7 +3,7 @@
         <base />
         <set-variable name="invalidKeys" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                string[] allowedKeys = {"sessionStartDate","sessionEndDate","sessionType"};
+                string[] allowedKeys = {"sessionStartDate","sessionEndDate","requestSessionType"};
                 bool invalidKey = false;
                 if(context.Request.Url.Query.Count &gt; 0){
                     for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
