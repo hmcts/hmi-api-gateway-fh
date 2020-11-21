@@ -23,8 +23,6 @@ import org.springframework.stereotype.Component;
 @Component("CommonDelegate")
 public class CommonDelegateImpl implements CommonDelegate {
 
-    private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/snl/acceptance/%s/input";
-
     public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
                                                            final String authorizationToken,
                                                            final String targetURL,
@@ -51,7 +49,7 @@ public class CommonDelegateImpl implements CommonDelegate {
     }
 
     private void handleRestCall(final String targetURL,
-                                final String inputFile,
+                                final String inputPayload,
                                 final Headers headers,
                                 final String authorizationToken,
                                 final Map<String, String> params,
@@ -61,12 +59,11 @@ public class CommonDelegateImpl implements CommonDelegate {
                                 final HMIVerifier hmiVerifier,
                                 final String expectedMessage) throws IOException {
 
-        String inputPayload = null;
         switch (httpMethod) {
             case POST:
             case PUT:
             case DELETE:
-                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                //inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
                 hmiVerifier.verify(status, expectedMessage,
                         performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;

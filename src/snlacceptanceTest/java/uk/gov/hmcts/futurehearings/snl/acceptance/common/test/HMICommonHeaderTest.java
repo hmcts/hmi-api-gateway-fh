@@ -16,6 +16,7 @@ import static uk.gov.hmcts.futurehearings.snl.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.snl.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.snl.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeaderWithDuplicateValues;
 
+import uk.gov.hmcts.futurehearings.snl.acceptance.common.TestingUtils;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.error.HMIErrorVerifier;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.success.HMISuccessVerifier;
@@ -68,6 +69,8 @@ public abstract class HMICommonHeaderTest {
 
     public HMIErrorVerifier hmiErrorVerifier;
 
+    private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/snl/acceptance/%s/input";
+
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
@@ -91,10 +94,12 @@ public abstract class HMICommonHeaderTest {
     @Test
     @DisplayName("Successfully validated response with all the header values")
     void test_successful_response_with_a_complete_header() throws Exception {
+
+        String inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + getInputPayloadFileName());
         commonDelegate.test_expected_response_for_supplied_header(
                 getApiSubscriptionKey(),
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeURL(), inputPayload,
                 createCompletePayloadHeader(getApiSubscriptionKey()),
                 null,
                 getUrlParams(),
