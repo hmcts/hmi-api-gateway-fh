@@ -1,12 +1,33 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/future-hearings/resources/update-resources-location" />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-            <mock-response status-code="201" content-type="application/json" />
-        </when>
-    </choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/locations" />
+                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://www.hmcts.com/future-hearings/resources/update-resources-location" />
+                <choose>
+                    <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
+                        <mock-response status-code="201" content-type="application/json" />
+                    </when>
+                </choose>
+            </when>
+        </choose>
     </inbound>
     <backend>
         <base />
