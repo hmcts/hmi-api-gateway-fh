@@ -49,7 +49,7 @@
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "You need to provide manndatory parameter: 'requestSessionType'")
+                            new JProperty("message", "You need to provide mandatory parameter: 'requestSessionType'")
                         ).ToString();
                         }</set-body>
                 </return-response>
