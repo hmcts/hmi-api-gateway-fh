@@ -12,7 +12,7 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/{locationCaseHQId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{sAndLHost}#/resources/users" />
+				<set-backend-service base-url="http://#{sAndLHost}#/resources/locations" />
                 <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
