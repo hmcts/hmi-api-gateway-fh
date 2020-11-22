@@ -4,11 +4,11 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
+                <set-backend-service base-url="http:/#{emulatorHost}#/resources/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
                 <rewrite-uri template="/" copy-unmatched-params="true" />
@@ -17,7 +17,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/future-hearings/resources/update-resources-user" />
