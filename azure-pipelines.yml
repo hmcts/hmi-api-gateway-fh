@@ -276,7 +276,7 @@ stages:
 
   - stage: TestDEV
     dependsOn: BuildDev
-    condition: or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -336,7 +336,7 @@ stages:
 
   - stage: TestTEST
     dependsOn: BuildTest
-    condition: or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -432,7 +432,7 @@ stages:
       - TestSbox
       - TestDev
       - TestTest
-    condition: and(or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
@@ -460,7 +460,7 @@ stages:
     dependsOn: 
       - PlanProd
       - BuildStg
-    condition: and(or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-PROD
     jobs:
