@@ -5,6 +5,7 @@ import static uk.gov.hmcts.futurehearings.snl.acceptance.common.helper.CommonHea
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.delegate.CommonDelegateImpl;
+import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.dto.SNLVerificationDTO;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
@@ -67,8 +68,7 @@ class POSTHearingsValidationTest extends HearingValidationTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                this.getHttpSucessStatus(),
-                "common",
-                getHmiSuccessVerifier(),"The request was received successfully.");
+                HttpStatus.BAD_REQUEST,
+                getHmiSuccessVerifier(),new SNLVerificationDTO(HttpStatus.ACCEPTED,null,null,null));
     }
 }

@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.snl.acceptance.common.delegate;
 import static uk.gov.hmcts.futurehearings.snl.acceptance.common.RestClientTemplate.shouldExecute;
 
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.TestingUtils;
+import uk.gov.hmcts.futurehearings.snl.acceptance.common.dto.SNLDto;
 import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.HMIVerifier;
 
 import java.io.IOException;
@@ -26,15 +27,14 @@ public class CommonDelegateImpl implements CommonDelegate {
     public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
                                                            final String authorizationToken,
                                                            final String targetURL,
-                                                           final String inputFile,
+                                                           final String inputPayload,
                                                            final Map<String, String> standardHeaderMap,
                                                            final Headers headers,
                                                            final Map<String, String> params,
                                                            final HttpMethod httpMethod,
                                                            final HttpStatus status,
-                                                           final String inputFileDirectory,
                                                            final HMIVerifier hmiVerifier,
-                                                           final String expectedMessage) throws IOException {
+                                                           final SNLDto snlDto) throws IOException {
 
         log.debug("The value of the target header (Header Map) : " + standardHeaderMap);
         log.debug("The value of the target header (Wiremock Header) :" + standardHeaderMap);
@@ -44,7 +44,7 @@ public class CommonDelegateImpl implements CommonDelegate {
         } else {
             standardWireMockHeaders = headers;
         }
-        handleRestCall(targetURL, inputFile, standardWireMockHeaders, authorizationToken, params, httpMethod, status, inputFileDirectory, hmiVerifier, expectedMessage);
+        handleRestCall(targetURL, inputPayload, standardWireMockHeaders, authorizationToken, params, httpMethod, status, hmiVerifier, snlDto);
 
     }
 
@@ -55,20 +55,18 @@ public class CommonDelegateImpl implements CommonDelegate {
                                 final Map<String, String> params,
                                 final HttpMethod httpMethod,
                                 final HttpStatus status,
-                                final String inputFileDirectory,
                                 final HMIVerifier hmiVerifier,
-                                final String expectedMessage) throws IOException {
+                                final SNLDto snlDto) throws IOException {
 
         switch (httpMethod) {
             case POST:
             case PUT:
             case DELETE:
-                //inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
-                hmiVerifier.verify(status, expectedMessage,
+                hmiVerifier.verify(snlDto,
                         performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;
             case GET:
-                hmiVerifier.verify(status, expectedMessage, performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
+                hmiVerifier.verify(snlDto, performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;
             case OPTIONS:
                 performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload);

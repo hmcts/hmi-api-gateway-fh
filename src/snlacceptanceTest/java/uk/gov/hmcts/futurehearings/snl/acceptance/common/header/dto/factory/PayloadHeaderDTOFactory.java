@@ -56,7 +56,7 @@ public class PayloadHeaderDTOFactory {
                                                                           final BusinessHeaderDTO businessHeaderDTO,
                                                                           final Map<String, String> mapAddedHeaderValues) {
         List<Header> listOfHeaders = new ArrayList<Header>();
-        Header subscriptionKeyHeader = new Header("Ocp-Apim-Subscription-Key", systemHeaderDTO.subscriptionKey());
+        Header subscriptionKeyHeader = new Header("Subscription-Key", systemHeaderDTO.subscriptionKey());
         listOfHeaders.add(subscriptionKeyHeader);
         Header contentTypeHeader =  new Header("Content-Type", systemHeaderDTO.contentType());
         listOfHeaders.add(contentTypeHeader);
@@ -84,7 +84,7 @@ public class PayloadHeaderDTOFactory {
                                                                                       final BusinessHeaderDTO businessHeaderDTO,
                                                                                       final Map<String, String> mapAddedHeaderValues) {
         final Multimap<String, String> headerAsMultiMap = ArrayListMultimap.create();
-        headerAsMultiMap.put("Ocp-Apim-Subscription-Key", systemHeaderDTO.subscriptionKey());
+        headerAsMultiMap.put("Subscription-Key", systemHeaderDTO.subscriptionKey());
         headerAsMultiMap.put("Content-Type", systemHeaderDTO.contentType());
         headerAsMultiMap.put("Accept", systemHeaderDTO.accept());
         headerAsMultiMap.put("Source-System", businessHeaderDTO.sourceSystem());
@@ -101,7 +101,7 @@ public class PayloadHeaderDTOFactory {
     public static final Map<String, String> convertToMapWithMandatoryHeaders(final SystemHeaderDTO systemHeaderDTO,
                                                                              final BusinessHeaderDTO businessHeaderDTO) {
         final Map<String, String> headerMap = new HashMap<>();
-        headerMap.put("Ocp-Apim-Subscription-Key", systemHeaderDTO.subscriptionKey());
+        headerMap.put("Subscription-Key", systemHeaderDTO.subscriptionKey());
         headerMap.put("Content-Type", systemHeaderDTO.contentType());
         headerMap.put("Accept", systemHeaderDTO.accept());
         headerMap.put("Source-System", businessHeaderDTO.sourceSystem());

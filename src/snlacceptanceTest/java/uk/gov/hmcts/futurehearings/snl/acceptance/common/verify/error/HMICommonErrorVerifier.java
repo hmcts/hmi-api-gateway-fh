@@ -1,24 +1,34 @@
 package uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.error;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import uk.gov.hmcts.futurehearings.snl.acceptance.common.dto.SNLDto;
+import uk.gov.hmcts.futurehearings.snl.acceptance.common.verify.dto.SNLVerificationDTO;
 
 import java.util.Map;
 
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component("HMICommonErrorVerifier")
 public class HMICommonErrorVerifier implements HMIErrorVerifier {
-    public void verify(HttpStatus expectedHttpStatus,
-                       String expectedMessage,
+    public void verify(SNLDto snlDTO,
                        Response response) {
-        log.debug(response.getBody().asString());
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        log.info("Response" + response.getBody().asString());
+        SNLVerificationDTO snlVerificationDTO = null;
+        if (snlDTO instanceof SNLVerificationDTO) {
+            snlVerificationDTO = (SNLVerificationDTO) snlDTO;
+        }
+        assertEquals(snlVerificationDTO.httpStatus().value(), response.statusCode());
+        assertEquals(3, response.getBody().jsonPath().getMap("$").size());
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(), responseMap.get("statusCode"));
-        assertEquals(expectedMessage, responseMap.get(("message")));
+        assertEquals(snlVerificationDTO.errorCode(), responseMap.get("errCode"));
+        assertEquals(snlVerificationDTO.errorDescription(), responseMap.get(("errorDesc")));
+
     }
 }

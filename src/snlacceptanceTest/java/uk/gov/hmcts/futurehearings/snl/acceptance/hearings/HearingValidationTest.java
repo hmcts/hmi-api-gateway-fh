@@ -53,7 +53,7 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         RestAssured.useRelaxedHTTPSValidation();
         this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
-                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(true));
         this.setInputFileDirectory("hearings");
         String authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,

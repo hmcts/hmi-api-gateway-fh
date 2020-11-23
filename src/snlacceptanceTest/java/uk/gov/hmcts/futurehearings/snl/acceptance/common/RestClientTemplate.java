@@ -34,7 +34,7 @@ public class RestClientTemplate {
         switch (httpMethod) {
             case POST:
                 return RestAssured
-                        .expect().that().statusCode(expectedHttpStatus.value())
+                        //.expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
                         .auth()
