@@ -203,11 +203,11 @@ class GET_sessions_UnitTests {
 
     @Order(11)
     @ParameterizedTest(name = "Test for mandatory parameter - {0}")
-    @ValueSource(strings = {"sessionStartDate","sessionEndDate"})
+    @ValueSource(strings = {"requestStartDate","requestEndDate"})
     void testRetrieveSessionsRequestWithDateParams(String iteration) {
         paramsAsMap.clear();
         paramsAsMap.put(iteration,"2018-01-29 20:36:01Z");
-
+        paramsAsMap.put("requestSessionType", "any");
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -216,9 +216,8 @@ class GET_sessions_UnitTests {
     @Order(12)
     @DisplayName("Test with one non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithOneNonMandatoryParams() {
-        paramsAsMap.remove("sessionStartDate");
-        paramsAsMap.remove("room-Name");
-
+        paramsAsMap.clear();
+        paramsAsMap.put("requestSessionType", "any");
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -227,8 +226,8 @@ class GET_sessions_UnitTests {
     @Order(13)
     @DisplayName("Test with two non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
-        paramsAsMap.remove("sessionEndDate");
-
+        paramsAsMap.remove("requestEndDate");
+        paramsAsMap.put("requestSessionType", "any");
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -239,9 +238,7 @@ class GET_sessions_UnitTests {
     @DisplayName("Test with no mandatory parameters")
     void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.clear();
-        paramsAsMap.put("caseCourt","oxford");
-        paramsAsMap.put("room-Name", "RM012");
-
+        paramsAsMap.put("requestSessionType", "any");
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -250,7 +247,6 @@ class GET_sessions_UnitTests {
     @Order(15)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
-
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -259,7 +255,6 @@ class GET_sessions_UnitTests {
     @Order(16)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
-
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -295,13 +290,15 @@ class GET_sessions_UnitTests {
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams() {
+        paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
         return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams() {
-        headersAsMap.put("requestSessionType", "any");
-        return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext, headersAsMap, targetInstance);
+        paramsAsMap.clear();
+        paramsAsMap.put("requestSessionType", "any");
+        return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {

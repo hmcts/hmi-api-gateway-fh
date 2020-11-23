@@ -90,12 +90,8 @@ public class SessionsResponseVerifier {
 
     public static void  thenValidateResponseForNoMandatoryParams(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            assertEquals(400, response.getStatusCode(),"Response Code Validation:");
-            getObjStep().pass("Got the expected response code: 400");
-            assertEquals(MISSING_MANDATORY_PARAMS,responseMap.get(("message")),"Status Code Message Validation:");
-            getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
-
+            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 200");
         }
         catch (AssertionError e){
             getObjStep().fail("Exception in "+e.getMessage());
