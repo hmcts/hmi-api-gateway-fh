@@ -16,6 +16,6 @@ steps:
         $format = $_.format
         $operationId = $_.operationId
         $file = $_.templateFile
-        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose
+        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose -ErrorAction Stop
       }
     azurePowerShellVersion: 'LatestVersion'
