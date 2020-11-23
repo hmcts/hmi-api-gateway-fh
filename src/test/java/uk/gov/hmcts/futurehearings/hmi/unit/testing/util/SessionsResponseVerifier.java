@@ -1,8 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import io.restassured.response.Response;
+
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
 
@@ -10,7 +12,7 @@ public class SessionsResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
-    private static final String MISSING_MANDATORY_PARAMS = "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
+    private static final String MISSING_MANDATORY_PARAMS = "Invalid query parameter/s in the request URL.";
 
     public static void  thenValidateResponseForInvalidResource(Response response){
         try{
