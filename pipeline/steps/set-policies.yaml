@@ -12,10 +12,10 @@ steps:
       $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
       $policies = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\policies.json -Raw | ConvertFrom-Json).policies
       foreach ($_ in $policies) {
-        Write-Host "Applying $_.operationId" 
         $format = $_.format
         $operationId = $_.operationId
         $file = $_.templateFile
+        Write-Host "Applying $operationId"
         Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose -ErrorAction Stop
       }
     azurePowerShellVersion: 'LatestVersion'
