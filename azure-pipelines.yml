@@ -184,7 +184,7 @@ stages:
 
   - stage: TestSBOX
     dependsOn: BuildSbox
-    condition: or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
