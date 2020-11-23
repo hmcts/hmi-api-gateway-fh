@@ -6,7 +6,7 @@ protocols = ["http", "https"]
 revision = "1"
 open_api_spec_content_format = "swagger-link-json"
 open_api_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api.json"
-servic#_url = ""
+service_url = ""
 tags = {
     "businessarea":"cross-cutting",
     "application":"hearing-management-interface",
