@@ -25,7 +25,7 @@
                 return invalidKey;
             }" />
         <choose>
-            <when condition="(bool)context.Variables["invalidKeys"])">
+            <when condition="@((bool)context.Variables["invalidKeys"])">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
