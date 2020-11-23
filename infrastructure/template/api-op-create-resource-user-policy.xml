@@ -4,7 +4,7 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http:/#{emulatorHost}#/resources/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
