@@ -27,9 +27,10 @@ import org.springframework.test.context.ActiveProfiles;
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         final Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("requestSessionType", "1234");
+        queryParams.put("requestSessionType", "ADHOC");
 
         this.setParams(queryParams);
+        this.headersAsMap.put("Destination-System", "S&L");
         setRootContext(sessionsApiRootContext);
     }
 }
