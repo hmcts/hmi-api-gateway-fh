@@ -28,6 +28,7 @@
                     <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
                 </set-header>
                 <set-backend-service base-url="http://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
+                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
