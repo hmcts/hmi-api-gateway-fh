@@ -5,9 +5,16 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateFlyweightDT0;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.factory.DelegateDTOFactory;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
+import java.util.Map;
+
+import io.restassured.http.Headers;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +70,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.NOT_FOUND, getInputFileDirectory(),
-                getHmiErrorVerifier(),"Resource not found");
+                getHmiErrorVerifier(),"Resource not found",null);
     }
 
     //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
@@ -72,6 +79,15 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @DisplayName("Successfully validated response with an xml payload")
     void test_successful_response_for_test_xml_body() throws Exception {
 
+        DelegateDTO delegateDTO = DelegateDTOFactory.buildDelegateDTO(getAuthorizationToken(),
+                getRelativeURL(), "sample-xml-payload.xml",
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                this.getHttpSucessStatus(),
+                "common",
+                getHmiSuccessVerifier(),"The request was received successfully.");
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
@@ -81,6 +97,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
-                getHmiSuccessVerifier(),"The request was received successfully.");
+                getHmiSuccessVerifier(),"The request was received successfully.",delegateDTO);
     }
+
 }
