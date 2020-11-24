@@ -4,6 +4,7 @@ import static net.serenitybdd.rest.SerenityRest.expect;
 
 import java.util.Map;
 
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,9 @@ public class RestClientTemplate {
         Response response = null;
         switch (httpMethod) {
             case POST:
-                response = expect().that().statusCode(httpStatus.value())
+                response =
+                        RestAssured
+                                //.expect().that().statusCode(httpStatus.value())
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
@@ -33,7 +36,9 @@ public class RestClientTemplate {
                         .when().post().then().extract().response();
                 break;
             case PUT:
-                response = expect().that().statusCode(httpStatus.value())
+                response =
+                        RestAssured
+                        //.expect().that().statusCode(httpStatus.value())
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
