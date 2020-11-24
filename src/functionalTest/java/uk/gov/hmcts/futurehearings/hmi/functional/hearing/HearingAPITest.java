@@ -20,6 +20,7 @@ import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,6 +46,8 @@ public class HearingAPITest extends FunctionalTest {
 
 
     @Test
+    //@Disabled("TO BE REMOVED -  As this is a Template Test...")
+    @Pending
     public void testSuccessfulPostToHearing() throws IOException {
 
         log.info("Post hearing request to target Instance" + targetInstance);
@@ -54,11 +57,5 @@ public class HearingAPITest extends FunctionalTest {
                                     headersAsMap,
                                     getAuthorizationToken(),
                                     input);
-    }
-
-    @Pending
-    @Test
-    public void testPendingPostToHearing() throws IOException {
-
     }
 }
