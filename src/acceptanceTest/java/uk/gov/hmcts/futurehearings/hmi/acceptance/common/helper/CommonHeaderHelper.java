@@ -212,8 +212,8 @@ public class CommonHeaderHelper {
     ) {
         //Set invalid value for specific header key
         final String acceptType = deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ? MediaType.APPLICATION_PDF_VALUE : MediaType.APPLICATION_JSON_VALUE;
-        final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System") ? "S&L" : "CFT";
-        final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CFT" : DESTINATION_SYSTEM;
+        final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System") ? "CRIMES" : "CFT";
+        final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CRIMES" : DESTINATION_SYSTEM;
         final String requestType = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Type") ? "Robbery" : "Assault";
         final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
         final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
