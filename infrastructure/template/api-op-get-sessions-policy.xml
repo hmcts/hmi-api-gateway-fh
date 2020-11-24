@@ -38,6 +38,9 @@
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
                 </set-header>
+                <set-header name="Request-Processed-At" exists-action="override">
+                    <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
+                </set-header>
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/sessions" />
                 <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
             </when>
