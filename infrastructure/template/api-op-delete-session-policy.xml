@@ -1,8 +1,28 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-session" />
-        <mock-response status-code="200" content-type="application/json" />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+                <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+                <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+                <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-session" />
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
     </inbound>
     <backend>
         <base />
