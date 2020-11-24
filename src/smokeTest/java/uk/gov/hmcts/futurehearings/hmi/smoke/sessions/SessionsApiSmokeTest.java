@@ -3,6 +3,9 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.sessions;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +26,10 @@ import org.springframework.test.context.ActiveProfiles;
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
+        final Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("requestSessionType", "1234");
+
+        this.setParams(queryParams);
         setRootContext(sessionsApiRootContext);
     }
 }
