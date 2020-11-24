@@ -6,10 +6,12 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 import java.util.Map;
 
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 public class ResourcesSteps {
 
     private String resourcesUser;
@@ -48,9 +50,9 @@ public class ResourcesSteps {
 
     @Step("User performs the creation of a location using the Resources API")
     public void shouldCreateALocation(final String apiURL,
-                                   final Map<String, Object> headersAsMap,
-                                   final String authorizationToken,
-                                   final String body) {
+                                      final Map<String, Object> headersAsMap,
+                                      final String authorizationToken,
+                                      final String body) {
 
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
@@ -58,15 +60,16 @@ public class ResourcesSteps {
                 body,
                 HttpMethod.POST,
                 HttpStatus.CREATED);
+        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
 
     }
 
     @Step("User performs the amend of a location using the Resources API")
     public void shouldUpdateALocation(final String apiURL,
-                                   final Map<String, Object> headersAsMap,
-                                   final String authorizationToken,
-                                   final String body) {
+                                      final Map<String, Object> headersAsMap,
+                                      final String authorizationToken,
+                                      final String body) {
 
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
@@ -74,6 +77,7 @@ public class ResourcesSteps {
                 body,
                 HttpMethod.PUT,
                 HttpStatus.NO_CONTENT);
+        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatusCode());
 
     }
