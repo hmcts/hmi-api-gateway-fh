@@ -83,7 +83,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
@@ -100,7 +100,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK,  getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
 
@@ -117,7 +117,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Room Id with and without value - Param : {0} --> {1}")
@@ -133,7 +133,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Session Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -149,7 +149,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Case Id HMCTS with and without value - Param : {0} --> {1}")
@@ -165,7 +165,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -181,7 +181,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Venue_Id & Hearing_Room_Id) with and without value - Param : {0} --> {1}")
@@ -200,7 +200,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Session_Id_CaseHQ, Hearing_Case_Id_Hmcts & Hearing_Id_Casehq) with and without value - Param : {0} --> {1}")
@@ -221,7 +221,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @Test
@@ -241,7 +241,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG);
+                SCHEDULES_SUCCESS_MSG,null);
     }
 
     @Test
@@ -262,6 +262,6 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 }
