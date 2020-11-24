@@ -69,6 +69,8 @@ public abstract class SmokeTest {
 
     protected String rootContext;
 
+    protected Map<String, String> urlParams;
+
     private final String DESTINATION_SYSTEM_MOCK = "MOCK";
     private final String DESTINATION_SYSTEM = DESTINATION_SYSTEM_MOCK;
 
