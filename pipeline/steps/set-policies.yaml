@@ -16,10 +16,6 @@ steps:
         $operationId = $_.operationId
         $file = $_.templateFile
         Write-Host "Applying $operationId"
-        try { 
-          Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose
-          } catch {
-            Write-Error $Error[0] -ErrorAction Stop
-          }
-        }
+        Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose -ErrorAction Stop
+      }
     azurePowerShellVersion: 'LatestVersion'
