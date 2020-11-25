@@ -8,10 +8,12 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.directlisting.process.D
 import java.util.Map;
 
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 public class HearingsSteps {
 
     private String hearingUser;
@@ -28,6 +30,7 @@ public class HearingsSteps {
                 body,
                 HttpMethod.POST,
                 HttpStatus.ACCEPTED);
+        log.debug("The value of the Hearing Response Body"+response.getBody().prettyPrint());
         assertEquals(HttpStatus.ACCEPTED.value(),response.getStatusCode());
 
     }
