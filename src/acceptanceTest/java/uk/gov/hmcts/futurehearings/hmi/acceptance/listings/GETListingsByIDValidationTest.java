@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsByIdValidationVerifier;
@@ -53,6 +54,7 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
                                                          final String returnErrorCode,
                                                          final String returnDescription) throws Exception {
 
+        this.setUrlParams(QueryParamsHelper.buildQueryParams("hearing_type", "1234"));
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
