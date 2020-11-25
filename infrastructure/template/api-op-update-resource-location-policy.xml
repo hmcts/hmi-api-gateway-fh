@@ -24,7 +24,7 @@
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
                 </set-header>
-				<set-backend-service base-url="http://#{sAndLHost}#/resources/locations" />
+				<set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/locations" />
                 <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
