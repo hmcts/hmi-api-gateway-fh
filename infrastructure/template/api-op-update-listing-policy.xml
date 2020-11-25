@@ -12,7 +12,23 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
                 <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
+               <set-header name="Content-Type" exists-action="override">
+                    <value>application/json; charset=utf-8</value>
+                </set-header>
+                <set-header name="Accept" exists-action="override">
+                    <value>application/json; version=1.2</value>
+                </set-header>
+                <set-header name="Request-Type" exists-action="override">
+                    <value>text</value>
+                </set-header>
+                <set-header name="Subscription-Key" exists-action="override">
+                    <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
+                </set-header>
+                <set-header name="Request-Processed-At" exists-action="override">
+                    <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
+                </set-header>
+                <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
+                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
