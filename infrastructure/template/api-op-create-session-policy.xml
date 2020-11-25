@@ -1,10 +1,30 @@
 <policies>
     <inbound>
         <base />
-        <set-backend-service base-url="https://www.hmcts.com/request-hearings/create-session" />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                <mock-response status-code="200" content-type="application/json" />
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://www.hmcts.com/request-hearings/create-session" />
+                <choose>
+                    <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
+                        <mock-response status-code="200" content-type="application/json" />
+                    </when>
+                </choose>
             </when>
         </choose>
     </inbound>
