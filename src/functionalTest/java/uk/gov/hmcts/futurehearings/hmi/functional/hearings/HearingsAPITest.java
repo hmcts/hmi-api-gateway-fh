@@ -7,6 +7,7 @@ import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
 
 import java.io.IOException;
+import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
@@ -43,16 +44,17 @@ public class HearingsAPITest extends FunctionalTest {
     public void testRequestAndAmendHearing() throws IOException {
 
         log.debug("In the testRequestAndAmendHearing () method");
+        int randomId = new Random().nextInt(8);
         String inputBodyForRequestHearing =
-                String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), "615");
+                String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), randomId);
         hearingsSteps.shouldRequestAHearing(hearingsApiRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForRequestHearing);
 
-        hearings_idRootContext = String.format(hearings_idRootContext,"615");
+        hearings_idRootContext = String.format(hearings_idRootContext,randomId);
         String inputBodyForAmendHearing =
-                String.format(readFileContents(HEARINGS_INPUT_PATH + "/PUT-hearing-payload.json"), "615", "615");
+                String.format(readFileContents(HEARINGS_INPUT_PATH + "/PUT-hearing-payload.json"), randomId, randomId);
         hearingsSteps.shouldAmendAHearing(hearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
