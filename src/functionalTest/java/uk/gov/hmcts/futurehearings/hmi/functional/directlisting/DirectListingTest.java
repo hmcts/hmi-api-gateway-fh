@@ -52,14 +52,13 @@ public class DirectListingTest extends FunctionalTest {
 
 
     @Test
-    @Pending
-    public void testSuccessfulDirectListing() throws IOException {
+    public void testSuccessfulDirectListing() throws Exception {
 
         log.debug("In the testSuccessfulPostToHearing () method");
 
         Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("sessionStartDate", "2018-01-29 20:36:01Z");
-        queryParameters.put("sessionEndDate", "2018-01-29 20:36:01Z");
+        queryParameters.put("requestSessionType", "ADHOC");
+        //queryParameters.put("sessionEndDate", "2018-01-29 20:36:01Z");
 
         String sessionIdCaseHQ = directListingSteps.getSessionIdForDirectListing(sessionsRootContext,
                 headersAsMap,
