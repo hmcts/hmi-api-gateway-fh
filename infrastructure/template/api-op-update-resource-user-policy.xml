@@ -2,35 +2,18 @@
    <inbound>
         <base />
         <choose>
-
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
+        	<!-- #{hostName}# -->
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
-				<rewrite-uri template="/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-header name="Content-Type" exists-action="override">
-                    <value>application/json; charset=utf-8</value>
-                </set-header>
-                <set-header name="Accept" exists-action="override">
-                    <value>application/json; version=1.2</value>
-                </set-header>
-                <set-header name="Request-Type" exists-action="override">
-                    <value>text</value>
-                </set-header>
-                <set-header name="Subscription-Key" exists-action="override">
-                    <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
-                </set-header>
-				<set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/users" />
-                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
+				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>

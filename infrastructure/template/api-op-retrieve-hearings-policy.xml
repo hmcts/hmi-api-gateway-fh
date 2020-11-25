@@ -37,21 +37,17 @@
                             }</set-body>
                     </return-response>
                 </when>
-				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+					<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/hearings/" />
 				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<choose>

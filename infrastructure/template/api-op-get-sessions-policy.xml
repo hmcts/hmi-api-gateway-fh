@@ -1,94 +1,122 @@
 <policies>
     <inbound>
         <base />
-        <set-variable name="mandatoryMissing" value="@{
+        <set-variable name="invalidKeys" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-
-                return !qryPrmKeys.Contains("requestSessionType");
+                string[] allowedKeys = {"sessionStartDate","sessionEndDate","caseCourt","room-Name"};
+                bool invalidKey = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                        {
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
+                                break;
+                            }
+                        }
+                        if(!keyFound){
+                            invalidKey = true;
+                            break;
+                        }
+                    }
+                }
+                return invalidKey;
             }" />
         <choose>
-            <when condition="@((bool)context.Variables["mandatoryMissing"])">
+            <when condition="@(context.Request.Url.Query.Count > 4 || (bool)context.Variables["invalidKeys"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("statusCode", 400),
+                        new JProperty("message", "Invalid query parameter/s in the request URL.")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <set-variable name="sessionIdMissing" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"caseCourt","room-Name"};
+                bool invalidKey = false;
+                bool keyFound = false;
+                if(context.Request.Url.Query.Count == 1){
+                    keyFound = true;
+                }
+                if(context.Request.Url.Query.Count == 2){
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == "sessionStartDate" || qryPrmKeys[1] == "sessionEndDate")){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == "sessionStartDate" || qryPrmKeys[0] == "sessionEndDate") && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                }
+                if(context.Request.Url.Query.Count == 3){
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[1] == allowedKeys[0] || qryPrmKeys[1] == allowedKeys[1]) && (qryPrmKeys[2] == allowedKeys[0] || qryPrmKeys[2] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                    if ((qryPrmKeys[0] == allowedKeys[0] || qryPrmKeys[0] == allowedKeys[1]) && (qryPrmKeys[2] == allowedKeys[0] || qryPrmKeys[2] == allowedKeys[1])){
+                        keyFound = true;
+                    }
+                }
+                if(keyFound){
+                    invalidKey = true;
+                }
+                return invalidKey;
+            }" />
+        <choose>
+            <when condition="@((bool)context.Variables["sessionIdMissing"])">
                 <return-response>
                     <set-status code="400" reason="Malformed request." />
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "You need to provide mandatory parameter: 'requestSessionType'")
+                            new JProperty("message", "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'")
                         ).ToString();
                         }</set-body>
                 </return-response>
             </when>
         </choose>
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/" copy-unmatched-params="true" /> 
-                <set-backend-service base-url="https://#{emulatorHost}#/resources/sessions" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-header name="Content-Type" exists-action="override">
-                    <value>application/json; charset=utf-8</value>
-                </set-header>
-                <set-header name="Accept" exists-action="override">
-                    <value>application/json; version=1.2</value>
-                </set-header>
-                <set-header name="Request-Type" exists-action="override">
-                    <value>text</value>
-                </set-header>
-                <set-header name="Subscription-Key" exists-action="override">
-                    <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
-                </set-header>
-                <set-header name="Request-Processed-At" exists-action="override">
-                    <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
-                </set-header>
-                <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/sessions" />
-                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("sessionIdCaseHQ") != null)">
                 <return-response>
-                    <set-status code="200" />
+                    <set-status code="200" reason="Successful reesponse." />
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/json</value>
                     </set-header>
                     <set-body>@{
-                            var data = new JArray();
-                            JObject recordOne = new JObject(
-                                new JProperty("sessionStartDate", "2018-01-29 20:36:01Z"),
-                                new JProperty("sessionEndDate", "2018-01-29 20:36:01Z"),
-                                new JProperty("caseCourt", "Milton Keynes"),
-                                new JProperty("room-Name", "RM012"),
-                                new JProperty("JoH", new JObject(
-                                    new JProperty("PersonRoleID", "PR012"),
-                                    new JProperty("PersonID", "P012"),
-                                    new JProperty("PersonRole", "Judge"),
-                                    new JProperty("personName", "Marcus Trescothic"),
-                                    new JProperty("TicketName", "T123")
-                                )),
-                                new JProperty("SessionType", "DS"),
-                                new JProperty("SessionIDCaseHQ", "SID012")
-                            );
-                            JObject recordTwo = new JObject(
-                                new JProperty("sessionStartDate", "2018-01-29 10:36:01Z"),
-                                new JProperty("sessionEndDate", "2018-01-29 12:36:01Z"),
-                                new JProperty("caseCourt", "Oxford"),
-                                new JProperty("room-Name", "RM012"),
-                                new JProperty("JoH", new JObject(
-                                    new JProperty("PersonRoleID", "PR012"),
-                                    new JProperty("PersonID", "P012"),
-                                    new JProperty("PersonRole", "Judge"),
-                                    new JProperty("personName", "Donald Duck"),
-                                    new JProperty("TicketName", "T123")
-                                )),
-                                new JProperty("SessionType", "DS"),
-                                new JProperty("SessionIDCaseHQ", "SID015")
-                            );
-                            data.Add(recordOne);
-                            data.Add(recordTwo);
-                            return data.ToString();
+                        return new JObject(
+                            new JProperty("sessionStartDate", "2018-01-29 20:36:01Z"),
+                            new JProperty("sessionEndDate", "2018-01-29 20:36:01Z"),
+                            new JProperty("caseCourt", "Milton Keynes"),
+                            new JProperty("room-Name", "RM012"),
+                            new JProperty("JoH", new JObject(
+                                new JProperty("PersonRoleID", "PR012"),
+                                new JProperty("PersonID", "P012"),
+                                new JProperty("PersonRole", "Judge"),
+                                new JProperty("personName", "Marcus Trescothic"),
+                                new JProperty("TicketName", "T123")
+                             )),
+                            new JProperty("SessionType", "DS"),
+                            new JProperty("SessionIDCaseHQ", "SID012")
+                        ).ToString();
                         }</set-body>
                 </return-response>
             </when>
         </choose>
+        <set-backend-service base-url="https://www.hmcts.com/sessions/get-sessions" />
+        <mock-response status-code="200" content-type="application/json" />
     </inbound>
     <backend>
         <base />
