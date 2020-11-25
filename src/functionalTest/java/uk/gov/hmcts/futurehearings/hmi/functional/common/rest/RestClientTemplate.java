@@ -65,7 +65,9 @@ public class RestClientTemplate {
                                                            final Map<String, String> queryParams,
                                                            final HttpStatus httpStatus) {
 
-        return expect().that().statusCode(httpStatus.value())
+        return
+                RestAssured
+                        //.expect().that().statusCode(httpStatus.value())
                 .given()
                 .queryParams(queryParams)
                 .headers(headersAsMap)
