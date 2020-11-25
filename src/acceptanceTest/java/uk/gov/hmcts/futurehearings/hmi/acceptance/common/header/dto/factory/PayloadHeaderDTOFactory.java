@@ -11,7 +11,6 @@ import java.util.Objects;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import lombok.EqualsAndHashCode;
@@ -118,6 +117,15 @@ public class PayloadHeaderDTOFactory {
         final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
         headerMap.put("Cache-Control", systemHeaderDTO.cacheControl());
         headerMap.put("Content-Encoding", systemHeaderDTO.contentEncoding());
+        return headerMap;
+    }
+
+    public static final Map<String, String> convertToMapAfterHeadersAdded(final SystemHeaderDTO systemHeaderDTO,
+                                                                            final BusinessHeaderDTO businessHeaderDTO,
+                                                                            final Map<String,String> headersToAdd) {
+
+        final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
+        headerMap.putAll(headersToAdd);
         return headerMap;
     }
 
