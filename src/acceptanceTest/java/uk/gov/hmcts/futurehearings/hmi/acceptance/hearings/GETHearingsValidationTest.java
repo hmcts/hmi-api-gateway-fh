@@ -1,11 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsByQueryValidationVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsValidationVerifier;
@@ -245,5 +247,31 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 INVALID_QUERY_PARAMETER_MSG,null);
     }
 
+    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
+    @CsvSource(value = {"EMULATOR,400,1000,mandatory value missing", "EMULATOR,400,1003,bad LOV value"}, nullValues = "NIL")
+    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
+                                                         final String returnHttpCode,
+                                                         final String returnErrorCode,
+                                                         final String returnDescription) throws Exception {
+
+        final HttpStatus httpStatus =
+                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), "hearing-request-standard.json",
+                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                        destinationSystem,
+                        returnHttpCode,
+                        returnErrorCode,
+                        returnDescription),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                httpStatus,
+                getInputFileDirectory(),
+                new CaseHQCommonErrorVerifier(),
+                returnDescription,
+                null);
+    }
 
 }
