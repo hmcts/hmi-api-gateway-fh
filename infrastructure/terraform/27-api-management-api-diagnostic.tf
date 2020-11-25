@@ -7,7 +7,7 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
 
   always_log_errors         = true
   log_client_ip             = true
-  verbosity                 = "Verbose"
+  verbosity                 = "information"
   http_correlation_protocol = "W3C"
 
   frontend_request {
