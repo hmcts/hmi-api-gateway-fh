@@ -153,6 +153,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                                                          final String returnErrorCode,
                                                          final String returnDescription) throws Exception {
 
+        this.setUrlParams(QueryParamsHelper.buildQueryParams("hearing_type", "1234"));
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
