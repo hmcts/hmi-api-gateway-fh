@@ -10,6 +10,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -69,6 +70,8 @@ public abstract class SmokeTest {
 
     protected String rootContext;
 
+    protected Map<String, String> params;
+
     private final String DESTINATION_SYSTEM_MOCK = "MOCK";
     private final String DESTINATION_SYSTEM = DESTINATION_SYSTEM_MOCK;
 
@@ -123,11 +126,23 @@ public abstract class SmokeTest {
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     void testSuccessfulHmiApiGet() {
 
-        Response response = given()
-                .headers(headersAsMap)
-                .auth().oauth2(getAuthorizationToken())
-                .basePath(getRootContext())
-                .when().get();
+        Response response = null;
+
+        if (Objects.isNull(params) || params.size() == 0) {
+            response = given()
+                    .headers(headersAsMap)
+                    .auth().oauth2(getAuthorizationToken())
+                    .basePath(getRootContext())
+                    .when().get();
+        } else {
+            log.debug("Query params :" + params);
+            response = given()
+                    .queryParams(params)
+                    .headers(headersAsMap)
+                    .auth().oauth2(getAuthorizationToken())
+                    .basePath(getRootContext())
+                    .when().get();
+        }
 
         if (response.getStatusCode() != 200) {
             log.debug(" The value of the Response Status " + response.getStatusCode());
