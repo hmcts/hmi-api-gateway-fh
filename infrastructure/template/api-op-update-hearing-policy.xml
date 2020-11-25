@@ -4,11 +4,11 @@
 		<choose>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{emulatorHost}#/hearings/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
             </when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{emulatorHost}#/hearings/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
