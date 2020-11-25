@@ -1,4 +1,4 @@
 { 
-    "sAndLHost":  "hmi-casehqemulator.sandbox.platform.hmcts.net",
-    "mcgirrHost":  "hmcts-uat.casehq.net"
+    "hostName":  "hmi-casehqemulator.sandbox.platform.hmcts.net",
+    "mockEndpoint": ""
 }

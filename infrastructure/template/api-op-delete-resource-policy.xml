@@ -2,21 +2,17 @@
     <inbound>
         <base />
         <choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+				<set-backend-service base-url="http://hmi-casehqemulator.sandbox.platform.hmcts.net/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>
