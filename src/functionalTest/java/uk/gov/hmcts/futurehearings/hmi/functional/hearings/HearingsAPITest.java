@@ -44,7 +44,7 @@ public class HearingsAPITest extends FunctionalTest {
     public void testRequestAndAmendHearing() throws IOException {
 
         log.debug("In the testRequestAndAmendHearing () method");
-        int randomId = new Random().nextInt(8);
+        int randomId = new Random().nextInt(99999999);
         String inputBodyForRequestHearing =
                 String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), randomId);
         hearingsSteps.shouldRequestAHearing(hearingsApiRootContext,
