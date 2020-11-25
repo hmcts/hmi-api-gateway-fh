@@ -22,7 +22,7 @@ public class DirectListingSteps {
     public String getSessionIdForDirectListing(final String apiURL,
                                                final Map<String, Object> headersAsMap,
                                                final String authorizationToken,
-                                               final Map<String, String> queryParameters) {
+                                               final Map<String, String> queryParameters) throws Exception {
 
         String sessionIdCaseHQ = getSessionId(callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,

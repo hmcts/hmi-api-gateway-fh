@@ -1,11 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.resources;
 
+
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
 import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
+import java.util.Random;
 
 import java.io.IOException;
 
@@ -50,8 +52,9 @@ public class ResourcesAPITest extends FunctionalTest {
     public void testRequestAndAmendAResourceByUser() throws IOException {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(99999999);
         String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), "615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
         resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -59,7 +62,7 @@ public class ResourcesAPITest extends FunctionalTest {
 
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"615");
         String inputBodyForAmendResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), "615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomId);
         resourceSteps.shouldUpdateAnUser(resourcesByUser_idRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -70,16 +73,17 @@ public class ResourcesAPITest extends FunctionalTest {
     public void testRequestAndAmendAResourceByLocation() throws IOException {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(99999999);
         String inputBodyForCreateResourcesByLocation =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), "615","615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), randomId,randomId);
         resourceSteps.shouldCreateALocation(resourcesByLocationRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForCreateResourcesByLocation);
 
-        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,"615");
+        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
         String inputBodyForAmendResourcesByLocation =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-location-payload.json"), "615","615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-location-payload.json"), randomId,randomId);
         resourceSteps.shouldUpdateALocation(resourcesByLocation_idRootContext,
                 headersAsMap,
                 authorizationToken,
