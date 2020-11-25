@@ -1,9 +1,30 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.springframework.beans.factory.annotation.Value;
+
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForNoMandatoryParams;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForRetrieve;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForAdditionalParam;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +36,6 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.*;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -203,11 +221,11 @@ class GET_sessions_UnitTests {
 
     @Order(11)
     @ParameterizedTest(name = "Test for mandatory parameter - {0}")
-    @ValueSource(strings = {"requestStartDate","requestEndDate"})
+    @ValueSource(strings = {"sessionStartDate","sessionEndDate"})
     void testRetrieveSessionsRequestWithDateParams(String iteration) {
         paramsAsMap.clear();
         paramsAsMap.put(iteration,"2018-01-29 20:36:01Z");
-        paramsAsMap.put("requestSessionType", "any");
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -216,8 +234,9 @@ class GET_sessions_UnitTests {
     @Order(12)
     @DisplayName("Test with one non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithOneNonMandatoryParams() {
-        paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "any");
+        paramsAsMap.remove("sessionStartDate");
+        paramsAsMap.remove("room-Name");
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -226,8 +245,8 @@ class GET_sessions_UnitTests {
     @Order(13)
     @DisplayName("Test with two non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
-        paramsAsMap.remove("requestEndDate");
-        paramsAsMap.put("requestSessionType", "any");
+        paramsAsMap.remove("sessionEndDate");
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -238,7 +257,9 @@ class GET_sessions_UnitTests {
     @DisplayName("Test with no mandatory parameters")
     void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "any");
+        paramsAsMap.put("caseCourt","oxford");
+        paramsAsMap.put("room-Name", "RM012");
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -247,6 +268,7 @@ class GET_sessions_UnitTests {
     @Order(15)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -255,6 +277,7 @@ class GET_sessions_UnitTests {
     @Order(16)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
+
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForRetrieve(response);
     }
@@ -290,15 +313,11 @@ class GET_sessions_UnitTests {
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams() {
-        paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "any");
         return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams() {
-        paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "any");
-        return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {
