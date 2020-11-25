@@ -52,8 +52,9 @@ public class ResourcesAPITest extends FunctionalTest {
     public void testRequestAndAmendAResourceByUser() throws IOException {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(8);
         String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), "615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
         resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -61,7 +62,7 @@ public class ResourcesAPITest extends FunctionalTest {
 
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"615");
         String inputBodyForAmendResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), "615");
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomId);
         resourceSteps.shouldUpdateAnUser(resourcesByUser_idRootContext,
                 headersAsMap,
                 authorizationToken,
