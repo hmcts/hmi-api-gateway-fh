@@ -1,3 +1,7 @@
+data "azurerm_key_vault" "infra_key_vault" {
+  name                = "hmi-shared-kv-${var.environment}"
+  resource_group_name = "hmi-sharedservices-${var.environment}-rg"
+}
 variable "tenant_id" {
   description = "The Tenant ID for the principal we're giving permission to."
 }
