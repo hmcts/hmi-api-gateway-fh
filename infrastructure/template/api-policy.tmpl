@@ -23,7 +23,7 @@
         </cors>
         <!-- set a header to enable mocks -->
         ${enableMockHeader}
-        <set-header name="TransactionID" exists-action="skip">
+        <set-header name="transactionHMCSTId" exists-action="skip">
             <value>@{
                 return DateTime.Now.ToString("yyyyMMddmmss");
             }</value>
