@@ -72,10 +72,6 @@ class POSTHearingsValidationTest extends HearingValidationTest {
                 getHmiSuccessVerifier(),"The request was received successfully.",null);
     }
 
-    //@Test
-    //@Tag("sbox")
-    //@Tag("test")
-    //@DisplayName("Successfully validated response with all the header values from a Wiremock Instance")
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
     @CsvSource(value = {"EMULATOR,400,1000,Invalid LOV Value","EMULATOR,400,1003,mandatory value missing","EMULATOR,400,1004,schema validation failure"}, nullValues = "NIL")
     void test_successful_response_from_the_emulator_stub(final String destinationSystem,
