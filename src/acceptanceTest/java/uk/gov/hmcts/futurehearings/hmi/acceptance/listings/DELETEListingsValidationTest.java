@@ -86,7 +86,7 @@ class DELETEListingsValidationTest extends ListingsValidationTest {
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
-                getRelativeURL(), "put-listings-request-valid.json",
+                getRelativeURL(), "delete-listings-request-valid.json",
                 createHeaderWithEmulatorValues(getApiSubscriptionKey(),
                         destinationSystem,
                         returnHttpCode,
