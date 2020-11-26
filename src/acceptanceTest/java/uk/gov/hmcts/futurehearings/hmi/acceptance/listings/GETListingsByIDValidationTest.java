@@ -1,12 +1,18 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
+
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsByIdValidationVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -39,5 +45,33 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
         this.setHmiSuccessVerifier(new GETListingsByIdValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+    }
+
+    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
+    @CsvSource(value = {"EMULATOR,400,1002,reference to a resource that doesn't exist"}, nullValues = "NIL")
+    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
+                                                         final String returnHttpCode,
+                                                         final String returnErrorCode,
+                                                         final String returnDescription) throws Exception {
+
+        this.setUrlParams(QueryParamsHelper.buildQueryParams("hearing_type", "1234"));
+        final HttpStatus httpStatus =
+                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                        destinationSystem,
+                        returnHttpCode,
+                        returnErrorCode,
+                        returnDescription),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                httpStatus,
+                getInputFileDirectory(),
+                new CaseHQCommonErrorVerifier(),
+                returnDescription,
+                null);
     }
 }
