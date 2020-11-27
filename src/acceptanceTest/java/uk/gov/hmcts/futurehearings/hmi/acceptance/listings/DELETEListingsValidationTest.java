@@ -46,12 +46,12 @@ class DELETEListingsValidationTest extends ListingsValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        listings_idRootContext = String.format(listings_idRootContext,"12345");
+        listings_idRootContext = String.format(listings_idRootContext, "12345");
         this.setRelativeURL(listings_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-listings-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings", "listing"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
@@ -72,33 +72,6 @@ class DELETEListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
-                getHmiSuccessVerifier(),"The request was received successfully.",null);
-    }
-
-    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
-    @CsvSource(value = {"EMULATOR,400,1000,Invalid LOV Value","EMULATOR,400,1003,mandatory value missing","EMULATOR,400,1004,schema validation failure"}, nullValues = "NIL")
-    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
-                                                         final String returnHttpCode,
-                                                         final String returnErrorCode,
-                                                         final String returnDescription) throws Exception {
-
-        final HttpStatus httpStatus =
-                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getAuthorizationToken(),
-                getRelativeURL(), "delete-listings-request-valid.json",
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
-                        destinationSystem,
-                        returnHttpCode,
-                        returnErrorCode,
-                        returnDescription),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                httpStatus,
-                getInputFileDirectory(),
-                new CaseHQCommonErrorVerifier(),
-                returnDescription,
-                null);
+                getHmiSuccessVerifier(), "The request was received successfully.", null);
     }
 }

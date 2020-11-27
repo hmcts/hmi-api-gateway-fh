@@ -1,9 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.verify.GETSchedulesValidationVerifier;
 
@@ -56,7 +58,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     private String scope;
 
     private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
-    private static final String SCHEDULES_SUCCESS_MSG= "The request was received successfully.";
+    private static final String SCHEDULES_SUCCESS_MSG = "The request was received successfully.";
 
     @BeforeAll
     public void initialiseValues() throws Exception {
@@ -64,7 +66,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
         this.setRelativeURL(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("schedules","schedule"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("schedules", "schedule"));
         this.setHmiSuccessVerifier(new GETSchedulesValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
@@ -83,13 +85,13 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_date, date", "hearing_date,''", "hearing_date,' '", "hearing_date,NIL", "hearing_date, 2002-10-02T10:00:00-05:00"}, nullValues = "NIL")
     void test_hearing_date_queryparam_with_value(final String hearingDateKey,
-                                                        final String hearingDateValue) throws IOException {
+                                                 final String hearingDateValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -98,9 +100,9 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK,  getInputFileDirectory(),
+                HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
 
@@ -117,7 +119,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Room Id with and without value - Param : {0} --> {1}")
@@ -133,7 +135,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Session Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -149,7 +151,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Case Id HMCTS with and without value - Param : {0} --> {1}")
@@ -165,7 +167,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -181,15 +183,15 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Venue_Id & Hearing_Room_Id) with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_venue_id,234,hearing_room_id,123", "hearing_venue_id,NIL,hearing_room_id,NIL"}, nullValues = "NIL")
     void test_multiple_queryparam_with_value(final String hearingVenueIdKey,
-                                                    final String hearingVenueIdValue,
-                                                    final String hearingRoomIdKey,
-                                                    final String hearingRoomIdValue) throws IOException {
+                                             final String hearingVenueIdValue,
+                                             final String hearingRoomIdKey,
+                                             final String hearingRoomIdValue) throws IOException {
         this.setUrlParams(buildQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -200,17 +202,17 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Multiple params (Hearing_Session_Id_CaseHQ, Hearing_Case_Id_Hmcts & Hearing_Id_Casehq) with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_session_id_casehq,234,hearing_case_id_hmcts,123,hearing_id_casehq,case1", "hearing_session_id_casehq,NIL,hearing_case_id_hmcts,NIL,hearing_id_casehq,NIL"}, nullValues = "NIL")
     void test_multiple_queryparams_with_value(final String paramKey1,
-                                                    final String paramVal1,
-                                                    final String paramKey2,
-                                                    final String paramVal2,
-                                                    final String paramKey3,
-                                                    final String paramVal3) throws IOException {
+                                              final String paramVal1,
+                                              final String paramKey2,
+                                              final String paramVal2,
+                                              final String paramKey3,
+                                              final String paramVal3) throws IOException {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -221,17 +223,17 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @Test
     void test_all_params_with_value() throws IOException {
         this.setUrlParams(buildQueryParams("hearing_date", "09/09/1964",
-                                                    "hearing_venue_id", "1",
-                                                    "hearing_room_id", null,
-                                                    "hearing_session_id_casehq","",
-                                                    "hearing_case_id_hmcts"," ",
-                                                    "hearing_id_casehq",""));
+                "hearing_venue_id", "1",
+                "hearing_room_id", null,
+                "hearing_session_id_casehq", "",
+                "hearing_case_id_hmcts", " ",
+                "hearing_id_casehq", ""));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -241,7 +243,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SCHEDULES_SUCCESS_MSG,null);
+                SCHEDULES_SUCCESS_MSG, null);
     }
 
     @Test
@@ -249,10 +251,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
         this.setUrlParams(buildQueryParams("hearing_date", "09/09/1964",
                 "hearing_venue_id", "1",
                 "hearing_room_id", null,
-                "hearing_session_id_casehq","",
-                "hearing_case_id_hmcts"," ",
-                "hearing_id_casehq","",
-                "extra_param",""));
+                "hearing_session_id_casehq", "",
+                "hearing_case_id_hmcts", " ",
+                "hearing_id_casehq", "",
+                "extra_param", ""));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -262,6 +264,6 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG, null);
     }
 }
