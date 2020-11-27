@@ -47,7 +47,7 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
+    /*@ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
     @CsvSource(value = {"EMULATOR,400,1002,reference to a resource that doesn't exist"}, nullValues = "NIL")
     void test_successful_response_from_the_emulator_stub(final String destinationSystem,
                                                          final String returnHttpCode,
@@ -73,5 +73,5 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
                 new CaseHQCommonErrorVerifier(),
                 returnDescription,
                 null);
-    }
+    }*/
 }
