@@ -25,6 +25,21 @@
                 <set-backend-service base-url="https://#{emulatorHost}#/resources/sessions" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+                 <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                    <set-url>https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                    <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                    <set-body>@{
+                        return "client_id=b085c529-1b29-4075-969c-32ebfaddb1e4&scope=api://d49d7fa2-6904-4223-a907-3b8992af4190/.default&client_secret=4b3eca29-2ff6-4419-8061-2b23cef9e756&grant_type=client_credentials";}
+                    </set-body>
+                </send-request>
+                <set-header name="Authorization" exists-action="override">
+                    <value>
+                    @("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])
+                    </value>
+                </set-header>
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-header name="Content-Type" exists-action="override">
                     <value>application/json; charset=utf-8</value>
@@ -41,6 +56,8 @@
                 <set-header name="Request-Processed-At" exists-action="override">
                     <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
                 </set-header>
+                <!--  Don't expose APIM subscription key to the backend. -->
+                <set-header exists-action="delete" name="Ocp-Apim-Subscription-Key"/>
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/sessions" />
                 <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
             </when>
