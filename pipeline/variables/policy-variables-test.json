@@ -7,5 +7,8 @@
     "cftRootCtx": "casehqapi/rest/hmcts",
     "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
+    "sAndLOauthUrl": "https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token",
+    "sAndLAuthClient": "b085c529-1b29-4075-969c-32ebfaddb1e4",
+    "sAndLAuthSecret": "4b3eca29-2ff6-4419-8061-2b23cef9e756",
     "mockEndpoint": ""
 }
