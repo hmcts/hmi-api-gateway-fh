@@ -25,7 +25,7 @@
         ${enableMockHeader}
         <set-header name="transactionHMCSTId" exists-action="skip">
             <value>@{
-                return new Guid.ToString();
+                return new Guid().ToString();
             }</value>
         </set-header>
         <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
