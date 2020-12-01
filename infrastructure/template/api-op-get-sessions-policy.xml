@@ -26,13 +26,13 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
                  <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
-                    <set-url>https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token</set-url>
+                    <set-url>#{sAndLOauthUrl}#</set-url>
                     <set-method>POST</set-method>
                     <set-header name="Content-Type" exists-action="override">
                     <value>application/x-www-form-urlencoded</value>
                     </set-header>
                     <set-body>@{
-                        return "client_id=b085c529-1b29-4075-969c-32ebfaddb1e4&scope=api://d49d7fa2-6904-4223-a907-3b8992af4190/.default&client_secret=4b3eca29-2ff6-4419-8061-2b23cef9e756&grant_type=client_credentials";}
+                        return "client_id=#{sAndLAuthClient}#&client_secret=#{sAndLAuthSecret}#&grant_type=client_credentials";}
                     </set-body>
                 </send-request>
                 <set-header name="Authorization" exists-action="override">
