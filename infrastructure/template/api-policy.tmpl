@@ -23,7 +23,7 @@
         </cors>
         <!-- set a header to enable mocks -->
         ${enableMockHeader}
-        <set-header name="transactionHMCSTId" exists-action="skip">
+        <set-header name="transactionIdHMCTS" exists-action="skip">
             <value>@{
                 var guidBinary = new byte[16];
                 Array.Copy(Guid.NewGuid().ToByteArray(), 0, guidBinary, 0, 10);
