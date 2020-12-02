@@ -55,7 +55,7 @@ class PUTListingsValidationTest extends ListingsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
+   /* @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
     @CsvSource(value = {"EMULATOR,400,1000,Invalid LOV Value","EMULATOR,400,1003,mandatory value missing","EMULATOR,400,1004,schema validation failure"}, nullValues = "NIL")
     void test_successful_response_from_the_emulator_stub(final String destinationSystem,
                                                          final String returnHttpCode,
@@ -80,5 +80,5 @@ class PUTListingsValidationTest extends ListingsValidationTest {
                 new CaseHQCommonErrorVerifier(),
                 returnDescription,
                 null);
-    }
+    }*/
 }
