@@ -1,4 +1,7 @@
 { 
     "sAndLHost":  "hmi-casehqemulator.sandbox.platform.hmcts.net",
+    "sAndLOauthUrl": "https://hmcts-uat.casehq.net/hmi_oauth2/resources/hmi/token",
+    "sAndLAuthClient": "api-uat-casehq@mcmshmcts.onmicrosoft.com",
+    "sAndLAuthSecret": "JTuREp6m4W9KyjbzFpnUFanh",
     "mcgirrHost":  "hmcts-uat.casehq.net"
 }
