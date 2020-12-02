@@ -12,19 +12,16 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
-                    <set-url>#{sAndLOauthUrl}#</set-url>
+                    <set-url>https://hmcts-uat.casehq.net/hmi_oauth2/resources/hmi/token</set-url>
                     <set-method>POST</set-method>
                     <set-header name="Content-Type" exists-action="override">
-                    <value>application/x-www-form-urlencoded</value>
+                        <value>application/x-www-form-urlencoded</value>
                     </set-header>
                     <set-body>@{
-                        return "client_id=#{sAndLAuthClient}#&client_secret=#{sAndLAuthSecret}#&grant_type=client_credentials";}
-                    </set-body>
+                        return "username=api-uat-casehq@mcmshmcts.onmicrosoft.com&password=JTuREp6m4W9KyjbzFpnUFanh&grant_type=password_credentials";}</set-body>
                 </send-request>
                 <set-header name="Authorization" exists-action="override">
-                    <value>
-                    @("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])
-                    </value>
+                    <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])</value>
                 </set-header>
 				<rewrite-uri template="/{locationCaseHQId}" copy-unmatched-params="true" />
 				<set-header name="Content-Type" exists-action="override">
@@ -39,8 +36,9 @@
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
                 </set-header>
+                <!--  Don't expose APIM subscription key to the backend. -->
+                <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
 				<set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/locations" />
-                <authentication-basic username="HmiApiUser" password="HMI_API_QDX77581" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
