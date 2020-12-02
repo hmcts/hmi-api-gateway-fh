@@ -12,13 +12,13 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
 				<send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
-                    <set-url>https://hmcts-uat.casehq.net/hmi_oauth2/resources/hmi/token</set-url>
+                    <set-url>#{sAndLOauthUrl}#</set-url>
                     <set-method>POST</set-method>
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/x-www-form-urlencoded</value>
                     </set-header>
                     <set-body>@{
-                        return "username=api-uat-casehq@mcmshmcts.onmicrosoft.com&password=JTuREp6m4W9KyjbzFpnUFanh&grant_type=password_credentials";}</set-body>
+                        return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
                 </send-request>
                 <set-header name="Authorization" exists-action="override">
                     <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])</value>
