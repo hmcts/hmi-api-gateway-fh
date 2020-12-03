@@ -32,20 +32,15 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
     @Value("${token_apiURL}")
     private String token_apiURL;
 
-    @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    @Value("${token_username}")
+    private String token_username;
 
-    @Value("${grantType}")
-    private String grantType;
+    @Value("${token_password}")
+    private String token_password;
 
-    @Value("${clientID}")
-    private String clientID;
+    @Value("${expired_access_token}")
+    private String expired_access_token;
 
-    @Value("${clientSecret}")
-    private String clientSecret;
-
-    @Value("${scope}")
-    private String scope;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
@@ -55,12 +50,10 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("hearings");
-       /* String authorizationToken = generateOAuthToken (token_apiURL,
-                token_apiTenantId,
-                grantType, clientID,
-                clientSecret,
-                scope,
-                HttpStatus.OK);*/
-        //this.setAuthorizationToken(authorizationToken);
+        String authorizationToken = generateOAuthToken(token_apiURL,
+                token_username,
+                token_password,
+                HttpStatus.OK);
+        this.setAuthorizationToken(authorizationToken);
     }
 }
