@@ -1,12 +1,16 @@
 package uk.gov.hmcts.futurehearings.snl.acceptance.security;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.reset;
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 import static uk.gov.hmcts.futurehearings.snl.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
+import java.util.Map;
 import java.util.Objects;
 
 import io.restassured.RestAssured;
@@ -42,9 +46,14 @@ class OAuthTokenGeneratorTest {
     @Value("${token_password}")
     private String token_password;
 
-    @Value("${token_password}")
-    private String token_password;
-    expiredAccessToken
+    @Value("${expired_access_token}")
+    private String expired_access_token;
+
+    @Value("${targetInstance}")
+    private String targetInstance;
+
+    @Value("${sessionsApiRootContext}")
+    private String sessionsApiRootContext;
 
     @BeforeAll
     public void initialiseValues() {
@@ -96,39 +105,42 @@ class OAuthTokenGeneratorTest {
                 HttpStatus.BAD_REQUEST);
     }
 
-    /*@Test
-    @Order(3)
+    @Test
     @DisplayName("Test for Invalid OAuth Token")
-    void testSecureRequestForInvalidOAuthToken() {
+    void test_secure_request_for_invalid_oauth_token() {
 
-        Response response = given()
+        Response response = RestAssured
+                .expect().that().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .given()
                 .auth()
                 .oauth2("accessToken")
-                .header("Ocp-Apim-Subscription-Key", targetSubscriptionKey)
                 .baseUri(targetInstance)
-                .basePath(secureApiRootContext)
+                .basePath(sessionsApiRootContext)
+                .queryParams(Map.of("requestSessionType", "ADHOC"))
                 .when()
                 .get();
-
-        validateInvalidOauthResponse(response);
+        validateInvalidOauthResponse(HttpStatus.UNAUTHORIZED , response);
     }
 
     @Test
-    @Order(4)
-    @DisplayName("Test for expired OAuth Token")
-    void testSecureRequestForExpiredOAuthToken() {
+    @DisplayName("Test for Expired OAuth Token")
+    void test_secure_request_for_expired_oauth_token() {
 
-        Response response = given()
+        Response response = RestAssured
+                .expect().that().statusCode(HttpStatus.UNAUTHORIZED.value())
+                .given()
                 .auth()
-                .oauth2(expiredAccessToken)
-                .header("Ocp-Apim-Subscription-Key", targetSubscriptionKey)
+                .oauth2("accessToken")
                 .baseUri(targetInstance)
-                .basePath(secureApiRootContext)
+                .basePath(sessionsApiRootContext)
+                .queryParams(Map.of("requestSessionType", "ADHOC"))
                 .when()
                 .get();
-
-        validateInvalidOauthResponse(response);
+        validateInvalidOauthResponse(HttpStatus.UNAUTHORIZED , response);
     }
-*/
 
+    void validateInvalidOauthResponse(HttpStatus httpStatus ,Response response) {
+        // TO DO - Implement the Response Once XML Response Defect is Fixed.
+        log.debug(response.prettyPrint());
+    }
 }
