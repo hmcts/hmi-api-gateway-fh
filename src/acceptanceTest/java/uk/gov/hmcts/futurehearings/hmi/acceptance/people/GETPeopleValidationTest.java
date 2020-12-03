@@ -53,10 +53,59 @@ class GETPeopleValidationTest extends PeopleValidationTest {
     }
 
     @ParameterizedTest(name = "Test updated_since param without valid ISO 8601 date format (YYYY-mm-dd)  - Param : {0} --> {1}")
-    @CsvSource(value = {"updated_since, 01-31-2018","updated_since,'31-01-2018'", "updated_since,'2018-01-29 20:36:01Z'",
+    @CsvSource(value = {"updated_since, '01-31-2018'","updated_since,'31-01-2018'", "updated_since,'2018-01-29 20:36:01Z'",
             "updated_since,'2000-12-19T11:59:59.374Z'", "updated_since,NIL"}, nullValues= "NIL")
     void test_updated_since_queryparam_negative_value(final String updatedSinceKey, final String updatedSinceValue) throws IOException {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                UPDATED_SINCE_INVALID_DATE_FORMAT,null);
+    }
+
+    @ParameterizedTest(name = "Test updated_since param with valid ISO 8601 date format (YYYY-mm-dd)  - Param : {0} --> {1}")
+    @CsvSource(value = {"updated_since, '2020-10-01'","updated_since,'2020-12-03T15:05:57Z'", "updated_since,'2020-12-03T15:05:57+00:00'",
+            "updated_since,'20201203T150557Z'"})
+    void test_updated_since_queryparam_valid_value(final String updatedSinceKey, final String updatedSinceValue) throws IOException {
+        this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                SUCCESS_MSG,null);
+    }
+
+    @ParameterizedTest(name = "Test per_page param without mandatory updated_since param - Param : {0} --> {1}")
+    @CsvSource(value = {"per_page, 50","per_page,' '", "per_page,NIL"}, nullValues= "NIL")
+    void test_per_page_without_mandatory_updated_since_queryparam(final String perPageKey, final String perPageValue) throws IOException {
+        this.setUrlParams(buildQueryParams(perPageKey, perPageValue));
+        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createStandardPayloadHeader(getApiSubscriptionKey()),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
+                getHmiErrorVerifier(),
+                UPDATED_SINCE_INVALID_DATE_FORMAT,null);
+    }
+
+    @ParameterizedTest(name = "Test page param without mandatory updated_since param - Param : {0} --> {1}")
+    @CsvSource(value = {"page, 2","page,' '", "page,NIL"}, nullValues= "NIL")
+    void test_page_without_mandatory_updated_since_queryparam(final String pageKey, final String pageValue) throws IOException {
+        this.setUrlParams(buildQueryParams(pageKey, pageValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
