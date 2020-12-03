@@ -12,20 +12,17 @@ import org.springframework.http.HttpStatus;
 public class OAuthTokenGenerator {
 
     public static final String generateOAuthToken(final String token_apiURL,
-                                                  final String token_apiTenantId,
-                                                  final String grantType,
-                                                  final String clientID,
-                                                  final String clientSecret,
-                                                  final String scope,
+                                                  final String userName,
+                                                  final String password,
                                                   final HttpStatus httpStatus) throws Exception {
 
-        String full_token_apiURL = String.format(token_apiURL, token_apiTenantId);
-        final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
-                grantType, clientID, clientSecret, scope);
+        String full_token_apiURL = token_apiURL;
+        final String bodyForToken = String.format("username=%s&password=%s",
+                userName, password);
 
         Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
         assertEquals(httpStatus.value(), response.getStatusCode());
-        return response.jsonPath().getString("access_token");
+        return response.jsonPath().getString("idToken");
     }
 
     public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
