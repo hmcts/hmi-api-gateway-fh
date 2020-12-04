@@ -69,6 +69,7 @@ class OAuthTokenGeneratorTest {
                 token_username,
                 token_password,
                 HttpStatus.OK);
+        log.debug("The value of Token "+token);
         assertTrue(Objects.nonNull(token));
         assertTrue(token.length() > 1);
     }
@@ -130,7 +131,7 @@ class OAuthTokenGeneratorTest {
                 .expect().that().statusCode(HttpStatus.UNAUTHORIZED.value())
                 .given()
                 .auth()
-                .oauth2("accessToken")
+                .oauth2(expired_access_token)
                 .baseUri(targetInstance)
                 .basePath(sessionsApiRootContext)
                 .queryParams(Map.of("requestSessionType", "ADHOC"))
