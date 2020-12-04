@@ -3,3 +3,10 @@ resource "azurerm_resource_group" "hmi_apim_rg" {
   location = var.location
   tags     = var.tags
 }
+
+resource "azurerm_management_lock" "hmi_apim_rg_lock" {
+  name       = "resource-group-level"
+  scope      = azurerm_resource_group.hmi_apim_rg.id
+  lock_level = "CanNotDelete"
+  notes      = "This Resource Group Can Not Be Deleted"
+}
