@@ -5,8 +5,8 @@ resource "azurerm_resource_group" "hmi_apim_rg" {
 }
 
 resource "azurerm_management_lock" "hmi_apim_rg_lock" {
-  name       = "resource-group-level"
+  name       = "resource-group-level-lock"
   scope      = azurerm_resource_group.hmi_apim_rg.id
-  lock_level = "CanNotDelete"
+  lock_level = null
   notes      = "This Resource Group Can Not Be Deleted"
 }
