@@ -1,0 +1,36 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "E")">
+                <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                    <set-url>https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                    <set-body>@{
+                        return "client_id=b085c529-1b29-4075-969c-32ebfaddb1e4&client_secret=4b3eca29-2ff6-4419-8061-2b23cef9e756&scope=api://d49d7fa2-6904-4223-a907-3b8992af4190/.default&grant_type=client_credentials";}</set-body>
+                </send-request>
+                <set-header name="Authorization" exists-action="override">
+                    <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["accessToken"])</value>
+                </set-header>
+                <rewrite-uri template="/api/people/{id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
