@@ -53,8 +53,9 @@ class GETPeopleValidationTest extends PeopleValidationTest {
     }
 
     @ParameterizedTest(name = "Test updated_since param without valid ISO 8601 date format (YYYY-mm-dd)  - Param : {0} --> {1}")
-    @CsvSource(value = {"updated_since, '01-31-2018'","updated_since,'31-01-2018'", "updated_since,'2018-01-29 20:36:01Z'",
+    @CsvSource(value = {"updated_since, '01-31-2018'","updated_since, '2018-01-3*'","updated_since,'31-01-2018'", "updated_since,'2018-01-29 20:36:01Z'",
             "updated_since,'2000-12-19T11:59:59.374Z'", "updated_since,NIL"}, nullValues= "NIL")
+    //TO DO - To Be tested and can only be implemented post knowing how the Azure Mock will respond.
     void test_updated_since_queryparam_negative_value(final String updatedSinceKey, final String updatedSinceValue) throws IOException {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -72,6 +73,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
     @ParameterizedTest(name = "Test updated_since param with valid ISO 8601 date format (YYYY-mm-dd)  - Param : {0} --> {1}")
     @CsvSource(value = {"updated_since, '2020-10-01'","updated_since,'2020-12-03T15:05:57Z'", "updated_since,'2020-12-03T15:05:57+00:00'",
             "updated_since,'20201203T150557Z'"})
+    //TO DO - To Be tested and can only be implemented post knowing how the Azure Mock will respond.
     void test_updated_since_queryparam_valid_value(final String updatedSinceKey, final String updatedSinceValue) throws IOException {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
@@ -120,7 +122,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
 
     @Disabled("Disabling it until tested against API to ensure page params boundary conditions and invalid value would return any error or not")
     @ParameterizedTest(name = "Test Page param with invalid values but with valid mandatory updated_since value - Param : {0} --> {1}")
-    @CsvSource(value = {"updated_since,2018-05-01,page,-1","updated_since,2018-05-01,page,0",
+    @CsvSource(value = {"updated_since,2018-05-01,page,-1","updated_since,2018-05-01,page,1*","updated_since,2018-05-01,page,0",
             "updated_since,2018-05-01,page,' '", "updated_since,2018-05-01,page,NIL"}, nullValues= "NIL")
     void test_page_queryparam_negative_value(final String updatedSinceKey, final String updatedSinceValue,
                                              final String pageKey, final String pageValue) throws IOException {
@@ -139,7 +141,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
 
     @Disabled("Disabling it until tested against API to ensure page params boundary conditions and invalid value would return any error or not")
     @ParameterizedTest(name = "Test Page param with invalid values but with valid mandatory updated_since value - Param : {0} --> {1}")
-    @CsvSource(value = {"updated_since,2018-05-01,per_page,10","updated_since,2018-05-01,per_page,200","updated_since,2018-05-01,per_page,-1",
+    @CsvSource(value = {"updated_since,2018-05-01,per_page,0","updated_since,2018-05-01,per_page,200","updated_since,2018-05-01,per_page,2*","updated_since,2018-05-01,per_page,-1",
             "updated_since,2018-05-01,per_page,' '", "updated_since,2018-05-01,page,NIL"}, nullValues= "NIL")
     void test_per_page_queryparam_negative_value(final String updatedSinceKey, final String updatedSinceValue,
                                              final String perPageKey, final String perPageValue) throws IOException {
