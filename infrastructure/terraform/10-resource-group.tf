@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "hmi_apim_rg" {
 resource "azurerm_management_lock" "hmi_apim_rg_lock" {
   name       = "resource-group-level-lock"
   scope      = azurerm_resource_group.hmi_apim_rg.id
-  lock_level = var.environment == "stg" || var.environment == "prod" ? "CanNotDelete" : null
+  lock_level = var.environment == "sbox" || var.environment == "prod" ? "CanNotDelete" : null
   notes      = "This Resource Group Can Not Be Deleted"
-  count      = var.environment == "stg" || var.environment == "prod" ? 1 : 0
+  count      = var.environment == "sbox" || var.environment == "prod" ? 1 : 0
 }

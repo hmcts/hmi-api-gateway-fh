@@ -26,6 +26,14 @@ jobs:
         subscription=$(az account show --query id -o tsv)
         resourcegroup="hmi-apim-$(environment)-rg"
         apim="hmi-apim-svc-$(environment)"
+        if [ $(environment) -eq "sbox"] || [ $(environment) -eq "prod"]
+        then
+          az lock delete --name "resource-group-level-lock" --resource-group $resourcegroup
+        fi
         az rest -m delete -u https://management.azure.com/subscriptions/$subscription/resourceGroups/$resourcegroup/providers/Microsoft.ApiManagement/service/$apim/apis/echo-api?api-version=2019-01-01
         az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "starter" --delete-subscriptions true --yes
         az apim product delete --resource-group $resourcegroup --service-name $apim --product-id "unlimited" --delete-subscriptions true --yes
+        if [ $(environment) -eq "sbox"] || [ $(environment) -eq "prod"]
+        then
+          az lock create --name "resource-group-level-lock" --resource-group $resourcegroup --lock-type CanNotDelete
+        fi
