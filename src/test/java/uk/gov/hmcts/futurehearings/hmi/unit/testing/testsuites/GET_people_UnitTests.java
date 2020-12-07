@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("GET /listings - Retrieve Listings")
+@DisplayName("GET /people - Retrieve People")
 public class GET_people_UnitTests {
 
     @Value("${targetInstance}")
