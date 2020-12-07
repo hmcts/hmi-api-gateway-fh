@@ -57,7 +57,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
                 <set-header name="Authorization" exists-action="override">
-                    <value>@("Bearer " + #{elink_token}#)</value>
+                    <value>Bearer #{elink_token}#</value>
                 </set-header>
                 <rewrite-uri template="/api/people" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
