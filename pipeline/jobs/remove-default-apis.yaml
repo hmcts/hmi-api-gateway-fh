@@ -37,4 +37,6 @@ jobs:
           if [ $(environment) = "stg" ] || [ $(environment) = "prod" ]; then
             az lock create --name "resource-group-level-lock" --resource-group $resourcegroup --lock-type CanNotDelete --notes "PROD ENV, please contact HMI if resource needs modifying"
           fi
+        else
+          echo "No default APIs found."
         fi
