@@ -7,5 +7,6 @@
     "cftRootCtx": "casehqapi/rest/hmcts",
     "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
-    "mockEndpoint": ""
+    "mockEndpoint": "",
+    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
 }
