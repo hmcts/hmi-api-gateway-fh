@@ -7,5 +7,8 @@
     "cftRootCtx": "casehqapi/rest/hmcts",
     "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
+    "sAndLOauthUrl": "https://hmcts-uat.casehq.net/hmi_oauth2/resources/hmi/token",
+    "sAndLAuthClient": "api-uat-casehq@mcmshmcts.onmicrosoft.com",
+    "sAndLAuthSecret": "JTuREp6m4W9KyjbzFpnUFanh",
     "mockEndpoint": "<mock-response status-code=\"200\" content-type=\"application/json\" />"
 }
