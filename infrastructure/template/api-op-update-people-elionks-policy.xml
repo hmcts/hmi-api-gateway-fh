@@ -1,0 +1,27 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
+                <set-header name="Authorization" exists-action="override">
+                    <value>Bearer fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh</value>
+                </set-header>
+                <rewrite-uri template="/api/people/{id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://judiciary-middleware-staging.herokuapp.com/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://judiciary-middleware-staging.herokuapp.com/" />
+                <mock-response status-code="204" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
