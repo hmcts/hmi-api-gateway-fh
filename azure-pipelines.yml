@@ -89,7 +89,7 @@ stages:
 
   - stage: PlanSTG
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/fix_run_stage')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -415,7 +415,7 @@ stages:
   - stage: BuildSTG
     dependsOn: 
       - PlanStg
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/fix_run_stage')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
@@ -442,7 +442,6 @@ stages:
   - stage: BuildPROD
     dependsOn: 
       - PlanProd
-      - BuildStg
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-PROD
