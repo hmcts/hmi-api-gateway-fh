@@ -415,10 +415,7 @@ stages:
   - stage: BuildSTG
     dependsOn: 
       - PlanStg
-      - TestSbox
-      - TestDev
-      - TestTest
-    condition: or(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
