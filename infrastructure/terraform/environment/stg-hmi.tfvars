@@ -1,7 +1,7 @@
-apim_sku_name = "Developer"
+apim_sku_name = "Premium"
 apim_sku_capacity = "1"
 publisher_name = "HMCTS HMI"
-publisher_email = "stg@hmcts.placeholder"
+publisher_email = "kara.nottingham1@hmcts.net"
 protocols = ["http", "https"]
 revision = "1"
 open_api_spec_content_format = "swagger-link-json"
