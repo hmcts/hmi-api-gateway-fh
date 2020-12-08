@@ -14,6 +14,7 @@ import net.thucydides.core.annotations.Step;
 import org.json.JSONObject;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 public class PeopleSteps {
 
@@ -47,6 +48,10 @@ public class PeopleSteps {
 
         JSONObject peopleObj = new JSONObject(response.body().asString());
         assertEquals(peopleId ,peopleObj.getString("id"));
+        assertTrue(!StringUtils.isEmpty(peopleObj.getString("known_as")));
+        assertTrue(!StringUtils.isEmpty(peopleObj.getString("surname")));
+        assertTrue(!StringUtils.isEmpty(peopleObj.getString("fullname")));
+        assertTrue(!StringUtils.isEmpty(peopleObj.getString("email")));
     }
 
     @Step("User makes a request to Update People (PUT in the People API)")
