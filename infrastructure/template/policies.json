@@ -124,6 +124,11 @@
       "operationId"  : "delete-listing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-delete-listing-policy.xml"
+    },
+    {
+      "operationId"  : "update-people",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-people-elinks-policy.xml"
     }
   ]
 }
