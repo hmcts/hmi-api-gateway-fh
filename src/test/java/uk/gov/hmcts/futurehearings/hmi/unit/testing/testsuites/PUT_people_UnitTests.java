@@ -1,9 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,6 +27,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @SpringBootTest(classes = { Application.class })
@@ -35,6 +37,8 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVe
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /people - Update People")
 class PUT_people_UnitTests {
+
+	private static final String CORRECT_UPDATE_PEOPLE_PAYLOAD = "requests/update-resources-location-payload.json";
 
 	@Value("${targetInstance}")
 	private String targetInstance;
@@ -49,7 +53,6 @@ class PUT_people_UnitTests {
 	private String destinationSystem;
 
 	private final Map<String, Object> headersAsMap = new HashMap<>();
-	private final Map<String, Object> queryParams = new HashMap<>();
 
 	@Value("${tokenURL}")
 	private String tokenURL;
@@ -101,37 +104,102 @@ class PUT_people_UnitTests {
 	@Order(1)
 	@DisplayName("Test for Valid Path Param")
 	void testRetrievePeopleForValidPathParams() {
-		final Response response = whenGetPeopleRequestIsInvokedForWithPathParam();
+		final Response response = whenUpdatePeopleRequestIsInvokedForWithPathParam();
 		thenValidateResponseForUpdatePeopleById(response);
 	}
-
-	@Test
+	/**
+	 * Missing Content-Type header retruns specific response
+	 * @throws IOException
+	 */
+    @Test
     @Order(2)
-    @DisplayName("Test for Invalid Header for Update People with ID")
-    void testRetrievePeopleForInvalidHeader() {
-        headersAsMap.remove("Request-Created-At");
-        headersAsMap.put("Request-Created-At", "invalid date");
-        final Response response = whenGetPeopleRequestIsInvokedForWithPathParam();
-        thenValidateResponseForUpdatePeopleByIdWithInvalidHeader(response);
+    @DisplayName("Test for missing ContentType header")
+    void testpdatePeopleWithMissingContentTypeHeader() throws IOException {
+        headersAsMap.remove("Content-Type");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+    @Test
+    @Order(3)
+    @DisplayName("Test for invalid ContentType header")
+    void testUpdatePeopleWithInvalidContentTypeHeader() throws IOException {
+        headersAsMap.remove("Content-Type");
+        headersAsMap.put("Content-Type", "application/xml");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Test for missing Accept header")
+    void testUpdatePeopleWithMissingAcceptHeader() throws IOException {
+        headersAsMap.remove("Accept");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Test for invalid Accept header")
+    void testUpdatePeopleWithInvalidAcceptHeader() throws IOException {
+        headersAsMap.remove("Accept");
+        headersAsMap.put("Accept", "application/jsonxml");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingOrInvalidAcceptHeader(response);
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Test for missing OcpSubKey")
+    void testUpdatePopleRequestWithMissingOcpSubKey() throws IOException {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingSubscriptionKeyHeader(response);
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
+    void testUpdatePeopleRequestWithInvalidOcpSubKey()throws IOException {
+        headersAsMap.remove("Ocp-Apim-Subscription-Key");
+        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+    }
+
+	@Order(8)
+    @ParameterizedTest(name = "Test for missing madatory {0} header")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    void testUpdatePeopleWithMissingHeader(String iteration) throws IOException {
+        headersAsMap.remove(iteration);
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
 	@Test
-    @Order(3)
+    @Order(9)
     @DisplayName("Test for Invalid AccessToken for Update People with ID")
-    void testRetrievePeopleForInvalidAccessToken() {
+    void testRetrievePeopleWithInvalidAccessToken() {
         final Response response = whenUpdatePeopleRequestIsInvokedForWithInvalidAcessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
 	}
 
-    @Test
-    @Order(4)
-    @DisplayName("Test for Invalid AccessToken for Update People with ID")
-    void testRetrievePeopleWithParamsForInvalidAccessToken() {
-        final Response response = whenUpdatePeopleRequestIsInvokedWithAnInvalidToken();
-        thenValidateResponseForMissingOrInvalidAccessToken(response);
+	private String givenAPayload(final String path) throws IOException {
+        return readFileContents(path);
 	}
 	
-	private Response whenGetPeopleRequestIsInvokedForWithPathParam() {
+    private Response whenUpdatePeopleIsInvoked(final String input) {
+        return updatePeopleResponseForAMissingOrInvalidHeader(elinksApiRootContext + "/PID012", headersAsMap, targetInstance, input);
+    }
+	
+	private Response whenUpdatePeopleRequestIsInvokedForWithPathParam() {
 		return updatePeopleForValidId(elinksApiRootContext + "/PID012", headersAsMap, targetInstance);
 	}
 
@@ -140,7 +208,7 @@ class PUT_people_UnitTests {
     }
 	
     private Response whenUpdatePeopleRequestIsInvokedWithAnInvalidToken() {
-        return updatePeopleWithInvalidToken(elinksApiRootContext, headersAsMap, queryParams, targetInstance);
+        return updatePeopleWithInvalidToken(elinksApiRootContext, headersAsMap, targetInstance);
 	}
 	
 	private Response updatePeopleForValidId(final String api, final Map<String, Object> headersAsMap, final String basePath) {
@@ -163,14 +231,26 @@ class PUT_people_UnitTests {
                 .when().get().then().extract().response();
 	}
 	
-    private Response updatePeopleWithInvalidToken(final String api, final Map<String, Object> headersAsMap, final Map<String, Object> queryParams, final String basePath) {
+    private Response updatePeopleWithInvalidToken(final String api, final Map<String, Object> headersAsMap, 
+			final String basePath) {
         return given()
                 .auth()
                 .oauth2("accessToken")
                 .headers(headersAsMap)
-                .queryParams(queryParams)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().get().then().extract().response();
+	}
+	
+	private Response updatePeopleResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
+		log.info("Calling: {}{}", basePath, api);
+		return given()
+                .auth()
+                .oauth2(accessToken)
+                .body(payloadBody)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().put().then().extract().response();
     }
 }
