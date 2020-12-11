@@ -1,4 +1,4 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.videoHearing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
@@ -35,13 +35,13 @@ class POSTVideoHearingsValidationTest extends VideoHearingValidationTest {
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
 
-    @Value("${videoHearingApiRootContext}")
-    private String videoHearingApiRootContext;
+    @Value("${videohearingsRootContext}")
+    private String videohearingsRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(videoHearingApiRootContext);
+        this.setRelativeURL(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("video-hearing-request-standard.json");
         this.setHttpSucessStatus(HttpStatus.ACCEPTED);
