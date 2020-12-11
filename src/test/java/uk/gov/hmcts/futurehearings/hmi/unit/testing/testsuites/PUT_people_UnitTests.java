@@ -29,7 +29,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVe
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @SpringBootTest(classes = { Application.class })
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
