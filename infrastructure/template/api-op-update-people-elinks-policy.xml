@@ -10,7 +10,7 @@
                 <set-backend-service base-url="https://#{elinksHost}#/api" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://#{elinksHost}/api" />
+                <set-backend-service base-url="https://#{elinksHost}#/api" />
                 <mock-response status-code="204" content-type="application/json" />
             </when>
         </choose>
