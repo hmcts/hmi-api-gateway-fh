@@ -4,13 +4,13 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
                 <set-header name="Authorization" exists-action="override">
-                    <value>Bearer fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh</value>
+                    <value>Bearer #{elinksToken}#</value>
                 </set-header>
-                <rewrite-uri template="/api/people/{id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://judiciary-middleware-staging.herokuapp.com/" />
+                <rewrite-uri template="/people/{id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://#{elinksHost}/api" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://judiciary-middleware-staging.herokuapp.com/" />
+                <set-backend-service base-url="https://#{elinksHost}/api" />
                 <mock-response status-code="204" content-type="application/json" />
             </when>
         </choose>
