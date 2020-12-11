@@ -14,7 +14,7 @@ sessionsRootContext: /hmi/sessions
 sessions_idRootContext: /hmi/sessions/%s
 listingsRootContext: /hmi/listings
 listings_idRootContext: /hmi/listings/%s
-videoHearingApiRootContext: /hmi/resources/video-hearing
+videohearingsRootContext: /hmi/resources/video-hearing
 
 grantType: client_credentials
 clientID: b085c529-1b29-4075-969c-32ebfaddb1e4
