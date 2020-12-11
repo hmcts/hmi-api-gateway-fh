@@ -11,5 +11,6 @@
     "sAndLAuthClient": "api-sit-casehq@mcmshmcts.onmicrosoft.com",
     "sAndLAuthSecret": "VxYksRD4MqJNysBsCm9eGfgH",
     "mockEndpoint": "",
-    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
+    "elinkHost" : "judiciary-middleware-staging.herokuapp.com",
+    "elinkToken" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
 }
