@@ -7,7 +7,7 @@
                     <value>Bearer #{elinksToken}#</value>
                 </set-header>
                 <rewrite-uri template="/people/{id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{elinksHost}/api" />
+                <set-backend-service base-url="https://#{elinksHost}#/api" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://#{elinksHost}/api" />
