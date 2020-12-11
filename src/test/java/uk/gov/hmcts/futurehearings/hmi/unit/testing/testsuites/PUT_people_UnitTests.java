@@ -22,14 +22,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.*;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
-@Slf4j
 @SpringBootTest(classes = { Application.class })
 @ActiveProfiles("local")
 @ExtendWith(TestReporter.class)
@@ -38,7 +36,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @DisplayName("PUT /people - Update People")
 class PUT_people_UnitTests {
 
-	private static final String CORRECT_UPDATE_PEOPLE_PAYLOAD = "requests/update-resources-location-payload.json";
+	private static final String CORRECT_UPDATE_PEOPLE_PAYLOAD = "requests/update-people-payload.json";
 
 	@Value("${targetInstance}")
 	private String targetInstance;
@@ -102,10 +100,11 @@ class PUT_people_UnitTests {
 
 	@Test
 	@Order(1)
-	@DisplayName("Test for Valid Path Param")
-	void testRetrievePeopleForValidPathParams() {
-		final Response response = whenUpdatePeopleRequestIsInvokedForWithPathParam();
-		thenValidateResponseForUpdatePeopleById(response);
+	@DisplayName("Test for Valid People Update")
+	void testRetrievePeopleForValidPathParams() throws IOException {
+        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
+        final Response response = whenUpdatePeopleIsInvoked(input);
+		thenValidateResponseForUpdate(response);
 	}
 	/**
 	 * Missing Content-Type header retruns specific response
@@ -187,7 +186,8 @@ class PUT_people_UnitTests {
     @Order(9)
     @DisplayName("Test for Invalid AccessToken for Update People with ID")
     void testRetrievePeopleWithInvalidAccessToken() {
-        final Response response = whenUpdatePeopleRequestIsInvokedForWithInvalidAcessToken();
+		accessToken = "invalidToken";
+        final Response response = whenUpdatePeopleRequestNoPayloadIsInvoked();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
 	}
 
@@ -196,22 +196,14 @@ class PUT_people_UnitTests {
 	}
 	
     private Response whenUpdatePeopleIsInvoked(final String input) {
-        return updatePeopleResponseForAMissingOrInvalidHeader(elinksApiRootContext + "/PID012", headersAsMap, targetInstance, input);
+        return updatePeopleWithPayload(elinksApiRootContext + "/2959d456-cee3-4011-bf16-e028025ca775", headersAsMap, targetInstance, input);
     }
 	
-	private Response whenUpdatePeopleRequestIsInvokedForWithPathParam() {
-		return updatePeopleForValidId(elinksApiRootContext + "/PID012", headersAsMap, targetInstance);
-	}
-
-	private Response whenUpdatePeopleRequestIsInvokedForWithInvalidAcessToken() {
-        return updatePeopleForValidIdWithInvalidAccessToken(elinksApiRootContext + "/PID012", headersAsMap, targetInstance);
-    }
-	
-    private Response whenUpdatePeopleRequestIsInvokedWithAnInvalidToken() {
-        return updatePeopleWithInvalidToken(elinksApiRootContext, headersAsMap, targetInstance);
+	private Response whenUpdatePeopleRequestNoPayloadIsInvoked() {
+		return updatePeopleNoPayload(elinksApiRootContext + "/2959d456-cee3-4011-bf16-e028025ca775", headersAsMap, targetInstance);
 	}
 	
-	private Response updatePeopleForValidId(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+	private Response updatePeopleNoPayload(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 		return given()
 				.auth()
 				.oauth2(accessToken)
@@ -220,30 +212,8 @@ class PUT_people_UnitTests {
 				.basePath(api)
 				.when().get().then().extract().response();
 	}
-
-	private Response updatePeopleForValidIdWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
-        return given()
-                .auth()
-                .oauth2("accessToken")
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-	}
 	
-    private Response updatePeopleWithInvalidToken(final String api, final Map<String, Object> headersAsMap, 
-			final String basePath) {
-        return given()
-                .auth()
-                .oauth2("accessToken")
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-	}
-	
-	private Response updatePeopleResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
-		log.info("Calling: {}{}", basePath, api);
+	private Response updatePeopleWithPayload(final String api, final Map<String, Object> headersAsMap, final String basePath,  final String payloadBody) {
 		return given()
                 .auth()
                 .oauth2(accessToken)

@@ -36,7 +36,6 @@ public class ElinksResponseVerifier {
 
     public static void  thenValidateResponseForUpdatePeopleById(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(200, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 200");
         }
@@ -52,7 +51,6 @@ public class ElinksResponseVerifier {
 
     public static void  thenValidateResponseForUpdatePeopleByIdWithInvalidHeader(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
         }
@@ -68,7 +66,6 @@ public class ElinksResponseVerifier {
 
     public static void  thenValidateResponseForGetPeopleByParams(Response response){
         try{
-            List<Map<String, String>> responseMap = response.getBody().jsonPath().getList("$");
             assertEquals(200, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 200");
         }
@@ -84,7 +81,6 @@ public class ElinksResponseVerifier {
 
     public static void  thenValidateInvalidResponseForGetPeopleByParams(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
         }
