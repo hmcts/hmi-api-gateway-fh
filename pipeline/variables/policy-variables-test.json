@@ -11,6 +11,6 @@
     "sAndLAuthClient": "api-uat-casehq@mcmshmcts.onmicrosoft.com",
     "sAndLAuthSecret": "JTuREp6m4W9KyjbzFpnUFanh",
     "mockEndpoint": "",
-    "elinkHost" : "judiciary-middleware-staging.herokuapp.com",
-    "elinkToken" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
+    "elinksHost" : "judiciary-middleware-staging.herokuapp.com",
+    "elinksToken" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
 }
