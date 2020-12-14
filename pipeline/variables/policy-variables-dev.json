@@ -8,7 +8,7 @@
     "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
     "mockEndpoint": "<mock-response status-code=\"200\" content-type=\"application/json\" />",
-    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
+    "elinkToken": "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh",
     "sAndLOauthUrl": "https://hmcts-uat.casehq.net/hmi_oauth2/resources/hmi/token",
     "sAndLAuthClient": "api-uat-casehq@mcmshmcts.onmicrosoft.com",
     "sAndLAuthSecret": "JTuREp6m4W9KyjbzFpnUFanh"
