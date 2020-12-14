@@ -1,0 +1,27 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
+                <set-header name="Authorization" exists-action="override">
+                    <value>Bearer #{elink_token}#</value>
+                </set-header>
+                <rewrite-uri template="/api/people/{id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
