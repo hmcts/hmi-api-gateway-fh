@@ -1,8 +1,0 @@
-apiVersion: v1
-name: hmi-wiremock
-home: https://github.com/futurehearings/hmi/wiremock
-version: 0.0.1
-description: Mock Instance for the HMI Project.
-maintainers:
-  - name: QA Team of HMI
-    email: pettedson.john@HMCTS.NET
