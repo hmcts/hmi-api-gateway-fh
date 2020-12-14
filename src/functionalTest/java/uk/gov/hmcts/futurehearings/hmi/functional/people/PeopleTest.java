@@ -1,9 +1,7 @@
-package uk.gov.hmcts.futurehearings.hmi.functional.people;
-
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+package uk.gov.hmcts.futurehearings.hmi.functional.People;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
+import uk.gov.hmcts.futurehearings.hmi.functional.People.steps.PeopleSteps;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
 import java.util.HashMap;
@@ -15,7 +13,6 @@ import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,36 +59,9 @@ public class PeopleTest extends FunctionalTest {
                 queryParameters);
 
         people_idRootContext = String.format(people_idRootContext, peopleId);
-        peopleSteps.performGetByPeopleId(people_idRootContext, peopleId,
+        peopleSteps.performGetByPeopleId(people_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 null);
-    }
-
-    @Disabled("Disabling test until put dev is complete")
-    @Test
-    public void testPeopleUpdate() throws Exception {
-
-        log.debug("In the testSuccessfulPeopleUpdate() method");
-
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("updated_since", "2020-10-12");
-        queryParameters.put("per_page", "50");
-        queryParameters.put("page", "1");
-
-        String peopleId = peopleSteps.getPeopleIdForELinks(peopleRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-
-        String inputPayloadForPeopleUpdate =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-listing-payload.json"),
-                        peopleId);
-
-        people_idRootContext = String.format(people_idRootContext, peopleId);
-        peopleSteps.performPeopleUpdate(people_idRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputPayloadForPeopleUpdate);
     }
 }
