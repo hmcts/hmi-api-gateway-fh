@@ -8,7 +8,7 @@
     "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
     "mockEndpoint": "",
-    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
+    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh",
     "sAndLOauthUrl": "https://hmcts-sit.casehq.net/hmi_oauth2/resources/hmi/token",
     "sAndLAuthClient": "api-sit-casehq@mcmshmcts.onmicrosoft.com",
     "sAndLAuthSecret": "VxYksRD4MqJNysBsCm9eGfgH"
