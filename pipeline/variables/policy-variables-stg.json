@@ -1,14 +1,15 @@
 { 
     "emulatorHost":  "hmi-casehqemulator.stg.platform.hmcts.net",
     "emulatorCtx": "casehqapi/rest/hmcts",
-    "crimeHost":  "hmcts-sit.casehq.net",
+    "crimeHost":  "hmcts-uat.casehq.net",
     "crimeRootCtx": "casehqapi/rest/hmcts",
-    "cftHost":  "hmcts-sit.casehq.net",
+    "cftHost":  "hmcts-uat.casehq.net",
     "cftRootCtx": "casehqapi/rest/hmcts",
-    "sAndLHost":  "hmcts-sit.casehq.net",
+    "sAndLHost":  "hmcts-uat.casehq.net",
     "sAndLCtx": "casehqapi/rest/hmcts",
+    "mockEndpoint": "",
+    "elink_token" : "fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh"
     "sAndLOauthUrl": "https://hmcts-sit.casehq.net/hmi_oauth2/resources/hmi/token",
     "sAndLAuthClient": "api-sit-casehq@mcmshmcts.onmicrosoft.com",
-    "sAndLAuthSecret": "VxYksRD4MqJNysBsCm9eGfgH",
-    "mockEndpoint": ""
+    "sAndLAuthSecret": "VxYksRD4MqJNysBsCm9eGfgH"
 }
