@@ -34,7 +34,7 @@ public class RestClientTemplate {
         switch (httpMethod) {
             case POST:
                 return RestAssured
-                        .expect().that().statusCode(expectedHttpStatus.value())
+                        //.expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
                         .auth()
@@ -45,7 +45,7 @@ public class RestClientTemplate {
                         .post().then().extract().response();
             case PUT:
                     return RestAssured
-                            .expect().that().statusCode(expectedHttpStatus.value())
+                            //.expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
                             .auth()
@@ -56,7 +56,7 @@ public class RestClientTemplate {
                             .put().then().extract().response();
             case DELETE:
                 return RestAssured
-                        .expect().that().statusCode(expectedHttpStatus.value())
+                        //.expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
                         .auth()
@@ -67,7 +67,8 @@ public class RestClientTemplate {
                         .delete().then().extract().response();
             case GET:
                 if (Objects.isNull(params) || params.size() == 0) {
-                    return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                    return RestAssured
+                            //.expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
                             .auth()
@@ -78,7 +79,8 @@ public class RestClientTemplate {
                 } else {
                     log.debug("Query Params " + params);
                     Response response = null;
-                    response = RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                    response = RestAssured
+                            //.expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .queryParams(params)
                             .headers(headers)
@@ -91,7 +93,8 @@ public class RestClientTemplate {
                     return response;
                 }
             case OPTIONS:
-                return RestAssured.expect().that().statusCode(expectedHttpStatus.value())
+                return RestAssured
+                        //.expect().that().statusCode(expectedHttpStatus.value())
                         .given()
                         .headers(headers)
                         .auth()

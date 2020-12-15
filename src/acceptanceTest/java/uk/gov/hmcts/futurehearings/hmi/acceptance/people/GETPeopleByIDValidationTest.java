@@ -8,6 +8,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.resources.verify.GETResourceBy
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled("These tests are to be execute once the policies are sorted out.....")
 @SuppressWarnings("java:S2187")
 class GETPeopleByIDValidationTest extends PeopleValidationTest {
 
