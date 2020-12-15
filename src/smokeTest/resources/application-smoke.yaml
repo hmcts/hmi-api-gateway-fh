@@ -8,6 +8,7 @@ resourcesApiRootContext : /hmi/resources
 sessionsApiRootContext: /hmi/sessions
 listingsApiRootContext: /hmi/listings
 userApiRootContext : /users
+peopleApiRootContext : /hmi/people
 spring.flyway.enabled: false
 
 grantType: client_credentials
