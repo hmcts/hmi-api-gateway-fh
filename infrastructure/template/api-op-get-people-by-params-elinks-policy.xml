@@ -13,7 +13,7 @@
                     <set-body>@{
                         return new JObject(
                             new JProperty("statusCode", 400),
-                            new JProperty("message", "You need to provide mandatory parameter: 'updated_since'")
+                            new JProperty("message", "Please supply ‘updated_since’ date in iso8601 form")
                         ).ToString();
                         }</set-body>
                 </return-response>
