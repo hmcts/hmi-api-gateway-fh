@@ -1,0 +1,73 @@
+{
+  "id": "%s",
+  "personal_code": "49931041",
+  "title": "Sir",
+  "known_as": "Robert the Test",
+  "surname": "Rousey",
+  "fullname": "Sir Robert the Test Rousey",
+  "post_nominals": null,
+  "email": "MrJustice.Rousey@ejudiciary.net",
+  "appointments": [
+    {
+      "role": "High Court Judge",
+      "role_name": "High Court Judge- Sitting in Retirement",
+      "type": "Courts",
+      "court_name": "Royal Courts of Justice - High Court - Chancery",
+      "court_type": "High Court Chancery",
+      "circuit": "London",
+      "bench": null,
+      "advisory_committee_area": null,
+      "location": null,
+      "is_principal": true,
+      "start_date": "2020-01-01"
+    }
+  ],
+  "authorisations": [
+    {
+      "jurisdiction": "Civil",
+      "tickets": [
+        "Technology and Construction Court",
+        "Direct Recruitment to Family",
+        "Patents"
+      ]
+    }
+  ],
+  "authorisations_with_dates": [
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Direct Recruitment to Family",
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Direct Recruitment to Family",
+      "start_date": "2020-01-01",
+      "end_date": null
+    },
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Patents",
+      "start_date": "2020-01-01",
+      "end_date": null
+    },
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Patents",
+      "start_date": "2009-07-08",
+      "end_date": null
+    },
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Technology and Construction Court",
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "jurisdiction": "Civil",
+      "ticket": "Technology and Construction Court",
+      "start_date": "2020-01-01",
+      "end_date": null
+    }
+  ]
+}
