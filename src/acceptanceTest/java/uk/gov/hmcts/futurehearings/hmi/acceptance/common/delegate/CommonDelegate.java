@@ -25,5 +25,5 @@ public interface CommonDelegate {
                                                            final String inputFileDirectory,
                                                            final HMIVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDTO delegateDT0) throws IOException;
+                                                           final DelegateDTO delegateDT0) throws Exception;
 }
