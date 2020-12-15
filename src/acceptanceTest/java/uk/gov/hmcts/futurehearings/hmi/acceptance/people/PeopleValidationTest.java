@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public class PeopleValidationTest extends HMICommonHeaderTest {
+public abstract class PeopleValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
