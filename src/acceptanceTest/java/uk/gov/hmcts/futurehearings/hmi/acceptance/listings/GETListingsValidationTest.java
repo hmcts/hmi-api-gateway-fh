@@ -58,7 +58,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
 
     @Test
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
-    void test_date_of_listing_with_invalid_queryparam() throws IOException {
+    void test_date_of_listing_with_invalid_queryparam() throws Exception {
         this.setUrlParams(buildQueryParams("test_param", ""));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -74,7 +74,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
-    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws IOException {
+    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -90,7 +90,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues= "NIL")
-    void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws IOException {
+    void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -114,7 +114,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
     void test_multiple_query_params(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
-                                              final String paramVal2) throws IOException {
+                                              final String paramVal2) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -129,7 +129,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
     }
 
     @Test
-    void test_multiple_query_params_with_an_error_parameter() throws IOException {
+    void test_multiple_query_params_with_an_error_parameter() throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams("date_of_listing",
                 "2018-01-29 20:36:01Z",
                 "hearing_type",
