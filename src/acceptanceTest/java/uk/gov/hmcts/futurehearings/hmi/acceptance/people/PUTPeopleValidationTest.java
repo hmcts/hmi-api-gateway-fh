@@ -18,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled("These tests are to be execute once the policies are sorted out.....")
 @SuppressWarnings("java:S2187")
 class PUTPeopleValidationTest extends PeopleValidationTest {
 
