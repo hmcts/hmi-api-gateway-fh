@@ -62,7 +62,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @Disabled("Disabled as parameters checks are disabled in dev")
     @Test
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
-    void test_invalid_query_param_with_value() throws IOException {
+    void test_invalid_query_param_with_value() throws Exception {
         this.setUrlParams(buildQueryParams( "extra_param_key", " "));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -78,7 +78,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session Request Type - Param : {0} --> {1}")
     @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '", "sessionStartDate,NIL"}, nullValues= "NIL")
-    void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws IOException {
+    void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -94,7 +94,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session EndDate without mandatory Session Request Type - Param : {0} --> {1}")
     @CsvSource(value = {"sessionEndDate, 2018-01-29 20:36:01Z", "sessionEndDate,''", "sessionEndDate,' '",  "sessionEndDate,NIL"}, nullValues= "NIL")
-    void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws IOException {
+    void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionEndDateKey, sessionEndDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -110,7 +110,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session Room Name without mandatory Session Request Type- Param : {0} --> {1}")
     @CsvSource(value = {"room-Name, R012", "room-Name,''", "room-Name,' '", "room-Name,NIL"}, nullValues = "NIL")
-    void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
+    void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws Exception {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -126,7 +126,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session Case Court without mandatory Session Request Type - Param : {0} --> {1}")
     @CsvSource(value = {"caseCourt, case01", "caseCourt,''", "caseCourt,' '", "caseCourt,NIL"}, nullValues = "NIL")
-    void test_caseCourt_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws IOException {
+    void test_caseCourt_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws Exception {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -149,7 +149,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramKey3,
                                               final String paramVal3,
                                               final String paramKey4,
-                                              final String paramVal4) throws IOException {
+                                              final String paramVal4) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -172,8 +172,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramKey3,
                                               final String paramVal3,
                                               final String paramKey4,
-                                              final String paramVal4
-                                                ) throws IOException {
+                                              final String paramVal4) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -198,7 +197,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                               final String paramKey4,
                                               final String paramVal4,
                                               final String paramKey5,
-                                              final String paramVal5) throws IOException {
+                                              final String paramVal5) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4, paramKey5, paramVal5));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -226,8 +225,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                          final String paramKey5,
                                          final String paramVal5,
                                          final String paramKey6,
-                                         final String paramVal6
-                                         ) throws IOException {
+                                         final String paramVal6) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4, paramKey5, paramVal5, paramKey6, paramVal6));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
