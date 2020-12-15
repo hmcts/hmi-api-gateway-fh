@@ -44,7 +44,7 @@ class POSTVideoHearingsValidationTest extends VideoHearingValidationTest {
         this.setRelativeURL(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("video-hearing-request-standard.json");
-        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
+        this.setHttpSucessStatus(HttpStatus.CREATED);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("video-hearing","video-hearings"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
