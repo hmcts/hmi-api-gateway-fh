@@ -39,7 +39,7 @@ public class CommonDelegateImpl implements CommonDelegate {
                                                            final String inputFileDirectory,
                                                            final HMIVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDTO delegateFlyweightDT0) throws IOException {
+                                                           final DelegateDTO delegateFlyweightDT0) throws Exception {
 
         log.debug("The value of the target header (Header Map) : " + standardHeaderMap);
         log.debug("The value of the target header (Wiremock Header) :" + standardHeaderMap);
@@ -62,7 +62,7 @@ public class CommonDelegateImpl implements CommonDelegate {
                                 final HttpStatus status,
                                 final String inputFileDirectory,
                                 final HMIVerifier hmiVerifier,
-                                final String expectedMessage) throws IOException {
+                                final String expectedMessage) throws Exception {
 
         String inputPayload = null;
         switch (httpMethod) {
