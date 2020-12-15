@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
 
-public class ListingsResponseVerifier {
+public class ElinksResponseVerifier {
 
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";
     private static final String INVALID_SUB_KEY_ERROR = "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.";
@@ -34,9 +34,8 @@ public class ListingsResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForGetPeopleById(Response response){
+    public static void  thenValidateResponseForUpdatePeopleById(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(200, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 200");
         }
@@ -50,9 +49,8 @@ public class ListingsResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForGetPeopleByIdWithInvalidHeader(Response response){
+    public static void  thenValidateResponseForUpdatePeopleByIdWithInvalidHeader(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
         }
@@ -68,7 +66,6 @@ public class ListingsResponseVerifier {
 
     public static void  thenValidateResponseForGetPeopleByParams(Response response){
         try{
-            List<Map<String, String>> responseMap = response.getBody().jsonPath().getList("$");
             assertEquals(200, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 200");
         }
@@ -84,7 +81,6 @@ public class ListingsResponseVerifier {
 
     public static void  thenValidateInvalidResponseForGetPeopleByParams(Response response){
         try{
-            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
         }
