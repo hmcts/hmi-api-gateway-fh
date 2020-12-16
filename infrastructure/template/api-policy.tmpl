@@ -6,6 +6,9 @@
             <audiences>
                 <audience>api://d49d7fa2-6904-4223-a907-3b8992af4190</audience>
             </audiences>
+            <issuers>
+                <issuer>https://sts.windows.net/531ff96d-0ae9-462a-8d2d-bec7c0b42082/</issuer>
+            </issuers>
             <required-claims>
                 <claim name="roles" match="all">
                     <value>hmiGateway</value>
@@ -39,6 +42,7 @@
             <value>EMULATOR</value>
             <value>CRIME</value>
             <value>CFT</value>
+            <value>ELINKS</value>
         </check-header>
         <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true">
         </check-header>
