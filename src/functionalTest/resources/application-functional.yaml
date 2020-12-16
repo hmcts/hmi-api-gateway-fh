@@ -21,3 +21,6 @@ resourcesByLocation_idRootContext: /hmi/resources/location/%s
 
 resourcesByUserRootContext: /hmi/resources/user/
 resourcesByUser_idRootContext: /hmi/resources/user/%s
+
+peopleRootContext: /hmi/people
+people_idRootContext: /hmi/people/%s

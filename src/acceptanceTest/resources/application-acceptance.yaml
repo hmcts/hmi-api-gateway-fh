@@ -14,6 +14,8 @@ sessionsRootContext: /hmi/sessions
 sessions_idRootContext: /hmi/sessions/%s
 listingsRootContext: /hmi/listings
 listings_idRootContext: /hmi/listings/%s
+peopleRootContext: /hmi/people
+people_idRootContext: /hmi/people/%s
 
 grantType: client_credentials
 clientID: b085c529-1b29-4075-969c-32ebfaddb1e4

@@ -78,6 +78,6 @@ public abstract class FunctionalTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"S&L");
+        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
     }
 }
