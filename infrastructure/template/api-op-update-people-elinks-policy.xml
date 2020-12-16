@@ -1,0 +1,27 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
+                <set-header name="Authorization" exists-action="override">
+                    <value>Bearer #{elinksToken}#</value>
+                </set-header>
+                <rewrite-uri template="/people/{id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://#{elinksHost}#/api" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://#{elinksHost}#/api" />
+                <mock-response status-code="204" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
