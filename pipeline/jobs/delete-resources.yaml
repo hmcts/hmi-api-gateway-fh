@@ -34,10 +34,4 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         az apim delete -n ${{ parameters.apim }} -g ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
-        deployments=$(az deployment group list -g ${{ parameters.resourceGroup }} --query [].name -o tsv)
-        for deployment in $deployments
-        do 
-        echo Deleting -n $deployment
-        az deployment group delete -g ${{ parameters.resourceGroup }} -n $deployment
-        done
       
