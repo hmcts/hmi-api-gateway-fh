@@ -126,6 +126,11 @@
       "templateFile" : "api-op-delete-listing-policy.xml"
     },
     {
+      "operationId"  : "request-video-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-video-hearing-policy.xml"
+    },
+    {
       "operationId"  : "get-people",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-get-people-by-id-elinks-policy.xml"

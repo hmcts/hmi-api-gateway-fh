@@ -50,6 +50,70 @@ public class ListingsResponseVerifier {
         }
     }
 
+    public static void  thenValidateResponseForRequestVideoHearing(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(201, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 201");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void thenValidateResponseForRequestVideoHearingWithInvalidHeader(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 400");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void thenValidateResponseForRequestVideoHearingWithInvalidMedia(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(406, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 406");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void thenValidateResponseForRequestVideoHearingWithInvalidToken(final Response response) {
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(401, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 401");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
     public static void  thenValidateResponseForGetPeopleByIdWithInvalidHeader(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
