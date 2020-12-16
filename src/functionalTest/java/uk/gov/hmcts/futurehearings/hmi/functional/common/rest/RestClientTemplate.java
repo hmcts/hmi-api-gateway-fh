@@ -53,6 +53,15 @@ public class RestClientTemplate {
                         .basePath(apiURL)
                         .when().put().then().extract().response();
                 break;
+            case GET :
+                response =
+                         expect().that().statusCode(httpStatus.value())
+                        .given()
+                        .headers(headersAsMap)
+                        .auth().oauth2(authorizationToken)
+                        .basePath(apiURL)
+                        .when().get().then().extract().response();
+                break;
             default:
                 throw new UnsupportedOperationException("This REST method is not Supported....");
         }
