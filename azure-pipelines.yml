@@ -415,9 +415,6 @@ stages:
   - stage: BuildSTG
     dependsOn: 
       - PlanStg
-      - TestSbox
-      - TestDev
-      - TestTest
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
@@ -445,7 +442,6 @@ stages:
   - stage: BuildPROD
     dependsOn: 
       - PlanProd
-      - BuildStg
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-PROD
