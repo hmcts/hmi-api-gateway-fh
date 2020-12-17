@@ -7,11 +7,6 @@ steps:
   displayName: 'Download secure file'
   inputs:
     secureFile: ${{ parameters.secure_file }}
-- bash:
-    pwd
-    ls
-    ls $(Agent.TempDirectory)
-    # mv $(Agent.TempDirectory)/${{ parameters.secure_file }} pipeline/variables/
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
@@ -23,7 +18,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
+    variableFiles: $(Agent.TempDirectory)/${{ parameters.secure_file }}
     enableTelemetry: true
-- bash:
-    rm -rf pipeline/variables/${{ parameters.secure_file }}
