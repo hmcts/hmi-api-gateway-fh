@@ -2,7 +2,10 @@ steps:
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
   inputs:
-    secureFile: policy-variables-sbox.json
+    secureFile: policy-variables-$(environment).json
+- bash: |
+    pwd
+    ls
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
@@ -14,5 +17,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: 'policy-variables-$(environment).json'
+    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
     enableTelemetry: true
