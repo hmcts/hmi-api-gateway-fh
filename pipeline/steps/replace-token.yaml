@@ -8,7 +8,10 @@ steps:
   inputs:
     secureFile: ${{ parameters.secure_file }}
 - bash:
-    mv $(Agent.TempDirectory)/${{ parameters.secure_file }} pipeline/variables/
+    pwd
+    ls
+    ls $(Agent.TempDirectory)
+    # mv $(Agent.TempDirectory)/${{ parameters.secure_file }} pipeline/variables/
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
