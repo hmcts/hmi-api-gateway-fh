@@ -19,6 +19,8 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - template: ../steps/replace-token.yaml
+    parameters:
+      secure_file: policy-variables-${{ variables.environment }}.json
   - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
