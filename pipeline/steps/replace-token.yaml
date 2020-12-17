@@ -1,8 +1,12 @@
 steps:
-# - task: DownloadSecureFile@1
-#   displayName: 'Download secure file'
-#   inputs:
-#     secureFile: policy-variables-$(environment).json
+- bash: |
+    secure_file="policy-variables-$(environment).json"
+    echo "##vso[task.setvariable variable=secure_file;isOutput=true;isSecret=true;]$secure_file"
+- task: DownloadSecureFile@1
+  displayName: 'Download secure file'
+  name: policy-file
+  inputs:
+    secureFile: $($secure_file)
 - bash: |
     echo $(environment)
     pwd
