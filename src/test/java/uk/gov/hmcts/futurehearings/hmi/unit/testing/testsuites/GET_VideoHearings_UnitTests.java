@@ -16,15 +16,16 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRequestVideoHearingWithInvalidHeader;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("POST /resources/video-hearing - Request Video Hearing")
-public class POST_VideoHearings_UnitTests {
+@DisplayName("GET /resources/video-hearing - Request Video Hearing")
+public class GET_VideoHearings_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, Object> queryParams = new HashMap<>();
@@ -91,21 +92,48 @@ public class POST_VideoHearings_UnitTests {
     @Order(1)
     @DisplayName("Test for Valid Headers")
     void testRetrievePeopleForValidHeaders() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithPathParam();
-        thenValidateResponseForRequestVideoHearing(response);
+        final Response response = whenRetrieveVideoHearingIsInvoked();
+        thenValidateResponseForRetrieveVideoHearing(response);
     }
 
     @Test
     @Order(2)
-    @DisplayName("Test for Invalid Headers")
-    void testRetrievePeopleForInvalidHeaders() {
-        headersAsMap.put("Source-System", "");
-        final Response response = whenRequestVideoHearingIsInvokedForWithPathParam();
-        thenValidateResponseForRequestVideoHearingWithInvalidHeader(response);
+    @DisplayName("Test for Valid Headers with query param")
+    void testRetrievePeopleForValidHeadersWithQueryParam() {
+        queryParams.put("username", "name");
+        final Response response = whenRetrieveVideoHearingIsInvokedWithQueryParam();
+        thenValidateResponseForRetrieveVideoHearing(response);
     }
 
     @Test
     @Order(3)
+    @DisplayName("Test for Valid Headers with invalid query param")
+    void testRetrievePeopleForValidHeadersWithInvalidQueryParam() {
+        queryParams.clear();
+        queryParams.put("any", "name");
+        final Response response = whenRetrieveVideoHearingIsInvokedWithQueryParam();
+        thenValidateResponseForRetrieveVideoHearingWithInvalidQueryParams(response);
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Test for Valid Headers with Path Param")
+    void testRetrievePeopleForValidHeadersWithPathParam() {
+        final Response response = whenRetrieveVideoHearingIsInvokedWithPathParam();
+        thenValidateResponseForRetrieveVideoHearingWithPathParam(response);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Test for Invalid Headers")
+    void testRetrievePeopleForInvalidHeaders() {
+        headersAsMap.put("Source-System", "");
+        final Response response = whenRetrieveVideoHearingIsInvoked();
+        thenValidateResponseForRequestVideoHearingWithInvalidHeader(response);
+    }
+
+    @Test
+    @Order(6)
     @DisplayName("Test for Invalid Token")
     void testRetrievePeopleForMissingToken() {
         final Response response = whenRequestVideoHearingIsInvokedForWithInvalidToken();
@@ -113,7 +141,7 @@ public class POST_VideoHearings_UnitTests {
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     @DisplayName("Test for Invalid Date")
     void testRetrievePeopleForInvalidDate() {
         final Response response = whenRequestVideoHearingIsInvokedForWithInvalidDate();
@@ -121,7 +149,7 @@ public class POST_VideoHearings_UnitTests {
     }
 
     @Test
-    @Order(5)
+    @Order(8)
     @DisplayName("Test for Invalid MediaType")
     void testRetrievePeopleForInvalidMediaType() {
         final Response response = whenRequestVideoHearingIsInvokedForWithInvalidMedia();
@@ -129,7 +157,7 @@ public class POST_VideoHearings_UnitTests {
     }
 
     @Test
-    @Order(6)
+    @Order(9)
     @DisplayName("Test for Invalid Content Type")
     void testRetrievePeopleForInvalidContentType() {
         final Response response = whenRequestVideoHearingIsInvokedForWithInvalidContentType();
@@ -138,37 +166,55 @@ public class POST_VideoHearings_UnitTests {
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidContentType() {
         headersAsMap.put("Content-Type", "InvalidMedia");
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidMedia() {
         headersAsMap.put("Accept", "InvalidMedia");
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidDate() {
         headersAsMap.put("Request-Created-At", "InvalidDate");
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidToken() {
         return sendPostRequestForVideoHearingWithInvalidToken(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
-    private Response whenRequestVideoHearingIsInvokedForWithPathParam() {
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+    private Response whenRetrieveVideoHearingIsInvoked() {
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
-    private Response sendPostRequestForVideoHearing(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response whenRetrieveVideoHearingIsInvokedWithQueryParam() {
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, queryParams, targetInstance);
+    }
+
+    private Response whenRetrieveVideoHearingIsInvokedWithPathParam() {
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing/hearingId", headersAsMap, targetInstance);
+    }
+
+    private Response sendGetRequestForVideoHearing(final String api, final Map<String, Object> headersAsMap, final String basePath) {
         return given()
                 .auth()
                 .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().get().then().extract().response();
     }
 
+    private Response sendGetRequestForVideoHearing(final String api, final Map<String, Object> headersAsMap, final Map<String, Object> queryParams, final String basePath) {
+        return given()
+                .auth()
+                .oauth2(accessToken)
+                .headers(headersAsMap)
+                .queryParams(queryParams)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
 
     private Response sendPostRequestForVideoHearingWithInvalidToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
         return given()
@@ -177,7 +223,7 @@ public class POST_VideoHearings_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().post().then().extract().response();
+                .when().get().then().extract().response();
     }
 
 }
