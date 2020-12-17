@@ -1,5 +1,5 @@
 targetInstance: https://hmi-apim.dev.platform.hmcts.net
-targetHost:  hmi-apim.sandbox.platform.hmcts.net
+targetHost:  hmi-apim.dev.platform.hmcts.net
 targetSubscriptionKey: 200b2902217a4afc9beabcc2b662be4e
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
