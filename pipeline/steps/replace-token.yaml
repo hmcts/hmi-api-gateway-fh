@@ -4,7 +4,6 @@ steps:
     echo "##vso[task.setvariable variable=secure_file;isOutput=true;isSecret=true;]$secure_file"
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
-  name: policy-file
   inputs:
     secureFile: $($secure_file)
 - bash: |
