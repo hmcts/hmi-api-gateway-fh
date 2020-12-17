@@ -5,7 +5,7 @@ steps:
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
   inputs:
-    secureFile: $($secure_file)
+    secureFile: $(secure_file)
 - bash: |
     echo $(environment)
     pwd
