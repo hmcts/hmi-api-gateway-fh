@@ -151,6 +151,11 @@
       "templateFile" : "api-op-retrieve-vh-by-id-policy.xml"
     },
     {
+      "operationId"  : "get-people-by-params",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-vh-by-id-policy.xml"
+    },
+    {
       "operationId"  : "retrieve-video-hering-by-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-vh-by-user-policy.xml"
