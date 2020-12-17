@@ -146,7 +146,7 @@
       "templateFile" : "api-op-update-people-elinks-policy.xml"
     },
     {
-      "operationId"  : "get-people-by-params",
+      "operationId"  : "retrieve-video-hearings",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-vh-by-id-policy.xml"
     },
