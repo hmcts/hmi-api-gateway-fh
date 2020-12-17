@@ -1,0 +1,80 @@
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="mandatoryMissing" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+
+                return !qryPrmKeys.Contains("updated_since");
+            }" />
+        <choose>
+            <when condition="@((bool)context.Variables["mandatoryMissing"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                            new JProperty("statusCode", 400),
+                            new JProperty("message", "Please supply ‘updated_since’ date in iso8601 form")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <set-variable name="invalidQueryParams" value="@{
+                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+                string[] allowedKeys = {"updated_since","per_page","page"};
+                bool invalidQueryParam = false;
+                if(context.Request.Url.Query.Count &gt; 0){
+                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                    {
+                        bool keyFound = false;
+                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                        {
+                            if (qryPrmKeys[i] == allowedKeys[j]){
+                                keyFound = true;
+                                break;
+                            }
+                        }
+                        if(!keyFound){
+                            invalidQueryParam = true;
+                            break;
+                        }
+                    }
+                }
+
+                return invalidQueryParam;
+            }" />
+        <choose>
+            <when condition="@(context.Request.Url.Query.Count > 3 || (bool)context.Variables["invalidQueryParams"])">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("statusCode", 400),
+                        new JProperty("message", "Invalid query parameter/s in the request URL.")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
+                <set-header name="Authorization" exists-action="override">
+                    <value>Bearer #{elinksToken}#</value>
+                </set-header>
+                <rewrite-uri template="/api/people" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
