@@ -22,3 +22,5 @@ steps:
     useLegacyPattern: false
     variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
     enableTelemetry: true
+- bash:
+    rm -rf pipeline/variables/${{ parameters.secure_file }}
