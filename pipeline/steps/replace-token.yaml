@@ -1,12 +1,13 @@
 parameters:
-  - name: secure_file
+  - name: environment
     type: string
 
 steps:
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
+  name: policy-variables-${{ parameters.environment }}
   inputs:
-    secureFile: ${{ parameters.secure_file }}
+    secureFile: policy-variables-${{ parameters.environment }}.json
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
@@ -18,5 +19,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: $(Agent.TempDirectory)/${{ parameters.secure_file }}
+    variableFiles: $(policy-variables-${{ parameters.environment }}.secureFilePath)
     enableTelemetry: true
