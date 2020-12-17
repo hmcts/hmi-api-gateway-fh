@@ -1,7 +1,3 @@
-parameters:
-  - name: secure_file
-    type: string
-
 steps:
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
