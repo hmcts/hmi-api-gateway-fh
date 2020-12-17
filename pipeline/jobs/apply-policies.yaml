@@ -9,9 +9,6 @@ parameters:
   - name: subscription
     type: string
 
-  - name: environment
-    type: string
-
 jobs:
 - job: PreparePolicies
   dependsOn:
