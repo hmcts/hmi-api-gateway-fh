@@ -15,6 +15,7 @@ sessions_idRootContext: /hmi/sessions/%s
 listingsRootContext: /hmi/listings
 listings_idRootContext: /hmi/listings/%s
 videohearingsRootContext: /hmi/resources/video-hearing
+videohearings_idRootContext: /hmi/resources/video-hearing/%s
 peopleRootContext: /hmi/people
 people_idRootContext: /hmi/people/%s
 
