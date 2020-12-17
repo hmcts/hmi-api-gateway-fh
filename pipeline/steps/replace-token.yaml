@@ -1,4 +1,8 @@
 steps:
+- task: DownloadSecureFile@1
+  displayName: 'Download secure file'
+  inputs:
+    secureFile: 'policy-variables-$(environment).json'
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
@@ -10,5 +14,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
+    variableFiles: 'policy-variables-$(environment).json'
     enableTelemetry: true
