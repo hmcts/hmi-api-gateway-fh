@@ -233,7 +233,7 @@ class GET_sessions_UnitTests {
     @DisplayName("Test with no mandatory parameters")
     void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.clear();
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
+            final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
 
