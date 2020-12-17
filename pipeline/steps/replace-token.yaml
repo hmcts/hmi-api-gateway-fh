@@ -5,7 +5,7 @@ parameters:
 steps:
 - task: DownloadSecureFile@1
   displayName: 'Download secure file'
-  name: policy-variables-${{ parameters.environment }}
+  name: policy_variables_${{ parameters.environment }}
   inputs:
     secureFile: policy-variables-${{ parameters.environment }}.json
 - task: replacetokens@3
@@ -19,5 +19,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: $(policy-variables-${{ parameters.environment }}.secureFilePath)
+    variableFiles: $(policy_variables_${{ parameters.environment }}.secureFilePath)
     enableTelemetry: true
