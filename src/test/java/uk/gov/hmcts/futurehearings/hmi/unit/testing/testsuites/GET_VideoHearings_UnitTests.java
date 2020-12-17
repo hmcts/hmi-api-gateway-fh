@@ -20,11 +20,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-<<<<<<< HEAD
 @ActiveProfiles("test")
-=======
-@ActiveProfiles("local")
->>>>>>> 2400970... HMIS-636: Adding policies for new end points for VH
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
