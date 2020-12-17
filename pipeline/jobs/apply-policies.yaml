@@ -23,7 +23,7 @@ jobs:
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
-      secure_file: policy-variables-${{ parameters.environment }}.json
+      environment: ${{ parameters.environment }}
   - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
