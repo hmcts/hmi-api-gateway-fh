@@ -1,9 +1,10 @@
 steps:
-- task: DownloadSecureFile@1
-  displayName: 'Download secure file'
-  inputs:
-    secureFile: policy-variables-$(environment).json
+# - task: DownloadSecureFile@1
+#   displayName: 'Download secure file'
+#   inputs:
+#     secureFile: policy-variables-$(environment).json
 - bash: |
+    echo $(environment)
     pwd
     ls
 - task: replacetokens@3
@@ -17,5 +18,5 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     useLegacyPattern: false
-    variableFiles: 'pipeline/variables/policy-variables-$(environment).json'
+    variableFiles: $(policy-variables-$(environment).json'
     enableTelemetry: true
