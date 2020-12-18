@@ -225,7 +225,7 @@ public class SessionsResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForAdditionalParam(Response response){
+    public static void  thenValidateResponseForMandatoryParam(Response response){
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
@@ -233,6 +233,26 @@ public class SessionsResponseVerifier {
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
             assertEquals("You need to provide mandatory parameter: 'requestSessionType'", responseMap.get(("message")),"Status Code Message Validation:");
+            getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseFoInvalidParam(String paramName, Response response){
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 400");
+            assertEquals("Unsupported Query Param detected: '" + paramName + "'", responseMap.get(("message")),"Status Code Message Validation:");
             getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
         }
         catch (AssertionError e){
