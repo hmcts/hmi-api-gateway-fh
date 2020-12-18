@@ -193,10 +193,10 @@ class GET_sessions_UnitTests {
     @Order(10)
     @DisplayName("Test for Invalid Parameter")
     void testRetrieveSessionsRequestWithAdditionalParam() {
-        paramsAsMap.clear();
+        paramsAsMap.put("requestSessionType", "ADHOC");
         paramsAsMap.put("Invalid-Param","Value");
         final Response response = whenRetrieveSessionsIsInvokedWithAdditionalParam();
-        thenValidateResponseForAdditionalParam(response);
+        thenValidateResponseFoInvalidParam("Invalid-Param", response);
     }
 
 
