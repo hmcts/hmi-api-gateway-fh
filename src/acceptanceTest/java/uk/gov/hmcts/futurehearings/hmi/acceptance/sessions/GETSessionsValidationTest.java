@@ -42,8 +42,6 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @Value("${sessionsRootContext}")
     private String sessionsRootContext;
 
-    private static final String START_END_DATE_MANDATORY_ERROR_MSG= "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
-    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
     private static final String SESSIONS_SUCCESS_MSG= "The request was received successfully.";
     private static final String REQUEST_TYPE_MANDATORY_ERROR_MSG = "You need to provide mandatory parameter: 'requestSessionType'";
 
@@ -59,7 +57,6 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    @Disabled("Disabled as parameters checks are disabled in dev")
     @Test
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_invalid_query_param_with_value() throws Exception {
@@ -73,12 +70,12 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
     }
 
-    @ParameterizedTest(name = "Session StartDate without mandatory Session Request Type - Param : {0} --> {1}")
-    @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '", "sessionStartDate,NIL"}, nullValues= "NIL")
-    void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
+    @ParameterizedTest(name = "Testing the valid mandatory value of the query parameter : {0} --> {1}")
+    @CsvSource(value = {"requestSessionType,ADHOC","requestSessionType,1234","requestSessionType,''", "requestSessionType,' '", "requestSessionType,NIL"}, nullValues= "NIL")
+    void test_valid_query_param_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -87,15 +84,15 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
+                HttpStatus.OK, getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                SESSIONS_SUCCESS_MSG,null);
     }
 
-    @ParameterizedTest(name = "Session EndDate without mandatory Session Request Type - Param : {0} --> {1}")
-    @CsvSource(value = {"sessionEndDate, 2018-01-29 20:36:01Z", "sessionEndDate,''", "sessionEndDate,' '",  "sessionEndDate,NIL"}, nullValues= "NIL")
-    void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws Exception {
-        this.setUrlParams(buildQueryParams(sessionEndDateKey, sessionEndDateValue));
+    @ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestJudgeType : {0} --> {1}")
+    @CsvSource(value = {"requestJudgeType,AD12H", "requestJudgeType,''", "requestJudgeType,' '",  "requestJudgeType,NIL"}, nullValues= "NIL")
+    void test_request_judge_type_query_param_with_value(final String requestJudgeType, final String requestJudgeTypeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestJudgeType, requestJudgeTypeValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -108,9 +105,9 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
     }
 
-    @ParameterizedTest(name = "Session Room Name without mandatory Session Request Type- Param : {0} --> {1}")
-    @CsvSource(value = {"room-Name, R012", "room-Name,''", "room-Name,' '", "room-Name,NIL"}, nullValues = "NIL")
-    void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws Exception {
+    @ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestLocationId : {0} --> {1}")
+    @CsvSource(value = {"requestLocationId, R012", "requestLocationId,''", "requestLocationId,' '", "requestLocationId,NIL"}, nullValues = "NIL")
+    void test_request_location_id_without_mandatory_query_params(final String roomNameKey, final String roomNameValue) throws Exception {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -124,10 +121,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
     }
 
-    @ParameterizedTest(name = "Session Case Court without mandatory Session Request Type - Param : {0} --> {1}")
-    @CsvSource(value = {"caseCourt, case01", "caseCourt,''", "caseCourt,' '", "caseCourt,NIL"}, nullValues = "NIL")
-    void test_caseCourt_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws Exception {
-        this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
+    @ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestDuration : {0} --> {1}")
+    @CsvSource(value = {"requestDuration, case01", "requestDuration,''", "requestDuration,' '", "requestDuration,NIL"}, nullValues = "NIL")
+    void test_request_duration_without_mandatory_query_params(final String requestDurationKey, final String requestDurationValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestDurationKey, requestDurationValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -141,16 +138,14 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params - RoomName with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
-    @CsvSource({"requestSessionType,1234,sessionStartDate,2018-01-29 20:36:01Z,sessionEndDate,2018-01-29 20:36:01Z,room-Name,R121", "requestSessionType,,sessionStartDate,,sessionEndDate,,room-Name,"})
-    void test_roomName_with_multiple_queryparams(final String paramKey1,
+    @CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocationId,R012", "requestSessionType,,requestJudgeType,,requestLocationId,"})
+    void test_request_location_id_with_multiple_query_params(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
                                               final String paramVal2,
                                               final String paramKey3,
-                                              final String paramVal3,
-                                              final String paramKey4,
-                                              final String paramVal4) throws Exception {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
+                                              final String paramVal3)throws Exception {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -164,16 +159,14 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Multiple params - CourtCase with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
-    @CsvSource({"requestSessionType,1234,sessionStartDate,2018-01-29 20:36:01Z,sessionEndDate,2018-01-29 20:36:01Z,caseCourt,R121", "requestSessionType,,sessionStartDate,,sessionEndDate,,caseCourt,"})
-    void test_courtCase_with_multiple_queryparams(final String paramKey1,
+    @CsvSource({"requestSessionType,ADHOC,requestLocationId,301,requestDuration,360","requestSessionType,1234,requestLocationId,280,requestDuration,-1"})
+    void test_request_duration_with_multiple_query_params(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
                                               final String paramVal2,
                                               final String paramKey3,
-                                              final String paramVal3,
-                                              final String paramKey4,
-                                              final String paramVal4) throws Exception {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
+                                              final String paramVal3) throws Exception {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -187,18 +180,16 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Test with All Query Parameters - Param : {0} --> {1}")
-    @CsvSource({"requestSessionType,1234,sessionStartDate,2018-01-29 20:36:01Z,sessionEndDate,2018-01-29 20:36:01Z,room-Name,R121,caseCourt,case123", "requestSessionType,,sessionStartDate,,sessionEndDate,,room-Name,,caseCourt,"})
-    void test_all_queryparams_with_value(final String paramKey1,
+    @CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocationId,301,requestDuration,360"})
+    void test_all_query_params_with_value(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
                                               final String paramVal2,
                                               final String paramKey3,
                                               final String paramVal3,
                                               final String paramKey4,
-                                              final String paramVal4,
-                                              final String paramKey5,
-                                              final String paramVal5) throws Exception {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4, paramKey5, paramVal5));
+                                              final String paramVal4) throws Exception {
+        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -213,8 +204,8 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @Disabled("Disabled as parameters checks are disabled in dev")
     @ParameterizedTest(name = "Test with All Query Parameters with extram params - Param : {0} --> {1}")
-    @CsvSource({"requestSessionType,1234,sessionStartDate,2018-01-29 20:36:01Z,sessionEndDate,2018-01-29 20:36:01Z,room-Name,R121,caseCourt,case123,extra_params,extra", "requestSessionType,,sessionStartDate,,sessionEndDate,,room-Name,,caseCourt,,extra_params,,"})
-    void test_all_queryparams_with_extra_params(final String paramKey1,
+    @CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocation,301,requestDuration,360,extra_params,extra", "requestSessionType,,sessionStartDate,,sessionEndDate,,room-Name,,caseCourt,,extra_params,,"})
+    void test_all_query_params_with_extra_params(final String paramKey1,
                                          final String paramVal1,
                                          final String paramKey2,
                                          final String paramVal2,
@@ -236,7 +227,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
     }
 
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
