@@ -21,7 +21,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -92,6 +92,9 @@ class GET_sessions_UnitTests {
         paramsAsMap.put("requestSessionType", "ADHOC");
         paramsAsMap.put("requestStartDate", "2018-01-29 20:36:01Z");
         paramsAsMap.put("requestEndDate", "2018-01-29 21:36:01Z");
+        paramsAsMap.put("requestJudgeType", "AC");
+        paramsAsMap.put("requestLocationId", "354");
+        paramsAsMap.put("requestDuration", "360");
     }
 
     @Test
