@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.hearings;
 
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPact;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -50,7 +50,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms request received for a complete payload with 2 Entities(Ind and Org) populated - POST",
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -66,7 +66,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
@@ -79,7 +79,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithNoEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms request received for a complete payload with no Entities populated - POST",
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -95,7 +95,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
@@ -109,7 +109,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms request received for a standard (only outer elements) payload - POST",
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -125,7 +125,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 authorizationToken,
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
@@ -139,7 +139,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms request received for the most basic mandatory payload - POST",
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -155,7 +155,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH))),
                 POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 authorizationToken,
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,mockServer,
