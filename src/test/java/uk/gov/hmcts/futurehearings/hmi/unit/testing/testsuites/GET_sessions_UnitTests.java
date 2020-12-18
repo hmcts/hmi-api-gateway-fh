@@ -92,9 +92,6 @@ class GET_sessions_UnitTests {
         paramsAsMap.put("requestSessionType", "ADHOC");
         paramsAsMap.put("requestStartDate", "2018-01-29 20:36:01Z");
         paramsAsMap.put("requestEndDate", "2018-01-29 21:36:01Z");
-        paramsAsMap.put("caseCourt", "oxford");
-        paramsAsMap.put("room-Name", "RM012");
-
     }
 
     @Test
@@ -226,7 +223,6 @@ class GET_sessions_UnitTests {
     @DisplayName("Test with two non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
         paramsAsMap.remove("requestEndDate");
-        paramsAsMap.put("requestSessionType", "any");
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
@@ -237,8 +233,7 @@ class GET_sessions_UnitTests {
     @DisplayName("Test with no mandatory parameters")
     void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "ADHOC");
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
+            final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
         thenValidateResponseForNoMandatoryParams(response);
     }
 
