@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 public class PACTFactory {
     private PACTFactory() {}
 
-    public static final RequestResponsePact buildPactForSnL(final Map<String, String> headersAsMap,
+    public static final RequestResponsePact buildPact(final Map<String, String> headersAsMap,
                                                       final PactDslWithProvider builder,
                                                       final String pactDescription,
                                                       final String requestPayloadJsonPath,
