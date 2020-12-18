@@ -42,6 +42,8 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @Value("${sessionsRootContext}")
     private String sessionsRootContext;
 
+    private static final String START_END_DATE_MANDATORY_ERROR_MSG= "You need to provide both of the following parameters: 'sessionStartDate', 'sessionEndDate'";
+    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
     private static final String SESSIONS_SUCCESS_MSG= "The request was received successfully.";
     private static final String REQUEST_TYPE_MANDATORY_ERROR_MSG = "You need to provide mandatory parameter: 'requestSessionType'";
 
@@ -57,7 +59,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    //@Disabled("Disabled as parameters checks are disabled in dev")
+    @Disabled("Disabled as parameters checks are disabled in dev")
     @Test
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_invalid_query_param_with_value() throws Exception {
@@ -71,12 +73,12 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Session StartDate without mandatory Session Request Type - Param : {0} --> {1}")
     @CsvSource(value = {"sessionStartDate, 2018-01-29 20:36:01Z","sessionStartDate,''", "sessionStartDate,' '", "sessionStartDate,NIL"}, nullValues= "NIL")
-    void test_session_startDate_query_param_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
+    void test_session_startDate_queryparam_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -92,7 +94,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session EndDate without mandatory Session Request Type - Param : {0} --> {1}")
     @CsvSource(value = {"sessionEndDate, 2018-01-29 20:36:01Z", "sessionEndDate,''", "sessionEndDate,' '",  "sessionEndDate,NIL"}, nullValues= "NIL")
-    void test_session_endDate_query_param_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws Exception {
+    void test_session_endDate_queryparam_with_value(final String sessionEndDateKey, final String sessionEndDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionEndDateKey, sessionEndDateValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -108,7 +110,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
 
     @ParameterizedTest(name = "Session Room Name without mandatory Session Request Type- Param : {0} --> {1}")
     @CsvSource(value = {"room-Name, R012", "room-Name,''", "room-Name,' '", "room-Name,NIL"}, nullValues = "NIL")
-    void test_roomName_without_mandatory_query_params(final String roomNameKey, final String roomNameValue) throws Exception {
+    void test_roomName_without_mandatory_queryparams(final String roomNameKey, final String roomNameValue) throws Exception {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
         commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
                 getAuthorizationToken(),
@@ -234,7 +236,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG,null);
     }
 
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
