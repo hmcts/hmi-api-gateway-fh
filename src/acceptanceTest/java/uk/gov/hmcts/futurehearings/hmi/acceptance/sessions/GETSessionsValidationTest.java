@@ -266,6 +266,4 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 returnDescription,
                 null);
     }
-
-
 }
