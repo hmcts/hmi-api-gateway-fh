@@ -24,3 +24,6 @@ resourcesByUser_idRootContext: /hmi/resources/user/%s
 
 peopleRootContext: /hmi/people
 people_idRootContext: /hmi/people/%s
+
+videohearingsRootContext: /hmi/resources/video-hearing
+videohearings_idRootContext: /hmi/resources/video-hearing/%s
