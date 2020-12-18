@@ -15,13 +15,13 @@ import org.springframework.http.MediaType;
 public class RestDelegate {
     private RestDelegate () {}
 
-    public static final Response invokeSnLAPI (final Map<String, String> headersAsMap,
-                                               final String authorizationToken,
-                                               final String requestPayloadPath,
-                                               final HttpMethod httpMethod,
-                                               final MockServer mockServer,
-                                               final String apiURIPath,
-                                               final HttpStatus httpStatus) throws IOException {
+    public static final Response invokeAPI(final Map<String, String> headersAsMap,
+                                           final String authorizationToken,
+                                           final String requestPayloadPath,
+                                           final HttpMethod httpMethod,
+                                           final MockServer mockServer,
+                                           final String apiURIPath,
+                                           final HttpStatus httpStatus) throws IOException {
 
         switch (httpMethod) {
             case POST:
