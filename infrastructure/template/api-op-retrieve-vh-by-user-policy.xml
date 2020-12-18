@@ -44,7 +44,7 @@
                 <rewrite-uri template="/api/people" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VHMOCK")">
                 <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
                 <mock-response status-code="200" content-type="application/json" />
             </when>
