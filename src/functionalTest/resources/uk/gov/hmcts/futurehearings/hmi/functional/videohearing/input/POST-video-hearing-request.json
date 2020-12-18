@@ -1,0 +1,41 @@
+{
+  "scheduled_date_time": "2020-12-11T10:01:00.153Z",
+  "scheduled_duration": 0,
+  "hearing_venue_name": "venue",
+  "case_type_name": "case-type",
+  "hearing_type_name": "hearing-type",
+  "cases": [
+    {
+      "number": "601",
+      "name": "FED",
+      "is_lead_case": true
+    }
+  ],
+  "participants": [
+    {
+      "title": "MR",
+      "first_name": "James",
+      "middle_names": "V",
+      "last_name": "Bond",
+      "contact_email": "james.bond@hmcts.net",
+      "telephone_number": "23323232",
+      "username": "%s",
+      "display_name": "Bond",
+      "case_role_name": "Bond",
+      "hearing_role_name": "Bond",
+      "representee": "James",
+      "organisation_name": "TVL"
+    }
+  ],
+  "hearing_room_name": "South",
+  "other_information": "string",
+  "created_by": "string",
+  "questionnaire_not_required": true,
+  "audio_recording_required": true,
+  "endpoints": [
+    {
+      "display_name": "Bond",
+      "defence_advocate_username": "James"
+    }
+  ]
+}
