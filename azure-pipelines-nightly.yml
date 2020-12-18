@@ -57,6 +57,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
