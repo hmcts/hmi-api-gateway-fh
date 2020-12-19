@@ -9,6 +9,9 @@ parameters:
   - name: subscription
     type: string
 
+  - name: environment
+    type: string
+
 jobs:
 - job: PreparePolicies
   dependsOn:
@@ -19,6 +22,8 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - template: ../steps/replace-token.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
   - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
