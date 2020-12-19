@@ -121,6 +121,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-SBOX
+        environment: sbox
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
@@ -146,6 +147,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
@@ -171,6 +173,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
@@ -430,6 +433,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-STG
+        environment: stg
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
@@ -458,6 +462,7 @@ stages:
       parameters:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-PROD
+        environment: prod
         dependsOn: TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
