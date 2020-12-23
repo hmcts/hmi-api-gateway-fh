@@ -1,5 +1,5 @@
 {
-  "scheduled_date_time":"2020-12-17T15:00:00.000Z",
+  "scheduled_date_time":"%s",
   "scheduled_duration":45,
   "hearing_venue_name":"Birmingham Civil and Family Justice Centre",
   "case_type_name":"Civil Money Claims",
