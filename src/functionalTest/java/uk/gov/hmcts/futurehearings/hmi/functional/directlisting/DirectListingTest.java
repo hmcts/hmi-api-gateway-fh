@@ -59,7 +59,6 @@ public class DirectListingTest extends FunctionalTest {
 
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
-        //queryParameters.put("sessionEndDate", "2018-01-29 20:36:01Z");
 
         String sessionIdCaseHQ = directListingSteps.getSessionIdForDirectListing(sessionsRootContext,
                 headersAsMap,
