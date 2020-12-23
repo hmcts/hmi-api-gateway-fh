@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PACTFactory {
+    private PACTFactory() {}
 
     public static final RequestResponsePact buildPact(final Map<String, String> headersAsMap,
                                                       final PactDslWithProvider builder,
