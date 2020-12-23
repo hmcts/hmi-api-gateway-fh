@@ -1,6 +1,6 @@
-targetInstance: https://hmi-apim.dev.platform.hmcts.net
-targetHost:  hmi-apim.dev.platform.hmcts.net
-targetSubscriptionKey: 200b2902217a4afc9beabcc2b662be4e
+targetInstance: ${ENDPOINT_URL}
+targetHost: ${ENDPOINT_HOST}
+targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 hmiApiRootContext : /hmi/
 schedulesApiRootContext: /hmi/schedules
