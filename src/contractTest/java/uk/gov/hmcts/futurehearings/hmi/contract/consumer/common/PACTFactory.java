@@ -7,12 +7,14 @@ import java.util.Map;
 
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.http.entity.ContentType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PACTFactory {
-    private PACTFactory() {}
 
     public static final RequestResponsePact buildPact(final Map<String, String> headersAsMap,
                                                       final PactDslWithProvider builder,
@@ -29,6 +31,26 @@ public class PACTFactory {
                 .method(httpMethod.toString())
                 .headers(headersAsMap)
                 .body(readFileContents(requestPayloadJsonPath), ContentType.APPLICATION_JSON)
+                .willRespondWith()
+                .status(httpStatus.value())
+                .toPact();
+    }
+
+    public static final RequestResponsePact buildPactWithPayload(final Map<String, String> headersAsMap,
+                                                      final PactDslWithProvider builder,
+                                                      final String pactDescription,
+                                                      final String requestPayload,
+                                                      final String caseHQAPIPath,
+                                                      final HttpMethod httpMethod,
+                                                      final HttpStatus httpStatus,
+                                                      final String apiState) throws IOException {
+        return builder
+                .given(apiState)
+                .uponReceiving(pactDescription)
+                .path(caseHQAPIPath)
+                .method(httpMethod.toString())
+                .headers(headersAsMap)
+                .body(requestPayload, ContentType.APPLICATION_JSON)
                 .willRespondWith()
                 .status(httpStatus.value())
                 .toPact();
@@ -53,4 +75,5 @@ public class PACTFactory {
                 .status(httpStatus.value())
                 .toPact();
     }
+
 }
