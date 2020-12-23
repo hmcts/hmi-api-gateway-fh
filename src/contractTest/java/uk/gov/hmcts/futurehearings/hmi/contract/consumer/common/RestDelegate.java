@@ -8,12 +8,14 @@ import java.util.Map;
 import au.com.dius.pact.consumer.MockServer;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RestDelegate {
-    private RestDelegate () {}
 
     public static final Response invokeAPI(final Map<String, String> headersAsMap,
                                            final String authorizationToken,
@@ -60,8 +62,33 @@ public class RestDelegate {
                         .statusCode(httpStatus.value())
                         .extract().response();
             default:
-                return null;
+                throw new IllegalArgumentException("HTTP method " + httpMethod +" is not supported");
 
+        }
+    }
+
+    public static final Response invokeAPIWithPayloadBody(final Map<String, String> headersAsMap,
+                                           final String authorizationToken,
+                                           final String requestPayload,
+                                           final HttpMethod httpMethod,
+                                           final MockServer mockServer,
+                                           final String apiURIPath,
+                                           final HttpStatus httpStatus) throws Exception {
+        switch (httpMethod) {
+            case POST:
+                return RestAssured
+                        .given()
+                        .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .body(requestPayload)
+                        .when()
+                        .post(mockServer.getUrl() + apiURIPath)
+                        .then()
+                        .statusCode(httpStatus.value())
+                        .extract().response();
+            default:
+                throw new IllegalArgumentException("HTTP method " + httpMethod +" is not supported");
         }
     }
 }
