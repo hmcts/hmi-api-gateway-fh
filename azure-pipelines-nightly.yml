@@ -67,7 +67,9 @@ stages:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-TEST
         environment: test
-        dependsOn: ApplyHostName
+        dependsOn: 
+        - TerraformApply
+        - ApplyHostName
 
   - stage: TestTEST
     dependsOn: BuildTest
