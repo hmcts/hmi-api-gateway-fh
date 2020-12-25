@@ -4,6 +4,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUt
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 import au.com.dius.pact.consumer.MockServer;
 import io.restassured.RestAssured;
@@ -61,19 +62,20 @@ public class RestDelegate {
                         .then()
                         .statusCode(httpStatus.value())
                         .extract().response();
+
             default:
-                throw new IllegalArgumentException("HTTP method " + httpMethod +" is not supported");
+                throw new IllegalArgumentException("HTTP method " + httpMethod + " is not supported");
 
         }
     }
 
     public static final Response invokeAPIWithPayloadBody(final Map<String, String> headersAsMap,
-                                           final String authorizationToken,
-                                           final String requestPayload,
-                                           final HttpMethod httpMethod,
-                                           final MockServer mockServer,
-                                           final String apiURIPath,
-                                           final HttpStatus httpStatus) throws Exception {
+                                                          final String authorizationToken,
+                                                          final String requestPayload,
+                                                          final HttpMethod httpMethod,
+                                                          final MockServer mockServer,
+                                                          final String apiURIPath,
+                                                          final HttpStatus httpStatus) throws Exception {
         switch (httpMethod) {
             case POST:
                 return RestAssured
@@ -88,7 +90,32 @@ public class RestDelegate {
                         .statusCode(httpStatus.value())
                         .extract().response();
             default:
-                throw new IllegalArgumentException("HTTP method " + httpMethod +" is not supported");
+                throw new IllegalArgumentException("HTTP method " + httpMethod + " is not supported");
+        }
+    }
+
+    public static final Response invokeAPIWithQueryParameters(final Map<String, String> headersAsMap,
+                                                              final String authorizationToken,
+                                                              final Map<String, String> queryParameters,
+                                                              final HttpMethod httpMethod,
+                                                              final MockServer mockServer,
+                                                              final String apiURIPath,
+                                                              final HttpStatus httpStatus) throws Exception {
+        switch (httpMethod) {
+            case POST:
+                return RestAssured
+                        .given()
+                        .headers(headersAsMap)
+                        //.auth().oauth2(authorizationToken)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .queryParams(queryParameters)
+                        .when()
+                        .post(mockServer.getUrl() + apiURIPath)
+                        .then()
+                        .statusCode(httpStatus.value())
+                        .extract().response();
+            default:
+                throw new IllegalArgumentException("HTTP method " + httpMethod + " is not supported");
         }
     }
 }
