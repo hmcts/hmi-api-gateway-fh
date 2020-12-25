@@ -1,8 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.sessions;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildResponsePactFromSnL;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildResponsePact;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
@@ -48,10 +47,11 @@ class GetSessionsAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompleteGetSessionsResponsePact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildResponsePactFromSnL(headersAsMap, builder,
+        return buildResponsePact(headersAsMap, builder,
                 "Provider confirms complete response received for the GET Sessions",
                 GET_SESSION_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_SnL_GET_SESSION_API_PATH,
+                null,
                 HttpMethod.GET,
                 HttpStatus.OK,
                 "Sessions API"
@@ -81,10 +81,11 @@ class GetSessionsAPIConsumerTests extends ContractTest {
     public RequestResponsePact createMandatoryGetSessionsResponsePact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildResponsePactFromSnL(headersAsMap, builder,
+        return buildResponsePact(headersAsMap, builder,
                 "Provider confirms only mandatory response received for GET Sessions",
                 GET_SESSION_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_SnL_GET_SESSION_API_PATH,
+                null,
                 HttpMethod.GET,
                 HttpStatus.OK,
                 "Sessions API"
