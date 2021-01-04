@@ -352,7 +352,7 @@ class GET_listings_UnitTests {
 
     @Order(20)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -362,7 +362,7 @@ class GET_listings_UnitTests {
 
     @Order(21)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveListingsByIDRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
