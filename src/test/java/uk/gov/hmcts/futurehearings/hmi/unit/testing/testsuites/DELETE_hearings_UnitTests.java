@@ -185,7 +185,7 @@ class DELETE_hearings_UnitTests {
 
 	@Order(8)
 	@ParameterizedTest(name = "Test for missing {0} header")
-	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At", "Request-Type" })
+	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At" })
 	void testDeleteHearingRequestWithMissingHeader(String iteration) throws IOException {
 		headersAsMap.remove(iteration);
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -195,7 +195,7 @@ class DELETE_hearings_UnitTests {
 
 	@Order(9)
 	@ParameterizedTest(name = "Test for invalid {0} header")
-	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At", "Request-Type" })
+	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At" })
 	void testDeleteHearingRequestWithInvalidHeader(String iteration) throws IOException {
 		headersAsMap.remove(iteration);
 		headersAsMap.put(iteration, "A");
