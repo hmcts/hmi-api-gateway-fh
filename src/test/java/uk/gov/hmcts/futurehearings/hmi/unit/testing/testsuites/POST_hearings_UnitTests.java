@@ -183,7 +183,7 @@ class POST_hearings_UnitTests {
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRequestHearingsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
@@ -193,7 +193,7 @@ class POST_hearings_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRequestHearingsWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

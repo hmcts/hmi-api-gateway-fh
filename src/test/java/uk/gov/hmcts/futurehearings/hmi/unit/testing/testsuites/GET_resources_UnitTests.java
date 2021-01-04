@@ -172,7 +172,7 @@ class GET_resources_UnitTests {
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -182,7 +182,7 @@ class GET_resources_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -307,7 +307,7 @@ class GET_resources_UnitTests {
 
     @Order(18)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -317,7 +317,7 @@ class GET_resources_UnitTests {
 
     @Order(19)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
