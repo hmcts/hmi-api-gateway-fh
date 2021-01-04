@@ -11,7 +11,7 @@
 				<rewrite-uri template="/update-resource/{userIdCaseHQ}" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
 			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
                     <set-url>#{sAndLOauthUrl}#</set-url>
                     <set-method>POST</set-method>
