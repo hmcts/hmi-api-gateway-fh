@@ -47,6 +47,8 @@ build/
 /node_modules
 /infrastructure/.terraform/
 **/*.jar
+**/*.class
+/bin/
 
 ### STS ###
 .apt_generated
