@@ -183,7 +183,7 @@ class POST_resources_user_UnitTests {
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
@@ -193,7 +193,7 @@ class POST_resources_user_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testCreateUserResourceWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

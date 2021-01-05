@@ -174,7 +174,7 @@ class PUT_people_UnitTests {
 
 	@Order(8)
     @ParameterizedTest(name = "Test for missing madatory {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
     void testUpdatePeopleWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
