@@ -169,18 +169,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.remove("Ocp-Apim-Subscription-Key");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
 		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-		thenValidateResponseForMissingSubscriptionKeyHeader(response);
-	}
-
-	@Test
-	@Order(7)
-	@DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-	void testDeleteResourcesRequestWithInvalidOcpSubKey() throws IOException {
-		headersAsMap.remove("Ocp-Apim-Subscription-Key");
-		headersAsMap.put("Ocp-Apim-Subscription-Key", "invalidocpsubkey");
-		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
-		thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+		thenValidateResponseForDelete(response);
 	}
 
 	@Order(8)
