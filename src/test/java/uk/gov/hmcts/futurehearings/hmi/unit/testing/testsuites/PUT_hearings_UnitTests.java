@@ -166,18 +166,7 @@ class PUT_hearings_UnitTests {
 		headersAsMap.remove("Ocp-Apim-Subscription-Key");
 		final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
 		final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-		thenValidateResponseForMissingSubscriptionKeyHeader(response);
-	}
-
-	@Test
-	@Order(7)
-	@DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-	void testUpdateHearingsRequestWithInvalidOcpSubKey() throws IOException {
-		headersAsMap.remove("Ocp-Apim-Subscription-Key");
-		headersAsMap.put("Ocp-Apim-Subscription-Key", "invalidocpsubkey");
-		final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
-		final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
-		thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+		thenValidateResponseForUpdate(response);
 	}
 
 	@Order(8)
