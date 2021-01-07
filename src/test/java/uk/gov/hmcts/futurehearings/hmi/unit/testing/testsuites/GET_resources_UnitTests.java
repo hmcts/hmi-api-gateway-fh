@@ -286,7 +286,7 @@ class GET_resources_UnitTests {
 
     @Order(18)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -296,7 +296,7 @@ class GET_resources_UnitTests {
 
     @Order(19)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

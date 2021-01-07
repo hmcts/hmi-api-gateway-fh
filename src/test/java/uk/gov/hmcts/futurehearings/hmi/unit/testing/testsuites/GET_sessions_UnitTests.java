@@ -361,7 +361,7 @@ class GET_sessions_UnitTests {
 
     @Order(26)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -371,7 +371,7 @@ class GET_sessions_UnitTests {
 
     @Order(27)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsByIDRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
