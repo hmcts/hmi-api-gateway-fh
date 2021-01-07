@@ -77,7 +77,7 @@ class CreateHearingAPIConsumerTest extends ContractTest {
 
         this.inputPayload = String.format(readFileContents(CREATE_HEARING_STANDARD_PAYLOAD_JSON_PATH),
                 getRFC3339FormattedDateForwardDays(10));
-        return buildPact(headersAsMap, builder,
+        return buildPactWithPayload(headersAsMap, builder,
                 "Provider confirms create booking/hearing request received for a standard payload POST",
                 this.inputPayload,
                 PROVIDER_CREATE_A_HEARING_API_PATH,
