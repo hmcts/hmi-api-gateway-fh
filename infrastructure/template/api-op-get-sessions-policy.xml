@@ -67,7 +67,7 @@
                     <value>application/json; charset=utf-8</value>
                 </set-header>
                 <set-header name="Accept" exists-action="override">
-                    <value>application/json; version=1.2</value>
+                    <value>application/json</value>
                 </set-header>
                 <set-header name="Request-Type" exists-action="override">
                     <value>text</value>

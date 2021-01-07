@@ -7,7 +7,6 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRetrieve;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
@@ -36,7 +35,7 @@ import java.util.Map;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -337,6 +336,16 @@ class GET_listings_UnitTests {
 
         final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForRetrieve(response);
+    }
+
+    @Order(20)
+    @ParameterizedTest(name = "Test for missing {0} header - By ID")
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
+        headersAsMap.remove(iteration);
+
+        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(21)
