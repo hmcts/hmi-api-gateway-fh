@@ -157,17 +157,7 @@ class GET_resources_UnitTests {
     void testRetrieveResourcesRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(8)
@@ -292,17 +282,7 @@ class GET_resources_UnitTests {
     void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(18)

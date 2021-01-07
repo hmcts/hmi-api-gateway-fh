@@ -168,18 +168,7 @@ class GET_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveListingsRequestWithInvalidOcpSubKey(){
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-
-        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(8)
@@ -336,7 +325,7 @@ class GET_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
@@ -347,17 +336,7 @@ class GET_listings_UnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
         final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(20)
-    @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
-    void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
-        headersAsMap.remove(iteration);
-
-        final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingOrInvalidHeader(response, iteration);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(21)

@@ -168,18 +168,7 @@ class GET_hearings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveHearingsRequestWithInvalidOcpSubKey(){
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-
-        final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(8)

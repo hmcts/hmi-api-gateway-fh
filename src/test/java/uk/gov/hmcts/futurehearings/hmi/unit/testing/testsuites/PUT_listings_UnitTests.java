@@ -151,18 +151,7 @@ class PUT_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
         final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testUpdateListingsRequestWithInvalidOcpSubKey()throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_UPDATE_LISTINGS_PAYLOAD);
-        final Response response = whenUpdateListingsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForUpdate(response);
     }
 
     @Order(8)

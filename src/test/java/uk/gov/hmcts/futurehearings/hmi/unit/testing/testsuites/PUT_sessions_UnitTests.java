@@ -26,7 +26,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -167,18 +166,7 @@ class PUT_sessions_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
         final Response response = whenUpdateSessionsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testUpdateSessionsRequestWithInvalidOcpSubKey()throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_UPDATE_SESSIONS_PAYLOAD);
-        final Response response = whenUpdateSessionsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForUpdate(response);
     }
 
     @Order(8)
