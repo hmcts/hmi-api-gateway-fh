@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.hearings;
 
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPact;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -48,7 +48,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForAmendHearingAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a complete payload with 2 Entities(Ind and Org) populated - PUT",
                 AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 PROVIDER_AMEND_SnL_HEARING_API_PATH,
@@ -64,7 +64,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH))),
                 PUT_AMEND_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 AMEND_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
@@ -77,7 +77,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithNoEntitiesForAmendHearingAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a complete payload with no Entities populated - PUT",
                 AMEND_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 PROVIDER_AMEND_SnL_HEARING_API_PATH,
@@ -93,7 +93,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(AMEND_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH))),
                 PUT_AMEND_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 AMEND_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
@@ -107,7 +107,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createStandardPayloadForAmendHearingAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms amend hearing request received for a standard (only outer elements) payload - PUT",
                 AMEND_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 PROVIDER_AMEND_SnL_HEARING_API_PATH,
@@ -123,7 +123,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(AMEND_HEARING_STANDARD_PAYLOAD_JSON_PATH))),
                 PUT_AMEND_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 AMEND_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,
@@ -137,7 +137,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createMandatoryPayloadForAmendHearingAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,builder,
+        return buildPact(headersAsMap,builder,
                 "Provider confirms amend hearing request received for the most basic mandatory payload - PUT",
                 AMEND_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_AMEND_SnL_HEARING_API_PATH,
@@ -153,7 +153,7 @@ class AmendHearingAPIConsumerTest extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(AMEND_HEARING_MANDATORY_PAYLOAD_JSON_PATH))),
                 PUT_AMEND_HEARING_REQUEST_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 AMEND_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,mockServer,

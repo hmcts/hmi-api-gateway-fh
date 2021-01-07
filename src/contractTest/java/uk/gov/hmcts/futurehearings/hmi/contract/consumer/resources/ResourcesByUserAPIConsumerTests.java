@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.resources;
 
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPact;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -46,7 +46,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompletePOSTPayloadForRequestUserAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload for an Resource By User - POST",
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
@@ -64,7 +64,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH))),
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,
@@ -79,7 +79,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
     public RequestResponsePact createOptionalPOSTPayloadForRequestUserAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,
+        return buildPact(headersAsMap,
                 builder,
                 "Provider confirms request received for an optional payload for an Resource By User - POST",
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
@@ -98,7 +98,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH))),
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.POST,
@@ -113,7 +113,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompletePUTPayloadForRequestUserAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload for an Resource By User - PUT",
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_USER_RESOURCE_API_PATH,
@@ -131,7 +131,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH))),
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
@@ -146,7 +146,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
     public RequestResponsePact createOptionalPUTPayloadForRequestUserAPIPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,
+        return buildPact(headersAsMap,
                 builder,
                 "Provider confirms request received for an optional payload for an Resource By User - PUT",
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
@@ -165,7 +165,7 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH))),
                 RESOURCES_USER_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
