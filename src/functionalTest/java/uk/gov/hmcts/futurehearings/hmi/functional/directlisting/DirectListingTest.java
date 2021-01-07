@@ -52,7 +52,6 @@ public class DirectListingTest extends FunctionalTest {
 
 
     @Test
-    @Pending
     public void testSuccessfulDirectListing() throws Exception {
 
         log.debug("In the testSuccessfulPostToHearing () method");
