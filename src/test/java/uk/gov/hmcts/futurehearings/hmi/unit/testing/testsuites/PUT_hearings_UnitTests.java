@@ -104,7 +104,6 @@ class PUT_hearings_UnitTests {
 		headersAsMap.put("Source-System", "CFT");
 		headersAsMap.put("Destination-System", destinationSystem);
 		headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-		headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 		headersAsMap.put("Request-Type", "THEFT");
 	}
 
@@ -171,7 +170,7 @@ class PUT_hearings_UnitTests {
 
 	@Order(8)
 	@ParameterizedTest(name = "Test for missing {0} header")
-	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At" })
+	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At"})
 	void testUpdateHearingsWithMissingHeader(String iteration) throws IOException {
 		headersAsMap.remove(iteration);
 		final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
@@ -181,7 +180,7 @@ class PUT_hearings_UnitTests {
 
 	@Order(9)
 	@ParameterizedTest(name = "Test for invalid {0} header")
-	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At", "Request-Processed-At" })
+	@ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At"})
 	void testUpdateHearingsWithInvalidHeader(String iteration) throws IOException {
 		headersAsMap.remove(iteration);
 		headersAsMap.put(iteration, "A");
