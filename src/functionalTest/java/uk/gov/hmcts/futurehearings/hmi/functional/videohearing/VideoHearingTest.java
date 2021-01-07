@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
@@ -52,9 +53,10 @@ public class VideoHearingTest extends FunctionalTest {
         log.debug("In the testSuccessfulPostVideoHearing() method");
         final String username = String.format("abc" + new Random().nextInt(999999));
         final String payloadForVideoHearing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-video-hearing-request.json"), username);
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
 
         //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
         videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
                 headersAsMap,
                 authorizationToken,
