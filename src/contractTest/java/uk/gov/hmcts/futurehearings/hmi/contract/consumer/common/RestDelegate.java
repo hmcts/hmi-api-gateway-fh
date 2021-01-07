@@ -102,7 +102,7 @@ public class RestDelegate {
                                                               final String apiURIPath,
                                                               final HttpStatus httpStatus) throws Exception {
         switch (httpMethod) {
-            case POST:
+            case GET:
                 return RestAssured
                         .given()
                         .headers(headersAsMap)
@@ -110,7 +110,7 @@ public class RestDelegate {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .queryParams(queryParameters)
                         .when()
-                        .post(mockServer.getUrl() + apiURIPath)
+                        .get(mockServer.getUrl() + apiURIPath)
                         .then()
                         .statusCode(httpStatus.value())
                         .extract().response();
