@@ -70,7 +70,6 @@ public class QueryParamsHelper {
         queryParams.put(paramKey6, paramValue6);
         return queryParams;
     }
-
     public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
@@ -86,6 +85,26 @@ public class QueryParamsHelper {
         queryParams.put(paramKey5, paramValue5);
         queryParams.put(paramKey6, paramValue6);
         queryParams.put(paramKey7, paramValue7);
+        return queryParams;
+    }
+
+    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+                                                             final String paramKey2, final String paramValue2,
+                                                             final String paramKey3, final String paramValue3,
+                                                             final String paramKey4, final String paramValue4,
+                                                             final String paramKey5, final String paramValue5,
+                                                             final String paramKey6, final String paramValue6,
+                                                             final String paramKey7, final String paramValue7,
+                                                             final String paramKey8, final String paramValue8) {
+        final Map<String, String>  queryParams = new HashMap<>();
+        queryParams.put(paramKey1, paramValue1);
+        queryParams.put(paramKey2, paramValue2);
+        queryParams.put(paramKey3, paramValue3);
+        queryParams.put(paramKey4, paramValue4);
+        queryParams.put(paramKey5, paramValue5);
+        queryParams.put(paramKey6, paramValue6);
+        queryParams.put(paramKey7, paramValue7);
+        queryParams.put(paramKey8, paramValue8);
         return queryParams;
     }
 }
