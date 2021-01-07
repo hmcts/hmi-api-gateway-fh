@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.people;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
@@ -56,6 +57,7 @@ public class PeopleTest extends FunctionalTest {
         queryParameters.put("per_page", "50");
         queryParameters.put("page", "1");
 
+        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
         String peopleId = peopleSteps.getPeopleIdForELinks(peopleRootContext,
                 headersAsMap,
                 authorizationToken,
