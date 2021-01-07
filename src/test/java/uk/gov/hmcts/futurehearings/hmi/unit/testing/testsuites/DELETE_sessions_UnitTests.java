@@ -106,7 +106,6 @@ class DELETE_sessions_UnitTests {
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
     }
 
@@ -173,7 +172,7 @@ class DELETE_sessions_UnitTests {
 
     @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testDeleteSessionsRequestWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -183,7 +182,7 @@ class DELETE_sessions_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testDeleteSessionsRequestWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
