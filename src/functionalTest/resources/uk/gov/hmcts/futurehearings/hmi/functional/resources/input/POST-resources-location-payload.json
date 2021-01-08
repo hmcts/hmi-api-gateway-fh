@@ -6,7 +6,6 @@
     },
     "location": {
       "locationIdHMCTS": "%s",
-      "locationIdCaseHQ": "%s",
       "locationDescription": "HMI-Test",
       "locationAddress": "351 Silbury Boulevard, Witan Gate East, Central Milton Keynes",
       "locationCluster": "TV",

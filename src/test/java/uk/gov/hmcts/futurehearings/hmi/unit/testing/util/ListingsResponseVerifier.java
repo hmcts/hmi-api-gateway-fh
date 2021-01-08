@@ -66,6 +66,54 @@ public class ListingsResponseVerifier {
         }
     }
 
+    public static void  thenValidateResponseForRetrieveVideoHearing(Response response){
+        try{
+            List<Map<String, String>> responseMap = response.getBody().jsonPath().getList("$");
+            assertEquals(200, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 200");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForRetrieveVideoHearingWithInvalidQueryParams(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 400");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForRetrieveVideoHearingWithPathParam(Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(200, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 200");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
     public static void thenValidateResponseForRequestVideoHearingWithInvalidHeader(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
