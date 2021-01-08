@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.listings;
 
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPact;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -48,7 +48,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompletePUTPayloadWithEntitiesForRequestListingPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload for an Request Listing - PUT",
                 RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH,
                 PROVIDER_REQUEST_SnL_LISTING_RESOURCE_API_PATH,
@@ -66,7 +66,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH))),
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_COMPLETE_PAYLOAD_WITH_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
@@ -81,7 +81,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
     public RequestResponsePact createMandatoryPUTPayloadForRequestListingPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,
+        return buildPact(headersAsMap,
                 builder,
                 "Provider confirms request received for an mandatory payload for an Request Listing - PUT",
                 RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH,
@@ -100,7 +100,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH))),
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT,
@@ -115,7 +115,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
     public RequestResponsePact createStandardWithNoEntitiesPUTPayloadForRequestListingPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,
+        return buildPact(headersAsMap,
                 builder,
                 "Provider confirms request received for an standard with no entities payload for an Request Listing - PUT",
                 RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
@@ -134,7 +134,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH))),
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH,
                 HttpMethod.PUT,
@@ -149,7 +149,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
     public RequestResponsePact createStandardPUTPayloadForRequestListingPact(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap,
+        return buildPact(headersAsMap,
                 builder,
                 "Provider confirms request received for an standard payload for an Request Listing - PUT",
                 RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
@@ -168,7 +168,7 @@ class ListingRequestAPIConsumerTests extends ContractTest {
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH))),
                 RESOURCES_LISTING_REQUEST_SCHEMA_JSON);
 
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH,
                 HttpMethod.PUT,
