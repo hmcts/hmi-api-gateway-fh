@@ -144,6 +144,21 @@
       "operationId"  : "update-people",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-update-people-elinks-policy.xml"
+    },
+    {
+      "operationId"  : "retrieve-video-hearings",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-vh-by-id-policy.xml"
+    },
+    {
+      "operationId"  : "get-people",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-people-by-id-elinks-policy.xml"
+    },
+    {
+      "operationId"  : "retrieve-video-hering-by-user",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-retrieve-vh-by-user-policy.xml"
     }
   ]
 }
