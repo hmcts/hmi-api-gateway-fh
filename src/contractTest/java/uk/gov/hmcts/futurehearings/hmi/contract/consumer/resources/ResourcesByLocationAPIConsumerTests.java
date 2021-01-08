@@ -1,7 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.contract.consumer.resources;
 
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPactForSnL;
-import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeSnLAPI;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFactory.buildPact;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPI;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.validation.factory.PayloadValidationFactory.validateHMIPayload;
 
@@ -45,7 +45,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload For Request Resource Location - POST",
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -61,7 +61,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.POST, mockServer,
@@ -74,7 +74,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
     public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a optional payload For Request Resource Location - POST",
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -90,7 +90,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.POST, mockServer,
@@ -103,7 +103,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
     public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload For Request Resource Location - PUT",
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -119,7 +119,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT, mockServer,
@@ -132,7 +132,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
     public RequestResponsePact createOptionalPayloadRequestResourceLocationAPIPactPUT(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPactForSnL(headersAsMap, builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a optional payload For Request Resource Location - PUT",
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_RESOURCES_LOCATION_API_PATH,
@@ -148,7 +148,7 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
         validateHMIPayload(new JSONObject(new JSONTokener(readFileContents(REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH))),
                 POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE);
-        invokeSnLAPI(headersAsMap,
+        invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH,
                 HttpMethod.PUT, mockServer,
