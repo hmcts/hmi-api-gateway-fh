@@ -35,7 +35,7 @@ import java.util.Map;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
