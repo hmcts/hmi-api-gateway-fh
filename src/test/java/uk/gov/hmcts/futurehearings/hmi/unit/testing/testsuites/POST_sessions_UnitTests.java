@@ -98,7 +98,6 @@ class POST_sessions_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -157,17 +156,7 @@ class POST_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testCreateSessionsWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForRequestOrDelete(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateSessionsWithMissingHeader(String iteration) throws IOException {
@@ -177,7 +166,7 @@ class POST_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateSessionsWithInvalidHeader(String iteration) throws IOException {
@@ -189,7 +178,7 @@ class POST_sessions_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Correct Headers")
     void testCreateSessionsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
@@ -200,7 +189,7 @@ class POST_sessions_UnitTests {
 
 
     @Test
-    @Order(11)
+    @Order(9)
     @DisplayName("Test for missing Access Token")
     void testCreateSessionsWithMissingAccessToken() throws IOException {
 
@@ -210,7 +199,7 @@ class POST_sessions_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testCreateSessionsWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

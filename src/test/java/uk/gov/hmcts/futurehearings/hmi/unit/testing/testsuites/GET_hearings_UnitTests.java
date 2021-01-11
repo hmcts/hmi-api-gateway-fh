@@ -96,7 +96,6 @@ class GET_hearings_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -160,17 +159,7 @@ class GET_hearings_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRetrieveHearingsRequestWithMissingOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-
-        final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForRetrieve(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveHearingsRequestWithMissingHeader(String iteration) {
@@ -180,7 +169,7 @@ class GET_hearings_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveHearingsRequestWithInvalidHeader(String iteration) {
@@ -192,7 +181,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Invalid Parameter")
     void testRetrieveHearingsRequestWithAdditionalParam() {
         paramsAsMap.put("Invalid-Param","Value");
@@ -202,7 +191,7 @@ class GET_hearings_UnitTests {
         paramsAsMap.remove("Invalid-Param");
     }
 
-    @Order(11)
+    @Order(9)
     @ParameterizedTest(name = "Test for {0} Parameter")
     @ValueSource(strings = {"hearingIdCaseHQ","hearingDate","hearingType"})
     void testRetrieveHearingsRequestWithParam(String iteration) {
@@ -214,7 +203,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveHearingsRequestWithCorrectHeadersAndNoParams() {
 
@@ -223,7 +212,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveHearingsRequestWithCorrectHeadersAndParams() {
 
@@ -232,7 +221,7 @@ class GET_hearings_UnitTests {
     }
 
     @Test
-    @Order(14)
+    @Order(12)
     @DisplayName("Test for missing Access Token")
     void testDeleteHearingRequestWithMissingAccessToken() {
 
