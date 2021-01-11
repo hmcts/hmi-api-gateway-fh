@@ -100,7 +100,6 @@ class POST_resources_user_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -159,17 +158,7 @@ class POST_resources_user_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testCreateUserResourceWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForCreate(response);
-    }
-
-    @Order(7)
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
@@ -179,7 +168,7 @@ class POST_resources_user_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(8)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateUserResourceWithInvalidHeader(String iteration) throws IOException {
@@ -191,7 +180,7 @@ class POST_resources_user_UnitTests {
     }
 
     @Test
-    @Order(9)
+    @Order(8)
     @DisplayName("Test for Correct Headers")
     void testCreateUserResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
@@ -201,7 +190,7 @@ class POST_resources_user_UnitTests {
 
 
     @Test
-    @Order(10)
+    @Order(9)
     @DisplayName("Test for missing Access Token")
     void testCreateUserResourceWithMissingAccessToken() throws IOException {
 
@@ -211,7 +200,7 @@ class POST_resources_user_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testCreateUserResourceWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

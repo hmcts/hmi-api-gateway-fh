@@ -88,7 +88,6 @@ class PUT_people_UnitTests {
 
 	@BeforeEach
 	void initialiseValues() {
-		headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
 		headersAsMap.put("Content-Type", "application/json");
 		headersAsMap.put("Accept", "application/json");
 		headersAsMap.put("Source-System", "CFT");
@@ -150,17 +149,7 @@ class PUT_people_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
-    @Order(6)
-    @DisplayName("Test for missing OcpSubKey")
-    void testUpdatePopleRequestWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
-        final Response response = whenUpdatePeopleIsInvoked(input);
-		thenValidateResponseForUpdate(response);
-    }
-
-	@Order(8)
+	@Order(6)
     @ParameterizedTest(name = "Test for missing madatory {0} header")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testUpdatePeopleWithMissingHeader(String iteration) throws IOException {
@@ -171,7 +160,7 @@ class PUT_people_UnitTests {
     }
 
 	@Test
-    @Order(9)
+    @Order(7)
     @DisplayName("Test for Invalid AccessToken for Update People with ID")
     void testRetrievePeopleWithInvalidAccessToken() {
 		accessToken = "invalidToken";
