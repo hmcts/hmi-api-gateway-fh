@@ -73,7 +73,7 @@
                     <value>text</value>
                 </set-header>
                 <set-header name="Destination-System" exists-action="override">
-                    <value>S&amp;L<</value>
+                    <value>S&amp;L</value>
                 </set-header>
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
