@@ -33,7 +33,7 @@
             <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
         </set-header>
         <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
-            <value>S&amp;L</value>
+            <value>SNL</value>
             <value>MOCK</value>
             <value>EMULATOR</value>
             <value>CRIME</value>
@@ -41,7 +41,7 @@
             <value>RM</value>
         </check-header>
         <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
-            <value>S&amp;L</value>
+            <value>SNL</value>
             <value>MOCK</value>
             <value>EMULATOR</value>
             <value>CRIME</value>
