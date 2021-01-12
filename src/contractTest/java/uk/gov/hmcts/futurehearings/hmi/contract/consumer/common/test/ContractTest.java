@@ -17,9 +17,6 @@ import org.springframework.http.HttpStatus;
 @Getter(AccessLevel.PUBLIC)
 public abstract class ContractTest {
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${token_apiURL}")
     private String token_apiURL;
 
@@ -52,16 +49,6 @@ public abstract class ContractTest {
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
 
-       /* headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        //Only Commenting out in this step as this is not required as of the moment for the McGirr Deployment
-        //headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", "S&L");
-        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");
-        headersAsMap.put("Authorization", "Bearer "+getAuthorizationToken());*/
-        headersAsMap = createStandardSnLHeader(getAuthorizationToken(),"S&L");
+        headersAsMap = createStandardSnLHeader(getAuthorizationToken(),"SNL");
     }
 }
