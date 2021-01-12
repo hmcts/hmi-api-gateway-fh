@@ -1,5 +1,3 @@
-targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
-
 grantType: client_credentials
 clientID: b085c529-1b29-4075-969c-32ebfaddb1e4
 clientSecret: 4b3eca29-2ff6-4419-8061-2b23cef9e756
