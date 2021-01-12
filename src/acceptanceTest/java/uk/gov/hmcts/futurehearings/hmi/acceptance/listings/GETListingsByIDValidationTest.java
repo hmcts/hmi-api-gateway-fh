@@ -1,18 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
-
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsByIdValidationVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -28,9 +22,6 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${listings_idRootContext}")
     private String listings_idRootContext;

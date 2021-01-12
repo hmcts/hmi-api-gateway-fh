@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,7 +15,6 @@ import lombok.experimental.Accessors;
 @ToString
 @EqualsAndHashCode
 public class SystemHeaderDTO {
-    private String subscriptionKey;
     private String accept;
     private String contentType;
     private String contentEncoding;

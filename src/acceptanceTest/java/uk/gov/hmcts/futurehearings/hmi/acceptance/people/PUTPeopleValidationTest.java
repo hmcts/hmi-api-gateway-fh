@@ -6,7 +6,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +22,6 @@ class PUTPeopleValidationTest extends PeopleValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${people_idRootContext}")
     private String people_idRootContext;

@@ -23,9 +23,6 @@ public class GETResourcesValidationTest extends ResourceValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${resourcesRootContext}")
     private String resourcesRootContext;
 
