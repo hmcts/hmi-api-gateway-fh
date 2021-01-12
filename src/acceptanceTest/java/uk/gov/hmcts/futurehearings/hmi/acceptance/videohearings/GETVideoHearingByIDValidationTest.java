@@ -24,9 +24,6 @@ class GETVideoHearingByIDValidationTest extends PeopleValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${videohearings_idRootContext}")
     private String videohearings_idRootContext;
 
