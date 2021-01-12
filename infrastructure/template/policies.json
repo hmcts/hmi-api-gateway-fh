@@ -159,6 +159,11 @@
       "operationId"  : "retrieve-video-hering-by-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-vh-by-user-policy.xml"
+    },
+    {
+      "operationId"  : "emulator-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-emulator-health-policy.xml"
     }
   ]
 }
