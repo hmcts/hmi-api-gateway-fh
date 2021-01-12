@@ -1,5 +1,4 @@
 targetInstance: ${ENDPOINT_URL}
-targetSubscriptionKey: ${ENDPOINT_SUBSCRIPTION_KEY}
 hmiApiRootContext : /hmi/
 hearingsApiRootContext: /hmi/hearings
 hearings_idRootContext: /hmi/hearings/%s
