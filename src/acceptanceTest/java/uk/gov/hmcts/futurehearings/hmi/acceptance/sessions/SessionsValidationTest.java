@@ -23,9 +23,6 @@ public abstract class SessionsValidationTest extends HMICommonHeaderTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${token_apiURL}")
     private String token_apiURL;
 
@@ -48,7 +45,6 @@ public abstract class SessionsValidationTest extends HMICommonHeaderTest {
     public void initialiseValues() throws Exception {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("sessions");
