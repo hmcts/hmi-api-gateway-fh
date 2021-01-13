@@ -20,50 +20,41 @@ import org.springframework.http.MediaType;
 public class CommonHeaderHelper {
 
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
-    private static final String SNL_DESTINATION_SYSTEM = "S&L";
+    private static final String SNL_DESTINATION_SYSTEM = "SNL";
+    private static final String RM_DESTINATION_SYSTEM = "RM";
     private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
-    public static final Map<String, String> createCompletePayloadHeader(final String subscriptionKey) {
+    public static final Map<String, String> createCompletePayloadHeader() {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static final Map<String, String> createStandardPayloadHeader(final String subscriptionKey) {
+    public static final Map<String, String> createStandardPayloadHeader() {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static final Headers createStandardPayloadHeaderWithDuplicateValues(final String subscriptionKey,
-                                                                               Map<String, String> duplicateHeaderValues) {
+    public static final Headers createStandardPayloadHeaderWithDuplicateValues(Map<String, String> duplicateHeaderValues) {
 
         return buildHeaderWithDoubleValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 duplicateHeaderValues
         );
     }
@@ -71,7 +62,6 @@ public class CommonHeaderHelper {
     public static final Map<String, String> createHeaderWithAllValuesNull() {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                null,
                 null,
                 null,
                 null,
@@ -89,71 +79,53 @@ public class CommonHeaderHelper {
                 "",
                 "",
                 "",
-                "",
                 ""
         );
     }
 
-    public static final Map<String, String> createHeaderWithCorruptedHeaderKey(final String subscriptionKey,
-                                                                               final List<String> headersToBeTruncated) {
+    public static final Map<String, String> createHeaderWithCorruptedHeaderKey(final List<String> headersToBeTruncated) {
 
         return buildHeaderWithValuesWithKeysTruncated(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 headersToBeTruncated
         );
     }
 
-    public static final Map<String, String> createHeaderWithRemovedHeaderKey(final String subscriptionKey,
-                                                                             final List<String> headersToBeRemoved) {
+    public static final Map<String, String> createHeaderWithRemovedHeaderKey(final List<String> headersToBeRemoved) {
 
         return buildHeaderWithValuesWithKeysTruncated(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 headersToBeRemoved
         );
     }
 
-    public static Map<String, String> createHeaderWithSourceSystemValue(final String subscriptionKey,
-                                                                        final String sourceSystem) {
+    public static Map<String, String> createHeaderWithSourceSystemValue(final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 sourceSystem,
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static Map<String, String> createHeaderWithDestinationSystemValue(final String subscriptionKey,
-                                                                             final String destinationSystem) {
+    public static Map<String, String> createHeaderWithDestinationSystemValue(final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                destinationSystem,
-                "Assault"
+                destinationSystem
         );
     }
 
-    public static Map<String, String> createHeaderWithEmulatorValues(final String subscriptionKey,
-                                                                     final String destinationSystem,
+    public static Map<String, String> createHeaderWithEmulatorValues(final String destinationSystem,
                                                                      final String returnHttpCode,
                                                                      final String returnErrorCode,
                                                                      final String returnDescription) {
@@ -165,238 +137,187 @@ public class CommonHeaderHelper {
 
         return buildHeaderWithEmulatorValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
                 destinationSystem,
-                "Assault",emulatorHeaderValues
+                emulatorHeaderValues
         );
     }
 
-    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String subscriptionKey,
-                                                                                  final String requestCreatedAt) {
+    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
                 requestCreatedAt,
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static Map<String, String> createHeaderWithRequestProcessedAtSystemValue(final String subscriptionKey,
-                                                                                    final String requestProcessedAt) {
+    public static Map<String, String> createHeaderWithRequestProcessedAtSystemValue(final String requestProcessedAt) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
                 "2012-03-19T07:22:00Z",
-                requestProcessedAt,
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static Map<String, String> createHeaderWithRequestTypeAtSystemValue(final String subscriptionKey,
-                                                                               final String requestType) {
+    public static Map<String, String> createHeaderWithRequestTypeAtSystemValue(final String requestType) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                requestType
+                DESTINATION_SYSTEM
         );
     }
 
-    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String subscriptionKey,
-                                                                              final String acceptType) {
+    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
-                subscriptionKey,
-                "2012-03-19T07:22:00Z",
                 "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
-    public static final Map<String, String> createHeaderWithDeprecatedHeaderValue(final String subscriptionKey,
-                                                                                  final String deprecatedHeaderKey,
+    public static final Map<String, String> createHeaderWithDeprecatedHeaderValue(final String deprecatedHeaderKey,
                                                                                   final String deprecatedHeaderVal
     ) {
         //Set invalid value for specific header key
         final String acceptType = deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ? MediaType.APPLICATION_PDF_VALUE : MediaType.APPLICATION_JSON_VALUE;
         final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System") ? "CRIMES" : "CFT";
         final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CRIMES" : DESTINATION_SYSTEM;
-        final String requestType = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Type") ? "Robbery" : "Assault";
         final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
-        final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
 
         Map<String, String> headers = convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
                 null,
                 null,
-                subscriptionKey,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedAt,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType));
+                        destinationSystem
+                        ));
         headers.put(deprecatedHeaderKey, deprecatedHeaderVal);
         return Collections.unmodifiableMap(headers);
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
                                                              final String acceptType,
-                                                             final String subscriptionKey,
                                                              final String requestCreatedDate,
-                                                             final String requestProcessedAt,
                                                              final String sourceSystem,
-                                                             final String destinationSystem,
-                                                             final String requestType) {
+                                                             final String destinationSystem
+                                                             ) {
         return Collections.unmodifiableMap(convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 null,
-                subscriptionKey,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType)));
+                        destinationSystem
+                       )));
     }
 
     private static Map<String, String> buildHeaderWithEmulatorValues(final String contentType,
                                                                      final String acceptType,
-                                                                     final String subscriptionKey,
                                                                      final String requestCreatedDate,
-                                                                     final String requestProcessedAt,
                                                                      final String sourceSystem,
                                                                      final String destinationSystem,
-                                                                     final String requestType,
                                                                      final Map<String, String> emulatorHeaders) {
         return Collections.unmodifiableMap(convertToMapAfterHeadersAdded(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 null,
-                subscriptionKey,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType),emulatorHeaders));
+                        destinationSystem
+                        ),emulatorHeaders));
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
                                                              final String acceptType,
-                                                             final String subscriptionKey,
                                                              final String cacheControl,
                                                              final String contentEncoding,
                                                              final String requestCreatedDate,
-                                                             final String requestProcessedAt,
                                                              final String sourceSystem,
-                                                             final String destinationSystem,
-                                                             final String requestType) {
+                                                             final String destinationSystem
+                                                             ) {
         return Collections.unmodifiableMap(convertToMapWithAllHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 contentEncoding,
-                subscriptionKey,
                 cacheControl),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType)));
+                        destinationSystem
+                        )));
     }
 
     private static Headers buildHeaderWithDoubleValues(final String contentType,
                                                        final String acceptType,
-                                                       final String subscriptionKey,
                                                        final String cacheControl,
                                                        final String contentEncoding,
                                                        final String requestCreatedDate,
-                                                       final String requestProcessedAt,
                                                        final String sourceSystem,
                                                        final String destinationSystem,
-                                                       final String requestType,
                                                        final Map<String, String> extraHeaderValue) {
         return convertToRestAssuredHeaderRequiredHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 contentEncoding,
-                subscriptionKey,
                 cacheControl),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), extraHeaderValue);
+                        destinationSystem
+                        ), extraHeaderValue);
     }
 
     private static Map<String, String> buildHeaderWithValuesWithKeysTruncated(final String contentType,
                                                                               final String acceptType,
-                                                                              final String subscriptionKey,
                                                                               final String requestCreatedDate,
-                                                                              final String requestProcessedAt,
                                                                               final String sourceSystem,
                                                                               final String destinationSystem,
-                                                                              final String requestType,
                                                                               List<String> headersToTruncate) {
         return Collections.unmodifiableMap(convertToMapAfterTruncatingHeaderKey(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 null,
-                subscriptionKey,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), headersToTruncate));
+                        destinationSystem
+                        ), headersToTruncate));
 
     }
 
     private static Map<String, String> buildHeaderWithValuesWithKeysRemoved(final String contentType,
                                                                             final String acceptType,
-                                                                            final String subscriptionKey,
                                                                             final String requestCreatedDate,
-                                                                            final String requestProcessedAt,
                                                                             final String sourceSystem,
                                                                             final String destinationSystem,
-                                                                            final String requestType,
                                                                             List<String> headersToBeRemoved) {
         return Collections.unmodifiableMap(convertToMapAfterHeadersRemoved(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 null,
-                subscriptionKey,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), headersToBeRemoved));
+                        destinationSystem
+                        ), headersToBeRemoved));
 
     }
 
