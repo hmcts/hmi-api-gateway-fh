@@ -32,7 +32,7 @@
         <set-header name="Request-Processed-At" exists-action="override">
             <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
         </set-header>
-        <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="true">
+        <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="false">
             <value>SNL</value>
             <value>MOCK</value>
             <value>EMULATOR</value>
@@ -40,7 +40,7 @@
             <value>CFT</value>
             <value>RM</value>
         </check-header>
-        <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="true">
+        <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="false">
             <value>SNL</value>
             <value>MOCK</value>
             <value>EMULATOR</value>
