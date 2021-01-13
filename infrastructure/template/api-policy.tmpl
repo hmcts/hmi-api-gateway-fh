@@ -28,6 +28,9 @@
         <set-header name="_EnableMocks" exists-action="override">
             <value>true</value>
         </set-header>
+        <set-header name="Request-Processed-At" exists-action="override">
+            <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
+        </set-header>
         <!-- set-header name="Accept" exists-action="override">
             <value>application/json</value>
         </set-header-->
@@ -84,19 +87,6 @@
                     <set-body>@(
                         new JObject(new JProperty("statusCode", 400),
                         new JProperty("message", "Missing/Invalid Header Request-Created-At")).ToString())</set-body>
-                </return-response>
-            </when>
-        </choose>
-        <choose>
-            <when condition="@(context.Request.Headers["Request-Processed-At"] == null)">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("statusCode", 400),
-                            new JProperty("message", "Missing/Invalid Header Request-Processed-At")
-                        ).ToString();
-                    }</set-body>
                 </return-response>
             </when>
         </choose>
