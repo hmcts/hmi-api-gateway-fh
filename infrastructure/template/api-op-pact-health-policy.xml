@@ -1,7 +1,8 @@
 <policies>
     <inbound>
         <rewrite-uri template="/" copy-unmatched-params="true" />
-        <set-backend-service base-url="http://#{pactHost}#" />
+        <set-backend-service base-url="http://hmi-pact.dev.platform.hmcts.net" />
+        <!--set-backend-service base-url="http://#{pactHost}#" /-->
     </inbound>
     <backend>
         <base />
