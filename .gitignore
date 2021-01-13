@@ -1,3 +1,5 @@
+/pipeline/variables/policy-variables*
+
 # Local .terraform directories
 **/.terraform/*
 
