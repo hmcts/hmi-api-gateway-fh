@@ -219,7 +219,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
-    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, R&M", "Invalid_Source_System, DIV-FR"}, nullValues = "NIL")
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Source_System, DIV-FR"}, nullValues = "NIL")
     //Source-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME and CFT - This can only be verified manually
     // and tested for dependant EMULATOr or End Systems being available
     void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
@@ -238,7 +238,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
-    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, R&M", "Invalid_Destination_System, CRIMES"}, nullValues = "NIL")
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Destination_System, CRIMES"}, nullValues = "NIL")
     //Destination-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME,CFT and ELINKS - This can only be verified manually and tested for
     //dependant Azure Mock,EMULATOR or End Systems being available
     void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
@@ -264,6 +264,8 @@ public abstract class HMICommonHeaderTest {
             "Invalid_Date_Format, 2002-10-02T15:00:00*05Z",
             "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
             "Invalid_Date_Format, 2002-10-02T15:00:00",
+            "InValid_Date_Format, 2002-10-02T15:00:00.05Z",
+            "InValid_Date_Format, 2019-10-12 07:20:50.52Z",
     })
     void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
@@ -354,8 +356,6 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} --> {1}")
     @CsvSource({"Valid_Date_Format, 2012-03-19T07:22:00Z", "Valid_Date_Format, 2002-10-02T15:00:00Z",
-            "Valid_Date_Format, 2002-10-02T15:00:00.05Z",
-            "Valid_Date_Format, 2019-10-12 07:20:50.52Z",
             "Valid_Date_Format, 2020-10-13T20:20:39+01:00"
     })
     void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
