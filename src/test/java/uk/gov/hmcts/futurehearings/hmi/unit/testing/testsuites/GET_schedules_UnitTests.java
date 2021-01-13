@@ -97,14 +97,12 @@ class GET_schedules_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Ocp-Apim-Trace", "true");
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
         headersAsMap.put("Accept", "application/json");
 
         paramsAsMap.put("hearing_date", "2018-02-29T20:36:01Z");
@@ -163,28 +161,9 @@ class GET_schedules_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRetrieveHearingSchedulesRequestWithMissingOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveHearingSchedulesRequestWithInvalidOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveHearingSchedulesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -192,9 +171,9 @@ class GET_schedules_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveHearingSchedulesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -204,7 +183,7 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Correct Headers and No Parameters")
     void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
@@ -212,7 +191,7 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(9)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveHearingSchedulesRequestWithCorrectRequestAndAllParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndAllParams();
@@ -220,7 +199,7 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for missing Access Token")
     void testRetrieveHearingSchedulesRequestWithMissingAccessToken() {
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingAccessToken();
@@ -228,7 +207,7 @@ class GET_schedules_UnitTests {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveHearingSchedulesRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

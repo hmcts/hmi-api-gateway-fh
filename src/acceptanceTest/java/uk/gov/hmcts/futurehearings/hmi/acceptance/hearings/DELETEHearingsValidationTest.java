@@ -1,14 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.factory.DelegateDTOFactory;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
@@ -17,8 +15,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +57,10 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @DisplayName("Delete Hearings Request with Hearing Id in Uri")
     void deleteHearingsRequestWithInvalidUri() throws Exception {
         this.setRelativeURL(hearingsApiRootContext + "/1234");
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createCompletePayloadHeader(getApiSubscriptionKey()),
+                createCompletePayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -80,17 +76,17 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
 
         DelegateDTO delegateDTO = DelegateDTOFactory.buildDelegateDTO(getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
                 this.getHttpSucessStatus(),
                 "common",
                 getHmiSuccessVerifier(),"The request was received successfully.");
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),

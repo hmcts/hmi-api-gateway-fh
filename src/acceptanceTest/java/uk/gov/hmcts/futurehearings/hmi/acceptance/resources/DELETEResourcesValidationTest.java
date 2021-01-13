@@ -57,10 +57,10 @@ class DELETEResourcesValidationTest extends ResourceValidationTest {
     @DisplayName("Successfully validated response with an xml payload")
     void test_successful_response_for_test_xml_body() throws Exception {
 
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),

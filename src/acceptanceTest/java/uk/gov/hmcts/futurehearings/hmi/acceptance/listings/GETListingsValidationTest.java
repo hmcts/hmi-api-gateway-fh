@@ -1,16 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsValidationVerifier;
-
-import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,9 +31,6 @@ class GETListingsValidationTest extends ListingsValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${listingsRootContext}")
     private String listingsRootContext;
 
@@ -60,10 +53,10 @@ class GETListingsValidationTest extends ListingsValidationTest {
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_date_of_listing_with_invalid_queryparam() throws Exception {
         this.setUrlParams(buildQueryParams("test_param", ""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -76,10 +69,10 @@ class GETListingsValidationTest extends ListingsValidationTest {
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -92,10 +85,10 @@ class GETListingsValidationTest extends ListingsValidationTest {
     @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues= "NIL")
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -116,10 +109,10 @@ class GETListingsValidationTest extends ListingsValidationTest {
                                               final String paramKey2,
                                               final String paramVal2) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -134,10 +127,10 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 "2018-01-29 20:36:01Z",
                 "hearing_type",
                 "VH","test_extra_param",""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),

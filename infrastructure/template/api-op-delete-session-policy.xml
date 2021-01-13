@@ -10,7 +10,7 @@
                 <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <rewrite-uri template="/{sessionIDCaseHQ}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions/" />
             </when>

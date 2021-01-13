@@ -81,14 +81,12 @@ class DELETE_listings_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", "MOCK");
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
     }
 
     @Test
@@ -142,30 +140,9 @@ class DELETE_listings_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
-    @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testDeleteListingsRequestWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testDeleteListingsRequestWithInvalidOcpSubKey()throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
+    @Order(9)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testDeleteListingsRequestWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -173,9 +150,9 @@ class DELETE_listings_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(10)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testDeleteListingsRequestWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -185,7 +162,7 @@ class DELETE_listings_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteListingsRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
@@ -194,7 +171,7 @@ class DELETE_listings_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(12)
     @DisplayName("Test for missing Access Token")
     void testDeleteListingsRequestWithMissingAccessToken() throws IOException {
 
@@ -204,7 +181,7 @@ class DELETE_listings_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     @DisplayName("Test for invalid Access Token")
     void testDeleteListingsRequestWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

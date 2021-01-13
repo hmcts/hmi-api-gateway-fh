@@ -100,14 +100,12 @@ class POST_resources_user_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
     }
 
     @Test
@@ -160,30 +158,9 @@ class POST_resources_user_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testCreateUserResourceWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testCreateUserResourceWithInvalidOcpSubKey()throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
@@ -191,9 +168,9 @@ class POST_resources_user_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateUserResourceWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -203,7 +180,7 @@ class POST_resources_user_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Correct Headers")
     void testCreateUserResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
@@ -213,7 +190,7 @@ class POST_resources_user_UnitTests {
 
 
     @Test
-    @Order(11)
+    @Order(9)
     @DisplayName("Test for missing Access Token")
     void testCreateUserResourceWithMissingAccessToken() throws IOException {
 
@@ -223,7 +200,7 @@ class POST_resources_user_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testCreateUserResourceWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
