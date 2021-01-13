@@ -39,16 +39,14 @@ public class PayloadHeaderDTOFactory {
     }
 
     public static final BusinessHeaderDTO buildStandardBuinessHeaderPart(final String requestCreatedAt,
-                                                                         final String requestProcessedAt,
                                                                          final String sourceSystem,
-                                                                         final String destinationSystem,
-                                                                         final String requestType) {
+                                                                         final String destinationSystem
+                                                                        ) {
         return BusinessHeaderDTO.builder()
                 .requestCreatedAt(requestCreatedAt)
-                .requestProcessedAt(requestProcessedAt)
                 .sourceSystem(sourceSystem)
                 .destinationSystem(destinationSystem)
-                .requestType(requestType).build();
+                .build();
     }
 
     public static final Headers convertToRestAssuredHeaderRequiredHeaders(final SystemHeaderDTO systemHeaderDTO,
@@ -65,10 +63,6 @@ public class PayloadHeaderDTOFactory {
         listOfHeaders.add(destinationSystemHeader);
         Header requestCreatedAtHeader =  new Header("Request-Created-At", businessHeaderDTO.requestCreatedAt());
         listOfHeaders.add(requestCreatedAtHeader);
-        Header requestProcessedAtHeader =  new Header("Request-Processed-At", businessHeaderDTO.requestProcessedAt());
-        listOfHeaders.add(requestProcessedAtHeader);
-        Header requestTypeHeader =  new Header("Request-Type", businessHeaderDTO.requestType());
-        listOfHeaders.add(requestTypeHeader);
         mapAddedHeaderValues.forEach((key, value) -> {
            Header extraHeader = new Header (key,value);
             listOfHeaders.add(extraHeader);
@@ -86,8 +80,6 @@ public class PayloadHeaderDTOFactory {
         headerAsMultiMap.put("Source-System", businessHeaderDTO.sourceSystem());
         headerAsMultiMap.put("Destination-System", businessHeaderDTO.destinationSystem());
         headerAsMultiMap.put("Request-Created-At", businessHeaderDTO.requestCreatedAt());
-        headerAsMultiMap.put("Request-Processed-At", businessHeaderDTO.requestProcessedAt());
-        headerAsMultiMap.put("Request-Type", businessHeaderDTO.requestType());
         mapAddedHeaderValues.forEach((key, value) -> {
             headerAsMultiMap.put(key, value);
         });
@@ -102,8 +94,6 @@ public class PayloadHeaderDTOFactory {
         headerMap.put("Source-System", businessHeaderDTO.sourceSystem());
         headerMap.put("Destination-System", businessHeaderDTO.destinationSystem());
         headerMap.put("Request-Created-At", businessHeaderDTO.requestCreatedAt());
-        headerMap.put("Request-Processed-At", businessHeaderDTO.requestProcessedAt());
-        headerMap.put("Request-Type", businessHeaderDTO.requestType());
         return headerMap;
     }
 
