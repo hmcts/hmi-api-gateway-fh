@@ -28,9 +28,6 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${videohearingsRootContext}")
     private String videohearingsRootContext;
 
@@ -52,10 +49,10 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
     @CsvSource(value = {"username,'abc124'", "username,''", "username,' '", "username,NIL"}, nullValues = "NIL")
     void test_username_query_param_valid_value(final String usernameKey, final String usernameValue) throws Exception {
         this.setUrlParams(buildQueryParams(usernameKey, usernameValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -70,10 +67,10 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
                                                final String paramKey2, final String paramVal2
                                                ) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),

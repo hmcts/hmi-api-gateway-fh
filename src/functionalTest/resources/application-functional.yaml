@@ -1,5 +1,4 @@
 targetInstance: ${ENDPOINT_URL}
-targetSubscriptionKey : ${ENDPOINT_SUBSCRIPTION_KEY}
 hearingApiRootContext: /hmi/hearings
 spring.flyway.enabled: false
 

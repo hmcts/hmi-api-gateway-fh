@@ -3,7 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.resources;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.resources.verify.GETResourceByIDValidationVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,9 +22,6 @@ class GETResourceByIDValidationTest extends ResourceValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${resources_idRootContext}")
     private String resources_idRootContext;
