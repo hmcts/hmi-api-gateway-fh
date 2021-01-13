@@ -5,16 +5,14 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.rea
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
 import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
-import java.util.Random;
 
 import java.io.IOException;
+import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +58,7 @@ public class ResourcesAPITest extends FunctionalTest {
                 authorizationToken,
                 inputBodyForCreateResources);
 
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext,"615");
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
         String inputBodyForAmendResources =
                 String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomId);
         resourceSteps.shouldUpdateAnUser(resourcesByUser_idRootContext,

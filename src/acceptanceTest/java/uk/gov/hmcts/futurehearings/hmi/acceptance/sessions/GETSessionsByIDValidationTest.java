@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
@@ -29,9 +28,6 @@ public class GETSessionsByIDValidationTest extends SessionsValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${sessions_idRootContext}")
     private String sessions_idRootContext;
 
@@ -56,10 +52,10 @@ public class GETSessionsByIDValidationTest extends SessionsValidationTest {
 
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                createHeaderWithEmulatorValues(
                         destinationSystem,
                         returnHttpCode,
                         returnErrorCode,

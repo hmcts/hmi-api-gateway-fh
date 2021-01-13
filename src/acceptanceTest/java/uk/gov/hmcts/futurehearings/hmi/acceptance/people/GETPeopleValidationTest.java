@@ -6,15 +6,11 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryPara
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.people.verify.GETPeopleValidationErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.people.verify.GETPeopleValidationErrorVerifier;
 
-import java.io.IOException;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -33,9 +29,6 @@ class GETPeopleValidationTest extends PeopleValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${peopleRootContext}")
     private String peopleRootContext;
@@ -61,10 +54,10 @@ class GETPeopleValidationTest extends PeopleValidationTest {
             "updated_since,'20201203T150557Z'"})
     void test_updated_since_query_param_valid_value(final String updatedSinceKey, final String updatedSinceValue) throws Exception {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -77,10 +70,10 @@ class GETPeopleValidationTest extends PeopleValidationTest {
     @CsvSource(value = {"per_page, 50","per_page,' '", "per_page,NIL"}, nullValues= "NIL")
     void test_per_page_without_mandatory_updated_since_query_param(final String perPageKey, final String perPageValue) throws Exception {
         this.setUrlParams(buildQueryParams(perPageKey, perPageValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -93,10 +86,10 @@ class GETPeopleValidationTest extends PeopleValidationTest {
     @CsvSource(value = {"page, 2","page,' '", "page,NIL"}, nullValues= "NIL")
     void test_page_without_mandatory_updated_since_queryparam(final String pageKey, final String pageValue) throws Exception {
         this.setUrlParams(buildQueryParams(pageKey, pageValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -111,10 +104,10 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                                          final String paramKey2, final String paramVal2,
                                          final String paramKey3, final String paramVal3) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -130,10 +123,10 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                                                final String paramKey3, final String paramVal3,
                                                 final String paramKey4, final String paramVal4) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
