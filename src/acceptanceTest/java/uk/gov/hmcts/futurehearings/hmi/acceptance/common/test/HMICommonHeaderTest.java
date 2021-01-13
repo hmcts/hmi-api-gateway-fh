@@ -219,7 +219,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Source System Header invalid values - Param : {0} --> {1}")
-    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Source_System, DIV-FR"}, nullValues = "NIL")
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Value, rm", "Invalid_Source_System, DIV-FR"}, nullValues = "NIL")
     //Source-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME and CFT - This can only be verified manually
     // and tested for dependant EMULATOr or End Systems being available
     void test_source_system_invalid_values(String sourceSystemKey, String sourceSystemVal) throws Exception {
@@ -238,7 +238,7 @@ public abstract class HMICommonHeaderTest {
 
 
     @ParameterizedTest(name = "Destination System Header with invalid values - Param : {0} --> {1}")
-    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Destination_System, CRIMES"}, nullValues = "NIL")
+    @CsvSource(value = {"Null_Value, NIL", "Empty_Space,''", "Invalid_Value, S&L", "Invalid_Value, snl", "Invalid_Value, R&M", "Invalid_Value, rm", "Invalid_Destination_System, CRIMES"}, nullValues = "NIL")
     //Destination-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME,CFT and ELINKS - This can only be verified manually and tested for
     //dependant Azure Mock,EMULATOR or End Systems being available
     void test_destination_system_invalid_values(String destinationSystemKey, String destinationSystemVal) throws Exception {
