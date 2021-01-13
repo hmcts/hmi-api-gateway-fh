@@ -164,6 +164,11 @@
       "operationId"  : "emulator-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-emulator-health-policy.xml"
+    },
+    {
+      "operationId"  : "pact-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-pact-health-policy.xml"
     }
   ]
 }
