@@ -31,10 +31,8 @@ public class CommonHeaderHelper {
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -43,10 +41,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -57,10 +53,8 @@ public class CommonHeaderHelper {
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 duplicateHeaderValues
         );
     }
@@ -94,10 +88,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValuesWithKeysTruncated(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 headersToBeTruncated
         );
     }
@@ -107,10 +99,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValuesWithKeysTruncated(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM,
-                "Assault",
                 headersToBeRemoved
         );
     }
@@ -120,10 +110,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 sourceSystem,
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -132,10 +120,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                destinationSystem,
-                "Assault"
+                destinationSystem
         );
     }
 
@@ -152,10 +138,9 @@ public class CommonHeaderHelper {
         return buildHeaderWithEmulatorValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
                 destinationSystem,
-                "Assault",emulatorHeaderValues
+                emulatorHeaderValues
         );
     }
 
@@ -164,10 +149,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 requestCreatedAt,
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -176,10 +159,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                requestProcessedAt,
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -188,10 +169,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                requestType
+                DESTINATION_SYSTEM
         );
     }
 
@@ -200,10 +179,8 @@ public class CommonHeaderHelper {
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
                 "2012-03-19T07:22:00Z",
-                "2012-03-19T07:22:00Z",
                 "CFT",
-                DESTINATION_SYSTEM,
-                "Assault"
+                DESTINATION_SYSTEM
         );
     }
 
@@ -214,9 +191,7 @@ public class CommonHeaderHelper {
         final String acceptType = deprecatedHeaderKey.equalsIgnoreCase("X-Accept") ? MediaType.APPLICATION_PDF_VALUE : MediaType.APPLICATION_JSON_VALUE;
         final String sourceSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Source-System") ? "CRIMES" : "CFT";
         final String destinationSystem = deprecatedHeaderKey.equalsIgnoreCase("X-Destination-System") ? "CRIMES" : DESTINATION_SYSTEM;
-        final String requestType = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Type") ? "Robbery" : "Assault";
         final String requestCreatedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Created-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
-        final String requestProcessedAt = deprecatedHeaderKey.equalsIgnoreCase("X-Request-Processed-At") ? "2002-10-02T15:00:00*05Z" : "2012-03-19T07:22:00Z";
 
         Map<String, String> headers = convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 MediaType.APPLICATION_JSON_VALUE,
@@ -225,10 +200,9 @@ public class CommonHeaderHelper {
                 null,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedAt,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType));
+                        destinationSystem
+                        ));
         headers.put(deprecatedHeaderKey, deprecatedHeaderVal);
         return Collections.unmodifiableMap(headers);
     }
@@ -236,10 +210,9 @@ public class CommonHeaderHelper {
     private static Map<String, String> buildHeaderWithValues(final String contentType,
                                                              final String acceptType,
                                                              final String requestCreatedDate,
-                                                             final String requestProcessedAt,
                                                              final String sourceSystem,
-                                                             final String destinationSystem,
-                                                             final String requestType) {
+                                                             final String destinationSystem
+                                                             ) {
         return Collections.unmodifiableMap(convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
@@ -247,19 +220,16 @@ public class CommonHeaderHelper {
                 null,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType)));
+                        destinationSystem
+                       )));
     }
 
     private static Map<String, String> buildHeaderWithEmulatorValues(final String contentType,
                                                                      final String acceptType,
                                                                      final String requestCreatedDate,
-                                                                     final String requestProcessedAt,
                                                                      final String sourceSystem,
                                                                      final String destinationSystem,
-                                                                     final String requestType,
                                                                      final Map<String, String> emulatorHeaders) {
         return Collections.unmodifiableMap(convertToMapAfterHeadersAdded(buildStandardSytemHeaderPart(
                 contentType,
@@ -268,10 +238,9 @@ public class CommonHeaderHelper {
                 null,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType),emulatorHeaders));
+                        destinationSystem
+                        ),emulatorHeaders));
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
@@ -279,10 +248,9 @@ public class CommonHeaderHelper {
                                                              final String cacheControl,
                                                              final String contentEncoding,
                                                              final String requestCreatedDate,
-                                                             final String requestProcessedAt,
                                                              final String sourceSystem,
-                                                             final String destinationSystem,
-                                                             final String requestType) {
+                                                             final String destinationSystem
+                                                             ) {
         return Collections.unmodifiableMap(convertToMapWithAllHeaders(buildStandardSytemHeaderPart(
                 contentType,
                 acceptType,
@@ -290,10 +258,9 @@ public class CommonHeaderHelper {
                 contentEncoding,
                 cacheControl),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType)));
+                        destinationSystem
+                        )));
     }
 
     private static Headers buildHeaderWithDoubleValues(final String contentType,
@@ -301,10 +268,8 @@ public class CommonHeaderHelper {
                                                        final String cacheControl,
                                                        final String contentEncoding,
                                                        final String requestCreatedDate,
-                                                       final String requestProcessedAt,
                                                        final String sourceSystem,
                                                        final String destinationSystem,
-                                                       final String requestType,
                                                        final Map<String, String> extraHeaderValue) {
         return convertToRestAssuredHeaderRequiredHeaders(buildStandardSytemHeaderPart(
                 contentType,
@@ -313,19 +278,16 @@ public class CommonHeaderHelper {
                 contentEncoding,
                 cacheControl),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), extraHeaderValue);
+                        destinationSystem
+                        ), extraHeaderValue);
     }
 
     private static Map<String, String> buildHeaderWithValuesWithKeysTruncated(final String contentType,
                                                                               final String acceptType,
                                                                               final String requestCreatedDate,
-                                                                              final String requestProcessedAt,
                                                                               final String sourceSystem,
                                                                               final String destinationSystem,
-                                                                              final String requestType,
                                                                               List<String> headersToTruncate) {
         return Collections.unmodifiableMap(convertToMapAfterTruncatingHeaderKey(buildStandardSytemHeaderPart(
                 contentType,
@@ -334,20 +296,17 @@ public class CommonHeaderHelper {
                 null,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), headersToTruncate));
+                        destinationSystem
+                        ), headersToTruncate));
 
     }
 
     private static Map<String, String> buildHeaderWithValuesWithKeysRemoved(final String contentType,
                                                                             final String acceptType,
                                                                             final String requestCreatedDate,
-                                                                            final String requestProcessedAt,
                                                                             final String sourceSystem,
                                                                             final String destinationSystem,
-                                                                            final String requestType,
                                                                             List<String> headersToBeRemoved) {
         return Collections.unmodifiableMap(convertToMapAfterHeadersRemoved(buildStandardSytemHeaderPart(
                 contentType,
@@ -356,10 +315,9 @@ public class CommonHeaderHelper {
                 null,
                 null),
                 buildStandardBuinessHeaderPart(requestCreatedDate,
-                        requestProcessedAt,
                         sourceSystem,
-                        destinationSystem,
-                        requestType), headersToBeRemoved));
+                        destinationSystem
+                        ), headersToBeRemoved));
 
     }
 
