@@ -27,6 +27,11 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - template: ../steps/download-test-file.yaml
+    parameters:
+      fileName: smoke
+      fileExtension: yaml
+      filePath: /src/smokeTest/resources/
   - template: ../steps/run-gradlew.yaml
     parameters:
       command: clean smoke -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName) -DAPI_LOG_LEVEL=DEBUG

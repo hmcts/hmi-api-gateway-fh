@@ -1,0 +1,18 @@
+parameters:
+  - name: fileName
+    type: string
+
+  - name: fileExtension
+    type: string
+
+  - name: filePath
+    type: string
+
+steps:
+  - task: DownloadSecureFile@1
+    displayName: 'Download secure file'
+    name: application_${{ parameters.fileName }}
+    inputs:
+      secureFile: application-${{ parameters.fileName }}.${{ parameters.fileExtension }}
+  - script: |
+      mv $(${{ parameters.fileName }}.secureFilePath) $(System.DefaultWorkingDirectory)${{ parameters.filePath }}application-${{ parameters.fileName }}.${{ parameters.fileExtension }}
