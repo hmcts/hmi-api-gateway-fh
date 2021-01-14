@@ -20,13 +20,4 @@ resource "azurerm_api_management" "hmi_apim" {
       subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
     }
   }
-
-  lifecycle {
-    ignore_changes = [
-      "hostname_configuration.proxy.default_ssl_binding",
-      "hostname_configuration.proxy.host_name",
-      "hostname_configuration.proxy.key_vault_id",
-      "hostname_configuration.proxy.negotiate_client_certificate"
-    ]
-  }
 }
