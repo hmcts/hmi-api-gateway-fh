@@ -1,4 +1,5 @@
 /pipeline/variables/policy-variables*
+/src/acceptanceTest/resources/application-acceptance.yaml
 
 # Local .terraform directories
 **/.terraform/*
