@@ -10,7 +10,7 @@
                 <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
                     <set-url>#{sAndLOauthUrl}#</set-url>
                     <set-method>POST</set-method>
@@ -33,11 +33,11 @@
                 <set-header name="Request-Type" exists-action="override">
                     <value>text</value>
                 </set-header>
+                <set-header name="Destination-System" exists-action="override">
+                    <value>S&amp;L</value>
+                </set-header>
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
-                </set-header>
-                <set-header name="Request-Processed-At" exists-action="override">
-                    <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
                 </set-header>
                 <!--  Don't expose APIM subscription key to the backend. -->
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />

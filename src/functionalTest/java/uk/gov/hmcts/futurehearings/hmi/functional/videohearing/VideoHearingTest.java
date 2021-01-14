@@ -56,7 +56,7 @@ public class VideoHearingTest extends FunctionalTest {
                 String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
 
         //Make Post call for video hearing with username
-        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
+        headersAsMap = createStandardHMIHeader("MOCK");
         videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
                 headersAsMap,
                 authorizationToken,

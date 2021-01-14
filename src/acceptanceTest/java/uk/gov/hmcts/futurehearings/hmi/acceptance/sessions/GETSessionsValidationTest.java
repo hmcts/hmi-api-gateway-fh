@@ -10,8 +10,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQComm
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.verify.GETSessionsValidationVerifier;
 
-import java.io.IOException;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -36,9 +34,6 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${sessionsRootContext}")
     private String sessionsRootContext;
 
@@ -61,10 +56,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_invalid_query_param_with_value() throws Exception {
         this.setUrlParams(buildQueryParams("extra_param_key", " "));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -77,10 +72,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestSessionType,ADHOC", "requestSessionType,1234", "requestSessionType,''", "requestSessionType,' '", "requestSessionType,NIL"}, nullValues = "NIL")
     void test_valid_query_param_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -93,10 +88,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestStartDate,AD12H", "requestStartDate,''", "requestStartDate,' '", "requestStartDate,NIL"}, nullValues = "NIL")
     void test_request_start_date_query_param_with_value(final String requestStartDate, final String requestStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestStartDate, requestStartDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -109,10 +104,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestEndDate,AD12H", "requestEndDate,''", "requestEndDate,' '", "requestEndDate,NIL"}, nullValues = "NIL")
     void test_request_end_date_query_param_with_value(final String requestEndDate, final String requestEndDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestEndDate, requestEndDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -125,10 +120,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestJudgeType,AD12H", "requestJudgeType,''", "requestJudgeType,' '", "requestJudgeType,NIL"}, nullValues = "NIL")
     void test_request_judge_type_query_param_with_value(final String requestJudgeType, final String requestJudgeTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestJudgeType, requestJudgeTypeValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -141,10 +136,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestLocationId, R012", "requestLocationId,''", "requestLocationId,' '", "requestLocationId,NIL"}, nullValues = "NIL")
     void test_request_location_id_without_mandatory_query_params(final String roomNameKey, final String roomNameValue) throws Exception {
         this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -157,10 +152,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     @CsvSource(value = {"requestDuration, case01", "requestDuration,''", "requestDuration,' '", "requestDuration,NIL"}, nullValues = "NIL")
     void test_request_duration_without_mandatory_query_params(final String requestDurationKey, final String requestDurationValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestDurationKey, requestDurationValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -181,10 +176,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                                             final String paramKey3,
                                                             final String paramVal3) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -205,10 +200,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                                           final String paramKey3,
                                                           final String paramVal3) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -226,10 +221,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                                              final String paramKey3,
                                                              final String paramVal3) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -247,10 +242,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                                           final String paramKey3,
                                                           final String paramVal3) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -279,10 +274,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 paramKey4, paramVal4,
                 paramKey5, paramVal5,
                 paramKey6, paramVal6));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -315,10 +310,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 paramKey5, paramVal5,
                 paramKey6, paramVal6,
                 paramKey7, paramVal7));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -337,10 +332,10 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         this.setUrlParams(buildQueryParams("requestSessionType", "12345"));
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                createHeaderWithEmulatorValues(
                         destinationSystem,
                         returnHttpCode,
                         returnErrorCode,

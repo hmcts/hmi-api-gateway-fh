@@ -13,8 +13,7 @@ import org.springframework.http.HttpStatus;
 public interface CommonDelegate {
 
 
-    public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
-                                                           final String authorizationToken,
+    public void test_expected_response_for_supplied_header(final String authorizationToken,
                                                            final String targetURL,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,

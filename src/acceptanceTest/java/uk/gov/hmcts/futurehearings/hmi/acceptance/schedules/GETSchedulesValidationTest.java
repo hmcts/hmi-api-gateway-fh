@@ -1,15 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.schedules;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.verify.GETSchedulesValidationVerifier;
-
-import java.io.IOException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,9 +29,6 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${schedulesApiRootContext}")
     private String schedulesApiRootContext;
@@ -76,10 +69,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_date_of_listing_with_invalid_query_param() throws Exception {
         this.setUrlParams(buildQueryParams("test_param", ""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -93,10 +86,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     void test_hearing_date_queryparam_with_value(final String hearingDateKey,
                                                  final String hearingDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -110,10 +103,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @CsvSource(value = {"hearing_venue_id, 234", "hearing_venue_id,''", "hearing_venue_id,' '", "hearing_venue_id,NIL"}, nullValues = "NIL")
     void test_hearing_venue_id_queryparam_with_value(final String hearingVenueIdKey, final String hearingVenueIdValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingVenueIdKey, hearingVenueIdValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -126,10 +119,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @CsvSource(value = {"hearing_room_id, 234", "hearing_room_id,''", "hearing_room_id,' '", "hearing_room_id,NIL"}, nullValues = "NIL")
     void test_hearing_room_id_queryparam_with_value(final String hearingRoomIdKey, final String hearingRoomIdValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingRoomIdKey, hearingRoomIdValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -142,10 +135,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @CsvSource(value = {"hearing_session_id_casehq, 234", "hearing_session_id_casehq,''", "hearing_session_id_casehq,' '", "hearing_session_id_casehq,NIL"}, nullValues = "NIL")
     void test_hearing_session_id_casehq_queryparam_with_value(final String hearingSessionIdCaseHQKey, final String hearingSessionIdCaseHQValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingSessionIdCaseHQKey, hearingSessionIdCaseHQValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -158,10 +151,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @CsvSource(value = {"hearing_case_id_hmcts, 234", "hearing_case_id_hmcts,''", "hearing_case_id_hmcts,' '", "hearing_case_id_hmcts,NIL"}, nullValues = "NIL")
     void test_hearing_case_id_hmcts_queryparam_with_value(final String hearingCaseIdHmctsKey, final String hearingCaseIdHmctsValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingCaseIdHmctsKey, hearingCaseIdHmctsValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -174,10 +167,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @CsvSource(value = {"hearing_id_casehq, 234", "hearing_id_casehq,''", "hearing_id_casehq,' '", "hearing_id_casehq,NIL"}, nullValues = "NIL")
     void test_hearing_id_casehq_queryparam_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -193,10 +186,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                                              final String hearingRoomIdKey,
                                              final String hearingRoomIdValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingVenueIdKey, hearingVenueIdValue, hearingRoomIdKey, hearingRoomIdValue));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -214,10 +207,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                                               final String paramKey3,
                                               final String paramVal3) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -234,10 +227,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 "hearing_session_id_casehq", "",
                 "hearing_case_id_hmcts", " ",
                 "hearing_id_casehq", ""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -255,10 +248,10 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
                 "hearing_case_id_hmcts", " ",
                 "hearing_id_casehq", "",
                 "extra_param", ""));
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
