@@ -27,9 +27,6 @@ public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${token_apiURL}")
     private String token_apiURL;
 
@@ -52,7 +49,6 @@ public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
     public void initialiseValues() throws Exception {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("sessions");
@@ -74,10 +70,10 @@ public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
 
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                createHeaderWithEmulatorValues(
                         destinationSystem,
                         returnHttpCode,
                         returnErrorCode,

@@ -23,9 +23,6 @@ public class POSTResourcesByLocationValidationTest extends ResourceValidationTes
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${resourcesByLocationRootContext}")
     private String resourcesByLocationRootContext;
 

@@ -23,9 +23,6 @@ public class PUTResourcesByLocationValidationTest extends ResourceValidationTest
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
-
     @Value("${resourcesByLocation_idRootContext}")
     private String resourcesByLocation_idRootContext;
 
