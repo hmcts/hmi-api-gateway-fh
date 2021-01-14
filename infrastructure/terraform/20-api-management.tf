@@ -21,4 +21,9 @@ resource "azurerm_api_management" "hmi_apim" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [
+      "hostname_configuration"
+    ]
+  }
 }
