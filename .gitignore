@@ -1,5 +1,10 @@
 /pipeline/variables/policy-variables*
 /src/acceptanceTest/resources/application-acceptance.yaml
+/src/contractTest/resources/application-contract.yaml
+/src/functionalTest/resources/application-functional.yaml
+/src/smokeTest/resources/application-smoke.yaml
+/src/test/resources/application-local.yaml
+/src/test/resources/application-test.yaml
 
 # Local .terraform directories
 **/.terraform/*

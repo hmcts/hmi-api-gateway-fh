@@ -27,6 +27,16 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - template: ../steps/download-test-file.yaml
+    parameters:
+      fileName: local
+      fileExtension: yaml
+      filePath: /src/test/resources/
+  - template: ../steps/download-test-file.yaml
+    parameters:
+      fileName: test
+      fileExtension: yaml
+      filePath: /src/test/resources/     
   - template: ../steps/run-gradlew.yaml
     parameters:
       command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName)
