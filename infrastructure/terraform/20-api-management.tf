@@ -23,10 +23,10 @@ resource "azurerm_api_management" "hmi_apim" {
 
   lifecycle {
     ignore_changes = [
-      "default_ssl_binding",
-      "host_name",
-      "key_vault_id",
-      "negotiate_client_certificate"
+      "hostname_configuration.proxy.default_ssl_binding",
+      "hostname_configuration.proxy.host_name",
+      "hostname_configuration.proxy.key_vault_id",
+      "hostname_configuration.proxy.negotiate_client_certificate"
     ]
   }
 }
