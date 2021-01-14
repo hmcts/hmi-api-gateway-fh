@@ -21,4 +21,12 @@ resource "azurerm_api_management" "hmi_apim" {
     }
   }
 
+  lifecycle {
+        ignore_changes = [
+          "default_ssl_binding",
+          "host_name",
+          "key_vault_id",
+          "negotiate_client_certificate"
+        ]
+    }
 }
