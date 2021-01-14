@@ -88,14 +88,12 @@ class PUT_people_UnitTests {
 
 	@BeforeEach
 	void initialiseValues() {
-		headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
 		headersAsMap.put("Content-Type", "application/json");
 		headersAsMap.put("Accept", "application/json");
 		headersAsMap.put("Source-System", "CFT");
 		headersAsMap.put("Destination-System", destinationSystem);
 		headersAsMap.put("Request-Type", "THEFT");
 		headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-		headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 	}
 
 	@Test
@@ -151,30 +149,9 @@ class PUT_people_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
-    @Order(6)
-    @DisplayName("Test for missing OcpSubKey")
-    void testUpdatePopleRequestWithMissingOcpSubKey() throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
-        final Response response = whenUpdatePeopleIsInvoked(input);
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testUpdatePeopleRequestWithInvalidOcpSubKey()throws IOException {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
-        final Response response = whenUpdatePeopleIsInvoked(input);
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-	@Order(8)
+	@Order(6)
     @ParameterizedTest(name = "Test for missing madatory {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testUpdatePeopleWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
@@ -183,7 +160,7 @@ class PUT_people_UnitTests {
     }
 
 	@Test
-    @Order(9)
+    @Order(7)
     @DisplayName("Test for Invalid AccessToken for Update People with ID")
     void testRetrievePeopleWithInvalidAccessToken() {
 		accessToken = "invalidToken";

@@ -10,7 +10,7 @@
 				<rewrite-uri template="/delete-hearing" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
 			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "S&L")">
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<rewrite-uri template="/delete-hearing" copy-unmatched-params="true" />
 				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
 			</when>

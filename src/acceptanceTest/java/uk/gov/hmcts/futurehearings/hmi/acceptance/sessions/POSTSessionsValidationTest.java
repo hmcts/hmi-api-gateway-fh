@@ -56,10 +56,10 @@ class POSTSessionsValidationTest extends SessionsValidationTest {
     @DisplayName("Successfully validated response with an xml payload")
     void test_successful_response_for_test_xml_body() throws Exception {
 
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
+                createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -77,10 +77,10 @@ class POSTSessionsValidationTest extends SessionsValidationTest {
 
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "post-sessions-request-valid.json",
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                createHeaderWithEmulatorValues(
                         destinationSystem,
                         returnHttpCode,
                         returnErrorCode,

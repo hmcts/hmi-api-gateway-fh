@@ -33,9 +33,6 @@ public abstract class FunctionalTest {
     @Value("${targetInstance}")
     protected String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    protected String targetSubscriptionKey;
-
     @Value("${hearingApiRootContext}")
     protected String hearingApiRootContext;
 
@@ -69,7 +66,6 @@ public abstract class FunctionalTest {
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
-        this.setTargetSubscriptionKey(targetSubscriptionKey);
 
         this.authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,
@@ -78,6 +74,6 @@ public abstract class FunctionalTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"S&L");
+        headersAsMap = createStandardHMIHeader("SNL");
     }
 }
