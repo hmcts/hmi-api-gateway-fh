@@ -1,13 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
-
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateFlyweightDT0;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +24,7 @@ public class CommonDelegateImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
 
-    public void test_expected_response_for_supplied_header(final String targetSubscriptionKey,
-                                                           final String authorizationToken,
+    public void test_expected_response_for_supplied_header(final String authorizationToken,
                                                            final String targetURL,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,

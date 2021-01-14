@@ -93,14 +93,12 @@ class GET_resources_UnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
     }
 
     @Test
@@ -151,28 +149,9 @@ class GET_resources_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRetrieveResourcesRequestWithMissingOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveResourcesRequestWithInvalidOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -180,9 +159,9 @@ class GET_resources_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -192,7 +171,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Correct Headers and No Parameters")
     void testRetrieveResourcesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveResourcesIsInvokedWithCorrectHeadersAndNoParams();
@@ -200,7 +179,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(9)
     @DisplayName("Test for missing Access Token")
     void testRetrieveResourcesRequestWithMissingAccessToken() {
 
@@ -209,7 +188,7 @@ class GET_resources_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveResourcesRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
@@ -292,22 +271,12 @@ class GET_resources_UnitTests {
     void testRetrieveIndividualResourceRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(17)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - Individual Resource")
-    void testRetrieveIndividualResourceRequestWithInvalidOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-        final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(18)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -317,7 +286,7 @@ class GET_resources_UnitTests {
 
     @Order(19)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

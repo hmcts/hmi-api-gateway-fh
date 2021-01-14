@@ -80,14 +80,12 @@ class GET_sessions_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
         paramsAsMap.put("requestSessionType", "ADHOC");
         paramsAsMap.put("requestStartDate", "2018-01-29 20:36:01Z");
@@ -147,30 +145,9 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRetrieveSessionsRequestWithMissingOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveSessionsRequestWithInvalidOcpSubKey(){
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -178,9 +155,9 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -190,7 +167,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Invalid Parameter")
     void testRetrieveSessionsRequestWithAdditionalParam() {
         paramsAsMap.put("requestSessionType", "ADHOC");
@@ -200,7 +177,7 @@ class GET_sessions_UnitTests {
     }
 
 
-    @Order(11)
+    @Order(9)
     @ParameterizedTest(name = "Test for mandatory parameter - {0}")
     @ValueSource(strings = {"requestSessionType"})
     void testRetrieveSessionsRequestWithDateParams(String iteration) {
@@ -211,7 +188,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test with one non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithOneNonMandatoryParams() {
         paramsAsMap.clear();
@@ -222,7 +199,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     @DisplayName("Test with two non-mandatory and one mandatory parameters")
     void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
         paramsAsMap.remove("requestEndDate");
@@ -232,7 +209,7 @@ class GET_sessions_UnitTests {
 
 
     @Test
-    @Order(14)
+    @Order(12)
     @DisplayName("Test with no mandatory parameters")
     void testRetrieveSessionsRequestWithNoMandatoryParams() {
         paramsAsMap.clear();
@@ -241,7 +218,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(15)
+    @Order(13)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
@@ -249,7 +226,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(16)
+    @Order(14)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
         final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
@@ -257,7 +234,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(17)
+    @Order(15)
     @DisplayName("Test for missing Access Token")
     void testRetrieveSessionsRequestWithMissingAccessToken() {
         final Response response = whenRetrieveSessionsIsInvokedWithMissingAccessToken();
@@ -265,7 +242,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(16)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveSessionsRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
@@ -368,23 +345,12 @@ class GET_sessions_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(25)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
-    void testRetrieveSessionsByIDRequestWithInvalidOcpSubKey(){
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(26)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -394,7 +360,7 @@ class GET_sessions_UnitTests {
 
     @Order(27)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveSessionsByIDRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

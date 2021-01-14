@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -12,8 +11,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQComm
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +26,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
-
-    @Value("${targetSubscriptionKey}")
-    private String targetSubscriptionKey;
 
     @Value("${token_apiURL}")
     private String token_apiURL;
@@ -55,7 +49,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
     public void initialiseValues() throws Exception {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
-        this.setApiSubscriptionKey(targetSubscriptionKey);
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("hearings");
@@ -77,10 +70,10 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
 
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
+                createHeaderWithEmulatorValues(
                         destinationSystem,
                         returnHttpCode,
                         returnErrorCode,

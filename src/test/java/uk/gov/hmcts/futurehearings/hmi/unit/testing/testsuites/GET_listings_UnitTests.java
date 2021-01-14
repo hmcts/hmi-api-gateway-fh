@@ -7,7 +7,6 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRetrieve;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 
@@ -96,14 +95,12 @@ class GET_listings_UnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        headersAsMap.put("Request-Processed-At", "2018-02-29 20:36:01Z");
 
         paramsAsMap.put("date_of_listing", "2018-01-29 21:36:01Z");
         paramsAsMap.put("hearing_type", "VH");
@@ -161,30 +158,9 @@ class GET_listings_UnitTests {
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
-    @Test
     @Order(6)
-    @DisplayName("Test for missing Ocp-Apim-Subscription-Key header")
-    void testRetrieveListingsRequestWithMissingOcpSubKey() {
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-
-        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
-    }
-
-    @Test
-    @Order(7)
-    @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header")
-    void testRetrieveListingsRequestWithInvalidOcpSubKey(){
-        headersAsMap.remove("Ocp-Apim-Subscription-Key");
-        headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
-
-        final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
-    }
-
-    @Order(8)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -192,9 +168,9 @@ class GET_listings_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(9)
+    @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -204,7 +180,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     @DisplayName("Test for Invalid Parameter")
     void testRetrieveListingsRequestWithAdditionalParam() {
         paramsAsMap.put("Invalid-Param","Value");
@@ -215,7 +191,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(9)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveListingsRequestWithCorrectHeadersAndNoParams() {
 
@@ -224,7 +200,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveListingsRequestWithCorrectHeadersAndParams() {
 
@@ -233,7 +209,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     @DisplayName("Test for missing Access Token")
     void testRetrieveListingsRequestWithMissingAccessToken() {
 
@@ -242,7 +218,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(14)
+    @Order(12)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveListingsRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
@@ -336,7 +312,7 @@ class GET_listings_UnitTests {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
         final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForMissingSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Test
@@ -347,12 +323,12 @@ class GET_listings_UnitTests {
         headersAsMap.put("Ocp-Apim-Subscription-Key","invalidocpsubkey");
 
         final Response response = whenRetrieveListingsByIDRequestIsInvokedWithMissingOrInvalidHeader();
-        thenValidateResponseForInvalidSubscriptionKeyHeader(response);
+        thenValidateResponseForRetrieve(response);
     }
 
     @Order(20)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -362,7 +338,7 @@ class GET_listings_UnitTests {
 
     @Order(21)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At","Request-Processed-At","Request-Type"})
+    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsByIDRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");

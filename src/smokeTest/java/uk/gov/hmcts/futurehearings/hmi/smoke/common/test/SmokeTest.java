@@ -43,9 +43,6 @@ public abstract class SmokeTest {
     @Value("${targetInstance}")
     protected String targetInstance;
 
-    @Value("${targetSubscriptionKey}")
-    protected String targetSubscriptionKey;
-
     @Value("${token_apiURL}")
     private String token_apiURL;
 
@@ -96,15 +93,7 @@ public abstract class SmokeTest {
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
 
-        /*headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Ocp-Apim-Subscription-Key", targetSubscriptionKey);
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", DESTINATION_SYSTEM);
-        headersAsMap.put("Request-Created-At", "2002-10-02T15:00:00Z");
-        headersAsMap.put("Request-Processed-At", "2002-10-02 15:00:00Z");
-        headersAsMap.put("Request-Type", "ASSAULT");*/
-        headersAsMap = createStandardHMIHeader(targetSubscriptionKey,"MOCK");
+        headersAsMap = createStandardHMIHeader("MOCK");
     }
 
     @BeforeEach
