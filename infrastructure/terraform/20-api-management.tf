@@ -20,4 +20,10 @@ resource "azurerm_api_management" "hmi_apim" {
       subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      hostname_configuration
+    ]
+  }
 }
