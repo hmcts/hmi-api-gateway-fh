@@ -1,5 +1,4 @@
 /pipeline/variables/policy-variables*
-<<<<<<< HEAD
 /src/acceptanceTest/resources/application-acceptance.yaml
 /src/contractTest/resources/application-contract.yaml
 /src/functionalTest/resources/application-functional.yaml
@@ -8,8 +7,6 @@
 /src/test/resources/application-test.yaml
 /src/integrationTest/resources/application-integration.yaml
 /src/snlacceptanceTest/resources/application-snlacceptance.yaml
-=======
->>>>>>> parent of 72d5dc28... ignore acceptance vars
 
 # Local .terraform directories
 **/.terraform/*
