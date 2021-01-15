@@ -29,6 +29,11 @@ jobs:
   variables:
     ${{ insert }}: ${{ parameters.variables }}
   steps:
+  - template: ../steps/download-test-file.yaml
+    parameters:
+      fileName: contract
+      fileExtension: yaml
+      filePath: /src/contractTest/resources/
   - template: ../steps/run-gradlew-agent.yaml
     parameters:
       command: clean contract -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_HOST=$(hostName)
