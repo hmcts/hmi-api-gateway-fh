@@ -18,4 +18,6 @@ steps:
         Write-Host "Applying $operationId"
         Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose -ErrorAction Stop
       }
+      Write-Host "Applying Product policy"
+      Set-AzApiManagementPolicy -Context $apimContext -ProductId "hmi-apim-product" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\hmi-product-policy.xml -Verbose -ErrorAction Stop
     azurePowerShellVersion: 'LatestVersion'
