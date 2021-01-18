@@ -1,25 +1,6 @@
 <policies>
     <inbound>
         <base />
-        <!-- Save the X-Forwarded-For value -->
-        <set-variable name="originalXForwardedForValue" value="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))" />
-        <!-- Check the client IP value in the X-Forwarded-For header-->
-        <set-header name="X-Forwarded-For" exists-action="override">
-            <value>@{
-                return context.Request.Headers.GetValueOrDefault("x-forwarded-for",""); 
-                }
-            </value>
-        </set-header>
-        <check-header name="x-forwarded-for" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
-            <value>165.120.71.105</value>
-        </check-header>
-        <!-- Revert X-Forwarded-For to its original value-->
-        <set-header name="X-Forwarded-For" exists-action="override">
-            <value>@{
-                return context.Variables.GetValueOrDefault<string>("originalXForwardedForValue");
-                }
-            </value>
-        </set-header>
     </inbound>
     <backend>
         <base />
