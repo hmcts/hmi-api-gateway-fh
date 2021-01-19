@@ -74,6 +74,6 @@ public abstract class FunctionalTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-        headersAsMap = createStandardHMIHeader("SNL");
+        headersAsMap = createStandardHMIHeader("S&L");
     }
 }
