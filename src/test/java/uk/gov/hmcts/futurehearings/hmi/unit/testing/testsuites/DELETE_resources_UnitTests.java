@@ -3,8 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForDelete;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
@@ -28,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -61,6 +60,7 @@ class DELETE_resources_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -91,9 +91,12 @@ class DELETE_resources_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+    
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -112,7 +115,7 @@ class DELETE_resources_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testDeleteResourcesRequestForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpDelete(resourcesApiRootContext+ "delete", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -122,7 +125,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -133,7 +136,7 @@ class DELETE_resources_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -143,7 +146,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -154,7 +157,7 @@ class DELETE_resources_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -164,7 +167,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -175,7 +178,7 @@ class DELETE_resources_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -184,7 +187,7 @@ class DELETE_resources_UnitTests {
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteResourcesRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForDelete(response);
     }
 
@@ -194,7 +197,7 @@ class DELETE_resources_UnitTests {
     void testDeleteResourcesRequestWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingAccessToken(input);
+        final Response response = deleteResourceByIdNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -203,76 +206,23 @@ class DELETE_resources_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testDeleteResourcesRequestWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenDeleteResourcesRequestIsInvokedForInvalidResource(final String input) {
-        return deleteResourcesResponseForInvalidResource(resourcesApiRootContext+"delete", headersAsMap, targetInstance, input);
+
+    private Response deleteResourceById(final String input) {
+        return httpClient.httpDelete(resourcesApiRootContext+ "/resource123", headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenDeleteResourcesRequestIsInvokedWithCorrectHeaders(final String input) {
-        return deleteResourcesResponseForCorrectHeaders(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteResourcesRequestIsInvokedWithMissingAccessToken(final String input) {
-        return deleteHearingsResponseForMissingAccessToken(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteResourcesRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return deleteResourcesResponseForMissingOrInvalidHeader(resourcesApiRootContext+ "/resource123", headersAsMap, targetInstance, input);
+    private Response deleteResourceByIdNoAuth(final String input) {
+        return httpClient.httpDeleteNoAuth(resourcesApiRootContext+ "/resource123", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response deleteResourcesResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteResourcesResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteResourcesResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-
-    }
 }
