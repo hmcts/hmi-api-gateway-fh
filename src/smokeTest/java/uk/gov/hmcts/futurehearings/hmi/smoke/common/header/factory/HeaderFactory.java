@@ -21,7 +21,7 @@ public class HeaderFactory {
 
         Map<String,String> headersAsMap = new HashMap<String,String>();
         headersAsMap.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        headersAsMap.put("Accept", MediaType.APPLICATION_JSON_VALUE);
+        headersAsMap.put("Accept", MediaType.APPLICATION_JSON_VALUE+"; version=1.2");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);

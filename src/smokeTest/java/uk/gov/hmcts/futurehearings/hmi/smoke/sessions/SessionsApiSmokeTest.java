@@ -30,7 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
         queryParams.put("requestSessionType", "ADHOC");
 
         this.setParams(queryParams);
-        this.headersAsMap.put("Destination-System", "SNL");
+        this.headersAsMap.put("Destination-System", "S&L");
         setRootContext(sessionsApiRootContext);
     }
 }
