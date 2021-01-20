@@ -17,7 +17,6 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.*;
 
 @Slf4j
@@ -43,6 +42,7 @@ class GET_sessions_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final String bodyPayload = "";
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -250,7 +250,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
         httpClient.setAccessToken(accessToken);
-        final Response response = httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        final Response response = httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
 
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
@@ -258,31 +258,31 @@ class GET_sessions_UnitTests {
     }
 
     private Response whenRetrieveSessionsIsInvokedWithAdditionalParam() {
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedForInvalidResource() {
-        return httpClient.httpGet(sessionsApiRootContext+"get", headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext+"get", headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams() {
         paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams() {
         paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {
-        return httpClient.httpGetNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        return httpClient.httpGetNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader() {
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     @Test
@@ -290,7 +290,7 @@ class GET_sessions_UnitTests {
     @DisplayName("Test for Invalid Resource - By ID")
     void testRetrieveSessionsByIDRequestForInvalidResource() {
 
-        final Response response = httpClient.httpGet(sessionsApiRootContext+"/CASE1234/get", headersAsMap, paramsAsMap);
+        final Response response = httpClient.httpGet(sessionsApiRootContext+"/CASE1234/get", headersAsMap, paramsAsMap, bodyPayload);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -395,10 +395,10 @@ class GET_sessions_UnitTests {
     }
 
     private Response retrieveSessionById() {
-        return httpClient.httpGet(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap);
+        return httpClient.httpGet(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response retrieveSessionByIdNoAuth() {
-        return httpClient.httpGetNoAuth(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap);
+        return httpClient.httpGetNoAuth(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap, bodyPayload);
     }
 }

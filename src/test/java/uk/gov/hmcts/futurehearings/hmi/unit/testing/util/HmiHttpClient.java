@@ -26,26 +26,50 @@ public class HmiHttpClient {
     }
 
     public Response httpGet(final String basePath, final Map<String, Object> headersAsMap,
-            final Map<String, String> paramsAsMap) {
+            final Map<String, String> paramsAsMap, String payloadBody) {
         try {
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
-                    .basePath(basePath).when().get().then().extract().response();
+                    .body(payloadBody).basePath(basePath).when().get().then().extract().response();
         } catch (Exception exc) {
-                log.error("SSL Exception occured. Trying again...", exc);
-                return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
-                        .basePath(basePath).when().get().then().extract().response();
+            log.error("SSL Exception occured. Trying again...", exc);
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().get().then().extract().response();
+        }
+    }
+
+    public Response httpDelete(final String basePath, final Map<String, Object> headersAsMap,
+            final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().delete().then().extract().response();
+        } catch (Exception exc) {
+            log.error("SSL Exception occured. Trying again...", exc);
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().delete().then().extract().response();
         }
     }
 
     public Response httpGetNoAuth(final String basePath, final Map<String, Object> headersAsMap,
-            final Map<String, String> paramsAsMap) {
+            final Map<String, String> paramsAsMap, String payloadBody) {
         try {
-            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath).when().get()
-                    .then().extract().response();
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath)
+                    .body(payloadBody).when().get().then().extract().response();
         } catch (RuntimeException exc) {
             log.error("Exception occured. Trying again...", exc);
-            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath).when().get()
-                    .then().extract().response();
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath)
+                    .body(payloadBody).when().get().then().extract().response();
+        }
+    }
+
+    public Response httpDeleteNoAuth(final String basePath, final Map<String, Object> headersAsMap,
+            final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath)
+                    .body(payloadBody).when().delete().then().extract().response();
+        } catch (RuntimeException exc) {
+            log.error("Exception occured. Trying again...", exc);
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap).basePath(basePath)
+                    .body(payloadBody).when().delete().then().extract().response();
         }
     }
 }
