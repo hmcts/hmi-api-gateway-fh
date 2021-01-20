@@ -1,0 +1,17 @@
+    <policies>
+        <inbound>
+            <base />
+            <ip-filter action="forbid">
+                <address>165.120.71.105</address>
+            </ip-filter>
+        </inbound>
+        <backend>
+            <base />
+        </backend>
+        <outbound>
+            <base />
+        </outbound>
+        <on-error>
+            <base />
+        </on-error>
+    </policies>
