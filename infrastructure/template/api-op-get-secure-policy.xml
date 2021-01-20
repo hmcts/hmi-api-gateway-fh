@@ -1,6 +1,6 @@
 <policies>
     <inbound>
-        <check-header name="X-Azure-ClientIP" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
+        <check-header name="X-Forwarded-For" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
             <value>165.120.71.105</value>
         </check-header>
         <return-response>
@@ -10,7 +10,8 @@
             </set-header>
             <set-body>@( 
                 new JObject(new JProperty("statusCode", 200),
-                new JProperty("yourIP", context.Request.Headers.GetValueOrDefault("X-Azure-ClientIP",""))).ToString())</set-body>
+                new JProperty("fromFD", context.Request.Headers.GetValueOrDefault("X-Azure-ClientIP","")),
+                new JProperty("yourIP", context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))).ToString())</set-body>
         </return-response>
     </inbound>
     <backend>
