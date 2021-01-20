@@ -1,18 +1,18 @@
 <policies>
     <inbound>
-        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Access denied due to invalid OAuth information">
-            <openid-config url="https://sts.windows.net/531ff96d-0ae9-462a-8d2d-bec7c0b42082/.well-known/openid-configuration" />
-            <audiences>
-                <audience>api://d49d7fa2-6904-4223-a907-3b8992af4190</audience>
-            </audiences>
-            <required-claims>
-                <claim name="roles" match="all">
-                    <value>hmiGateway</value>
-                </claim>
-            </required-claims>
-        </validate-jwt>
-        <set-backend-service base-url="https://www.hmcts.com/oauth/get-secure" />
-        <mock-response status-code="200" content-type="application/json" />
+        <check-header name="X-Forwarded-For" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
+            <value>165.120.71.105</value>
+        </check-header>
+        <return-response>
+            <set-status code="200" />
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@( 
+                new JObject(new JProperty("statusCode", 200),
+                new JProperty("fromFD", context.Request.Headers.GetValueOrDefault("X-Azure-ClientIP","")),
+                new JProperty("yourIP", context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))).ToString())</set-body>
+        </return-response>
     </inbound>
     <backend>
         <base />
