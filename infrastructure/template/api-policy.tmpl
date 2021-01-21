@@ -36,6 +36,7 @@
         </set-header-->
         <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="false">
             <value>SNL</value>
+            <value>S&amp;L</value><!--Additional header for passing McGirr tests -->
             <value>MOCK</value>
             <value>EMULATOR</value>
             <value>CRIME</value>
@@ -44,6 +45,7 @@
         </check-header>
         <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="false">
             <value>SNL</value>
+            <value>S&amp;L</value><!--Additional header for passing McGirr tests -->
             <value>MOCK</value>
             <value>EMULATOR</value>
             <value>CRIME</value>
@@ -55,6 +57,7 @@
         <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true" />
         <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
+            <value>application/json; version=1.2</value><!--Additional header for passing McGirr tests -->
         </check-header>
         <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
