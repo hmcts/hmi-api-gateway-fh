@@ -36,8 +36,8 @@ version = '0.0.1'
 defaultTasks 'clean', 'test', 'aggregate'
 
 allprojects {
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
+    sourceCompatibility = '11.0.3'
+    targetCompatibility = '11.0.3'
 }
 
 
