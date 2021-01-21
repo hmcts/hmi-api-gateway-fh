@@ -2,11 +2,9 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForRequestOrDelete;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -28,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -36,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = { Application.class })
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(TestReporter.class)
@@ -60,6 +59,7 @@ class DELETE_sessions_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -90,10 +90,12 @@ class DELETE_sessions_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
 
     @BeforeAll
-    void setToken(){
+    void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+        this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -113,7 +115,8 @@ class DELETE_sessions_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testDeleteSessionsRequestForInvalidResource() throws Exception {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpDelete(sessionsApiRootContext + "/session_id/" + "delete",
+                headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -123,7 +126,7 @@ class DELETE_sessions_UnitTests {
     void testDeleteSessionsRequestWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -134,7 +137,7 @@ class DELETE_sessions_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -144,7 +147,7 @@ class DELETE_sessions_UnitTests {
     void testDeleteSessionsRequestWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -155,28 +158,28 @@ class DELETE_sessions_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Order(6)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
+    @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDeleteSessionsRequestWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
+    @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDeleteSessionsRequestWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -185,7 +188,7 @@ class DELETE_sessions_UnitTests {
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteSessionsRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithCorrectHeaders(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForRequestOrDelete(response);
     }
 
@@ -195,7 +198,7 @@ class DELETE_sessions_UnitTests {
     void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteHearingRequestIsInvokedWithMissingAccessToken(input);
+        final Response response = deleteSessionByIdNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -203,77 +206,24 @@ class DELETE_sessions_UnitTests {
     @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
-        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL,
+                invalidScope);
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedForInvalidResource(final String input) {
-        return deleteSessionsResponseForInvalidResource(sessionsApiRootContext+"/session_id/" + "delete", headersAsMap, targetInstance, input);
+    private Response deleteSessionById(final String input) {
+        return httpClient.httpDelete(sessionsApiRootContext + "/session_id", headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenDeleteSessionsRequestIsInvokedWithCorrectHeaders(final String input) {
-        return deleteSessionsResponseForCorrectHeaders(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteHearingRequestIsInvokedWithMissingAccessToken(final String input) {
-        return deleteSessionsResponseForMissingAccessToken(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteSessionsRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return deleteSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext+"/session_id", headersAsMap, targetInstance, input);
+    private Response deleteSessionByIdNoAuth(final String input) {
+        return httpClient.httpDeleteNoAuth(sessionsApiRootContext + "/session_id", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response deleteSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteSessionsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-
-    }
 }
