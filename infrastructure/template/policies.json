@@ -173,7 +173,7 @@
     {
       "operationId"  : "direct-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-direct-heaaring-policy.xml"
+      "templateFile" : "api-op-direct-hearing-policy.xml"
     }
   ]
 }
