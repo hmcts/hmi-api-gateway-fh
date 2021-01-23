@@ -215,22 +215,22 @@ class POST_direct_hearings_UnitTests {
      * @return Response 404 expected
      */
     private Response whenDirectHearingsIsInvokedForInvalidResource(final String input) {
-        return directHearingsResponseForInvalidResource(directHearingApiRootContext + "/post", headersAsMap,
+        return directHearingsResponseForInvalidResource(directHearingApiRootContext + "/123/post", headersAsMap,
                 targetInstance, input);
     }
 
     private Response whenDirectHearingsIsInvokedWithCorrectHeaders(final String input) {
-        return directHearingsResponseForCorrectHeaders(directHearingApiRootContext, headersAsMap, targetInstance,
+        return directHearingsResponseForCorrectHeaders(directHearingApiRootContext + "/123", headersAsMap, targetInstance,
                 input);
     }
 
     private Response whenDirectHearingsIsInvokedWithMissingAccessToken(final String input) {
-        return directHearingsResponseForMissingAccessToken(directHearingApiRootContext, headersAsMap, targetInstance,
+        return directHearingsResponseForMissingAccessToken(directHearingApiRootContext + "/123", headersAsMap, targetInstance,
                 input);
     }
 
     private Response whenDirectHearingsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return directHearingsResponseForMissingOrInvalidHeader(directHearingApiRootContext, headersAsMap,
+        return directHearingsResponseForMissingOrInvalidHeader(directHearingApiRootContext + "/123", headersAsMap,
                 targetInstance, input);
     }
 
