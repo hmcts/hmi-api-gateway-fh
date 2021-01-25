@@ -13,6 +13,7 @@ steps:
   inputs:
     targetFiles: '**/*-policy.xml'
     encoding: 'auto'
+    escapeType: 'html'
     writeBOM: true
     actionOnMissing: 'warn'
     keepToken: false
