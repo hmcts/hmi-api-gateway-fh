@@ -14,7 +14,7 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+                <set-backend-service base-url="http://#{ipWhitelist}#/resources/" />
             </when>
         </choose>
     </inbound>
