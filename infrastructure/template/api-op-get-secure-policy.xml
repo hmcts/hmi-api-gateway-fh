@@ -11,6 +11,10 @@
                 new JProperty("fromFD", context.Request.Headers.GetValueOrDefault("X-Azure-ClientIP","")),
                 new JProperty("yourIP", context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))).ToString())</set-body>
         </return-response>
+        <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+            <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
+            <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+        </when>
     </inbound>
     <backend>
         <base />
