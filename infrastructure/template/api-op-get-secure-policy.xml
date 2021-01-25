@@ -1,8 +1,6 @@
 <policies>
     <inbound>
-        <check-header name="X-Forwarded-For" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
-            <value>165.120.71.105</value>
-        </check-header>
+        #{ipWhitelist}#
         <return-response>
             <set-status code="200" />
             <set-header name="Content-Type" exists-action="override">
