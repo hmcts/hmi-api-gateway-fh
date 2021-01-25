@@ -1,6 +1,5 @@
 <policies>
     <inbound>
-        #{ipWhitelist}#
         <return-response>
             <set-status code="200" />
             <set-header name="Content-Type" exists-action="override">
