@@ -16,7 +16,7 @@ steps:
         $operationId = $_.operationId
         $file = $_.templateFile
         Write-Host "Applying $operationId"
-        Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\$file 
+        ConvertTo-Html $(System.DefaultWorkingDirectory)\infrastructure\template\$file 
         Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api" -Format $format -OperationId $operationId -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\$file -Verbose -ErrorAction Stop
       }
       Write-Host "Applying Product policy"
