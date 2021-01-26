@@ -1,6 +1,7 @@
     <policies>
         <inbound>
             <base />
+            #{ipWhitelist}#
         </inbound>
         <backend>
             <base />
