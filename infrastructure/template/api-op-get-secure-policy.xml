@@ -1,18 +1,7 @@
 <policies>
     <inbound>
-        <check-header name="X-Forwarded-For" failed-check-httpcode="403" failed-check-error-message="Unauthorized" ignore-case="true">
-            <value>165.120.71.105</value>
-        </check-header>
-        <return-response>
-            <set-status code="200" />
-            <set-header name="Content-Type" exists-action="override">
-                <value>application/json</value>
-            </set-header>
-            <set-body>@( 
-                new JObject(new JProperty("statusCode", 200),
-                new JProperty("fromFD", context.Request.Headers.GetValueOrDefault("X-Azure-ClientIP","")),
-                new JProperty("yourIP", context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))).ToString())</set-body>
-        </return-response>
+        <set-backend-service base-url="https://www.hmcts.com/oauth/get-secure" />
+        <mock-response status-code="200" content-type="application/json" />
     </inbound>
     <backend>
         <base />
