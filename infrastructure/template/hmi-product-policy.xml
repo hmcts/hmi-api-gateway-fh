@@ -1,9 +1,7 @@
     <policies>
         <inbound>
             <base />
-            <ip-filter action="forbid">
-                <address>165.120.71.105</address>
-            </ip-filter>
+            #{ipWhitelist}#
         </inbound>
         <backend>
             <base />
