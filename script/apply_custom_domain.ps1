@@ -42,7 +42,7 @@ if (!(Get-Module -Name Az.ApiManagement)){
         Write-Host "Az.ApiManagement already installed, skipping" -ForegroundColor Green
     }
 $KeyVaultId = "https://$KeyVaultName.vault.azure.net/secrets/apim-hostname-certificate"
-$proxy = (New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding)
+$proxy = (New-AzApiManagementCustomHostnameConfiguration -Hostname $Hostname -HostnameType $HostnameType -KeyVaultId $KeyVaultId -DefaultSslBinding -NegotiateClientCertificate)
 $apim = (Get-AzApiManagement -ResourceGroupName $ResourceGroupName -Debug)
 if ($apim.ProxyCustomHostnameConfiguration.Hostname -notcontains $proxy.Hostname) {
     $apim.ProxyCustomHostnameConfiguration = $proxy
