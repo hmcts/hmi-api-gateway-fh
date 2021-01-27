@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.*;
 
 @Slf4j
@@ -42,6 +42,7 @@ class GET_sessions_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final String bodyPayload = "";
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -72,9 +73,12 @@ class GET_sessions_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+        this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -207,7 +211,6 @@ class GET_sessions_UnitTests {
         thenValidateResponseForNoMandatoryParams(response);
     }
 
-
     @Test
     @Order(12)
     @DisplayName("Test with no mandatory parameters")
@@ -246,53 +249,48 @@ class GET_sessions_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testRetrieveSessionsRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
-        final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
+        httpClient.setAccessToken(accessToken);
+        final Response response = httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
 
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+        httpClient.setAccessToken(accessToken);
     }
 
-
-
     private Response whenRetrieveSessionsIsInvokedWithAdditionalParam() {
-        return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedForInvalidResource() {
-        return retrieveSessionsResponseForInvalidResource(sessionsApiRootContext+"get", headersAsMap, targetInstance);
+        return httpClient.httpGet(sessionsApiRootContext+"get", headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams() {
         paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
-        return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams() {
         paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
-        return retrieveSessionsResponseForCorrectHeadersAndParams(sessionsApiRootContext, headersAsMap, paramsAsMap, targetInstance);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {
-        return retrieveSessionsResponseForMissingAccessToken(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+        return httpClient.httpGetNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader() {
-        return retrieveSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
     }
-
-
-    //Sessions By ID
-
 
     @Test
     @Order(19)
     @DisplayName("Test for Invalid Resource - By ID")
     void testRetrieveSessionsByIDRequestForInvalidResource() {
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedForInvalidResource();
+        final Response response = httpClient.httpGet(sessionsApiRootContext+"/CASE1234/get", headersAsMap, paramsAsMap, bodyPayload);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -302,7 +300,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsByIDRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -313,7 +311,7 @@ class GET_sessions_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -323,7 +321,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsByIDRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -334,7 +332,7 @@ class GET_sessions_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -344,7 +342,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsByIDRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForRetrieve(response);
     }
 
@@ -354,7 +352,7 @@ class GET_sessions_UnitTests {
     void testRetrieveSessionsByIDRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -365,7 +363,7 @@ class GET_sessions_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
 
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -374,7 +372,7 @@ class GET_sessions_UnitTests {
     @DisplayName("Test for Correct Headers with No Parameters - By ID")
     void testRetrieveSessionsByIDRequestWithCorrectHeadersAndNoParams() {
 
-        final Response response = whenRetrieveSessionsByIDIsInvokedWithCorrectHeadersAndNoParams();
+        final Response response = retrieveSessionById();
         thenValidateResponseForRetrieve(response);
     }
 
@@ -382,7 +380,7 @@ class GET_sessions_UnitTests {
     @Order(29)
     @DisplayName("Test for missing Access Token")
     void testRetrieveSessionsByIDRequestWithMissingAccessToken() {
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingAccessToken();
+        final Response response = retrieveSessionByIdNoAuth();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -391,82 +389,16 @@ class GET_sessions_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testRetrieveSessionsByIDRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
-        final Response response = whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader();
+        httpClient.setAccessToken(accessToken);
+        final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenRetrieveSessionsByIDRequestIsInvokedForInvalidResource() {
-        return retrieveSessionsResponseForInvalidResource(sessionsApiRootContext+"/CASE1234/get", headersAsMap, targetInstance);
+    private Response retrieveSessionById() {
+        return httpClient.httpGet(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap, bodyPayload);
     }
 
-    private Response whenRetrieveSessionsByIDIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveSessionsResponseForCorrectHeadersAndNoParams(sessionsApiRootContext+"/CASE1234", headersAsMap, targetInstance);
-    }
-
-    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingAccessToken() {
-        return retrieveSessionsResponseForMissingAccessToken(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
-    }
-
-    private Response whenRetrieveSessionsByIDRequestIsInvokedWithMissingOrInvalidHeader() {
-        return retrieveSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext+"/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
-    }
-
-    private Response retrieveSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-    }
-
-    private Response retrieveSessionsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .queryParams(paramsAsMap)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-    }
-
-
-    private Response retrieveSessionsResponseForCorrectHeadersAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-    }
-
-    private Response retrieveSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
-
-        return given()
-                .queryParams(paramsAsMap)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-    }
-
-    private Response retrieveSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final Map<String, String> paramsAsMap, final String basePath) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .queryParams(paramsAsMap)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-
+    private Response retrieveSessionByIdNoAuth() {
+        return httpClient.httpGetNoAuth(sessionsApiRootContext+"/CASE1234", headersAsMap, paramsAsMap, bodyPayload);
     }
 }
