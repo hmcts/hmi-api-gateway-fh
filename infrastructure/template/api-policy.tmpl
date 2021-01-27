@@ -31,9 +31,25 @@
         <set-header name="Request-Processed-At" exists-action="override">
             <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
         </set-header>
-        <!-- set-header name="Accept" exists-action="override">
-            <value>application/json</value>
-        </set-header-->
+        <set-header name="transactionIdHMCTS" exists-action="skip">
+            <value>@{
+                var guidBinary = new byte[16];
+                Array.Copy(Guid.NewGuid().ToByteArray(), 0, guidBinary, 0, 10);
+                long time = DateTime.Now.Ticks;
+                byte[] bytes = new byte[6];
+                unchecked
+                {
+                       bytes[5] = (byte)(time >> 40);
+                       bytes[4] = (byte)(time >> 32);
+                       bytes[3] = (byte)(time >> 24);
+                       bytes[2] = (byte)(time >> 16);
+                       bytes[1] = (byte)(time >> 8);
+                       bytes[0] = (byte)(time);
+                }
+                Array.Copy(bytes, 0, guidBinary, 10, 6);
+                return new Guid(guidBinary).ToString();
+            }</value>
+        </set-header>
         <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="false">
             <value>SNL</value>
             <value>MOCK</value>
@@ -55,6 +71,7 @@
         <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true" />
         <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
+            <value>application/json; version=1.2</value><!--Additional header for passing McGirr tests -->
         </check-header>
         <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
