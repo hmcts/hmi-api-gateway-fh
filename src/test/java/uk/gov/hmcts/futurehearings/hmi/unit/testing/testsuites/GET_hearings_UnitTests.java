@@ -43,7 +43,6 @@ class GET_hearings_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
     private final Map<String, String> paramsAsMap = new HashMap<>();
-    private final Map<String, String> pathParamsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -88,7 +87,6 @@ class GET_hearings_UnitTests {
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
-        pathParamsAsMap.put("hearingIdCaseHQ", "CASE1234");
 
         paramsAsMap.put("hearingType", "THEFT");
         paramsAsMap.put("hearingDate", "2018-02-29T20:36:01Z");
@@ -229,7 +227,7 @@ class GET_hearings_UnitTests {
 
 
     private Response whenRetrieveHearingsIsInvokedWithAdditionalParam() {
-        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap, pathParamsAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext + "/CASE1234", headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedForInvalidResource() {
@@ -237,19 +235,19 @@ class GET_hearings_UnitTests {
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams() {
-        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap,  pathParamsAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveHearingsResponseForCorrectHeadersAndNoParams(hearingApiRootContext, headersAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndNoParams(hearingApiRootContext + "/CASE1234", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedWithMissingAccessToken() {
-        return retrieveHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap,  pathParamsAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForMissingAccessToken(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader() {
-        return retrieveHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext, headersAsMap,  pathParamsAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response retrieveHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
@@ -263,12 +261,11 @@ class GET_hearings_UnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveHearingsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> pathParamsAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response retrieveHearingsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .pathParams(pathParamsAsMap)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -288,10 +285,9 @@ class GET_hearings_UnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> pathParamsAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response retrieveHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
-                .pathParams(pathParamsAsMap)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
@@ -299,12 +295,11 @@ class GET_hearings_UnitTests {
                 .when().get().then().extract().response();
     }
 
-    private Response retrieveHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final Map<String, String> pathParamsAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+    private Response retrieveHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final Map<String, String> paramsAsMap, final String basePath) {
 
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .pathParams(pathParamsAsMap)
                 .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
