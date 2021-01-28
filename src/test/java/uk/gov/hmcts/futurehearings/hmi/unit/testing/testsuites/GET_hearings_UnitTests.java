@@ -177,7 +177,7 @@ class GET_hearings_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for {0} Parameter")
-    @ValueSource(strings = {"hearingIdCaseHQ","hearingDate","hearingType"})
+    @ValueSource(strings = {"hearingDate","hearingType"})
     void testRetrieveHearingsRequestWithParam(String iteration) {
         paramsAsMap.clear();
         paramsAsMap.put(iteration, "Value");
