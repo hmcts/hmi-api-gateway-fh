@@ -53,8 +53,8 @@ class POST_direct_hearings_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${directHearingRootContext}")
-    private String directHearingApiRootContext;
+    @Value("${hearingApiRootContext}")
+    private String hearingApiRootContext;
 
     @Value("${destinationSystem}")
     private String destinationSystem;
@@ -215,22 +215,22 @@ class POST_direct_hearings_UnitTests {
      * @return Response 404 expected
      */
     private Response whenDirectHearingsIsInvokedForInvalidResource(final String input) {
-        return directHearingsResponseForInvalidResource(directHearingApiRootContext + "/123/post", headersAsMap,
+        return directHearingsResponseForInvalidResource(hearingApiRootContext + "/h123/sessions/s123/post", headersAsMap,
                 targetInstance, input);
     }
 
     private Response whenDirectHearingsIsInvokedWithCorrectHeaders(final String input) {
-        return directHearingsResponseForCorrectHeaders(directHearingApiRootContext + "/123", headersAsMap, targetInstance,
+        return directHearingsResponseForCorrectHeaders(hearingApiRootContext + "/h123/sessions/s123", headersAsMap, targetInstance,
                 input);
     }
 
     private Response whenDirectHearingsIsInvokedWithMissingAccessToken(final String input) {
-        return directHearingsResponseForMissingAccessToken(directHearingApiRootContext + "/123", headersAsMap, targetInstance,
+        return directHearingsResponseForMissingAccessToken(hearingApiRootContext + "/h123/sessions/s123", headersAsMap, targetInstance,
                 input);
     }
 
     private Response whenDirectHearingsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return directHearingsResponseForMissingOrInvalidHeader(directHearingApiRootContext + "/123", headersAsMap,
+        return directHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext + "/h123/sessions/s123", headersAsMap,
                 targetInstance, input);
     }
 
