@@ -1,17 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForDelete;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -79,6 +77,7 @@ class DELETE_hearings_UnitTests {
 	private static String accessToken;
 
 	private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
 	@Value("${invalidTokenURL}")
 	private String invalidTokenURL;
@@ -92,9 +91,12 @@ class DELETE_hearings_UnitTests {
 	@Value("${invalidClientSecret}")
 	private String invalidClientSecret;
 
+	private HmiHttpClient httpClient;
+
 	@BeforeAll
 	void setToken() {
 		accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
 	}
 
 	@BeforeEach
@@ -114,7 +116,7 @@ class DELETE_hearings_UnitTests {
 	@DisplayName("Test for Invalid Resource")
 	void testDeleteHearingRequestForInvalidResource() throws Exception {
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedForInvalidResource(input);
+		final Response response = httpClient.httpDelete(hearingApiRootContext + "delete", headersAsMap, paramsAsMap, input);
 		thenValidateResponseForInvalidResource(response);
 	}
 
@@ -124,7 +126,7 @@ class DELETE_hearings_UnitTests {
 	void testDeleteHearingRequestWithMissingContentTypeHeader() throws IOException {
 		headersAsMap.remove("Content-Type");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
 	}
 
@@ -135,7 +137,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.remove("Content-Type");
 		headersAsMap.put("Content-Type", "application/xml");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
 	}
 
@@ -145,7 +147,7 @@ class DELETE_hearings_UnitTests {
 	void testDeleteHearingRequestWithMissingAcceptHeader() throws IOException {
 		headersAsMap.remove("Accept");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidAcceptHeader(response);
 	}
 
@@ -156,7 +158,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.remove("Accept");
 		headersAsMap.put("Accept", "application/jsonxml");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidAcceptHeader(response);
 	}
 
@@ -166,7 +168,7 @@ class DELETE_hearings_UnitTests {
 	void testDeleteHearingRequestWithMissingHeader(String iteration) throws IOException {
 		headersAsMap.remove(iteration);
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidHeader(response, iteration);
 	}
 
@@ -177,7 +179,7 @@ class DELETE_hearings_UnitTests {
 		headersAsMap.remove(iteration);
 		headersAsMap.put(iteration, "A");
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidHeader(response, iteration);
 	}
 
@@ -186,7 +188,7 @@ class DELETE_hearings_UnitTests {
 	@DisplayName("Test for Correct Headers and Payload")
 	void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithCorrectHeaders(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForDelete(response);
 	}
 
@@ -196,7 +198,7 @@ class DELETE_hearings_UnitTests {
 	void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
 
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingAccessToken(input);
+		final Response response = deteHearingNoAuth(input);
 		thenValidateResponseForMissingOrInvalidAccessToken(response);
 	}
 
@@ -205,79 +207,22 @@ class DELETE_hearings_UnitTests {
 	@DisplayName("Test for invalid Access Token")
 	void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
 		accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+		httpClient.setAccessToken(accessToken);
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(input);
+		final Response response = deleteHearingAuth(input);
 		thenValidateResponseForMissingOrInvalidAccessToken(response);
 	}
 
-	private Response whenDeleteHearingRequestIsInvokedForInvalidResource(final String input) {
-		return deleteHearingsResponseForInvalidResource(hearingApiRootContext + "delete", headersAsMap, targetInstance, input);
+	private Response deleteHearingAuth(final String input) {
+		return httpClient.httpDelete(hearingApiRootContext, headersAsMap, paramsAsMap, input);
 	}
 
-	private Response whenDeleteHearingRequestIsInvokedWithCorrectHeaders(final String input) {
-		return deleteHearingsResponseForCorrectHeaders(hearingApiRootContext, headersAsMap, targetInstance, input);
-	}
-
-	private Response whenDeleteHearingRequestIsInvokedWithMissingAccessToken(final String input) {
-		return deleteHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap, targetInstance, input);
-	}
-
-	private Response whenDeleteHearingRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-		return deleteHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext, headersAsMap, targetInstance, input);
+	private Response deteHearingNoAuth(final String input) {
+		return httpClient.httpDeleteNoAuth(hearingApiRootContext, headersAsMap, paramsAsMap, input);
 	}
 
 	private String givenAPayload(final String path) throws IOException {
 		return readFileContents(path);
 	}
 
-	private Response deleteHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap,
-			final String basePath, final String payloadBody) {
-
-		return given()
-				.auth()
-				.oauth2(accessToken)
-				.body(payloadBody)
-				.headers(headersAsMap)
-				.baseUri(basePath)
-				.basePath(api)
-				.when().delete().then().extract().response();
-	}
-
-	private Response deleteHearingsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap,
-			final String basePath, final String payloadBody) {
-
-		return given()
-				.auth()
-				.oauth2(accessToken)
-				.body(payloadBody)
-				.headers(headersAsMap)
-				.baseUri(basePath)
-				.basePath(api)
-				.when().delete().then().extract().response();
-	}
-
-	private Response deleteHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap,
-			final String basePath, final String payloadBody) {
-
-		return given()
-				.body(payloadBody)
-				.headers(headersAsMap)
-				.baseUri(basePath)
-				.basePath(api)
-				.when().delete().then().extract().response();
-	}
-
-	private Response deleteHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-
-    }
 }
