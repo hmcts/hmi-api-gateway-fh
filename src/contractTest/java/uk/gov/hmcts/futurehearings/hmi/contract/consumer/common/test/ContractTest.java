@@ -48,7 +48,6 @@ public abstract class ContractTest {
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-
         headersAsMap = createStandardSnLHeader(getAuthorizationToken(),"SNL");
     }
 }
