@@ -227,7 +227,7 @@ class GET_hearings_UnitTests {
 
 
     private Response whenRetrieveHearingsIsInvokedWithAdditionalParam() {
-        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext + "/CASE1234", headersAsMap, paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedForInvalidResource() {
@@ -235,19 +235,19 @@ class GET_hearings_UnitTests {
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams() {
-        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveHearingsResponseForCorrectHeadersAndNoParams(hearingApiRootContext + "/CASE1234", headersAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndNoParams(hearingApiRootContext, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedWithMissingAccessToken() {
-        return retrieveHearingsResponseForMissingAccessToken(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader() {
-        return retrieveHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext + "/CASE1234", headersAsMap,  paramsAsMap, targetInstance);
+        return retrieveHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
     }
 
     private Response retrieveHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
