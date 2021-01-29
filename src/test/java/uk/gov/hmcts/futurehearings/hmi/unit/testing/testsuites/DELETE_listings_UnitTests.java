@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -43,6 +44,7 @@ class DELETE_listings_UnitTests {
     private String listingsApiRootContext;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -73,9 +75,13 @@ class DELETE_listings_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+	private HmiHttpClient httpClient;
+
+
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -94,7 +100,7 @@ class DELETE_listings_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testDeleteListingsRequestForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpDelete(listingsApiRootContext+"delete", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -104,7 +110,7 @@ class DELETE_listings_UnitTests {
     void testDeleteListingsRequestWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -115,7 +121,7 @@ class DELETE_listings_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -125,7 +131,7 @@ class DELETE_listings_UnitTests {
     void testDeleteListingsRequestWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -136,7 +142,7 @@ class DELETE_listings_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -146,7 +152,7 @@ class DELETE_listings_UnitTests {
     void testDeleteListingsRequestWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -157,7 +163,7 @@ class DELETE_listings_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -166,7 +172,7 @@ class DELETE_listings_UnitTests {
     @DisplayName("Test for Correct Headers and Payload")
     void testDeleteListingsRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithCorrectHeaders(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForRequestOrDelete(response);
     }
 
@@ -176,7 +182,7 @@ class DELETE_listings_UnitTests {
     void testDeleteListingsRequestWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingAccessToken(input);
+        final Response response = deleteListingByIdNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -185,77 +191,22 @@ class DELETE_listings_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testDeleteListingsRequestWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-        final Response response = whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = deleteListingById(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-
-    private Response whenDeleteListingsRequestIsInvokedForInvalidResource(final String input) {
-        return deleteListingsResponseForInvalidResource(listingsApiRootContext+"delete", headersAsMap, targetInstance, input);
+    private Response deleteListingById(final String input) {
+        return httpClient.httpDelete(listingsApiRootContext+ "/list_id", headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenDeleteListingsRequestIsInvokedWithCorrectHeaders(final String input) {
-        return deleteListingsResponseForCorrectHeaders(listingsApiRootContext+ "/list_id", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteListingsRequestIsInvokedWithMissingAccessToken(final String input) {
-        return deleteListingsResponseForMissingAccessToken(listingsApiRootContext+ "/list_id", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenDeleteListingsRequestIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return deleteListingsResponseForMissingOrInvalidHeader(listingsApiRootContext+ "/list_id", headersAsMap, targetInstance, input);
+    private Response deleteListingByIdNoAuth(final String input) {
+        return httpClient.httpDeleteNoAuth(listingsApiRootContext+ "/list_id", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response deleteListingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteListingsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteListingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-    }
-
-    private Response deleteListingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().delete().then().extract().response();
-
-    }
 }
