@@ -200,7 +200,7 @@ task contract(type: Test) {
     include "uk/gov/hmcts/futurehearings/hmi/contract/consumer/**"
     systemProperty 'pact.rootDir', "pacts"
     systemProperties System.getProperties()
-    delete 'pacts/HMI_API-SandL_API.json'
+    //delete 'pacts/HMI_API-SandL_API.json'
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
@@ -610,7 +610,6 @@ pact {
 
     reports {
         defaultReports() // adds the standard console output
-
         markdown // report in markdown format
         json // report in json format
     }

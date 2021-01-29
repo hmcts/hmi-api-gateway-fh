@@ -52,23 +52,4 @@ class POSTHearingsValidationTest extends HearingValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
         this.commonDelegate = new CommonDelegateImpl();
     }
-
-    //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
-    //Confirmed by Product Owner that this should be a Success Scenario.
-    @Test
-    @DisplayName("Successfully validated response with an xml payload")
-    @Disabled("Initial Setup")
-    void test_successful_response_for_test_xml_body() throws Exception {
-
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getAuthorizationToken(),
-                getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(getApiSubscriptionKey()),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                this.getHttpSucessStatus(),
-                "common",
-                getHmiSuccessVerifier(),"The request was received successfully.");
-    }
 }

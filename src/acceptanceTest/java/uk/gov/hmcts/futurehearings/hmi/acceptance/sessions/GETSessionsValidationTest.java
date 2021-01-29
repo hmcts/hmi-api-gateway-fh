@@ -286,7 +286,6 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 SESSIONS_SUCCESS_MSG, null);
     }
 
-    @Disabled("Disabled as parameters checks are disabled in dev")
     @ParameterizedTest(name = "Test with All Query Parameters with extra params - Param : {0} --> {1}")
     @CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocation,301,requestDuration,360,requestStartDate,2011-10-37,requestEndDate,01/JAN/2011,extra_params,extra", "requestSessionType,,requestJudgeType,,requestLocation,,requestDuration,,requestStartDate,,requestEndDate,,extra_params,"})
     void test_all_query_params_with_extra_params(final String paramKey1,
@@ -319,7 +318,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);
+                "Unsupported Query Param detected: 'extra_params'", null);
     }
 
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
