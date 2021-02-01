@@ -178,7 +178,7 @@ stages:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-TEST
         environment: test
-        dependsOn: 
+        dependsOn:
         - TerraformApply
         - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
@@ -212,21 +212,7 @@ stages:
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test
-          dependsOn: 
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-SBOX
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-            
-      - template: pipeline/jobs/test-smoke.yaml
-        parameters:
-          displayName: Smoke Test
-          dependsOn: 
-          - UnitTest
+          dependsOn:
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -239,10 +225,8 @@ stages:
       - template: pipeline/jobs/test-acceptance.yaml
         parameters:
           displayName: Acceptance Test
-          dependsOn: 
-          - SmokeTest
-          - CreateStorage
-          - ExportKeyVault
+          dependsOn:
+          - UnitTest
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -250,13 +234,24 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn:
+          - AcceptanceTest
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
-          dependsOn: 
+          dependsOn:
           - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -267,10 +262,8 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
-          dependsOn: 
-          - ContractTest
-          - CreateStorage
-          - ExportKeyVault
+          dependsOn:
+          - AcceptanceTest
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -281,7 +274,8 @@ stages:
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
-      
+          dependsOn:
+          - AcceptanceTest
 
   - stage: TestDEV
     dependsOn: BuildDev
@@ -304,7 +298,7 @@ stages:
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test
-          dependsOn: 
+          dependsOn:
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-DEV
@@ -317,7 +311,7 @@ stages:
       - template: pipeline/jobs/test-acceptance.yaml
         parameters:
           displayName: Acceptance Test
-          dependsOn: 
+          dependsOn:
           - UnitTest
           - CreateStorage
           - ExportKeyVault
@@ -350,7 +344,7 @@ stages:
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test
-          dependsOn: 
+          dependsOn:
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -363,7 +357,7 @@ stages:
       - template: pipeline/jobs/test-smoke.yaml
         parameters:
           displayName: Smoke Test
-          dependsOn: 
+          dependsOn:
           - UnitTest
           - CreateStorage
           - ExportKeyVault
@@ -377,7 +371,7 @@ stages:
       - template: pipeline/jobs/test-acceptance.yaml
         parameters:
           displayName: Acceptance Test
-          dependsOn: 
+          dependsOn:
           - SmokeTest
           - CreateStorage
           - ExportKeyVault
@@ -391,7 +385,7 @@ stages:
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
-          dependsOn: 
+          dependsOn:
           - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
@@ -405,7 +399,7 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
-          dependsOn: 
+          dependsOn:
           - ContractTest
           - CreateStorage
           - ExportKeyVault
@@ -422,7 +416,7 @@ stages:
 
 
   - stage: BuildSTG
-    dependsOn: 
+    dependsOn:
       - PlanStg
       - TestSbox
       - TestDev
@@ -440,7 +434,7 @@ stages:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-STG
         environment: stg
-        dependsOn: 
+        dependsOn:
         - TerraformApply
         - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
@@ -455,7 +449,7 @@ stages:
 
 
   - stage: BuildPROD
-    dependsOn: 
+    dependsOn:
       - PlanProd
       - BuildStg
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -471,7 +465,7 @@ stages:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-PROD
         environment: prod
-        dependsOn: 
+        dependsOn:
         - TerraformApply
         - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
