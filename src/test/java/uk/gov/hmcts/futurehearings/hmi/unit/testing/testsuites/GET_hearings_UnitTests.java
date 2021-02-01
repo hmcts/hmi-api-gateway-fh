@@ -207,7 +207,7 @@ class GET_hearings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Access Token")
-    void testDeleteHearingRequestWithMissingAccessToken() {
+    void testRetrieveHearingRequestWithMissingAccessToken() {
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingAccessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
@@ -216,14 +216,21 @@ class GET_hearings_UnitTests {
     @Test
     @Order(15)
     @DisplayName("Test for invalid Access Token")
-    void testDeleteHearingRequestWithInvalidAccessToken() {
+    void testRetrieveHearingRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-
+    @Test
+    @Order(16)
+    @DisplayName("Test only with path param")
+    void testRetrieveHearingRequestWithPathParam() {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams();
+        thenValidateResponseForRetrieve(response);
+    }
 
 
     private Response whenRetrieveHearingsIsInvokedWithAdditionalParam() {
@@ -236,6 +243,10 @@ class GET_hearings_UnitTests {
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams() {
         return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams() {
+        return retrieveHearingsResponseForCorrectHeadersAndPathParam(hearingApiRootContext + "/hearingId123", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
@@ -262,6 +273,18 @@ class GET_hearings_UnitTests {
     }
 
     private Response retrieveHearingsResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final Map<String, String> paramsAsMap, final String basePath) {
+
+        return given()
+                .auth()
+                .oauth2(accessToken)
+                .queryParams(paramsAsMap)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
+
+    private Response retrieveHearingsResponseForCorrectHeadersAndPathParam(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .auth()
