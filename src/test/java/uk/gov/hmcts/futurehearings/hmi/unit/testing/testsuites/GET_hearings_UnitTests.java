@@ -215,6 +215,14 @@ class GET_hearings_UnitTests {
 
     @Test
     @Order(15)
+    @DisplayName("Test only with path param")
+    void testRetrieveHearingRequestWithPathParam() {
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams();
+        thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(16)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveHearingRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
@@ -222,15 +230,6 @@ class GET_hearings_UnitTests {
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
-
-    @Test
-    @Order(16)
-    @DisplayName("Test only with path param")
-    void testRetrieveHearingRequestWithPathParam() {
-        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams();
-        thenValidateResponseForRetrieve(response);
-    }
-
 
     private Response whenRetrieveHearingsIsInvokedWithAdditionalParam() {
         return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap, paramsAsMap, targetInstance);
@@ -288,7 +287,6 @@ class GET_hearings_UnitTests {
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .queryParams(paramsAsMap)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
