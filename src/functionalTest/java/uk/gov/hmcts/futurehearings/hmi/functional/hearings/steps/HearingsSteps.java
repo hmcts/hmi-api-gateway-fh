@@ -61,7 +61,6 @@ public class HearingsSteps {
                 body,
                 httpMethod,
                 HttpStatus.BAD_REQUEST);
-        System.out.println(response.getBody().asString());
         assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
 
     }

@@ -62,6 +62,7 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setAuthorizationToken(authorizationToken);
     }
 
+    //TODO: This tests needs to be enabled post HMIS-487 dev complete
     @Disabled("Disabling emulator tests until HMIS-487 is dev complete")
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
     @CsvSource(value = {"EMULATOR,400,1000,mandatory value missing", "EMULATOR,400,1003,bad LOV value"}, nullValues = "NIL")
