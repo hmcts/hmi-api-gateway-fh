@@ -2,13 +2,10 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForRequestOrDelete;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -29,6 +26,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -61,6 +59,7 @@ class POST_sessions_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -91,9 +90,12 @@ class POST_sessions_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+    
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -111,7 +113,7 @@ class POST_sessions_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testCreateSessionsForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpPost(sessionsApiRootContext+"post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -121,7 +123,7 @@ class POST_sessions_UnitTests {
     void testCreateSessionsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
@@ -131,7 +133,7 @@ class POST_sessions_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -141,7 +143,7 @@ class POST_sessions_UnitTests {
     void testCreateSessionsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -152,7 +154,7 @@ class POST_sessions_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -162,7 +164,7 @@ class POST_sessions_UnitTests {
     void testCreateSessionsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -173,7 +175,7 @@ class POST_sessions_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -182,11 +184,9 @@ class POST_sessions_UnitTests {
     @DisplayName("Test for Correct Headers")
     void testCreateSessionsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithCorrectHeaders(input);
+        final Response response = createSession(input);
         thenValidateResponseForRequestOrDelete(response);
     }
-
-
 
     @Test
     @Order(9)
@@ -194,7 +194,7 @@ class POST_sessions_UnitTests {
     void testCreateSessionsWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingAccessToken(input);
+        final Response response = createSessionNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -203,76 +203,22 @@ class POST_sessions_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testCreateSessionsWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_CREATE_SESSIONS_PAYLOAD);
-        final Response response = whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createSession(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenCreateSessionsIsInvokedForInvalidResource(final String input) {
-        return createSessionsResponseForInvalidResource(sessionsApiRootContext+"post", headersAsMap, targetInstance, input);
+    private Response createSessionNoAuth(final String input) {
+        return httpClient.httpPostNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenCreateSessionsIsInvokedWithCorrectHeaders(final String input) {
-        return createSessionsResponseForCorrectHeaders(sessionsApiRootContext, headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateSessionsIsInvokedWithMissingAccessToken(final String input) {
-        return createSessionsResponseForMissingAccessToken(sessionsApiRootContext, headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateSessionsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return createSessionsResponseForMissingOrInvalidHeader(sessionsApiRootContext, headersAsMap, targetInstance, input);
+    private Response createSession(final String input) {
+        return httpClient.httpPost(sessionsApiRootContext, headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response createSessionsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createSessionsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createSessionsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createSessionsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-
-    }
 }

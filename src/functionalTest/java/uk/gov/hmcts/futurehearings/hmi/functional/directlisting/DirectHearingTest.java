@@ -1,24 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps.DirectListingSteps;
+import uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps.DirectHearingSteps;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,16 +29,16 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings("java:S2699")
-public class DirectListingTest extends FunctionalTest {
+public class DirectHearingTest extends FunctionalTest {
 
     @Value("${sessionsRootContext}")
     protected String sessionsRootContext;
 
-    @Value("${listings_idRootContext}")
-    protected String listings_idRootContext;
+    @Value("${directhearings_idRootContext}")
+    protected String directhearings_idRootContext;
 
     @Steps
-    DirectListingSteps directListingSteps;
+    DirectHearingSteps directHearingSteps;
 
     @Before
     public void initialiseValues() throws Exception {
@@ -52,22 +47,23 @@ public class DirectListingTest extends FunctionalTest {
 
 
     @Test
-    public void testSuccessfulDirectListing() throws Exception {
+    public void testSuccessfulDirectHearing() throws Exception {
 
         log.debug("In the testSuccessfulPostToHearing () method");
 
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
 
-        String sessionIdCaseHQ = directListingSteps.getSessionIdForDirectListing(sessionsRootContext,
+        String sessionIdCaseHQ = directHearingSteps.getSessionIdForDirectListing(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
                 queryParameters);
 
-        listings_idRootContext = String.format(listings_idRootContext, sessionIdCaseHQ);
-        String inputBodyForDirectListing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-listing-payload.json"), sessionIdCaseHQ);
-        directListingSteps.performDirectListingForGivenSessionId(listings_idRootContext,
+        directhearings_idRootContext = String.format(directhearings_idRootContext, sessionIdCaseHQ);
+        headersAsMap = createStandardHMIHeader("MOCK");
+       String inputBodyForDirectListing =
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json"), sessionIdCaseHQ);
+        directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForDirectListing);
