@@ -245,7 +245,7 @@ class GET_hearings_UnitTests {
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams() {
-        return retrieveHearingsResponseForCorrectHeadersAndPathParam(hearingApiRootContext + "/hearingId123", headersAsMap, targetInstance);
+        return retrieveHearingsResponseForCorrectHeadersAndPathParam(hearingApiRootContext + "/CASE1234", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
