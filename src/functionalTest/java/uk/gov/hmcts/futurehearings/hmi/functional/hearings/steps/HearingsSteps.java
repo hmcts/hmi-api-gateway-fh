@@ -2,8 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.functional.directlisting.process.DirectListingResponseProcess.getSessionId;
 
 import java.util.Map;
 
@@ -48,6 +46,23 @@ public class HearingsSteps {
                 HttpMethod.PUT,
                 HttpStatus.ACCEPTED);
         assertEquals(HttpStatus.ACCEPTED.value(),response.getStatusCode());
+
+    }
+
+    @Step("User amends a Hearing request with invalid payload")
+    public void shouldRequestHearingWithInvalidPayload(final String apiURL,
+                                    final Map<String, Object> headersAsMap,
+                                    final String authorizationToken, final HttpMethod httpMethod,
+                                    final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                httpMethod,
+                HttpStatus.BAD_REQUEST);
+        System.out.println(response.getBody().asString());
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
 
     }
 }
