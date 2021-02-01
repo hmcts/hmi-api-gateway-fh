@@ -14,7 +14,7 @@ import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-public class DirectListingSteps {
+public class DirectHearingSteps {
 
     private String actor;
 
