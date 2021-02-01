@@ -1,0 +1,82 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://www.gov.uk/sessionsResponse.json",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"sessionsResponse": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"sessions": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"sessionIdCaseHQ": {
+								"type": "string"
+							},
+							"sessionType": {
+								"type": "string",
+								"maxLength": 10
+							},
+							
+							"sessionJudges": {
+						    "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sessionJudgeId": {
+                      "type": "string",
+                      "maxLength": 100
+                    },
+                    "sessionJudgeType": {
+                      "type": "string",
+                      "maxLength": 10
+                    },
+                    "isPresiding": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "sessionJudgeId",
+                    "sessionJudgeType",
+                    "isPresiding"
+                  ]
+                }
+							},
+							"sessionStartTime": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"sessionDuration": {
+								"type": "integer"
+							},
+							"sessionVenueId": {
+								"type": "string"
+							},
+							"sessionRoomId": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"sessionIdCaseHQ",
+							"sessionType",
+							"sessionStartTime",
+							"sessionDuration",
+							"sessionRoomId"
+						]
+					}
+				}
+			},
+			"required": [
+				"sessions"
+			]
+		}
+	},
+	"required": [
+		"sessionsResponse"
+	]
+}

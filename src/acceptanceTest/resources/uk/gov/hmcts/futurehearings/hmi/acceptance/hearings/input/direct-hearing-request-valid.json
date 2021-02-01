@@ -1,0 +1,15 @@
+{
+  "listingRequestId": "L012",
+  "hearingIdCaseHQ": "H012",
+  "hearingType": "Civil",
+  "hearingDate": "2020-09-19",
+  "hearingStartTime": "10:45",
+  "hearingEndTime": "11:45",
+  "hearingCaseIdHMCTS": "5f2bffcee0b6aa870e82f007",
+  "hearingSessionIdCaseHQ": "5f2bffceef36b0eaf339d884",
+  "hearingTranslatorRequired": "No",
+  "hearingCreatedDate": "2020-09-17",
+  "hearingCreatedBy": "Russel Crowe",
+  "hearingVenueId": "V012",
+  "hearingRoomId": "R012"
+}

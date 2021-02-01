@@ -1,24 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps.DirectListingSteps;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +36,9 @@ public class DirectListingTest extends FunctionalTest {
 
     @Value("${listings_idRootContext}")
     protected String listings_idRootContext;
+
+    @Value("${directhearings_idRootContext}")
+    protected String directhearings_idRootContext;
 
     @Steps
     DirectListingSteps directListingSteps;
@@ -65,9 +63,10 @@ public class DirectListingTest extends FunctionalTest {
                 queryParameters);
 
         listings_idRootContext = String.format(listings_idRootContext, sessionIdCaseHQ);
-        String inputBodyForDirectListing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-listing-payload.json"), sessionIdCaseHQ);
-        directListingSteps.performDirectListingForGivenSessionId(listings_idRootContext,
+        headersAsMap = createStandardHMIHeader("MOCK");
+       String inputBodyForDirectListing =
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json"), sessionIdCaseHQ);
+        directListingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForDirectListing);

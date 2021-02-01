@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://www.gov.uk/locationRequest.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "locationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "reusable.json#/definitions/meta"
+        },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "locationIdHMCTS": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8
+            },
+            "locationDescription": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "locationAddress": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "locationCluster": {
+              "type": "string",
+              "maxLength": 3
+            },
+            "locationPostCode": {
+              "type": "string",
+              "maxLength": 15
+            },
+            "locationPrimaryFlag": {
+              "type": "boolean"
+            },
+            "locationParentCode": {
+              "type": "string",
+              "maxLength": 8
+            },
+            "locationActiveFrom": {
+              "type": "string",
+              "format": "datetime"
+            },
+            "locationActiveTo": {
+              "type": "string",
+              "format": "datetime"
+            },
+            "locationSecurityGuardFlag": {
+              "type": "boolean"
+            },
+            "locationVideoConfFlag": {
+              "type": "boolean"
+            },
+            "locationSeatingCapacity": {
+              "type": "integer"
+            },
+            "locationRecordingEqFlag": {
+              "type": "boolean"
+            },
+            "locationVCSite": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "locationVCSiteAddress": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "locationVCNumber": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "locationVCContactPhone": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "locationVCEmail": {
+              "type": "string",
+              "maxLength": 255
+            }
+          },
+          "required": [
+          ]
+        }
+      },
+      "required": [
+        "meta",
+        "location"
+      ]
+    }
+  },
+  "required": [
+    "locationRequest"
+  ]
+}
