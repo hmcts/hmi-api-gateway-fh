@@ -82,5 +82,40 @@ public class ResourcesSteps {
 
     }
 
+    @Step("User performs the creation of a user with invalid payload")
+    public void shouldCreateOrAmendUserWithInvalidPayload(final String apiURL,
+                                   final Map<String, Object> headersAsMap,
+                                   final String authorizationToken,
+                                   final HttpMethod httpMethod,
+                                   final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                httpMethod,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+
+    }
+
+    @Step("User performs the creation of a location using invalid payload")
+    public void shouldCreateOrAmendLocationWithInvalidPayload(final String apiURL,
+                                      final Map<String, Object> headersAsMap,
+                                      final String authorizationToken,
+                                      final HttpMethod httpMethod,
+                                      final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                httpMethod,
+                HttpStatus.BAD_REQUEST);
+        log.debug("The value of the response body : " + response.getBody().prettyPrint());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+
+    }
+
 
 }
