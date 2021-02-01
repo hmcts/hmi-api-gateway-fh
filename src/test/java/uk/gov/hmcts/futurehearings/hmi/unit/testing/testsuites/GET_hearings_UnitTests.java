@@ -227,7 +227,6 @@ class GET_hearings_UnitTests {
     @Order(16)
     @DisplayName("Test only with path param")
     void testRetrieveHearingRequestWithPathParam() {
-        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
         final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams();
         thenValidateResponseForRetrieve(response);
     }
