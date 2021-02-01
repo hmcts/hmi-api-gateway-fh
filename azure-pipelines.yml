@@ -227,6 +227,8 @@ stages:
           displayName: Acceptance Test
           dependsOn:
           - UnitTest
+          - CreateStorage
+          - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -239,6 +241,8 @@ stages:
           displayName: Smoke Test
           dependsOn:
           - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -252,6 +256,8 @@ stages:
           displayName: Contract Test
           dependsOn:
           - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
@@ -264,6 +270,8 @@ stages:
           displayName: Functional Test
           dependsOn:
           - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
           subscriptionKey: $(subscriptionKey)
           storageContainer: $(storageContainer)
