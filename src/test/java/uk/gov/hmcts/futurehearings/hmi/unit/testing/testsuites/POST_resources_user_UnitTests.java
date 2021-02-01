@@ -2,13 +2,10 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForCreate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -26,10 +23,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -62,6 +59,7 @@ class POST_resources_user_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -92,10 +90,12 @@ class POST_resources_user_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
 
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -113,7 +113,7 @@ class POST_resources_user_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testCreateUserResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpPost(resourcesApiRootContext+"/user"+"post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -123,7 +123,7 @@ class POST_resources_user_UnitTests {
     void testCreateUserResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
@@ -133,7 +133,7 @@ class POST_resources_user_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -143,7 +143,7 @@ class POST_resources_user_UnitTests {
     void testCreateUserResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -154,7 +154,7 @@ class POST_resources_user_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -164,7 +164,7 @@ class POST_resources_user_UnitTests {
     void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -175,7 +175,7 @@ class POST_resources_user_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -184,7 +184,7 @@ class POST_resources_user_UnitTests {
     @DisplayName("Test for Correct Headers")
     void testCreateUserResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithCorrectHeaders(input);
+        final Response response = createUser(input);
         thenValidateResponseForCreate(response);
     }
 
@@ -195,7 +195,7 @@ class POST_resources_user_UnitTests {
     void testCreateUserResourceWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingAccessToken(input);
+        final Response response = createUserNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -204,76 +204,22 @@ class POST_resources_user_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testCreateUserResourceWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createUser(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenCreateUserResourceIsInvokedForInvalidResource(final String input) {
-        return createUserResourceResponseForInvalidResource(resourcesApiRootContext+"/user"+"post", headersAsMap, targetInstance, input);
+    private Response createUserNoAuth(final String input) {
+        return httpClient.httpPostNoAuth(resourcesApiRootContext+"/user", headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenCreateUserResourceIsInvokedWithCorrectHeaders(final String input) {
-        return createUserResourceResponseForCorrectHeaders(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateUserResourceIsInvokedWithMissingAccessToken(final String input) {
-        return createUserResourceResponseForMissingAccessToken(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateUserResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return createUserResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/user", headersAsMap, targetInstance, input);
+    private Response createUser(final String input) {
+        return httpClient.httpPost(resourcesApiRootContext+"/user", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response createUserResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createUserResourceResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createUserResourceResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createUserResourceResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-
-    }
 }
