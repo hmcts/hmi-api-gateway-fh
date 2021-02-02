@@ -39,7 +39,7 @@ jobs:
       command: clean contract -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_HOST=$(hostName)
   - template: ../steps/run-gradlew-agent.yaml
     parameters:
-      command: pactPublish -DPACT_BROKER_FULL_URL=$(pactBrokerUrl)
+      command: pactPublish -DPACT_BROKER_FULL_URL=https://pact-broker.platform.hmcts.net
   # - template: ../steps/run-gradlew-agent.yaml
   #   parameters:
   #     command: pactVerify -Ppact.verifier.publishResults=true
