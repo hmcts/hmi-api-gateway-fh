@@ -14,7 +14,7 @@ import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-public class DirectListingSteps {
+public class DirectHearingSteps {
 
     private String actor;
 
@@ -32,7 +32,7 @@ public class DirectListingSteps {
         return sessionIdCaseHQ;
     }
 
-    @Step("User makes a request to List a Hearing Request Directly (PUT in the Listing API)")
+    /*@Step("User makes a request to List a Hearing Request Directly (PUT in the Listing API)")
     public void performDirectListingForGivenSessionId(final String apiURL,
                                                         final Map<String, Object> headersAsMap,
                                                         final String authorizationToken,
@@ -42,5 +42,18 @@ public class DirectListingSteps {
                 authorizationToken,
                 body, HttpMethod.PUT,HttpStatus.NO_CONTENT);
         assertEquals(HttpStatus.NO_CONTENT.value(),response.getStatusCode());
+    }*/
+
+    @Step("User makes a request to List a Hearing Request Directly (POST in the Hearing API)")
+    public void performDirectHearingListingForGivenSessionId(final String apiURL,
+                                                      final Map<String, Object> headersAsMap,
+                                                      final String authorizationToken,
+                                                      final String body) {
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.POST,
+                HttpStatus.ACCEPTED);
+        assertEquals(HttpStatus.ACCEPTED.value(),response.getStatusCode());
     }
 }

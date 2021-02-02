@@ -12,12 +12,12 @@ import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Pending;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
@@ -52,12 +52,70 @@ public class HearingsAPITest extends FunctionalTest {
                 authorizationToken,
                 inputBodyForRequestHearing);
 
-        hearings_idRootContext = String.format(hearings_idRootContext,randomId);
         String inputBodyForAmendHearing =
                 String.format(readFileContents(HEARINGS_INPUT_PATH + "/PUT-hearing-payload.json"), randomId, randomId);
-        hearingsSteps.shouldAmendAHearing(hearings_idRootContext,
+        hearingsSteps.shouldAmendAHearing(String.format(hearings_idRootContext,randomId),
                 headersAsMap,
                 authorizationToken,
                 inputBodyForAmendHearing);
     }
+
+    @Test
+    public void testRequestHearingWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendHearing () method");
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(hearingsApiRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "{}");
+    }
+
+    @Test
+    public void testRequestHearingWithXmlPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendHearing () method");
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(hearingsApiRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "<xml><hello></xml>");
+    }
+
+    @Test
+    public void testAmendHearingWithEmptyPayload() throws IOException {
+
+        log.debug("In the testAmendHearing () method");
+        int randomId = new Random().nextInt(99999999);
+        String inputBodyForRequestHearing =
+                String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), randomId);
+        hearingsSteps.shouldRequestAHearing(hearingsApiRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForRequestHearing);
+
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext,randomId),
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "{}");
+    }
+
+
+
+    @Test
+    public void testAmendHearingWithXmlPayload() throws IOException {
+
+        log.debug("In the testAmendHearing () method");
+        int randomId = new Random().nextInt(99999999);
+        String inputBodyForRequestHearing =
+                String.format(readFileContents(HEARINGS_INPUT_PATH + "/POST-hearing-payload.json"), randomId);
+        hearingsSteps.shouldRequestAHearing(hearingsApiRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForRequestHearing);
+
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext,randomId),
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "<xml><hello></xml>");
+    }
+
 }

@@ -2,21 +2,21 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForCreate;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForCreate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
-import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,25 +26,26 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+
 @Slf4j
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = { Application.class })
 @ActiveProfiles("test")
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("POST /resources/user - Create User Resource")
+@DisplayName("POST /direct-hearings - Request Hearings")
 @SuppressWarnings("java:S2699")
-class POST_resources_user_UnitTests {
+class POST_direct_hearings_UnitTests {
 
-    private static final String CORRECT_CREATE_USER_RESOURCE_PAYLOAD = "requests/create-resources-user-payload.json";
+    private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/create-hearing-request-payload.json";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -52,8 +53,8 @@ class POST_resources_user_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${resourcesApiRootContext}")
-    private String resourcesApiRootContext;
+    @Value("${hearingApiRootContext}")
+    private String hearingApiRootContext;
 
     @Value("${destinationSystem}")
     private String destinationSystem;
@@ -89,11 +90,11 @@ class POST_resources_user_UnitTests {
 
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
-
-    private HmiHttpClient httpClient;
+    
+	private HmiHttpClient httpClient;
 
     @BeforeAll
-    void setToken(){
+    void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
 		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
@@ -111,115 +112,115 @@ class POST_resources_user_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testCreateUserResourceForInvalidResource() throws IOException {
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = httpClient.httpPost(resourcesApiRootContext+"/user"+"post", headersAsMap, paramsAsMap, input);
+    void testDirectHearingsForInvalidResource() throws IOException {
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = httpClient.httpPost(hearingApiRootContext + "/sessions/s123/post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    void testCreateUserResourceWithMissingContentTypeHeader() throws IOException {
+    void testDirectHearingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
+
     @Test
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
-    void testCreateUserResourceWithInvalidContentTypeHeader() throws IOException {
+    void testDirectHearingsWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
     @Test
     @Order(4)
     @DisplayName("Test for missing Accept header")
-    void testCreateUserResourceWithMissingAcceptHeader() throws IOException {
+    void testDirectHearingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Test
     @Order(5)
     @DisplayName("Test for invalid Accept header")
-    void testCreateUserResourceWithInvalidAcceptHeader() throws IOException {
+    void testDirectHearingsWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
     @Order(6)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
-    void testCreateUserResourceWithMissingHeader(String iteration) throws IOException {
+    @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
+    void testDirectHearingsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
-    void testCreateUserResourceWithInvalidHeader(String iteration) throws IOException {
+    @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
+    void testDirectHearingsWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
     @Test
     @Order(8)
     @DisplayName("Test for Correct Headers")
-    void testCreateUserResourceWithCorrectHeaders() throws IOException {
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+    void testDirectHearingsWithCorrectHeaders() throws IOException {
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForCreate(response);
     }
-
 
     @Test
     @Order(9)
     @DisplayName("Test for missing Access Token")
-    void testCreateUserResourceWithMissingAccessToken() throws IOException {
+    void testDirectHearingsWithMissingAccessToken() throws IOException {
 
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUserNoAuth(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearingNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     @Test
     @Order(10)
     @DisplayName("Test for invalid Access Token")
-    void testCreateUserResourceWithInvalidAccessToken() throws IOException {
-        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
+    void testDirectHearingsWithInvalidAccessToken() throws IOException {
+        accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL,
+                invalidScope);
         httpClient.setAccessToken(accessToken);
-        final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
-        final Response response = createUser(input);
+        final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
+        final Response response = requestDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response createUserNoAuth(final String input) {
-        return httpClient.httpPostNoAuth(resourcesApiRootContext+"/user", headersAsMap, paramsAsMap, input);
+    private Response requestDirectHearing(final String input) {
+        return httpClient.httpPost(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
     }
 
-    private Response createUser(final String input) {
-        return httpClient.httpPost(resourcesApiRootContext+"/user", headersAsMap, paramsAsMap, input);
+    private Response requestDirectHearingNoAuth(final String input) {
+        return httpClient.httpPostNoAuth(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
-
 }

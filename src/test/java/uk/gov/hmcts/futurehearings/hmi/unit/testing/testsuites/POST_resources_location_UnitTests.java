@@ -2,13 +2,10 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForCreate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
@@ -29,6 +26,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -61,6 +59,7 @@ class POST_resources_location_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -91,9 +90,12 @@ class POST_resources_location_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+    
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -111,7 +113,7 @@ class POST_resources_location_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testCreateLocationResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpPost(resourcesApiRootContext+"/location"+"post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -121,7 +123,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
@@ -131,7 +133,7 @@ class POST_resources_location_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -141,7 +143,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -152,7 +154,7 @@ class POST_resources_location_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -162,7 +164,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -173,7 +175,7 @@ class POST_resources_location_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -182,7 +184,7 @@ class POST_resources_location_UnitTests {
     @DisplayName("Test for Correct Headers")
     void testCreateLocationResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithCorrectHeaders(input);
+        final Response response = createResource(input);
         thenValidateResponseForCreate(response);
     }
 
@@ -192,7 +194,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingAccessToken(input);
+        final Response response = createResourceNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -201,76 +203,22 @@ class POST_resources_location_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testCreateLocationResourceWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenCreateLocationResourceIsInvokedForInvalidResource(final String input) {
-        return createLocationResourceResponseForInvalidResource(resourcesApiRootContext+"/location"+"post", headersAsMap, targetInstance, input);
+    private Response createResourceNoAuth(final String input) {
+        return httpClient.httpPostNoAuth(resourcesApiRootContext+"/location", headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenCreateLocationResourceIsInvokedWithCorrectHeaders(final String input) {
-        return createLocationResourceResponseForCorrectHeaders(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateLocationResourceIsInvokedWithMissingAccessToken(final String input) {
-        return createLocationResourceResponseForMissingAccessToken(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
-    }
-
-    private Response whenCreateLocationResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return createLocationResourceResponseForMissingOrInvalidHeader(resourcesApiRootContext+"/location", headersAsMap, targetInstance, input);
+    private Response createResource(final String input) {
+        return httpClient.httpPost(resourcesApiRootContext+"/location", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response createLocationResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createLocationResourceResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createLocationResourceResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response createLocationResourceResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-
-    }
 }

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -62,6 +63,7 @@ class POST_hearings_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -92,9 +94,12 @@ class POST_hearings_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+    
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -112,7 +117,7 @@ class POST_hearings_UnitTests {
     @DisplayName("Test for Invalid Resource")
     void testRequestHearingsForInvalidResource() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedForInvalidResource(input);
+        final Response response = httpClient.httpPost(hearingApiRootContext + "post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -122,7 +127,7 @@ class POST_hearings_UnitTests {
     void testRequestHearingsWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
     @Test
@@ -132,7 +137,7 @@ class POST_hearings_UnitTests {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -142,7 +147,7 @@ class POST_hearings_UnitTests {
     void testRequestHearingsWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -153,7 +158,7 @@ class POST_hearings_UnitTests {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -163,7 +168,7 @@ class POST_hearings_UnitTests {
     void testRequestHearingsWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -174,7 +179,7 @@ class POST_hearings_UnitTests {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -183,7 +188,7 @@ class POST_hearings_UnitTests {
     @DisplayName("Test for Correct Headers")
     void testRequestHearingsWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithCorrectHeaders(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForCreate(response);
     }
 
@@ -193,7 +198,7 @@ class POST_hearings_UnitTests {
     void testRequestHearingsWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingAccessToken(input);
+        final Response response = postDirectHearingNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -202,76 +207,22 @@ class POST_hearings_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testRequestHearingsWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-
+        httpClient.setAccessToken(accessToken);
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = postDirectHearing(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
-    private Response whenRequestHearingsIsInvokedForInvalidResource(final String input) {
-        return requestHearingsResponseForInvalidResource(hearingApiRootContext+"post", headersAsMap, targetInstance, input);
+    private Response postDirectHearing(final String input) {
+        return httpClient.httpPost(hearingApiRootContext, headersAsMap, paramsAsMap, input);
     }
 
-    private Response whenRequestHearingsIsInvokedWithCorrectHeaders(final String input) {
-        return requestHearingsResponseForCorrectHeaders(hearingApiRootContext, headersAsMap, targetInstance, input);
-    }
-
-    private Response whenRequestHearingsIsInvokedWithMissingAccessToken(final String input) {
-        return requestHearingsResponseForMissingAccessToken(hearingApiRootContext, headersAsMap, targetInstance, input);
-    }
-
-    private Response whenRequestHearingsIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return requestHearingsResponseForMissingOrInvalidHeader(hearingApiRootContext, headersAsMap, targetInstance, input);
+    private Response postDirectHearingNoAuth(final String input) {
+        return httpClient.httpPostNoAuth(hearingApiRootContext, headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
     }
 
-    private Response requestHearingsResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response requestHearingsResponseForCorrectHeaders(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response requestHearingsResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
-
-        return given()
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-    private Response requestHearingsResponseForMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap,final String basePath, final String payloadBody) {
-
-        return given()
-                .auth()
-                .oauth2(accessToken)
-                .body(payloadBody)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-
-    }
 }

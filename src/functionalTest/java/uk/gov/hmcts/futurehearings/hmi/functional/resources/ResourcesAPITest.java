@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
@@ -61,10 +62,70 @@ public class ResourcesAPITest extends FunctionalTest {
         resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
         String inputBodyForAmendResources =
                 String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomId);
-        resourceSteps.shouldUpdateAnUser(resourcesByUser_idRootContext,
+        resourceSteps.shouldUpdateAnUser(String.format(resourcesByUser_idRootContext, randomId),
                 headersAsMap,
                 authorizationToken,
                 inputBodyForAmendResources);
+    }
+
+    @Test
+    public void testRequestUserWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "{}");
+
+    }
+
+    @Test
+    public void testRequestUserWithXmlPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "<xml><test></xml>");
+
+    }
+
+    @Test
+    public void testAmendUserWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(99999999);
+        String inputBodyForCreateResources =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
+        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForCreateResources);
+
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
+        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "{}");
+    }
+
+    @Test
+    public void testAmendUserWithXmlPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(99999999);
+        String inputBodyForCreateResources =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
+        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForCreateResources);
+
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
+        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "<xml><test></xml>");
     }
 
     @Test
@@ -86,5 +147,46 @@ public class ResourcesAPITest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken,
                 inputBodyForAmendResourcesByLocation);
+    }
+
+    @Test
+    public void testRequestLocationWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "{}");
+
+    }
+
+    @Test
+    public void testRequestLocationWithXmlPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "<xml><test></xml>");
+
+    }
+
+    @Test
+    public void testAmendLocationWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        int randomId = new Random().nextInt(99999999);
+        String inputBodyForCreateResourcesByLocation =
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), randomId,randomId);
+        resourceSteps.shouldCreateALocation(resourcesByLocationRootContext,
+                headersAsMap,
+                authorizationToken,
+                inputBodyForCreateResourcesByLocation);
+
+        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
+        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocation_idRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "{}");
     }
 }

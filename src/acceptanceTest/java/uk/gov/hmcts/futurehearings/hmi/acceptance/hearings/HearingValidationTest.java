@@ -11,6 +11,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQComm
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +62,8 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
         this.setAuthorizationToken(authorizationToken);
     }
 
+    //TODO: This tests needs to be enabled post HMIS-487 dev complete
+    @Disabled("Disabling emulator tests until HMIS-487 is dev complete")
     @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
     @CsvSource(value = {"EMULATOR,400,1000,mandatory value missing", "EMULATOR,400,1003,bad LOV value"}, nullValues = "NIL")
     void test_successful_response_from_the_emulator_stub(final String destinationSystem,

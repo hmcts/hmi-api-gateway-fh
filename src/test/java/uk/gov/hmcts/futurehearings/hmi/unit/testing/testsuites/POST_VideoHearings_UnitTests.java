@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
@@ -27,7 +28,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 public class POST_VideoHearings_UnitTests {
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, Object> queryParams = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -70,9 +71,12 @@ public class POST_VideoHearings_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private HmiHttpClient httpClient;
+
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
+		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
     @BeforeEach
@@ -89,7 +93,7 @@ public class POST_VideoHearings_UnitTests {
     @Order(1)
     @DisplayName("Test for Valid Headers")
     void testRetrievePeopleForValidHeaders() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithPathParam();
+        final Response response = requestVideoHearing();
         thenValidateResponseForRequestVideoHearing(response);
     }
 
@@ -98,7 +102,7 @@ public class POST_VideoHearings_UnitTests {
     @DisplayName("Test for Invalid Headers")
     void testRetrievePeopleForInvalidHeaders() {
         headersAsMap.put("Source-System", "");
-        final Response response = whenRequestVideoHearingIsInvokedForWithPathParam();
+        final Response response = requestVideoHearing();
         thenValidateResponseForRequestVideoHearingWithInvalidHeader(response);
     }
 
@@ -106,7 +110,7 @@ public class POST_VideoHearings_UnitTests {
     @Order(3)
     @DisplayName("Test for Invalid Token")
     void testRetrievePeopleForMissingToken() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithInvalidToken();
+        final Response response = requestVideoHearingNoAuth();
         thenValidateResponseForRequestVideoHearingWithInvalidToken(response);
     }
 
@@ -114,7 +118,8 @@ public class POST_VideoHearings_UnitTests {
     @Order(4)
     @DisplayName("Test for Invalid Date")
     void testRetrievePeopleForInvalidDate() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithInvalidDate();
+        headersAsMap.put("Request-Created-At", "InvalidDate");
+        final Response response = requestVideoHearing();
         thenValidateResponseForRequestVideoHearingWithInvalidHeader(response);
     }
 
@@ -122,7 +127,8 @@ public class POST_VideoHearings_UnitTests {
     @Order(5)
     @DisplayName("Test for Invalid MediaType")
     void testRetrievePeopleForInvalidMediaType() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithInvalidMedia();
+        headersAsMap.put("Accept", "InvalidMedia");
+        final Response response = requestVideoHearing();
         thenValidateResponseForRequestVideoHearingWithInvalidMedia(response);
     }
 
@@ -130,48 +136,27 @@ public class POST_VideoHearings_UnitTests {
     @Order(6)
     @DisplayName("Test for Invalid Content Type")
     void testRetrievePeopleForInvalidContentType() {
-        final Response response = whenRequestVideoHearingIsInvokedForWithInvalidContentType();
+        headersAsMap.put("Content-Type", "InvalidMedia");
+        final Response response = requestVideoHearingNoPayload();
         thenValidateResponseForRequestVideoHearingWithInvalidHeader(response);
     }
 
-    private Response whenRequestVideoHearingIsInvokedForWithInvalidContentType() {
-        headersAsMap.put("Content-Type", "InvalidMedia");
+    private Response requestVideoHearingNoPayload() {
         return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
     }
 
-    private Response whenRequestVideoHearingIsInvokedForWithInvalidMedia() {
-        headersAsMap.put("Accept", "InvalidMedia");
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+    private Response requestVideoHearingNoAuth() {
+        return httpClient.httpPostNoAuth(resourcesApiRootContext + "/video-hearing", headersAsMap, paramsAsMap, "");
     }
 
-    private Response whenRequestVideoHearingIsInvokedForWithInvalidDate() {
-        headersAsMap.put("Request-Created-At", "InvalidDate");
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
-    }
-
-    private Response whenRequestVideoHearingIsInvokedForWithInvalidToken() {
-        return sendPostRequestForVideoHearingWithInvalidToken(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
-    }
-
-    private Response whenRequestVideoHearingIsInvokedForWithPathParam() {
-        return sendPostRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+    private Response requestVideoHearing() {
+        return httpClient.httpPost(resourcesApiRootContext + "/video-hearing", headersAsMap, paramsAsMap, "");
     }
 
     private Response sendPostRequestForVideoHearing(final String api, final Map<String, Object> headersAsMap, final String basePath) {
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().post().then().extract().response();
-    }
-
-
-    private Response sendPostRequestForVideoHearingWithInvalidToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
-        return given()
-                .auth()
-                .oauth2("accessToken")
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
