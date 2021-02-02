@@ -12,7 +12,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsVal
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -94,7 +93,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingIdCaseHQ, 234"})
-    void test_hearing_id_casehq_query_param_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws Exception {
+    void test_invalid_hearing_id_casehq_query_param_with_value(final String hearingIdCaseHQKey, final String hearingIdCaseHQValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingIdCaseHQKey, hearingIdCaseHQValue));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
