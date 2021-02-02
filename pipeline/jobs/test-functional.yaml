@@ -20,6 +20,7 @@ parameters:
 
 jobs:
 - job: FunctionalTest
+  continueOnError: true
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
