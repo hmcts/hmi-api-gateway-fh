@@ -239,7 +239,6 @@ stages:
       - template: pipeline/jobs/test-smoke.yaml
         parameters:
           displayName: Smoke Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -254,7 +253,6 @@ stages:
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -269,7 +267,6 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -382,7 +379,6 @@ stages:
       - template: pipeline/jobs/test-smoke.yaml
         parameters:
           displayName: Smoke Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -397,7 +393,6 @@ stages:
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -412,7 +407,6 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
-          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
