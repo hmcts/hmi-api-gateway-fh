@@ -239,6 +239,7 @@ stages:
       - template: pipeline/jobs/test-smoke.yaml
         parameters:
           displayName: Smoke Test
+          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -250,10 +251,10 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
+          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -268,6 +269,7 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
+          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -284,6 +286,7 @@ stages:
           displayName: Code Quality Test
           dependsOn:
           - AcceptanceTest
+
 
   - stage: TestDEV
     dependsOn: BuildDev
@@ -361,20 +364,6 @@ stages:
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-            
-      - template: pipeline/jobs/test-smoke.yaml
-        parameters:
-          displayName: Smoke Test
-          dependsOn:
-          - UnitTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
       - template: pipeline/jobs/test-acceptance.yaml
         parameters:
@@ -390,9 +379,25 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          continueOnError: true
+          dependsOn:
+          - AcceptanceTest
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
+          continueOnError: true
           dependsOn:
           - AcceptanceTest
           - CreateStorage
@@ -407,8 +412,9 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
+          continueOnError: true
           dependsOn:
-          - ContractTest
+          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -421,14 +427,12 @@ stages:
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
-
+          dependsOn:
+          - AcceptanceTest
 
   - stage: BuildSTG
     dependsOn:
       - PlanStg
-      - TestSbox
-      - TestDev
-      - TestTest
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     variables:
       - group: HMI-APIM-BUILD-STG
