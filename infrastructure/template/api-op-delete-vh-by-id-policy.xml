@@ -1,0 +1,31 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
+                <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                    <set-url>https://login.microsoftonline.com/fb6e0e22-0da3-4c35-972a-9d61eb256508/oauth2/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                </send-request>
+                <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/delete" />
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
