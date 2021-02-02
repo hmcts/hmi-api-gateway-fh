@@ -89,7 +89,7 @@ stages:
 
   - stage: PlanSTG
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -99,7 +99,7 @@ stages:
 
   - stage: PlanPROD
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
