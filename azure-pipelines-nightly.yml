@@ -27,7 +27,7 @@ stages:
           environment: test
 
   - stage: DeleteAPIM
-    dependsOn:Validate
+    dependsOn: Validate
     jobs:
     - template: pipeline/jobs/delete-resources.yaml
       parameters:
@@ -36,7 +36,7 @@ stages:
         apim: hmi-apim-svc-test
 
   - stage: PlanTEST
-    dependsOn:DeleteAPIM
+    dependsOn: DeleteAPIM
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -45,7 +45,7 @@ stages:
         group: HMI-APIM-BUILD-TEST
 
   - stage: BuildTEST
-    dependsOn:PlanTest
+    dependsOn: PlanTest
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
@@ -57,11 +57,11 @@ stages:
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-TEST
-        dependsOn:TerraformApply
+        dependsOn: TerraformApply
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
         displayName: Apply Custom Domain Configuration
-        dependsOn:TerraformApply
+        dependsOn: TerraformApply
     - template: pipeline/jobs/apply-policies.yaml
       parameters:
         displayName: Apply API Policies
@@ -72,7 +72,7 @@ stages:
         - ApplyHostName
 
   - stage: TestTEST
-    dependsOn:BuildTest
+    dependsOn: BuildTest
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
