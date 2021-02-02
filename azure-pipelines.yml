@@ -366,7 +366,7 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - SmokeTest
+          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
