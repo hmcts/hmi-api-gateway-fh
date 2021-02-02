@@ -616,7 +616,7 @@ pact {
 
     publish {
         pactDirectory = 'pacts'
-        pactBrokerUrl = System.getProperty("PACT_BROKER_FULL_URL") ?: 'https://pact-broker.platform.hmcts.net'
+        pactBrokerUrl = System.getProperty("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
         tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
         version = project.pactVersion
     }
@@ -631,7 +631,7 @@ pact {
             path = System.getenv("PACT_SandL_PATH") ?: '/'
 
             if ('pactVerify' in gradle.startParameter.taskNames) {
-                hasPactsFromPactBroker(System.getenv("PACT_BROKER_FULL_URL") ?: 'https://pact-broker.platform.hmcts.net') {
+                hasPactsFromPactBroker(System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80') {
                     project.version = project.pactVersion
                 }
             }
