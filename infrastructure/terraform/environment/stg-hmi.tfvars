@@ -5,6 +5,7 @@ publisher_email = "kara.nottingham1@hmcts.net"
 protocols = ["http", "https"]
 open_api_spec_content_format = "swagger-link-json"
 open_api_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api.json"
+revision = "5"
 service_url = ""
 tags = {
     "businessarea":"cross-cutting",
