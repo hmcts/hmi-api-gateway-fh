@@ -544,6 +544,7 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+    acceptanceTestImplementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
     //Functional Testing Dependencies - FINISH
 
     //Snl Acceptance Test Dependencies - START
