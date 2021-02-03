@@ -16,7 +16,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
                 <rewrite-uri template="/{hearingIdCaseHQ}" copy-unmatched-params="true" />
-                <set-backend-service base-url="#{emulatorHost}#/hearings/retrieve-hearing/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/request-hearings/hearings/id" />
