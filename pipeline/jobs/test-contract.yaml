@@ -20,6 +20,7 @@ parameters:
 
 jobs:
 - job: ContractTest
+  continueOnError: true
   pool:
     name: hmi-$(environment)
   dependsOn:

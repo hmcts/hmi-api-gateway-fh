@@ -67,7 +67,7 @@ stages:
         displayName: Apply API Policies
         subscription: DTS-SHAREDSERVICES-TEST
         environment: test
-        dependsOn: 
+        dependsOn:
         - TerraformApply
         - ApplyHostName
 
@@ -91,7 +91,7 @@ stages:
       - template: pipeline/jobs/test-unit.yaml
         parameters:
           displayName: Unit Test
-          dependsOn: 
+          dependsOn:
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -100,11 +100,11 @@ stages:
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-            
-      - template: pipeline/jobs/test-smoke.yaml
+ 
+      - template: pipeline/jobs/test-acceptance.yaml
         parameters:
-          displayName: Smoke Test
-          dependsOn: 
+          displayName: Acceptance Test
+          dependsOn:
           - UnitTest
           - CreateStorage
           - ExportKeyVault
@@ -113,13 +113,13 @@ stages:
           storageContainer: $(storageContainer)
           variables:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]    
 
-      - template: pipeline/jobs/test-acceptance.yaml
+      - template: pipeline/jobs/test-smoke.yaml
         parameters:
-          displayName: Acceptance Test
-          dependsOn: 
-          - SmokeTest
+          displayName: Smoke Test
+          dependsOn:
+          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -132,7 +132,7 @@ stages:
       - template: pipeline/jobs/test-contract.yaml
         parameters:
           displayName: Contract Test
-          dependsOn: 
+          dependsOn:
           - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
@@ -146,8 +146,8 @@ stages:
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
-          dependsOn: 
-          - ContractTest
+          dependsOn:
+          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -160,3 +160,5 @@ stages:
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
+          dependsOn:
+          - AcceptanceTest
