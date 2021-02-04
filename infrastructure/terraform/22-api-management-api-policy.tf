@@ -6,3 +6,10 @@ resource "azurerm_api_management_api_policy" "hmi_apim_api_policy" {
   xml_content = templatefile("../template/api-policy.tmpl", { enableMockHeader = "${var.enable_mock_header_string}" })
 
 }
+
+resource "azurerm_api_management_api_policy" "hmi_apim_api_health_policy" {
+  api_name            = "${azurerm_api_management_api.hmi_apim_api.name}-health"
+  api_management_name = azurerm_api_management.hmi_apim.name
+  resource_group_name = azurerm_resource_group.hmi_apim_rg.name
+}
+
