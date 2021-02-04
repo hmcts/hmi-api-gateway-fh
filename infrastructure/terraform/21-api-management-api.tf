@@ -25,7 +25,7 @@ resource "azurerm_api_management_api" "hmi_apim_api_health" {
   display_name        = "${var.prefix}-${var.product}-api-health"
   path                = "health"
   protocols           = var.protocols
-
+  service_url         = var.service_url
   subscription_required = false
 
   import {
