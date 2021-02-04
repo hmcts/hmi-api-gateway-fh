@@ -26,7 +26,7 @@ resource "azurerm_api_management_api" "hmi_apim_api_health" {
   path                = "${var.prefix}-api-health"
   protocols           = var.protocols
 
-  service_url = var.service_url
+  //service_url = var.service_url
 
   subscription_required = false
 
