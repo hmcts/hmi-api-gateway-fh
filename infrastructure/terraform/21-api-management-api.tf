@@ -23,8 +23,13 @@ resource "azurerm_api_management_api" "hmi_apim_api_health" {
   api_management_name = azurerm_api_management.hmi_apim.name
   revision            = var.revision
   display_name        = "${var.prefix}-${var.product}-api-health"
-  path                = "${var.prefix}-api-health"
+  path                = "health"
   protocols           = var.protocols
 
   subscription_required = false
+
+  import {
+    content_format = var.open_api_spec_content_format
+    content_value  = var.open_api_spec_content_value
+  }
 }
