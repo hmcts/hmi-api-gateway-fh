@@ -16,7 +16,7 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
     content_value  = var.open_api_spec_content_value
   }
 }
-resource "azurerm_api_management_api" "hmi_apim_api" {
+resource "azurerm_api_management_api" "hmi_apim_api_health" {
   name                = "${var.prefix}-${var.product}-api-health"
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
   api_management_name = azurerm_api_management.hmi_apim.name
