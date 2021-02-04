@@ -13,4 +13,3 @@ resource "azurerm_api_management_api_policy" "hmi_apim_api_health_policy" {
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
   xml_content = templatefile("../template/api-health-policy.xml")
 }
-
