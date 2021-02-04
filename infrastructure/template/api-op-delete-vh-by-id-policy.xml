@@ -15,7 +15,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/delete" />
-                <mock-response status-code="200" content-type="application/json" />
+                <mock-response status-code="204" content-type="application/json" />
             </when>
         </choose>
     </inbound>
