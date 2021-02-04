@@ -3,7 +3,7 @@
         <base />
         <set-variable name="invalidQueryParams" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                string[] allowedKeys = {"hearingIdCaseHQ","hearingDate","hearingType"};
+                string[] allowedKeys = {"hearingDate","hearingType"};
                 bool invalidQueryParam = false;
                 if(context.Request.Url.Query.Count &gt; 0){
                     for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
@@ -26,7 +26,7 @@
                 return invalidQueryParam;
             }" />
             <choose>
-                <when condition="@(context.Request.Url.Query.Count > 3 || (bool)context.Variables["invalidQueryParams"])">
+                <when condition="@(context.Request.Url.Query.Count > 2 || (bool)context.Variables["invalidQueryParams"])">
                     <return-response>
                         <set-status code="400" reason="Malformed request." />
                         <set-body>@{
