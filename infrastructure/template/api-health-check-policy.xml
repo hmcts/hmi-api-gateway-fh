@@ -1,6 +1,6 @@
 <policies>
     <inbound>
-        <base />
+        <set-backend-service base-url="https://hmi-apim.dev.platform.hmcts.net/hmi/" />
     </inbound>
     <backend>
         <base />
