@@ -31,6 +31,30 @@ public class VideoHearingSteps {
         assertEquals(HttpStatus.CREATED.value(),response.getStatusCode());
     }
 
+    @Step("User makes a request to Put Video Hearing API")
+    public void makePutForVideoHearing(final String apiURL,
+                                        final Map<String, Object> headersAsMap,
+                                        final String authorizationToken,
+                                        final String body) {
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.PUT,HttpStatus.OK);
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+    }
+
+    @Step("User makes a request to Delete Video Hearing API")
+    public void makeDeleteForVideoHearing(final String apiURL,
+                                       final Map<String, Object> headersAsMap,
+                                       final String authorizationToken,
+                                       final String body) {
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.DELETE,HttpStatus.NO_CONTENT);
+        assertEquals(HttpStatus.NO_CONTENT.value(),response.getStatusCode());
+    }
+
     @Step("User makes a request to Get List of hearings for relevant search parameters on the Video Hearing API")
     public String performVideoHearingGetByUsername(final String apiURL,
                                        final Map<String, Object> headersAsMap,

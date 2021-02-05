@@ -48,7 +48,7 @@ public class VideoHearingTest extends FunctionalTest {
 
 
     @Test
-    public void testVideoHearing() throws Exception {
+    public void testCreateVideoHearing() throws Exception {
 
         log.debug("In the testSuccessfulPostVideoHearing() method");
         final String username = String.format("abc" + new Random().nextInt(999999));
@@ -77,5 +77,83 @@ public class VideoHearingTest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken,
                 null);
+    }
+
+    @Test
+    public void testAmendVideoHearing() throws Exception {
+
+        log.debug("In the testSuccessfulPostVideoHearing() method");
+        final String username = String.format("abc" + new Random().nextInt(999999));
+        final String payloadForVideoHearing =
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
+
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                payloadForVideoHearing);
+
+        //Make Get call for video hearing with username as query param
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("username", username);
+
+        final String hearingId = videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+
+        //Make Put call for amend video hearing with hearingId as path param
+        final String payloadForPutVideoHearing =
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/PUT-video-hearing-request.json"), username);
+        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
+        videoHearingSteps.makePutForVideoHearing(videohearings_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                payloadForPutVideoHearing);
+
+        //Make Get call for video hearing with hearingId as path param
+        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
+        videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext, hearingId,
+                headersAsMap,
+                authorizationToken,
+                null);
+    }
+
+    @Test
+    public void testDeleteVideoHearing() throws Exception {
+
+        log.debug("In the testSuccessfulPostVideoHearing() method");
+        final String username = String.format("abc" + new Random().nextInt(999999));
+        final String payloadForVideoHearing =
+                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
+
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                payloadForVideoHearing);
+
+        //Make Get call for video hearing with username as query param
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("username", username);
+
+        final String hearingId = videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+
+        //Make Delete call for delete video hearing with hearingId as path param
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
+        videoHearingSteps.makeDeleteForVideoHearing(videohearings_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}");
+
+        //Verify - Cannot verify as Mock return values for Get
+        //TODO: Needs to add verify test once mapped to video hearing
+        
     }
 }
