@@ -1,27 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForRetrieve;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidSubscriptionKeyHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +15,9 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -103,7 +88,6 @@ class GET_hearings_UnitTests {
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
 
-        paramsAsMap.put("hearingIdCaseHQ", "CASE1234");
         paramsAsMap.put("hearingType", "THEFT");
         paramsAsMap.put("hearingDate", "2018-02-29T20:36:01Z");
     }
@@ -193,7 +177,7 @@ class GET_hearings_UnitTests {
 
     @Order(9)
     @ParameterizedTest(name = "Test for {0} Parameter")
-    @ValueSource(strings = {"hearingIdCaseHQ","hearingDate","hearingType"})
+    @ValueSource(strings = {"hearingDate","hearingType"})
     void testRetrieveHearingsRequestWithParam(String iteration) {
         paramsAsMap.clear();
         paramsAsMap.put(iteration, "Value");
@@ -223,7 +207,7 @@ class GET_hearings_UnitTests {
     @Test
     @Order(12)
     @DisplayName("Test for missing Access Token")
-    void testDeleteHearingRequestWithMissingAccessToken() {
+    void testRetrieveHearingRequestWithMissingAccessToken() {
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingAccessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
@@ -231,16 +215,21 @@ class GET_hearings_UnitTests {
 
     @Test
     @Order(15)
+    @DisplayName("Test only with path param")
+    void testRetrieveHearingRequestWithPathParam() {
+        final Response response = whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams();
+        thenValidateResponseForRetrieve(response);
+    }
+
+    @Test
+    @Order(16)
     @DisplayName("Test for invalid Access Token")
-    void testDeleteHearingRequestWithInvalidAccessToken() {
+    void testRetrieveHearingRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
-
-
-
 
     private Response whenRetrieveHearingsIsInvokedWithAdditionalParam() {
         return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap, paramsAsMap, targetInstance);
@@ -252,6 +241,10 @@ class GET_hearings_UnitTests {
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndParams() {
         return retrieveHearingsResponseForCorrectHeadersAndParams(hearingApiRootContext, headersAsMap,  paramsAsMap, targetInstance);
+    }
+
+    private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndPathParams() {
+        return retrieveHearingsResponseForCorrectHeadersAndPathParam(hearingApiRootContext + "/CASE1234", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveHearingsIsInvokedWithCorrectHeadersAndNoParams() {
@@ -283,6 +276,17 @@ class GET_hearings_UnitTests {
                 .auth()
                 .oauth2(accessToken)
                 .queryParams(paramsAsMap)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
+
+    private Response retrieveHearingsResponseForCorrectHeadersAndPathParam(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+
+        return given()
+                .auth()
+                .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
