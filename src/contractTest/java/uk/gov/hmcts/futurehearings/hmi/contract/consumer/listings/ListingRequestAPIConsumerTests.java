@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,11 @@ class ListingRequestAPIConsumerTests extends ContractTest {
     public static final String RESOURCES_LISTING_REQUEST_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-mandatory-payload.json";
     public static final String RESOURCES_LISTING_REQUEST_STANDARD_PAYLOAD_WITH_NO_ENTITIES_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-no-entities-payload.json";
     public static final String RESOURCES_LISTING_REQUEST_STANDARD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/listings/request-listing-standard-payload.json";
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("SNL");
+    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompletePUTPayloadWithEntitiesForRequestListingPact(

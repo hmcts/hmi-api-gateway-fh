@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,11 @@ class ResourcesByUserAPIConsumerTests extends ContractTest {
     public static final String RESOURCES_USER_REQUEST_SCHEMA_JSON = "/userMessage.json";
     public static final String RESOURCES_USER_REQUEST_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-user-complete-payload.json";
     public static final String RESOURCES_USER_REQUEST_OPTIONAL_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-user-optional-payload.json";
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("SNL");
+    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompletePOSTPayloadForRequestUserAPIPact(
