@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -36,6 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetSessionsAPIConsumerTests extends ContractTest {
 
     private static final String PROVIDER_SnL_GET_SESSION_API_PATH = "/casehqapi/rest/hmcts/resources/sessions";

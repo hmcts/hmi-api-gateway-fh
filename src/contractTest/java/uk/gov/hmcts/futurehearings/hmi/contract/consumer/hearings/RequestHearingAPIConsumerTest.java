@@ -23,6 +23,7 @@ import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -34,8 +35,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RequestHearingAPIConsumerTest extends ContractTest {
-
 
 
     public static final String POST_HEARING_REQUEST_MESSAGE_SCHEMA_FILE = "/hearingRequestMessage.json";
@@ -56,7 +57,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithIndOrgEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPact(headersAsMap,builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload with 2 Entities(Ind and Org) populated - POST",
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -75,7 +76,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_ENTITIES_IND_ORG_PAYLOAD_JSON_PATH,
-                HttpMethod.POST,mockServer,
+                HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
@@ -85,7 +86,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createCompletePayloadWithNoEntitiesForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPact(headersAsMap,builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a complete payload with no Entities populated - POST",
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -104,7 +105,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         invokeAPI(headersAsMap,
                 getAuthorizationToken(),
                 REQUEST_HEARING_COMPLETE_STANDARD_NO_ENTITIES_PAYLOAD_JSON_PATH,
-                HttpMethod.POST,mockServer,
+                HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
@@ -115,7 +116,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createStandardPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPact(headersAsMap,builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for a standard (only outer elements) payload - POST",
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -134,7 +135,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         invokeAPI(headersAsMap,
                 authorizationToken,
                 REQUEST_HEARING_STANDARD_PAYLOAD_JSON_PATH,
-                HttpMethod.POST,mockServer,
+                HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
@@ -145,7 +146,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
     public RequestResponsePact createMandatoryPayloadForRequestHearingAPIPactPOST(
             PactDslWithProvider builder) throws IOException {
 
-        return buildPact(headersAsMap,builder,
+        return buildPact(headersAsMap, builder,
                 "Provider confirms request received for the most basic mandatory payload - POST",
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
@@ -164,7 +165,7 @@ class RequestHearingAPIConsumerTest extends ContractTest {
         invokeAPI(headersAsMap,
                 authorizationToken,
                 REQUEST_HEARING_MANDATORY_PAYLOAD_JSON_PATH,
-                HttpMethod.POST,mockServer,
+                HttpMethod.POST, mockServer,
                 PROVIDER_REQUEST_SnL_HEARING_API_PATH,
                 HttpStatus.OK);
         Assertions.assertTrue(true);
