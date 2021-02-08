@@ -1,0 +1,117 @@
+<policies>
+    <inbound>
+        <base />
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Access denied due to invalid OAuth information">
+            <openid-config url="https://sts.windows.net/531ff96d-0ae9-462a-8d2d-bec7c0b42082/.well-known/openid-configuration" />
+            <audiences>
+                <audience>api://d49d7fa2-6904-4223-a907-3b8992af4190</audience>
+            </audiences>
+            <issuers>
+                <issuer>https://sts.windows.net/531ff96d-0ae9-462a-8d2d-bec7c0b42082/</issuer>
+            </issuers>
+            <required-claims>
+                <claim name="roles" match="all">
+                    <value>hmiGateway</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+        <cors>
+            <allowed-origins>
+                <origin>*</origin>
+            </allowed-origins>
+            <allowed-methods>
+                <method>GET</method>
+                <method>POST</method>
+            </allowed-methods>
+        </cors>
+        <!-- set a header to enable mocks -->
+        <set-header name="_EnableMocks" exists-action="override">
+            <value>true</value>
+        </set-header>
+        <set-header name="Request-Processed-At" exists-action="override">
+            <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
+        </set-header>
+        <set-header name="transactionIdHMCTS" exists-action="skip">
+            <value>@{
+                var guidBinary = new byte[16];
+                Array.Copy(Guid.NewGuid().ToByteArray(), 0, guidBinary, 0, 10);
+                long time = DateTime.Now.Ticks;
+                byte[] bytes = new byte[6];
+                unchecked
+                {
+                    bytes[5] = (byte)(time >> 40);
+                    bytes[4] = (byte)(time >> 32);
+                    bytes[3] = (byte)(time >> 24);
+                    bytes[2] = (byte)(time >> 16);
+                    bytes[1] = (byte)(time >> 8);
+                    bytes[0] = (byte)(time);
+                }
+                Array.Copy(bytes, 0, guidBinary, 10, 6);
+                return new Guid(guidBinary).ToString();
+                }</value>
+        </set-header>
+        <check-header name="Source-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Source-System" ignore-case="false">
+            <value>SNL</value>
+            <value>MOCK</value>
+            <value>EMULATOR</value>
+            <value>CRIME</value>
+            <value>CFT</value>
+            <value>RM</value>
+        </check-header>
+        <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="false">
+            <value>SNL</value>
+            <value>MOCK</value>
+            <value>EMULATOR</value>
+            <value>CRIME</value>
+            <value>CFT</value>
+            <value>ELINKS</value>
+            <value>VH</value>
+            <value>RM</value>
+        </check-header>
+        <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true" />
+        <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+            <value>application/json; version=1.2</value><!--Additional header for passing McGirr tests -->
+        </check-header>
+        <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
+            <value>application/json</value>
+            <value>application/json;charset=UTF-8</value>
+            <value>application/json; charset=UTF-8</value>
+        </check-header>
+        <choose>
+            <when condition="@(context.Request.Headers["Request-Created-At"] == null)">
+                <return-response>
+                    <set-status code="400" reason="Malformed request." />
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("statusCode", 400),
+                        new JProperty("message", "Missing/Invalid Header Request-Created-At")
+                        ).ToString();
+                        }</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <choose>
+            <when condition="@(!Regex.IsMatch(context.Request.Headers.GetValueOrDefault("Request-Created-At",""), @"^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt| ]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500)))">
+                <return-response>
+                    <set-status code="400" reason="Bad request - &apos;Invalid Request-Created-At&apos; http header" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@(
+                        new JObject(new JProperty("statusCode", 400),
+                        new JProperty("message", "Missing/Invalid Header Request-Created-At")).ToString())</set-body>
+                </return-response>
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
