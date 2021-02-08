@@ -14,7 +14,7 @@
                         }</set-body>
                 </send-request>
                 <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/" />
+                <set-backend-service base-url="#{vhHost}#/hearings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/delete" />
