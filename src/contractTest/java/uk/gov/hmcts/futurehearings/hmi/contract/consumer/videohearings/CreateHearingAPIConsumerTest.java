@@ -5,6 +5,7 @@ import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.PACTFacto
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.RestDelegate.invokeAPIWithPayloadBody;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.getRFC3339FormattedDateForwardDays;
 import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.TestingUtils.readFileContents;
+import static uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.header.factory.HeaderFactory.createStandardSnLHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.contract.consumer.common.test.ContractTest;
@@ -18,7 +19,10 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -30,6 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreateHearingAPIConsumerTest extends ContractTest {
 
     public static final String CREATE_HEARING_MANDATORY_PAYLOAD_JSON_PATH
@@ -41,6 +46,11 @@ class CreateHearingAPIConsumerTest extends ContractTest {
     private static final String PROVIDER_CREATE_A_HEARING_API_PATH = "/hearings";
 
     private String inputPayload = null;
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("VH");
+    }
 
     @Pact(provider = "VideoHearings_API", consumer = "HMI_API")
     public RequestResponsePact createMandatoryPayloadToCreateAHearingAPIPactPOST(

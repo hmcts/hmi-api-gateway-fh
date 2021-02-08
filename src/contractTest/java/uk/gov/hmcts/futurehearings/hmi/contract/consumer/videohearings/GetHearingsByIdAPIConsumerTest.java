@@ -18,7 +18,9 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.restassured.response.Response;
 import org.json.JSONException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -30,10 +32,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GetHearingsByIdAPIConsumerTest extends ContractTest {
 
     private static final String PROVIDER_VIDEO_HEARINGS_API = "/hearings/12345";
     public static final String GET_HEARINGS_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/response/videohearings/get-hearings-by-id-response.json";
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("VH");
+    }
 
     @Pact(provider = "VideoHearings_API", consumer = "HMI_API")
     public RequestResponsePact createCompleteGetHearingsResponsePact(

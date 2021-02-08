@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,7 @@ public class HearingsAPITest extends FunctionalTest {
     HearingsSteps hearingsSteps;
 
     @Test
+    @Ignore
     public void testRequestAndAmendHearing() throws IOException {
 
         log.debug("In the testRequestAndAmendHearing () method");
