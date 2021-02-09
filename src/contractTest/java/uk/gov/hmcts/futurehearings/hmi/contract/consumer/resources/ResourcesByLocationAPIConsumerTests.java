@@ -21,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -33,6 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
     public static final String POST_RESOURCE_LISTING_LOCATION_MESSAGE_SCHEMA_FILE = "/locationMessage.json";
@@ -40,6 +43,11 @@ class ResourcesByLocationAPIConsumerTests extends ContractTest {
 
     public static final String REQUEST_LISTING_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-complete-payload.json";
     public static final String REQUEST_LISTING_OPTIONAL_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/payload/resources/request-location-optional-payload.json";
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("SNL");
+    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompletePayloadRequestResourceLocationAPIPactPOST(

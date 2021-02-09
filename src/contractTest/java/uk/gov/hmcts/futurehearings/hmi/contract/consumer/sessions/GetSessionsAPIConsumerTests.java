@@ -22,7 +22,9 @@ import io.restassured.response.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -35,6 +37,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetSessionsAPIConsumerTests extends ContractTest {
 
     private static final String PROVIDER_SnL_GET_SESSION_API_PATH = "/casehqapi/rest/hmcts/resources/sessions";
@@ -42,6 +45,11 @@ class GetSessionsAPIConsumerTests extends ContractTest {
     public static final String GET_SESSION_RESPONSE_SCHEMA_JSON = "/getSessionsResponseMessage.json";
     public static final String GET_SESSION_COMPLETE_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/response/sessions/get-sessions-complete-response.json";
     public static final String GET_SESSION_MANDATORY_PAYLOAD_JSON_PATH = "uk/gov/hmcts/futurehearings/hmi/contract/consumer/response/sessions/get-sessions-mandatory-response.json";
+
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        this.setDestinationSystem("SNL");
+    }
 
     @Pact(provider = "SandL_API", consumer = "HMI_API")
     public RequestResponsePact createCompleteGetSessionsResponsePact(
