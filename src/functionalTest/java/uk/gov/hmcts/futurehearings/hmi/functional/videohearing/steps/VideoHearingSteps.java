@@ -20,7 +20,7 @@ public class VideoHearingSteps {
     private String actor;
 
     @Step("User makes a request to Post Video Hearing API")
-    public void makePostForVideoHearing(final String apiURL,
+    public void shouldCreateVideoHearing(final String apiURL,
                                         final Map<String, Object> headersAsMap,
                                         final String authorizationToken,
                                         final String body) {
@@ -31,8 +31,21 @@ public class VideoHearingSteps {
         assertEquals(HttpStatus.CREATED.value(),response.getStatusCode());
     }
 
+    @Step("User makes a request to Video Hearing API with invalid payload")
+    public void shouldRequestVideoHearingWithInvalidPayload(final String apiURL,
+                                         final Map<String, Object> headersAsMap,
+                                         final String authorizationToken,
+                                         final HttpMethod httpMethod,
+                                         final String body) {
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, httpMethod, HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
+    }
+
     @Step("User makes a request to Put Video Hearing API")
-    public void makePutForVideoHearing(final String apiURL,
+    public void shouldAmendVideoHearing(final String apiURL,
                                         final Map<String, Object> headersAsMap,
                                         final String authorizationToken,
                                         final String body) {
@@ -44,7 +57,7 @@ public class VideoHearingSteps {
     }
 
     @Step("User makes a request to Delete Video Hearing API")
-    public void makeDeleteForVideoHearing(final String apiURL,
+    public void shouldDeleteVideoHearing(final String apiURL,
                                        final Map<String, Object> headersAsMap,
                                        final String authorizationToken,
                                        final String body) {
@@ -71,7 +84,7 @@ public class VideoHearingSteps {
     }
 
     @Step("User makes a request to Get Video hearing by ID")
-    public void performVideoHearingGetByHearingId(final String apiURL,
+    public void shouldFetchVideoHearingByHearingId(final String apiURL,
                                                    final String hearingId,
                                                    final Map<String, Object> headersAsMap,
                                                    final String authorizationToken,

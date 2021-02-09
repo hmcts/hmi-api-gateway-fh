@@ -17,9 +17,11 @@ import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
@@ -41,6 +43,8 @@ public class VideoHearingTest extends FunctionalTest {
     @Steps
     VideoHearingSteps videoHearingSteps;
 
+    public static final String VIDEO_HEARING_INPUT_PATH = "uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input";
+
     @Before
     public void initialiseValues() throws Exception {
         super.initialiseValues();
@@ -53,11 +57,11 @@ public class VideoHearingTest extends FunctionalTest {
         log.debug("In the testSuccessfulPostVideoHearing() method");
         final String username = String.format("abc" + new Random().nextInt(999999));
         final String payloadForVideoHearing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/POST-video-hearing-request.json"), username);
 
         //Make Post call for video hearing with username
         headersAsMap = createStandardHMIHeader("MOCK");
-        videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
+        videoHearingSteps.shouldCreateVideoHearing(videohearingsRootContext,
                 headersAsMap,
                 authorizationToken,
                 payloadForVideoHearing);
@@ -73,10 +77,36 @@ public class VideoHearingTest extends FunctionalTest {
 
         //Make Get call for video hearing with hearingId as path param
         videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
-        videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext, hearingId,
+        videoHearingSteps.shouldFetchVideoHearingByHearingId(videohearings_idRootContext, hearingId,
                 headersAsMap,
                 authorizationToken,
                 null);
+    }
+
+    @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
+    @Test
+    public void testCreateVideoHearingWithEmptyPayload() throws Exception {
+
+        log.debug("In the testCreateVideoHearingWithEmptyPayload() method");
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "{}");
+    }
+
+    @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
+    @Test
+    public void testCreateVideoHearingWithXmlPayload() throws Exception {
+
+        log.debug("In the testCreateVideoHearingWithXmlPayload() method");
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "<xml><test></xml>");
     }
 
     @Test
@@ -85,11 +115,11 @@ public class VideoHearingTest extends FunctionalTest {
         log.debug("In the testSuccessfulPostVideoHearing() method");
         final String username = String.format("abc" + new Random().nextInt(999999));
         final String payloadForVideoHearing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/POST-video-hearing-request.json"), username);
 
         //Make Post call for video hearing with username
         headersAsMap = createStandardHMIHeader("MOCK");
-        videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
+        videoHearingSteps.shouldCreateVideoHearing(videohearingsRootContext,
                 headersAsMap,
                 authorizationToken,
                 payloadForVideoHearing);
@@ -105,19 +135,85 @@ public class VideoHearingTest extends FunctionalTest {
 
         //Make Put call for amend video hearing with hearingId as path param
         final String payloadForPutVideoHearing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/PUT-video-hearing-request.json"), username);
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/PUT-video-hearing-request.json"), username);
         videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
-        videoHearingSteps.makePutForVideoHearing(videohearings_idRootContext,
+        videoHearingSteps.shouldAmendVideoHearing(videohearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 payloadForPutVideoHearing);
 
         //Make Get call for video hearing with hearingId as path param
         videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
-        videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext, hearingId,
+        videoHearingSteps.shouldFetchVideoHearingByHearingId(videohearings_idRootContext, hearingId,
                 headersAsMap,
                 authorizationToken,
                 null);
+    }
+
+    @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
+    @Test
+    public void testAmendVideoHearingWithEmptyPayload() throws Exception {
+
+        log.debug("In the testSuccessfulPostVideoHearing() method");
+        final String username = String.format("abc" + new Random().nextInt(999999));
+        final String payloadForVideoHearing =
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/POST-video-hearing-request.json"), username);
+
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.shouldCreateVideoHearing(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                payloadForVideoHearing);
+
+        //Make Get call for video hearing with username as query param
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("username", username);
+
+        final String hearingId = videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+
+        //Make Put call for amend video hearing with hearingId as path param
+        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
+        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videohearings_idRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "{}");
+    }
+
+    @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
+    @Test
+    public void testAmendVideoHearingWithXmlPayload() throws Exception {
+
+        log.debug("In the testSuccessfulPostVideoHearing() method");
+        final String username = String.format("abc" + new Random().nextInt(999999));
+        final String payloadForVideoHearing =
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/POST-video-hearing-request.json"), username);
+
+        //Make Post call for video hearing with username
+        headersAsMap = createStandardHMIHeader("MOCK");
+        videoHearingSteps.shouldCreateVideoHearing(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                payloadForVideoHearing);
+
+        //Make Get call for video hearing with username as query param
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("username", username);
+
+        final String hearingId = videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+
+        //Make Put call for amend video hearing with hearingId as path param
+        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
+        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videohearings_idRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "<xml><test></xml>");
     }
 
     @Test
@@ -126,11 +222,11 @@ public class VideoHearingTest extends FunctionalTest {
         log.debug("In the testSuccessfulPostVideoHearing() method");
         final String username = String.format("abc" + new Random().nextInt(999999));
         final String payloadForVideoHearing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/videohearing/input/POST-video-hearing-request.json"), username);
+                String.format(readFileContents(VIDEO_HEARING_INPUT_PATH + "/POST-video-hearing-request.json"), username);
 
         //Make Post call for video hearing with username
         headersAsMap = createStandardHMIHeader("MOCK");
-        videoHearingSteps.makePostForVideoHearing(videohearingsRootContext,
+        videoHearingSteps.shouldCreateVideoHearing(videohearingsRootContext,
                 headersAsMap,
                 authorizationToken,
                 payloadForVideoHearing);
@@ -147,7 +243,7 @@ public class VideoHearingTest extends FunctionalTest {
         //Make Delete call for delete video hearing with hearingId as path param
         headersAsMap = createStandardHMIHeader("MOCK");
         videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
-        videoHearingSteps.makeDeleteForVideoHearing(videohearings_idRootContext,
+        videoHearingSteps.shouldDeleteVideoHearing(videohearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}");
@@ -156,4 +252,5 @@ public class VideoHearingTest extends FunctionalTest {
         //TODO: Needs to add verify test once mapped to video hearing
         
     }
+
 }
