@@ -84,7 +84,6 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
-    @Test
     public void testCreateVideoHearingWithEmptyPayload() throws Exception {
 
         log.debug("In the testCreateVideoHearingWithEmptyPayload() method");
@@ -97,7 +96,6 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
-    @Test
     public void testCreateVideoHearingWithXmlPayload() throws Exception {
 
         log.debug("In the testCreateVideoHearingWithXmlPayload() method");
@@ -151,7 +149,6 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
-    @Test
     public void testAmendVideoHearingWithEmptyPayload() throws Exception {
 
         log.debug("In the testSuccessfulPostVideoHearing() method");
@@ -184,7 +181,6 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Disabled("Disabling this test as functional test is pointing to MOCK which supports any format and return success")
-    @Test
     public void testAmendVideoHearingWithXmlPayload() throws Exception {
 
         log.debug("In the testSuccessfulPostVideoHearing() method");
