@@ -1,10 +1,12 @@
 resource "azurerm_key_vault" "hmi_apim_kv" {
-  name                = "${var.prefix}-${var.product}-kv-${var.environment}"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.hmi_apim_rg.name
-  tenant_id           = var.tenant_id
-  sku_name            = var.kv_sku_name
-  tags                = var.tags
+  name                       = "${var.prefix}-${var.product}-kv-${var.environment}"
+  location                   = var.location
+  resource_group_name        = azurerm_resource_group.hmi_apim_rg.name
+  tenant_id                  = var.tenant_id
+  sku_name                   = var.kv_sku_name
+  tags                       = var.tags
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
 }
 
 resource "azurerm_key_vault_access_policy" "permissions" {
