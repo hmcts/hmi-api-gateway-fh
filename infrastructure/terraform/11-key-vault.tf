@@ -5,8 +5,8 @@ resource "azurerm_key_vault" "hmi_apim_kv" {
   tenant_id                  = var.tenant_id
   sku_name                   = var.kv_sku_name
   tags                       = var.tags
+  soft_delete_enabled        = true
   soft_delete_retention_days = 7
-  purge_protection_enabled   = false
 }
 
 resource "azurerm_key_vault_access_policy" "permissions" {
