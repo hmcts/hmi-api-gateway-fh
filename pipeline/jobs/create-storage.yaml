@@ -27,6 +27,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         echo "Obtaining storage key..."
+        echo $(devopsResourceGroup)
         key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
         echo "Creating storage container"
         container="test-results-"$(date +"%m-%d-%y")
