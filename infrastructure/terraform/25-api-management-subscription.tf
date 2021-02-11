@@ -20,7 +20,7 @@ resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
 
 resource "azurerm_key_vault_access_policy" "shared_kv_premissions" {
   key_vault_id       = data.azurerm_key_vault.infra_key_vault.id
-  tenant_id          = azurerm_key_vault.hmi_apim_kv.tenant_id
+  tenant_id          = adata.azurerm_key_vault.infra_key_vault.tenant_id
   object_id          = azurerm_api_management.hmi_apim.identity[0].principal_id
   secret_permissions = var.secret_permissions
 }
