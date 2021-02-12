@@ -31,4 +31,5 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         az group delete --name ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
+        az group wait --deleted --resource-group ${{ parameters.resourceGroup }}
       
