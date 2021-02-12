@@ -2,7 +2,7 @@
         <inbound>
             <base />
             #{ipWhitelist}#
-            <rate-limit-by-key  calls="100" renewal-period="60"  counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))" />
+            <rate-limit-by-key  calls="1000" renewal-period="60"  counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))" />
         </inbound>
         <backend>
             <base />
