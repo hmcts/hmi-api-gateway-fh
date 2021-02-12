@@ -176,6 +176,16 @@
       "templateFile" : "api-op-request-direct-hearing-policy.xml"
     },
     {
+      "operationId"  : "update-video-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-vh-by-id-policy.xml"
+    },
+    {
+      "operationId"  : "delete-video-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-vh-by-id-policy.xml"
+    },
+    {
       "operationId"  : "retrieve-hearing-by-id",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-hearing-by-id-policy.xml"
