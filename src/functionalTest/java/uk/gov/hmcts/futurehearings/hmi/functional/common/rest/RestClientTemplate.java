@@ -51,7 +51,7 @@ public class RestClientTemplate {
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
                         .basePath(apiURL)
-                        .when().put().then().extract().response();
+                        .when().delete().then().extract().response();
                 break;
             case GET :
                 response =
