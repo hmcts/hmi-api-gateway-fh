@@ -4,9 +4,6 @@ parameters:
   
   - name: resourceGroup
     type: string
-  
-  - name: apim
-    type: string
 
 jobs:
 - job: deleteAPIM
@@ -33,5 +30,5 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az apim delete -n ${{ parameters.apim }} -g ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
+        az group delete --name ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
       
