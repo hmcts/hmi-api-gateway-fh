@@ -25,7 +25,7 @@
                         </send-request>
                         <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
                     </when>
-                </choose>
+                <choose>
                 <set-header name="Authorization" exists-action="override">
                     <value>@((String)context.Variables["snlAuthToken"])</value>
                 </set-header>
