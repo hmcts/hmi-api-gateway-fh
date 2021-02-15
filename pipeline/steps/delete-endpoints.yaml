@@ -17,7 +17,7 @@ steps:
 
         foreach ($_ in $endpoints) {
           $operationId = $_.operationId
-          Remove-AzApiManagementOperation -Context $apimContext -ApiId "hmi-apim-api"  -OperationId $operationId -Force
+          Remove-AzApiManagementOperation -Context $apimContext -ApiId "hmi-apim-api"  -OperationId $operationId
           Write-Host "Deleted endpoint: $operationId"
         }
       }else{
