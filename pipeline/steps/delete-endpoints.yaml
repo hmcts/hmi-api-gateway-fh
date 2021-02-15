@@ -10,7 +10,7 @@ steps:
     ScriptType: 'InlineScript'
     Inline: |
       $supportedEnvironments = @("stg", "prod")
-      $toDelete = $supportedEnvironments -contains $(environment)
+      $toDelete = $supportedEnvironments -contains "$(environment)"
       if($toDelete){
         $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
         $endpoints = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\delete-endpoints.json -Raw | ConvertFrom-Json).endpoints
