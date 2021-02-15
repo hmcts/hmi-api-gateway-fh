@@ -22,16 +22,11 @@
                 <set-header name="Authorization" exists-action="override">
                     <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
-                <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="#{vhHost}#/hearings" />
+                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-                <mock-response status-code="200" content-type="application/json" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/update-video-hearing/" />
+                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
+                <mock-response status-code="201" content-type="application/json" />
             </when>
         </choose>
     </inbound>
