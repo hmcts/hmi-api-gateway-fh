@@ -11,7 +11,7 @@
                     </set-header>
                     <set-body>@{
                         return "client_id=#{vhAuthClient}#&resource=#{vhAuthResource}#&client_secret=#{vhAuthSecret}#&grant_type=client_credentials";
-                        }</set-body>
+                    }</set-body>
                 </send-request>
                 <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
