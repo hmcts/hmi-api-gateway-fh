@@ -128,7 +128,7 @@
     {
       "operationId"  : "request-video-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-create-video-hearing-policy.xml"
+      "templateFile" : "api-op-create-vh-policy.xml"
     },
     {
       "operationId"  : "get-people",
