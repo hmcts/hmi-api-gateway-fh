@@ -153,6 +153,13 @@ stages:
         dependsOn: 
         - TerraformApply
         - ApplyHostName
+    - template: pipeline/jobs/delete-endpoints.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
+        dependsOn: 
+        - TerraformApply
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
