@@ -9,12 +9,16 @@ steps:
     azureSubscription: ${{ parameters.subscription }}
     ScriptType: 'InlineScript'
     Inline: |
-      $supportedEnvironments = @("stg", "prod")
+      $supportedEnvironments = @("dev","stg", "prod")
       $toDelete = $supportedEnvironments -contains "$(environment)"
       if($toDelete){
         $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
         $endpoints = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\delete-endpoints.json -Raw | ConvertFrom-Json).endpoints
         Write-Host "Deleting endpoints in ${environment}.  Please wait..."
+        foreach ($_ in $endpoints) {
+          $operationId = $_.operationId
+          Write-Host "Deleting endpoint: $operationId"
+        }
       }else{
         Write-Host "Nothing to delete for environment: $(environment)"
       }

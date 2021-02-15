@@ -1,9 +1,6 @@
 {
   "endpoints": [
     {
-      "operationId"  : "health-check"
-    },
-    {
       "operationId"  : "secure"
     },
     {
