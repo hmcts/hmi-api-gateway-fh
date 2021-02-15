@@ -14,10 +14,11 @@ steps:
       if($toDelete){
         $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
         $endpoints = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\delete-endpoints.json -Raw | ConvertFrom-Json).endpoints
-        Write-Host "Deleting endpoints in ${environment}.  Please wait..."
+
         foreach ($_ in $endpoints) {
           $operationId = $_.operationId
-          Write-Host "Deleting endpoint: $operationId"
+          Remove-AzApiManagementOperation -Context $apimContext -ApiId "hmi-apim-api"  -OperationId $operationId -Force
+          Write-Host "Deleted endpoint: $operationId"
         }
       }else{
         Write-Host "Nothing to delete for environment: $(environment)"
