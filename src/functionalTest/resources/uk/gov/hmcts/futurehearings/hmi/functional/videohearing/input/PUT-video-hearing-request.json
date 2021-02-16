@@ -1,0 +1,17 @@
+{
+  "scheduled_date_time": "2021-02-04T16:00:27.921Z",
+  "scheduled_duration": 0,
+  "hearing_venue_name": "string",
+  "hearing_room_name": "string",
+  "other_information": "string",
+  "cases": [
+    {
+      "number": "string",
+      "name": "string",
+      "is_lead_case": true
+    }
+  ],
+  "updated_by": "string",
+  "questionnaire_not_required": true,
+  "audio_recording_required": true
+}
