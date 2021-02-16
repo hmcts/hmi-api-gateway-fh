@@ -2,7 +2,7 @@
   "scheduled_date_time": "2021-02-04T16:00:27.921Z",
   "scheduled_duration": 0,
   "hearing_venue_name": "string",
-  "hearing_room_name": "string",
+  "hearing_room_name": "%s",
   "other_information": "string",
   "cases": [
     {
