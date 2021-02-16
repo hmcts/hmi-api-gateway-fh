@@ -3,19 +3,19 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{hearingIdCaseHQ}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{hearingIdCaseHQ}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-                <rewrite-uri template="/{hearingIdCaseHQ}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{hearingIdCaseHQ}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
