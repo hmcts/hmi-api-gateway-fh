@@ -214,11 +214,11 @@ class DELETE_hearings_UnitTests {
 	}
 
 	private Response deleteHearingAuth(final String input) {
-		return httpClient.httpDelete(hearingApiRootContext, headersAsMap, paramsAsMap, input);
+		return httpClient.httpDelete(hearingApiRootContext  + "/h123", headersAsMap, paramsAsMap, input);
 	}
 
 	private Response deteHearingNoAuth(final String input) {
-		return httpClient.httpDeleteNoAuth(hearingApiRootContext, headersAsMap, paramsAsMap, input);
+		return httpClient.httpDeleteNoAuth(hearingApiRootContext  + "/h123", headersAsMap, paramsAsMap, input);
 	}
 
 	private String givenAPayload(final String path) throws IOException {
