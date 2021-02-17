@@ -44,7 +44,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(hearingsApiRootContext);
+        this.setRelativeURL(hearingsApiRootContext + "/h123");
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
@@ -56,7 +56,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @Test
     @DisplayName("Delete Hearings Request with Hearing Id in Uri")
     void deleteHearingsRequestWithInvalidUri() throws Exception {
-        this.setRelativeURL(hearingsApiRootContext + "/1234");
+        this.setRelativeURL(hearingsApiRootContext + "/invalid/1234");
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
