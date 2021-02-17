@@ -3,19 +3,19 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-                <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{listingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">

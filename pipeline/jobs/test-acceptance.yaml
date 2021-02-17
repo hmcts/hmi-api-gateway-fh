@@ -43,6 +43,6 @@ jobs:
     parameters:
       zipName: acceptance_tests
       subscription: ${{ parameters.subscription }}
-      resourceGroup: $(resourceGroup)
-      storageAccount: $(storageAccount)
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
       storageContainer: $(storageContainer)
