@@ -3,7 +3,7 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+               <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
@@ -27,6 +27,10 @@
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
                 <mock-response status-code="201" content-type="application/json" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/create-video-hearing/" />
             </when>
         </choose>
     </inbound>
