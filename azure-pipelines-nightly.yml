@@ -33,7 +33,6 @@ stages:
       parameters:
         subscription: DTS-SHAREDSERVICES-TEST
         resourceGroup: hmi-apim-test-rg
-        apim: hmi-apim-svc-test
 
   - stage: PlanTEST
     dependsOn: DeleteAPIM

@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 import static uk.gov.hmcts.futurehearings.hmi.functional.videohearing.process.VideoHearingLookUpResponseProcess.getHearingId;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -74,32 +76,68 @@ public class VideoHearingSteps {
                                        final String authorizationToken,
                                        final Map<String, String> queryParameters) throws Exception {
 
-        String hearingId = getHearingId(callRestEndpointWithPayload(apiURL,
+        System.out.println("URL" + apiURL);
+        String hearingId = getHearingId(callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                null, HttpMethod.GET,HttpStatus.OK));
+                queryParameters, HttpStatus.OK));
 
         assertTrue(Objects.nonNull(hearingId) && !hearingId.trim().equals(""));
         return hearingId;
     }
 
     @Step("User makes a request to Get Video hearing by ID")
-    public void shouldFetchVideoHearingByHearingId(final String apiURL,
-                                                   final String hearingId,
+    public Response shouldFetchVideoHearingByHearingId(final String apiURL,
                                                    final Map<String, Object> headersAsMap,
                                                    final String authorizationToken,
-                                                   final Map<String, String> queryParameters) throws Exception {
+                                                   final Map<String, String> queryParameters
+                                                   ) throws Exception {
 
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
                 null, HttpMethod.GET,HttpStatus.OK);
+        return response;
+    }
 
+    @Step("Verify video hearing created")
+    public void assertVideoHearingCreated(Response response, final String hearingId) throws Exception {
         assertEquals(HttpStatus.OK.value(),response.getStatusCode());
 
         JSONObject peopleObj = new JSONObject(response.body().asString());
         assertEquals(hearingId ,peopleObj.getString("id"));
         assertTrue(!StringUtils.isEmpty(peopleObj.getString("hearing_venue_name")));
         assertTrue(!StringUtils.isEmpty(peopleObj.getString("scheduled_date_time")));
+    }
+
+    @Step("Verify video hearing updated")
+    public void assertVideoHearingUpdated(Response response,
+                                             final String hearingId,
+                                             final String updatedHearingRoomName) throws Exception {
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+
+        JSONObject peopleObj = new JSONObject(response.body().asString());
+        assertEquals(hearingId ,peopleObj.getString("id"));
+        assertTrue(!StringUtils.isEmpty(peopleObj.getString("hearing_room_name")));
+        assertEquals(updatedHearingRoomName ,peopleObj.getString("hearing_room_name"));
+    }
+
+    @Step("Verify video hearing deleted")
+    public void assertVideoHearingDeleted(final String apiURL,
+                                                       final Map<String, Object> headersAsMap,
+                                                       final String authorizationToken,
+                                                       final Map<String, String> queryParameters,
+                                                       final String hearingId
+    ) throws Exception {
+
+        Response response = callRestEndpointWithQueryParams(apiURL,
+                headersAsMap,
+                authorizationToken,
+                queryParameters, HttpStatus.OK);
+        JSONArray jsonArray = new JSONArray(response.body().asString());
+        for(int i=0; i<jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            assertTrue(!jsonObject.getString("id").equalsIgnoreCase(hearingId));
+        }
     }
 }
