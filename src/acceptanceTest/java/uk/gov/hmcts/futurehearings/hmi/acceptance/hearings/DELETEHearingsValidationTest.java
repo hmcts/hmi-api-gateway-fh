@@ -38,13 +38,13 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
 
-    @Value("${hearingsApiRootContext}")
-    private String hearingsApiRootContext;
+    @Value("${hearings_idRootContext}")
+    private String hearings_idRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(hearingsApiRootContext + "/h123");
+        this.setRelativeURL(String.format(hearings_idRootContext,"12345"));
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.OK);
@@ -56,7 +56,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @Test
     @DisplayName("Delete Hearings Request with Hearing Id in Uri")
     void deleteHearingsRequestWithInvalidUri() throws Exception {
-        this.setRelativeURL(hearingsApiRootContext + "/invalid/1234");
+        this.setRelativeURL(String.format(hearings_idRootContext,"/invalid/12345"));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
