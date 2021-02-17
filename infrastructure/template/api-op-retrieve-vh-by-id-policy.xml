@@ -3,7 +3,7 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+               <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
@@ -22,8 +22,8 @@
                 <set-header name="Authorization" exists-action="override">
                     <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
-                <rewrite-uri template="/resources/video-hearing/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net" />
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/resources/video-hearing" />
