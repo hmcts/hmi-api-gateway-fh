@@ -29,6 +29,10 @@
                 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/delete" />
                 <mock-response status-code="204" content-type="application/json" />
             </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/delete-video-hearing/" />
+            </when>
         </choose>
     </inbound>
     <backend>

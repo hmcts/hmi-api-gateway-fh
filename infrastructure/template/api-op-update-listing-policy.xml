@@ -3,11 +3,11 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
@@ -29,7 +29,7 @@
                 <set-header name="Authorization" exists-action="override">
                      <value>@((String)context.Variables["snlAuthToken"])</value>
                 </set-header>
-                <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                <set-header name="Content-Type" exists-action="override">
                     <value>application/json; charset=utf-8</value>
                 </set-header>
@@ -44,7 +44,7 @@
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{caseListingRequestId}" copy-unmatched-params="true" />
+                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
