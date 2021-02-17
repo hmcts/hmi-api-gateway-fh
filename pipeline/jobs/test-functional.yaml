@@ -48,6 +48,6 @@ jobs:
     parameters:
       zipName: functional_tests
       subscription: ${{ parameters.subscription }}
-      resourceGroup: $(resourceGroup)
-      storageAccount: $(storageAccount)
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
       storageContainer: $(storageContainer)

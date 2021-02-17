@@ -74,7 +74,7 @@ jobs:
   - template: ../steps/publish-test-results.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
-      resourceGroup: $(resourceGroup)
-      storageAccount: $(storageAccount)
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
       zipName: ${{ parameters.displayName }}
       storageContainer: $(storageContainer)
