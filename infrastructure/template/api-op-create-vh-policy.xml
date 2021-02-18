@@ -1,42 +1,7 @@
 <policies>
     <inbound>
         <base />
-        <set-variable name="invalidQueryParams" value="@{
-                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                string[] allowedKeys = {"username"};
-                bool invalidQueryParam = false;
-                if(context.Request.Url.Query.Count &gt; 0){
-                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
-                    {
-                        bool keyFound = false;
-                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
-                        {
-                            if (qryPrmKeys[i] == allowedKeys[j]){
-                                keyFound = true;
-                                break;
-                            }
-                        }
-                        if(!keyFound){
-                            invalidQueryParam = true;
-                            break;
-                        }
-                    }
-                }
-
-                return invalidQueryParam;
-            }" />
         <choose>
-            <when condition="@(context.Request.Url.Query.Count > 1 || (bool)context.Variables["invalidQueryParams"])">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                        new JProperty("statusCode", 400),
-                        new JProperty("message", "Invalid query parameter/s in the request URL.")
-                        ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
                 <choose>
@@ -60,20 +25,13 @@
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
-                <set-header name="Authorization" exists-action="override">
-                    <value>Bearer fjt3Fjwu_Abd9yawtkEvRUut9HTsbf5D86ab2mx0_kRoFrNeaaX7vqz96ft6wGjh</value>
-                </set-header>
-                <rewrite-uri template="/api/people" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
-                <mock-response status-code="200" content-type="application/json" />
+                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
+                <mock-response status-code="201" content-type="application/json" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
                 <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-video-hearing/" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/create-video-hearing/" />
             </when>
         </choose>
     </inbound>
