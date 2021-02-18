@@ -11,8 +11,37 @@
 				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-				<rewrite-uri template="/delete-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
+                <choose>
+                    <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
+                        <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                            <set-url>#{sAndLOauthUrl}#</set-url>
+                            <set-method>POST</set-method>
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/x-www-form-urlencoded</value>
+                            </set-header>
+                            <set-body>@{
+                                return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
+                        </send-request>
+                        <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                    </when>
+                </choose>
+                <set-header name="Authorization" exists-action="override">
+                     <value>@((String)context.Variables["snlAuthToken"])</value>
+                </set-header>
+				<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+				<set-header name="Content-Type" exists-action="override">
+                    <value>application/json; charset=utf-8</value>
+                </set-header>
+                <set-header name="Request-Type" exists-action="override">
+                    <value>text</value>
+                </set-header>
+                <set-header name="Subscription-Key" exists-action="override">
+                    <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
+                </set-header>
+                <!--  Don't expose APIM subscription key to the backend. -->
+                <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
+				<set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/hearings" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/delete-hearing" copy-unmatched-params="true" />
@@ -40,6 +69,38 @@
     </backend>
     <outbound>
         <base />
+         <choose>
+            <when condition="@(context.Response.StatusCode == 401)">
+                <cache-remove-value key="snlAuth" />
+                <return-response>
+						<set-status code="502" />
+						<set-header name="Content-Type">
+							<value>application/json</value>
+						</set-header>
+						<set-body>@{
+						return new JObject(
+							new JProperty("message", "Successfully autheticated by HMI, however target system failed to autheticate. Please try again.")
+						    ).ToString();
+						}
+					</set-body>
+				</return-response>
+            </when>
+             <when condition="@(context.Response.StatusCode == 403)">
+                <cache-remove-value key="snlAuth" />
+                <return-response>
+						<set-status code="502" />
+						<set-header name="Content-Type">
+							<value>application/json</value>
+						</set-header>
+						<set-body>@{
+						return new JObject(
+							new JProperty("message", "Successfully authorized by HMI, however target system failed to authorize. Please try again.")
+						    ).ToString();
+						}
+					</set-body>
+				</return-response>
+            </when>
+        </choose>
     </outbound>
     <on-error>
         <base />
