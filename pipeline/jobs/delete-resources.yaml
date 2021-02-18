@@ -30,6 +30,4 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az group delete --name ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
-        az group wait --deleted --resource-group ${{ parameters.resourceGroup }}
-      
+        az apim delete -n ${{ parameters.apim }} -g ${{ parameters.resourceGroup }} --subscription ${{ parameters.subscription }} --yes
