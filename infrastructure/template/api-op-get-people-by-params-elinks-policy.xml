@@ -67,8 +67,8 @@
                 <mock-response status-code="200" content-type="application/json" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/retrieve-peope/" />
+                <rewrite-uri template="/retrieve-peope" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
             </when>
         </choose>
     </inbound>
