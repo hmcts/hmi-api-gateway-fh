@@ -1,0 +1,16 @@
+{
+  "endpoints": [
+    {
+      "operationId"  : "secure"
+    },
+    {
+      "operationId"  : "test-wiremock-connection"
+    },
+    {
+      "operationId"  : "emulator-health"
+    },
+    {
+      "operationId"  : "pact-health"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+parameters:
+  - name: subscription
+    type: string
+    
+steps:
+- task: AzurePowerShell@5
+  displayName: Delete Endpoints from APIM API
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'InlineScript'
+    Inline: |
+      $supportedEnvironments = @("stg", "prod")
+      $toDelete = $supportedEnvironments -contains "$(environment)"
+      if($toDelete){
+        $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
+        $endpoints = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\delete-endpoints.json -Raw | ConvertFrom-Json).endpoints
+
+        foreach ($_ in $endpoints) {
+          $operationId = $_.operationId
+          Remove-AzApiManagementOperation -Context $apimContext -ApiId "hmi-apim-api"  -OperationId $operationId
+          Write-Host "Deleted endpoint: $operationId"
+        }
+      }else{
+        Write-Host "Nothing to delete for environment: $(environment)"
+      }
+    azurePowerShellVersion: 'LatestVersion'
