@@ -27,3 +27,6 @@ jobs:
   - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
+  - template: ../steps/delete-endpoints.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
