@@ -3,192 +3,230 @@
     {
       "operationId"  : "request-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-request-hearing-policy.xml"
+      "templateFile" : "api-op-request-hearing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "health-check",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-health-check-policy.xml"
+      "templateFile" : "api-op-health-check-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-hearing-policy.xml"
+      "templateFile" : "api-op-update-hearing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "retrieve-hearings",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-hearings-policy.xml"
+      "templateFile" : "api-op-retrieve-hearings-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "schedule",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-hearing-sched-policy.xml"
+      "templateFile" : "api-op-retrieve-hearing-sched-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "resource-by-id",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-resource-by-id-policy.xml"
+      "templateFile" : "api-op-retrieve-resource-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "resources",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-resources-policy.xml"
+      "templateFile" : "api-op-retrieve-resources-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "delete-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-delete-hearing-policy.xml"
+      "templateFile" : "api-op-delete-hearing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "delete-resource",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-delete-resource-policy.xml"
+      "templateFile" : "api-op-delete-resource-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-listings",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-listing-policy.xml"
+      "templateFile" : "api-op-get-listing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-resource-location",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-resource-location-policy.xml"
+      "templateFile" : "api-op-update-resource-location-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-resource-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-resource-user-policy.xml"
+      "templateFile" : "api-op-update-resource-user-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-listings",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-listing-policy.xml"
+      "templateFile" : "api-op-get-listing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-sessions",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-sessions-policy.xml"
+      "templateFile" : "api-op-get-sessions-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-session",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-session-policy.xml"
+      "templateFile" : "api-op-update-session-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-session-by-id",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-sessions-by-id-policy.xml"
+      "templateFile" : "api-op-get-sessions-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-listing-by-id",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-listing-by-id-policy.xml"
+      "templateFile" : "api-op-get-listing-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "create-session",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-create-session-policy.xml"
+      "templateFile" : "api-op-create-session-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "delete-session",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-delete-session-policy.xml"
+      "templateFile" : "api-op-delete-session-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "secure",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-secure-policy.xml"
+      "templateFile" : "api-op-get-secure-policy.xml",
+      "errorAction"  : "Ignore"
     },
     {
       "operationId"  : "test-wiremock-connection",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-test-wiremock-policy.xml"
+      "templateFile" : "api-op-test-wiremock-policy.xml",
+      "errorAction"  : "Ignore"
     },
     {
       "operationId"  : "create-resource-location",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-create-resource-location-policy.xml"
+      "templateFile" : "api-op-create-resource-location-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "create-resource-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-create-resource-user-policy.xml"
+      "templateFile" : "api-op-create-resource-user-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-listing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-listing-policy.xml"
+      "templateFile" : "api-op-update-listing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "delete-listing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-delete-listing-policy.xml"
+      "templateFile" : "api-op-delete-listing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "request-video-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-create-vh-policy.xml"
+      "templateFile" : "api-op-create-vh-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-people",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-people-by-id-elinks-policy.xml"
+      "templateFile" : "api-op-get-people-by-id-elinks-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-people-by-params",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-people-by-params-elinks-policy.xml"
+      "templateFile" : "api-op-get-people-by-params-elinks-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-people",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-people-elinks-policy.xml"
+      "templateFile" : "api-op-update-people-elinks-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "retrieve-video-hearings",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-vh-by-id-policy.xml"
+      "templateFile" : "api-op-retrieve-vh-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "get-people",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-people-by-id-elinks-policy.xml"
+      "templateFile" : "api-op-get-people-by-id-elinks-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "retrieve-video-hering-by-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-vh-by-user-policy.xml"
+      "templateFile" : "api-op-retrieve-vh-by-user-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "emulator-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-emulator-health-policy.xml"
+      "templateFile" : "api-op-emulator-health-policy.xml",
+      "errorAction"  : "Ignore"
     },
     {
       "operationId"  : "pact-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-pact-health-policy.xml"
+      "templateFile" : "api-op-pact-health-policy.xml",
+      "errorAction"  : "Ignore"
     },
     {
       "operationId"  : "direct-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-request-direct-hearing-policy.xml"
+      "templateFile" : "api-op-request-direct-hearing-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "update-video-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-update-vh-by-id-policy.xml"
+      "templateFile" : "api-op-update-vh-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "delete-video-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-delete-vh-by-id-policy.xml"
+      "templateFile" : "api-op-delete-vh-by-id-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "retrieve-hearing-by-id",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-retrieve-hearing-by-id-policy.xml"
+      "templateFile" : "api-op-retrieve-hearing-by-id-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
