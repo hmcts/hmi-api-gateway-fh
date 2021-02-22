@@ -27,6 +27,9 @@
                     };
                     foreach (string cidrAddress in cidrList)
                     {
+                        if(cidrAddress ==  "0.0.0.0/0"){
+                            return "validIP";
+                        }
                         string[] cidrParts = cidrAddress.Split('/');
                         string[] inputIPParts = ipAddress.Split('.');
                         string[] cidrIPArray = cidrParts[0].Split('.');
