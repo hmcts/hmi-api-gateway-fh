@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -21,21 +22,32 @@ public class PeopleSteps {
     private String actor;
 
     @Step("User makes a request to Get List of People for relevant search parameters on the People API")
-    public String getPeopleIdForELinks(final String apiURL,
-                                               final Map<String, Object> headersAsMap,
-                                               final String authorizationToken,
-                                               final Map<String, String> queryParameters) throws Exception {
+    public Response shouldFetchListOfPeople(final String apiURL,
+                                       final Map<String, Object> headersAsMap,
+                                       final String authorizationToken,
+                                       final Map<String, String> queryParameters) throws Exception {
 
-        String peopleId = getPeopleId(callRestEndpointWithQueryParams(apiURL,
+        Response response = callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.OK));
+                queryParameters, HttpStatus.OK);
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+        return response;
+    }
+
+    @Step("Verify People List and Fetch people id from the first record")
+    public String assertAndFetchPeopleId(Response response) throws Exception {
+        System.out.println(response.body().asString());
+        JSONArray jsonArray = new JSONArray(response.body().asString());
+        System.out.println(jsonArray.length());
+
+        String peopleId = getPeopleId(response);
         assertTrue(Objects.nonNull(peopleId) && !peopleId.trim().equals(""));
         return peopleId;
     }
 
     @Step("User makes a request to Get List of People for relevant search parameters on the People API")
-    public void performGetByPeopleId(final String apiURL, final String peopleId,
+    public void shouldGetByPeopleId(final String apiURL, final String peopleId,
                                        final Map<String, Object> headersAsMap,
                                        final String authorizationToken,
                                        final Map<String, String> queryParameters) throws Exception {
