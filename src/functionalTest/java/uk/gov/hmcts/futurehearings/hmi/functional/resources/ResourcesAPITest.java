@@ -52,17 +52,19 @@ public class ResourcesAPITest extends FunctionalTest {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         int randomId = new Random().nextInt(99999999);
+        final String randomEmailId = randomId + "@test.com";
+
         String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
         resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForCreateResources);
 
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
         String inputBodyForAmendResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomId);
-        resourceSteps.shouldUpdateAnUser(String.format(resourcesByUser_idRootContext, randomId),
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomEmailId);
+        resourceSteps.shouldUpdateAnUser(String.format(resourcesByUser_idRootContext, randomEmailId),
                 headersAsMap,
                 authorizationToken,
                 inputBodyForAmendResources);
@@ -95,14 +97,16 @@ public class ResourcesAPITest extends FunctionalTest {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         int randomId = new Random().nextInt(99999999);
+        final String randomEmailId = randomId + "@test.com";
+
         String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
         resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForCreateResources);
 
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
         resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
@@ -114,14 +118,16 @@ public class ResourcesAPITest extends FunctionalTest {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         int randomId = new Random().nextInt(99999999);
+        final String randomEmailId = randomId + "@test.com";
+
         String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomId);
+                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
         resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForCreateResources);
 
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomId);
+        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
         resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,

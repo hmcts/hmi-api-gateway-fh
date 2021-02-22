@@ -28,6 +28,7 @@ public class ResourcesSteps {
                 body,
                 HttpMethod.POST,
                 HttpStatus.CREATED);
+        System.out.println(response.getBody().asString());
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
 
     }
