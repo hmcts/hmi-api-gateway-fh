@@ -115,12 +115,6 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "secure",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-get-secure-policy.xml",
-      "errorAction"  : "Ignore"
-    },
-    {
       "operationId"  : "test-wiremock-connection",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-test-wiremock-policy.xml",
