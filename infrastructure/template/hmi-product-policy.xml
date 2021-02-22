@@ -58,6 +58,7 @@
                 }
                 return ipAddress; }</value>
             </set-header>   
+            <!--IP Whitelist Validation -->
             #{ipWhitelist}#
             <!-- Revert X-Forwarded-For to its original value-->
             <set-header name="X-Forwarded-For" exists-action="override">
