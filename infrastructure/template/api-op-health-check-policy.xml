@@ -1,7 +1,17 @@
 <policies>
     <inbound>
-        <set-backend-service base-url="https://www.hmcts.com/hmi/health-check" />
-        <mock-response status-code="200" content-type="application/json" />
+        <return-response>
+            <set-status code="200" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+            return new JObject(
+                new JProperty("status", "Up")
+                ).ToString();
+            }
+            </set-body>
+        </return-response>
     </inbound>
     <backend>
         <base />
