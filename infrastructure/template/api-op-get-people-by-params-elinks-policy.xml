@@ -66,6 +66,10 @@
                 <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
                 <mock-response status-code="200" content-type="application/json" />
             </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/retrieve-people" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
+            </when>
         </choose>
     </inbound>
     <backend>
