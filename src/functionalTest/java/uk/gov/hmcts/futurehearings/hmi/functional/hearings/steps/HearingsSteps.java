@@ -49,6 +49,24 @@ public class HearingsSteps {
 
     }
 
+    @Step("User deletes a Hearing request")
+    public void shouldDeleteAHearing(final String apiURL,
+                                    final Map<String, Object> headersAsMap,
+                                    final String authorizationToken,
+                                    final String body) {
+
+        System.out.println(apiURL);
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                HttpMethod.DELETE,
+                HttpStatus.BAD_REQUEST);
+        System.out.println("RES" + response.getBody().asString());
+        assertEquals(HttpStatus.ACCEPTED.value(),response.getStatusCode());
+
+    }
+
     @Step("User amends a Hearing request with invalid payload")
     public void shouldRequestHearingWithInvalidPayload(final String apiURL,
                                     final Map<String, Object> headersAsMap,
