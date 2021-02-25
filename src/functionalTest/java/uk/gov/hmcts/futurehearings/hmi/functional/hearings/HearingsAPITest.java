@@ -120,4 +120,27 @@ public class HearingsAPITest extends FunctionalTest {
                 "<xml><hello></xml>");
     }
 
+    @Test
+    public void testDeleteHearingWithEmptyPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendHearing () method");
+        int randomId = new Random().nextInt(99999999);
+
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext,randomId),
+                headersAsMap,
+                authorizationToken,HttpMethod.DELETE,
+                "{}");
+    }
+
+    @Test
+    public void testDeleteHearingWithXmlPayload() throws IOException {
+
+        log.debug("In the testRequestAndAmendHearing () method");
+        int randomId = new Random().nextInt(99999999);
+
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext,randomId),
+                headersAsMap,
+                authorizationToken,HttpMethod.DELETE,
+                "<test></test>");
+    }
 }
