@@ -1,9 +1,7 @@
     <policies>
         <inbound>
             <base />
-            <!-- Save the X-Forwarded-For value -->
-            <set-variable name="originalXForwardedForValue" value="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For"))" />
-            <set-header name="X-Forwarded-For" exists-action="override">
+            <set-header name="X-HMI-ValidIP" exists-action="override">
                 <value>@{
                 int HostToNetworkOrder(int host)
                 {
@@ -15,7 +13,7 @@
                     return (short)((((int)host & 0xFF) << 8) | (int)((host >> 8) & 0xFF));
                 }
                 
-                string ipAddress = context.Request.Headers.GetValueOrDefault("x-forwarded-for",""); 
+                string ipAddress = context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""); 
                 if (!string.IsNullOrEmpty(ipAddress))
                 {
                     string[] tokens = ipAddress.Split(':'); 
@@ -61,15 +59,12 @@
                 }
                 return ipAddress; }</value>
             </set-header>   
-            <!--IP Whitelist Validation -->
-            #{ipWhitelist}#
-            <!-- Revert X-Forwarded-For to its original value-->
-            <set-header name="X-Forwarded-For" exists-action="override">
-                <value>@{
-                    return context.Variables.GetValueOrDefault<string>("originalXForwardedForValue");
-                    }
-                </value>
-            </set-header>
+            <choose>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("X-HMI-ValidIP","") != "validIP")">
+                    <!--IP Whitelist Validation -->
+                    #{ipWhitelist}#
+                </when>
+            </choose>
 
             <rate-limit-by-key  calls="#{rateCallLimit}#" renewal-period="60"  counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For",""))" />
         </inbound>
