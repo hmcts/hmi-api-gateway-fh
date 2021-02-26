@@ -1,0 +1,16 @@
+<policies>
+    <inbound>
+        <base />
+        <rewrite-uri template="/" copy-unmatched-params="true" />
+        <set-backend-service base-url="http://#{emulatorHost}#/utils/retrieve-client-ip" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
