@@ -24,7 +24,7 @@ steps:
       Write-Host "Applying Healthcheck policy"
       Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api-health" -Format "application/vnd.ms-azure-apim.policy.raw+xml" -OperationId liveness-check -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\api-health-check-policy.xml -Verbose -ErrorAction Stop
       Write-Host "Applying IpCheck policy"
-      Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api-health" -Format "application/vnd.ms-azure-apim.policy.raw+xml" -OperationId liveness-check -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\api-ip-check-policy.xml -Verbose -ErrorAction Stop
+      Set-AzApiManagementPolicy -Context $apimContext -ApiId "hmi-apim-api-health" -Format "application/vnd.ms-azure-apim.policy.raw+xml" -OperationId ip-check -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\api-ip-check-policy.xml -Verbose -ErrorAction Stop
       Write-Host "Applying Product policy"
       Set-AzApiManagementPolicy -Context $apimContext -ProductId "hmi-apim-product-$(environment)" -Format "application/vnd.ms-azure-apim.policy.raw+xml" -PolicyFilePath $(System.DefaultWorkingDirectory)\infrastructure\template\hmi-product-policy.xml -Verbose -ErrorAction Stop
     azurePowerShellVersion: 'LatestVersion'
