@@ -46,6 +46,16 @@ public class CommonHeaderHelper {
         );
     }
 
+    public static final Map<String, String> createPayloadWithCFTDestinationHeader() {
+
+        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_JSON_VALUE,
+                "2012-03-19T07:22:00Z",
+                "SNL",
+                "CFT"
+        );
+    }
+
     public static final Headers createStandardPayloadHeaderWithDuplicateValues(Map<String, String> duplicateHeaderValues) {
 
         return buildHeaderWithDoubleValues(MediaType.APPLICATION_JSON_VALUE,
