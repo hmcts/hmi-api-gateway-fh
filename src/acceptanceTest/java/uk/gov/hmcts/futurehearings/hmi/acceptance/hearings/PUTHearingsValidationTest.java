@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createPayloadWithCFTDestinationHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -68,5 +69,35 @@ class PUTHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 this.getHttpSucessStatus(), "common",
                 getHmiSuccessVerifier(),"The request was received successfully.",null);
+    }
+
+    @Test
+    @DisplayName("Successfully test update hearing with CFT destination system - should route to Emulator")
+    void test_update_hearing_with_CFT_destination_system() throws Exception {
+
+        commonDelegate.test_expected_response_for_supplied_header(
+                getAuthorizationToken(),
+                getRelativeURL(), "hearing-request-standard.json",
+                createPayloadWithCFTDestinationHeader(),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.OK, "hearings",
+                getHmiSuccessVerifier(),"The request was received successfully.",null);
+    }
+
+    @Test
+    @DisplayName("Successfully test update hearing with CFT destination system with empty payload - should route to Emulator")
+    void test_update_hearing_with_CFT_destination_system_without_body() throws Exception {
+
+        commonDelegate.test_expected_response_for_supplied_header(
+                getAuthorizationToken(),
+                getRelativeURL(), "hearing-request-without-body.json",
+                createPayloadWithCFTDestinationHeader(),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                HttpStatus.BAD_REQUEST, "hearings",
+                getHmiSuccessVerifier(),"Bad Request.",null);
     }
 }
