@@ -5,7 +5,9 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CFTEmulatorErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.CFTEmulatorResponseVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
@@ -78,12 +80,12 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "hearing-request-standard.json",
-                createPayloadWithCFTDestinationHeader(),
+                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, "hearings",
-                getHmiSuccessVerifier(),"The request was received successfully.",null);
+                new CFTEmulatorResponseVerifier(),"",null);
     }
 
     @Test
@@ -93,11 +95,11 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "hearing-request-without-body.json",
-                createPayloadWithCFTDestinationHeader(),
+                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, "hearings",
-                getHmiSuccessVerifier(),"Bad Request.",null);
+                new CFTEmulatorErrorVerifier(),"",null);
     }
 }
