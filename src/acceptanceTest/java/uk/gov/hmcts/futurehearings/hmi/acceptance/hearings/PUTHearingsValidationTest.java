@@ -5,7 +5,9 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CFTEmulatorErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.CFTEmulatorResponseVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +85,7 @@ class PUTHearingsValidationTest extends HearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, "hearings",
-                getHmiSuccessVerifier(),"",null);
+                new CFTEmulatorResponseVerifier(),"",null);
     }
 
     @Test
@@ -98,6 +100,6 @@ class PUTHearingsValidationTest extends HearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, "hearings",
-                getHmiSuccessVerifier(),"",null);
+                new CFTEmulatorErrorVerifier(),"",null);
     }
 }
