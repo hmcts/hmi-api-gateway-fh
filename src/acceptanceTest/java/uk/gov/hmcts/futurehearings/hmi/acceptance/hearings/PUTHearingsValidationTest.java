@@ -78,12 +78,12 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "hearing-request-standard.json",
-                createPayloadWithCFTDestinationHeader(),
+                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, "hearings",
-                getHmiSuccessVerifier(),"The request was received successfully.",null);
+                getHmiSuccessVerifier(),"",null);
     }
 
     @Test
@@ -93,11 +93,11 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), "hearing-request-without-body.json",
-                createPayloadWithCFTDestinationHeader(),
+                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, "hearings",
-                getHmiSuccessVerifier(),"Bad Request.",null);
+                getHmiSuccessVerifier(),"",null);
     }
 }
