@@ -53,7 +53,8 @@ public class DirectHearingSteps {
                 headersAsMap,
                 authorizationToken,
                 body, HttpMethod.POST,
-                HttpStatus.ACCEPTED);
-        assertEquals(HttpStatus.ACCEPTED.value(),response.getStatusCode());
+                HttpStatus.NO_CONTENT);
+        System.out.println(response.getBody().asString());
+        assertEquals(HttpStatus.NO_CONTENT.value(),response.getStatusCode());
     }
 }

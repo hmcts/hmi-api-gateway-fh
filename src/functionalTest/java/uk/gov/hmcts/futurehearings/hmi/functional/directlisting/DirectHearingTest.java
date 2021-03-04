@@ -60,7 +60,6 @@ public class DirectHearingTest extends FunctionalTest {
                 queryParameters);
 
         directhearings_idRootContext = String.format(directhearings_idRootContext, sessionIdCaseHQ);
-        headersAsMap = createStandardHMIHeader("MOCK");
        String inputBodyForDirectListing =
                 String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json"), sessionIdCaseHQ);
         directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
