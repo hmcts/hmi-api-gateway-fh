@@ -33,12 +33,3 @@ jobs:
         az storage container create --name $container --account-name $(devopsStorageAccount) --account-key $key
         echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
         echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
-
-        echo "Creating ROTA storage account"
-        az storage account create -n hmirota${{ environment.name }} -g hmi-sharedinfra-${{ environment.name }}-rg -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environnment=${{ environment.fullName }}
-        echo "Acquiring storage key"
-        rotaKey=$(az storage account keys list -g hmi-sharedinfra-${{ environment.name }}-rg --account-name hmirota${{ environment.name }} --query "[0].value" -o tsv)
-        echo "##vso[task.setvariable variable=storageKeyRota;issecret=true;]$rotaKey"
-        az storage container create --name input --account-name hmirota${{ environment.name }} --account-key $rotaKey
-        az storage container create --name done --account-name hmirota${{ environment.name }} --account-key $rotaKey
-        az storage container create --name error --account-name hmirota${{ environment.name }} --account-key $key

@@ -1,0 +1,14 @@
+parameters:
+  - name: subscription
+    type: string
+    
+steps:
+- task: AzureCLI@2
+  displayName: Create ROTA Storage
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'InlineScript'
+    Inline: |
+      echo "Creating ROTA storage account"
+       
+    azurePowerShellVersion: 'LatestVersion'
