@@ -9,7 +9,7 @@ parameters:
   - name: subscription
     type: string
 
-  - name: environment
+  - name: environmentName
     type: string
 
 jobs:
