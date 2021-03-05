@@ -162,6 +162,10 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        dependsOn: TerraformApply
 
   - stage: BuildTEST
     dependsOn: PlanTest
