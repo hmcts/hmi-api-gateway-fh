@@ -165,6 +165,7 @@ stages:
     - template: pipeline/jobs/create-storage-rota.yaml
       parameters:
         displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-DEV
         dependsOn: TerraformApply
 
   - stage: BuildTEST
