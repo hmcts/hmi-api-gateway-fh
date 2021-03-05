@@ -26,10 +26,4 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Obtaining storage key..."
-        key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
-        echo "Creating storage container"
-        container="test-results-"$(date +"%m-%d-%y")
-        az storage container create --name $container --account-name $(devopsStorageAccount) --account-key $key
-        echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
-        echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
+       echo "Creating ROTA storage account for $(environment)"
