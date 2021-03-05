@@ -1,0 +1,35 @@
+parameters:
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: displayName
+    type: string
+ 
+  - name: subscription
+    type: string
+
+jobs:
+- job: CreateStorage
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: AzureCLI@2
+    displayName: createContainer
+    name: createContainer
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        echo "Obtaining storage key..."
+        key=$(az storage account keys list -g $(devopsResourceGroup) --account-name $(devopsStorageAccount) --query "[0].value" -o tsv)
+        echo "Creating storage container"
+        container="test-results-"$(date +"%m-%d-%y")
+        az storage container create --name $container --account-name $(devopsStorageAccount) --account-key $key
+        echo "##vso[task.setvariable variable=storagekey;isOutput=true;isSecret=true;]$key"
+        echo "##vso[task.setvariable variable=container;isOutput=true;isSecret=true;]$container"
