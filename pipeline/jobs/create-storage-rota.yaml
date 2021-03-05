@@ -19,21 +19,11 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - task: AzureCLI@2
-    displayName: createContainer
+    displayName: Create ROTA Storage for ${{ environment.name }}
     name: createContainer
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Creating ROTA storage account for $(environment)"
-        accountName="hmirota"$(environment)
-
-        az storage account create -n $accountName -g "hmi-sharedinfra-$(environment)-rg" -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environnment=${{ environment.fullName }}
-        echo "Acquiring storage key"
-        key=$(az storage account keys list -g "hmi-sharedinfra-$(environment)-rg" --account-name $accountName --query "[0].value" -o tsv)
-        echo "##vso[task.setvariable variable=storageKey;issecret=true;]$key"
-        echo "Creating containers"
-        az storage container create --name "input" --account-name $accountName --account-key $key
-        az storage container create --name "done" --account-name $accountName --account-key $key
-        az storage container create --name "error" --account-name $accountName --account-key $key
+        echo "Creating ROTA storage account for ${{ environment.name }}"
