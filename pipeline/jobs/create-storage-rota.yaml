@@ -26,4 +26,12 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-       echo "Creating ROTA storage account for $(environment)"
+        echo "Creating ROTA storage account for $(environment)"
+        az storage account create -n hmirota$(environment) -g hmi-sharedinfra-$(environment)-rg -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environnment=${{ environment.fullName }}
+        echo "Acquiring storage key"
+        key=$(az storage account keys list -g hmi-sharedinfra-$(environment)-rg --account-name hmirota$(environment) --query "[0].value" -o tsv)
+        echo "##vso[task.setvariable variable=storageKey;issecret=true;]$key"
+        echo "Creating containers"
+        az storage container create --name "input" --account-name hmirota$(environment) --account-key $key
+        az storage container create --name "done" --account-name hmirota$(environment) --account-key $key
+        az storage container create --name "error" --account-name hmirota$(environment) --account-key $key
