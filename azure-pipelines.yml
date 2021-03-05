@@ -167,6 +167,7 @@ stages:
         displayName: Create ROTA Storage
         subscription: DTS-SHAREDSERVICES-DEV
         dependsOn: TerraformApply
+        environment: ${{ environment.name }}
 
   - stage: BuildTEST
     dependsOn: PlanTest

@@ -9,6 +9,9 @@ parameters:
   - name: subscription
     type: string
 
+  - name: environment
+    type: string
+
 jobs:
 - job: CreateStorage
   dependsOn:
@@ -19,11 +22,13 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - task: AzureCLI@2
-    displayName: Create ROTA Storage for ${{ environment.name }}
+    displayName: Create ROTA Storage
     name: createContainer
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Creating ROTA storage account for ${{ environment.name }}"
+        echo "Creating ROTA storage account for $(environment)"
+        accountName="hmirota$(environment)"
+        resourceGroup="hmi-sharedinfra-$(environment)-rg"
