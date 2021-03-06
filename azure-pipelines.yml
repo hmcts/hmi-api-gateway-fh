@@ -134,6 +134,12 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
+        environmentName: sandbox
 
   - stage: BuildDEV
     dependsOn: PlanDev
@@ -196,6 +202,12 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+        environmentName: test
 
   - stage: TestSBOX
     dependsOn: BuildSbox
@@ -458,6 +470,12 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+        environmentName: staging
 
 
   - stage: BuildPROD
@@ -488,3 +506,9 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+        environmentName: production
