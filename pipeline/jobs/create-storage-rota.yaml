@@ -37,10 +37,10 @@ jobs:
         key=$(az storage account keys list -g $resourceGroup --account-name $accountName --query "[0].value" -o tsv)
         echo "##vso[task.setvariable variable=storageKey;issecret=true;]$key"
         echo "Creating containers..."
-        az storage container create --name "input" --account-name $accountName --account-key $key
+        az storage container create --name "input/files" --account-name $accountName --account-key $key
         echo "- input"
-        az storage container create --name "output" --account-name $accountName --account-key $key
+        az storage container create --name "output/files" --account-name $accountName --account-key $key
         echo "- output"
-        az storage container create --name "error" --account-name $accountName --account-key $key
+        az storage container create --name "error/files" --account-name $accountName --account-key $key
         echo "- error"
         echo "Creating containers complete"
