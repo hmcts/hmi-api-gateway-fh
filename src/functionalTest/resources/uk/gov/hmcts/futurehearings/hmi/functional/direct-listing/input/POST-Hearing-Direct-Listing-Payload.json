@@ -1,20 +1,46 @@
 {
-  "hearingRequest": {
+  "listingRequest": {
     "meta": {
     },
     "_case": {
       "caseIdHMCTS": "616",
+      "caseListingRequestId": "%s",
       "caseTitle": "Gill Vs Stanley",
       "caseJurisdiction": "FAM",
-      "caseCourt": "9",
-      "caseRegistered": "2015-12-11T19:28:30.45Z",
-      "caseListingRequestId" : "661"
+
+      "caseRegistered": "2020-09-14T20:20:39+00:00",
+      "caseCourt": "1",
+      "caseComments": "This is a direct listing case",
+
+      "caseRestrictedFlag": true,
+      "caseInterpreterRequiredFlag": true
     },
     "listing": {
-      "listingCourt": "301",
-      "listingPriority": "CRIT",
-      "listingSessionType": "DS",
-      "listingType": "DECNIS"
-    }
+      "listingType": "DECNIS",
+      "listingDuration": 60,
+
+      "listingStartTime": "14:00:00"
+    },
+    "entities": [
+      {
+        "entityHmiId": "E200017",
+        "entityTypeCode": "IND",
+        "entityRoleCode": "DEF",
+        "entitySubType": {
+          "entityClassCode": "PERSON",
+          "entityTitle": "Mr",
+          "entityFirstName": "Jim",
+          "entityLastName": "Thompson"
+        }
+      },
+      {
+        "entityHmiId": "12345",
+        "entityTypeCode": "ORG",
+        "entityRoleCode": "DEF",
+        "entitySubType": {
+          "entityClassCode": "ORG",
+          "entityCompanyName": "A Company Ltd" }
+      }
+    ]
   }
 }
