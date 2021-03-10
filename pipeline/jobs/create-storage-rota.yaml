@@ -1,0 +1,42 @@
+parameters:
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: displayName
+    type: string
+ 
+  - name: subscription
+    type: string
+
+  - name: environmentName
+    type: string
+
+jobs:
+- job: CreateStorage
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: AzureCLI@2
+    displayName: Create ROTA Blob
+    name: createContainer
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        echo "Creating ROTA storage account for $(environment)"
+        accountName="hmidtu$(environment)"
+        resourceGroup="hmi-sharedinfra-$(environment)-rg"
+        az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environment=${{ parameters.environmentName }}
+        echo "Acquiring storage key"
+        key=$(az storage account keys list -g $resourceGroup --account-name $accountName --query "[0].value" -o tsv)
+        echo "##vso[task.setvariable variable=storageKey;issecret=true;]$key"
+        echo "Creating containers..."
+        az storage container create --name "rota" --account-name $accountName --account-key $key
+        echo "- rota"
+        echo "Creating containers complete"

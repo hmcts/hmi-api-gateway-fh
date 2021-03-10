@@ -16,7 +16,7 @@ public class DirectListingResponseProcess {
         log.debug(response.getBody().prettyPrint());
         String sessionId = null;
         JSONObject JSONResponseBody = new JSONObject(response.body().asString());
-        JSONObject jsonObject = JSONResponseBody.getJSONObject("sessionsResponse").getJSONArray("sessions").getJSONObject(0);
+        JSONObject jsonObject = JSONResponseBody.getJSONObject("sessionsResponse").getJSONArray("sessions").getJSONObject(1);
         return jsonObject.getString("sessionIdCaseHQ");
     }
 }
