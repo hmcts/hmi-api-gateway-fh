@@ -65,4 +65,21 @@ public class ResourcesSteps {
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
 
     }
+
+    @Step("User performs the creation of a user with invalid payload")
+    public void shouldCreateOrAmendUserWithInvalidPayload(final String apiURL,
+                                                          final Map<String, Object> headersAsMap,
+                                                          final String authorizationToken,
+                                                          final HttpMethod httpMethod,
+                                                          final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body,
+                httpMethod,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+
+    }
 }

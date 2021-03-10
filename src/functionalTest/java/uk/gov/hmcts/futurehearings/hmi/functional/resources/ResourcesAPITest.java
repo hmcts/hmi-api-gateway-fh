@@ -48,6 +48,16 @@ public class ResourcesAPITest extends FunctionalTest {
     ResourcesSteps resourceSteps;
 
     @Test
+    public void testRequestUserWithEmptyPayload() {
+
+        log.debug("In the testRequestAndAmendAResourceByUser() method");
+        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
+                headersAsMap,
+                authorizationToken, HttpMethod.POST,
+                "{}");
+    }
+
+    @Test
     public void testRequestAndAmendAResourceByLocation() throws IOException {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
