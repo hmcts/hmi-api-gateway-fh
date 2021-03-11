@@ -146,7 +146,11 @@ test.finalizedBy(aggregate)
 
 
 task functional(type: Test) {
-
+    retry {
+        maxRetries = 1
+        maxFailures = 2
+        failOnPassedAfterRetry = false
+    }
     description = "Runs functional tests"
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
