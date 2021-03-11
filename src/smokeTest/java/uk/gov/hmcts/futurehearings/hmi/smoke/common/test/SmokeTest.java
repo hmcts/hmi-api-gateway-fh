@@ -104,7 +104,7 @@ public abstract class SmokeTest {
         log.debug("Test execution Class Completed: " + info.getTestClass().get().getName());
     }
 
-    @RepeatedTest(2)
+    @Test
     @DisplayName("Smoke Test to Test the Endpoint for the HMI Root Context")
     void testSuccessfulHmiApiGet() {
 
