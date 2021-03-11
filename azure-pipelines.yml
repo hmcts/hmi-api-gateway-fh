@@ -88,7 +88,7 @@ stages:
         group: HMI-APIM-BUILD-TEST
 
   - stage: PlanSTG
-    dependsOn: Validate
+    dependsOn: TestTEST
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
@@ -96,9 +96,20 @@ stages:
         displayName: Plan STG
         subscription: DTS-SHAREDSERVICES-STG
         group: HMI-APIM-BUILD-STG
+    - job: waitForValidation
+      displayName: Wait for external validation  
+      pool: server    
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:   
+      - task: ManualValidation@0
+        timeoutInMinutes: 1440 # task times out in 1 day
+        inputs:
+            instructions: 'Please validate the Terraform Plan for STG environment to resume'
+            onTimeout: 'resume'
+    
 
   - stage: PlanPROD
-    dependsOn: Validate
+    dependsOn: BuildSTG
     condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
@@ -106,6 +117,16 @@ stages:
         displayName: Plan PROD
         subscription: DTS-SHAREDSERVICES-PROD
         group: HMI-APIM-BUILD-PROD
+    - job: waitForValidation
+      displayName: Wait for external validation  
+      pool: server    
+      timeoutInMinutes: 4320 # job times out in 3 days
+      steps:   
+      - task: ManualValidation@0
+        timeoutInMinutes: 1440 # task times out in 1 day
+        inputs:
+            instructions: 'Please validate the Terraform Plan for PROD environment to resume'
+            onTimeout: 'resume'
 
   - stage: BuildSBOX
     dependsOn: PlanSbox
@@ -423,6 +444,17 @@ stages:
           displayName: Code Quality Test
           dependsOn:
           - AcceptanceTest
+
+      - job: waitForValidation
+        displayName: Wait for external validation  
+        pool: server    
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:   
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+              instructions: 'Please validate the Test environment to resume'
+              onTimeout: 'resume'
 
   - stage: BuildSTG
     dependsOn:
