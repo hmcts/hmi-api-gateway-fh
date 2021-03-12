@@ -11,8 +11,6 @@ public class PeopleLookUpResponseProcess {
 
     public static String getPeopleId(Response response) throws JSONException {
         log.debug(response.getBody().prettyPrint());
-        //JSONObject JSONResponseBody = new JSONObject(response.body().asString());
-        //JSONObject jsonObject = JSONResponseBody.getJSONArray("People").getJSONObject(0);
 
         JSONArray jsonArray = new JSONArray(response.body().asString());
         JSONObject jsonObject = jsonArray.getJSONObject(0);
