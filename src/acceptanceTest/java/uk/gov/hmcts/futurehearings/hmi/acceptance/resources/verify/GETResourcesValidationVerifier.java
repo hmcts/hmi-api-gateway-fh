@@ -18,8 +18,5 @@ public class GETResourcesValidationVerifier implements HMISuccessVerifier {
                        Response response) {
         log.debug(response.getBody().asString());
         assertTrue(response.getBody().jsonPath().getList("$").size()>0);
-        /*Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
-        assertEquals(expectedMessage,responseMap.get(("message")));*/
     }
 }

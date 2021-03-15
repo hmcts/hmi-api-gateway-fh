@@ -20,9 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 class GETListingsByIDValidationTest extends ListingsValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${listings_idRootContext}")
     private String listings_idRootContext;
 
@@ -37,32 +34,4 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
         this.setHmiSuccessVerifier(new GETListingsByIdValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
-
-    /*@ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
-    @CsvSource(value = {"EMULATOR,400,1002,reference to a resource that doesn't exist"}, nullValues = "NIL")
-    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
-                                                         final String returnHttpCode,
-                                                         final String returnErrorCode,
-                                                         final String returnDescription) throws Exception {
-
-        this.setUrlParams(QueryParamsHelper.buildQueryParams("hearing_type", "1234"));
-        final HttpStatus httpStatus =
-                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(getApiSubscriptionKey(),
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(getApiSubscriptionKey(),
-                        destinationSystem,
-                        returnHttpCode,
-                        returnErrorCode,
-                        returnDescription),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                httpStatus,
-                getInputFileDirectory(),
-                new CaseHQCommonErrorVerifier(),
-                returnDescription,
-                null);
-    }*/
 }

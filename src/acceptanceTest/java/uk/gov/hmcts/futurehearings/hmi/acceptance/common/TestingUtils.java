@@ -18,20 +18,7 @@ public class TestingUtils {
     public static String readFileContents (final String path) throws IOException {
 
         File file = ResourceUtils.getFile("classpath:"+path);
-        //File is found
         log.debug("File Found : " + file.exists());
         return new String(Files.readAllBytes(Paths.get(file.toURI())));
-    }
-
-    public static void comparePayloads(final String expectedPayloadPath, final Response response) {
-        try {
-            String output =
-                    readFileContents(expectedPayloadPath);
-            JSONAssert.assertEquals(output,
-                    response.getBody().asString(), JSONCompareMode.STRICT);
-        } catch (JSONException | IOException comparisonException) {
-            log.error("Payloads have not matched" , comparisonException);
-            throw new AssertionError("Payloads have not matched");
-        }
     }
 }

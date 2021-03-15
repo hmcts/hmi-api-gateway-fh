@@ -18,7 +18,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
@@ -26,10 +25,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SelectClasses(PUTVideoHearingsValidationTest.class)
 @IncludeTags("Post")
 class PUTVideoHearingsValidationTest extends VideoHearingValidationTest {
-
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
 
     @Value("${videohearings_idRootContext}")
     private String videohearings_idRootContext;

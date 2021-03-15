@@ -44,38 +44,4 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
-
-    @ParameterizedTest(name = "Test username with invalid values  - Param : {0} --> {1}")
-    @CsvSource(value = {"username,'abc124'", "username,''", "username,' '", "username,NIL"}, nullValues = "NIL")
-    void test_username_query_param_valid_value(final String usernameKey, final String usernameValue) throws Exception {
-        this.setUrlParams(buildQueryParams(usernameKey, usernameValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SUCCESS_MSG,null);
-    }
-
-    @ParameterizedTest(name = "Test All query params with extra param - Param : {0} --> {1}")
-    @CsvSource(value = {"username,abc123,extra_param,extra", "username,,extra_param,"})
-    void test_all_query_param_with_extra_param(final String paramKey1, final String paramVal1,
-                                               final String paramKey2, final String paramVal2
-                                               ) throws Exception {
-        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                ERROR_MSG,null);
-    }
 }
