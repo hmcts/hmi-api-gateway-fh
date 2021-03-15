@@ -48,90 +48,13 @@ public class ResourcesAPITest extends FunctionalTest {
     ResourcesSteps resourceSteps;
 
     @Test
-    public void testRequestAndAmendAResourceByUser() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        int randomId = new Random().nextInt(99999999);
-        final String randomEmailId = randomId + "@test.com";
-
-        String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
-        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForCreateResources);
-
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
-        String inputBodyForAmendResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-user-payload.json"), randomEmailId);
-        resourceSteps.shouldUpdateAnUser(String.format(resourcesByUser_idRootContext, randomEmailId),
-                headersAsMap,
-                authorizationToken,
-                inputBodyForAmendResources);
-    }
-
-    @Test
-    public void testRequestUserWithEmptyPayload() throws IOException {
+    public void testRequestUserWithEmptyPayload() {
 
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.POST,
                 "{}");
-
-    }
-
-    @Test
-    public void testRequestUserWithXmlPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.POST,
-                "<xml><test></xml>");
-
-    }
-
-    @Test
-    public void testAmendUserWithEmptyPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        int randomId = new Random().nextInt(99999999);
-        final String randomEmailId = randomId + "@test.com";
-
-        String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
-        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForCreateResources);
-
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
-        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.PUT,
-                "{}");
-    }
-
-    @Test
-    public void testAmendUserWithXmlPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        int randomId = new Random().nextInt(99999999);
-        final String randomEmailId = randomId + "@test.com";
-
-        String inputBodyForCreateResources =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-user-payload.json"), randomEmailId);
-        resourceSteps.shouldCreateAnUser(resourcesByUserRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForCreateResources);
-
-        resourcesByUser_idRootContext = String.format(resourcesByUser_idRootContext, randomEmailId);
-        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUser_idRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.PUT,
-                "<xml><test></xml>");
     }
 
     @Test
@@ -174,7 +97,6 @@ public class ResourcesAPITest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken, HttpMethod.POST,
                 "<xml><test></xml>");
-
     }
 
     @Test
