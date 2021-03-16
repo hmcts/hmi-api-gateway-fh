@@ -91,11 +91,29 @@
                         "For_each": {
                             "foreach": "@body('List_blobs')?['value']",
                             "actions": {
-                                "Condition": {
+                                "Get_blob_content_using_path": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/GetFileContentByPath",
+                                        "queries": {
+                                            "inferContentType": true,
+                                            "path": "@items('For_each')?['Path']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                },
+                                "is_file_xml": {
                                     "actions": {
                                         "Blob_Meta": {
                                             "runAfter": {
-                                                "Create_blob_2": [
+                                                "Create_file_in_output_folder": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -107,12 +125,12 @@
                                                     }
                                                 },
                                                 "method": "get",
-                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_blob_2')?['Path']))}"
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_file_in_output_folder')?['Path']))}"
                                             }
                                         },
-                                        "Create_blob_2": {
+                                        "Create_file_in_output_folder": {
                                             "runAfter": {
-                                                "Set_variable_2": [
+                                                "Set_jsonPayload": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -138,9 +156,9 @@
                                                 }
                                             }
                                         },
-                                        "Create_blob_3": {
+                                        "Create_payload_file": {
                                             "runAfter": {
-                                                "Set_variable_3": [
+                                                "Set_jsonString": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -166,9 +184,26 @@
                                                 }
                                             }
                                         },
+                                        "Delete_blob_2": {
+                                            "runAfter": {
+                                                "HTTP": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                            }
+                                        },
                                         "HTTP": {
                                             "runAfter": {
-                                                "Create_blob_3": [
+                                                "Create_payload_file": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -178,17 +213,9 @@
                                                 "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/"
                                             }
                                         },
-                                        "Set_variable": {
-                                            "runAfter": {},
-                                            "type": "SetVariable",
-                                            "inputs": {
-                                                "name": "xmlPayload",
-                                                "value": "@{body('Get_blob_content_using_path')}"
-                                            }
-                                        },
-                                        "Set_variable_2": {
+                                        "Set_jsonPayload": {
                                             "runAfter": {
-                                                "Set_variable": [
+                                                "Set_xmlPayload": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -198,7 +225,7 @@
                                                 "value": "@{json(xml(variables('xmlPayload')))}"
                                             }
                                         },
-                                        "Set_variable_3": {
+                                        "Set_jsonString": {
                                             "runAfter": {
                                                 "Blob_Meta": [
                                                     "Succeeded"
@@ -208,6 +235,14 @@
                                             "inputs": {
                                                 "name": "jsonString",
                                                 "value": "@{replace(variables('jsonPayload'), '@id', '_id')}"
+                                            }
+                                        },
+                                        "Set_xmlPayload": {
+                                            "runAfter": {},
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlPayload",
+                                                "value": "@{body('Get_blob_content_using_path')}"
                                             }
                                         }
                                     },
@@ -241,23 +276,6 @@
                                                         "transferMode": "Chunked"
                                                     }
                                                 }
-                                            },
-                                            "Delete_blob": {
-                                                "runAfter": {
-                                                    "Create_File_in_Error_Folder": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ApiConnection",
-                                                "inputs": {
-                                                    "host": {
-                                                        "connection": {
-                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                        }
-                                                    },
-                                                    "method": "delete",
-                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
-                                                }
                                             }
                                         }
                                     },
@@ -272,24 +290,6 @@
                                         ]
                                     },
                                     "type": "If"
-                                },
-                                "Get_blob_content_using_path": {
-                                    "runAfter": {},
-                                    "type": "ApiConnection",
-                                    "inputs": {
-                                        "host": {
-                                            "connection": {
-                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                            }
-                                        },
-                                        "method": "get",
-                                        "path": "/datasets/default/GetFileContentByPath",
-                                        "queries": {
-                                            "inferContentType": true,
-                                            "path": "@items('For_each')?['Path']",
-                                            "queryParametersSingleEncoded": true
-                                        }
-                                    }
                                 }
                             },
                             "runAfter": {
@@ -301,7 +301,7 @@
                         },
                         "Initialize_jsonPayload": {
                             "runAfter": {
-                                "Initialize_xmlString": [
+                                "Initialize_xmlPayload": [
                                     "Succeeded"
                                 ]
                             },
@@ -338,22 +338,6 @@
                                 "variables": [
                                     {
                                         "name": "xmlPayload",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_xmlString": {
-                            "runAfter": {
-                                "Initialize_xmlPayload": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "xmlString",
                                         "type": "string"
                                     }
                                 ]
