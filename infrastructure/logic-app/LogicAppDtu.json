@@ -1,0 +1,400 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmidturota_name": {
+            "defaultValue": "hmidturotadevla",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "name": "azureblob",
+            "properties": {
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                },
+                "displayName": "HMI DTU Rota",
+                "parameterValues": {
+                    "accountName": "[parameters('storageAccountName')]",
+                    "accessKey": "[parameters('storageAccessKey')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmidturota_name')]",
+            "location": "uksouth",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 5
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Create_read.me": {
+                            "runAfter": {
+                                "Initialize_jsonString": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Rota files to be processed')",
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/datasets/default/files",
+                                "queries": {
+                                    "folderPath": "/rota/input",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "For_each": {
+                            "foreach": "@body('List_blobs')?['value']",
+                            "actions": {
+                                "Condition": {
+                                    "actions": {
+                                        "Blob_Meta": {
+                                            "runAfter": {
+                                                "Create_blob_2": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_blob_2')?['Path']))}"
+                                            }
+                                        },
+                                        "Create_blob_2": {
+                                            "runAfter": {
+                                                "Set_variable_2": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": "@body('Get_blob_content_using_path')",
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/datasets/default/files",
+                                                "queries": {
+                                                    "folderPath": "/rota/output",
+                                                    "name": "@items('For_each')?['Name']",
+                                                    "queryParametersSingleEncoded": true
+                                                }
+                                            },
+                                            "runtimeConfiguration": {
+                                                "contentTransfer": {
+                                                    "transferMode": "Chunked"
+                                                }
+                                            }
+                                        },
+                                        "Create_blob_3": {
+                                            "runAfter": {
+                                                "Set_variable_3": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": "@variables('jsonString')",
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/datasets/default/files",
+                                                "queries": {
+                                                    "folderPath": "/rota/output/",
+                                                    "name": "@{replace(actions('Blob_Meta').outputs.body.displayName, 'xml', 'json')}",
+                                                    "queryParametersSingleEncoded": true
+                                                }
+                                            },
+                                            "runtimeConfiguration": {
+                                                "contentTransfer": {
+                                                    "transferMode": "Chunked"
+                                                }
+                                            }
+                                        },
+                                        "HTTP": {
+                                            "runAfter": {
+                                                "Create_blob_3": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "method": "GET",
+                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/"
+                                            }
+                                        },
+                                        "Set_variable": {
+                                            "runAfter": {},
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlPayload",
+                                                "value": "@{body('Get_blob_content_using_path')}"
+                                            }
+                                        },
+                                        "Set_variable_2": {
+                                            "runAfter": {
+                                                "Set_variable": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonPayload",
+                                                "value": "@{json(xml(variables('xmlPayload')))}"
+                                            }
+                                        },
+                                        "Set_variable_3": {
+                                            "runAfter": {
+                                                "Blob_Meta": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonString",
+                                                "value": "@{replace(variables('jsonPayload'), '@id', '_id')}"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Get_blob_content_using_path": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "else": {
+                                        "actions": {
+                                            "Create_File_in_Error_Folder": {
+                                                "runAfter": {},
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@body('Get_blob_content_using_path')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/rota/error/",
+                                                        "name": "@items('For_each')?['Name']",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Delete_blob": {
+                                                "runAfter": {
+                                                    "Create_File_in_Error_Folder": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "delete",
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "endsWith": [
+                                                    "@items('For_each')?['Path']",
+                                                    ".xml"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "type": "If"
+                                },
+                                "Get_blob_content_using_path": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/GetFileContentByPath",
+                                        "queries": {
+                                            "inferContentType": true,
+                                            "path": "@items('For_each')?['Path']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "List_blobs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Initialize_jsonPayload": {
+                            "runAfter": {
+                                "Initialize_xmlString": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonString": {
+                            "runAfter": {
+                                "Initialize_jsonPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonString",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlPayload": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlString": {
+                            "runAfter": {
+                                "Initialize_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlString",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "List_blobs": {
+                            "runAfter": {
+                                "Create_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/input'))}",
+                                "queries": {
+                                    "nextPageMarker": "",
+                                    "useFlatListing": false
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionName": "azureblob",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
