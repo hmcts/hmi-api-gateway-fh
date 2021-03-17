@@ -140,6 +140,12 @@ stages:
         subscription: DTS-SHAREDSERVICES-SBOX
         dependsOn: TerraformApply
         environmentName: sandbox
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: createRotaStorage
+        environmentName: sandbox
 
   - stage: BuildDEV
     dependsOn: PlanDev
@@ -213,6 +219,12 @@ stages:
         displayName: Create ROTA Storage
         subscription: DTS-SHAREDSERVICES-TEST
         dependsOn: TerraformApply
+        environmentName: test
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: createRotaStorage
         environmentName: test
 
   - stage: TestSBOX
@@ -482,6 +494,12 @@ stages:
         subscription: DTS-SHAREDSERVICES-STG
         dependsOn: TerraformApply
         environmentName: staging
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: createRotaStorage
+        environmentName: staging
 
 
   - stage: BuildPROD
@@ -517,4 +535,10 @@ stages:
         displayName: Create ROTA Storage
         subscription: DTS-SHAREDSERVICES-PROD
         dependsOn: TerraformApply
+        environmentName: production
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: createRotaStorage
         environmentName: production
