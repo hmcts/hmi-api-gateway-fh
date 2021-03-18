@@ -1,13 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.functional.directlisting.process.DirectListingResponseProcess.getSessionId;
 
 import java.util.Map;
-import java.util.Objects;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
