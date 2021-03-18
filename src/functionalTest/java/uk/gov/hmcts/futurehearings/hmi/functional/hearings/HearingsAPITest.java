@@ -1,19 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.hearings;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
-
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
 
-import java.io.IOException;
 import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
