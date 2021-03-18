@@ -41,7 +41,6 @@ allprojects {
     targetCompatibility = '11'
 }
 
-
 sourceSets {
     functionalTest {
         java {
@@ -124,7 +123,6 @@ configurations {
     snlacceptanceTestCompile.extendsFrom testCompile
     snlacceptanceTestRuntime.extendsFrom testRuntime
 }
-
 
 test {
     description = "Runs unit tests"
