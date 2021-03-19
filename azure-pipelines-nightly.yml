@@ -105,7 +105,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -119,21 +118,6 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn:
-          - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
-      - template: pipeline/jobs/test-contract.yaml
-        parameters:
-          displayName: Contract Test
-          dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -147,7 +131,6 @@ stages:
         parameters:
           displayName: Functional Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
