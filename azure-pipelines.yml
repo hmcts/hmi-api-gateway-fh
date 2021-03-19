@@ -250,20 +250,6 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - template: pipeline/jobs/test-contract.yaml
-        parameters:
-          displayName: Contract Test
-          dependsOn:
-          - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-SBOX
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
@@ -390,20 +376,6 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - template: pipeline/jobs/test-contract.yaml
-        parameters:
-          displayName: Contract Test
-          dependsOn:
-          - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
       - template: pipeline/jobs/test-functional.yaml
         parameters:
           displayName: Functional Test
@@ -457,7 +429,7 @@ stages:
   - stage: BuildPROD
     dependsOn:
       - PlanProd
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-PROD
     jobs:
