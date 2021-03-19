@@ -41,7 +41,6 @@ allprojects {
     targetCompatibility = '11'
 }
 
-
 sourceSets {
     functionalTest {
         java {
@@ -72,15 +71,6 @@ sourceSets {
         resources.srcDir file('src/smokeTest/resources')
     }
 
-    contractTest {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir file('src/contractTest/java')
-        }
-        resources.srcDir file('src/contactTest/resources')
-    }
-
     acceptanceTest {
         java {
             compileClasspath += main.output
@@ -88,15 +78,6 @@ sourceSets {
             srcDir file('src/acceptanceTest/java')
         }
         resources.srcDir file('src/acceptanceTest/resources')
-    }
-
-    snlacceptanceTest {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir file('src/snlacceptanceTest/java')
-        }
-        resources.srcDir file('src/snlacceptanceTest/resources')
     }
 }
 
@@ -117,14 +98,9 @@ configurations {
     integrationTestRuntime.extendsFrom testRuntime
     functionalTestCompile.extendsFrom testCompile
     functionalTestRuntime.extendsFrom testRuntime
-    contractTestCompile.extendsFrom testCompile
-    contractTestRuntime.extendsFrom testRuntime
     acceptanceTestCompile.extendsFrom testCompile
     acceptanceTestRuntime.extendsFrom testRuntime
-    snlacceptanceTestCompile.extendsFrom testCompile
-    snlacceptanceTestRuntime.extendsFrom testRuntime
 }
-
 
 test {
     description = "Runs unit tests"
@@ -201,19 +177,6 @@ task smoke(type: Test) {
     scanForTestClasses = true
 }
 
-task contract(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Runs the consumer Pact tests'
-    useJUnitPlatform()
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/contract/consumer/**"
-    systemProperty 'pact.rootDir', "pacts"
-    systemProperties System.getProperties()
-    delete 'pacts/HMI_API-SandL_API.json'
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-}
-
 task acceptance(type: Test) {
     group = 'Delivery pipeline'
     description = 'Runs the QA Acceptance tests'
@@ -227,28 +190,6 @@ task acceptance(type: Test) {
     enableAssertions = true
     scanForTestClasses = true
 }
-
-task snlacceptance(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Runs the QA Acceptance for SNL tests'
-    useJUnitPlatform()
-    testClassesDirs = sourceSets.snlacceptanceTest.output.classesDirs
-    classpath = sourceSets.snlacceptanceTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/snl/acceptance/**"
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-    enableAssertions = true
-    scanForTestClasses = true
-}
-
-task runAndPublishConsumerPactTests(type: Test) {
-    logger.lifecycle("Runs pact Tests")
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-}
-
-runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 clean {
     delete System.getProperty("pact.rootDir") + "/*.json"
@@ -285,7 +226,7 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.organization", "hmcts"
         property "sonar.sources", "src/main/java,pipeline,infrastructure"
-        property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/contractTest/java,src/functionalTest/java"
+        property "sonar.tests", "src/test/java,src/smokeTest/java,src/acceptanceTest/java,src/functionalTest/java"
     }
 }
 project.tasks['sonarqube'].group = "Verification"
@@ -496,44 +437,6 @@ dependencies {
     acceptanceTestImplementation sourceSets.test.runtimeClasspath
     //Acceptance Test Dependencies - FINISH
 
-    //Contract Testing Dependencies - START
-    contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-
-    contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-
-    contractTestImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-    contractTestImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
-    contractTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
-    contractTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-    contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5_2.12', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8_2.12', version: versions.pact_version
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-provider-junit5', version: '4.0.10'
-    contractTestCompile group: 'au.com.dius', name: 'pact-jvm-provider-gradle', version: '4.0.10'
-
-    contractTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
-    contractTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-    contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
-
-    contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.3.RELEASE'
-    contractTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
-    contractTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
-
-    contractTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    contractTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    contractTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-
-    contractTestImplementation group: 'com.github.everit-org.json-schema', name: 'org.everit.json.schema', version: '1.12.1'
-
-    contractTestImplementation sourceSets.main.runtimeClasspath
-    contractTestImplementation sourceSets.test.runtimeClasspath
-    //Contract Testing Dependencies - FINISH
-
     //Functional Testing Dependencies - START
     functionalTestImplementation("org.springframework.boot:spring-boot-starter-web")
     functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
@@ -555,36 +458,6 @@ dependencies {
     functionalTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     functionalTestImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
     //Functional Testing Dependencies - FINISH
-
-    //Snl Acceptance Test Dependencies - START
-    snlacceptanceTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter', {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-    snlacceptanceTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter', {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
-    snlacceptanceTestCompile("org.springframework.boot:spring-boot-starter-test")
-    snlacceptanceTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
-    snlacceptanceTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
-    snlacceptanceTestImplementation 'io.rest-assured:rest-assured:4.2.0'
-    snlacceptanceTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
-
-    snlacceptanceTestImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
-    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
-    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
-    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
-    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
-    snlacceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
-
-    snlacceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    snlacceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    snlacceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-    snlacceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
-    snlacceptanceTestImplementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
-
-    snlacceptanceTestImplementation sourceSets.main.runtimeClasspath
-    snlacceptanceTestImplementation sourceSets.test.runtimeClasspath
-    //Acceptance Test Dependencies - FINISH
 }
 
 mainClassName = 'uk.gov.hmcts.reform.demo.Application'
