@@ -201,17 +201,66 @@
                         "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                       }
                     },
-                    "HTTP": {
+                    "Get_Client_ID": {
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                          }
+                        },
+                        "method": "get",
+                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-id')}/value"
+                      },
                       "runAfter": {
                         "Create_payload_file": [
                           "Succeeded"
                         ]
                       },
-                      "type": "Http",
+                      "type": "ApiConnection"
+                    },
+                    "Get_Client_Secret_": {
                       "inputs": {
-                        "method": "GET",
-                        "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/"
-                      }
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                          }
+                        },
+                        "method": "get",
+                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                      },
+                      "runAfter": {
+                        "Get_Client_ID": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "ApiConnection"
+                    },
+                    "HTTP": {
+                      "inputs": {
+                        "authentication": {
+                          "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                          "clientId": "@body('Get_Client_ID')?['value']",
+                          "secret": "@body('Get_Client_Secret_')?['value']",
+                          "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                          "type": "ActiveDirectoryOAuth"
+                        },
+                        "body": "@variables('jsonString')",
+                        "headers": {
+                          "Accept": "application/json",
+                          "Content-Type": "application/json",
+                          "Destination-System": "MOCK",
+                          "Request-Created-At": "2018-01-29 20:36:01Z",
+                          "Source-System": "CFT"
+                        },
+                        "method": "POST",
+                        "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/hearings"
+                      },
+                      "runAfter": {
+                        "Get_Client_Secret_": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Http"
                     },
                     "Set_jsonPayload": {
                       "runAfter": {
@@ -374,6 +423,11 @@
                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
                 "connectionName": "azureblob",
                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+              },
+              "keyvault": {
+                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
+                "connectionName": "keyvault",
+                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
               }
             }
           }
