@@ -50,22 +50,4 @@ class DELETEResourcesValidationTest extends ResourceValidationTest {
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
-
-    //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
-    //Confirmed by Product Owner that this should be a Success Scenario.
-    @Test
-    @DisplayName("Successfully validated response with an xml payload")
-    void test_successful_response_for_test_xml_body() throws Exception {
-
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                this.getHttpSucessStatus(),
-                "common",
-                getHmiSuccessVerifier(),"The request was received successfully.",null);
-    }
 }

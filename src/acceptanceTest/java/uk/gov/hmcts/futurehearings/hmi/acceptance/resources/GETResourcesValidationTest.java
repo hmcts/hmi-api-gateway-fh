@@ -20,9 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 public class GETResourcesValidationTest extends ResourceValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${resourcesRootContext}")
     private String resourcesRootContext;
 
