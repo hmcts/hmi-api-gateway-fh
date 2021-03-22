@@ -23,12 +23,10 @@ public class RestClientTemplate {
                                                        final HttpMethod httpMethod,
                                                        final HttpStatus httpStatus) {
 
-        Response response = null;
+        Response response;
         switch (httpMethod) {
             case POST:
-                response =
-                        RestAssured
-                                //.expect().that().statusCode(httpStatus.value())
+                response = expect().that().statusCode(httpStatus.value())
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
@@ -36,10 +34,8 @@ public class RestClientTemplate {
                         .when().post().then().extract().response();
                 break;
             case PUT:
-                response =
-                        RestAssured
-                        //.expect().that().statusCode(httpStatus.value())
-                        .given().body(payloadBody)
+//                response = expect().that().statusCode(httpStatus.value())
+                       response= RestAssured.given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
                         .basePath(apiURL)
@@ -74,9 +70,7 @@ public class RestClientTemplate {
                                                            final Map<String, String> queryParams,
                                                            final HttpStatus httpStatus) {
 
-        return
-                RestAssured
-                        //.expect().that().statusCode(httpStatus.value())
+        return expect().that().statusCode(httpStatus.value())
                 .given()
                 .queryParams(queryParams)
                 .headers(headersAsMap)

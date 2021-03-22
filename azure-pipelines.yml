@@ -226,7 +226,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -240,7 +239,6 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -254,7 +252,6 @@ stages:
         parameters:
           displayName: Functional Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -306,7 +303,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-DEV
@@ -352,7 +348,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -366,7 +361,6 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -380,7 +374,6 @@ stages:
         parameters:
           displayName: Functional Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST

@@ -45,12 +45,8 @@ public class PeopleTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-
     @Test
     public void testPeopleLookUp() throws Exception {
-
-        log.debug("In the testSuccessfulGetPeople() method");
-
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
@@ -65,13 +61,12 @@ public class PeopleTest extends FunctionalTest {
 
         //Verify People List and fetch People Id from first record
         String peopleId = peopleSteps.assertAndFetchPeopleId(response);
-        log.debug("The value of the peopleId : "+peopleId);
+        log.debug("The value of the peopleId : " + peopleId);
 
         //Make Get by People Id call and verify
         people_idRootContext = String.format(people_idRootContext, peopleId);
-        peopleSteps.shouldGetByPeopleId(people_idRootContext, peopleId,
+        peopleSteps.shouldGetByPeopleId(people_idRootContext,
                 headersAsMap,
-                authorizationToken,
-                null);
+                authorizationToken);
     }
 }
