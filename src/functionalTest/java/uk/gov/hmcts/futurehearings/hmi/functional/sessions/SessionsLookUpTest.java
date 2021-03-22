@@ -40,71 +40,9 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestType() throws Exception {
-
-        log.debug("In the testSuccessfulGetSessionForSessionRequestType () method");
+    public void testSuccessfulGetSessionForSessionRequestType() {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() throws Exception {
-
-        log.debug("In the testSuccessfulGetSessionForSessionRequestType() method");
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestDuration", "360");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() throws Exception {
-
-        log.debug("In the testSuccessfulGetSessionForSessionRequestType() method");
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestLocationId", "301");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    @Ignore("Ignoring this test as it is Failing Due to Defect MCGIRRSD-2359")
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestJudgeType() throws Exception {
-
-        log.debug("In the testSuccessfulGetSessionForSessionRequestType() method");
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestJudgeType", "PUBLAW");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestStartDateAndRequestEndDate() throws Exception {
-
-        log.debug("In the testSuccessfulGetSessionForSessionRequestType() method");
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestStartDate", "2020-12-01T10:00:00Z");
-        queryParameters.put("requestEndDate", "2020-12-09T10:00:00Z");
 
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,

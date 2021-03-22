@@ -19,8 +19,6 @@ import org.springframework.util.StringUtils;
 
 public class VideoHearingSteps {
 
-    private String actor;
-
     @Step("User makes a request to Post Video Hearing API")
     public void shouldCreateVideoHearing(final String apiURL,
                                         final Map<String, Object> headersAsMap,
@@ -46,15 +44,16 @@ public class VideoHearingSteps {
         assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
     }
 
-    @Step("User makes a request to Put Video Hearing API")
-    public void shouldAmendVideoHearing(final String apiURL,
-                                        final Map<String, Object> headersAsMap,
-                                        final String authorizationToken,
-                                        final String body) {
+    @Step("User makes a request to Video Hearing API with invalid payload")
+    public void shouldAmendVideoHearingWithInvalidPayload(final String apiURL,
+                                                            final Map<String, Object> headersAsMap,
+                                                            final String authorizationToken,
+                                                            final HttpMethod httpMethod,
+                                                            final String body) {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, HttpMethod.PUT,HttpStatus.OK);
+                body, httpMethod, HttpStatus.OK);
         assertEquals(HttpStatus.OK.value(),response.getStatusCode());
     }
 
@@ -84,42 +83,6 @@ public class VideoHearingSteps {
 
         assertTrue(Objects.nonNull(hearingId) && !hearingId.trim().equals(""));
         return hearingId;
-    }
-
-    @Step("User makes a request to Get Video hearing by ID")
-    public Response shouldFetchVideoHearingByHearingId(final String apiURL,
-                                                   final Map<String, Object> headersAsMap,
-                                                   final String authorizationToken,
-                                                   final Map<String, String> queryParameters
-                                                   ) throws Exception {
-
-        Response response = callRestEndpointWithPayload(apiURL,
-                headersAsMap,
-                authorizationToken,
-                null, HttpMethod.GET,HttpStatus.OK);
-        return response;
-    }
-
-    @Step("Verify video hearing created")
-    public void assertVideoHearingCreated(Response response, final String hearingId) throws Exception {
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
-
-        JSONObject peopleObj = new JSONObject(response.body().asString());
-        assertEquals(hearingId ,peopleObj.getString("id"));
-        assertTrue(!StringUtils.isEmpty(peopleObj.getString("hearing_venue_name")));
-        assertTrue(!StringUtils.isEmpty(peopleObj.getString("scheduled_date_time")));
-    }
-
-    @Step("Verify video hearing updated")
-    public void assertVideoHearingUpdated(Response response,
-                                             final String hearingId,
-                                             final String updatedHearingRoomName) throws Exception {
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
-
-        JSONObject peopleObj = new JSONObject(response.body().asString());
-        assertEquals(hearingId ,peopleObj.getString("id"));
-        assertTrue(!StringUtils.isEmpty(peopleObj.getString("hearing_room_name")));
-        assertEquals(updatedHearingRoomName ,peopleObj.getString("hearing_room_name"));
     }
 
     @Step("Verify video hearing deleted")
