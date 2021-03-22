@@ -11,6 +11,9 @@
         },
         "storageAccessKey": {
             "type": "securestring"
+        },
+        "environmentName": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -36,6 +39,11 @@
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmidturota_name')]",
             "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]"
             ],
