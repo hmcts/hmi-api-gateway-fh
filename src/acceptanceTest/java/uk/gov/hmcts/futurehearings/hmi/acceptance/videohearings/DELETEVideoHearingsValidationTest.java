@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -26,10 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SelectClasses(DELETEVideoHearingsValidationTest.class)
 @IncludeTags("Post")
 class DELETEVideoHearingsValidationTest extends VideoHearingValidationTest {
-
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
 
     @Value("${videohearings_idRootContext}")
     private String videohearings_idRootContext;

@@ -56,23 +56,6 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    //This test is for a Standard Header but a Payload for Non JSON Type is to be tested.
-    //Confirmed by Product Owner that this should be a Success Scenario.
-    @Test
-    @DisplayName("Successfully validated response with an xml payload")
-    void test_successful_response_for_test_xml_body() throws Exception {
-
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), "sample-xml-payload.xml",
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                this.getHttpSucessStatus(), "common",
-                getHmiSuccessVerifier(),"The request was received successfully.",null);
-    }
-
     @Test
     @DisplayName("Successfully test update hearing with CFT destination system - should route to Emulator")
     void test_update_hearing_with_CFT_destination_system() throws Exception {

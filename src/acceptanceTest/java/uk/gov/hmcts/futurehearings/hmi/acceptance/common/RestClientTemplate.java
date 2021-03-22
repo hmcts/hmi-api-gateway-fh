@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,16 +43,16 @@ public class RestClientTemplate {
                         .when()
                         .post().then().extract().response();
             case PUT:
-                    return RestAssured
-                            .expect().that().statusCode(expectedHttpStatus.value())
-                            .given()
-                            .headers(headers)
-                            .auth()
-                            .oauth2(authorizationToken)
-                            .basePath(requestURL)
-                            .body(requestBodyPayload)
-                            .when()
-                            .put().then().extract().response();
+                return RestAssured
+                        .expect().that().statusCode(expectedHttpStatus.value())
+                        .given()
+                        .headers(headers)
+                        .auth()
+                        .oauth2(authorizationToken)
+                        .basePath(requestURL)
+                        .body(requestBodyPayload)
+                        .when()
+                        .put().then().extract().response();
             case DELETE:
                 return RestAssured
                         .expect().that().statusCode(expectedHttpStatus.value())
@@ -104,7 +103,6 @@ public class RestClientTemplate {
             default:
                 log.error("Http method not identified :" + httpMethod.name());
                 throw new IllegalArgumentException("HTTP method not identified");
-
         }
     }
 }

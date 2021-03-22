@@ -26,14 +26,11 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2187")
-public class GETHearingsByIDValidationTest extends HearingValidationTest {
+class GETHearingsByIDValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
     private CommonDelegate commonDelegate;
-
-    @Value("${targetInstance}")
-    private String targetInstance;
 
     @Value("${hearings_idRootContext}")
     private String hearings_idRootContext;
@@ -77,6 +74,4 @@ public class GETHearingsByIDValidationTest extends HearingValidationTest {
                 returnDescription,
                 null);
     }
-
-
 }
