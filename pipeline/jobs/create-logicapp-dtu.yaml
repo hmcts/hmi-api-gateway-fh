@@ -21,6 +21,10 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
+  - template: ../steps/replace-token.yaml
+    parameters:
+      path: '**/parameters-*.json'
+      environment: ${{ parameters.environment }}
   - task: AzureCLI@2
     displayName: Create DTU Logic App
     name: createLogicApp
