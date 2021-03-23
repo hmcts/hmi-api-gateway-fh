@@ -126,6 +126,15 @@ public abstract class SmokeTest {
                     .when().get();
         }
 
+        if (response.getStatusCode() == 500) {
+            log.debug("500 occured, giving it another chance");
+            response = given()
+                    .queryParams(params)
+                    .headers(headersAsMap)
+                    .auth().oauth2(getAuthorizationToken())
+                    .basePath(getRootContext())
+                    .when().get();
+        }
         if (response.getStatusCode() != 200) {
             log.debug(" The value of the Response Status " + response.getStatusCode());
             log.debug(" The value of the Response body " + response.getBody().prettyPrint());
