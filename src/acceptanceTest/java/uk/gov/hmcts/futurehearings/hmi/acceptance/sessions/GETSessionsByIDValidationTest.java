@@ -25,9 +25,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 public class GETSessionsByIDValidationTest extends SessionsValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${sessions_idRootContext}")
     private String sessions_idRootContext;
 
@@ -69,6 +66,4 @@ public class GETSessionsByIDValidationTest extends SessionsValidationTest {
                 returnDescription,
                 null);
     }
-
-
 }

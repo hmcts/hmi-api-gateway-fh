@@ -20,9 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 public class PUTResourcesByLocationValidationTest extends ResourceValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${resourcesByLocation_idRootContext}")
     private String resourcesByLocation_idRootContext;
 

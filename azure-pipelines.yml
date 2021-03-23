@@ -140,6 +140,12 @@ stages:
         subscription: DTS-SHAREDSERVICES-SBOX
         dependsOn: TerraformApply
         environmentName: sandbox
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-SBOX
+        environment: sbox
+        dependsOn: createRotaStorage
 
   - stage: BuildDEV
     dependsOn: PlanDev
@@ -174,6 +180,12 @@ stages:
         subscription: DTS-SHAREDSERVICES-DEV
         dependsOn: TerraformApply
         environmentName: development
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
+        dependsOn: createRotaStorage
 
   - stage: BuildTEST
     dependsOn: PlanTest
@@ -208,6 +220,12 @@ stages:
         subscription: DTS-SHAREDSERVICES-TEST
         dependsOn: TerraformApply
         environmentName: test
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
+        dependsOn: createRotaStorage
 
   - stage: TestSBOX
     dependsOn: BuildSbox
@@ -244,7 +262,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -258,21 +275,6 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn:
-          - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-SBOX
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
-      - template: pipeline/jobs/test-contract.yaml
-        parameters:
-          displayName: Contract Test
-          dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -286,7 +288,6 @@ stages:
         parameters:
           displayName: Functional Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-SBOX
@@ -338,7 +339,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-DEV
@@ -384,7 +384,6 @@ stages:
         parameters:
           displayName: Acceptance Test
           dependsOn:
-          - UnitTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -398,21 +397,6 @@ stages:
         parameters:
           displayName: Smoke Test
           dependsOn:
-          - AcceptanceTest
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
-      - template: pipeline/jobs/test-contract.yaml
-        parameters:
-          displayName: Contract Test
-          dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -426,7 +410,6 @@ stages:
         parameters:
           displayName: Functional Test
           dependsOn:
-          - AcceptanceTest
           - CreateStorage
           - ExportKeyVault
           subscription: DTS-SHAREDSERVICES-TEST
@@ -476,12 +459,18 @@ stages:
         subscription: DTS-SHAREDSERVICES-STG
         dependsOn: TerraformApply
         environmentName: staging
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-STG
+        environment: stg
+        dependsOn: createRotaStorage
 
 
   - stage: BuildPROD
     dependsOn:
       - PlanProd
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-PROD
     jobs:
@@ -512,3 +501,9 @@ stages:
         subscription: DTS-SHAREDSERVICES-PROD
         dependsOn: TerraformApply
         environmentName: production
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-PROD
+        environment: prod
+        dependsOn: createRotaStorage

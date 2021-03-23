@@ -18,11 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class HearingValidationTest extends HMICommonHeaderTest {
+abstract class HearingValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -67,7 +66,6 @@ public abstract class HearingValidationTest extends HMICommonHeaderTest {
                                                          final String returnHttpCode,
                                                          final String returnErrorCode,
                                                          final String returnDescription) throws Exception {
-
         final HttpStatus httpStatus =
                 returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
         commonDelegate.test_expected_response_for_supplied_header(

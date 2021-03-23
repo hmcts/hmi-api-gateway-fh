@@ -1,4 +1,7 @@
 parameters:
+  - name: path
+    type: string
+
   - name: environment
     type: string
 
@@ -11,7 +14,7 @@ steps:
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
-    targetFiles: '**/*-policy.xml'
+    targetFiles: ${{parameters.path}}
     encoding: 'auto'
     escapeType: 'html'
     writeBOM: true

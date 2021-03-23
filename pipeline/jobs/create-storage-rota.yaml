@@ -13,7 +13,7 @@ parameters:
     type: string
 
 jobs:
-- job: CreateStorage
+- job: createRotaStorage
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
@@ -23,7 +23,7 @@ jobs:
   steps:
   - task: AzureCLI@2
     displayName: Create ROTA Blob
-    name: createContainer
+    name: createRotaContainer
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
@@ -32,6 +32,8 @@ jobs:
         echo "Creating ROTA storage account for $(environment)"
         accountName="hmidtu$(environment)"
         resourceGroup="hmi-sharedinfra-$(environment)-rg"
+        kvName="hmi-shared-kv-$(environment)"
+
         az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environment=${{ parameters.environmentName }}
         echo "Acquiring storage key"
         key=$(az storage account keys list -g $resourceGroup --account-name $accountName --query "[0].value" -o tsv)
@@ -39,4 +41,6 @@ jobs:
         echo "Creating containers..."
         az storage container create --name "rota" --account-name $accountName --account-key $key
         echo "- rota"
+        echo "Updating Key Vault $kvName"
+        az keyvault secret set --name "dtu-storage-account-key" --value $key --vault-name $kvName
         echo "Creating containers complete"
