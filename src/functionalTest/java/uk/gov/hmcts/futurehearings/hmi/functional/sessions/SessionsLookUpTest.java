@@ -12,7 +12,6 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,9 +39,9 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestType() {
+    public void testFailsGetSessionForSessionRequestType() {
         Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
+        queryParameters.put("requestSessionType", "TEST");
 
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
