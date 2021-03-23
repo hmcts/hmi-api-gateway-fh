@@ -179,7 +179,6 @@ stages:
         displayName: Create ROTA Storage
         subscription: DTS-SHAREDSERVICES-DEV
         dependsOn: TerraformApply
-        environmentName: development
     - template: pipeline/jobs/create-logicapp-dtu.yaml
       parameters:
         displayName: Create DTU Logic Application
