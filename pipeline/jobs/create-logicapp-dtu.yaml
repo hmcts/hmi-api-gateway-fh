@@ -34,7 +34,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         echo "looking at file"
-        cat $(System.DefaultWorkingDirectory)\infrastructure\logic-app\parameters-$(environment).json
+        cat "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\parameters-$(environment).json"
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\LogicAppDtu.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\parameters-$(environment).json"
