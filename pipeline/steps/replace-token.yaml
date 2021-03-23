@@ -1,6 +1,7 @@
 parameters:
-  - path:
+  - name: path
     type: string
+
   - name: environment
     type: string
 
