@@ -183,6 +183,7 @@ stages:
       parameters:
         displayName: Create DTU Logic Application
         subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
         dependsOn: createRotaStorage
 
   - stage: BuildTEST

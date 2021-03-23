@@ -9,6 +9,9 @@ parameters:
   - name: subscription
     type: string
 
+  - name: environment
+    type: string
+
 jobs:
 - job: CreateDtuLogicApp
   dependsOn:
@@ -21,7 +24,7 @@ jobs:
   - template: ../steps/replace-token.yaml
     parameters:
       path: '**/parameters-*.json'
-      environment: 'dev'
+      environment: ${{ parameters.environment }}
   - task: AzureCLI@2
     displayName: Create DTU Logic App
     name: createLogicApp
