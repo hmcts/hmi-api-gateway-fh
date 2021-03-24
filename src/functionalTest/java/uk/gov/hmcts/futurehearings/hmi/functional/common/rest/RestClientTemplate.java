@@ -64,7 +64,7 @@ public class RestClientTemplate {
         return response;
     }
 
-    public static Response callRestEndpointWithQueryParams(final String apiURL,
+    public static Response callRestEndpointWithInvalidQueryParams(final String apiURL,
                                                            final Map<String, Object> headersAsMap,
                                                            final String authorizationToken,
                                                            final Map<String, String> queryParams,
