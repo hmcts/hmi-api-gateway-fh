@@ -102,7 +102,7 @@ class GET_schedules_UnitTests {
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
-        headersAsMap.put("Request-Created-At", "2018-01-29 20:36:01Z");
+        headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
         headersAsMap.put("Accept", "application/json");
 
         paramsAsMap.put("hearing_date", "2018-02-29T20:36:01Z");
