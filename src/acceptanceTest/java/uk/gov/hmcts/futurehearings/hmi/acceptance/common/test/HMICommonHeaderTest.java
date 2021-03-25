@@ -144,13 +144,35 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Destination-System",null);
     }
 
-    @Test
-    @DisplayName("Request Created At Header invalid value")
-    void test_request_created_at_invalid_value() throws Exception {
+    @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} --> {1}")
+    @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
+            "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
+            "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
+            "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
+            "Invalid_Date_Format, 2002-10-02T15:00:00*05Z",
+            "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
+            "Invalid_Date_Format, 2019-10-12 07:20:50.52Z",
+            "Invalid_Date_Format, 2019-10-12 07:20:Z",
+            "Invalid_Date_Format, 2019-10-12 07:20:00",
+            "Invalid_Date_Format, 2019-02-00T07:20:00Z",
+            "Invalid_Date_Format, 2019-12-32T07:20:00Z",
+            "Invalid_Date_Format, 2019-02-10T24:00:00Z",
+            "Invalid_Date_Format, 2019-02-10T23:60:00Z",
+            "Invalid_Date_Format, 2019-02-10T23:50:60Z",
+            "Invalid_Date_Format, 2019-02-10T23:59:61Z",
+            "Invalid_Date_Format, 20-02-10T07:20:00Z",
+            "Invalid_Date_Format, 2019-10-12T07:20:00+01:00Z",
+            "Invalid_Date_Format, 2019-10-12T07:20:00+01:61Z",
+            "Invalid_Date_Format, 2019-10-12T07:20:00-02:00Z",
+            "Invalid_Date_Format, 2019-10-12T07:20:00.00+01:00Z",
+            "Invalid_Date_Format, 2019-10-12T07:20:00.00-01:00Z",
+            "Invalid_Date_Format, 2019-10-12t07:20:00.00z",
+    })
+    void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithRequestCreatedAtSystemValue("2002-02-31T10:00:30-05:00Z"),
+                createHeaderWithRequestCreatedAtSystemValue( requestCreatedAtVal),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -158,6 +180,35 @@ public abstract class HMICommonHeaderTest {
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
                 "Missing/Invalid Header Request-Created-At",null);
+    }
+
+    @ParameterizedTest(name = "Request Created At System Header valid values - Param : {0} --> {1}")
+    @CsvSource({
+            "Valid_Date_Format, 2019-10-12T07:20:00",
+            "Valid_Date_Format, 2019-10-12T07:20:11.1111",
+            "Valid_Date_Format, 2019-10-12T07:20:00+00:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00+01:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00+01:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00-02:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00.00",
+            "Valid_Date_Format, 2019-10-12T07:20:00.00+01:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00.00-01:00",
+            "Valid_Date_Format, 2019-10-12T07:20:00Z",
+            "Valid_Date_Format, 2019-10-12T15:20:00Z",
+            "Valid_Date_Format, 2019-10-12T07:20:00.00Z",
+    })
+    void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
+        commonDelegate.test_expected_response_for_supplied_header(
+                getAuthorizationToken(),
+                getRelativeURL(), getInputPayloadFileName(),
+                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal),
+                null,
+                getUrlParams(),
+                getHttpMethod(),
+                getHttpSucessStatus(),
+                getInputFileDirectory(),
+                getHmiSuccessVerifier(),
+                "The request was received successfully.",null);
     }
 
     @Test
@@ -176,31 +227,13 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Media Type",null);
     }
 
-    @ParameterizedTest(name = "Request Created At System Header With Valid Date Format - Param : {0} --> {1}")
-    @CsvSource({"Valid_Date_Format, 2012-03-19T07:22:00Z", "Valid_Date_Format, 2002-10-02T15:00:00Z",
-            "Valid_Date_Format, 2020-10-13T20:20:39+01:00"
-    })
-    void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                getHttpSucessStatus(),
-                getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                "The request was received successfully.",null);
-    }
-
     @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
     @CsvSource(value = {
             //System Headers of Accept and Content-Type could not be duplicated as Rest Assured seems to remove the Duplication of valid same values.
             //This should be tested manually using Postman.
             "Source-System,NIL","Source-System,''","Source-System,CFT",
             "Destination-System,NIL","Destination-System,''","Destination-System,SNL",
-            "Request-Created-At,NIL","Request-Created-At,''","Request-Created-At,2002-10-02T15:00:00Z"
+            "Request-Created-At,NIL"
     }, nullValues = "NIL")
     void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 
@@ -220,6 +253,5 @@ public abstract class HMICommonHeaderTest {
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
                 expectedErrorMessage,null);
-
     }
 }
