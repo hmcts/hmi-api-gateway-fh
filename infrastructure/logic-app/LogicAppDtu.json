@@ -226,7 +226,7 @@
                                                 }
                                             }
                                         },
-                                        "Delete_blob_2": {
+                                        "Delete_source_blob": {
                                             "runAfter": {
                                                 "HTTP": [
                                                     "Succeeded"
@@ -244,6 +244,12 @@
                                             }
                                         },
                                         "Get_Client_ID": {
+                                            "runAfter": {
+                                                "Create_payload_file": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
@@ -252,15 +258,15 @@
                                                 },
                                                 "method": "get",
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-id')}/value"
-                                            },
+                                            }
+                                        },
+                                        "Get_Client_Secret_": {
                                             "runAfter": {
-                                                "Create_payload_file": [
+                                                "Get_Client_ID": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection"
-                                        },
-                                        "Get_Client_Secret_": {
+                                            "type": "ApiConnection",
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
@@ -269,15 +275,15 @@
                                                 },
                                                 "method": "get",
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
-                                            },
+                                            }
+                                        },
+                                        "HTTP": {
                                             "runAfter": {
-                                                "Get_Client_ID": [
+                                                "Get_Client_Secret_": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection"
-                                        },
-                                        "HTTP": {
+                                            "type": "Http",
                                             "inputs": {
                                                 "authentication": {
                                                     "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
@@ -296,13 +302,7 @@
                                                 },
                                                 "method": "POST",
                                                 "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/hearings"
-                                            },
-                                            "runAfter": {
-                                                "Get_Client_Secret_": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "Http"
+                                            }
                                         },
                                         "Set_jsonPayload": {
                                             "runAfter": {
@@ -366,6 +366,51 @@
                                                     "contentTransfer": {
                                                         "transferMode": "Chunked"
                                                     }
+                                                }
+                                            },
+                                            "Create_blob": {
+                                                "runAfter": {
+                                                    "Delete_blob": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@concat('Rota files to be processed')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/rota/input",
+                                                        "name": "read.me",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Delete_blob": {
+                                                "runAfter": {
+                                                    "Create_File_in_Error_Folder": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "delete",
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                                                 }
                                             }
                                         }
