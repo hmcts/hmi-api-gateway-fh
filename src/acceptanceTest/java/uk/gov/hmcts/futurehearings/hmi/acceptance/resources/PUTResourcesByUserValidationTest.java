@@ -35,8 +35,6 @@ class PUTResourcesByUserValidationTest extends ResourceValidationTest {
     @Value("${resourcesByUser_idRootContext}")
     private String resourcesByUser_idRootContext;
 
-    private HttpMethod httpMethod;
-
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();

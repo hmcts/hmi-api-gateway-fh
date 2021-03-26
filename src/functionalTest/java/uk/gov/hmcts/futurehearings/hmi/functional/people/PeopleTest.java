@@ -8,8 +8,8 @@ import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
@@ -45,33 +45,27 @@ public class PeopleTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-
     @Test
-    public void testPeopleLookUp() throws Exception {
-
-        log.debug("In the testSuccessfulGetPeople() method");
-
+    public void testPeopleLookUp() {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
         queryParameters.put("page", "1");
+        queryParameters.put("TEST", "TEST");
 
-        //Make Get call to fetch list of People
         headersAsMap = createStandardHMIHeader("EMULATOR");
-        final Response response = peopleSteps.shouldFetchListOfPeople(peopleRootContext,
+        peopleSteps.shouldFetchListOfPeople(peopleRootContext,
                 headersAsMap,
                 authorizationToken,
                 queryParameters);
+    }
 
-        //Verify People List and fetch People Id from first record
-        String peopleId = peopleSteps.assertAndFetchPeopleId(response);
-        log.debug("The value of the peopleId : "+peopleId);
-
-        //Make Get by People Id call and verify
-        people_idRootContext = String.format(people_idRootContext, peopleId);
-        peopleSteps.shouldGetByPeopleId(people_idRootContext, peopleId,
+    @Test
+    public void testPersonLookUp() {
+        people_idRootContext = String.format(people_idRootContext, new Random().nextInt(99999999));
+        headersAsMap = createStandardHMIHeader("EMULATOR");
+        peopleSteps.shouldGetByPeopleId(people_idRootContext,
                 headersAsMap,
-                authorizationToken,
-                null);
+                authorizationToken);
     }
 }

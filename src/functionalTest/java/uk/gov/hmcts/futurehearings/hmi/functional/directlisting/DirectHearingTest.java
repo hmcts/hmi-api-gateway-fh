@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
@@ -45,23 +44,12 @@ public class DirectHearingTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-
     @Test
-    public void testSuccessfulDirectHearing() throws Exception {
-
-        log.debug("In the testSuccessfulPostToHearing () method");
-
+    public void testDirectHearing() throws Exception {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
 
-        String sessionIdCaseHQ = directHearingSteps.getSessionIdForDirectListing(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-
-        directhearings_idRootContext = String.format(directhearings_idRootContext, sessionIdCaseHQ);
-       String inputBodyForDirectListing =
-                String.format(readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json"), sessionIdCaseHQ);
+        String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json");
         directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
                 headersAsMap,
                 authorizationToken,

@@ -60,7 +60,6 @@ public abstract class FunctionalTest {
 
     @Before
     public void initialiseValues() throws Exception {
-
         RestAssured.config =
                 SerenityRest.config()
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));

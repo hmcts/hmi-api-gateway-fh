@@ -30,8 +30,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("functional")
 public class ResourcesAPITest extends FunctionalTest {
 
-    public static final String RESOURCES_INPUT_PATH = "uk/gov/hmcts/futurehearings/hmi/functional/resources/input";
-
     @Value("${resourcesByUserRootContext}")
     protected String resourcesByUserRootContext;
 
@@ -49,7 +47,6 @@ public class ResourcesAPITest extends FunctionalTest {
 
     @Test
     public void testRequestUserWithEmptyPayload() {
-
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
                 headersAsMap,
@@ -58,59 +55,16 @@ public class ResourcesAPITest extends FunctionalTest {
     }
 
     @Test
-    public void testRequestAndAmendAResourceByLocation() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        int randomId = new Random().nextInt(99999999);
-        String inputBodyForCreateResourcesByLocation =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), randomId,randomId);
-        resourceSteps.shouldCreateALocation(resourcesByLocationRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForCreateResourcesByLocation);
-
-        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
-        String inputBodyForAmendResourcesByLocation =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/PUT-resources-location-payload.json"), randomId,randomId);
-        resourceSteps.shouldUpdateALocation(resourcesByLocation_idRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForAmendResourcesByLocation);
-    }
-
-    @Test
-    public void testRequestLocationWithEmptyPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
+    public void testRequestLocationWithEmptyPayload() {
         resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.POST,
                 "{}");
-
     }
 
     @Test
-    public void testRequestLocationWithXmlPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.POST,
-                "<xml><test></xml>");
-    }
-
-    @Test
-    public void testAmendLocationWithEmptyPayload() throws IOException {
-
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
+    public void testAmendLocationWithEmptyPayload() {
         int randomId = new Random().nextInt(99999999);
-        String inputBodyForCreateResourcesByLocation =
-                String.format(readFileContents(RESOURCES_INPUT_PATH + "/POST-resources-location-payload.json"), randomId,randomId);
-        resourceSteps.shouldCreateALocation(resourcesByLocationRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForCreateResourcesByLocation);
-
         resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
         resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocation_idRootContext,
                 headersAsMap,

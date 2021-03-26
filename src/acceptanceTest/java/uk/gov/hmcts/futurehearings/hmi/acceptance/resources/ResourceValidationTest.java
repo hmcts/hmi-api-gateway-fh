@@ -60,31 +60,4 @@ public abstract class ResourceValidationTest extends HMICommonHeaderTest {
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
     }
-
-    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
-    @CsvSource(value = {"EMULATOR,400,1000,Invalid LOV Value","EMULATOR,400,1002,reference to a resource that doesn't exist","EMULATOR,400,1003,mandatory value missing","EMULATOR,400,1004,schema validation failure"}, nullValues = "NIL")
-    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
-                                                         final String returnHttpCode,
-                                                         final String returnErrorCode,
-                                                         final String returnDescription) throws Exception {
-
-        final HttpStatus httpStatus =
-                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), "put-user-as-resource-request-valid.json",
-                createHeaderWithEmulatorValues(
-                        destinationSystem,
-                        returnHttpCode,
-                        returnErrorCode,
-                        returnDescription),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                httpStatus,
-                getInputFileDirectory(),
-                new CaseHQCommonErrorVerifier(),
-                returnDescription,
-                null);
-    }
 }
