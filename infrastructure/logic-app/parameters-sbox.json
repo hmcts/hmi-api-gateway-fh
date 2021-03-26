@@ -18,6 +18,18 @@
                 },
                 "secretName": "dtu-storage-account-key"
              }
+        },
+        "appId":{
+            "value": "#{keyVaultUserId}#"
+        },
+        "appSecret":{
+            "value": "#{keyVaultUserSecret}#"
+        },
+        "tenantId":{
+            "value": "#{azureTenant}#"
+        },
+        "keyvaultName":{
+            "value": "hmi-shared-kv-sbox"
         }
     }
 }
