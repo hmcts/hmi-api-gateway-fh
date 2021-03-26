@@ -368,7 +368,24 @@
                                                     }
                                                 }
                                             },
-                                            "Create_blob": {
+                                            "Delete_blob": {
+                                                "runAfter": {
+                                                    "Create_File_in_Error_Folder": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "delete",
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                }
+                                            },
+                                            "Update_read.me": {
                                                 "runAfter": {
                                                     "Delete_blob": [
                                                         "Succeeded"
@@ -394,23 +411,6 @@
                                                     "contentTransfer": {
                                                         "transferMode": "Chunked"
                                                     }
-                                                }
-                                            },
-                                            "Delete_blob": {
-                                                "runAfter": {
-                                                    "Create_File_in_Error_Folder": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ApiConnection",
-                                                "inputs": {
-                                                    "host": {
-                                                        "connection": {
-                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                        }
-                                                    },
-                                                    "method": "delete",
-                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                                                 }
                                             }
                                         }
