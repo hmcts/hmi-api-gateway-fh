@@ -1,21 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.people.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
-import static uk.gov.hmcts.futurehearings.hmi.functional.people.process.PeopleLookUpResponseProcess.getPeopleId;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 
 public class PeopleSteps {
 
@@ -23,25 +16,14 @@ public class PeopleSteps {
     public Response shouldFetchListOfPeople(final String apiURL,
                                        final Map<String, Object> headersAsMap,
                                        final String authorizationToken,
-                                       final Map<String, String> queryParameters) throws Exception {
+                                       final Map<String, String> queryParameters) {
 
-        Response response = callRestEndpointWithQueryParams(apiURL,
+        Response response = callRestEndpointWithInvalidQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+                queryParameters, HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
         return response;
-    }
-
-    @Step("Verify People List and Fetch people id from the first record")
-    public String assertAndFetchPeopleId(Response response) throws Exception {
-        System.out.println(response.body().asString());
-        JSONArray jsonArray = new JSONArray(response.body().asString());
-        System.out.println(jsonArray.length());
-
-        String peopleId = getPeopleId(response);
-        assertTrue(Objects.nonNull(peopleId) && !peopleId.trim().equals(""));
-        return peopleId;
     }
 
     @Step("User makes a request to Get List of People for relevant search parameters on the People API")
