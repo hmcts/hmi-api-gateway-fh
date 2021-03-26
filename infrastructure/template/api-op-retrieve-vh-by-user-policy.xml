@@ -51,7 +51,7 @@
                                 return "client_id=#{vhAuthClient}#&resource=#{vhAuthResource}#&client_secret=#{vhAuthSecret}#&grant_type=client_credentials";
                             }</set-body>
                         </send-request>
-                        <cache-store-value key="vhlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
                     </when>
                 </choose>
                 <set-header name="Authorization" exists-action="override">
