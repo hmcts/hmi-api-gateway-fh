@@ -1,6 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.sessions.steps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithInvalidQueryParams;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 import java.util.Map;
 
@@ -17,9 +17,9 @@ public class SessionsLookUpSteps {
                                                               final String authorizationToken,
                                                               final Map<String, String> queryParameters) {
 
-         callRestEndpointWithInvalidQueryParams(apiURL,
+         callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.BAD_REQUEST);
+                queryParameters, HttpStatus.OK);
     }
 }

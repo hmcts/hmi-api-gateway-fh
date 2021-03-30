@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.sessions;
 
+import org.junit.Ignore;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.sessions.steps.SessionsLookUpSteps;
@@ -39,9 +40,60 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testFailsGetSessionForSessionRequestType() {
+    @Ignore
+    public void testSuccessfulGetSessionForSessionRequestType() {
         Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "TEST");
+        queryParameters.put("requestSessionType", "ADHOC");
+
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    @Ignore
+    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() {
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("requestSessionType", "ADHOC");
+        queryParameters.put("requestDuration", "360");
+
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() {
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("requestSessionType", "ADHOC");
+        queryParameters.put("requestLocationId", "301");
+
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestJudgeType() {
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("requestSessionType", "ADHOC");
+        queryParameters.put("requestJudgeType", "PUBLAW");
+
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestStartDateAndRequestEndDate() {
+        Map<String, String> queryParameters = new HashMap<String, String>();
+        queryParameters.put("requestSessionType", "ADHOC");
+        queryParameters.put("requestStartDate", "2020-12-01T10:00:00Z");
+        queryParameters.put("requestEndDate", "2020-12-09T10:00:00Z");
 
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
