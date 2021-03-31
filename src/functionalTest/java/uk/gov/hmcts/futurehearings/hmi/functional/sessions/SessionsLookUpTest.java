@@ -40,7 +40,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
     public void testSuccessfulGetSessionForSessionRequestType() {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
@@ -52,7 +52,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
