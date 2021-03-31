@@ -57,9 +57,9 @@ public class VideoHearingSteps {
                                        final String authorizationToken,
                                        final Map<String, String> queryParameters) {
         System.out.println("URL" + apiURL);
-        callRestEndpointWithInvalidQueryParams(apiURL,
+        callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.BAD_REQUEST);
+                queryParameters, HttpStatus.OK);
     }
 }
