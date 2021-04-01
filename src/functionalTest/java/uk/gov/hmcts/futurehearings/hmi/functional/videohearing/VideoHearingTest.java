@@ -79,7 +79,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testGetVideoHearing() {
         headersAsMap = createStandardHMIHeader("VH");
-        Map<String, String> queryParameters = new HashMap<String, String>();
+        Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("username", String.valueOf(new Random().nextInt(99999999)));
 
         videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
