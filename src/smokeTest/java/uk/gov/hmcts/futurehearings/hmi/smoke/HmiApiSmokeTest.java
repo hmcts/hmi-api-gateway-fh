@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import io.restassured.response.Response;
@@ -39,13 +40,7 @@ class HmiApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the root endpoint")
     void testRootHmiApiGet() {
-        Response response;
-
-        response = given()
-                .headers(headersAsMap)
-                .auth().oauth2(getAuthorizationToken())
-                .basePath(getRootContext())
-                .when().get();
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), RestClient.makeGetRequest(getHeadersAsMap(),
+                getAuthorizationToken(), getRootContext()).getStatusCode());
     }
 }

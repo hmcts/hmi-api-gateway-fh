@@ -32,7 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 public abstract class SmokeTest {
 
     @Value("${targetInstance}")
-    protected String targetInstance;
+    private String targetInstance;
 
     @Value("${token_apiURL}")
     private String token_apiURL;
@@ -52,15 +52,13 @@ public abstract class SmokeTest {
     @Value("${scope}")
     private String scope;
 
-    protected Map<String, String> headersAsMap = new HashMap<String,String>();
+    private Map<String, String> headersAsMap = new HashMap<String,String>();
 
-    protected String authorizationToken;
+    private String authorizationToken;
 
-    protected String rootContext;
+    private String rootContext;
 
-    protected Map<String, String> params;
-
-    protected String destinationSystem = "MOCK";
+    private String destinationSystem = "MOCK";
 
     @BeforeAll
     public void beforeAll(TestInfo info) {

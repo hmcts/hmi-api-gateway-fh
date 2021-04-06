@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import static io.restassured.RestAssured.given;
@@ -40,17 +41,10 @@ class SessionsApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the sessions endpoint")
     void testSessionsHmiApiGet() {
-        Response response;
         final Map<String, String> queryParams = new HashMap<>();
         queryParams.put("requestSessionType", "ADHOC");
 
-        response = given()
-                .queryParams(queryParams)
-                .headers(headersAsMap)
-                .auth().oauth2(authorizationToken)
-                .basePath(rootContext)
-                .when().get();
-
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), RestClient.makeGetRequest(getHeadersAsMap(),
+                getAuthorizationToken(), queryParams, getRootContext()).getStatusCode());
     }
 }
