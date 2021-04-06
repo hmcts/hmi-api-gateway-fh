@@ -35,4 +35,17 @@ class HmiApiSmokeTest extends SmokeTest {
         super.initialiseValues();
         setRootContext(hmiApiRootContext);
     }
+
+    @Test
+    @DisplayName("Smoke Test to test the root endpoint")
+    void testRootHmiApiGet() {
+        Response response;
+
+        response = given()
+                .headers(headersAsMap)
+                .auth().oauth2(getAuthorizationToken())
+                .basePath(getRootContext())
+                .when().get();
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
 }

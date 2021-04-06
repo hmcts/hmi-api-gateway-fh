@@ -34,4 +34,17 @@ class ListingsApiSmokeTest extends SmokeTest {
         super.initialiseValues();
         setRootContext(listingsApiRootContext);
     }
+
+    @Test
+    @DisplayName("Smoke Test to test the listings endpoint")
+    void testListingsHmiApiGet() {
+        Response response;
+
+        response = given()
+                .headers(headersAsMap)
+                .auth().oauth2(getAuthorizationToken())
+                .basePath(getRootContext())
+                .when().get();
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
 }
