@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.hearings;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -36,7 +35,9 @@ class HearingApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the hearings endpoint")
     void testHearingHmiApiGet() {
-        assertEquals(HttpStatus.OK.value(), RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
-                getRootContext()).getStatusCode());
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
+                getRootContext());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
