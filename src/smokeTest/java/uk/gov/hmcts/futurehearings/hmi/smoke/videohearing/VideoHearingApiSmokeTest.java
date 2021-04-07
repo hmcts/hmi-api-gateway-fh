@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.videohearing;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -41,7 +42,9 @@ class VideoHearingApiSmokeTest extends SmokeTest {
         final Map<String, String> queryParams = new HashMap<>();
         queryParams.put("username", String.valueOf(new Random().nextInt(99999999)));
 
-        assertEquals(HttpStatus.OK.value(), RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), queryParams, getRootContext()).getStatusCode());
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
+                getAuthorizationToken(), queryParams, getRootContext());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
