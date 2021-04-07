@@ -35,8 +35,8 @@ public class VideoHearingSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, httpMethod, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+                body, httpMethod, HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
     }
 
     @Step("User makes a request to Delete Video Hearing API")
@@ -47,8 +47,8 @@ public class VideoHearingSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, HttpMethod.DELETE,HttpStatus.NO_CONTENT);
-        assertEquals(HttpStatus.NO_CONTENT.value(),response.getStatusCode());
+                body, HttpMethod.DELETE,HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
     }
 
     @Step("User makes a request to Get List of hearings for relevant search parameters on the Video Hearing API")
@@ -57,9 +57,20 @@ public class VideoHearingSteps {
                                        final String authorizationToken,
                                        final Map<String, String> queryParameters) {
         System.out.println("URL" + apiURL);
-        callRestEndpointWithInvalidQueryParams(apiURL,
+        callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.BAD_REQUEST);
+                queryParameters, HttpStatus.OK);
+    }
+
+    @Step("User makes a request to Get Video hearing by ID")
+    public Response performVideoHearingGetByHearingId(final String apiURL,
+                                                       final Map<String, Object> headersAsMap,
+                                                       final String authorizationToken) {
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                null, HttpMethod.GET,HttpStatus.OK);
+        return response;
     }
 }
