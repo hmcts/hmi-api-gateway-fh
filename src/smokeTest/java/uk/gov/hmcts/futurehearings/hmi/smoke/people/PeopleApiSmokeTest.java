@@ -45,9 +45,10 @@ class PeopleApiSmokeTest extends SmokeTest {
         queryParams.put("per_page", "50");
         queryParams.put("page", "1");
 
-        assertEquals(HttpStatus.OK.value(),
-                RestClient.makeGetRequest(getHeadersAsMap(),
-                        getAuthorizationToken(), queryParams,
-                        getRootContext()).getStatusCode());
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
+                getAuthorizationToken(), queryParams,
+                getRootContext());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }

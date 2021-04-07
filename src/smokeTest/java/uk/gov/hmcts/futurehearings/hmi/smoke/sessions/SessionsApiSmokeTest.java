@@ -44,7 +44,9 @@ class SessionsApiSmokeTest extends SmokeTest {
         final Map<String, String> queryParams = new HashMap<>();
         queryParams.put("requestSessionType", "ADHOC");
 
-        assertEquals(HttpStatus.BAD_REQUEST.value(), RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), queryParams, getRootContext()).getStatusCode());
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
+                getAuthorizationToken(), queryParams, getRootContext());
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 }

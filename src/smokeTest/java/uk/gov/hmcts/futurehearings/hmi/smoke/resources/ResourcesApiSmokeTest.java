@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.resources;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -36,7 +35,8 @@ class ResourcesApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the resources endpoint")
     void testResourcesHmiApiGet() {
-        assertEquals(HttpStatus.OK.value(),
-                RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(), getRootContext()).getStatusCode());
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(), getRootContext());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
