@@ -26,6 +26,9 @@
         }, 
         "keyvaultName": {
             "type": "string"
+        },
+        "hmiSchedulesUrl": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -346,7 +349,7 @@
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/hearings"
+                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                             }
                                         },
                                         "Set_jsonPayload": {
