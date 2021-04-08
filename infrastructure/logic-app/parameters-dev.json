@@ -30,6 +30,9 @@
         },
         "keyvaultName":{
             "value": "hmi-shared-kv-dev"
+        },
+        "hmiSchedulesUrl":{
+            "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
         }
     }
 }

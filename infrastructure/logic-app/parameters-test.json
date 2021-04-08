@@ -30,6 +30,9 @@
         },
         "keyvaultName":{
             "value": "hmi-shared-kv-test"
+        },
+        "hmiSchedulesUrl":{
+            "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
         }
     }
 }
