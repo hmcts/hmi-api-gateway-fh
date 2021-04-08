@@ -1,15 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.hearings;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import io.restassured.response.Response;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -35,4 +32,12 @@ class HearingApiSmokeTest extends SmokeTest {
         setRootContext(hearingsApiRootContext);
     }
 
+    @Test
+    @DisplayName("Smoke Test to test the hearings endpoint")
+    void testHearingHmiApiGet() {
+        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
+                getRootContext());
+
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
 }
