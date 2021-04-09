@@ -69,6 +69,8 @@
             <value>RM</value>
         </check-header>
         <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true" />
+        <check-header name="Request-Processed-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Processed-At" ignore-case="true" />
+        <check-header name="Request-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Type" ignore-case="true" />
         <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>application/json</value>
             <value>application/json; version=1.2</value><!--Additional header for passing McGirr tests -->
@@ -92,7 +94,7 @@
             </when>
         </choose>
         <choose>
-            <when condition="@(!Regex.IsMatch(context.Request.Headers.GetValueOrDefault("Request-Created-At",""), @"((?:(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]))T((2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9](?:\.\d+)?))(Z|[\+-](2[0-3]|[01][0-9]):[0-5][0-9])?)$"))">
+            <when condition="@(!Regex.IsMatch(context.Request.Headers.GetValueOrDefault("Request-Created-At",""), @"^((?:(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]))T((2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9](?:\.\d+)?))(Z|[\+-](2[0-3]|[01][0-9]):[0-5][0-9])?)$"))">
                 <return-response>
                     <set-status code="400" reason="Bad request - &apos;Invalid Request-Created-At&apos; http header" />
                     <set-header name="Content-Type" exists-action="override">
