@@ -233,7 +233,7 @@ public abstract class HMICommonHeaderTest {
             //This should be tested manually using Postman.
             "Source-System,NIL","Source-System,''","Source-System,CFT",
             "Destination-System,NIL","Destination-System,''","Destination-System,SNL",
-            "Request-Created-At,NIL"
+            "Request-Created-At,NIL","Request-Created-At,''","Request-Created-At,2002-10-02T15:00:00Z"
     }, nullValues = "NIL")
     void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 
