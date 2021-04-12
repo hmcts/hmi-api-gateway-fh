@@ -27,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings("java:S2187")
 class VideoHearingApiSmokeTest extends SmokeTest {
 
-    @Value("${videoHearingApiRootContext}")
-    private String videoHearingApiRootContext;
+    @Value("${videoHearingRootContext}")
+    private String videoHearingRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         this.setDestinationSystem("VH");
         super.initialiseValues();
-        setRootContext(videoHearingApiRootContext);
+        setRootContext(videoHearingRootContext);
     }
 
     @Test
