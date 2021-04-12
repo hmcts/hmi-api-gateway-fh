@@ -248,19 +248,6 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - template: pipeline/jobs/test-functional.yaml
-        parameters:
-          displayName: Functional Test
-          dependsOn:
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-SBOX
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
-
       - template: pipeline/jobs/test-codequality.yaml
         parameters:
           displayName: Code Quality Test
