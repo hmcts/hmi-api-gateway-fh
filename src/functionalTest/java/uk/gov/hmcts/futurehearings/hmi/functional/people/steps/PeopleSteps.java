@@ -18,11 +18,11 @@ public class PeopleSteps {
                                        final String authorizationToken,
                                        final Map<String, String> queryParameters) {
 
-        Response response = callRestEndpointWithInvalidQueryParams(apiURL,
+        Response response = callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
+                queryParameters, HttpStatus.OK);
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
         return response;
     }
 

@@ -51,7 +51,6 @@ public class PeopleTest extends FunctionalTest {
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
         queryParameters.put("page", "1");
-        queryParameters.put("TEST", "TEST");
 
         headersAsMap = createStandardHMIHeader("EMULATOR");
         peopleSteps.shouldFetchListOfPeople(peopleRootContext,
