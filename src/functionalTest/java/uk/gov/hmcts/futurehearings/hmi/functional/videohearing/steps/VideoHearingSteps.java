@@ -62,15 +62,4 @@ public class VideoHearingSteps {
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
     }
-
-    @Step("User makes a request to Get Video hearing by ID")
-    public Response performVideoHearingGetByHearingId(final String apiURL,
-                                                       final Map<String, Object> headersAsMap,
-                                                       final String authorizationToken) {
-        Response response = callRestEndpointWithPayload(apiURL,
-                headersAsMap,
-                authorizationToken,
-                null, HttpMethod.GET,HttpStatus.OK);
-        return response;
-    }
 }

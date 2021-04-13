@@ -26,6 +26,9 @@
         }, 
         "keyvaultName": {
             "type": "string"
+        },
+        "hmiSchedulesUrl": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -198,6 +201,34 @@
                                                 }
                                             }
                                         },
+                                        "Create_invalid_file_in_error_folder": {
+                                            "runAfter": {
+                                                "Set_jsonPayload": [
+                                                    "Failed"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": "@body('Get_blob_content_using_path')",
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/datasets/default/files",
+                                                "queries": {
+                                                    "folderPath": "/rota/error/",
+                                                    "name": "@items('For_each')?['Name']",
+                                                    "queryParametersSingleEncoded": true
+                                                }
+                                            },
+                                            "runtimeConfiguration": {
+                                                "contentTransfer": {
+                                                    "transferMode": "Chunked"
+                                                }
+                                            }
+                                        },
                                         "Create_payload_file": {
                                             "runAfter": {
                                                 "Set_jsonString": [
@@ -224,6 +255,23 @@
                                                 "contentTransfer": {
                                                     "transferMode": "Chunked"
                                                 }
+                                            }
+                                        },
+                                        "Delete_invalid_file": {
+                                            "runAfter": {
+                                                "Create_invalid_file_in_error_folder": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                                             }
                                         },
                                         "Delete_source_blob": {
@@ -301,7 +349,7 @@
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/hearings"
+                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                             }
                                         },
                                         "Set_jsonPayload": {

@@ -30,6 +30,9 @@
         },
         "keyvaultName":{
             "value": "hmi-shared-kv-sbox"
+        },
+        "hmiSchedulesUrl":{
+            "value": "https://hmi-apim.sbox.platform.hmcts.net/hmi/schedules"
         }
     }
 }
