@@ -123,8 +123,8 @@ test.finalizedBy(aggregate)
 
 task functional(type: Test) {
     retry {
-        maxRetries = 1
-        maxFailures = 2
+        maxRetries = 2
+        maxFailures = 5
         failOnPassedAfterRetry = false
     }
     description = "Runs functional tests"
@@ -161,8 +161,8 @@ task integration(type: Test) {
 
 task smoke(type: Test) {
     retry {
-        maxRetries = 1
-        maxFailures = 2
+        maxRetries = 2
+        maxFailures = 5
         failOnPassedAfterRetry = false
     }
     description = "Runs Smoke Tests"
