@@ -3,10 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.schedules;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-
-import java.io.IOException;
-import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
@@ -39,8 +35,8 @@ public class SchedulesAPITest extends FunctionalTest {
 
     @Test
     public void testCreateScheduleWithEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("EMULATOR");
-        schedulesSteps.shouldPostSessionsWithInvalidPayload(schedulesApiRootContext,
+        headersAsMap = createStandardHMIHeader("MOCK");
+        schedulesSteps.shouldPostSessionsWithPayload(schedulesApiRootContext,
                 headersAsMap, authorizationToken, HttpMethod.POST, "{}");
     }
 }

@@ -13,17 +13,17 @@ import org.springframework.http.HttpStatus;
 public class SchedulesSteps {
 
     @Step("Request made to Sessions API with invalid payload")
-    public void shouldPostSessionsWithInvalidPayload(final String apiURL,
-                                                     final Map<String, Object> headersAsMap,
-                                                     final String authorizationToken,
-                                                     final HttpMethod httpMethod,
-                                                     final String body) {
+    public void shouldPostSessionsWithPayload(final String apiURL,
+                                              final Map<String, Object> headersAsMap,
+                                              final String authorizationToken,
+                                              final HttpMethod httpMethod,
+                                              final String body) {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
                 body,
                 httpMethod,
-                HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+                HttpStatus.CREATED);
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
     }
 }
