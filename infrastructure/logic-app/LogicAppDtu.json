@@ -99,7 +99,8 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'keyvault')]"
+                "[resourceId('Microsoft.Web/connections', 'keyvault')]",
+                "[resourceId('Microsoft.Web/connections', 'office365')]"
             ],
             "properties": {
                 "state": "Enabled",
