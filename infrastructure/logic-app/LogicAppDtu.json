@@ -274,7 +274,7 @@
                                                 }
                                             }
                                         },
-                                        "Delete_invalid_file": {
+                                        "Send_an_email_(V2)": {
                                             "runAfter": {
                                                 "Create_invalid_file_in_error_folder": [
                                                     "Succeeded"
