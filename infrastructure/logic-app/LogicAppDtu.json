@@ -271,8 +271,30 @@
                                             }
                                         },
                                         "Send_an_email_(V2)": {
+                                            "inputs": {
+                                                "body": {
+                                                    "Body": "<p>An error was found on the file @{body('Create_invalid_file_in_error_folder')?['Name']} at @{body('Create_invalid_file_in_error_folder')?['LastModified']}.<br>\nThe location of the original message/file is located at @{body('Create_invalid_file_in_error_folder')?['Path']}.</p>",
+                                                    "Subject": "Error for producing a XML payload in JSON",
+                                                    "To": "subroto.mukherjee@HMCTS.NET"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/Mail"
+                                            },
                                             "runAfter": {
                                                 "Create_invalid_file_in_error_folder": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection"
+                                        },
+                                        "Delete_invalid_file": {
+                                            "runAfter": {
+                                                "Send_an_email_(V2)": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -364,28 +386,6 @@
                                                 "method": "POST",
                                                 "uri": "[parameters('hmiSchedulesUrl')]"
                                             }
-                                        },
-                                        "Send_an_email_(V2)": {
-                                            "inputs": {
-                                                "body": {
-                                                    "Body": "<p>An error was found on the file @{body('Create_invalid_file_in_error_folder')?['Name']} at @{body('Create_invalid_file_in_error_folder')?['LastModified']}.<br>\nThe location of the original message/file is located at @{body('Create_invalid_file_in_error_folder')?['Path']}.</p>",
-                                                    "Subject": "Error for producing a XML payload in JSON",
-                                                    "To": "subroto.mukherjee@HMCTS.NET"
-                                                },
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['office365']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "post",
-                                                "path": "/v2/Mail"
-                                            },
-                                            "runAfter": {
-                                                "Create_invalid_file_in_error_folder": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection"
                                         },
                                         "Set_jsonPayload": {
                                             "runAfter": {
