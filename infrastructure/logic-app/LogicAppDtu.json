@@ -76,14 +76,9 @@
             "name": "office365",
             "location": "[resourceGroup().location]",
             "properties": {
-                "displayName": "Office 365",
-                "customParameterValues": {
-                },
+                "displayName": "Office 365 Mailer",
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/office365')]"
-                },
-                "parameterValues": {
-
                 }
             }
         },
