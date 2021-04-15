@@ -52,7 +52,7 @@ public class PeopleTest extends FunctionalTest {
         queryParameters.put("per_page", "52");
         queryParameters.put("page", "1");
 
-        headersAsMap = createStandardHMIHeader("EMULATOR");
+        headersAsMap = createStandardHMIHeader("ELINKS");
         peopleSteps.shouldFetchListOfPeople(peopleRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -62,7 +62,7 @@ public class PeopleTest extends FunctionalTest {
     @Test
     public void testPersonLookUp() {
         people_idRootContext = String.format(people_idRootContext, new Random().nextInt(99999999));
-        headersAsMap = createStandardHMIHeader("EMULATOR");
+        headersAsMap = createStandardHMIHeader("ELINKS");
         peopleSteps.shouldGetByPeopleId(people_idRootContext,
                 headersAsMap,
                 authorizationToken);
