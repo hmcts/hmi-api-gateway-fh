@@ -33,8 +33,8 @@ public class PeopleSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                null, HttpMethod.GET,HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+                null, HttpMethod.GET,HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND.value(),response.getStatusCode());
     }
 
     @Step("User makes a request to Update People (PUT in the People API)")
