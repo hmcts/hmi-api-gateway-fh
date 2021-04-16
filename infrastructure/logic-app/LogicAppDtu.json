@@ -345,7 +345,7 @@
                                                     "Accept": "application/json",
                                                     "Content-Type": "application/json",
                                                     "Destination-System": "MOCK",
-                                                    "Request-Created-At": "2018-01-29 20:36:01Z",
+                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",

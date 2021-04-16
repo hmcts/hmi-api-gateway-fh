@@ -1,53 +1,50 @@
-package uk.gov.hmcts.futurehearings.hmi.smoke.people;
+package uk.gov.hmcts.futurehearings.hmi.smoke.videohearing;
 
 import io.restassured.response.Response;
-
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@DisplayName("Smoke Test for the HMI People Context")
+@DisplayName("Smoke Test for the HMI Video Hearing Context")
 @SuppressWarnings("java:S2187")
-class PeopleApiSmokeTest extends SmokeTest {
+class VideoHearingApiSmokeTest extends SmokeTest {
 
-    @Value("${peopleApiRootContext}")
-    private String peopleApiRootContext;
+    @Value("${videohearingsRootContext}")
+    private String videohearingsRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("ELINKS");
+        this.setDestinationSystem("VH");
         super.initialiseValues();
-        setRootContext(peopleApiRootContext);
+        setRootContext(videohearingsRootContext);
     }
 
     @Test
-    @DisplayName("Smoke Test to test the people endpoint")
-    void testPeopleHmiApiGet() {
+    void testVideoHearingHmiApiGet() {
         final Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("updated_since", "2020-11-01");
-        queryParams.put("per_page", "50");
-        queryParams.put("page", "1");
+        queryParams.put("username", String.valueOf(new Random().nextInt(99999999)));
 
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), queryParams,
-                getRootContext());
+                getAuthorizationToken(), queryParams, getRootContext());
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
