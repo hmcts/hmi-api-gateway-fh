@@ -1,7 +1,7 @@
 <policies>
     <inbound>
         <rewrite-uri template="/" copy-unmatched-params="true" />
-        <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/health/liveness" />
+        <set-backend-service base-url="#{vhHost}#/health/liveness" />
     </inbound>
     <backend>
         <base />
