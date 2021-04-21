@@ -1,0 +1,123 @@
+{
+    "?xml": {
+        "@version": "1.0",
+        "@encoding": "UTF-8",
+        "@standalone": "yes"
+    },
+    "rotaSchedule": {
+        "@xmlns": "http://com.moj.mcr.rota/v1/",
+        "rotaPeriod": {
+            "justiceAreaType": "LJA",
+            "justiceAreaName": "South West London",
+            "startDate": "2019-10-01",
+            "endDate": "2020-03-31"
+        },
+        "magistrates": {
+            "magistrate": [
+                {
+                    "_id": "MA1382",
+                    "title": "Mrs",
+                    "surname": "JavierTS",
+                    "forenames": "GaylaTS",
+                    "emailAddress": "gaylats.ioanats.javierts@rotaemail.com"
+                },
+                {
+                    "_id": "MA1462",
+                    "title": "Mrs",
+                    "surname": "SelbyTS",
+                    "forenames": "EthelindTS",
+                    "emailAddress": "ethelindts.arabellats.selbyts@rotaemail.com"
+                },
+                {
+                    "_id": "MA1450",
+                    "title": "Mrs",
+                    "surname": "LindsayTS",
+                    "forenames": "AshelyTS",
+                    "emailAddress": "ashelyts.tomits.lindsayts@rotaemail.com"
+                },
+                {
+                    "_id": "MA19917",
+                    "title": "Mrs",
+                    "surname": "MaddyTS",
+                    "forenames": "BarbeTS",
+                    "emailAddress": "barbets.hollits.maddyts@rotaemail.com"
+                },
+                {
+                    "_id": "MA12757",
+                    "title": "Mr",
+                    "surname": "DarlineTS",
+                    "forenames": "BrewsterTS",
+                    "emailAddress": "brewsterts.harrisonts.darlinets@rotaemail.com"
+                },
+                {
+                    "_id": "MA19919",
+                    "title": "Mrs",
+                    "surname": "ChristophTS",
+                    "forenames": "JayneTS",
+                    "emailAddress": "jaynets.clarisats.christophts@rotaemail.com"
+                },
+                {
+                    "_id": "MA20919",
+                    "title": "Mr",
+                    "surname": "FiliaTS",
+                    "forenames": "HarlandTS",
+                    "emailAddress": "harlandts.sawyerts.filiats@rotaemail.com"
+                },
+                {
+                    "_id": "MA1370",
+                    "title": "Mrs",
+                    "surname": "WilmarTS",
+                    "forenames": "ElnoreTS",
+                    "emailAddress": "elnorets.bernettets.wilmarts@rotaemail.com"
+                },
+                {
+                    "_id": "MA12857",
+                    "title": "Mrs",
+                    "surname": "RustyTS",
+                    "forenames": "AilaTS",
+                    "emailAddress": "ailats.celestets.rustyts@rotaemail.com"
+                },
+                {
+                    "_id": "MA1376",
+                    "title": "Mrs",
+                    "surname": "SeanTS",
+                    "forenames": "EmmalynnTS",
+                    "emailAddress": "emmalynnts.laviniets.seants@rotaemail.com"
+                },
+                {
+                    "_id": "MA21493",
+                    "title": "Ms",
+                    "surname": "PhipTS",
+                    "forenames": "CarleneTS",
+                    "emailAddress": "carlenets.verats.phipts@rotaemail.com"
+                },
+                {
+                    "_id": "MA21668",
+                    "title": "Mr",
+                    "surname": "RonnicaTS",
+                    "forenames": "ShepTS",
+                    "emailAddress": "shepts.lylets.ronnicats@rotaemail.com"
+                },
+                {
+                    "_id": "MA1324",
+                    "title": "Mrs",
+                    "surname": "OmarTS",
+                    "forenames": "KarenTS",
+                    "emailAddress": "karents.tildiets.omarts@rotaemail.com"
+                },
+                {
+                    "_id": "MA19920",
+                    "title": "Ms",
+                    "surname": "WardenTS",
+                    "forenames": "ElisabethTS",
+                    "emailAddress": "elisabethts.gretats.wardents@rotaemail.com"
+                },
+                {
+                    "_id": "MA19925",
+                    "title": "Mrs",
+                    "surname": "ManuelTS"
+                }
+            ]
+        }
+    }
+}
