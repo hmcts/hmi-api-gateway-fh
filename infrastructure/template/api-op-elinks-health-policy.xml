@@ -1,7 +1,7 @@
 <policies>
     <inbound>
         <rewrite-uri template="/" copy-unmatched-params="true" />
-        <!--set-backend-service base-url="#{vhHost}#/health/liveness" /-->
+        <!--set-backend-service base-url="#{elinksHost}#/health/liveness" /-->
         <set-backend-service base-url="https://#{elinksHost}#/health/liveness" />
         <mock-response status-code="200" content-type="application/json" />
     </inbound>
