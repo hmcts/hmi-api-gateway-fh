@@ -134,6 +134,18 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
+        environmentName: sandbox
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-SBOX
+        environment: sbox
+        dependsOn: createRotaStorage
 
   - stage: BuildDEV
     dependsOn: PlanDev
@@ -162,6 +174,18 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: TerraformApply
+        environmentName: development
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
+        dependsOn: createRotaStorage
 
   - stage: BuildTEST
     dependsOn: PlanTest
@@ -190,6 +214,18 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+        environmentName: test
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
+        dependsOn: createRotaStorage
 
   - stage: TestSBOX
     dependsOn: BuildSbox
@@ -391,6 +427,18 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+        environmentName: staging
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-STG
+        environment: stg
+        dependsOn: createRotaStorage
 
 
   - stage: BuildPROD
@@ -421,3 +469,15 @@ stages:
       parameters:
         displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+        environmentName: production
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-PROD
+        environment: prod
+        dependsOn: createRotaStorage

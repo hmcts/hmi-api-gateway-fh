@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName":{
+            "value": "sbox"
+        },
+        "workflows_hmidturota_name": {
+            "value": "hmi-la-dturota-sbox"
+        },
+        "storageAccountName":{
+            "value": "hmidtusbox"
+        },
+        "storageAccessKey":{
+            "reference": {
+                "keyVault": {
+                   "id": "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/hmi-sharedservices-sbox-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-sbox"
+                },
+                "secretName": "dtu-storage-account-key"
+             }
+        },
+        "appId":{
+            "value": "#{keyVaultUserId}#"
+        },
+        "appSecret":{
+            "value": "#{keyVaultUserSecret}#"
+        },
+        "tenantId":{
+            "value": "#{azureTenant}#"
+        },
+        "keyvaultName":{
+            "value": "hmi-shared-kv-sbox"
+        },
+        "hmiSchedulesUrl":{
+            "value": "https://hmi-apim.sbox.platform.hmcts.net/hmi/schedules"
+        }
+    }
+}

@@ -62,7 +62,7 @@ public class VideoHearingSteps {
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
     }
-
+    
     @Step("User makes a request to Get Video hearing by ID")
     public Response performVideoHearingGetByHearingId(final String apiURL,
                                                        final Map<String, Object> headersAsMap,

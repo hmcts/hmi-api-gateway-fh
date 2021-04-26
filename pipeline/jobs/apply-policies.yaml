@@ -23,6 +23,7 @@ jobs:
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
+      path: '**/*-policy.xml'
       environment: ${{ parameters.environment }}
   - template: ../steps/set-policies.yaml
     parameters:

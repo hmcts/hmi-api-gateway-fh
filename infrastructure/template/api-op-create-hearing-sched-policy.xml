@@ -1,0 +1,35 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{emulatorHost}#/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{emulatorHost}#/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{emulatorHost}#/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+				<rewrite-uri template="/retrieve-schedule" copy-unmatched-params="true" />
+				<set-backend-service base-url="http://#{emulatorHost}#/schedules/" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+				<mock-response status-code="201" content-type="application/json" />		
+        	</when>
+		</choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

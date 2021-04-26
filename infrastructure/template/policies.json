@@ -29,6 +29,11 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-hearing-sched-policy.xml",
       "errorAction"  : "Stop"
+    },{
+      "operationId"  : "create-schedule",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-hearing-sched-policy.xml",
+      "errorAction"  : "Stop"
     },
     {
       "operationId"  : "resource-by-id",
