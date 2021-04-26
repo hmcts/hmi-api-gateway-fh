@@ -4,7 +4,7 @@
             <value>Bearer #{elinksToken}#</value>
         </set-header>
         <rewrite-uri template="/people?updated_since=4018-04-10 " copy-unmatched-params="true" />
-        <set-backend-service base-url="https://#{elinksHost}#/api/" />
+        <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/api/" />
     </inbound>
     <backend>
         <base />
