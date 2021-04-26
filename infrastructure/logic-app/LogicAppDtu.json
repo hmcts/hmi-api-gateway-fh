@@ -71,6 +71,18 @@
             }
         },
         {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "office365",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "Office 365 Mailer",
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/office365')]"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmidturota_name')]",
@@ -82,7 +94,8 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'keyvault')]"
+                "[resourceId('Microsoft.Web/connections', 'keyvault')]",
+                "[resourceId('Microsoft.Web/connections', 'office365')]"
             ],
             "properties": {
                 "state": "Enabled",
@@ -257,9 +270,31 @@
                                                 }
                                             }
                                         },
-                                        "Delete_invalid_file": {
+                                        "Send_an_email_(V2)": {
+                                            "inputs": {
+                                                "body": {
+                                                    "Body": "<p>An error was found on the file @{body('Create_invalid_file_in_error_folder')?['Name']} at @{body('Create_invalid_file_in_error_folder')?['LastModified']}.<br>\nThe location of the original message/file is located at @{body('Create_invalid_file_in_error_folder')?['Path']}.</p>",
+                                                    "Subject": "Error for producing a XML payload in JSON",
+                                                    "To": "subroto.mukherjee@HMCTS.NET"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['office365']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/Mail"
+                                            },
                                             "runAfter": {
                                                 "Create_invalid_file_in_error_folder": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection"
+                                        },
+                                        "Delete_invalid_file": {
+                                            "runAfter": {
+                                                "Send_an_email_(V2)": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -563,6 +598,11 @@
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
                                 "connectionName": "keyvault",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
+                            },
+                            "office365": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/office365')]",
+                                "connectionName": "office365",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/office365')]"
                             }
                         }
                     }
