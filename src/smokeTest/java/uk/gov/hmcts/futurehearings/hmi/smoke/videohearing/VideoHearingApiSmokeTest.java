@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings("java:S2187")
 class VideoHearingApiSmokeTest extends SmokeTest {
 
-    @Value("${videohearingsRootContext}")
+    @Value("${videohearingsHealthcheck}")
     private String videohearingsRootContext;
 
     @BeforeAll
@@ -39,12 +39,9 @@ class VideoHearingApiSmokeTest extends SmokeTest {
     }
 
     @Test
-    void testVideoHearingHmiApiGet() {
-        final Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("username", String.valueOf(new Random().nextInt(99999999)));
-
+    void testVideoHearingHmiHealthCheck() {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), queryParams, getRootContext());
+                getAuthorizationToken(), getRootContext());
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
