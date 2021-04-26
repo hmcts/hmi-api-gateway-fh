@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -33,6 +32,7 @@ class PeopleApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
+        this.setDestinationSystem("ELINKS");
         super.initialiseValues();
         setRootContext(peopleApiRootContext);
     }

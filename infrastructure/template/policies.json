@@ -226,6 +226,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-hearing-by-id-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "vh-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-health-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
