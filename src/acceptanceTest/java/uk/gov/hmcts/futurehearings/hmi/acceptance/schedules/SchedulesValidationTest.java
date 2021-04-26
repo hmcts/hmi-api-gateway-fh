@@ -51,7 +51,7 @@ public abstract class SchedulesValidationTest extends HMICommonHeaderTest {
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setInputFileDirectory("sessions");
+        this.setInputFileDirectory("schedules");
         String authorizationToken = generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType, clientID,
