@@ -6,9 +6,6 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -27,26 +24,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings("java:S2187")
 class PeopleApiSmokeTest extends SmokeTest {
 
-    @Value("${peopleApiRootContext}")
-    private String peopleApiRootContext;
+    @Value("${peopleHealthcheck}")
+    private String peopleHealthcheck;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         this.setDestinationSystem("ELINKS");
         super.initialiseValues();
-        setRootContext(peopleApiRootContext);
+        setRootContext(peopleHealthcheck);
     }
 
     @Test
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
-        final Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("updated_since", "2020-11-01");
-        queryParams.put("per_page", "50");
-        queryParams.put("page", "1");
-
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), queryParams,
+                getAuthorizationToken(),
                 getRootContext());
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
