@@ -17,7 +17,6 @@ parameters:
       - STG
       - PROD
       - NONPROD
-      - PRODUCTION
       - ALL
 
   - name: environments
@@ -38,10 +37,6 @@ parameters:
     - name: stg
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
-
-    - name: prod
-      subscription: DTS-SHAREDSERVICES-PROD
-      group: HMI-APIM-BUILD-PROD
 
 variables:
   - group: HMI-APIM-Common
@@ -96,16 +91,6 @@ stages:
         displayName: Plan STG
         subscription: DTS-SHAREDSERVICES-STG
         group: HMI-APIM-BUILD-STG
-
-  - stage: PlanPROD
-    dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
-    jobs:
-    - template: pipeline/jobs/terraform-plan.yaml
-      parameters:
-        displayName: Plan PROD
-        subscription: DTS-SHAREDSERVICES-PROD
-        group: HMI-APIM-BUILD-PROD
 
   - stage: BuildSBOX
     dependsOn: PlanSbox
@@ -386,36 +371,6 @@ stages:
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-STG
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
-        dependsOn: TerraformApply
-
-
-  - stage: BuildPROD
-    dependsOn:
-      - PlanProd
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/tags/'))
-    variables:
-      - group: HMI-APIM-BUILD-PROD
-    jobs:
-    - template: pipeline/jobs/terraform-apply.yaml
-      parameters:
-        displayName: Build PROD
-        subscription: DTS-SHAREDSERVICES-PROD
-    - template: pipeline/jobs/apply-policies.yaml
-      parameters:
-        displayName: Apply API Policies
-        subscription: DTS-SHAREDSERVICES-PROD
-        environment: prod
-        dependsOn:
-        - TerraformApply
-        - ApplyHostName
-    - template: pipeline/jobs/remove-default-apis.yaml
-      parameters:
-        displayName: Remove default APIS
-        subscription: DTS-SHAREDSERVICES-PROD
         dependsOn: TerraformApply
     - template: pipeline/jobs/apply-hostname.yaml
       parameters:
