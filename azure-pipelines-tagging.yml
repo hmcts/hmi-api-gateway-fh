@@ -3,11 +3,6 @@ trigger: none
 
 parameters:
 
-  - name: deploytag
-    displayName: Tag to deploy
-    type: string
-    default: 1.0
-
   - name: stage
     displayName: Stage to Run
     type: string
