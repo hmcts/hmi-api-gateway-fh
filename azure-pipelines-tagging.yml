@@ -1,7 +1,7 @@
 ---
 trigger:
   - none
-  
+
 parameters:
 
   - name: stage
@@ -57,7 +57,7 @@ stages:
 
   - stage: PlanSBOX
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -67,7 +67,7 @@ stages:
 
   - stage: PlanDEV
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -77,7 +77,7 @@ stages:
 
   - stage: PlanTEST
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -87,7 +87,7 @@ stages:
 
   - stage: PlanSTG
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -97,7 +97,7 @@ stages:
 
   - stage: PlanPROD
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -107,7 +107,7 @@ stages:
 
   - stage: BuildSBOX
     dependsOn: PlanSbox
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
@@ -147,7 +147,7 @@ stages:
 
   - stage: BuildDEV
     dependsOn: PlanDev
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
@@ -187,7 +187,7 @@ stages:
 
   - stage: BuildTEST
     dependsOn: PlanTest
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
@@ -227,7 +227,7 @@ stages:
 
   - stage: TestSBOX
     dependsOn: BuildSbox
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -278,7 +278,7 @@ stages:
 
   - stage: TestDEV
     dependsOn: BuildDev
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -323,7 +323,7 @@ stages:
 
   - stage: TestTEST
     dependsOn: BuildTest
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -400,7 +400,7 @@ stages:
   - stage: BuildSTG
     dependsOn:
       - PlanStg
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
