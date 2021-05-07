@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 
+import org.junit.Ignore;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
@@ -46,32 +47,5 @@ class GETHearingsByIDValidationTest extends HearingValidationTest {
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-    }
-
-    @ParameterizedTest(name = "Testing against the Emulator for Error Responses that come from the Case HQ System")
-    @CsvSource(value = {"EMULATOR,400,1000,mandatory value missing", "EMULATOR,400,1003,Bad LOV value"}, nullValues = "NIL")
-    void test_successful_response_from_the_emulator_stub(final String destinationSystem,
-                                                         final String returnHttpCode,
-                                                         final String returnErrorCode,
-                                                         final String returnDescription) throws Exception {
-
-        final HttpStatus httpStatus =
-                returnHttpCode.equalsIgnoreCase("400") ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_ACCEPTABLE;
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithEmulatorValues(
-                        destinationSystem,
-                        returnHttpCode,
-                        returnErrorCode,
-                        returnDescription),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                httpStatus,
-                getInputFileDirectory(),
-                new CaseHQCommonErrorVerifier(),
-                returnDescription,
-                null);
     }
 }

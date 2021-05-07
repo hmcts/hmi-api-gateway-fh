@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createPayloadWithCFTDestinationHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 
+import org.junit.Ignore;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CFTEmulatorErrorVerifier;
@@ -54,35 +55,5 @@ class PUTHearingsValidationTest extends HearingValidationTest {
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-    }
-
-    @Test
-    @DisplayName("Successfully test update hearing with CFT destination system - should route to Emulator")
-    void test_update_hearing_with_CFT_destination_system() throws Exception {
-
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), "hearing-request-standard.json",
-                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, "hearings",
-                new CFTEmulatorResponseVerifier(),"",null);
-    }
-
-    @Test
-    @DisplayName("Successfully test update hearing with CFT destination system with empty payload - should route to Emulator")
-    void test_update_hearing_with_CFT_destination_system_without_body() throws Exception {
-
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), "hearing-request-without-body.json",
-                createPayloadWithCFTDestinationHeader("SNL", "CFT"),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, "hearings",
-                new CFTEmulatorErrorVerifier(),"",null);
     }
 }
