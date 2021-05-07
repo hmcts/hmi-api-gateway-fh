@@ -115,7 +115,6 @@ class OAuthTokenGeneratorTest {
     @NullAndEmptySource
     @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_client_secret(final String clientSecret) throws Exception {
-
         generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType,clientID,
@@ -128,7 +127,6 @@ class OAuthTokenGeneratorTest {
     @NullAndEmptySource
     @ValueSource(strings = {"", "test_id", "api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default"})
     void test_get_token_with_negative_scope(final String scope) throws Exception {
-
         generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType,clientID,
