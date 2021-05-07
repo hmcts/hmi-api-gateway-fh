@@ -31,10 +31,6 @@ public class OAuthTokenGenerator {
     public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
                                                             final HttpStatus badRequest,
                                                             final String full_token_apiURL) {
-
-        log.debug("The value of the Body : " + bodyForToken);
-        log.debug("The value of the Target URL : " + full_token_apiURL);
-
         Response response = expect().that().statusCode(badRequest.value())
                 .given()
                 .body(bodyForToken)
@@ -45,7 +41,6 @@ public class OAuthTokenGenerator {
                 .then()
                 .extract()
                 .response();
-        log.debug(response.prettyPrint());
         return response;
     }
 }
