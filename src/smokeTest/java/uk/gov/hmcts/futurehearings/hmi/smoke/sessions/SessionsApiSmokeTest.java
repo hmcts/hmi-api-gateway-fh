@@ -42,7 +42,6 @@ class SessionsApiSmokeTest extends SmokeTest {
     @DisplayName("Smoke Test to test the sessions endpoint")
     void testSessionsHmiApiGet() {
         final Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("requestSessionType", "ADHOC");
 
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
                 getAuthorizationToken(), queryParams, getRootContext());
