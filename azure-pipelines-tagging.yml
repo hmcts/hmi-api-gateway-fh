@@ -1,7 +1,5 @@
 ---
 trigger:
-  - master
-pr:
   - none
 
 parameters:
@@ -15,7 +13,9 @@ parameters:
       - DEV
       - TEST
       - STG
+      - PROD
       - NONPROD
+      - PRODUCTION
       - ALL
 
   - name: environments
@@ -37,6 +37,10 @@ parameters:
       subscription: DTS-SHAREDSERVICES-STG
       group: HMI-APIM-BUILD-STG
 
+    - name: prod
+      subscription: DTS-SHAREDSERVICES-PROD
+      group: HMI-APIM-BUILD-PROD
+
 variables:
   - group: HMI-APIM-Common
 
@@ -53,7 +57,7 @@ stages:
 
   - stage: PlanSBOX
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -63,7 +67,7 @@ stages:
 
   - stage: PlanDEV
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -73,7 +77,7 @@ stages:
 
   - stage: PlanTEST
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -83,7 +87,7 @@ stages:
 
   - stage: PlanSTG
     dependsOn: Validate
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:
@@ -91,9 +95,19 @@ stages:
         subscription: DTS-SHAREDSERVICES-STG
         group: HMI-APIM-BUILD-STG
 
+  - stage: PlanPROD
+    dependsOn: Validate
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+        group: HMI-APIM-BUILD-PROD
+
   - stage: BuildSBOX
     dependsOn: PlanSbox
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-SBOX
     jobs:
@@ -133,7 +147,7 @@ stages:
 
   - stage: BuildDEV
     dependsOn: PlanDev
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-DEV
     jobs:
@@ -173,7 +187,7 @@ stages:
 
   - stage: BuildTEST
     dependsOn: PlanTest
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-TEST
     jobs:
@@ -213,7 +227,7 @@ stages:
 
   - stage: TestSBOX
     dependsOn: BuildSbox
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -264,7 +278,7 @@ stages:
 
   - stage: TestDEV
     dependsOn: BuildDev
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -309,7 +323,7 @@ stages:
 
   - stage: TestTEST
     dependsOn: BuildTest
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
@@ -386,7 +400,7 @@ stages:
   - stage: BuildSTG
     dependsOn:
       - PlanStg
-    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')))
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL'), eq(variables['Build.SourceBranch'], 'refs/tags/'))
     variables:
       - group: HMI-APIM-BUILD-STG
     jobs:
@@ -422,4 +436,46 @@ stages:
         displayName: Create DTU Logic Application
         subscription: DTS-SHAREDSERVICES-STG
         environment: stg
+        dependsOn: createRotaStorage
+
+
+  - stage: BuildPROD
+    dependsOn:
+      - PlanProd
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'PROD'), contains('${{ parameters.stage }}', 'PRODUCTION'), contains('${{ parameters.stage }}', 'ALL')), eq(variables['Build.SourceBranch'], 'refs/tags/'))
+    variables:
+      - group: HMI-APIM-BUILD-PROD
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build PROD
+        subscription: DTS-SHAREDSERVICES-PROD
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-PROD
+        environment: prod
+        dependsOn:
+        - TerraformApply
+        - ApplyHostName
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/apply-hostname.yaml
+      parameters:
+        displayName: Apply Custom Domain Configuration
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-PROD
+        dependsOn: TerraformApply
+        environmentName: production
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-PROD
+        environment: prod
         dependsOn: createRotaStorage
