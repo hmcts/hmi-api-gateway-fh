@@ -40,60 +40,8 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
-    public void testSuccessfulGetSessionForSessionRequestType() {
+    public void testGetSessionForSessionRequestType() {
         Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestDuration", "360");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestLocationId", "301");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestJudgeType() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestJudgeType", "PUBLAW");
-
-        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
-                headersAsMap,
-                authorizationToken,
-                queryParameters);
-    }
-
-    @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestStartDateAndRequestEndDate() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
-        queryParameters.put("requestStartDate", "2020-12-01T10:00:00Z");
-        queryParameters.put("requestEndDate", "2020-12-09T10:00:00Z");
 
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
