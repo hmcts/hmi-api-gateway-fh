@@ -186,6 +186,64 @@
                                                 "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_file_in_output_folder')?['Path']))}"
                                             }
                                         },
+                                        "Condition": {
+                                            "actions": {
+                                                "Delete_source_blob": {
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "HTTP": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "else": {
+                                                "actions": {
+                                                    "Condition_2": {
+                                                        "actions": {},
+                                                        "runAfter": {},
+                                                        "expression": {
+                                                            "and": [
+                                                                {
+                                                                    "equals": [
+                                                                        "@outputs('HTTP')['statusCode']",
+                                                                        401
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "equals": [
+                                                                        "@outputs('HTTP')['statusCode']",
+                                                                        403
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        "type": "If"
+                                                    }
+                                                }
+                                            },
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "equals": [
+                                                            "@outputs('HTTP')['statusCode']",
+                                                            201
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
+                                        },
                                         "Create_file_in_output_folder": {
                                             "runAfter": {
                                                 "Set_jsonPayload": [
@@ -270,48 +328,9 @@
                                                 }
                                             }
                                         },
-                                        "Send_an_email_(V2)": {
-                                            "inputs": {
-                                                "body": {
-                                                    "Body": "<p>An error was found on the file @{body('Create_invalid_file_in_error_folder')?['Name']} at @{body('Create_invalid_file_in_error_folder')?['LastModified']}.<br>\nThe location of the original message/file is located at @{body('Create_invalid_file_in_error_folder')?['Path']}.</p>",
-                                                    "Subject": "Error for producing a XML payload in JSON",
-                                                    "To": "subroto.mukherjee@HMCTS.NET"
-                                                },
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['office365']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "post",
-                                                "path": "/v2/Mail"
-                                            },
-                                            "runAfter": {
-                                                "Create_invalid_file_in_error_folder": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection"
-                                        },
                                         "Delete_invalid_file": {
                                             "runAfter": {
                                                 "Send_an_email_(V2)": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "delete",
-                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
-                                            }
-                                        },
-                                        "Delete_source_blob": {
-                                            "runAfter": {
-                                                "HTTP": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -340,7 +359,7 @@
                                                     }
                                                 },
                                                 "method": "get",
-                                                "path": "/secrets/@{encodeURIComponent('hmi-client-app-id')}/value"
+                                                "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
                                             }
                                         },
                                         "Get_Client_Secret_": {
@@ -384,7 +403,29 @@
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",
-                                                "uri": "[parameters('hmiSchedulesUrl')]"
+                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                            }
+                                        },
+                                        "Send_an_email_(V2)": {
+                                            "runAfter": {
+                                                "Create_invalid_file_in_error_folder": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": {
+                                                    "Body": "<p>An error was found on the file @{body('Create_invalid_file_in_error_folder')?['Name']} at @{body('Create_invalid_file_in_error_folder')?['LastModified']}.<br>\nThe location of the original message/file is located at @{body('Create_invalid_file_in_error_folder')?['Path']}.</p>",
+                                                    "Subject": "Error for producing a XML payload in JSON",
+                                                    "To": "subroto.mukherjee@HMCTS.NET"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['office365_1']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/Mail"
                                             }
                                         },
                                         "Set_jsonPayload": {
