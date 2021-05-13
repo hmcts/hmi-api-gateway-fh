@@ -210,20 +210,33 @@
                                             "else": {
                                                 "actions": {
                                                     "Condition_2": {
-                                                        "actions": {},
+                                                        "actions": {
+                                                            "Send_HMI_Error": {
+                                                                "runAfter": {},
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "body": {
+                                                                        "Body": "<p>Testing 1-2-3</p>",
+                                                                        "Subject": "Error received from HMI",
+                                                                        "To": "subroto.mukherjee@HMCTS.NET"
+                                                                    },
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['office365']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "post",
+                                                                    "path": "/v2/Mail"
+                                                                }
+                                                            }
+                                                        },
                                                         "runAfter": {},
                                                         "expression": {
                                                             "and": [
                                                                 {
-                                                                    "equals": [
+                                                                    "greaterOrEquals": [
                                                                         "@outputs('HTTP')['statusCode']",
-                                                                        401
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "equals": [
-                                                                        "@outputs('HTTP')['statusCode']",
-                                                                        403
+                                                                        500
                                                                     ]
                                                                 }
                                                             ]
