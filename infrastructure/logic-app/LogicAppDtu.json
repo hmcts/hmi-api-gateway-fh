@@ -188,8 +188,36 @@
                                         },
                                         "Condition": {
                                             "actions": {
-                                                "Delete_source_blob": {
+                                                "Create_blob_in_error_folder": {
                                                     "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@body('Get_blob_content_using_path')",
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/datasets/default/files",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "@items('For_each')?['Name']",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Delete_current_blob": {
+                                                    "runAfter": {
+                                                        "Create_blob_in_error_folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
                                                     "type": "ApiConnection",
                                                     "inputs": {
                                                         "host": {
@@ -198,7 +226,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_blob_in_error_folder')?['Path']))}"
                                                     }
                                                 }
                                             },
