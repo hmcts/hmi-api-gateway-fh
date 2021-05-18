@@ -226,7 +226,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_blob_in_error_folder')?['Path']))}"
+                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                                                     }
                                                 }
                                             },
