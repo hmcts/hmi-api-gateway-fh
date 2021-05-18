@@ -4,9 +4,9 @@ publisher_name                     = "HMCTS HMI"
 publisher_email                    = "hmi-team@HMCTS.NET"
 protocols                          = ["http", "https"]
 open_api_spec_content_format       = "swagger-link-json"
-open_api_spec_content_value        = "https://raw.githubusercontent.com/hmcts/reform-api-docs/HMIS-884/docs/specs/future-hearings-hmi-api.json"
+open_api_spec_content_value        = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api.json"
 open_api_health_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api-health.json"
-revision                           = "13"
+revision                           = "14"
 service_url                        = ""
 tags = {
   "businessarea" : "cross-cutting",
