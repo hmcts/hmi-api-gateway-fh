@@ -444,7 +444,7 @@
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                             }
                                         },
                                         "Send_an_email_(V2)": {
