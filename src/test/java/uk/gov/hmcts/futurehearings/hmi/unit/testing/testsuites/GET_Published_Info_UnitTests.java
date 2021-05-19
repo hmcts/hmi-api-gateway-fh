@@ -110,11 +110,11 @@ public class GET_Published_Info_UnitTests {
     }
 
     private Response whenGetPublishedInfoIsInvoked() {
-        return retrievePublishedInfo(hmiRootContext + "/get-published-info", headersAsMap, targetInstance);
+        return retrievePublishedInfo(hmiRootContext + "get-published-info", headersAsMap, targetInstance);
     }
 
     private Response whenGetPublishedInfoIsInvokedWithInvalidAcessToken() {
-        return retrievePublishedInfoWithInvalidAccessToken(hmiRootContext + "/get-published-info", headersAsMap, targetInstance);
+        return retrievePublishedInfoWithInvalidAccessToken(hmiRootContext + "get-published-info", headersAsMap, targetInstance);
     }
 
     private Response retrievePublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {

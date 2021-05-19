@@ -26,7 +26,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("DELETE /delete-published-info - Retrieve published info")
+@DisplayName("DELETE /delete-published-info - Delete published info")
 public class DELETE_Published_Info_UnitTests {
 
     private static final String REQUESTS_DELETE_PUBLISHED_INFO_PAYLOAD_JSON = "requests/delete-published-info-payload.json";
@@ -90,7 +90,7 @@ public class DELETE_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for valid success status for Get Published info")
+    @DisplayName("Test for valid success status for Delete Published info")
     void testDeletePublishedInfoForHappyPath() throws IOException {
         final String input = givenAPayload(REQUESTS_DELETE_PUBLISHED_INFO_PAYLOAD_JSON);
         final Response response = whenDeletePublishedInfoIsInvoked(input);
@@ -99,7 +99,7 @@ public class DELETE_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Invalid Header for Get Published info")
+    @DisplayName("Test for Invalid Header for Delete Published info")
     void testDeletePublishedInfoForInvalidHeader() throws IOException {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "invalid date");
@@ -110,7 +110,7 @@ public class DELETE_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Invalid AccessToken for Get Published info")
+    @DisplayName("Test for Invalid AccessToken for Delete Published info")
     void testDeletePublishedInfoForInvalidAccessToken() throws IOException {
         final String input = givenAPayload(REQUESTS_DELETE_PUBLISHED_INFO_PAYLOAD_JSON);
         final Response response = whenDeletePublishedInfoIsInvokedWithInvalidAcessToken(input);
@@ -118,11 +118,11 @@ public class DELETE_Published_Info_UnitTests {
     }
 
     private Response whenDeletePublishedInfoIsInvoked(final String payload) {
-        return deletePublishedInfo(hmiRootContext + "/delete-published-info", headersAsMap, targetInstance, payload);
+        return deletePublishedInfo(hmiRootContext + "delete-published-info", headersAsMap, targetInstance, payload);
     }
 
     private Response whenDeletePublishedInfoIsInvokedWithInvalidAcessToken(final String payload) {
-        return deletePublishedInfoWithInvalidAccessToken(hmiRootContext + "/delete-published-info", headersAsMap, targetInstance, payload);
+        return deletePublishedInfoWithInvalidAccessToken(hmiRootContext + "delete-published-info", headersAsMap, targetInstance, payload);
     }
 
     private Response deletePublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payload) {

@@ -26,7 +26,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("POST /add-published-info - Retrieve published info")
+@DisplayName("POST /add-published-info - Add published info")
 public class POST_Published_Info_UnitTests {
 
     private static final String REQUESTS_POST_PUBLISHED_INFO_PAYLOAD_JSON = "requests/add-published-info-payload.json";
@@ -90,7 +90,7 @@ public class POST_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for valid success status for Get Published info")
+    @DisplayName("Test for valid success status for Add Published info")
     void testAddPublishedInfoForHappyPath() throws IOException {
         final String input = givenAPayload(REQUESTS_POST_PUBLISHED_INFO_PAYLOAD_JSON);
         final Response response = whenAddPublishedInfoIsInvoked();
@@ -99,7 +99,7 @@ public class POST_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Invalid Header for Get Published info")
+    @DisplayName("Test for Invalid Header for Add Published info")
     void testAddPublishedInfoForInvalidHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "invalid date");
@@ -109,18 +109,18 @@ public class POST_Published_Info_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Invalid AccessToken for Get Published info")
+    @DisplayName("Test for Invalid AccessToken for Add Published info")
     void testAddPublishedInfoForInvalidAccessToken() {
         final Response response = whenAddPublishedInfoIsInvokedWithInvalidAcessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
     private Response whenAddPublishedInfoIsInvoked() {
-        return retrievePublishedInfo(hmiRootContext + "/add-published-info", headersAsMap, targetInstance);
+        return retrievePublishedInfo(hmiRootContext + "add-published-info", headersAsMap, targetInstance);
     }
 
     private Response whenAddPublishedInfoIsInvokedWithInvalidAcessToken() {
-        return addPublishedInfoWithInvalidAccessToken(hmiRootContext + "/add-published-info", headersAsMap, targetInstance);
+        return addPublishedInfoWithInvalidAccessToken(hmiRootContext + "add-published-info", headersAsMap, targetInstance);
     }
 
     private Response addPublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
