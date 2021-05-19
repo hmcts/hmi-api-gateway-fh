@@ -111,7 +111,7 @@ public class DELETE_Published_Info_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid AccessToken for Get Published info")
-    void testRetrievePeopleForInvalidAccessToken() throws IOException {
+    void testDeletePublishedInfoForInvalidAccessToken() throws IOException {
         final String input = givenAPayload(REQUESTS_DELETE_PUBLISHED_INFO_PAYLOAD_JSON);
         final Response response = whenDeletePublishedInfoIsInvokedWithInvalidAcessToken(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);

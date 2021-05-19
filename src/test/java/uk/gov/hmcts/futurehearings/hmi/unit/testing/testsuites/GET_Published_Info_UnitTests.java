@@ -86,7 +86,7 @@ public class GET_Published_Info_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for valid success status for Get Published info")
-    void testRetrievePeopleForValidPathParams() {
+    void testRetrievePublishedInfoForHappyPath() {
         final Response response = whenGetPublishedInfoIsInvoked();
         thenValidateResponseForGet(response);
     }
@@ -94,7 +94,7 @@ public class GET_Published_Info_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Header for Get Published info")
-    void testRetrievePeopleForInvalidHeader() {
+    void testRetrievePublishedInfoForInvalidHeader() {
         headersAsMap.remove("Request-Created-At");
         headersAsMap.put("Request-Created-At", "invalid date");
         final Response response = whenGetPublishedInfoIsInvoked();
@@ -104,7 +104,7 @@ public class GET_Published_Info_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid AccessToken for Get Published info")
-    void testRetrievePeopleForInvalidAccessToken() {
+    void testRetrievePublishedInfoForInvalidAccessToken() {
         final Response response = whenGetPublishedInfoIsInvokedWithInvalidAcessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
