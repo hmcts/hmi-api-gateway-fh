@@ -188,7 +188,7 @@
                                         },
                                         "Condition": {
                                             "actions": {
-                                                "Create_blob_in_error_folder": {
+                                                "Create_blob_in_output_folder": {
                                                     "runAfter": {},
                                                     "type": "ApiConnection",
                                                     "inputs": {
@@ -201,7 +201,7 @@
                                                         "method": "post",
                                                         "path": "/datasets/default/files",
                                                         "queries": {
-                                                            "folderPath": "/rota/error/",
+                                                            "folderPath": "/rota/output/",
                                                             "name": "@items('For_each')?['Name']",
                                                             "queryParametersSingleEncoded": true
                                                         }
@@ -214,7 +214,7 @@
                                                 },
                                                 "Delete_current_blob": {
                                                     "runAfter": {
-                                                        "Create_blob_in_error_folder": [
+                                                        "Create_blob_in_output_folder": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -240,6 +240,51 @@
                                                 "actions": {
                                                     "Condition_2": {
                                                         "actions": {
+                                                            "Create_blob_in_error_folder": {
+                                                                "runAfter": {
+                                                                    "Send_HMI_Error": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "body": "@body('Get_blob_content_using_path')",
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "post",
+                                                                    "path": "/datasets/default/files",
+                                                                    "queries": {
+                                                                        "folderPath": "/rota/error/",
+                                                                        "name": "@items('For_each')?['Name']",
+                                                                        "queryParametersSingleEncoded": true
+                                                                    }
+                                                                },
+                                                                "runtimeConfiguration": {
+                                                                    "contentTransfer": {
+                                                                        "transferMode": "Chunked"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "Delete_blob_2": {
+                                                                "runAfter": {
+                                                                    "Create_blob_in_error_folder": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "delete",
+                                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                                }
+                                                            },
                                                             "Send_HMI_Error": {
                                                                 "runAfter": {},
                                                                 "type": "ApiConnection",
