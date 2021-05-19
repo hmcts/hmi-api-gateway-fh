@@ -232,6 +232,7 @@
                                             },
                                             "runAfter": {
                                                 "HTTP": [
+                                                    "Failed",
                                                     "Succeeded"
                                                 ]
                                             },
