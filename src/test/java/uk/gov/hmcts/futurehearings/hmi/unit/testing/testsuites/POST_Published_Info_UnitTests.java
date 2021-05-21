@@ -37,7 +37,7 @@ public class POST_Published_Info_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hmiApiRootContext}")
+    @Value("${publishingRootContext}")
     private String hmiRootContext;
 
     @Value("${destinationSystem}")
@@ -116,11 +116,11 @@ public class POST_Published_Info_UnitTests {
     }
 
     private Response whenAddPublishedInfoIsInvoked() {
-        return retrievePublishedInfo(hmiRootContext + "add-published-info", headersAsMap, targetInstance);
+        return retrievePublishedInfo(hmiRootContext + "/add-published-info", headersAsMap, targetInstance);
     }
 
     private Response whenAddPublishedInfoIsInvokedWithInvalidAcessToken() {
-        return addPublishedInfoWithInvalidAccessToken(hmiRootContext + "add-published-info", headersAsMap, targetInstance);
+        return addPublishedInfoWithInvalidAccessToken(hmiRootContext + "/add-published-info", headersAsMap, targetInstance);
     }
 
     private Response addPublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {

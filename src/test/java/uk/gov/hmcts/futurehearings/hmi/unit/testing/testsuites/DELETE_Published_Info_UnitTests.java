@@ -37,7 +37,7 @@ public class DELETE_Published_Info_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hmiApiRootContext}")
+    @Value("${publishingRootContext}")
     private String hmiRootContext;
 
     @Value("${destinationSystem}")
@@ -118,11 +118,11 @@ public class DELETE_Published_Info_UnitTests {
     }
 
     private Response whenDeletePublishedInfoIsInvoked(final String payload) {
-        return deletePublishedInfo(hmiRootContext + "delete-published-info", headersAsMap, targetInstance, payload);
+        return deletePublishedInfo(hmiRootContext + "/delete-published-info", headersAsMap, targetInstance, payload);
     }
 
     private Response whenDeletePublishedInfoIsInvokedWithInvalidAcessToken(final String payload) {
-        return deletePublishedInfoWithInvalidAccessToken(hmiRootContext + "delete-published-info", headersAsMap, targetInstance, payload);
+        return deletePublishedInfoWithInvalidAccessToken(hmiRootContext + "/delete-published-info", headersAsMap, targetInstance, payload);
     }
 
     private Response deletePublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payload) {

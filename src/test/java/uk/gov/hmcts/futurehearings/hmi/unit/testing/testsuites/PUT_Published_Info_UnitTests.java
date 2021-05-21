@@ -37,7 +37,7 @@ public class PUT_Published_Info_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${hmiApiRootContext}")
+    @Value("${publishingRootContext}")
     private String hmiRootContext;
 
     @Value("${destinationSystem}")
@@ -118,11 +118,11 @@ public class PUT_Published_Info_UnitTests {
     }
 
     private Response whenUpdatePublishedInfoIsInvoked(final String input) {
-        return updatePublishedInfo(hmiRootContext + "update-published-info", headersAsMap, targetInstance, input);
+        return updatePublishedInfo(hmiRootContext + "/update-published-info", headersAsMap, targetInstance, input);
     }
 
     private Response whenUpdatePublishedInfoIsInvokedWithInvalidAcessToken(final String input) {
-        return updatePublishedInfoWithInvalidAccessToken(hmiRootContext + "update-published-info", headersAsMap, targetInstance, input);
+        return updatePublishedInfoWithInvalidAccessToken(hmiRootContext + "/update-published-info", headersAsMap, targetInstance, input);
     }
 
     private Response updatePublishedInfoWithInvalidAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payload) {
