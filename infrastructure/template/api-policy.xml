@@ -23,6 +23,7 @@
                 <method>GET</method>
                 <method>POST</method>
             </allowed-methods>
+            #{corsAllowHeaders}#
         </cors>
         <!-- set a header to enable mocks -->
         <set-header name="_EnableMocks" exists-action="override">
