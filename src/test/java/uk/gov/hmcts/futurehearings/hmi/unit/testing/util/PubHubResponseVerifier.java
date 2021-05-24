@@ -51,4 +51,19 @@ public class PubHubResponseVerifier {
             throw e;
         }
     }
+
+    public static void  thenValidateResponseForPut(Response response){
+        try{
+            assertEquals(200, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 201");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
 }

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.PubHubResponseVerifier.thenValidateResponseForPost;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForGetPeopleByIdWithInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.PubHubResponseVerifier.thenValidateResponseForPut;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
@@ -94,7 +95,7 @@ public class PUT_Published_Info_UnitTests {
     void testUpdatePublishedInfoForHappyPath() throws IOException {
         final String input = givenAPayload(REQUESTS_PUT_PUBLISHED_INFO_PAYLOAD_JSON);
         final Response response = whenUpdatePublishedInfoIsInvoked(input);
-        thenValidateResponseForPost(response);
+        thenValidateResponseForPut(response);
     }
 
     @Test

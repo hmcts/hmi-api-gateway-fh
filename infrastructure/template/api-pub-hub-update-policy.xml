@@ -4,7 +4,7 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/update-info/pub" />
-                <mock-response status-code="201" content-type="application/json" />
+                <mock-response status-code="200" content-type="application/json" />
             </when>
         </choose>
     </inbound>
