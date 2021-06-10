@@ -30,7 +30,7 @@
 	                            new JProperty("max_slot", "16"),
 	                            new JProperty("max_duration_mins", ""),
 	                            new JProperty("court_session", "THUAM"),
-	                            new JProperty("court_session", "TVLO")
+	                            new JProperty("rota_business_type_code", "TVLO")
 	                        );
                             JObject recordTwo = new JObject(
 	                            new JProperty("id", "dcecc67c-792a-3df8-acd0-8ecbb71f0f6e"),
@@ -39,7 +39,7 @@
 	                            new JProperty("max_slot", "6"),
 	                            new JProperty("max_duration_mins", ""),
 	                            new JProperty("court_session", "THUAM"),
-	                            new JProperty("court_session", "TVLO")
+	                            new JProperty("rota_business_type_code", "TVLO")
 	                        );
                             JObject recordThree = new JObject(
 	                            new JProperty("id", "dcecc67c-792a-3df8-acd0-8ecbb71f0f6e"),
@@ -48,7 +48,7 @@
 	                            new JProperty("max_slot", "12"),
 	                            new JProperty("max_duration_mins", ""),
 	                            new JProperty("court_session", "TUEAM"),
-	                            new JProperty("court_session", "TVLO")
+	                            new JProperty("rota_business_type_code", "TVLO")
 	                        );
 	                        data.Add(recordOne);
 	                        data.Add(recordTwo);
