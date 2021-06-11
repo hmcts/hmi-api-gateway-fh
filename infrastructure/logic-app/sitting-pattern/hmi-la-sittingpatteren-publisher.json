@@ -67,7 +67,7 @@
                             "type": "Recurrence"
                         }
                     },
-                   "actions": {
+                    "actions": {
                         "Create_read.me": {
                             "runAfter": {},
                             "type": "ApiConnection",
@@ -168,48 +168,76 @@
                                         "For_each_2": {
                                             "foreach": "@split(variables('csvFileContent'), '\n')",
                                             "actions": {
-                                                "Append_to_array_variable": {
+                                                "Condition": {
+                                                    "actions": {
+                                                        "Append_to_jsonOutputArray": {
+                                                            "runAfter": {
+                                                                "Set_jsonRecord": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToArrayVariable",
+                                                            "inputs": {
+                                                                "name": "jsonOutputArray",
+                                                                "value": "@variables('jsonRecord')"
+                                                            }
+                                                        },
+                                                        "Set_jsonRecord": {
+                                                            "runAfter": {
+                                                                "Set_spRecord": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonRecord",
+                                                                "value": "@json(variables('spRecord'))"
+                                                            }
+                                                        },
+                                                        "Set_spRecord": {
+                                                            "runAfter": {
+                                                                "Set_variable": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "spRecord",
+                                                                "value": "{\n  \"id\": \"@{variables('spRecordArr')[0]}\",\n  \"oucode\": \"@{variables('spRecordArr')[1]}\",\n  \"courtroom_id\": \"@{variables('spRecordArr')[2]}\",\n  \"max_slot\": \"@{variables('spRecordArr')[3]}\",\n  \"max_duration_mins\": \"@{variables('spRecordArr')[4]}\",\n  \"court_session\": \"@{variables('spRecordArr')[5]}\",\n  \"rota_business_type_code\": \"@{variables('spRecordArr')[6]}\",\n  \"valid_from\": \"\",\n  \"valid_to\": \"\"\n}"
+                                                            }
+                                                        },
+                                                        "Set_variable": {
+                                                            "runAfter": {},
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "spRecordArr",
+                                                                "value": "@split(items('For_each_2'), ',')"
+                                                            }
+                                                        }
+                                                    },
                                                     "runAfter": {
-                                                        "Set_variable_2": [
+                                                        "Increment_variable": [
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "type": "AppendToArrayVariable",
-                                                    "inputs": {
-                                                        "name": "jsonOutputArray",
-                                                        "value": "@variables('jsonRecord')"
-                                                    }
-                                                },
-                                                "Set_spRecord": {
-                                                    "runAfter": {
-                                                        "Set_variable": [
-                                                            "Succeeded"
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "greater": [
+                                                                    "@variables('recordCount')",
+                                                                    1
+                                                                ]
+                                                            }
                                                         ]
                                                     },
-                                                    "type": "SetVariable",
-                                                    "inputs": {
-                                                        "name": "spRecord",
-                                                        "value": "{\n  \"id\": \"@{variables('spRecordArr')[0]}\",\n  \"oucode\": \"@{variables('spRecordArr')[1]}\",\n  \"courtroom_id\": \"@{variables('spRecordArr')[2]}\",\n  \"max_slot\": \"@{variables('spRecordArr')[3]}\",\n  \"max_duration_mins\": \"@{variables('spRecordArr')[4]}\",\n  \"court_session\": \"@{variables('spRecordArr')[5]}\",\n  \"rota_business_type_code\": \"@{variables('spRecordArr')[6]}\",\n  \"valid_from\": \"\",\n  \"valid_to\": \"\"\n}"
-                                                    }
+                                                    "type": "If"
                                                 },
-                                                "Set_variable": {
+                                                "Increment_variable": {
                                                     "runAfter": {},
-                                                    "type": "SetVariable",
+                                                    "type": "IncrementVariable",
                                                     "inputs": {
-                                                        "name": "spRecordArr",
-                                                        "value": "@split(items('For_each_2'), ',')"
-                                                    }
-                                                },
-                                                "Set_variable_2": {
-                                                    "runAfter": {
-                                                        "Set_spRecord": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "type": "SetVariable",
-                                                    "inputs": {
-                                                        "name": "jsonRecord",
-                                                        "value": "@json(variables('spRecord'))"
+                                                        "name": "recordCount",
+                                                        "value": 1
                                                     }
                                                 }
                                             },
@@ -489,9 +517,26 @@
                                 ]
                             }
                         },
-                        "List_blobs": {
+                        "Initialize_variable": {
                             "runAfter": {
                                 "Initialize_jsonOutputArray": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "recordCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "List_blobs": {
+                            "runAfter": {
+                                "Initialize_variable": [
                                     "Succeeded"
                                 ]
                             },
