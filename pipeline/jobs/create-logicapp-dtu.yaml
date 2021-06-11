@@ -36,4 +36,7 @@ jobs:
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\LogicAppDtu.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\parameters-$(environment).json"
-        echo "Creating DTU Logic Application is complete"
+        echo "Creating DTU Logic Application - Sitting Patterns"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\hmi-la-dtusittingpatterens.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\parameters-$(environment).json"
+        echo "Creating DTU Logic Applications is complete"
+        
