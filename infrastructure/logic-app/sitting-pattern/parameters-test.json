@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName":{
+            "value": "test"
+        },
+        "workflows_hmidtusittingpatterns_name": {
+            "value": "hmi-la-dtusittingpatterns-test"
+        },
+        "storageAccountName":{
+            "value": "hmidtutest"
+        },
+        "storageAccessKey":{
+            "reference": {
+                "keyVault": {
+                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedservices-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
+                },
+                "secretName": "dtu-storage-account-key"
+             }
+        }
+    }
+}
