@@ -6,7 +6,7 @@
             "value": "development"
         },
         "workflows_hmidtusittingpatterns_name": {
-            "value": "hmi-la-sittingpatterns-retriever-dev"
+            "value": "hmi-la-sittingpattern-retriever-dev"
         },
         "storageAccountName":{
             "value": "hmidtudev"
