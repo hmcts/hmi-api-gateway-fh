@@ -67,7 +67,7 @@
                             "type": "Recurrence"
                         }
                     },
-                    "actions": {
+                   "actions": {
                         "Create_read.me": {
                             "runAfter": {},
                             "type": "ApiConnection",
@@ -115,18 +115,6 @@
                                 },
                                 "is_file_csv": {
                                     "actions": {
-                                        "Append_to_string_variable": {
-                                            "runAfter": {
-                                                "For_each_2": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "AppendToStringVariable",
-                                            "inputs": {
-                                                "name": "jsonOutput",
-                                                "value": "]"
-                                            }
-                                        },
                                         "Blob_Meta": {
                                             "runAfter": {
                                                 "Create_file_in_output_folder": [
@@ -152,34 +140,6 @@
                                             },
                                             "type": "Compose",
                                             "inputs": "@replace(variables('csvFileContent'), '\\r\\n', '|')"
-                                        },
-                                        "Create_blob": {
-                                            "runAfter": {
-                                                "Append_to_string_variable": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": "@replace(variables('jsonOutput'), ',]', ']')",
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "post",
-                                                "path": "/datasets/default/files",
-                                                "queries": {
-                                                    "folderPath": "/sitting-pattern/data/",
-                                                    "name": "repository.json",
-                                                    "queryParametersSingleEncoded": true
-                                                }
-                                            },
-                                            "runtimeConfiguration": {
-                                                "contentTransfer": {
-                                                    "transferMode": "Chunked"
-                                                }
-                                            }
                                         },
                                         "Create_file_in_output_folder": {
                                             "runAfter": {},
@@ -220,18 +180,6 @@
                                                         "value": "@variables('jsonRecord')"
                                                     }
                                                 },
-                                                "Append_to_string_variable_2": {
-                                                    "runAfter": {
-                                                        "Set_spRecord": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "type": "AppendToStringVariable",
-                                                    "inputs": {
-                                                        "name": "jsonOutput",
-                                                        "value": "@{variables('spRecord')},"
-                                                    }
-                                                },
                                                 "Set_spRecord": {
                                                     "runAfter": {
                                                         "Set_variable": [
@@ -254,7 +202,7 @@
                                                 },
                                                 "Set_variable_2": {
                                                     "runAfter": {
-                                                        "Append_to_string_variable_2": [
+                                                        "Set_spRecord": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -296,7 +244,7 @@
                                         },
                                         "Recreate_read.me": {
                                             "runAfter": {
-                                                "Create_blob": [
+                                                "Update_Repository": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -332,6 +280,34 @@
                                             "inputs": {
                                                 "name": "csvFileContent",
                                                 "value": "@{body('Get_csv')}"
+                                            }
+                                        },
+                                        "Update_Repository": {
+                                            "runAfter": {
+                                                "For_each_2": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": "@variables('jsonOutputArray')",
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/datasets/default/files",
+                                                "queries": {
+                                                    "folderPath": "/sitting-pattern/data/",
+                                                    "name": "repository.json",
+                                                    "queryParametersSingleEncoded": true
+                                                }
+                                            },
+                                            "runtimeConfiguration": {
+                                                "contentTransfer": {
+                                                    "transferMode": "Chunked"
+                                                }
                                             }
                                         }
                                     },
@@ -451,7 +427,7 @@
                         },
                         "Initialize_jsonOutputArray": {
                             "runAfter": {
-                                "Initialize_jsonOutputString": [
+                                "Initialize_jsonRecord": [
                                     "Succeeded"
                                 ]
                             },
@@ -465,40 +441,7 @@
                                 ]
                             }
                         },
-                        "Initialize_jsonOutputString": {
-                            "runAfter": {
-                                "Initialize_jsonRecord": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonOutput",
-                                        "type": "string",
-                                        "value": "["
-                                    }
-                                ]
-                            }
-                        },
                         "Initialize_jsonRecord": {
-                            "runAfter": {
-                                "Initialize_recData": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonRecord",
-                                        "type": "object"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_recData": {
                             "runAfter": {
                                 "Initialize_spRecordArr": [
                                     "Succeeded"
@@ -508,8 +451,8 @@
                             "inputs": {
                                 "variables": [
                                     {
-                                        "name": "recData",
-                                        "type": "array"
+                                        "name": "jsonRecord",
+                                        "type": "object"
                                     }
                                 ]
                             }
