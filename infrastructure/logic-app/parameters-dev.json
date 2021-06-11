@@ -8,6 +8,9 @@
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-dev"
         },
+        "workflows_hmidtusittingpatterns_name": {
+            "value": "hmi-la-dtusittingpatterns-dev"
+        },
         "storageAccountName":{
             "value": "hmidtudev"
         },
