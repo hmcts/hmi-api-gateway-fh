@@ -6,7 +6,7 @@
             "value": "sbox"
         },
         "workflows_hmidtusittingpatterns_name": {
-            "value": "hmi-la-dtusittingpatterns-sbox"
+            "value": "hmi-la-sittingpattern-publisher-sbox"
         },
         "storageAccountName":{
             "value": "hmidtusbox"

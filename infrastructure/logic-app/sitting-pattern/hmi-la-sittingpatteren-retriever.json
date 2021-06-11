@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "workflows_hmidtusittingpatterns_name": {
-            "defaultValue": "hmi-dtusittingpatterns-retriver-la",
+            "defaultValue": "hmi-la-sittingpattern-retriver",
             "type": "String"
         },
         "storageAccountName": {

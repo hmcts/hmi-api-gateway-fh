@@ -6,7 +6,7 @@
             "value": "test"
         },
         "workflows_hmidtusittingpatterns_name": {
-            "value": "hmi-la-dtusittingpatterns-test"
+            "value": "hmi-la-sittingpattern-publisher-test"
         },
         "storageAccountName":{
             "value": "hmidtutest"
