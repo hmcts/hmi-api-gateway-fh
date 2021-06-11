@@ -3,25 +3,29 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "HMI-DTU")">
-                 <return-response>
+				<set-header name="AUTHORIZATION" exists-action="delete" />
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+				<set-query-parameter name="api-version" exists-action="skip">
+					<value>2016-10-01</value>
+				</set-query-parameter>
+				<set-query-parameter name="sp" exists-action="skip">
+					<value>%2Ftriggers%2Fmanual%2Frun</value>
+				</set-query-parameter>
+				<set-query-parameter name="sv" exists-action="skip">
+					<value>1.0</value>
+				</set-query-parameter>
+				<set-query-parameter name="sig" exists-action="skip">
+					<value>#{laHmiSittingPatternSig}#</value>
+				</set-query-parameter>
+                <set-backend-service base-url="https://#{laHmiSittingPatternHost}#/triggers/manual/paths/invoke" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <return-response>
                     <set-status code="200" />
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/json</value>
                     </set-header>
                     <set-body>@{
-                        return new JObject(
-                            new JProperty("message", "Under Construction.")
-                            ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <return-response>
-	                    <set-status code="200" />
-	                    <set-header name="Content-Type">
-	    					<value>application/json</value>
-						</set-header>
-	                    <set-body>@{
 	                        var data = new JArray();
 	                        JObject recordOne = new JObject(
 	                            new JProperty("id", "4a62691e-cbf2-3c96-a880-08123c67a5e5"),
@@ -55,7 +59,7 @@
 	                        data.Add(recordThree);
 	                        return data.ToString();
 	                    }</set-body>
-	                </return-response>
+                </return-response>
             </when>
         </choose>
     </inbound>
@@ -68,4 +72,4 @@
     <on-error>
         <base />
     </on-error>
-</policies> 
+</policies>
