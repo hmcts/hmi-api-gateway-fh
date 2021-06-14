@@ -165,6 +165,23 @@
                                                 }
                                             }
                                         },
+                                        "Delete_SP_file": {
+                                            "runAfter": {
+                                                "Recreate_read.me": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                            }
+                                        },
                                         "For_each_2": {
                                             "foreach": "@split(variables('csvFileContent'), '\n')",
                                             "actions": {
