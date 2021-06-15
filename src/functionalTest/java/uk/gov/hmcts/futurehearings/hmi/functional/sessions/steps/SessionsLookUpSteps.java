@@ -20,6 +20,6 @@ public class SessionsLookUpSteps {
          callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.BAD_REQUEST);
+                queryParameters, HttpStatus.OK);
     }
 }
