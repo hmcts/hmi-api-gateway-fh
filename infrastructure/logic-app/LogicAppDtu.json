@@ -417,7 +417,7 @@
                                         },
                                         "Delete_invalid_file": {
                                             "runAfter": {
-                                                "Send_an_email_(V2)": [
+                                                "Get_SN_Client_Secret": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -464,6 +464,40 @@
                                                 },
                                                 "method": "get",
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                            }
+                                        },
+                                        "Get_SN_Client_ID": {
+                                            "runAfter": {
+                                                "Send_an_email_(V2)": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                            }
+                                        },
+                                        "Get_SN_Client_Secret": {
+                                            "runAfter": {
+                                                "Get_SN_Client_ID": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
                                             }
                                         },
                                         "HTTP": {
