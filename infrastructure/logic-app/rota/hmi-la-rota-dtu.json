@@ -29,6 +29,9 @@
         },
         "hmiSchedulesUrl": {
             "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -417,7 +420,7 @@
                                         },
                                         "Delete_invalid_file": {
                                             "runAfter": {
-                                                "Get_SN_Client_Secret": [
+                                                "HTTP_2": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -525,6 +528,36 @@
                                                 },
                                                 "method": "POST",
                                                 "uri": "[parameters('hmiSchedulesUrl')]"
+                                            }
+                                        },
+                                        "HTTP_2": {
+                                            "runAfter": {
+                                                "Get_SN_Client_Secret": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "authentication": {
+                                                    "password": "@body('Get_SN_Client_Secret')?['value']",
+                                                    "type": "Basic",
+                                                    "username": "@body('Get_SN_Client_ID')?['value']"
+                                                },
+                                                "body": {
+                                                    "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                    "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                    "category": "Data Issue",
+                                                    "contact_type": "Alert",
+                                                    "description": "[[Error Exception]",
+                                                    "impact": "2",
+                                                    "service_offering": "93d387761be26c1049c38732f54bcb9f",
+                                                    "short_description": "HMI Rota File Error from Logic App Dev",
+                                                    "subcategory": "Data or File Error - other",
+                                                    "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                    "urgency": "3"
+                                                },
+                                                "method": "POST",
+                                                "uri": "[parameters('serviceNowHostUrl')]"
                                             }
                                         },
                                         "Send_an_email_(V2)": {
