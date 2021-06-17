@@ -42,10 +42,12 @@ class SessionsApiSmokeTest extends SmokeTest {
     @DisplayName("Smoke Test to test the sessions endpoint")
     void testSessionsHmiApiGet() {
         final Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("requestSessionType", "DS");
+        queryParams.put("requestLocationId", "301");
 
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
                 getAuthorizationToken(), queryParams, getRootContext());
 
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
