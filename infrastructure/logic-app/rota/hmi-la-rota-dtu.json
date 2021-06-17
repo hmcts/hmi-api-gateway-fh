@@ -257,7 +257,7 @@
                                                         "actions": {
                                                             "Create_blob_in_error_folder": {
                                                                 "runAfter": {
-                                                                    "Send_HMI_Error": [
+                                                                    "HTTP_3": [
                                                                         "Succeeded"
                                                                     ]
                                                                 },
@@ -298,6 +298,70 @@
                                                                     },
                                                                     "method": "delete",
                                                                     "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                                }
+                                                            },
+                                                            "Get_SN_User_ID": {
+                                                                "runAfter": {
+                                                                    "Send_HMI_Error": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                                }
+                                                            },
+                                                            "Get_SN_User_Pwd": {
+                                                                "runAfter": {
+                                                                    "Get_SN_User_ID": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                                }
+                                                            },
+                                                            "HTTP_3": {
+                                                                "runAfter": {
+                                                                    "Get_SN_User_Pwd": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "Http",
+                                                                "inputs": {
+                                                                    "authentication": {
+                                                                        "password": "@body('Get_SN_User_Pwd')?['value']",
+                                                                        "type": "Basic",
+                                                                        "username": "@body('Get_SN_User_ID')?['value']"
+                                                                    },
+                                                                     "body": {
+                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                        "category": "Data Issue",
+                                                                        "contact_type": "Alert",
+                                                                        "description": "[[Error Exception]",
+                                                                        "impact": "2",
+                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                        "short_description": "HMI Rota File Error from Logic App Dev",
+                                                                        "subcategory": "Data or File Error - other",
+                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                        "urgency": "3"
+                                                                    },
+                                                                    "method": "POST",
+                                                                    "uri": "[parameters('serviceNowHostUrl')]"
                                                                 }
                                                             },
                                                             "Send_HMI_Error": {
