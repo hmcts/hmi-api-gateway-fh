@@ -58,6 +58,7 @@
             <value>CRIME</value>
             <value>CFT</value>
             <value>RM</value>
+            <value>CP</value>
         </check-header>
         <check-header name="Destination-System" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Destination-System" ignore-case="false">
             <value>SNL</value>
@@ -68,6 +69,7 @@
             <value>ELINKS</value>
             <value>VH</value>
             <value>RM</value>
+            <value>HMI-DTU</value>
         </check-header>
         <check-header name="Request-Created-At" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Header Request-Created-At" ignore-case="true" />
         <check-header name="Accept" failed-check-httpcode="406" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
