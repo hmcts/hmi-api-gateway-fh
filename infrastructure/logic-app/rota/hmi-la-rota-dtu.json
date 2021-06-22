@@ -29,6 +29,21 @@
         },
         "hmiSchedulesUrl": {
             "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
+        },
+        "serviceNowAssignemntGroupId": {
+            "type": "string"
+        },
+        "serviceNowUserRoleTypeId": {
+            "type": "string"
+        },
+        "serviceNowServiceOfferingId": {
+            "type": "string"
+        },
+        "serviceNowCallerId": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -242,7 +257,7 @@
                                                         "actions": {
                                                             "Create_blob_in_error_folder": {
                                                                 "runAfter": {
-                                                                    "Send_HMI_Error": [
+                                                                    "HTTP_3": [
                                                                         "Succeeded"
                                                                     ]
                                                                 },
@@ -283,6 +298,70 @@
                                                                     },
                                                                     "method": "delete",
                                                                     "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                                }
+                                                            },
+                                                            "Get_SN_User_ID": {
+                                                                "runAfter": {
+                                                                    "Send_HMI_Error": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                                }
+                                                            },
+                                                            "Get_SN_User_Pwd": {
+                                                                "runAfter": {
+                                                                    "Get_SN_User_ID": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                                }
+                                                            },
+                                                            "HTTP_3": {
+                                                                "runAfter": {
+                                                                    "Get_SN_User_Pwd": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "Http",
+                                                                "inputs": {
+                                                                    "authentication": {
+                                                                        "password": "@body('Get_SN_User_Pwd')?['value']",
+                                                                        "type": "Basic",
+                                                                        "username": "@body('Get_SN_User_ID')?['value']"
+                                                                    },
+                                                                    "body": {
+                                                                        "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                                        "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                                        "category": "Data Issue",
+                                                                        "contact_type": "Alert",
+                                                                        "description": "@{body('HTTP')}",
+                                                                        "impact": "2",
+                                                                        "service_offering": "93d387761be26c1049c38732f54bcb9f",
+                                                                        "short_description": "HMI Rota File in error: @{items('For_each')?['Path']}",
+                                                                        "subcategory": "Data or File Error - other",
+                                                                        "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                                        "urgency": "3"
+                                                                    },
+                                                                    "method": "POST",
+                                                                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
                                                                 }
                                                             },
                                                             "Send_HMI_Error": {
@@ -417,7 +496,7 @@
                                         },
                                         "Delete_invalid_file": {
                                             "runAfter": {
-                                                "Send_an_email_(V2)": [
+                                                "HTTP_2": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -466,6 +545,40 @@
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
                                             }
                                         },
+                                        "Get_SN_Client_ID": {
+                                            "runAfter": {
+                                                "Send_an_email_(V2)": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                            }
+                                        },
+                                        "Get_SN_Client_Secret": {
+                                            "runAfter": {
+                                                "Get_SN_Client_ID": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                            }
+                                        },
                                         "HTTP": {
                                             "runAfter": {
                                                 "Get_Client_Secret_": [
@@ -491,6 +604,36 @@
                                                 },
                                                 "method": "POST",
                                                 "uri": "[parameters('hmiSchedulesUrl')]"
+                                            }
+                                        },
+                                        "HTTP_2": {
+                                            "runAfter": {
+                                                "Get_SN_Client_Secret": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "authentication": {
+                                                    "password": "@body('Get_SN_Client_Secret')?['value']",
+                                                    "type": "Basic",
+                                                    "username": "@body('Get_SN_Client_ID')?['value']"
+                                                },
+                                                "body": {
+                                                    "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                    "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                    "category": "Data Issue",
+                                                    "contact_type": "Alert",
+                                                    "description": "@{actions('Set_jsonPayload')['error']}",
+                                                    "impact": "2",
+                                                    "service_offering": "93d387761be26c1049c38732f54bcb9f",
+                                                    "short_description": "HMI Rota File Error @{items('For_each')?['Path']}",
+                                                    "subcategory": "Data or File Error - other",
+                                                    "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                    "urgency": "3"
+                                                },
+                                                "method": "POST",
+                                                "uri": "[parameters('serviceNowHostUrl')]"
                                             }
                                         },
                                         "Send_an_email_(V2)": {

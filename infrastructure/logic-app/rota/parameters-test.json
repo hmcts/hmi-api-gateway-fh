@@ -33,6 +33,21 @@
         },
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
+        },
+        "serviceNowHostUrl": {
+            "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+        },
+        "serviceNowAssignemntGroupId": {
+            "value": "56b756774fbd368057db0b318110c7bd"
+        },
+        "serviceNowUserRoleTypeId": {
+            "value": "c319bc4bdb41834074abffa9bf96199c"
+        },
+        "serviceNowServiceOfferingId": {
+            "value": "93d387761be26c1049c38732f54bcb9f"
+        },
+        "serviceNowCallerId": {
+            "value": "1475a0491b743414f0dc85e4464bcb7a"
         }
     }
 }
