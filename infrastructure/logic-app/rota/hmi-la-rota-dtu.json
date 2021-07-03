@@ -297,7 +297,7 @@
                                                                         }
                                                                     },
                                                                     "method": "get",
-                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
                                                                 }
                                                             },
                                                             "Get_SN_User_Pwd": {
@@ -314,7 +314,7 @@
                                                                         }
                                                                     },
                                                                     "method": "get",
-                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
                                                                 }
                                                             },
                                                             "HTTP_3": {
@@ -350,11 +350,23 @@
                                                         },
                                                         "runAfter": {},
                                                         "expression": {
-                                                            "and": [
+                                                            "or": [
                                                                 {
                                                                     "greaterOrEquals": [
                                                                         "@outputs('HTTP')['statusCode']",
                                                                         500
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "equals": [
+                                                                        "@outputs('HTTP')['statusCode']",
+                                                                        400
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "equals": [
+                                                                        "@outputs('HTTP')['statusCode']",
+                                                                        406
                                                                     ]
                                                                 }
                                                             ]
