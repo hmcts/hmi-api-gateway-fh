@@ -5,8 +5,8 @@
         "environmentName":{
             "value": "test"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-test"
+        "workflows_hmidtusittingpatterns_name": {
+            "value": "hmi-la-sittingpattern-publisher-test"
         },
         "storageAccountName":{
             "value": "hmidtutest"
@@ -18,21 +18,6 @@
                 },
                 "secretName": "dtu-storage-account-key"
              }
-        },
-        "appId":{
-            "value": "#{keyVaultUserId}#"
-        },
-        "appSecret":{
-            "value": "#{keyVaultUserSecret}#"
-        },
-        "tenantId":{
-            "value": "#{azureTenant}#"
-        },
-        "keyvaultName":{
-            "value": "hmi-shared-kv-test"
-        },
-        "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
         }
     }
 }

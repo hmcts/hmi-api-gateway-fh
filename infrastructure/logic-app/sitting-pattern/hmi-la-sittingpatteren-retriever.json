@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmidtusittingpatterns_name": {
+            "defaultValue": "hmi-la-sittingpattern-retriver",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
+        },
+        "environmentName": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "name": "azureblob",
+            "properties": {
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                },
+                "displayName": "HMI DTU Sitting Patterns",
+                "parameterValues": {
+                    "accountName": "[parameters('storageAccountName')]",
+                    "accessKey": "[parameters('storageAccessKey')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmidtusittingpatterns_name')]",
+            "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "method": "GET"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Get_blob_content": {
+                            "runAfter": {},
+                            "metadata": {
+                                "JTJmc2l0dGluZy1wYXR0ZXJuJTJmZGF0YSUyZnJlcG9zaXRvcnkuanNvbg==": "/sitting-pattern/data/repository.json"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent('JTJmc2l0dGluZy1wYXR0ZXJuJTJmZGF0YSUyZnJlcG9zaXRvcnkuanNvbg=='))}/content",
+                                "queries": {
+                                    "inferContentType": true
+                                }
+                            }
+                        },
+                        "Response": {
+                            "runAfter": {
+                                "Get_blob_content": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "body": "@body('Get_blob_content')",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "statusCode": 200
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionName": "azureblob",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

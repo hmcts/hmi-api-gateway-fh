@@ -5,8 +5,8 @@
         "environmentName":{
             "value": "sbox"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-sbox"
+        "workflows_hmidtusittingpatterns_name": {
+            "value": "hmi-la-sittingpattern-retriever-sbox"
         },
         "storageAccountName":{
             "value": "hmidtusbox"
@@ -18,21 +18,6 @@
                 },
                 "secretName": "dtu-storage-account-key"
              }
-        },
-        "appId":{
-            "value": "#{keyVaultUserId}#"
-        },
-        "appSecret":{
-            "value": "#{keyVaultUserSecret}#"
-        },
-        "tenantId":{
-            "value": "#{azureTenant}#"
-        },
-        "keyvaultName":{
-            "value": "hmi-shared-kv-sbox"
-        },
-        "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.sbox.platform.hmcts.net/hmi/schedules"
         }
     }
 }
