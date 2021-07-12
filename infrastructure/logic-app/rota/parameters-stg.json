@@ -3,18 +3,18 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "development"
+            "value": "stg"
         },
         "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-dev"
+            "value": "hmi-la-dturota-stg"
         },
         "storageAccountName":{
-            "value": "hmidtudev"
+            "value": "hmidtustg"
         },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
-                   "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedservices-dev-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-dev"
+                   "id": "/subscriptions/74dacd4f-a248-45bb-a2f0-af700dc4cf68/resourceGroups/hmi-sharedservices-stg-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-stg"
                 },
                 "secretName": "dtu-storage-account-key"
              }
@@ -29,16 +29,16 @@
             "value": "#{azureTenant}#"
         },
         "keyvaultName":{
-            "value": "hmi-shared-kv-dev"
+            "value": "hmi-shared-kv-stg"
         },
         "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+            "value": "https://hmi-apim.stg.platform.hmcts.net/hmi/schedules"
         },
         "hmiScopeUrl":{
             "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "serviceNowHostUrl": {
-            "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+            "value": "https://mojcpppreprod.service-now.com/api/now/table/incident?sysparm_fields=number"
         },
         "serviceNowAssignemntGroupId": {
             "value": "56b756774fbd368057db0b318110c7bd"

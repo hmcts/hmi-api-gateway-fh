@@ -565,7 +565,7 @@
                                             "type": "Http",
                                             "inputs": {
                                                 "authentication": {
-                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                    "audience": "[parameters('hmiScopeUrl')]",
                                                     "clientId": "@body('Get_Client_ID')?['value']",
                                                     "secret": "@body('Get_Client_Secret_')?['value']",
                                                     "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
