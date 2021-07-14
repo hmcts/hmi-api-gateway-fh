@@ -34,6 +34,9 @@
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
         },
+        "hmiScopeUrl":{
+            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
+        },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
         },
