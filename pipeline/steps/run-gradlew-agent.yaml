@@ -15,7 +15,6 @@ steps:
     displayName: Run gradle
     inputs:
       gradleWrapperFile: 'gradlew'
-      sonarQubeGradlePluginVersion: 2.186.0
       workingDirectory: '$(System.DefaultWorkingDirectory)'
       tasks: ${{ parameters.command }}
       publishJUnitResults: ${{ parameters.publishJUnitResults }}
