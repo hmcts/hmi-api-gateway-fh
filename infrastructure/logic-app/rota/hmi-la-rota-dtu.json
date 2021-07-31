@@ -125,7 +125,7 @@
                    "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_jsonString": [
+                                "Initialize_xmlSchedules": [
                                     "Succeeded"
                                 ]
                             },
@@ -568,7 +568,7 @@
                                             "type": "Http",
                                             "inputs": {
                                                 "authentication": {
-                                                    "audience": "[parameters('hmiScopeUrl')]",
+                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
                                                     "clientId": "@body('Get_Client_ID')?['value']",
                                                     "secret": "@body('Get_Client_Secret_')?['value']",
                                                     "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
@@ -618,7 +618,7 @@
                                         },
                                         "Set_jsonPayload": {
                                             "runAfter": {
-                                                "Set_xmlPayload": [
+                                                "Set_xmlSchedules": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -646,6 +646,18 @@
                                             "inputs": {
                                                 "name": "xmlPayload",
                                                 "value": "@{body('Get_blob_content_using_path')}"
+                                            }
+                                        },
+                                        "Set_xmlSchedules": {
+                                            "runAfter": {
+                                                "Set_xmlPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlSchedules",
+                                                "value": "@{substring(variables('xmlPayload'), indexOf(variables('xmlPayload'), '<schedules>'), sub(length(variables('xmlPayload')),indexOf(variables('xmlPayload'), '<schedules>')))}"
                                             }
                                         }
                                     },
@@ -786,6 +798,22 @@
                                 "variables": [
                                     {
                                         "name": "xmlPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlSchedules": {
+                            "runAfter": {
+                                "Initialize_jsonString": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlSchedules",
                                         "type": "string"
                                     }
                                 ]
