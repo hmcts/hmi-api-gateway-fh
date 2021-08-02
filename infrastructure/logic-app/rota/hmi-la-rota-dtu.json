@@ -125,7 +125,7 @@
                    "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_xmlMagistrate": [
+                                "Initialize_jsonCourtLocatioinProfiles": [
                                     "Succeeded"
                                 ]
                             },
@@ -683,6 +683,54 @@
                                             },
                                             "type": "Foreach"
                                         },
+                                        "Set_jsonCLProfiles": {
+                                            "runAfter": {
+                                                "Set_xmlCLProfile": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonCLProfiles",
+                                                "value": "@{json(xml(variables('xmlCLProfile')))}"
+                                            }
+                                        },
+                                        "Set_jsonJudges": {
+                                            "runAfter": {
+                                                "Set_xmlJudges": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonJudges",
+                                                "value": "@{json(xml(variables('xmlJudges')))}"
+                                            }
+                                        },
+                                        "Set_jsonLocations": {
+                                            "runAfter": {
+                                                "Set_xmlLocations": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonLocations",
+                                                "value": "@{json(xml(variables('xmlLocations')))}"
+                                            }
+                                        },
+                                        "Set_jsonMagistrates": {
+                                            "runAfter": {
+                                                "Set_xmlMagistrates": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonMagistrates",
+                                                "value": "@{json(xml(variables('xmlMagistrate')))}"
+                                            }
+                                        },
                                         "Set_jsonPayload": {
                                             "runAfter": {
                                                 "Process_Schedules": [
@@ -719,9 +767,21 @@
                                                 "value": "@{replace(variables('jsonPayload'), '@id', '_id')}"
                                             }
                                         },
+                                        "Set_jsonVenues": {
+                                            "runAfter": {
+                                                "Set_xmlVenues": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonVenues",
+                                                "value": "@{json(xml(variables('xmlVenues')))}"
+                                            }
+                                        },
                                         "Set_xmlCLProfile": {
                                             "runAfter": {
-                                                "Set_xmlPayload": [
+                                                "Set_jsonLocations": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -729,6 +789,42 @@
                                             "inputs": {
                                                 "name": "xmlCLProfile",
                                                 "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<courtListingProfiles>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</courtListingProfiles>'), length('</courtListingProfiles>')),\n        indexOf(variables('xmlPayload'), '<courtListingProfiles>')\n    )\n)}"
+                                            }
+                                        },
+                                        "Set_xmlJudges": {
+                                            "runAfter": {
+                                                "Set_jsonMagistrates": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlJudges",
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<districtJudges>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</districtJudges>'), length('</districtJudges>')),\n        indexOf(variables('xmlPayload'), '<districtJudges>')\n    )\n)}"
+                                            }
+                                        },
+                                        "Set_xmlLocations": {
+                                            "runAfter": {
+                                                "Set_jsonVenues": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlLocations",
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<locations>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</locations>'), length('</locations>')),\n        indexOf(variables('xmlPayload'), '<locations>')\n    )\n)}"
+                                            }
+                                        },
+                                        "Set_xmlMagistrates": {
+                                            "runAfter": {
+                                                "Set_xmlPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlMagistrate",
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<magistrates>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</magistrates>'), length('</magistrates>')),\n        indexOf(variables('xmlPayload'), '<magistrates>')\n    )\n)}"
                                             }
                                         },
                                         "Set_xmlPayload": {
@@ -741,7 +837,7 @@
                                         },
                                         "Set_xmlSchedules": {
                                             "runAfter": {
-                                                "Set_xmlCLProfile": [
+                                                "Set_jsonCLProfiles": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -749,6 +845,18 @@
                                             "inputs": {
                                                 "name": "xmlSchedules",
                                                 "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<schedules>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</schedules>'), length('</schedules>')),\n        indexOf(variables('xmlPayload'), '<schedules>')\n    )\n)}"
+                                            }
+                                        },
+                                        "Set_xmlVenues": {
+                                            "runAfter": {
+                                                "Set_jsonJudges": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlVenues",
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<venues>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</venues>'), length('</venues>')),\n        indexOf(variables('xmlPayload'), '<venues>')\n    )\n)}"
                                             }
                                         }
                                     },
@@ -850,9 +958,73 @@
                             },
                             "type": "Foreach"
                         },
+                        "Initialize_jsonCourtLocatioinProfiles": {
+                            "runAfter": {
+                                "Initialize_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonCLProfiles",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonJudges": {
+                            "runAfter": {
+                                "Initialize_jsonLocations": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonJudges",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonLocations": {
+                            "runAfter": {
+                                "Initialize_jsonVenues": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonLocations",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonMagistrates": {
+                            "runAfter": {
+                                "Initialize_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonMagistrates",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_jsonPayload": {
                             "runAfter": {
-                                "Initialize_xmlPayload": [
+                                "Initialize_xmlLocations": [
                                     "Succeeded"
                                 ]
                             },
@@ -868,7 +1040,7 @@
                         },
                         "Initialize_jsonSchedules": {
                             "runAfter": {
-                                "Initialize_xmlSchedules": [
+                                "Initialize_jsonString": [
                                     "Succeeded"
                                 ]
                             },
@@ -898,9 +1070,25 @@
                                 ]
                             }
                         },
+                        "Initialize_jsonVenues": {
+                            "runAfter": {
+                                "Initialize_jsonMagistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonVenues",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_xmlCourtListingProfile": {
                             "runAfter": {
-                                "Initialize_jsonSchedules": [
+                                "Initialize_xmlPayload": [
                                     "Succeeded"
                                 ]
                             },
@@ -909,6 +1097,38 @@
                                 "variables": [
                                     {
                                         "name": "xmlCLProfile",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlJudges": {
+                            "runAfter": {
+                                "Initialize_xmlSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlJudges",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlLocations": {
+                            "runAfter": {
+                                "Initialize_xmlVenues": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlLocations",
                                         "type": "string"
                                     }
                                 ]
@@ -944,7 +1164,7 @@
                         },
                         "Initialize_xmlSchedules": {
                             "runAfter": {
-                                "Initialize_jsonString": [
+                                "Initialize_xmlMagistrate": [
                                     "Succeeded"
                                 ]
                             },
@@ -953,6 +1173,22 @@
                                 "variables": [
                                     {
                                         "name": "xmlSchedules",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlVenues": {
+                            "runAfter": {
+                                "Initialize_xmlJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlVenues",
                                         "type": "string"
                                     }
                                 ]
