@@ -125,7 +125,7 @@
                    "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_xmlSchedules": [
+                                "Initialize_xmlMagistrate": [
                                     "Succeeded"
                                 ]
                             },
@@ -616,9 +616,76 @@
                                                 "uri": "[parameters('serviceNowHostUrl')]"
                                             }
                                         },
+                                        "Parse_JSON": {
+                                            "runAfter": {
+                                                "Set_jsonSchedules": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@variables('jsonSchedules')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "schedules": {
+                                                            "properties": {
+                                                                "schedule": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "courtListingProfile": {
+                                                                                "properties": {
+                                                                                    "@@idref": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "justice": {
+                                                                                "properties": {
+                                                                                    "@@idref": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "slot": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "courtListingProfile",
+                                                                            "justice",
+                                                                            "slot"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "Process_Schedules": {
+                                            "foreach": "@body('Parse_JSON')?['schedules']?['schedule']",
+                                            "actions": {},
+                                            "runAfter": {
+                                                "Parse_JSON": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
                                         "Set_jsonPayload": {
                                             "runAfter": {
-                                                "Set_xmlSchedules": [
+                                                "Process_Schedules": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -626,6 +693,18 @@
                                             "inputs": {
                                                 "name": "jsonPayload",
                                                 "value": "@{json(xml(variables('xmlPayload')))}"
+                                            }
+                                        },
+                                        "Set_jsonSchedules": {
+                                            "runAfter": {
+                                                "Set_xmlSchedules": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonSchedules",
+                                                "value": "@{json(xml(substring(variables('xmlSchedules'),0,sub(length(variables('xmlSchedules')), 16))))}"
                                             }
                                         },
                                         "Set_jsonString": {
@@ -775,6 +854,22 @@
                                 ]
                             }
                         },
+                        "Initialize_jsonSchedules": {
+                            "runAfter": {
+                                "Initialize_xmlSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonSchedules",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_jsonString": {
                             "runAfter": {
                                 "Initialize_jsonPayload": [
@@ -786,6 +881,38 @@
                                 "variables": [
                                     {
                                         "name": "jsonString",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlCourtListingProfile": {
+                            "runAfter": {
+                                "Initialize_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlCLProfile",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlMagistrate": {
+                            "runAfter": {
+                                "Initialize_xmlCourtListingProfile": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlMagistrate",
                                         "type": "string"
                                     }
                                 ]
