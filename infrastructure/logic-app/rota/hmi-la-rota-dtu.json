@@ -704,7 +704,7 @@
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "jsonSchedules",
-                                                "value": "@{json(xml(substring(variables('xmlSchedules'),0,sub(length(variables('xmlSchedules')), 16))))}"
+                                                "value": "@{json(xml(variables('xmlSchedules')))}"
                                             }
                                         },
                                         "Set_jsonString": {
@@ -719,6 +719,18 @@
                                                 "value": "@{replace(variables('jsonPayload'), '@id', '_id')}"
                                             }
                                         },
+                                        "Set_xmlCLProfile": {
+                                            "runAfter": {
+                                                "Set_xmlPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "xmlCLProfile",
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<courtListingProfiles>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</courtListingProfiles>'), length('</courtListingProfiles>')),\n        indexOf(variables('xmlPayload'), '<courtListingProfiles>')\n    )\n)}"
+                                            }
+                                        },
                                         "Set_xmlPayload": {
                                             "runAfter": {},
                                             "type": "SetVariable",
@@ -729,14 +741,14 @@
                                         },
                                         "Set_xmlSchedules": {
                                             "runAfter": {
-                                                "Set_xmlPayload": [
+                                                "Set_xmlCLProfile": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "xmlSchedules",
-                                                "value": "@{substring(variables('xmlPayload'), indexOf(variables('xmlPayload'), '<schedules>'), sub(length(variables('xmlPayload')),indexOf(variables('xmlPayload'), '<schedules>')))}"
+                                                "value": "@{substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<schedules>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</schedules>'), length('</schedules>')),\n        indexOf(variables('xmlPayload'), '<schedules>')\n    )\n)}"
                                             }
                                         }
                                     },
