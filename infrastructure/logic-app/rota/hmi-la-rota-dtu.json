@@ -743,6 +743,21 @@
                                         "Process_Schedules": {
                                             "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
                                             "actions": {
+                                                "Compose": {
+                                                    "runAfter": {
+                                                        "For_CLProfiles": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Compose",
+                                                    "inputs": {
+                                                        "courtId": "@{variables('courtId')}",
+                                                        "courtRoomId": "@{variables('courtRoomId')}",
+                                                        "sessionDuration": "@variables('sessionDuratiion')",
+                                                        "sessionReference": "@{variables('sessionReference')}",
+                                                        "sessionStart": "@{variables('sessionStart')}"
+                                                    }
+                                                },
                                                 "For_CLProfiles": {
                                                     "foreach": "@body('Parse_CLProfiles')?['courtListingProfiles']?['courtListingProfile']",
                                                     "actions": {
@@ -1380,7 +1395,7 @@
                         }
                     },
                     "outputs": {}
-                },s
+                },
                 "parameters": {
                     "$connections": {
                         "value": {
