@@ -334,16 +334,16 @@
                                                                         "username": "@body('Get_SN_User_ID')?['value']"
                                                                     },
                                                                     "body": {
-                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                        "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                                        "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
                                                                         "category": "Data Issue",
                                                                         "contact_type": "Alert",
-                                                                        "description": "@{body('HTTP')}",
+                                                                        "description": "@{body('HTTP_HMI_Schedules')}",
                                                                         "impact": "2",
-                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                        "short_description": "HMI Rota File Error @{items('For_each')?['Path']}",
+                                                                        "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                                        "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
                                                                         "subcategory": "Data or File Error - other",
-                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                        "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
                                                                         "urgency": "3"
                                                                     },
                                                                     "method": "POST",
