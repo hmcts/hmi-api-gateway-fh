@@ -117,7 +117,7 @@
                         "Recurrence": {
                             "recurrence": {
                                 "frequency": "Minute",
-                                "interval": 5
+                                "interval": 60
                             },
                             "type": "Recurrence"
                         }
@@ -151,7 +151,7 @@
                                 }
                             }
                         },
-                        "For_each": {
+                        "For_each_File": {
                             "foreach": "@body('List_blobs')?['value']",
                             "actions": {
                                 "Get_blob_content_using_path": {
@@ -167,7 +167,7 @@
                                         "path": "/datasets/default/GetFileContentByPath",
                                         "queries": {
                                             "inferContentType": true,
-                                            "path": "@items('For_each')?['Path']",
+                                            "path": "@items('For_each_File')?['Path']",
                                             "queryParametersSingleEncoded": true
                                         }
                                     }
@@ -207,7 +207,7 @@
                                                         "path": "/datasets/default/files",
                                                         "queries": {
                                                             "folderPath": "/rota/output/",
-                                                            "name": "@items('For_each')?['Name']",
+                                                            "name": "@items('For_each_File')?['Name']",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -231,7 +231,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                     }
                                                 }
                                             },
@@ -263,7 +263,7 @@
                                                                     "path": "/datasets/default/files",
                                                                     "queries": {
                                                                         "folderPath": "/rota/error/",
-                                                                        "name": "@items('For_each')?['Name']",
+                                                                        "name": "@items('For_each_File')?['Name']",
                                                                         "queryParametersSingleEncoded": true
                                                                     }
                                                                 },
@@ -287,7 +287,7 @@
                                                                         }
                                                                     },
                                                                     "method": "delete",
-                                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                                 }
                                                             },
                                                             "Get_SN_User_ID": {
@@ -408,7 +408,7 @@
                                                 "path": "/datasets/default/files",
                                                 "queries": {
                                                     "folderPath": "/rota/output",
-                                                    "name": "@items('For_each')?['Name']",
+                                                    "name": "@items('For_each_File')?['Name']",
                                                     "queryParametersSingleEncoded": true
                                                 }
                                             },
@@ -436,7 +436,7 @@
                                                 "path": "/datasets/default/files",
                                                 "queries": {
                                                     "folderPath": "/rota/error/",
-                                                    "name": "@items('For_each')?['Name']",
+                                                    "name": "@items('For_each_File')?['Name']",
                                                     "queryParametersSingleEncoded": true
                                                 }
                                             },
@@ -488,7 +488,7 @@
                                                     }
                                                 },
                                                 "method": "delete",
-                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                             }
                                         },
                                         "Get_Client_ID": {
@@ -683,6 +683,57 @@
                                                 }
                                             }
                                         },
+                                        "Parse_JSON": {
+                                            "runAfter": {
+                                                "Set_jsonMagistrates": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@variables('jsonMagistrates')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "magistrates": {
+                                                            "properties": {
+                                                                "magistrate": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "emailAddress": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "forenames": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "surname": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "title": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "title",
+                                                                            "surname",
+                                                                            "forenames",
+                                                                            "emailAddress"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
                                         "Parse_jsonSchedules": {
                                             "runAfter": {
                                                 "Set_jsonSchedules": [
@@ -743,9 +794,9 @@
                                         "Process_Schedules": {
                                             "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
                                             "actions": {
-                                                "Compose": {
+                                                "Compose_sessionRequest": {
                                                     "runAfter": {
-                                                        "For_CLProfiles": [
+                                                        "For_each_Magistrates": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -753,12 +804,50 @@
                                                     "inputs": {
                                                         "courtId": "@{variables('courtId')}",
                                                         "courtRoomId": "@{variables('courtRoomId')}",
+                                                        "johs": [
+                                                            {
+                                                                "isPresiding": "@{variables('johIdIsPresiding')}",
+                                                                "johId": "@{variables('johIdEmail')}",
+                                                                "slot": "@{variables('johIdSlot')}"
+                                                            }
+                                                        ],
                                                         "sessionDuration": "@variables('sessionDuratiion')",
                                                         "sessionReference": "@{variables('sessionReference')}",
                                                         "sessionStart": "@{variables('sessionStart')}"
                                                     }
                                                 },
-                                                "For_CLProfiles": {
+                                                "Create_sessionRequest_file": {
+                                                    "runAfter": {
+                                                        "Compose_sessionRequest": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@outputs('Compose_sessionRequest')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/schedules/",
+                                                            "name": "@{variables('sessionReference')}.json",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "For_each_CLProfiles": {
                                                     "foreach": "@body('Parse_CLProfiles')?['courtListingProfiles']?['courtListingProfile']",
                                                     "actions": {
                                                         "Find_CourtLocationProfile": {
@@ -782,12 +871,12 @@
                                                                             "type": "SetVariable",
                                                                             "inputs": {
                                                                                 "name": "sessionStart",
-                                                                                "value": "@{items('For_CLProfiles')?['sessionDate']} 10:00:00"
+                                                                                "value": "@{items('For_each_CLProfiles')?['sessionDate']}T10:00:00Z"
                                                                             }
                                                                         }
                                                                     },
                                                                     "runAfter": {
-                                                                        "Set_courtRoomId": [
+                                                                        "Set_johIdSlot": [
                                                                             "Succeeded"
                                                                         ]
                                                                     },
@@ -810,7 +899,7 @@
                                                                                 "type": "SetVariable",
                                                                                 "inputs": {
                                                                                     "name": "sessionStart",
-                                                                                    "value": "@{items('For_CLProfiles')?['sessionDate']} 14:00:00"
+                                                                                    "value": "@{items('For_each_CLProfiles')?['sessionDate']}T14:00:00Z"
                                                                                 }
                                                                             }
                                                                         }
@@ -819,7 +908,7 @@
                                                                         "and": [
                                                                             {
                                                                                 "equals": [
-                                                                                    "@items('For_CLProfiles')?['session']",
+                                                                                    "@items('For_each_CLProfiles')?['session']",
                                                                                     "AM"
                                                                                 ]
                                                                             }
@@ -832,7 +921,7 @@
                                                                     "type": "SetVariable",
                                                                     "inputs": {
                                                                         "name": "courtId",
-                                                                        "value": "@items('For_CLProfiles')?['locationId']"
+                                                                        "value": "@items('For_each_CLProfiles')?['locationId']"
                                                                     }
                                                                 },
                                                                 "Set_courtRoomId": {
@@ -844,7 +933,19 @@
                                                                     "type": "SetVariable",
                                                                     "inputs": {
                                                                         "name": "courtRoomId",
-                                                                        "value": "@items('For_CLProfiles')?['venueId']"
+                                                                        "value": "@items('For_each_CLProfiles')?['venueId']"
+                                                                    }
+                                                                },
+                                                                "Set_johIdSlot": {
+                                                                    "runAfter": {
+                                                                        "Set_courtRoomId": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "SetVariable",
+                                                                    "inputs": {
+                                                                        "name": "johIdSlot",
+                                                                        "value": "@items('Process_Schedules')?['slot']"
                                                                     }
                                                                 }
                                                             },
@@ -854,7 +955,7 @@
                                                                     {
                                                                         "equals": [
                                                                             "@items('Process_Schedules')?['courtListingProfile']?['@idref']",
-                                                                            "@items('For_CLProfiles')?['@id']"
+                                                                            "@items('For_each_CLProfiles')?['@id']"
                                                                         ]
                                                                     }
                                                                 ]
@@ -863,13 +964,60 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Set_variable": [
+                                                        "Set_sessionReference": [
                                                             "Succeeded"
                                                         ]
                                                     },
                                                     "type": "Foreach"
                                                 },
-                                                "Set_variable": {
+                                                "For_each_Magistrates": {
+                                                    "foreach": "@body('Parse_JSON')?['magistrates']?['magistrate']",
+                                                    "actions": {
+                                                        "Find_magistrate": {
+                                                            "actions": {
+                                                                "Set_johIdEmail": {
+                                                                    "runAfter": {},
+                                                                    "type": "SetVariable",
+                                                                    "inputs": {
+                                                                        "name": "johIdEmail",
+                                                                        "value": "@items('For_each_Magistrates')?['emailAddress']"
+                                                                    }
+                                                                },
+                                                                "Set_johIdPresiding": {
+                                                                    "runAfter": {
+                                                                        "Set_johIdEmail": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "SetVariable",
+                                                                    "inputs": {
+                                                                        "name": "johIdIsPresiding",
+                                                                        "value": "true"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "runAfter": {},
+                                                            "expression": {
+                                                                "and": [
+                                                                    {
+                                                                        "equals": [
+                                                                            "@items('Process_Schedules')?['justice']?['@idref']",
+                                                                            "@items('For_each_Magistrates')?['@id']"
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "type": "If"
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "For_each_CLProfiles": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "Set_sessionReference": {
                                                     "runAfter": {},
                                                     "type": "SetVariable",
                                                     "inputs": {
@@ -899,7 +1047,7 @@
                                         },
                                         "Set_jsonJudges": {
                                             "runAfter": {
-                                                "Set_jsonMagistrates": [
+                                                "Parse_JSON": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -1011,7 +1159,7 @@
                                                     "path": "/datasets/default/files",
                                                     "queries": {
                                                         "folderPath": "/rota/error/",
-                                                        "name": "@items('For_each')?['Name']",
+                                                        "name": "@items('For_each_File')?['Name']",
                                                         "queryParametersSingleEncoded": true
                                                     }
                                                 },
@@ -1035,7 +1183,7 @@
                                                         }
                                                     },
                                                     "method": "delete",
-                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                 }
                                             },
                                             "Update_read.me": {
@@ -1072,7 +1220,7 @@
                                         "and": [
                                             {
                                                 "endsWith": [
-                                                    "@items('For_each')?['Path']",
+                                                    "@items('For_each_File')?['Path']",
                                                     ".xml"
                                                 ]
                                             }
