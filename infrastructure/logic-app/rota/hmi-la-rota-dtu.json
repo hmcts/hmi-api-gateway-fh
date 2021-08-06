@@ -334,20 +334,20 @@
                                                                         "username": "@body('Get_SN_User_ID')?['value']"
                                                                     },
                                                                     "body": {
-                                                                        "assignment_group": "56b756774fbd368057db0b318110c7bd",
-                                                                        "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
                                                                         "category": "Data Issue",
                                                                         "contact_type": "Alert",
-                                                                        "description": "@{body('HTTP_HMI_Schedules')}",
+                                                                        "description": "@{body('HTTP')}",
                                                                         "impact": "2",
-                                                                        "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
-                                                                        "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
+                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                        "short_description": "HMI Rota File Error @{items('For_each')?['Path']}",
                                                                         "subcategory": "Data or File Error - other",
-                                                                        "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                                                         "urgency": "3"
                                                                     },
                                                                     "method": "POST",
-                                                                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                                    "uri": "[parameters('serviceNowHostUrl')]"
                                                                 }
                                                             }
                                                         },
