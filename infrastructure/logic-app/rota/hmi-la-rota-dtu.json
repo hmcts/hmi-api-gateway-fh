@@ -583,7 +583,7 @@
                                                     "Source-System": "CFT"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                             }
                                         },
                                         "HTTP_ServiceNow_Invalid_File": {
