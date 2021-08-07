@@ -600,7 +600,7 @@
                                                     "username": "@body('Get_SN_Client_ID')?['value']"
                                                 },
                                                 "body": {
-                                                    "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                    "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
                                                     "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
                                                     "category": "Data Issue",
                                                     "contact_type": "Alert",
