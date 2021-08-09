@@ -361,7 +361,7 @@
                                                                                 "caller_id": "[parameters('serviceNowCallerId')]",
                                                                                 "category": "Data Issue",
                                                                                 "contact_type": "Alert",
-                                                                                "description": "@{body('HTTP')}",
+                                                                                "description": "@{body('HTTP_HMI_Schedules')}",
                                                                                 "impact": "2",
                                                                                 "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                                                                 "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
