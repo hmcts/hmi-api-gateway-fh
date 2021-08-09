@@ -225,10 +225,10 @@
                                 },
                                 "is_file_xml": {
                                     "actions": {
-                                        "For_each": {
+                                        "For_each__Schedule": {
                                             "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
                                             "actions": {
-                                                "Compose": {
+                                                "Compose_sessionRequest": {
                                                     "runAfter": {
                                                         "Parse_Magistrate_File": [
                                                             "Succeeded"
@@ -242,82 +242,18 @@
                                                             {
                                                                 "isPresiding": "true",
                                                                 "johId": "@{body('Parse_Magistrate_File')?['emailAddress']}",
-                                                                "slot": "@{items('For_each')?['slot']}"
+                                                                "slot": "@{items('For_each__Schedule')?['slot']}"
                                                             }
                                                         ],
                                                         "sessionDuration": "@variables('sessionDuration')",
-                                                        "sessionReference": "@{items('For_each')?['@id']}",
+                                                        "sessionReference": "@{items('For_each__Schedule')?['@id']}",
                                                         "sessionStart": "@{variables('sessionStart')}"
                                                     }
-                                                },
-                                                "Condition": {
-                                                    "actions": {
-                                                        "Set_sessionDurationAM": {
-                                                            "runAfter": {
-                                                                "Set_sessionStartAM": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "type": "SetVariable",
-                                                            "inputs": {
-                                                                "name": "sessionDuration",
-                                                                "value": "180"
-                                                            }
-                                                        },
-                                                        "Set_sessionStartAM": {
-                                                            "runAfter": {},
-                                                            "type": "SetVariable",
-                                                            "inputs": {
-                                                                "name": "sessionStart",
-                                                                "value": "@{body('Parse_CPL_File')?['sessionDate']}T10:00Z"
-                                                            }
-                                                        }
-                                                    },
-                                                    "runAfter": {
-                                                        "Parse_CPL_File": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "else": {
-                                                        "actions": {
-                                                            "Set_sessionDurationPM": {
-                                                                "runAfter": {
-                                                                    "Set_sessionStartPM": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "SetVariable",
-                                                                "inputs": {
-                                                                    "name": "sessionDuration",
-                                                                    "value": "120"
-                                                                }
-                                                            },
-                                                            "Set_sessionStartPM": {
-                                                                "runAfter": {},
-                                                                "type": "SetVariable",
-                                                                "inputs": {
-                                                                    "name": "sessionStart",
-                                                                    "value": "@{body('Parse_CPL_File')?['sessionDate']}T14:00Z"
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    "expression": {
-                                                        "and": [
-                                                            {
-                                                                "equals": [
-                                                                    "@body('Parse_CPL_File')?['session']",
-                                                                    "AM"
-                                                                ]
-                                                            }
-                                                        ]
-                                                    },
-                                                    "type": "If"
                                                 },
                                                 "Condition_HMI_Success": {
                                                     "actions": {},
                                                     "runAfter": {
-                                                        "HTTP": [
+                                                        "HTTP_HMI_Schedules": [
                                                             "Succeeded",
                                                             "Failed"
                                                         ]
@@ -427,7 +363,7 @@
                                                                                 "contact_type": "Alert",
                                                                                 "description": "@{body('HTTP')}",
                                                                                 "impact": "2",
-                                                                                "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                                                "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                                                                 "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
                                                                                 "subcategory": "Data or File Error - other",
                                                                                 "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
@@ -443,19 +379,19 @@
                                                                     "or": [
                                                                         {
                                                                             "equals": [
-                                                                                "@outputs('HTTP')['statusCode']",
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                 500
                                                                             ]
                                                                         },
                                                                         {
                                                                             "equals": [
-                                                                                "@outputs('HTTP')['statusCode']",
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                 400
                                                                             ]
                                                                         },
                                                                         {
                                                                             "equals": [
-                                                                                "@outputs('HTTP')['statusCode']",
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                 406
                                                                             ]
                                                                         }
@@ -469,8 +405,72 @@
                                                         "and": [
                                                             {
                                                                 "equals": [
-                                                                    "@outputs('HTTP')['statusCode']",
+                                                                    "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                     201
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
+                                                "Condition_is_session_AM": {
+                                                    "actions": {
+                                                        "Set_sessionDurationAM": {
+                                                            "runAfter": {
+                                                                "Set_sessionStartAM": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "sessionDuration",
+                                                                "value": "180"
+                                                            }
+                                                        },
+                                                        "Set_sessionStartAM": {
+                                                            "runAfter": {},
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "sessionStart",
+                                                                "value": "@{body('Parse_CPL_File')?['sessionDate']}T10:00Z"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Parse_CPL_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "else": {
+                                                        "actions": {
+                                                            "Set_sessionDurationPM": {
+                                                                "runAfter": {
+                                                                    "Set_sessionStartPM": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "SetVariable",
+                                                                "inputs": {
+                                                                    "name": "sessionDuration",
+                                                                    "value": "120"
+                                                                }
+                                                            },
+                                                            "Set_sessionStartPM": {
+                                                                "runAfter": {},
+                                                                "type": "SetVariable",
+                                                                "inputs": {
+                                                                    "name": "sessionStart",
+                                                                    "value": "@{body('Parse_CPL_File')?['sessionDate']}T14:00Z"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "equals": [
+                                                                    "@body('Parse_CPL_File')?['session']",
+                                                                    "AM"
                                                                 ]
                                                             }
                                                         ]
@@ -490,14 +490,14 @@
                                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
                                                         "queries": {
                                                             "inferContentType": true,
-                                                            "path": "/rota/repository/clp/@{items('For_each')?['courtListingProfile']?['@idref']}.json",
+                                                            "path": "/rota/repository/clp/@{items('For_each__Schedule')?['courtListingProfile']?['@idref']}.json",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     }
                                                 },
                                                 "Get_Magistrate_Reposiotry": {
                                                     "runAfter": {
-                                                        "Condition": [
+                                                        "Condition_is_session_AM": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -512,14 +512,14 @@
                                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
                                                         "queries": {
                                                             "inferContentType": true,
-                                                            "path": "/rota/repository/magistrates/@{items('For_each')?['justice']?['@idref']}.json",
+                                                            "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     }
                                                 },
-                                                "HTTP": {
+                                                "HTTP_HMI_Schedules": {
                                                     "runAfter": {
-                                                        "Compose": [
+                                                        "Compose_sessionRequest": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -532,7 +532,7 @@
                                                             "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
                                                             "type": "ActiveDirectoryOAuth"
                                                         },
-                                                        "body": "@outputs('Compose')",
+                                                        "body": "@outputs('Compose_sessionRequest')",
                                                         "headers": {
                                                             "Accept": "application/json",
                                                             "Content-Type": "application/json",
