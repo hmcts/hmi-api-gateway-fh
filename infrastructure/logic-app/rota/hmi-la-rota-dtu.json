@@ -12,6 +12,9 @@
         "storageAccessKey": {
             "type": "securestring"
         },
+        "storageACPath": {
+            "type": "string"
+        },
         "environmentName": {
             "type": "string"
         },
@@ -172,7 +175,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('[paramters('storageAccountName')]'))}/files",
+                                        "path": "[parameters('storageACPath')]",
                                         "queries": {
                                             "folderPath": "/rota/output/",
                                             "name": "@items('For_each_File')?['Name']",
