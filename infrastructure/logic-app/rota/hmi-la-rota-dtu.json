@@ -244,7 +244,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                        "path": "[parameters('storageACPath')]",
                                         "queries": {
                                             "folderPath": "/rota/input/",
                                             "name": "read.me",
@@ -314,7 +314,7 @@
                                                                                 }
                                                                             },
                                                                             "method": "post",
-                                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                                            "path": "[parameters('storageACPath')]",
                                                                             "queries": {
                                                                                 "folderPath": "/rota/error/",
                                                                                 "name": "@items('For_each_File')?['Name']",
@@ -701,7 +701,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                        "path": "[parameters('storageACPath')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/clp/",
                                                             "name": "@{items('For_jsonCLP')?['@id']}.json",
@@ -739,7 +739,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                        "path": "[parameters('storageACPath')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/magistrates/",
                                                             "name": "@{items('For_jsonJudge')?['@id']}.json",
@@ -777,7 +777,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                        "path": "[parameters('storageACPath')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/magistrates/",
                                                             "name": "@{items('For_jsonMagistrate')?['@id']}.json",
