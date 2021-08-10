@@ -172,7 +172,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "[concat('/v2/datasets/@{encodeURIComponent(encodeURIComponent(','hmidtudev','))}/files')]",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('[paramters('storageAccountName')]'))}/files",
                                         "queries": {
                                             "folderPath": "/rota/output/",
                                             "name": "@items('For_each_File')?['Name']",
