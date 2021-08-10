@@ -11,8 +11,11 @@
         "storageAccountName":{
             "value": "hmidtudev"
         },
-        "storageACPath":{
+        "storageACPathFiles":{
             "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmdtudev'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath"
         },
         "storageAccessKey":{
             "reference": {

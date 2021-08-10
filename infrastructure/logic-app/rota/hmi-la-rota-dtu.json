@@ -12,7 +12,10 @@
         "storageAccessKey": {
             "type": "securestring"
         },
-        "storageACPath": {
+        "storageACPathFiles": {
+            "type": "string"
+        },
+        "storageACGetPath": {
             "type": "string"
         },
         "environmentName": {
@@ -175,7 +178,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "[parameters('storageACPath')]",
+                                        "path": "[parameters('storageACPathFiles')]",
                                         "queries": {
                                             "folderPath": "/rota/output/",
                                             "name": "@items('For_each_File')?['Name']",
@@ -244,7 +247,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "[parameters('storageACPath')]",
+                                        "path": "[parameters('storageACPathFiles')]",
                                         "queries": {
                                             "folderPath": "/rota/input/",
                                             "name": "read.me",
@@ -314,7 +317,7 @@
                                                                                 }
                                                                             },
                                                                             "method": "post",
-                                                                            "path": "[parameters('storageACPath')]",
+                                                                            "path": "[parameters('storageACPathFiles')]",
                                                                             "queries": {
                                                                                 "folderPath": "/rota/error/",
                                                                                 "name": "@items('For_each_File')?['Name']",
@@ -521,7 +524,7 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
+                                                        "path": "[parameters('storageACGetPath')]",
                                                         "queries": {
                                                             "inferContentType": true,
                                                             "path": "/rota/repository/clp/@{items('For_each__Schedule')?['courtListingProfile']?['@idref']}.json",
@@ -543,7 +546,7 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
+                                                        "path": "[parameters('storageACGetPath')]",
                                                         "queries": {
                                                             "inferContentType": true,
                                                             "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
@@ -701,7 +704,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "[parameters('storageACPath')]",
+                                                        "path": "[parameters('storageACPathFiles')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/clp/",
                                                             "name": "@{items('For_jsonCLP')?['@id']}.json",
@@ -739,7 +742,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "[parameters('storageACPath')]",
+                                                        "path": "[parameters('storageACPathFiles')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/magistrates/",
                                                             "name": "@{items('For_jsonJudge')?['@id']}.json",
@@ -777,7 +780,7 @@
                                                             }
                                                         },
                                                         "method": "post",
-                                                        "path": "[parameters('storageACPath')]",
+                                                        "path": "[parameters('storageACPathFiles')]",
                                                         "queries": {
                                                             "folderPath": "/rota/repository/magistrates/",
                                                             "name": "@{items('For_jsonMagistrate')?['@id']}.json",
