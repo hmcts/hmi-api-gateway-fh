@@ -11,6 +11,15 @@
         "storageAccountName":{
             "value": "hmidtustg"
         },
+        "storageACPathFiles":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/GetFileContentByPath"
+        },
+        "storageACGetPathSuffix":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {

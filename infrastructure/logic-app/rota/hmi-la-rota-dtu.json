@@ -12,6 +12,15 @@
         "storageAccessKey": {
             "type": "securestring"
         },
+        "storageACPathFiles": {
+            "type": "string"
+        },
+        "storageACGetPath": {
+            "type": "string"
+        },
+        "storageACGetPathSuffix": {
+            "type": "string"
+        },
         "environmentName": {
             "type": "string"
         },
@@ -117,15 +126,15 @@
                         "Recurrence": {
                             "recurrence": {
                                 "frequency": "Minute",
-                                "interval": 5
+                                "interval": 60
                             },
                             "type": "Recurrence"
                         }
                     },
-                   "actions": {
+                    "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_jsonString": [
+                                "Initialize_johIdIsPresiding": [
                                     "Succeeded"
                                 ]
                             },
@@ -151,9 +160,60 @@
                                 }
                             }
                         },
-                        "For_each": {
+                        "For_each_File": {
                             "foreach": "@body('List_blobs')?['value']",
                             "actions": {
+                                "Create_blob_output": {
+                                    "runAfter": {
+                                        "is_file_xml": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": "@body('Get_blob_content_using_path')",
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "[parameters('storageACPathFiles')]",
+                                        "queries": {
+                                            "folderPath": "/rota/output/",
+                                            "name": "@items('For_each_File')?['Name']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                },
+                                "Delete_source_blob": {
+                                    "runAfter": {
+                                        "Create_blob_output": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                    }
+                                },
                                 "Get_blob_content_using_path": {
                                     "runAfter": {},
                                     "type": "ApiConnection",
@@ -167,59 +227,317 @@
                                         "path": "/datasets/default/GetFileContentByPath",
                                         "queries": {
                                             "inferContentType": true,
-                                            "path": "@items('For_each')?['Path']",
+                                            "path": "@items('For_each_File')?['Path']",
                                             "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                },
+                                "Recreate_read.me": {
+                                    "runAfter": {
+                                        "Delete_source_blob": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": "@concat('Rota files to be processed')",
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "[parameters('storageACPathFiles')]",
+                                        "queries": {
+                                            "folderPath": "/rota/input/",
+                                            "name": "read.me",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
                                         }
                                     }
                                 },
                                 "is_file_xml": {
                                     "actions": {
-                                        "Blob_Meta": {
-                                            "runAfter": {
-                                                "Create_file_in_output_folder": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                        "For_each__Schedule": {
+                                            "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
+                                            "actions": {
+                                                "Compose_sessionRequest": {
+                                                    "runAfter": {
+                                                        "Parse_Magistrate_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Compose",
+                                                    "inputs": {
+                                                        "courtId": "@{body('Parse_CPL_File')?['locationId']}",
+                                                        "courtRoomId": "@{body('Parse_CPL_File')?['venueId']}",
+                                                        "johs": [
+                                                            {
+                                                                "isPresiding": "true",
+                                                                "johId": "@{body('Parse_Magistrate_File')?['emailAddress']}",
+                                                                "slot": "@{items('For_each__Schedule')?['slot']}"
+                                                            }
+                                                        ],
+                                                        "sessionDuration": "@variables('sessionDuration')",
+                                                        "sessionReference": "@{items('For_each__Schedule')?['@id']}",
+                                                        "sessionStart": "@{variables('sessionStart')}"
                                                     }
                                                 },
-                                                "method": "get",
-                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_file_in_output_folder')?['Path']))}"
-                                            }
-                                        },
-                                        "Condition": {
-                                            "actions": {
-                                                "Create_blob_in_output_folder": {
+                                                "Condition_HMI_Success": {
+                                                    "actions": {},
+                                                    "runAfter": {
+                                                        "HTTP_HMI_Schedules": [
+                                                            "Succeeded",
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "else": {
+                                                        "actions": {
+                                                            "Condition_HMI_Failed": {
+                                                                "actions": {
+                                                                    "Create_blob_in_error_folder": {
+                                                                        "runAfter": {
+                                                                            "HTTP_SN_Incident": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "body": "@body('Get_blob_content_using_path')",
+                                                                            "headers": {
+                                                                                "ReadFileMetadataFromServer": true
+                                                                            },
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "post",
+                                                                            "path": "[parameters('storageACPathFiles')]",
+                                                                            "queries": {
+                                                                                "folderPath": "/rota/error/",
+                                                                                "name": "@items('For_each_File')?['Name']",
+                                                                                "queryParametersSingleEncoded": true
+                                                                            }
+                                                                        },
+                                                                        "runtimeConfiguration": {
+                                                                            "contentTransfer": {
+                                                                                "transferMode": "Chunked"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Delete_file_SN": {
+                                                                        "runAfter": {
+                                                                            "Create_blob_in_error_folder": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "headers": {
+                                                                                "SkipDeleteIfFileNotFoundOnServer": false
+                                                                            },
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "delete",
+                                                                            "path": "[parameters('storageACGetPathSuffix')]"
+                                                                        }
+                                                                    },
+                                                                    "Get_SN_Client": {
+                                                                        "runAfter": {},
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                                        }
+                                                                    },
+                                                                    "Get_SN_Secret": {
+                                                                        "runAfter": {
+                                                                            "Get_SN_Client": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                                        }
+                                                                    },
+                                                                    "HTTP_SN_Incident": {
+                                                                        "runAfter": {
+                                                                            "Get_SN_Secret": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "Http",
+                                                                        "inputs": {
+                                                                            "authentication": {
+                                                                                "password": "@body('Get_SN_Secret')?['value']",
+                                                                                "type": "Basic",
+                                                                                "username": "@body('Get_SN_Client')?['value']"
+                                                                            },
+                                                                            "body": {
+                                                                                "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                                "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                                "category": "Data Issue",
+                                                                                "contact_type": "Alert",
+                                                                                "description": "@{body('HTTP_HMI_Schedules')}",
+                                                                                "impact": "2",
+                                                                                "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                                "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
+                                                                                "subcategory": "Data or File Error - other",
+                                                                                "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                                "urgency": "3"
+                                                                            },
+                                                                            "method": "POST",
+                                                                            "uri": "[parameters('serviceNowHostUrl')]"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "runAfter": {},
+                                                                "expression": {
+                                                                    "or": [
+                                                                        {
+                                                                            "equals": [
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                                500
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "equals": [
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                                400
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "equals": [
+                                                                                "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                                406
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "If"
+                                                            }
+                                                        }
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "equals": [
+                                                                    "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                    201
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
+                                                "Condition_is_session_AM": {
+                                                    "actions": {
+                                                        "Set_sessionDurationAM": {
+                                                            "runAfter": {
+                                                                "Set_sessionStartAM": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "sessionDuration",
+                                                                "value": "180"
+                                                            }
+                                                        },
+                                                        "Set_sessionStartAM": {
+                                                            "runAfter": {},
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "sessionStart",
+                                                                "value": "@{body('Parse_CPL_File')?['sessionDate']}T10:00Z"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Parse_CPL_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "else": {
+                                                        "actions": {
+                                                            "Set_sessionDurationPM": {
+                                                                "runAfter": {
+                                                                    "Set_sessionStartPM": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "SetVariable",
+                                                                "inputs": {
+                                                                    "name": "sessionDuration",
+                                                                    "value": "120"
+                                                                }
+                                                            },
+                                                            "Set_sessionStartPM": {
+                                                                "runAfter": {},
+                                                                "type": "SetVariable",
+                                                                "inputs": {
+                                                                    "name": "sessionStart",
+                                                                    "value": "@{body('Parse_CPL_File')?['sessionDate']}T14:00Z"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "equals": [
+                                                                    "@body('Parse_CPL_File')?['session']",
+                                                                    "AM"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
+                                                "Get_CLP_Repository": {
                                                     "runAfter": {},
                                                     "type": "ApiConnection",
                                                     "inputs": {
-                                                        "body": "@body('Get_blob_content_using_path')",
                                                         "host": {
                                                             "connection": {
                                                                 "name": "@parameters('$connections')['azureblob']['connectionId']"
                                                             }
                                                         },
-                                                        "method": "post",
-                                                        "path": "/datasets/default/files",
+                                                        "method": "get",
+                                                        "path": "[parameters('storageACGetPath')]",
                                                         "queries": {
-                                                            "folderPath": "/rota/output/",
-                                                            "name": "@items('For_each')?['Name']",
+                                                            "inferContentType": true,
+                                                            "path": "/rota/repository/clp/@{items('For_each__Schedule')?['courtListingProfile']?['@idref']}.json",
                                                             "queryParametersSingleEncoded": true
-                                                        }
-                                                    },
-                                                    "runtimeConfiguration": {
-                                                        "contentTransfer": {
-                                                            "transferMode": "Chunked"
                                                         }
                                                     }
                                                 },
-                                                "Delete_current_blob": {
+                                                "Get_Magistrate_Reposiotry": {
                                                     "runAfter": {
-                                                        "Create_blob_in_output_folder": [
+                                                        "Condition_is_session_AM": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -230,270 +548,271 @@
                                                                 "name": "@parameters('$connections')['azureblob']['connectionId']"
                                                             }
                                                         },
-                                                        "method": "delete",
-                                                        "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                        "method": "get",
+                                                        "path": "[parameters('storageACGetPath')]",
+                                                        "queries": {
+                                                            "inferContentType": true,
+                                                            "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    }
+                                                },
+                                                "HTTP_HMI_Schedules": {
+                                                    "runAfter": {
+                                                        "Compose_sessionRequest": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "authentication": {
+                                                            "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                            "clientId": "@body('Get_HMI_Client')?['value']",
+                                                            "secret": "@body('Get_HMI_secret')?['value']",
+                                                            "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                            "type": "ActiveDirectoryOAuth"
+                                                        },
+                                                        "body": "@outputs('Compose_sessionRequest')",
+                                                        "headers": {
+                                                            "Accept": "application/json",
+                                                            "Content-Type": "application/json",
+                                                            "Destination-System": "MOCK",
+                                                            "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                            "Source-System": "CFT"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "[parameters('hmiSchedulesUrl')]"
+                                                    }
+                                                },
+                                                "Parse_CPL_File": {
+                                                    "runAfter": {
+                                                        "Set_jsonCLProfile": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ParseJson",
+                                                    "inputs": {
+                                                        "content": "@variables('jsonCLProfiles')",
+                                                        "schema": {
+                                                            "properties": {
+                                                                "@@id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "business": {
+                                                                    "type": "string"
+                                                                },
+                                                                "locationId": {
+                                                                    "type": "string"
+                                                                },
+                                                                "panel": {
+                                                                    "type": "string"
+                                                                },
+                                                                "session": {
+                                                                    "type": "string"
+                                                                },
+                                                                "sessionDate": {
+                                                                    "type": "string"
+                                                                },
+                                                                "updatedDate": {
+                                                                    "type": "string"
+                                                                },
+                                                                "venueId": {
+                                                                    "type": "string"
+                                                                },
+                                                                "welshSpeaking": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "Parse_Magistrate_File": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrate": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ParseJson",
+                                                    "inputs": {
+                                                        "content": "@variables('jsonMagistrates')",
+                                                        "schema": {
+                                                            "properties": {
+                                                                "@@id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "emailAddress": {
+                                                                    "type": "string"
+                                                                },
+                                                                "forenames": {
+                                                                    "type": "string"
+                                                                },
+                                                                "surname": {
+                                                                    "type": "string"
+                                                                },
+                                                                "title": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "Set_jsonCLProfile": {
+                                                    "runAfter": {
+                                                        "Get_CLP_Repository": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                        "name": "jsonCLProfiles",
+                                                        "value": "@{body('Get_CLP_Repository')}"
+                                                    }
+                                                },
+                                                "Set_jsonMagistrate": {
+                                                    "runAfter": {
+                                                        "Get_Magistrate_Reposiotry": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                        "name": "jsonMagistrates",
+                                                        "value": "@{body('Get_Magistrate_Reposiotry')}"
                                                     }
                                                 }
                                             },
                                             "runAfter": {
-                                                "HTTP": [
-                                                    "Failed",
+                                                "Parse_jsonSchedules": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "else": {
-                                                "actions": {
-                                                    "Condition_2": {
-                                                        "actions": {
-                                                            "Create_blob_in_error_folder": {
-                                                                "runAfter": {
-                                                                    "HTTP_3": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "body": "@body('Get_blob_content_using_path')",
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "post",
-                                                                    "path": "/datasets/default/files",
-                                                                    "queries": {
-                                                                        "folderPath": "/rota/error/",
-                                                                        "name": "@items('For_each')?['Name']",
-                                                                        "queryParametersSingleEncoded": true
-                                                                    }
-                                                                },
-                                                                "runtimeConfiguration": {
-                                                                    "contentTransfer": {
-                                                                        "transferMode": "Chunked"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Delete_blob_2": {
-                                                                "runAfter": {
-                                                                    "Create_blob_in_error_folder": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "delete",
-                                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
-                                                                }
-                                                            },
-                                                            "Get_SN_User_ID": {
-                                                                "runAfter": {},
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "get",
-                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
-                                                                }
-                                                            },
-                                                            "Get_SN_User_Pwd": {
-                                                                "runAfter": {
-                                                                    "Get_SN_User_ID": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "get",
-                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
-                                                                }
-                                                            },
-                                                            "HTTP_3": {
-                                                                "runAfter": {
-                                                                    "Get_SN_User_Pwd": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "Http",
-                                                                "inputs": {
-                                                                    "authentication": {
-                                                                        "password": "@body('Get_SN_User_Pwd')?['value']",
-                                                                        "type": "Basic",
-                                                                        "username": "@body('Get_SN_User_ID')?['value']"
-                                                                    },
-                                                                    "body": {
-                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
-                                                                        "category": "Data Issue",
-                                                                        "contact_type": "Alert",
-                                                                        "description": "@{body('HTTP')}",
-                                                                        "impact": "2",
-                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                        "short_description": "HMI Rota File Error @{items('For_each')?['Path']}",
-                                                                        "subcategory": "Data or File Error - other",
-                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                                                        "urgency": "3"
-                                                                    },
-                                                                    "method": "POST",
-                                                                    "uri": "[parameters('serviceNowHostUrl')]"
-                                                                }
+                                            "type": "Foreach"
+                                        },
+                                        "For_jsonCLP": {
+                                            "foreach": "@body('Parse_CourtLocationProfiles')?['courtListingProfiles']?['courtListingProfile']",
+                                            "actions": {
+                                                "Create_jsonCLP_File": {
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@items('For_jsonCLP')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
                                                             }
                                                         },
-                                                        "runAfter": {},
-                                                        "expression": {
-                                                            "or": [
-                                                                {
-                                                                    "greaterOrEquals": [
-                                                                        "@outputs('HTTP')['statusCode']",
-                                                                        500
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "equals": [
-                                                                        "@outputs('HTTP')['statusCode']",
-                                                                        400
-                                                                    ]
-                                                                },
-                                                                {
-                                                                    "equals": [
-                                                                        "@outputs('HTTP')['statusCode']",
-                                                                        406
-                                                                    ]
-                                                                }
-                                                            ]
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/clp/",
+                                                            "name": "@{items('For_jsonCLP')?['@id']}.json",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Parse_CourtLocationProfiles": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
+                                        "For_jsonJudge": {
+                                            "foreach": "@body('Parse_Judges')?['districtJudges']?['districtJudge']",
+                                            "actions": {
+                                                "Create_jsonJudge_File": {
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@items('For_jsonJudge')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
                                                         },
-                                                        "type": "If"
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/magistrates/",
+                                                            "name": "@{items('For_jsonJudge')?['@id']}.json",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
                                                     }
                                                 }
                                             },
-                                            "expression": {
-                                                "and": [
-                                                    {
-                                                        "equals": [
-                                                            "@outputs('HTTP')['statusCode']",
-                                                            201
-                                                        ]
-                                                    }
-                                                ]
-                                            },
-                                            "type": "If"
-                                        },
-                                        "Create_file_in_output_folder": {
                                             "runAfter": {
-                                                "Set_jsonPayload": [
+                                                "Parse_Judges": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": "@body('Get_blob_content_using_path')",
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "post",
-                                                "path": "/datasets/default/files",
-                                                "queries": {
-                                                    "folderPath": "/rota/output",
-                                                    "name": "@items('For_each')?['Name']",
-                                                    "queryParametersSingleEncoded": true
-                                                }
-                                            },
-                                            "runtimeConfiguration": {
-                                                "contentTransfer": {
-                                                    "transferMode": "Chunked"
-                                                }
-                                            }
+                                            "type": "Foreach"
                                         },
-                                        "Create_invalid_file_in_error_folder": {
-                                            "runAfter": {
-                                                "Set_jsonPayload": [
-                                                    "Failed"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": "@body('Get_blob_content_using_path')",
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                        "For_jsonMagistrate": {
+                                            "foreach": "@body('Parse_Magistrates')?['magistrates']?['magistrate']",
+                                            "actions": {
+                                                "Create_jsonMagistrate_File": {
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@items('For_jsonMagistrate')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/magistrates/",
+                                                            "name": "@{items('For_jsonMagistrate')?['@id']}.json",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
                                                     }
-                                                },
-                                                "method": "post",
-                                                "path": "/datasets/default/files",
-                                                "queries": {
-                                                    "folderPath": "/rota/error/",
-                                                    "name": "@items('For_each')?['Name']",
-                                                    "queryParametersSingleEncoded": true
                                                 }
                                             },
-                                            "runtimeConfiguration": {
-                                                "contentTransfer": {
-                                                    "transferMode": "Chunked"
-                                                }
-                                            }
-                                        },
-                                        "Create_payload_file": {
                                             "runAfter": {
-                                                "Set_jsonString": [
+                                                "Parse_Magistrates": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": "@variables('jsonString')",
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "post",
-                                                "path": "/datasets/default/files",
-                                                "queries": {
-                                                    "folderPath": "/rota/output/",
-                                                    "name": "@{replace(actions('Blob_Meta').outputs.body.displayName, 'xml', 'json')}",
-                                                    "queryParametersSingleEncoded": true
-                                                }
-                                            },
-                                            "runtimeConfiguration": {
-                                                "contentTransfer": {
-                                                    "transferMode": "Chunked"
-                                                }
-                                            }
+                                            "type": "Foreach"
                                         },
-                                        "Delete_invalid_file": {
+                                        "Get_HMI_Client": {
                                             "runAfter": {
-                                                "HTTP_2": [
+                                                "For_jsonCLP": [
                                                     "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "delete",
-                                                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
-                                            }
-                                        },
-                                        "Get_Client_ID": {
-                                            "runAfter": {
-                                                "Create_payload_file": [
+                                                ],
+                                                "For_jsonJudge": [
+                                                    "Succeeded"
+                                                ],
+                                                "For_jsonMagistrate": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -508,9 +827,9 @@
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
                                             }
                                         },
-                                        "Get_Client_Secret_": {
+                                        "Get_HMI_secret": {
                                             "runAfter": {
-                                                "Get_Client_ID": [
+                                                "Get_HMI_Client": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -525,98 +844,269 @@
                                                 "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
                                             }
                                         },
-                                        "Get_SN_Client_ID": {
+                                        "Parse_CourtLocationProfiles": {
                                             "runAfter": {
-                                                "Create_invalid_file_in_error_folder": [
+                                                "Set_jsonSchedules": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection",
+                                            "type": "ParseJson",
                                             "inputs": {
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "get",
-                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                "content": "@variables('jsonCLProfiles')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "courtListingProfiles": {
+                                                            "properties": {
+                                                                "courtListingProfile": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "business": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "locationId": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "panel": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "session": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "sessionDate": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "updatedDate": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "venueId": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "welshSpeaking": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "sessionDate",
+                                                                            "session",
+                                                                            "panel",
+                                                                            "business",
+                                                                            "venueId",
+                                                                            "locationId",
+                                                                            "welshSpeaking",
+                                                                            "updatedDate"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             }
                                         },
-                                        "Get_SN_Client_Secret": {
+                                        "Parse_Judges": {
                                             "runAfter": {
-                                                "Get_SN_Client_ID": [
+                                                "Set_jsonSchedules": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "ApiConnection",
+                                            "type": "ParseJson",
                                             "inputs": {
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                    }
-                                                },
-                                                "method": "get",
-                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                "content": "@variables('jsonJudges')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "districtJudges": {
+                                                            "properties": {
+                                                                "districtJudge": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "emailAddress": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "forenames": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "surname": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "title": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "title",
+                                                                            "surname",
+                                                                            "forenames",
+                                                                            "emailAddress"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             }
                                         },
-                                        "HTTP": {
+                                        "Parse_Magistrates": {
                                             "runAfter": {
-                                                "Get_Client_Secret_": [
+                                                "Set_jsonSchedules": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "Http",
+                                            "type": "ParseJson",
                                             "inputs": {
-                                                "authentication": {
-                                                    "audience": "[parameters('hmiScopeUrl')]",
-                                                    "clientId": "@body('Get_Client_ID')?['value']",
-                                                    "secret": "@body('Get_Client_Secret_')?['value']",
-                                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
-                                                    "type": "ActiveDirectoryOAuth"
-                                                },
-                                                "body": "@variables('jsonString')",
-                                                "headers": {
-                                                    "Accept": "application/json",
-                                                    "Content-Type": "application/json",
-                                                    "Destination-System": "MOCK",
-                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
-                                                    "Source-System": "CFT"
-                                                },
-                                                "method": "POST",
-                                                "uri": "[parameters('hmiSchedulesUrl')]"
+                                                "content": "@variables('jsonMagistrates')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "magistrates": {
+                                                            "properties": {
+                                                                "magistrate": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "emailAddress": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "forenames": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "surname": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "title": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "title",
+                                                                            "surname",
+                                                                            "forenames",
+                                                                            "emailAddress"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             }
                                         },
-                                        "HTTP_2": {
+                                        "Parse_jsonSchedules": {
                                             "runAfter": {
-                                                "Get_SN_Client_Secret": [
+                                                "Get_HMI_secret": [
                                                     "Succeeded"
                                                 ]
                                             },
-                                            "type": "Http",
+                                            "type": "ParseJson",
                                             "inputs": {
-                                                "authentication": {
-                                                    "password": "@body('Get_SN_Client_Secret')?['value']",
-                                                    "type": "Basic",
-                                                    "username": "@body('Get_SN_Client_ID')?['value']"
-                                                },
-                                                "body": {
-                                                    "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                    "caller_id": "[parameters('serviceNowCallerId')]",
-                                                    "category": "Data Issue",
-                                                    "contact_type": "Alert",
-                                                    "description": "@{actions('Set_jsonPayload')['error']}",
-                                                    "impact": "2",
-                                                    "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                    "short_description": "HMI Rota File Error @{items('For_each')?['Path']}",
-                                                    "subcategory": "Data or File Error - other",
-                                                    "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                                    "urgency": "3"
-                                                },
-                                                "method": "POST",
-                                                "uri": "[parameters('serviceNowHostUrl')]"
+                                                "content": "@variables('jsonSchedules')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "schedules": {
+                                                            "properties": {
+                                                                "schedule": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "courtListingProfile": {
+                                                                                "properties": {
+                                                                                    "@@idref": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "justice": {
+                                                                                "properties": {
+                                                                                    "@@idref": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "slot": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "courtListingProfile",
+                                                                            "justice",
+                                                                            "slot"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             }
                                         },
-                                        "Set_jsonPayload": {
+                                        "Set_jsonCLProfiles": {
+                                            "runAfter": {
+                                                "Set_jsonLocations": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonCLProfiles",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<courtListingProfiles>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</courtListingProfiles>'), length('</courtListingProfiles>')),\n        indexOf(variables('xmlPayload'), '<courtListingProfiles>')\n    )\n)))}"
+                                            }
+                                        },
+                                        "Set_jsonJudges": {
+                                            "runAfter": {
+                                                "Set_jsonMagistrates": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonJudges",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<districtJudges>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</districtJudges>'), length('</districtJudges>')),\n        indexOf(variables('xmlPayload'), '<districtJudges>')\n    )\n)))}"
+                                            }
+                                        },
+                                        "Set_jsonLocations": {
+                                            "runAfter": {
+                                                "Set_jsonVenues": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonLocations",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<locations>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</locations>'), length('</locations>')),\n        indexOf(variables('xmlPayload'), '<locations>')\n    )\n)))}"
+                                            }
+                                        },
+                                        "Set_jsonMagistrates": {
                                             "runAfter": {
                                                 "Set_xmlPayload": [
                                                     "Succeeded"
@@ -624,20 +1114,32 @@
                                             },
                                             "type": "SetVariable",
                                             "inputs": {
-                                                "name": "jsonPayload",
-                                                "value": "@{json(xml(variables('xmlPayload')))}"
+                                                "name": "jsonMagistrates",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<magistrates>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</magistrates>'), length('</magistrates>')),\n        indexOf(variables('xmlPayload'), '<magistrates>')\n    )\n)))}"
                                             }
                                         },
-                                        "Set_jsonString": {
+                                        "Set_jsonSchedules": {
                                             "runAfter": {
-                                                "Blob_Meta": [
+                                                "Set_jsonCLProfiles": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "SetVariable",
                                             "inputs": {
-                                                "name": "jsonString",
-                                                "value": "@{replace(variables('jsonPayload'), '@id', '_id')}"
+                                                "name": "jsonSchedules",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<schedules>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</schedules>'), length('</schedules>')),\n        indexOf(variables('xmlPayload'), '<schedules>')\n    )\n)))}"
+                                            }
+                                        },
+                                        "Set_jsonVenues": {
+                                            "runAfter": {
+                                                "Set_jsonJudges": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonVenues",
+                                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<venues>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</venues>'), length('</venues>')),\n        indexOf(variables('xmlPayload'), '<venues>')\n    )\n)))}"
                                             }
                                         },
                                         "Set_xmlPayload": {
@@ -670,7 +1172,7 @@
                                                     "path": "/datasets/default/files",
                                                     "queries": {
                                                         "folderPath": "/rota/error/",
-                                                        "name": "@items('For_each')?['Name']",
+                                                        "name": "@items('For_each_File')?['Name']",
                                                         "queryParametersSingleEncoded": true
                                                     }
                                                 },
@@ -694,7 +1196,7 @@
                                                         }
                                                     },
                                                     "method": "delete",
-                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                 }
                                             },
                                             "Update_read.me": {
@@ -731,7 +1233,7 @@
                                         "and": [
                                             {
                                                 "endsWith": [
-                                                    "@items('For_each')?['Path']",
+                                                    "@items('For_each_File')?['Path']",
                                                     ".xml"
                                                 ]
                                             }
@@ -746,6 +1248,150 @@
                                 ]
                             },
                             "type": "Foreach"
+                        },
+                        "Initialize_courtId": {
+                            "runAfter": {
+                                "Initialize_sessionReference": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "courtId",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_courtRoomId": {
+                            "runAfter": {
+                                "Initialize_courtId": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "courtRoomId",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_johIdEmail": {
+                            "runAfter": {
+                                "Initialize_sessionDuration": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "johIdEmail",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_johIdIsPresiding": {
+                            "runAfter": {
+                                "Initialize_johIdSlot": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "johIdIsPresiding",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_johIdSlot": {
+                            "runAfter": {
+                                "Initialize_johIdEmail": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "johIdSlot",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonCourtLocatioinProfiles": {
+                            "runAfter": {
+                                "Initialize_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonCLProfiles",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonJudges": {
+                            "runAfter": {
+                                "Initialize_jsonLocations": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonJudges",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonLocations": {
+                            "runAfter": {
+                                "Initialize_jsonVenues": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonLocations",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonMagistrates": {
+                            "runAfter": {
+                                "Initialize_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonMagistrates",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
                         },
                         "Initialize_jsonPayload": {
                             "runAfter": {
@@ -763,6 +1409,22 @@
                                 ]
                             }
                         },
+                        "Initialize_jsonSchedules": {
+                            "runAfter": {
+                                "Initialize_jsonString": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonSchedules",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_jsonString": {
                             "runAfter": {
                                 "Initialize_jsonPayload": [
@@ -774,6 +1436,86 @@
                                 "variables": [
                                     {
                                         "name": "jsonString",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonVenues": {
+                            "runAfter": {
+                                "Initialize_jsonMagistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonVenues",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_magistrates": {
+                            "runAfter": {
+                                "Initialize_jsonCourtLocatioinProfiles": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "magistrates",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_sessionDuration": {
+                            "runAfter": {
+                                "Initialize_sessionStart": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "sessionDuration",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_sessionReference": {
+                            "runAfter": {
+                                "Initialize_magistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "sessionReference",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_sessionStart": {
+                            "runAfter": {
+                                "Initialize_courtRoomId": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "sessionStart",
                                         "type": "string"
                                     }
                                 ]
