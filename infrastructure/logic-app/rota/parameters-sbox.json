@@ -11,6 +11,15 @@
         "storageAccountName":{
             "value": "hmidtusbox"
         },
+        "storageACPathFiles":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/GetFileContentByPath"
+        },
+        "storageACGetPathSuffix":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {

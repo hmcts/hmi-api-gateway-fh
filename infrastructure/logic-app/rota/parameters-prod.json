@@ -11,6 +11,15 @@
         "storageAccountName":{
             "value": "hmidtuprod"
         },
+        "storageACPathFiles":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtuprod'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtuprod'))}/GetFileContentByPath"
+        },
+        "storageACGetPathSuffix":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtuprod'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
