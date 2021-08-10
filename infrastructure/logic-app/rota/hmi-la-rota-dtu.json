@@ -172,7 +172,7 @@
                                             }
                                         },
                                         "method": "post",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent([parameters('storageAccountName')]))}/files",
                                         "queries": {
                                             "folderPath": "/rota/output/",
                                             "name": "@items('For_each_File')?['Name']",
@@ -220,6 +220,37 @@
                                             "inferContentType": true,
                                             "path": "@items('For_each_File')?['Path']",
                                             "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                },
+                                "Recreate_read.me": {
+                                    "runAfter": {
+                                        "Delete_source_blob": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": "@concat('Rota files to be processed')",
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                        "queries": {
+                                            "folderPath": "/rota/input/",
+                                            "name": "read.me",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
                                         }
                                     }
                                 },
@@ -477,7 +508,7 @@
                                                     },
                                                     "type": "If"
                                                 },
-                                                "Get_CPL_Repository": {
+                                                "Get_CLP_Repository": {
                                                     "runAfter": {},
                                                     "type": "ApiConnection",
                                                     "inputs": {
@@ -620,14 +651,14 @@
                                                 },
                                                 "Set_jsonCLProfile": {
                                                     "runAfter": {
-                                                        "Get_CPL_Repository": [
+                                                        "Get_CLP_Repository": [
                                                             "Succeeded"
                                                         ]
                                                     },
                                                     "type": "SetVariable",
                                                     "inputs": {
                                                         "name": "jsonCLProfiles",
-                                                        "value": "@{body('Get_CPL_Repository')}"
+                                                        "value": "@{body('Get_CLP_Repository')}"
                                                     }
                                                 },
                                                 "Set_jsonMagistrate": {
