@@ -18,6 +18,9 @@
         "storageACGetPath": {
             "type": "string"
         },
+        "storageACGetPathSuffix": {
+            "type": "string"
+        },
         "environmentName": {
             "type": "string"
         },
@@ -208,7 +211,7 @@
                                             }
                                         },
                                         "method": "delete",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                        "path": "[parameters('storageACGetPathSuffix')]"
                                     }
                                 },
                                 "Get_blob_content_using_path": {
@@ -347,7 +350,7 @@
                                                                                 }
                                                                             },
                                                                             "method": "delete",
-                                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                                            "path": "[parameters('storageACGetPathSuffix')]"
                                                                         }
                                                                     },
                                                                     "Get_SN_Client": {
