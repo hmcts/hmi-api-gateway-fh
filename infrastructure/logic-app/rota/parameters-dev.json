@@ -12,7 +12,7 @@
             "value": "hmidtudev"
         },
         "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmdtudev'))}/files"
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files"
         },
         "storageACGetPath":{
             "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath"
