@@ -280,7 +280,7 @@
                                                         "courtRoomId": "@{body('Parse_CPL_File')?['venueId']}",
                                                         "johs": [
                                                             {
-                                                                "isPresiding": "true",
+                                                                "isPresiding": "@{equals(items('For_each__Schedule')?['slot'], 'CHAIR')}",
                                                                 "johId": "@{body('Parse_Magistrate_File')?['emailAddress']}",
                                                                 "slot": "@{items('For_each__Schedule')?['slot']}"
                                                             }
