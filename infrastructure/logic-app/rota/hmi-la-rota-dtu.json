@@ -1159,7 +1159,7 @@
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "jsonString",
-                                                "value": "@{json(variables('xmlPayload'))}"
+                                                "value": "@{json(xml(variables('xmlPayload')))}"
                                             }
                                         }
                                     },
