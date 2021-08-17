@@ -201,7 +201,7 @@
                                                     }
                                                 },
                                                 "method": "post",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                "path": "[parameters('storageACPathFiles')]",
                                                 "queries": {
                                                     "folderPath": "/rota/error/",
                                                     "name": "@items('For_each_File')?['Name']",
@@ -232,7 +232,7 @@
                                                     }
                                                 },
                                                 "method": "post",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                "path": "[parameters('storageACPathFiles')]",
                                                 "queries": {
                                                     "folderPath": "/rota/input/",
                                                     "name": "read.me",
@@ -262,7 +262,7 @@
                                                     }
                                                 },
                                                 "method": "delete",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                "path": "[parameters('storageACGetPathSuffix')]"
                                             }
                                         },
                                         "For_each__Schedule": {
@@ -1584,7 +1584,7 @@
                                     }
                                 },
                                 "method": "post",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                "path": "[parameters('storageACPathFiles')]",
                                 "queries": {
                                     "folderPath": "/rota/input/",
                                     "name": "read.me",
