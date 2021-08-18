@@ -418,7 +418,7 @@
                                                                 "expression": {
                                                                     "or": [
                                                                         {
-                                                                            "equals": [
+                                                                            "greaterOrEquals": [
                                                                                 "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                 500
                                                                             ]
