@@ -450,21 +450,21 @@
                                                                                         "username": "@body('Get_SN_Client')?['value']"
                                                                                     },
                                                                                     "body": {
-                                                                                "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                                                "caller_id": "[parameters('serviceNowCallerId')]",
-                                                                                "category": "Data Issue",
-                                                                                "contact_type": "Alert",
-                                                                                "description": "@{body('HTTP_HMI_Schedules')}",
-                                                                                "impact": "2",
-                                                                                "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                                "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
-                                                                                "subcategory": "Data or File Error - other",
-                                                                                "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                                                                "urgency": "3"
-                                                                            },
-                                                                            "method": "POST",
-                                                                            "uri": "[parameters('serviceNowHostUrl')]"
-                                                                        }
+                                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                                        "category": "Data Issue",
+                                                                                        "contact_type": "Alert",
+                                                                                        "description": "@{body('HTTP_HMI_Schedules')}",
+                                                                                        "impact": "2",
+                                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                                        "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
+                                                                                        "subcategory": "Data or File Error - other",
+                                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                                        "urgency": "3"
+                                                                                    },
+                                                                                    "method": "POST",
+                                                                                    "uri": "[parameters('serviceNowHostUrl')]"
+                                                                                }
                                                                             }
                                                                         },
                                                                         "runAfter": {},
@@ -1173,29 +1173,111 @@
                                                     "Succeeded"
                                                 ]
                                             },
+                                            "else": {
+                                                "actions": {
+                                                    "Create_in_Error_Folder_Invalid_Content": {
+                                                        "runAfter": {},
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "body": "@body('Get_blob_content_using_path')",
+                                                            "headers": {
+                                                                "ReadFileMetadataFromServer": true
+                                                            },
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                }
+                                                            },
+                                                            "method": "post",
+                                                            "path": "[parameters('storageACPathFiles')]",
+                                                            "queries": {
+                                                                "folderPath": "/rota/error/",
+                                                                "name": "@items('For_each_File')?['Name']",
+                                                                "queryParametersSingleEncoded": true
+                                                            }
+                                                        },
+                                                        "runtimeConfiguration": {
+                                                            "contentTransfer": {
+                                                                "transferMode": "Chunked"
+                                                            }
+                                                        }
+                                                    },
+                                                    "Create_read.me_when_invalid_XML_Content": {
+                                                        "runAfter": {
+                                                            "Delete_ROTA_file_with_invalid_XML_Content": [
+                                                                "Succeeded"
+                                                            ]
+                                                        },
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "body": "@concat('Rota files to be processed')",
+                                                            "headers": {
+                                                                "ReadFileMetadataFromServer": true
+                                                            },
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                }
+                                                            },
+                                                            "method": "post",
+                                                            "path": "[parameters('storageACPathFiles')]",
+                                                            "queries": {
+                                                                "folderPath": "/rota/input/",
+                                                                "name": "read.me",
+                                                                "queryParametersSingleEncoded": true
+                                                            }
+                                                        },
+                                                        "runtimeConfiguration": {
+                                                            "contentTransfer": {
+                                                                "transferMode": "Chunked"
+                                                            }
+                                                        }
+                                                    },
+                                                    "Delete_ROTA_file_with_invalid_XML_Content": {
+                                                        "runAfter": {
+                                                            "Create_in_Error_Folder_Invalid_Content": [
+                                                                "Succeeded"
+                                                            ]
+                                                        },
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "headers": {
+                                                                "SkipDeleteIfFileNotFoundOnServer": false
+                                                            },
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                }
+                                                            },
+                                                            "method": "delete",
+                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        }
+                                                    }
+                                                }
+                                            },
                                             "expression": {
                                                 "and": [
                                                     {
                                                         "greater": [
-                                                            "@indexOf(variables('xmlPayload'), '<magistrates>')",
+                                                            "@indexOf(variables('xmlPayload'), '<magistrate id')",
                                                             1
                                                         ]
                                                     },
                                                     {
                                                         "greater": [
-                                                            "@indexOf(variables('xmlPayload'), '<districtJudges>')",
+                                                            "@indexOf(variables('xmlPayload'), '<districtJudge id')",
                                                             1
                                                         ]
                                                     },
                                                     {
                                                         "greater": [
-                                                            "@indexOf(variables('xmlPayload'), '<courtListingProfiles>')",
+                                                            "@indexOf(variables('xmlPayload'), '<courtListingProfile id')",
                                                             1
                                                         ]
                                                     },
                                                     {
                                                         "greater": [
-                                                            "@indexOf(variables('xmlPayload'), '<schedules>')",
+                                                            "@indexOf(variables('xmlPayload'), '<schedule id')",
                                                             1
                                                         ]
                                                     }
