@@ -890,13 +890,13 @@
                                                     "password": "@body('Get_SNow_Secret')?['value']",
                                                     "type": "Basic",
                                                     "username": "@body('Get_SNow_Client')?['value']"
-                                                },
+                                                }
                                                 "body": {
                                                     "assignment_group": "56b756774fbd368057db0b318110c7bd",
                                                     "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
                                                     "category": "Data Issue",
                                                     "contact_type": "Alert",
-                                                    "description": "",
+                                                    "description": "@{actions('Validate_XML_Payload')['error']}",
                                                     "impact": "2",
                                                     "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
                                                     "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
