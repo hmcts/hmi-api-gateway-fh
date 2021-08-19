@@ -523,19 +523,19 @@
                                                                             "and": [
                                                                                 {
                                                                                     "equals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         400
                                                                                     ]
                                                                                 },
                                                                                 {
                                                                                     "equals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         406
                                                                                     ]
                                                                                 },
                                                                                 {
                                                                                     "greaterOrEquals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         500
                                                                                     ]
                                                                                 }
@@ -549,7 +549,7 @@
                                                                 "and": [
                                                                     {
                                                                         "equals": [
-                                                                            "",
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                             201
                                                                         ]
                                                                     }
