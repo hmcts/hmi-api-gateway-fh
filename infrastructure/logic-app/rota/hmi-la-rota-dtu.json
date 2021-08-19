@@ -1011,7 +1011,11 @@
                                                                     "type": "object"
                                                                 }
                                                             },
-                                                            "type": "object"
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 },
@@ -1170,7 +1174,11 @@
                                                                     "type": "object"
                                                                 }
                                                             },
-                                                            "type": "object"
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 },
