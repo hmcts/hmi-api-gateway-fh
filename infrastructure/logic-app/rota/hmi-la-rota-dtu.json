@@ -387,7 +387,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "For_each__Schedule": {
@@ -1301,7 +1301,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                            "path": "[parameters('storageACGetPathSuffix')]"
                                                         }
                                                     }
                                                 }
