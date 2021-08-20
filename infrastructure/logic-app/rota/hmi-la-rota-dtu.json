@@ -387,7 +387,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "For_each__Schedule": {
@@ -523,19 +523,19 @@
                                                                             "and": [
                                                                                 {
                                                                                     "equals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         400
                                                                                     ]
                                                                                 },
                                                                                 {
                                                                                     "equals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         406
                                                                                     ]
                                                                                 },
                                                                                 {
                                                                                     "greaterOrEquals": [
-                                                                                        "",
+                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                                         500
                                                                                     ]
                                                                                 }
@@ -549,7 +549,7 @@
                                                                 "and": [
                                                                     {
                                                                         "equals": [
-                                                                            "",
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
                                                                             201
                                                                         ]
                                                                     }
@@ -1011,7 +1011,11 @@
                                                                     "type": "object"
                                                                 }
                                                             },
-                                                            "type": "object"
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 },
@@ -1170,7 +1174,11 @@
                                                                     "type": "object"
                                                                 }
                                                             },
-                                                            "type": "object"
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 },
@@ -1301,7 +1309,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                            "path": "[parameters('storageACGetPathSuffix')]"
                                                         }
                                                     }
                                                 }
@@ -1785,7 +1793,7 @@
                         }
                     },
                     "outputs": {}
-                },s
+                },
                 "parameters": {
                     "$connections": {
                         "value": {
