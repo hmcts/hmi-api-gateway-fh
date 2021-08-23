@@ -370,6 +370,37 @@
                                                         }
                                                     }
                                                 },
+                                                "Create_blob_(V2)": {
+                                                    "runAfter": {
+                                                        "Delete_XML_from_Input_Folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('ROTA files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
                                                 "Delete_XML_from_Input_Folder": {
                                                     "runAfter": {
                                                         "Create_XML_in_Output_folder": [
@@ -415,142 +446,92 @@
                                                                 "sessionStart": "@{variables('sessionStart')}"
                                                             }
                                                         },
-                                                        "Condition_HMI_Success": {
-                                                            "actions": {},
-                                                            "runAfter": {
-                                                                "HTTP_HMI_Schedules": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "else": {
-                                                                "actions": {
-                                                                    "Condition_HMI_Failed": {
-                                                                        "actions": {
-                                                                            "Create_Session_Error_File": {
-                                                                                "runAfter": {
-                                                                                    "HTTP_SN_Incident": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "body": "@outputs('Compose_sessionRequest')",
-                                                                                    "headers": {
-                                                                                        "ReadFileMetadataFromServer": true
-                                                                                    },
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "post",
-                                                                                    "path": "[parameters('storageACPathFiles')]",
-                                                                                    "queries": {
-                                                                                        "folderPath": "/rota/error/",
-                                                                                        "name": "@{items('For_each__Schedule')?['@id']}.json",
-                                                                                        "queryParametersSingleEncoded": true
-                                                                                    }
-                                                                                },
-                                                                                "runtimeConfiguration": {
-                                                                                    "contentTransfer": {
-                                                                                        "transferMode": "Chunked"
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            "Get_SN_Client": {
-                                                                                "runAfter": {},
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "get",
-                                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
-                                                                                }
-                                                                            },
-                                                                            "Get_SN_Secret": {
-                                                                                "runAfter": {
-                                                                                    "Get_SN_Client": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "get",
-                                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
-                                                                                }
-                                                                            },
-                                                                            "HTTP_SN_Incident": {
-                                                                                "runAfter": {
-                                                                                    "Get_SN_Secret": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "Http",
-                                                                                "inputs": {
-                                                                                    "authentication": {
-                                                                                        "password": "@body('Get_SN_Secret')?['value']",
-                                                                                        "type": "Basic",
-                                                                                        "username": "@body('Get_SN_Client')?['value']"
-                                                                                    },
-                                                                                    "body": {
-                                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
-                                                                                        "category": "Data Issue",
-                                                                                        "contact_type": "Alert",
-                                                                                        "description": "@{body('HTTP_HMI_Schedules')}",
-                                                                                        "impact": "2",
-                                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                                        "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
-                                                                                        "subcategory": "Data or File Error - other",
-                                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                                                                        "urgency": "3"
-                                                                                    },
-                                                                                    "method": "POST",
-                                                                                    "uri": "[parameters('serviceNowHostUrl')]"
-                                                                                }
+                                                        "Condition_HMI_Failed": {
+                                                            "actions": {
+                                                                "Get_SN_Client": {
+                                                                    "runAfter": {},
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
                                                                             }
                                                                         },
-                                                                        "runAfter": {},
-                                                                        "expression": {
-                                                                            "and": [
-                                                                                {
-                                                                                    "equals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        400
-                                                                                    ]
-                                                                                },
-                                                                                {
-                                                                                    "equals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        406
-                                                                                    ]
-                                                                                },
-                                                                                {
-                                                                                    "greaterOrEquals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        500
-                                                                                    ]
-                                                                                }
-                                                                            ]
+                                                                        "method": "get",
+                                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                                    }
+                                                                },
+                                                                "Get_SN_Secret": {
+                                                                    "runAfter": {
+                                                                        "Get_SN_Client": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                            }
                                                                         },
-                                                                        "type": "If"
+                                                                        "method": "get",
+                                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                                    }
+                                                                },
+                                                                "HTTP_SN_Incident": {
+                                                                    "runAfter": {
+                                                                        "Get_SN_Secret": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "Http",
+                                                                    "inputs": {
+                                                                        "authentication": {
+                                                                            "password": "@body('Get_SN_Secret')?['value']",
+                                                                            "type": "Basic",
+                                                                            "username": "@body('Get_SN_Client')?['value']"
+                                                                        },
+                                                                        "body": {
+                                                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                            "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                            "category": "Data Issue",
+                                                                            "contact_type": "Alert",
+                                                                            "description": "@{body('HTTP_HMI_Schedules')}",
+                                                                            "impact": "2",
+                                                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                            "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
+                                                                            "subcategory": "Data or File Error - other",
+                                                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                            "urgency": "3"
+                                                                        },
+                                                                        "method": "POST",
+                                                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
                                                                     }
                                                                 }
                                                             },
+                                                            "runAfter": {
+                                                                "HTTP_HMI_Schedules": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
                                                             "expression": {
-                                                                "and": [
+                                                                "or": [
                                                                     {
                                                                         "equals": [
                                                                             "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                            201
+                                                                            400
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "equals": [
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                            406
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "greaterOrEquals": [
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                            500
                                                                         ]
                                                                     }
                                                                 ]
@@ -1768,7 +1749,7 @@
                             },
                             "type": "ApiConnection",
                             "inputs": {
-                                "body": "@concat('')",
+                                "body": "@concat('ROTA files to be processed')",
                                 "headers": {
                                     "ReadFileMetadataFromServer": true
                                 },
