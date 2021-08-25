@@ -11,6 +11,7 @@ parameters:
 
 jobs:
 - job: TerraformApply
+  timeoutInMinutes: 120
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-18.04'
@@ -22,6 +23,11 @@ jobs:
     inputs:
       sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment)'
       targetFolder: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
+  - template: ../steps/apim-availability.yaml
+    parameters:
+      subscriptionName: ${{ parameters.subscription }}
+      apimName: "$(prefix)-$(product)-svc-$(environment)"
+      resourceGroupName: "$(prefix)-$(product)-$(environment)-rg"
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-init.yaml
     parameters:
