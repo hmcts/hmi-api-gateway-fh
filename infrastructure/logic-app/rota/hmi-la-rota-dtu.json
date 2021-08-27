@@ -232,7 +232,7 @@
                                                     }
                                                 },
                                                 "method": "post",
-                                                "path": "[parameters('storageACPathFiles')]",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
                                                 "queries": {
                                                     "folderPath": "/rota/input/",
                                                     "name": "read.me",
@@ -339,6 +339,37 @@
                                         },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
+                                                "Create_Error_Parse_Magistrates_XML": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrates": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Exception occured when parsing magistrates')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-magistrates.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
                                                 "Create_XML_in_Output_folder": {
                                                     "runAfter": {
                                                         "For_each__Schedule": [
@@ -361,6 +392,37 @@
                                                         "queries": {
                                                             "folderPath": "/rota/output/",
                                                             "name": "@items('For_each_File')?['Name']",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_blob_(V2)": {
+                                                    "runAfter": {
+                                                        "Delete_XML_from_Input_Folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('ROTA files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -414,6 +476,98 @@
                                                                 "sessionReference": "@{items('For_each__Schedule')?['@id']}",
                                                                 "sessionStart": "@{variables('sessionStart')}"
                                                             }
+                                                        },
+                                                        "Condition_HMI_Failed": {
+                                                            "actions": {
+                                                                "Get_SN_Client": {
+                                                                    "runAfter": {},
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "get",
+                                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                                    }
+                                                                },
+                                                                "Get_SN_Secret": {
+                                                                    "runAfter": {
+                                                                        "Get_SN_Client": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "get",
+                                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                                    }
+                                                                },
+                                                                "HTTP_SN_Incident": {
+                                                                    "runAfter": {
+                                                                        "Get_SN_Secret": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "Http",
+                                                                    "inputs": {
+                                                                        "authentication": {
+                                                                            "password": "@body('Get_SN_Secret')?['value']",
+                                                                            "type": "Basic",
+                                                                            "username": "@body('Get_SN_Client')?['value']"
+                                                                        },
+                                                                        "body": {
+                                                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                                            "category": "Data Issue",
+                                                                            "contact_type": "Alert",
+                                                                            "description": "@{body('HTTP_HMI_Schedules')}",
+                                                                            "impact": "2",
+                                                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                                            "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
+                                                                            "subcategory": "Data or File Error - other",
+                                                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                                            "urgency": "3"
+                                                                        },
+                                                                        "method": "POST",
+                                                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "runAfter": {
+                                                                "HTTP_HMI_Schedules": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "expression": {
+                                                                "or": [
+                                                                    {
+                                                                        "equals": [
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                            400
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "equals": [
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                            406
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "greaterOrEquals": [
+                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
+                                                                            500
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "type": "If"
                                                         },
                                                         "Condition_is_session_AM": {
                                                             "actions": {
@@ -517,6 +671,33 @@
                                                                     "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
                                                                     "queryParametersSingleEncoded": true
                                                                 }
+                                                            }
+                                                        },
+                                                        "HTTP_HMI_Schedules": {
+                                                            "runAfter": {
+                                                                "Compose_sessionRequest": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Http",
+                                                            "inputs": {
+                                                                "authentication": {
+                                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                                    "clientId": "@body('Get_HMI_Client')?['value']",
+                                                                    "secret": "@body('Get_HMI_Secret')?['value']",
+                                                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                                    "type": "ActiveDirectoryOAuth"
+                                                                },
+                                                                "body": "@outputs('Compose_sessionRequest')",
+                                                                "headers": {
+                                                                    "Accept": "application/json",
+                                                                    "Content-Type": "application/json",
+                                                                    "Destination-System": "MOCK",
+                                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                                    "Source-System": "CFT"
+                                                                },
+                                                                "method": "POST",
+                                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
                                                             }
                                                         },
                                                         "Parse_CPL_File": {
@@ -739,6 +920,46 @@
                                                     },
                                                     "type": "Foreach"
                                                 },
+                                                "Get_HMI_Client": {
+                                                    "runAfter": {
+                                                        "For_jsonCLP": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_jsonJudge": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_jsonMagistrate": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                    }
+                                                },
+                                                "Get_HMI_Secret": {
+                                                    "runAfter": {
+                                                        "Get_HMI_Client": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                    }
+                                                },
                                                 "Parse_CourtLocationProfiles": {
                                                     "runAfter": {
                                                         "Set_jsonSchedules": [
@@ -914,13 +1135,7 @@
                                                 },
                                                 "Parse_jsonSchedules": {
                                                     "runAfter": {
-                                                        "For_jsonCLP": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_jsonJudge": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_jsonMagistrate": [
+                                                        "Get_HMI_Secret": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1076,7 +1291,7 @@
                                                                 }
                                                             },
                                                             "method": "post",
-                                                            "path": "[parameters('storageACPathFiles')]",
+                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
                                                             "queries": {
                                                                 "folderPath": "/rota/input/",
                                                                 "name": "read.me",
@@ -1554,6 +1769,37 @@
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
+                                }
+                            }
+                        },
+                        "Recreate_read.me": {
+                            "runAfter": {
+                                "For_each_File": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('ROTA files to be processed')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                "queries": {
+                                    "folderPath": "/rota/input/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
                                 }
                             }
                         }
