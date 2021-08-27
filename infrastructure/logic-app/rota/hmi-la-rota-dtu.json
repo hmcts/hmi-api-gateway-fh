@@ -339,15 +339,15 @@
                                         },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
-                                                "Create_Error_Parse_Magistrates_XML": {
+                                                "Create_Invalid_Magistrate_Record": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Parse_Magistrates": [
                                                             "Failed"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
                                                     "inputs": {
-                                                        "body": "@concat('Exception occured when parsing magistrates')",
+                                                        "body": "@actions('Parse_Magistrates').outputs",
                                                         "headers": {
                                                             "ReadFileMetadataFromServer": true
                                                         },
@@ -360,7 +360,7 @@
                                                         "path": "[parameters('storageACPathFiles')]",
                                                         "queries": {
                                                             "folderPath": "/rota/error/",
-                                                            "name": "invalid-magistrates.err",
+                                                            "name": "invalid-magistrate.err",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -914,8 +914,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_Magistrates": [
-                                                            "Succeeded"
+                                                        "Create_Invalid_Magistrate_Record": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
