@@ -339,7 +339,69 @@
                                         },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
-                                                "Create_Invalid_Magistrate_Record": {
+                                                "Create_Invalid_CLP_Error_File": {
+                                                    "runAfter": {
+                                                        "Parse_CourtListingProfiles": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_CourtListingProfiles').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-clps.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Invalid_Judges_Error_File": {
+                                                    "runAfter": {
+                                                        "Parse_Judges": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_Judges').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-judges.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Invalid_Magistrate_Error_File": {
                                                     "runAfter": {
                                                         "Parse_Magistrates": [
                                                             "Failed"
@@ -360,7 +422,7 @@
                                                         "path": "[parameters('storageACPathFiles')]",
                                                         "queries": {
                                                             "folderPath": "/rota/error/",
-                                                            "name": "invalid-magistrate.err",
+                                                            "name": "invalid-magistrates.err",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -807,7 +869,7 @@
                                                     "type": "Foreach"
                                                 },
                                                 "For_jsonCLP": {
-                                                    "foreach": "@body('Parse_CourtLocationProfiles')?['courtListingProfiles']?['courtListingProfile']",
+                                                    "foreach": "@body('Parse_CourtListingProfiles')?['courtListingProfiles']?['courtListingProfile']",
                                                     "actions": {
                                                         "Create_jsonCLP_File": {
                                                             "runAfter": {},
@@ -838,8 +900,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_CourtLocationProfiles": [
-                                                            "Succeeded"
+                                                        "Create_Invalid_CLP_Error_File": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -876,8 +938,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_Judges": [
-                                                            "Succeeded"
+                                                        "Create_Invalid_Judges_Error_File": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -914,7 +976,7 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Create_Invalid_Magistrate_Record": [
+                                                        "Create_Invalid_Magistrate_Error_File": [
                                                             "Skipped"
                                                         ]
                                                     },
@@ -960,7 +1022,7 @@
                                                         "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
                                                     }
                                                 },
-                                                "Parse_CourtLocationProfiles": {
+                                                "Parse_CourtListingProfiles": {
                                                     "runAfter": {
                                                         "Set_jsonSchedules": [
                                                             "Succeeded"
