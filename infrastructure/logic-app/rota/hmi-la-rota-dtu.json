@@ -435,7 +435,7 @@
                                                 "Create_Invalid_Schedules_Error_File": {
                                                     "runAfter": {
                                                         "Parse_jsonSchedules": [
-                                                            "Succeeded"
+                                                            "Failed"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
