@@ -536,7 +536,7 @@
                                                 },
                                                 "Create_read.me_when_invalid_CLP": {
                                                     "runAfter": {
-                                                        "Delete_File_if_invalid_CLP": [
+                                                        "Create_Invalid_CLP_Error_File": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -567,7 +567,7 @@
                                                 },
                                                 "Create_read.me_when_invalid_Judges": {
                                                     "runAfter": {
-                                                        "Delete_File_if_invalid_Judge": [
+                                                        "Create_Invalid_Judges_Error_File": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -598,7 +598,7 @@
                                                 },
                                                 "Create_read.me_when_invalid_Magistrates": {
                                                     "runAfter": {
-                                                        "Delete_File_if_invalid_Magistrates": [
+                                                        "Create_Invalid_Magistrate_Error_File": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1106,8 +1106,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Create_Invalid_CLP_Error_File": [
-                                                            "Skipped"
+                                                        "Create_read.me_when_invalid_CLP": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -1144,8 +1144,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Create_Invalid_Judges_Error_File": [
-                                                            "Skipped"
+                                                        "Create_read.me_when_invalid_Judges": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -1182,8 +1182,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Create_Invalid_Magistrate_Error_File": [
-                                                            "Skipped"
+                                                        "Create_read.me_when_invalid_Magistrates": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "Foreach"
