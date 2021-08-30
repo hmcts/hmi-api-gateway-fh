@@ -20,6 +20,15 @@
         "storageACGetPathSuffix":{
             "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
         },
+        "storageACExistingCLPPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_existing_CLP_repository_record')?['Path']))}"
+        },
+        "storageACExistingMagistrtePath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Magistrates')?['Path']))}"
+        },
+        "storageACExistingSchedulesPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Schedules')?['Path']))}"
+        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
