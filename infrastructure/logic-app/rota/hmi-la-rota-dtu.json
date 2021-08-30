@@ -18,6 +18,15 @@
         "storageACGetPath": {
             "type": "string"
         },
+        "storageACExistingMagistrtePath": {
+            "type": "string"
+        },
+        "storageACExistingSchedulesPath": {
+            "type": "string"
+        },
+        "storageACExistingCLPPath": {
+            "type": "string"
+        },
         "storageACGetPathSuffix": {
             "type": "string"
         },
@@ -232,7 +241,7 @@
                                                     }
                                                 },
                                                 "method": "post",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                "path": "[parameters('storageACPathFiles')]",
                                                 "queries": {
                                                     "folderPath": "/rota/input/",
                                                     "name": "read.me",
@@ -542,7 +551,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "[concat('/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}')]"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Judge": {
@@ -562,7 +571,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Magistrates": {
@@ -582,7 +591,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Schedules": {
@@ -602,7 +611,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_XML_from_Input_Folder": {
@@ -641,7 +650,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Magistrates')?['Path']))}"
+                                                                "path": "[parameters('storageACExistingMagistrtePath')]"
                                                             }
                                                         }
                                                     },
@@ -668,7 +677,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Schedules')?['Path']))}"
+                                                                "path": "[parameters('storageACExistingSchedulesPath')]"
                                                             }
                                                         }
                                                     },
@@ -958,7 +967,7 @@
                                                                     }
                                                                 },
                                                                 "method": "post",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                                "path": "[parameters('storageACPathFiles')]",
                                                                 "queries": {
                                                                     "folderPath": "/rota/repository/clp/",
                                                                     "name": "@{items('For_jsonCLP')?['@id']}.json",
@@ -1464,7 +1473,7 @@
                                                                 }
                                                             },
                                                             "method": "post",
-                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                            "path": "[parameters('storageACPathFiles')]",
                                                             "queries": {
                                                                 "folderPath": "/rota/input/",
                                                                 "name": "read.me",
@@ -1963,7 +1972,7 @@
                                     }
                                 },
                                 "method": "post",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                "path": "[parameters('storageACPathFiles')]",
                                 "queries": {
                                     "folderPath": "/rota/input/",
                                     "name": "read.me",
