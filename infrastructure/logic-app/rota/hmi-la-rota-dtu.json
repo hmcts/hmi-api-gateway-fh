@@ -341,8 +341,8 @@
                                             "actions": {
                                                 "Create_Invalid_CLP_Error_File": {
                                                     "runAfter": {
-                                                        "Parse_CourtListingProfiles": [
-                                                            "Failed"
+                                                        "Delete_File_if_invalid_CLP": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -372,8 +372,8 @@
                                                 },
                                                 "Create_Invalid_Judges_Error_File": {
                                                     "runAfter": {
-                                                        "Parse_Judges": [
-                                                            "Failed"
+                                                        "Delete_File_if_invalid_Judge": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -403,8 +403,8 @@
                                                 },
                                                 "Create_Invalid_Magistrate_Error_File": {
                                                     "runAfter": {
-                                                        "Parse_Magistrates": [
-                                                            "Failed"
+                                                        "Delete_File_if_invalid_Magistrates": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -434,8 +434,8 @@
                                                 },
                                                 "Create_Invalid_Schedules_Error_File": {
                                                     "runAfter": {
-                                                        "Parse_jsonSchedules": [
-                                                            "Failed"
+                                                        "Delete_File_if_invalid_Schedules": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -525,6 +525,86 @@
                                                         }
                                                     }
                                                 },
+                                                "Delete_File_if_invalid_CLP": {
+                                                    "runAfter": {
+                                                        "Parse_CourtListingProfiles": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[concat('/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}')]"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Judge": {
+                                                    "runAfter": {
+                                                        "Parse_Judges": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Magistrates": {
+                                                    "runAfter": {
+                                                        "Parse_Magistrates": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Parse_jsonSchedules": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                    }
+                                                },
                                                 "Delete_XML_from_Input_Folder": {
                                                     "runAfter": {
                                                         "Create_XML_in_Output_folder": [
@@ -544,6 +624,60 @@
                                                         "method": "delete",
                                                         "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
+                                                },
+                                                "For_each_Existing_Magistrates": {
+                                                    "foreach": "@body('Lists_Existing_Magistrates')?['value']",
+                                                    "actions": {
+                                                        "Delete_Existing_Magistrates_record": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Magistrates')?['Path']))}"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Existing_Magistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "For_each_Existing_Schedules": {
+                                                    "foreach": "@body('Lists_Existing_Schedules')?['value']",
+                                                    "actions": {
+                                                        "Delete_Existing_Schedule": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Existing_Schedules')?['Path']))}"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Existing_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
                                                 },
                                                 "For_each__Schedule": {
                                                     "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
@@ -780,6 +914,33 @@
                                                     },
                                                     "type": "Foreach"
                                                 },
+                                                "For_each_existing_CLP_repository_record": {
+                                                    "foreach": "@body('Lists_Existing_CLP_records')?['value']",
+                                                    "actions": {
+                                                        "Delete_Existing_CLP_Repository_record": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_existing_CLP_repository_record')?['Path']))}"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Existing_CLP_records": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
                                                 "For_jsonCLP": {
                                                     "foreach": "@body('Parse_CourtListingProfiles')?['courtListingProfiles']?['courtListingProfile']",
                                                     "actions": {
@@ -797,7 +958,7 @@
                                                                     }
                                                                 },
                                                                 "method": "post",
-                                                                "path": "[parameters('storageACPathFiles')]",
+                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
                                                                 "queries": {
                                                                     "folderPath": "/rota/repository/clp/",
                                                                     "name": "@{items('For_jsonCLP')?['@id']}.json",
@@ -894,9 +1055,81 @@
                                                     },
                                                     "type": "Foreach"
                                                 },
-                                                "Parse_CourtListingProfiles": {
+                                                "Lists_Existing_CLP_records": {
                                                     "runAfter": {
                                                         "Set_jsonSchedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "metadata": {
+                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZjbHAlMmY=": "/rota/repository/clp/"
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZjbHAlMmY='))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Lists_Existing_Magistrates": {
+                                                    "runAfter": {
+                                                        "Set_jsonSchedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "metadata": {
+                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZtYWdpc3RyYXRlcyUyZg==": "/rota/repository/magistrates/"
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZtYWdpc3RyYXRlcyUyZg=='))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Lists_Existing_Schedules": {
+                                                    "runAfter": {
+                                                        "Set_jsonSchedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "metadata": {
+                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY=": "/rota/repository/schedules/"
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY='))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Parse_CourtListingProfiles": {
+                                                    "runAfter": {
+                                                        "For_each_existing_CLP_repository_record": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -967,7 +1200,7 @@
                                                 },
                                                 "Parse_Judges": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_existing_CLP_repository_record": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1018,7 +1251,7 @@
                                                 },
                                                 "Parse_Magistrates": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_existing_CLP_repository_record": [
                                                             "Succeeded"
                                                         ]
                                                     },
