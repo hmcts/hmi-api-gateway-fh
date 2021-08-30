@@ -534,6 +534,130 @@
                                                         }
                                                     }
                                                 },
+                                                "Create_read.me_when_invalid_CLP": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_CLP": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Judges": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Judge": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Magistrates": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Magistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
                                                 "Delete_File_if_invalid_CLP": {
                                                     "runAfter": {
                                                         "Parse_CourtListingProfiles": [
@@ -939,7 +1063,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/repository/clp/',items('For_each_existing_CLP_repository_record')?['Name']))}"
+                                                                "path": "[parameters('storageACExistingCLPPath')]"
                                                             }
                                                         }
                                                     },
@@ -1972,7 +2096,7 @@
                                     }
                                 },
                                 "method": "post",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                "path": "[parameters('storageACPathFiles')]",
                                 "queries": {
                                     "folderPath": "/rota/input/",
                                     "name": "read.me",
