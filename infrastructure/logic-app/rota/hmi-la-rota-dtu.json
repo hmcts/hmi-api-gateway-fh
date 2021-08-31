@@ -141,9 +141,40 @@
                         }
                     },
                     "actions": {
-                        "Create_read.me": {
+                        "Create_CLP_read.me": {
                             "runAfter": {
-                                "Initialize_johIdIsPresiding": [
+                                "Create_Input_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('CLP repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/clp/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Input_read.me": {
+                            "runAfter": {
+                                "Initialize_sessionErrorBody": [
                                     "Succeeded"
                                 ]
                             },
@@ -159,6 +190,68 @@
                                 "path": "/datasets/default/files",
                                 "queries": {
                                     "folderPath": "/rota/input",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Magistrates_read.me": {
+                            "runAfter": {
+                                "Create_CLP_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Magistrates  repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/magistrates/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Schedules_read.me": {
+                            "runAfter": {
+                                "Create_Magistrates_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Schedules repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/schedules/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -815,6 +908,30 @@
                                                 "For_each__Schedule": {
                                                     "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
                                                     "actions": {
+                                                        "Append_magistrate_lookup_to_scheduleErrorBody": {
+                                                            "runAfter": {
+                                                                "Get_Magistrate_Repository": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToStringVariable",
+                                                            "inputs": {
+                                                                "name": "scheduleErrorBody",
+                                                                "value": "Invalid Magiistrate for schedule: @{items('For_each__Schedule')?['@id']}"
+                                                            }
+                                                        },
+                                                        "Append_to_scheduleErrorBody": {
+                                                            "runAfter": {
+                                                                "Get_CLP_Repository": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToStringVariable",
+                                                            "inputs": {
+                                                                "name": "scheduleErrorBody",
+                                                                "value": "Invalid CLP for schedule: @{items('For_each__Schedule')?['@id']}"
+                                                            }
+                                                        },
                                                         "Compose_sessionRequest": {
                                                             "runAfter": {
                                                                 "Parse_Magistrate_File": [
@@ -900,6 +1017,37 @@
                                                                 ]
                                                             },
                                                             "type": "If"
+                                                        },
+                                                        "Create_blob_(V2)_2": {
+                                                            "runAfter": {
+                                                                "Compose_sessionRequest": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": "@outputs('Compose_sessionRequest')",
+                                                                "headers": {
+                                                                    "ReadFileMetadataFromServer": true
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "post",
+                                                                "path": "[parameters('storageACPathFiles')]",
+                                                                "queries": {
+                                                                    "folderPath": "/rota/repository/schedules/",
+                                                                    "name": "@{items('For_each__Schedule')?['@id']}",
+                                                                    "queryParametersSingleEncoded": true
+                                                                }
+                                                            },
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
                                                         },
                                                         "Get_CLP_Repository": {
                                                             "runAfter": {},
@@ -1017,8 +1165,8 @@
                                                         },
                                                         "Set_jsonCLProfile": {
                                                             "runAfter": {
-                                                                "Get_CLP_Repository": [
-                                                                    "Succeeded"
+                                                                "Append_to_scheduleErrorBody": [
+                                                                    "Skipped"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
@@ -1029,8 +1177,8 @@
                                                         },
                                                         "Set_jsonMagistrate": {
                                                             "runAfter": {
-                                                                "Get_Magistrate_Repository": [
-                                                                    "Succeeded"
+                                                                "Append_magistrate_lookup_to_scheduleErrorBody": [
+                                                                    "Skipped"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
@@ -1107,7 +1255,7 @@
                                                     },
                                                     "runAfter": {
                                                         "Create_read.me_when_invalid_CLP": [
-                                                            "Succeeded"
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -1145,7 +1293,7 @@
                                                     },
                                                     "runAfter": {
                                                         "Create_read.me_when_invalid_Judges": [
-                                                            "Succeeded"
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -1183,7 +1331,7 @@
                                                     },
                                                     "runAfter": {
                                                         "Create_read.me_when_invalid_Magistrates": [
-                                                            "Succeeded"
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -2013,6 +2161,22 @@
                                 ]
                             }
                         },
+                        "Initialize_sessionErrorBody": {
+                            "runAfter": {
+                                "Initialize_johIdIsPresiding": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "scheduleErrorBody",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_sessionReference": {
                             "runAfter": {
                                 "Initialize_magistrates": [
@@ -2059,7 +2223,7 @@
                         },
                         "List_blobs": {
                             "runAfter": {
-                                "Create_read.me": [
+                                "Create_Schedules_read.me": [
                                     "Succeeded"
                                 ]
                             },
