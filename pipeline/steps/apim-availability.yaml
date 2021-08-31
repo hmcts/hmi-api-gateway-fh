@@ -7,29 +7,18 @@ parameters:
     type: string
 
 steps:
-  - template: templates\Azure\Common\check-soft-deleted.yaml@azTemplates
+  - template: templates\Azure\ApiManagement\check-name-availablity.yaml@azTemplates
     parameters: 
       subscriptionName: ${{ parameters.subscriptionName }}
       resourceName: ${{ parameters.apimName }}
       resourceLocation: $(location)
+      resourceGroupName: ${{ parameters.resourceGroupName }}
       variableName: available
       taskName: apim
-  
-  - bash: |
-      echo "available: $available"
-      purge=false
-      if [[ "$available" == "false" ]]; then
-        purge=true
-      fi
-      echo "##vso[task.setvariable variable=purge;isOutput=true]${purge}"
-    displayName: "Determine if to purge"
-    name: evaluate
-    env:
-      available: $(apim.available)
-
+      
   - template: templates\Azure\ApiManagement\purge.yaml@azTemplates
     parameters: 
       subscriptionName: ${{ parameters.subscriptionName }}
       apimName: ${{ parameters.apimName }}
       apimLocation: $(location)
-      shouldPurge: "$(evaluate.purge)"
+      condition: "eq(variables['apim.available'],'false')"
