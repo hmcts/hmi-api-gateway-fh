@@ -1363,9 +1363,6 @@
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "metadata": {
-                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZtYWdpc3RyYXRlcyUyZg==": "/rota/repository/magistrates/"
-                                                    },
                                                     "type": "ApiConnection",
                                                     "inputs": {
                                                         "host": {
@@ -1374,7 +1371,7 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZtYWdpc3RyYXRlcyUyZg=='))}",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/magistrates'))}",
                                                         "queries": {
                                                             "nextPageMarker": "",
                                                             "useFlatListing": false
@@ -1387,9 +1384,6 @@
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "metadata": {
-                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY=": "/rota/repository/schedules/"
-                                                    },
                                                     "type": "ApiConnection",
                                                     "inputs": {
                                                         "host": {
@@ -1398,7 +1392,7 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY='))}",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/schedules'))}",
                                                         "queries": {
                                                             "nextPageMarker": "",
                                                             "useFlatListing": false
