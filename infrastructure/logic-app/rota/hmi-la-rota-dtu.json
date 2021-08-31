@@ -364,7 +364,7 @@
                                                     }
                                                 },
                                                 "method": "delete",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                "path": "[parameters('storageACGetPathSuffix')]"
                                             }
                                         },
                                         "Get_SNow_Client": {
@@ -768,7 +768,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Judge": {
@@ -788,7 +788,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Magistrates": {
@@ -808,7 +808,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Schedules": {
@@ -828,7 +828,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_XML_from_Input_Folder": {
@@ -848,7 +848,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "For_each_Repo_Existing_CLP": {
@@ -867,7 +867,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
+                                                                "path": "[parameters('storageACExistingCLPPath')]"
                                                             }
                                                         }
                                                     },
@@ -894,7 +894,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
+                                                                "path": "[parameters('storageACExistingMagistrtePath')]"
                                                             }
                                                         }
                                                     },
@@ -921,7 +921,7 @@
                                                                     }
                                                                 },
                                                                 "method": "delete",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
+                                                                "path": "[parameters('storageACExistingSchedulesPath')]"
                                                             }
                                                         }
                                                     },
@@ -1086,7 +1086,7 @@
                                                                     }
                                                                 },
                                                                 "method": "get",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
+                                                                "path": "[parameters('storageACGetPath')]",
                                                                 "queries": {
                                                                     "inferContentType": true,
                                                                     "path": "/rota/repository/clp/@{items('For_each__Schedule')?['courtListingProfile']?['@idref']}.json",
@@ -1108,7 +1108,7 @@
                                                                     }
                                                                 },
                                                                 "method": "get",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath",
+                                                                "path": "[parameters('storageACGetPath')]",
                                                                 "queries": {
                                                                     "inferContentType": true,
                                                                     "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
@@ -1781,7 +1781,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                           "path": "[parameters('storageACGetPathSuffix')]"
                                                         }
                                                     }
                                                 }
