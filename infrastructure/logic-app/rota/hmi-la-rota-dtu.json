@@ -1338,7 +1338,7 @@
                                                 },
                                                 "Lists_Existing_CLP_records": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Set_jsonSchedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1362,7 +1362,7 @@
                                                 },
                                                 "Lists_Existing_Magistrates": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Set_jsonSchedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1386,7 +1386,7 @@
                                                 },
                                                 "Lists_Existing_Schedules": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Set_jsonSchedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1662,13 +1662,7 @@
                                                 },
                                                 "Set_jsonJudges": {
                                                     "runAfter": {
-                                                        "For_each_existing_CLP_repository_record": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_each_existing_Magistrates": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_each_existing_Schedules": [
+                                                        "Set_jsonMagistrates": [
                                                             "Succeeded"
                                                         ]
                                                     },
