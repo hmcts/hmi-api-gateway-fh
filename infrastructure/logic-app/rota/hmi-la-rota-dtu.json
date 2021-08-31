@@ -1342,9 +1342,6 @@
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "metadata": {
-                                                        "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZjbHAlMmY=": "/rota/repository/clp/"
-                                                    },
                                                     "type": "ApiConnection",
                                                     "inputs": {
                                                         "host": {
@@ -1353,7 +1350,7 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZjbHAlMmY='))}",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/clp'))}",
                                                         "queries": {
                                                             "nextPageMarker": "",
                                                             "useFlatListing": false
