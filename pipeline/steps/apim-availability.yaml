@@ -1,0 +1,24 @@
+parameters:
+  - name: subscriptionName
+    type: string
+  - name: apimName
+    type: string
+  - name: resourceGroupName
+    type: string
+
+steps:
+  - template: templates\Azure\ApiManagement\check-name-availablity.yaml@azTemplates
+    parameters: 
+      subscriptionName: ${{ parameters.subscriptionName }}
+      resourceName: ${{ parameters.apimName }}
+      resourceLocation: $(location)
+      resourceGroupName: ${{ parameters.resourceGroupName }}
+      variableName: available
+      taskName: apim
+      
+  - template: templates\Azure\ApiManagement\purge.yaml@azTemplates
+    parameters: 
+      subscriptionName: ${{ parameters.subscriptionName }}
+      apimName: ${{ parameters.apimName }}
+      apimLocation: $(location)
+      condition: "eq(variables['apim.available'],'false')"
