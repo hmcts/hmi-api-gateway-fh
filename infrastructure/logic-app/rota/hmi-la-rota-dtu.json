@@ -524,6 +524,97 @@
                                                             "Succeeded"
                                                         ]
                                                     },
+                                                    "else": {
+                                                        "actions": {
+                                                            "For_each_Schedule_Success": {
+                                                                "foreach": "@body('Success_Schedules_Get__Schedules_')?['value']",
+                                                                "actions": {
+                                                                    "HTTP_HMI": {
+                                                                        "runAfter": {},
+                                                                        "type": "Http",
+                                                                        "inputs": {
+                                                                            "authentication": {
+                                                                                "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                                                "clientId": "@body('Get_HMI_Client')?['value']",
+                                                                                "secret": "@body('Get_HMI_Secret')?['value']",
+                                                                                "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                                                "type": "ActiveDirectoryOAuth"
+                                                                            },
+                                                                            "headers": {
+                                                                                "Accept": "application/json",
+                                                                                "Content-Type": "application/json",
+                                                                                "Destination-System": "MOCK",
+                                                                                "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                                                "Source-System": "CFT"
+                                                                            },
+                                                                            "method": "POST",
+                                                                            "uri": "[parameters('hmiSchedulesUrl')]"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "runAfter": {
+                                                                    "Get_HMI_Secret": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "Foreach"
+                                                            },
+                                                            "Get_HMI_Client": {
+                                                                "runAfter": {
+                                                                    "Success_Schedules_Get__Schedules_": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                                }
+                                                            },
+                                                            "Get_HMI_Secret": {
+                                                                "runAfter": {
+                                                                    "Get_HMI_Client": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                                }
+                                                            },
+                                                            "Success_Schedules_Get__Schedules_": {
+                                                                "runAfter": {},
+                                                                "metadata": {
+                                                                    "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY=": "/rota/repository/schedules/"
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY='))}",
+                                                                    "queries": {
+                                                                        "nextPageMarker": "",
+                                                                        "useFlatListing": false
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
                                                     "expression": {
                                                         "and": [
                                                             {
