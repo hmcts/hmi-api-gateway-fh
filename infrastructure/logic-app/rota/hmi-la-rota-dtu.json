@@ -443,6 +443,37 @@
                                             "actions": {
                                                 "Condition": {
                                                     "actions": {
+                                                        "Create_read.me_Schedule_Error_Occured": {
+                                                            "runAfter": {
+                                                                "For_each_Schedule_File_Error_Occured": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": "@concat('Valid schedule files to be sent')",
+                                                                "headers": {
+                                                                    "ReadFileMetadataFromServer": true
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "post",
+                                                                "path": "[parameters('storageACPathFiles')]",
+                                                                "queries": {
+                                                                    "folderPath": "/rota/repository/schedules/",
+                                                                    "name": "read.me",
+                                                                    "queryParametersSingleEncoded": true
+                                                                }
+                                                            },
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
+                                                        },
                                                         "Failed_Schedule_Get_Schedules": {
                                                             "runAfter": {},
                                                             "type": "ApiConnection",
@@ -459,6 +490,33 @@
                                                                     "useFlatListing": false
                                                                 }
                                                             }
+                                                        },
+                                                        "For_each_Schedule_File_Error_Occured": {
+                                                            "foreach": "@body('Failed_Schedule_Get_Schedules')?['value']",
+                                                            "actions": {
+                                                                "Delete_Schedule_File_Error_Occured": {
+                                                                    "runAfter": {},
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "headers": {
+                                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                                        },
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "delete",
+                                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Schedule_File_Error_Occured')?['Path']))}"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "runAfter": {
+                                                                "Failed_Schedule_Get_Schedules": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Foreach"
                                                         }
                                                     },
                                                     "runAfter": {
@@ -1809,7 +1867,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                           "path": "[parameters('storageACGetPathSuffix')]"
+                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                         }
                                                     }
                                                 }
