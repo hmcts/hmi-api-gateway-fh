@@ -441,6 +441,43 @@
                                         },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
+                                                "Condition": {
+                                                    "actions": {
+                                                        "Failed_Schedule_Get_Schedules": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/schedules'))}",
+                                                                "queries": {
+                                                                    "nextPageMarker": "",
+                                                                    "useFlatListing": false
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "For_each__Schedule": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "greater": [
+                                                                    "@length(variables('scheduleErrorBody'))",
+                                                                    0
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
                                                 "Create_Invalid_CLP_Error_File": {
                                                     "runAfter": {
                                                         "Delete_File_if_invalid_CLP": [
@@ -536,7 +573,7 @@
                                                 },
                                                 "Create_Invalid_Schedules_Error_File": {
                                                     "runAfter": {
-                                                        "Delete_File_if_invalid_Schedules": [
+                                                        "Create_read.me_when_invalid_Schedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -567,7 +604,7 @@
                                                 },
                                                 "Create_XML_in_Output_folder": {
                                                     "runAfter": {
-                                                        "For_each__Schedule": [
+                                                        "Condition": [
                                                             "Succeeded"
                                                         ]
                                                     },
