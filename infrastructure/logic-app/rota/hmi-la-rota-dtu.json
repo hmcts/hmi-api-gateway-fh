@@ -605,6 +605,86 @@
                                                                     "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
                                                                 }
                                                             },
+                                                            "ScheduleErrorBody_Has_Errors": {
+                                                                "actions": {
+                                                                    "Get_SNow_Client_for_HMI_Error": {
+                                                                        "runAfter": {},
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                                        }
+                                                                    },
+                                                                    "Get_SNow_Secret_for_HMI_Error": {
+                                                                        "runAfter": {
+                                                                            "Get_SNow_Client_for_HMI_Error": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                                        }
+                                                                    },
+                                                                    "HTTP_2": {
+                                                                        "runAfter": {
+                                                                            "Get_SNow_Secret_for_HMI_Error": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "Http",
+                                                                        "inputs": {
+                                                                            "authentication": {
+                                                                                "password": "@body('Get_SNow_Secret_for_HMI_Error')?['value']",
+                                                                                "type": "Basic",
+                                                                                "username": "@body('Get_SNow_Client_for_HMI_Error')?['value']"
+                                                                            },
+                                                                            "body": {
+                                                                                "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                                "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                                "category": "Data Issue",
+                                                                                "contact_type": "Alert",
+                                                                                "description": "",
+                                                                                "impact": "2",
+                                                                                "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                                "short_description": "HMI Failed to process Schedules \n@{variables('scheduleErrorBody')}",
+                                                                                "subcategory": "Data or File Error - other",
+                                                                                "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                                "urgency": "3"
+                                                                            },
+                                                                            "method": "POST",
+                                                                            "uri": "[parameters('serviceNowHostUrl')]"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "runAfter": {
+                                                                    "For_each_Schedule_Success": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "expression": {
+                                                                    "and": [
+                                                                        {
+                                                                            "greater": [
+                                                                                "@length(variables('scheduleErrorBody'))",
+                                                                                0
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "If"
+                                                            },
                                                             "Success_Schedules_Get__Schedules_": {
                                                                 "runAfter": {},
                                                                 "metadata": {
