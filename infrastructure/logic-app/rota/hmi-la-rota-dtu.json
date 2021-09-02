@@ -529,7 +529,7 @@
                                                             "For_each_Schedule_Success": {
                                                                 "foreach": "@body('Success_Schedules_Get__Schedules_')?['value']",
                                                                 "actions": {
-                                                                    "HTTP_HMI": {
+                                                                    "HTTP_Call_HMI": {
                                                                         "runAfter": {},
                                                                         "type": "Http",
                                                                         "inputs": {
@@ -549,6 +549,18 @@
                                                                             },
                                                                             "method": "POST",
                                                                             "uri": "[parameters('hmiSchedulesUrl')]"
+                                                                        }
+                                                                    },
+                                                                    "Update_With_HMI_Error": {
+                                                                        "runAfter": {
+                                                                            "HTTP_Call_HMI": [
+                                                                                "Failed"
+                                                                            ]
+                                                                        },
+                                                                        "type": "AppendToStringVariable",
+                                                                        "inputs": {
+                                                                            "name": "scheduleErrorBody",
+                                                                            "value": "@body('HTTP_Call_HMI')"
                                                                         }
                                                                     }
                                                                 },
