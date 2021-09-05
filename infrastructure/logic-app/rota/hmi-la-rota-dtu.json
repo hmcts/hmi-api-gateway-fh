@@ -401,7 +401,7 @@
                                                 "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
                                             }
                                         },
-                                        "HTTP": {
+                                        "HTTP_ServiceNow_Invalid_XML": {
                                             "runAfter": {
                                                 "Get_SNow_Secret": [
                                                     "Succeeded"
@@ -1931,13 +1931,7 @@
                                                 },
                                                 "Set_jsonJudges": {
                                                     "runAfter": {
-                                                        "For_each_Repo_Existing_CLP": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_each_Repo_Existing_Magistrate": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_each_Repo_Existing_Schedules": [
+                                                        "Set_jsonMagistrates": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1957,7 +1951,13 @@
                                                 },
                                                 "Set_jsonSchedules": {
                                                     "runAfter": {
-                                                        "Set_jsonCLProfiles": [
+                                                        "For_each_Repo_Existing_CLP": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Magistrate": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Schedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2228,6 +2228,22 @@
                                 ]
                             }
                         },
+                        "Initialize_invalidRotaXmlDeetected": {
+                            "runAfter": {
+                                "Initialize_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "invalidRotaXmlDetected",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_johIdEmail": {
                             "runAfter": {
                                 "Initialize_sessionDuration": [
@@ -2342,7 +2358,7 @@
                         },
                         "Initialize_jsonPayload": {
                             "runAfter": {
-                                "Initialize_xmlPayload": [
+                                "Initialize_invalidRotaXmlDeetected": [
                                     "Succeeded"
                                 ]
                             },
