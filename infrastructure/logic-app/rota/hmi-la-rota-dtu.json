@@ -18,6 +18,15 @@
         "storageACGetPath": {
             "type": "string"
         },
+        "storageACExistingMagistrtePath": {
+            "type": "string"
+        },
+        "storageACExistingSchedulesPath": {
+            "type": "string"
+        },
+        "storageACExistingCLPPath": {
+            "type": "string"
+        },
         "storageACGetPathSuffix": {
             "type": "string"
         },
@@ -132,9 +141,40 @@
                         }
                     },
                     "actions": {
-                        "Create_read.me": {
+                        "Create_CLP_read.me": {
                             "runAfter": {
-                                "Initialize_johIdIsPresiding": [
+                                "Create_Input_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('CLP repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/clp/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Input_read.me": {
+                            "runAfter": {
+                                "Initialize_sessionErrorBody": [
                                     "Succeeded"
                                 ]
                             },
@@ -150,6 +190,68 @@
                                 "path": "/datasets/default/files",
                                 "queries": {
                                     "folderPath": "/rota/input",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Magistrates_read.me": {
+                            "runAfter": {
+                                "Create_CLP_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Magistrates  repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/magistrates/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "Create_Schedules_read.me": {
+                            "runAfter": {
+                                "Create_Magistrates_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Schedules repository')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[parameters('storageACPathFiles')]",
+                                "queries": {
+                                    "folderPath": "/rota/repository/schedules/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -299,7 +401,7 @@
                                                 "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
                                             }
                                         },
-                                        "HTTP": {
+                                        "HTTP_ServiceNow_Invalid_XML": {
                                             "runAfter": {
                                                 "Get_SNow_Secret": [
                                                     "Succeeded"
@@ -339,9 +441,475 @@
                                         },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
-                                                "Create_XML_in_Output_folder": {
+                                                "Condition": {
+                                                    "actions": {
+                                                        "Create_read.me_Schedule_Error_Occured": {
+                                                            "runAfter": {
+                                                                "For_each_Schedule_File_Error_Occured": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": "@concat('Valid schedule files to be sent')",
+                                                                "headers": {
+                                                                    "ReadFileMetadataFromServer": true
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "post",
+                                                                "path": "[parameters('storageACPathFiles')]",
+                                                                "queries": {
+                                                                    "folderPath": "/rota/repository/schedules/",
+                                                                    "name": "read.me",
+                                                                    "queryParametersSingleEncoded": true
+                                                                }
+                                                            },
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
+                                                        },
+                                                        "Failed_Schedule_Get_Schedules": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/schedules'))}",
+                                                                "queries": {
+                                                                    "nextPageMarker": "",
+                                                                    "useFlatListing": false
+                                                                }
+                                                            }
+                                                        },
+                                                        "For_each_Schedule_File_Error_Occured": {
+                                                            "foreach": "@body('Failed_Schedule_Get_Schedules')?['value']",
+                                                            "actions": {
+                                                                "Delete_Schedule_File_Error_Occured": {
+                                                                    "runAfter": {},
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "headers": {
+                                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                                        },
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "delete",
+                                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Schedule_File_Error_Occured')?['Path']))}"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "runAfter": {
+                                                                "Failed_Schedule_Get_Schedules": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Foreach"
+                                                        },
+                                                        "Get_ServiceNow_Client_When_Invalid_Schedules_Repo_": {
+                                                            "runAfter": {
+                                                                "Create_read.me_Schedule_Error_Occured": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                            }
+                                                        },
+                                                        "Get_ServiceNow_Secret_When_Invalid_Schedules_Repo_": {
+                                                            "runAfter": {
+                                                                "Get_ServiceNow_Client_When_Invalid_Schedules_Repo_": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                            }
+                                                        },
+                                                        "HTTP_ServiceNow_Invalid_Schedules_Repo": {
+                                                            "runAfter": {
+                                                                "Get_ServiceNow_Secret_When_Invalid_Schedules_Repo_": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Http",
+                                                            "inputs": {
+                                                                "authentication": {
+                                                                    "password": "@body('Get_ServiceNow_Secret_When_Invalid_Schedules_Repo_')?['value']",
+                                                                    "type": "Basic",
+                                                                    "username": "@body('Get_ServiceNow_Client_When_Invalid_Schedules_Repo_')?['value']"
+                                                                },
+                                                                "body": {
+                                                                    "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                    "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                    "category": "Data Issue",
+                                                                    "contact_type": "Alert",
+                                                                    "description": "",
+                                                                    "impact": "2",
+                                                                    "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                    "short_description": "HMI Rota File Error has invalid schedules: @{variables('scheduleErrorBody')}",
+                                                                    "subcategory": "Data or File Error - other",
+                                                                    "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                    "urgency": "3"
+                                                                },
+                                                                "method": "POST",
+                                                                "uri": "[parameters('serviceNowHostUrl')]"
+                                                            }
+                                                        }
+                                                    },
                                                     "runAfter": {
                                                         "For_each__Schedule": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "else": {
+                                                        "actions": {
+                                                            "For_each_Schedule_Success": {
+                                                                "foreach": "@body('Success_Schedules_Get__Schedules_')?['value']",
+                                                                "actions": {
+                                                                    "HTTP_Call_HMI": {
+                                                                        "runAfter": {},
+                                                                        "type": "Http",
+                                                                        "inputs": {
+                                                                            "authentication": {
+                                                                                "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                                                "clientId": "@body('Get_HMI_Client')?['value']",
+                                                                                "secret": "@body('Get_HMI_Secret')?['value']",
+                                                                                "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                                                "type": "ActiveDirectoryOAuth"
+                                                                            },
+                                                                            "headers": {
+                                                                                "Accept": "application/json",
+                                                                                "Content-Type": "application/json",
+                                                                                "Destination-System": "MOCK",
+                                                                                "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                                                "Source-System": "CFT"
+                                                                            },
+                                                                            "method": "POST",
+                                                                            "uri": "[parameters('hmiSchedulesUrl')]"
+                                                                        }
+                                                                    },
+                                                                    "Update_With_HMI_Error": {
+                                                                        "runAfter": {
+                                                                            "HTTP_Call_HMI": [
+                                                                                "Failed"
+                                                                            ]
+                                                                        },
+                                                                        "type": "AppendToStringVariable",
+                                                                        "inputs": {
+                                                                            "name": "scheduleErrorBody",
+                                                                            "value": "@{body('HTTP_Call_HMI')} for @{items('For_each__Schedule')?['@id']}"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "runAfter": {
+                                                                    "Get_HMI_Secret": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "Foreach"
+                                                            },
+                                                            "Get_HMI_Client": {
+                                                                "runAfter": {
+                                                                    "Success_Schedules_Get__Schedules_": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                                }
+                                                            },
+                                                            "Get_HMI_Secret": {
+                                                                "runAfter": {
+                                                                    "Get_HMI_Client": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                                }
+                                                            },
+                                                            "ScheduleErrorBody_Has_Errors": {
+                                                                "actions": {
+                                                                    "Get_SNow_Client_for_HMI_Error": {
+                                                                        "runAfter": {},
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                                        }
+                                                                    },
+                                                                    "Get_SNow_Secret_for_HMI_Error": {
+                                                                        "runAfter": {
+                                                                            "Get_SNow_Client_for_HMI_Error": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                                        }
+                                                                    },
+                                                                    "HTTP_ServiceNow_When_HMI_Schedules_Error": {
+                                                                        "runAfter": {
+                                                                            "Get_SNow_Secret_for_HMI_Error": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
+                                                                        "type": "Http",
+                                                                        "inputs": {
+                                                                            "authentication": {
+                                                                                "password": "@body('Get_SNow_Secret_for_HMI_Error')?['value']",
+                                                                                "type": "Basic",
+                                                                                "username": "@body('Get_SNow_Client_for_HMI_Error')?['value']"
+                                                                            },
+                                                                            "body": {
+                                                                                "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                                "caller_id": "[parameters('serviceNowCallerId')]",
+                                                                                "category": "Data Issue",
+                                                                                "contact_type": "Alert",
+                                                                                "description": "",
+                                                                                "impact": "2",
+                                                                                "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                                                "short_description": "HMI Failed to process Schedules \n@{variables('scheduleErrorBody')}",
+                                                                                "subcategory": "Data or File Error - other",
+                                                                                "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                                                "urgency": "3"
+                                                                            },
+                                                                            "method": "POST",
+                                                                            "uri": "[parameters('serviceNowHostUrl')]"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "runAfter": {
+                                                                    "For_each_Schedule_Success": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "expression": {
+                                                                    "and": [
+                                                                        {
+                                                                            "greater": [
+                                                                                "@length(variables('scheduleErrorBody'))",
+                                                                                0
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": "If"
+                                                            },
+                                                            "Success_Schedules_Get__Schedules_": {
+                                                                "runAfter": {},
+                                                                "metadata": {
+                                                                    "JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY=": "/rota/repository/schedules/"
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnJlcG9zaXRvcnklMmZzY2hlZHVsZXMlMmY='))}",
+                                                                    "queries": {
+                                                                        "nextPageMarker": "",
+                                                                        "useFlatListing": false
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "greater": [
+                                                                    "@length(variables('scheduleErrorBody'))",
+                                                                    0
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
+                                                "Create_Invalid_CLP_Error_File": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_CLP": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_CourtListingProfiles').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-clps.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Invalid_Judges_Error_File": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Judge": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_Judges').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-judges.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Invalid_Magistrate_Error_File": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Magistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_Magistrates').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-magistrates.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Invalid_Schedules_Error_File": {
+                                                    "runAfter": {
+                                                        "Create_read.me_when_invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@actions('Parse_jsonSchedules').outputs",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/error/",
+                                                            "name": "invalid-sessions.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_XML_in_Output_folder": {
+                                                    "runAfter": {
+                                                        "Condition": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -370,6 +938,241 @@
                                                         }
                                                     }
                                                 },
+                                                "Create_read.me": {
+                                                    "runAfter": {
+                                                        "Delete_XML_from_Input_Folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('ROTA files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_CLP": {
+                                                    "runAfter": {
+                                                        "Create_Invalid_CLP_Error_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Judges": {
+                                                    "runAfter": {
+                                                        "Create_Invalid_Judges_Error_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Magistrates": {
+                                                    "runAfter": {
+                                                        "Create_Invalid_Magistrate_Error_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Delete_File_if_invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Rota files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_CLP": {
+                                                    "runAfter": {
+                                                        "Parse_CourtListingProfiles": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Judge": {
+                                                    "runAfter": {
+                                                        "Parse_Judges": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Magistrates": {
+                                                    "runAfter": {
+                                                        "Parse_Magistrates": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                    }
+                                                },
+                                                "Delete_File_if_invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Parse_jsonSchedules": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                    }
+                                                },
                                                 "Delete_XML_from_Input_Folder": {
                                                     "runAfter": {
                                                         "Create_XML_in_Output_folder": [
@@ -390,9 +1193,114 @@
                                                         "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
+                                                "For_each_Repo_Existing_CLP": {
+                                                    "foreach": "@body('Lists_Repository_CLP')?['value']",
+                                                    "actions": {
+                                                        "Delete_Repo_Existing_CLP": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "[parameters('storageACExistingCLPPath')]"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Repository_CLP": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "For_each_Repo_Existing_Magistrate": {
+                                                    "foreach": "@body('Lists_Repository_Magistrates')?['value']",
+                                                    "actions": {
+                                                        "Delete_Repo_Existing_Magistrate": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "[parameters('storageACExistingMagistrtePath')]"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Repository_Magistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "For_each_Repo_Existing_Schedules": {
+                                                    "foreach": "@body('Lists_Repository_Schedules')?['value']",
+                                                    "actions": {
+                                                        "Delete_Repo_Existing_Schedule": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "headers": {
+                                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "[parameters('storageACExistingSchedulesPath')]"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Lists_Repository_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
                                                 "For_each__Schedule": {
                                                     "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
                                                     "actions": {
+                                                        "Append_magistrate_lookup_to_scheduleErrorBody": {
+                                                            "runAfter": {
+                                                                "Get_Magistrate_Repository": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToStringVariable",
+                                                            "inputs": {
+                                                                "name": "scheduleErrorBody",
+                                                                "value": "Invalid Magiistrate for schedule: @{items('For_each__Schedule')?['@id']}"
+                                                            }
+                                                        },
+                                                        "Append_to_scheduleErrorBody": {
+                                                            "runAfter": {
+                                                                "Get_CLP_Repository": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToStringVariable",
+                                                            "inputs": {
+                                                                "name": "scheduleErrorBody",
+                                                                "value": "Invalid CLP for schedule: @{items('For_each__Schedule')?['@id']} \\n\\r"
+                                                            }
+                                                        },
                                                         "Compose_sessionRequest": {
                                                             "runAfter": {
                                                                 "Parse_Magistrate_File": [
@@ -414,148 +1322,6 @@
                                                                 "sessionReference": "@{items('For_each__Schedule')?['@id']}",
                                                                 "sessionStart": "@{variables('sessionStart')}"
                                                             }
-                                                        },
-                                                        "Condition_HMI_Success": {
-                                                            "actions": {},
-                                                            "runAfter": {
-                                                                "HTTP_HMI_Schedules": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "else": {
-                                                                "actions": {
-                                                                    "Condition_HMI_Failed": {
-                                                                        "actions": {
-                                                                            "Create_Session_Error_File": {
-                                                                                "runAfter": {
-                                                                                    "HTTP_SN_Incident": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "body": "@outputs('Compose_sessionRequest')",
-                                                                                    "headers": {
-                                                                                        "ReadFileMetadataFromServer": true
-                                                                                    },
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "post",
-                                                                                    "path": "[parameters('storageACPathFiles')]",
-                                                                                    "queries": {
-                                                                                        "folderPath": "/rota/error/",
-                                                                                        "name": "@{items('For_each__Schedule')?['@id']}.json",
-                                                                                        "queryParametersSingleEncoded": true
-                                                                                    }
-                                                                                },
-                                                                                "runtimeConfiguration": {
-                                                                                    "contentTransfer": {
-                                                                                        "transferMode": "Chunked"
-                                                                                    }
-                                                                                }
-                                                                            },
-                                                                            "Get_SN_Client": {
-                                                                                "runAfter": {},
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "get",
-                                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
-                                                                                }
-                                                                            },
-                                                                            "Get_SN_Secret": {
-                                                                                "runAfter": {
-                                                                                    "Get_SN_Client": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "ApiConnection",
-                                                                                "inputs": {
-                                                                                    "host": {
-                                                                                        "connection": {
-                                                                                            "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                                                                        }
-                                                                                    },
-                                                                                    "method": "get",
-                                                                                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
-                                                                                }
-                                                                            },
-                                                                            "HTTP_SN_Incident": {
-                                                                                "runAfter": {
-                                                                                    "Get_SN_Secret": [
-                                                                                        "Succeeded"
-                                                                                    ]
-                                                                                },
-                                                                                "type": "Http",
-                                                                                "inputs": {
-                                                                                    "authentication": {
-                                                                                        "password": "@body('Get_SN_Secret')?['value']",
-                                                                                        "type": "Basic",
-                                                                                        "username": "@body('Get_SN_Client')?['value']"
-                                                                                    },
-                                                                                    "body": {
-                                                                                        "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                                                                        "caller_id": "[parameters('serviceNowCallerId')]",
-                                                                                        "category": "Data Issue",
-                                                                                        "contact_type": "Alert",
-                                                                                        "description": "@{body('HTTP_HMI_Schedules')}",
-                                                                                        "impact": "2",
-                                                                                        "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                                        "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
-                                                                                        "subcategory": "Data or File Error - other",
-                                                                                        "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                                                                        "urgency": "3"
-                                                                                    },
-                                                                                    "method": "POST",
-                                                                                    "uri": "[parameters('serviceNowHostUrl')]"
-                                                                                }
-                                                                            }
-                                                                        },
-                                                                        "runAfter": {},
-                                                                        "expression": {
-                                                                            "and": [
-                                                                                {
-                                                                                    "equals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        400
-                                                                                    ]
-                                                                                },
-                                                                                {
-                                                                                    "equals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        406
-                                                                                    ]
-                                                                                },
-                                                                                {
-                                                                                    "greaterOrEquals": [
-                                                                                        "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                                        500
-                                                                                    ]
-                                                                                }
-                                                                            ]
-                                                                        },
-                                                                        "type": "If"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "expression": {
-                                                                "and": [
-                                                                    {
-                                                                        "equals": [
-                                                                            "@outputs('HTTP_HMI_Schedules')['statusCode']",
-                                                                            201
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "type": "If"
                                                         },
                                                         "Condition_is_session_AM": {
                                                             "actions": {
@@ -621,6 +1387,37 @@
                                                             },
                                                             "type": "If"
                                                         },
+                                                        "Create_Schedule_Payload": {
+                                                            "runAfter": {
+                                                                "Compose_sessionRequest": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": "@outputs('Compose_sessionRequest')",
+                                                                "headers": {
+                                                                    "ReadFileMetadataFromServer": true
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "post",
+                                                                "path": "[parameters('storageACPathFiles')]",
+                                                                "queries": {
+                                                                    "folderPath": "/rota/repository/schedules/",
+                                                                    "name": "@{items('For_each__Schedule')?['@id']}",
+                                                                    "queryParametersSingleEncoded": true
+                                                                }
+                                                            },
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
+                                                        },
                                                         "Get_CLP_Repository": {
                                                             "runAfter": {},
                                                             "type": "ApiConnection",
@@ -659,33 +1456,6 @@
                                                                     "path": "/rota/repository/magistrates/@{items('For_each__Schedule')?['justice']?['@idref']}.json",
                                                                     "queryParametersSingleEncoded": true
                                                                 }
-                                                            }
-                                                        },
-                                                        "HTTP_HMI_Schedules": {
-                                                            "runAfter": {
-                                                                "Compose_sessionRequest": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "type": "Http",
-                                                            "inputs": {
-                                                                "authentication": {
-                                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
-                                                                    "clientId": "@body('Get_HMI_Client')?['value']",
-                                                                    "secret": "@body('Get_HMI_Secret')?['value']",
-                                                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
-                                                                    "type": "ActiveDirectoryOAuth"
-                                                                },
-                                                                "body": "@outputs('Compose_sessionRequest')",
-                                                                "headers": {
-                                                                    "Accept": "application/json",
-                                                                    "Content-Type": "application/json",
-                                                                    "Destination-System": "MOCK",
-                                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
-                                                                    "Source-System": "CFT"
-                                                                },
-                                                                "method": "POST",
-                                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                                             }
                                                         },
                                                         "Parse_CPL_File": {
@@ -764,8 +1534,8 @@
                                                         },
                                                         "Set_jsonCLProfile": {
                                                             "runAfter": {
-                                                                "Get_CLP_Repository": [
-                                                                    "Succeeded"
+                                                                "Append_to_scheduleErrorBody": [
+                                                                    "Skipped"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
@@ -776,8 +1546,8 @@
                                                         },
                                                         "Set_jsonMagistrate": {
                                                             "runAfter": {
-                                                                "Get_Magistrate_Repository": [
-                                                                    "Succeeded"
+                                                                "Append_magistrate_lookup_to_scheduleErrorBody": [
+                                                                    "Skipped"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
@@ -795,7 +1565,7 @@
                                                     "type": "Foreach"
                                                 },
                                                 "For_jsonCLP": {
-                                                    "foreach": "@body('Parse_CourtLocationProfiles')?['courtListingProfiles']?['courtListingProfile']",
+                                                    "foreach": "@body('Parse_CourtListingProfiles')?['courtListingProfiles']?['courtListingProfile']",
                                                     "actions": {
                                                         "Create_jsonCLP_File": {
                                                             "runAfter": {},
@@ -826,8 +1596,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_CourtLocationProfiles": [
-                                                            "Succeeded"
+                                                        "Create_read.me_when_invalid_CLP": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -864,8 +1634,8 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_Judges": [
-                                                            "Succeeded"
+                                                        "Create_read.me_when_invalid_Judges": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
@@ -902,21 +1672,15 @@
                                                         }
                                                     },
                                                     "runAfter": {
-                                                        "Parse_Magistrates": [
-                                                            "Succeeded"
+                                                        "Create_read.me_when_invalid_Magistrates": [
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "type": "Foreach"
                                                 },
-                                                "Get_HMI_Client": {
+                                                "Get_ServiceNow_Client_When_Invalid_Schedules": {
                                                     "runAfter": {
-                                                        "For_jsonCLP": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_jsonJudge": [
-                                                            "Succeeded"
-                                                        ],
-                                                        "For_jsonMagistrate": [
+                                                        "Create_Invalid_Schedules_Error_File": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -928,12 +1692,12 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-client')}/value"
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
                                                     }
                                                 },
-                                                "Get_HMI_Secret": {
+                                                "Get_ServiceNow_Secret_When_Invalid_Schedules": {
                                                     "runAfter": {
-                                                        "Get_HMI_Client": [
+                                                        "Get_ServiceNow_Client_When_Invalid_Schedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -945,10 +1709,103 @@
                                                             }
                                                         },
                                                         "method": "get",
-                                                        "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-serrvicenow-secret')}/value"
                                                     }
                                                 },
-                                                "Parse_CourtLocationProfiles": {
+                                                "HTTP_ServiceNow_Invalid_Schedules_XML": {
+                                                    "runAfter": {
+                                                        "Get_ServiceNow_Secret_When_Invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "authentication": {
+                                                            "password": "@body('Get_ServiceNow_Secret_When_Invalid_Schedules')?['value']",
+                                                            "type": "Basic",
+                                                            "username": "@body('Get_ServiceNow_Client_When_Invalid_Schedules')?['value']"
+                                                        },
+                                                        "body": {
+                                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                            "caller_id": "[parameters('serviceNowCallerId')]",
+                                                            "category": "Data Issue",
+                                                            "contact_type": "Alert",
+                                                            "description": "",
+                                                            "impact": "2",
+                                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                            "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']} has invalid schedules",
+                                                            "subcategory": "Data or File Error - other",
+                                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                            "urgency": "3"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "[parameters('serviceNowHostUrl')]"
+                                                    }
+                                                },
+                                                "Lists_Repository_CLP": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/clp'))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Lists_Repository_Magistrates": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/magistrates'))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Lists_Repository_Schedules": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/repository/schedules'))}",
+                                                        "queries": {
+                                                            "nextPageMarker": "",
+                                                            "useFlatListing": false
+                                                        }
+                                                    }
+                                                },
+                                                "Parse_CourtListingProfiles": {
                                                     "runAfter": {
                                                         "Set_jsonSchedules": [
                                                             "Succeeded"
@@ -1123,7 +1980,13 @@
                                                 },
                                                 "Parse_jsonSchedules": {
                                                     "runAfter": {
-                                                        "Get_HMI_Secret": [
+                                                        "For_jsonCLP": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_jsonJudge": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_jsonMagistrate": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1216,7 +2079,13 @@
                                                 },
                                                 "Set_jsonSchedules": {
                                                     "runAfter": {
-                                                        "Set_jsonCLProfiles": [
+                                                        "For_each_Repo_Existing_CLP": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Magistrate": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Schedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1487,6 +2356,22 @@
                                 ]
                             }
                         },
+                        "Initialize_invalidRotaXmlDeetected": {
+                            "runAfter": {
+                                "Initialize_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "invalidRotaXmlDetected",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_johIdEmail": {
                             "runAfter": {
                                 "Initialize_sessionDuration": [
@@ -1601,7 +2486,7 @@
                         },
                         "Initialize_jsonPayload": {
                             "runAfter": {
-                                "Initialize_xmlPayload": [
+                                "Initialize_invalidRotaXmlDeetected": [
                                     "Succeeded"
                                 ]
                             },
@@ -1695,6 +2580,22 @@
                                 ]
                             }
                         },
+                        "Initialize_sessionErrorBody": {
+                            "runAfter": {
+                                "Initialize_johIdIsPresiding": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "scheduleErrorBody",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_sessionReference": {
                             "runAfter": {
                                 "Initialize_magistrates": [
@@ -1741,7 +2642,7 @@
                         },
                         "List_blobs": {
                             "runAfter": {
-                                "Create_read.me": [
+                                "Create_Schedules_read.me": [
                                     "Succeeded"
                                 ]
                             },
@@ -1768,7 +2669,7 @@
                             },
                             "type": "ApiConnection",
                             "inputs": {
-                                "body": "@concat('')",
+                                "body": "@concat('ROTA files to be processed')",
                                 "headers": {
                                     "ReadFileMetadataFromServer": true
                                 },
