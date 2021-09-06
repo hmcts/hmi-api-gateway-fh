@@ -593,8 +593,30 @@
                                                             "For_each_Schedule_Success": {
                                                                 "foreach": "@body('Success_Schedules_Get__Schedules_')?['value']",
                                                                 "actions": {
-                                                                    "HTTP_Call_HMI": {
+                                                                    "Get_Schedule_File_Content": {
                                                                         "runAfter": {},
+                                                                        "type": "ApiConnection",
+                                                                        "inputs": {
+                                                                            "host": {
+                                                                                "connection": {
+                                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                                }
+                                                                            },
+                                                                            "method": "get",
+                                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/GetFileContentByPath",
+                                                                            "queries": {
+                                                                                "inferContentType": true,
+                                                                                "path": "@items('For_each_Schedule_Success')?['Path']",
+                                                                                "queryParametersSingleEncoded": true
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "HTTP_Call_HMI": {
+                                                                        "runAfter": {
+                                                                            "Get_Schedule_File_Content": [
+                                                                                "Succeeded"
+                                                                            ]
+                                                                        },
                                                                         "type": "Http",
                                                                         "inputs": {
                                                                             "authentication": {
@@ -604,6 +626,7 @@
                                                                                 "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
                                                                                 "type": "ActiveDirectoryOAuth"
                                                                             },
+                                                                            "body": "@body('Get_Schedule_File_Content')",
                                                                             "headers": {
                                                                                 "Accept": "application/json",
                                                                                 "Content-Type": "application/json",
