@@ -624,7 +624,7 @@
                                                                         "type": "AppendToStringVariable",
                                                                         "inputs": {
                                                                             "name": "scheduleErrorBody",
-                                                                            "value": "@body('HTTP_Call_HMI')"
+                                                                            "value": "@{body('HTTP_Call_HMI')} for @{items('For_each__Schedule')?['@id']}"
                                                                         }
                                                                     }
                                                                 },
@@ -1298,7 +1298,7 @@
                                                             "type": "AppendToStringVariable",
                                                             "inputs": {
                                                                 "name": "scheduleErrorBody",
-                                                                "value": "Invalid CLP for schedule: @{items('For_each__Schedule')?['@id']}"
+                                                                "value": "Invalid CLP for schedule: @{items('For_each__Schedule')?['@id']} \\n\\r"
                                                             }
                                                         },
                                                         "Compose_sessionRequest": {
@@ -1387,7 +1387,7 @@
                                                             },
                                                             "type": "If"
                                                         },
-                                                        "Create_Schedule_File": {
+                                                        "Create_Schedule_Payload": {
                                                             "runAfter": {
                                                                 "Compose_sessionRequest": [
                                                                     "Succeeded"
@@ -1712,7 +1712,7 @@
                                                         "path": "/secrets/@{encodeURIComponent('hmi-serrvicenow-secret')}/value"
                                                     }
                                                 },
-                                                "HTTP": {
+                                                "HTTP_ServiceNow_Invalid_Schedules_XML": {
                                                     "runAfter": {
                                                         "Get_ServiceNow_Secret_When_Invalid_Schedules": [
                                                             "Succeeded"
