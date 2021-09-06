@@ -701,7 +701,7 @@
                                                                             "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
                                                                         }
                                                                     },
-                                                                    "HTTP_2": {
+                                                                    "HTTP_ServiceNow_When_HMI_Schedules_Error": {
                                                                         "runAfter": {
                                                                             "Get_SNow_Secret_for_HMI_Error": [
                                                                                 "Succeeded"
