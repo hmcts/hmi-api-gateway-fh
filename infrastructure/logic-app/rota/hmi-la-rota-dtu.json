@@ -579,7 +579,7 @@
                                                                     "urgency": "3"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "[parameters('serviceNowHostUrl')]"
+                                                                "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
                                                             }
                                                         }
                                                     },
@@ -624,7 +624,7 @@
                                                                         "type": "AppendToStringVariable",
                                                                         "inputs": {
                                                                             "name": "scheduleErrorBody",
-                                                                            "value": "@{body('HTTP_Call_HMI')} for @{items('For_each__Schedule')?['@id']}"
+                                                                            "value": "@{body('HTTP_Call_HMI')} for "
                                                                         }
                                                                     }
                                                                 },
