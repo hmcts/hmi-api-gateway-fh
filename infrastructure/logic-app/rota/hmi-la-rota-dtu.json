@@ -1614,6 +1614,70 @@
                                                     },
                                                     "type": "Foreach"
                                                 },
+                                                "Get_ServiceNow_Client_When_Invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Create_Invalid_Schedules_Error_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                    }
+                                                },
+                                                "Get_ServiceNow_Secret_When_Invalid_Schedules": {
+                                                    "runAfter": {
+                                                        "Get_ServiceNow_Client_When_Invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-serrvicenow-secret')}/value"
+                                                    }
+                                                },
+                                                "HTTP": {
+                                                    "runAfter": {
+                                                        "Get_ServiceNow_Secret_When_Invalid_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "authentication": {
+                                                            "password": "@body('Get_ServiceNow_Secret_When_Invalid_Schedules')?['value']",
+                                                            "type": "Basic",
+                                                            "username": "@body('Get_ServiceNow_Client_When_Invalid_Schedules')?['value']"
+                                                        },
+                                                        "body": {
+                                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                            "caller_id": "[parameters('serviceNowCallerId')]",
+                                                            "category": "Data Issue",
+                                                            "contact_type": "Alert",
+                                                            "description": "",
+                                                            "impact": "2",
+                                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                            "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']} has invalid schedules",
+                                                            "subcategory": "Data or File Error - other",
+                                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                            "urgency": "3"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "[parameters('serviceNowHostUrl')]"
+                                                    }
+                                                },
                                                 "Lists_Repository_CLP": {
                                                     "runAfter": {
                                                         "Set_jsonMagistrates": [
