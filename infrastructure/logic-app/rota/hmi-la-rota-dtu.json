@@ -287,7 +287,7 @@
                                     "actions": {
                                         "Copy_File_To_Error_Folder": {
                                             "runAfter": {
-                                                "Validate_XML_Payload": [
+                                                "Validate_File_Content_for_Rota": [
                                                     "Failed"
                                                 ]
                                             },
@@ -439,6 +439,272 @@
                                                 "value": "@{body('Get_blob_content_using_path')}"
                                             }
                                         },
+                                        "Validate_File_Content_for_Rota": {
+                                            "runAfter": {
+                                                "Set_xmlPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@json(xml(variables('xmlPayload')))",
+                                                "schema": {
+                                                    "properties": {
+                                                        "?xml": {
+                                                            "properties": {
+                                                                "@@encoding": {
+                                                                    "type": "string"
+                                                                },
+                                                                "@@standalone": {
+                                                                    "type": "string"
+                                                                },
+                                                                "@@version": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "rotaSchedule": {
+                                                            "properties": {
+                                                                "@@xmlns": {
+                                                                    "type": "string"
+                                                                },
+                                                                "courtListingProfiles": {
+                                                                    "properties": {
+                                                                        "courtListingProfile": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "@@linkedSessionId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "business": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "locationId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "panel": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "session": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "sessionDate": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "updatedDate": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "venueId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "welshSpeaking": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "sessionDate",
+                                                                                    "session",
+                                                                                    "panel",
+                                                                                    "business",
+                                                                                    "venueId",
+                                                                                    "locationId",
+                                                                                    "welshSpeaking",
+                                                                                    "updatedDate"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "districtJudges": {
+                                                                    "properties": {
+                                                                        "districtJudge": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "emailAddress": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "forenames": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "surname": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "title": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "title",
+                                                                                    "surname",
+                                                                                    "forenames",
+                                                                                    "emailAddress"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "locations": {
+                                                                    "properties": {
+                                                                        "location": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "locationId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "name": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "locationId",
+                                                                                    "name"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "magistrates": {
+                                                                    "properties": {
+                                                                        "magistrate": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "emailAddress": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "forenames": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "surname": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "title": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "title",
+                                                                                    "surname",
+                                                                                    "forenames",
+                                                                                    "emailAddress"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "rotaPeriod": {
+                                                                    "properties": {
+                                                                        "endDate": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "justiceAreaName": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "justiceAreaType": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "startDate": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "schedules": {
+                                                                    "properties": {
+                                                                        "schedule": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "courtListingProfile": {
+                                                                                        "properties": {
+                                                                                            "@@idref": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "justice": {
+                                                                                        "properties": {
+                                                                                            "@@idref": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "slot": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "courtListingProfile",
+                                                                                    "justice",
+                                                                                    "slot"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "venues": {
+                                                                    "properties": {
+                                                                        "venue": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "name": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "venueId": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "venueId",
+                                                                                    "name"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
                                         "Validate_Schedule_Data_is_Present": {
                                             "actions": {
                                                 "Condition": {
@@ -585,7 +851,9 @@
                                                     },
                                                     "runAfter": {
                                                         "For_each__Schedule": [
-                                                            "Succeeded"
+                                                            "Succeeded",
+                                                            "Failed",
+                                                            "Skipped"
                                                         ]
                                                     },
                                                     "else": {
@@ -961,37 +1229,6 @@
                                                         }
                                                     }
                                                 },
-                                                "Create_read.me": {
-                                                    "runAfter": {
-                                                        "Delete_XML_from_Input_Folder": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "type": "ApiConnection",
-                                                    "inputs": {
-                                                        "body": "@concat('ROTA files to be processed')",
-                                                        "headers": {
-                                                            "ReadFileMetadataFromServer": true
-                                                        },
-                                                        "host": {
-                                                            "connection": {
-                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                            }
-                                                        },
-                                                        "method": "post",
-                                                        "path": "[parameters('storageACPathFiles')]",
-                                                        "queries": {
-                                                            "folderPath": "/rota/input/",
-                                                            "name": "read.me",
-                                                            "queryParametersSingleEncoded": true
-                                                        }
-                                                    },
-                                                    "runtimeConfiguration": {
-                                                        "contentTransfer": {
-                                                            "transferMode": "Chunked"
-                                                        }
-                                                    }
-                                                },
                                                 "Create_read.me_when_invalid_CLP": {
                                                     "runAfter": {
                                                         "Create_Invalid_CLP_Error_File": [
@@ -1180,26 +1417,6 @@
                                                     "runAfter": {
                                                         "Parse_jsonSchedules": [
                                                             "Failed"
-                                                        ]
-                                                    },
-                                                    "type": "ApiConnection",
-                                                    "inputs": {
-                                                        "headers": {
-                                                            "SkipDeleteIfFileNotFoundOnServer": false
-                                                        },
-                                                        "host": {
-                                                            "connection": {
-                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                            }
-                                                        },
-                                                        "method": "delete",
-                                                        "path": "[parameters('storageACGetPathSuffix')]"
-                                                    }
-                                                },
-                                                "Delete_XML_from_Input_Folder": {
-                                                    "runAfter": {
-                                                        "Create_XML_in_Output_folder": [
-                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -2120,7 +2337,7 @@
                                                 }
                                             },
                                             "runAfter": {
-                                                "Validate_XML_Payload": [
+                                                "Validate_File_Content_for_Rota": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -2235,18 +2452,6 @@
                                                 ]
                                             },
                                             "type": "If"
-                                        },
-                                        "Validate_XML_Payload": {
-                                            "runAfter": {
-                                                "Set_xmlPayload": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "SetVariable",
-                                            "inputs": {
-                                                "name": "jsonString",
-                                                "value": "@{json(xml(variables('xmlPayload')))}"
-                                            }
                                         }
                                     },
                                     "runAfter": {
