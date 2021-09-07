@@ -134,8 +134,8 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "frequency": "Minute",
-                                "interval": 60
+                                "frequency": "Hour",
+                                "interval": 8
                             },
                             "type": "Recurrence"
                         }
