@@ -2338,7 +2338,13 @@
                                                 },
                                                 "Set_jsonCLProfiles": {
                                                     "runAfter": {
-                                                        "Set_jsonJudges": [
+                                                        "For_each_Repo_Existing_CLP": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Magistrate": [
+                                                            "Succeeded"
+                                                        ],
+                                                        "For_each_Repo_Existing_Schedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2350,7 +2356,7 @@
                                                 },
                                                 "Set_jsonJudges": {
                                                     "runAfter": {
-                                                        "Create_CLP_read.me": [
+                                                        "Set_jsonCLProfiles": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2370,17 +2376,8 @@
                                                 },
                                                 "Set_jsonSchedules": {
                                                     "runAfter": {
-                                                        "For_each_Repo_Existing_CLP": [
-                                                            "Succeeded",
-                                                            "Failed"
-                                                        ],
-                                                        "For_each_Repo_Existing_Magistrate": [
-                                                            "Succeeded",
-                                                            "Failed"
-                                                        ],
-                                                        "For_each_Repo_Existing_Schedules": [
-                                                            "Succeeded",
-                                                            "Failed"
+                                                        "Set_jsonJudges": [
+                                                            "Succeeded"
                                                         ]
                                                     },
                                                     "type": "SetVariable",
