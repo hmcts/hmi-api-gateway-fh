@@ -5,7 +5,7 @@ resource "azurerm_api_management" "hmi_apim" {
   publisher_name      = var.publisher_name
   publisher_email     = var.publisher_email
   sku_name            = "${var.apim_sku_name}_${var.apim_sku_capacity}"
-  tags                = var.tags
+  tags                = local.common_tags
 
   identity {
     type = "SystemAssigned"

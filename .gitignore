@@ -9,7 +9,7 @@
 /src/snlacceptanceTest/resources/application-snlacceptance.yaml
 
 # Local .terraform directories
-**/.terraform/*
+**/.terraform
 
 # .tfstate files
 *.tfstate

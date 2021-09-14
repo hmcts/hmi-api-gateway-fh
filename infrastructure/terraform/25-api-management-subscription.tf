@@ -29,5 +29,5 @@ resource "azurerm_key_vault_secret" "subscription_key" {
   name         = "${var.prefix}-${var.product}-sub-key"
   value        = azurerm_api_management_subscription.hmi_apim_subscription.primary_key
   key_vault_id = data.azurerm_key_vault.infra_key_vault.id
-  tags         = var.tags
+  tags         = local.common_tags
 }
