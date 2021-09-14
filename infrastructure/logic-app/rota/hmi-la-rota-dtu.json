@@ -1324,8 +1324,8 @@
                                                 },
                                                 "Create_read.me_when_invalid_Schedules": {
                                                     "runAfter": {
-                                                        "Delete_File_if_invalid_Schedules": [
-                                                            "Succeeded"
+                                                        "Parse_jsonSchedules": [
+                                                            "Failed"
                                                         ]
                                                     },
                                                     "type": "ApiConnection",
@@ -1396,26 +1396,6 @@
                                                 "Delete_File_if_invalid_Magistrates": {
                                                     "runAfter": {
                                                         "Parse_Magistrates": [
-                                                            "Failed"
-                                                        ]
-                                                    },
-                                                    "type": "ApiConnection",
-                                                    "inputs": {
-                                                        "headers": {
-                                                            "SkipDeleteIfFileNotFoundOnServer": false
-                                                        },
-                                                        "host": {
-                                                            "connection": {
-                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                            }
-                                                        },
-                                                        "method": "delete",
-                                                        "path": "[parameters('storageACGetPathSuffix')]"
-                                                    }
-                                                },
-                                                "Delete_File_if_invalid_Schedules": {
-                                                    "runAfter": {
-                                                        "Parse_jsonSchedules": [
                                                             "Failed"
                                                         ]
                                                     },
