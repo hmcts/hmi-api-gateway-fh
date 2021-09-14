@@ -141,37 +141,6 @@
                         }
                     },
                     "actions": {
-                        "Create_CLP_read.me": {
-                            "runAfter": {
-                                "Create_Input_read.me": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@concat('CLP repository')",
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "[parameters('storageACPathFiles')]",
-                                "queries": {
-                                    "folderPath": "/rota/repository/clp/",
-                                    "name": "read.me",
-                                    "queryParametersSingleEncoded": true
-                                }
-                            },
-                            "runtimeConfiguration": {
-                                "contentTransfer": {
-                                    "transferMode": "Chunked"
-                                }
-                            }
-                        },
                         "Create_Input_read.me": {
                             "runAfter": {
                                 "Initialize_sessionErrorBody": [
@@ -190,68 +159,6 @@
                                 "path": "/datasets/default/files",
                                 "queries": {
                                     "folderPath": "/rota/input",
-                                    "name": "read.me",
-                                    "queryParametersSingleEncoded": true
-                                }
-                            },
-                            "runtimeConfiguration": {
-                                "contentTransfer": {
-                                    "transferMode": "Chunked"
-                                }
-                            }
-                        },
-                        "Create_Magistrates_read.me": {
-                            "runAfter": {
-                                "Create_CLP_read.me": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@concat('Magistrates  repository')",
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "[parameters('storageACPathFiles')]",
-                                "queries": {
-                                    "folderPath": "/rota/repository/magistrates/",
-                                    "name": "read.me",
-                                    "queryParametersSingleEncoded": true
-                                }
-                            },
-                            "runtimeConfiguration": {
-                                "contentTransfer": {
-                                    "transferMode": "Chunked"
-                                }
-                            }
-                        },
-                        "Create_Schedules_read.me": {
-                            "runAfter": {
-                                "Create_Magistrates_read.me": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@concat('Schedules repository')",
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "[parameters('storageACPathFiles')]",
-                                "queries": {
-                                    "folderPath": "/rota/repository/schedules/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -1074,6 +981,37 @@
                                                     },
                                                     "type": "If"
                                                 },
+                                                "Create_CLP_read.me": {
+                                                    "runAfter": {
+                                                        "Create_Schedules_read.me": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('CLP repository')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/clp/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
                                                 "Create_Invalid_CLP_Error_File": {
                                                     "runAfter": {
                                                         "Delete_File_if_invalid_CLP": [
@@ -1189,6 +1127,68 @@
                                                         "queries": {
                                                             "folderPath": "/rota/error/",
                                                             "name": "invalid-sessions.err",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Magistrates_read.me": {
+                                                    "runAfter": {
+                                                        "Set_jsonMagistrates": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Magistrates  repository')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/magistrates/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_Schedules_read.me": {
+                                                    "runAfter": {
+                                                        "Create_Magistrates_read.me": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('Schedules repository')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/repository/schedules/",
+                                                            "name": "read.me",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -1430,7 +1430,27 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                        "path": "[parameters('storageACExistingCLPPath')]"
+                                                    }
+                                                },
+                                                "Delete_Source_XML": {
+                                                    "runAfter": {
+                                                        "Create_XML_in_Output_folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "[parameters('storageACExistingCLPPath')]"
                                                     }
                                                 },
                                                 "For_each_Repo_Existing_CLP": {
@@ -1984,7 +2004,7 @@
                                                 },
                                                 "Lists_Repository_CLP": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Create_CLP_read.me": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2005,7 +2025,7 @@
                                                 },
                                                 "Lists_Repository_Magistrates": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Create_CLP_read.me": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2026,7 +2046,7 @@
                                                 },
                                                 "Lists_Repository_Schedules": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Create_CLP_read.me": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2285,6 +2305,37 @@
                                                         }
                                                     }
                                                 },
+                                                "Recreate_read.me": {
+                                                    "runAfter": {
+                                                        "Delete_Source_XML": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('ROTA files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "[parameters('storageACPathFiles')]",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
                                                 "Set_jsonCLProfiles": {
                                                     "runAfter": {
                                                         "Set_jsonJudges": [
@@ -2299,7 +2350,7 @@
                                                 },
                                                 "Set_jsonJudges": {
                                                     "runAfter": {
-                                                        "Set_jsonMagistrates": [
+                                                        "Create_CLP_read.me": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -2320,13 +2371,16 @@
                                                 "Set_jsonSchedules": {
                                                     "runAfter": {
                                                         "For_each_Repo_Existing_CLP": [
-                                                            "Succeeded"
+                                                            "Succeeded",
+                                                            "Failed"
                                                         ],
                                                         "For_each_Repo_Existing_Magistrate": [
-                                                            "Succeeded"
+                                                            "Succeeded",
+                                                            "Failed"
                                                         ],
                                                         "For_each_Repo_Existing_Schedules": [
-                                                            "Succeeded"
+                                                            "Succeeded",
+                                                            "Failed"
                                                         ]
                                                     },
                                                     "type": "SetVariable",
@@ -2870,7 +2924,7 @@
                         },
                         "List_blobs": {
                             "runAfter": {
-                                "Create_Schedules_read.me": [
+                                "Create_Input_read.me": [
                                     "Succeeded"
                                 ]
                             },
@@ -2886,37 +2940,6 @@
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
-                                }
-                            }
-                        },
-                        "Recreate_read.me": {
-                            "runAfter": {
-                                "For_each_File": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@concat('ROTA files to be processed')",
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "[parameters('storageACPathFiles')]",
-                                "queries": {
-                                    "folderPath": "/rota/input/",
-                                    "name": "read.me",
-                                    "queryParametersSingleEncoded": true
-                                }
-                            },
-                            "runtimeConfiguration": {
-                                "contentTransfer": {
-                                    "transferMode": "Chunked"
                                 }
                             }
                         }
