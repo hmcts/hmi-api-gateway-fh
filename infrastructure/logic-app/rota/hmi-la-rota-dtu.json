@@ -33,6 +33,9 @@
         "environmentName": {
             "type": "string"
         },
+        "hmiDestination": {
+            "type": "string"
+        },
          "appId": {
             "type": "securestring"
         }, 
@@ -805,7 +808,7 @@
                                                                             "headers": {
                                                                                 "Accept": "application/json",
                                                                                 "Content-Type": "application/json",
-                                                                                "Destination-System": "MOCK",
+                                                                                "Destination-System": "[parameters('hmiDestination')]",
                                                                                 "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
                                                                                 "Source-System": "CFT"
                                                                             },
