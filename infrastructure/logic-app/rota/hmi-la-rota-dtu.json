@@ -1433,6 +1433,26 @@
                                                         "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
+                                                "Delete_Source_XML": {
+                                                    "runAfter": {
+                                                        "Create_XML_in_Output_folder": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "delete",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                    }
+                                                },
                                                 "For_each_Repo_Existing_CLP": {
                                                     "foreach": "@body('Lists_Repository_CLP')?['value']",
                                                     "actions": {
