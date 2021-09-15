@@ -391,6 +391,87 @@ stages:
           dependsOn:
           - AcceptanceTest
 
+          
+  - stage: TestSTG
+    dependsOn: BuildSTG
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    pool:
+      vmImage: 'ubuntu-18.04'
+    variables:
+      - group: HMI-APIM-BUILD-STG
+      - name: 'env'
+        value: 'Test'
+      - name: 'subscriptionName'
+        value: 'DTS-SHAREDSERVICES-TEST'
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for ${{ variables.env }} Results
+          subscription: ${{ variables.subscriptionName }}
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: ${{ variables.subscriptionName }}
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Functional Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+          dependsOn:
+          - AcceptanceTest
+
   - stage: BuildSTG
     dependsOn:
       - PlanStg
