@@ -5,6 +5,14 @@ trigger:
 pr: 
   - none
 
+resources:
+  repositories:
+    - repository: azTemplates
+      type: github
+      name: hmcts/azure-devops-templates
+      ref: refs/heads/master
+      endpoint: hmcts
+
 schedules:
 - cron: "0 4 * * *"
   displayName: Daily midnight build
