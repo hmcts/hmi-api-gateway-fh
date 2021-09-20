@@ -56,7 +56,7 @@
             "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "hmiDestination":{
-            "value": "SNL"
+            "value": "MOCK"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
