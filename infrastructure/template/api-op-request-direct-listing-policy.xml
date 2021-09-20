@@ -3,12 +3,12 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                <rewrite-uri template="/direct-listing" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                <rewrite-uri template="/direct-listing" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
@@ -29,7 +29,7 @@
                 <set-header name="Authorization" exists-action="override">
                      <value>@((String)context.Variables["snlAuthToken"])</value>
                 </set-header>
-				<rewrite-uri template="/{sessionId}" copy-unmatched-params="true" />
+				<rewrite-uri template="/" copy-unmatched-params="true" />
 				<set-header name="Content-Type" exists-action="override">
 					<value>application/json; charset=utf-8</value>
 				</set-header>
@@ -44,8 +44,8 @@
 				<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/listings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                <rewrite-uri template="/direct-listing" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/listings/" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/request-hearings/hearings/id" />
