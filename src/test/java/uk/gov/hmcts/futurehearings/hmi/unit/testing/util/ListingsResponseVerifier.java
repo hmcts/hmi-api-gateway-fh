@@ -68,8 +68,7 @@ public class ListingsResponseVerifier {
 
     public static void  thenValidateResponseForDirectListing(final Response response){
         try{
-            List<Map<String, String>> responseMap = response.getBody().jsonPath().getList("$");
-            assertEquals(200, response.getStatusCode(),"Status Code Validation:");
+            assertEquals(204, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 204");
         }
         catch (AssertionError e){
