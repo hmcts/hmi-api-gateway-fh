@@ -22,9 +22,19 @@ variable "secret_permissions" {
     "delete"
   ]
 }
+variable "cft_platform_subscription_id" {
+  description = "Subscription ID for the CFT Platform"
+}
 
 locals {
-  common_tags = module.ctags.common_tags
+  common_tags   = module.ctags.common_tags
+  env_long_name = var.environment == "sbox" ? "sandbox" : ""
+}
+locals {
+  env_long_name = var.environment == "stg" ? "staging" : ""
+}
+locals {
+  env_long_name = local.env_long_name == "" ? var.environment : ""
 }
 
 module "ctags" {

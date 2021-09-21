@@ -8,6 +8,7 @@ open_api_spec_content_value        = "https://raw.githubusercontent.com/hmcts/re
 open_api_health_spec_content_value = "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api-health.json"
 revision                           = "16"
 service_url                        = ""
+cft_platform_subscription_id       = ""
 
 enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
 virtual_network_type      = "Internal"

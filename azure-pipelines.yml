@@ -116,15 +116,10 @@ stages:
         environment: sbox
         dependsOn: 
         - TerraformApply
-        - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-SBOX
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
     - template: pipeline/jobs/create-storage-rota.yaml
       parameters:
@@ -156,15 +151,10 @@ stages:
         environment: dev
         dependsOn: 
         - TerraformApply
-        - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-DEV
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
     - template: pipeline/jobs/create-storage-rota.yaml
       parameters:
@@ -196,15 +186,10 @@ stages:
         environment: test
         dependsOn:
         - TerraformApply
-        - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-TEST
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
     - template: pipeline/jobs/create-storage-rota.yaml
       parameters:
@@ -490,15 +475,10 @@ stages:
         environment: stg
         dependsOn:
         - TerraformApply
-        - ApplyHostName
     - template: pipeline/jobs/remove-default-apis.yaml
       parameters:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-STG
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
         dependsOn: TerraformApply
     - template: pipeline/jobs/create-storage-rota.yaml
       parameters:
