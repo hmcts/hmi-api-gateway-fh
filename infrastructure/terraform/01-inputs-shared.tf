@@ -37,3 +37,5 @@ module "ctags" {
   product     = var.prefix
   builtFrom   = var.builtFrom
 }
+
+data "azurerm_client_config" "current" {}
