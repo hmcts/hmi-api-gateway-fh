@@ -28,13 +28,7 @@ variable "cft_platform_subscription_id" {
 
 locals {
   common_tags   = module.ctags.common_tags
-  env_long_name = var.environment == "sbox" ? "sandbox" : ""
-}
-locals {
-  env_long_name = var.environment == "stg" ? "staging" : ""
-}
-locals {
-  env_long_name = local.env_long_name == "" ? var.environment : ""
+  env_long_name = var.environment == "sbox" ? "sandbox" : (var.environment == "stg" ? "staging" : var.environment)
 }
 
 module "ctags" {
