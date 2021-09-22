@@ -18,9 +18,9 @@ resource "azurerm_key_vault_access_policy" "policy" {
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id
   key_permissions         = []
-      secret_permissions      = ["Get", "Set", "List", "Delete"]
-      certificate_permissions = []
-      storage_permissions     = []
+  secret_permissions      = ["Get", "Set", "List", "Delete"]
+  certificate_permissions = []
+  storage_permissions     = []
 }
 
 resource "azurerm_api_management_custom_domain" "custom_domain" {
