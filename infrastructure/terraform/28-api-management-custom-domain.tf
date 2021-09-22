@@ -1,12 +1,10 @@
 
 
 data "azurerm_key_vault" "kv" {
-  provider            = azurerm.cft_platform
-  name                = "acmedcdcftapps${var.environment}"
-  resource_group_name = "cft-platform-${var.environment}-rg"
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
 }
 data "azurerm_key_vault_certificate" "cert" {
-  provider     = azurerm.cft_platform
   name         = "hmi-apim.${local.env_long_name}.platform.hmcts.net"
   key_vault_id = data.azurerm_key_vault.kv.id
 }
@@ -16,7 +14,6 @@ data "azurerm_api_management" "hmi_apim_svc" {
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
 }
 resource "azurerm_key_vault_access_policy" "policy" {
-  provider     = azurerm.cft_platform
   key_vault_id            = data.azurerm_key_vault.kv.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id

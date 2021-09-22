@@ -11,9 +11,3 @@ terraform {
 provider "azurerm" {
   features {}
 }
-
-provider "azurerm" {
-  features {}
-  alias           = "cft_platform"
-  subscription_id = var.cft_platform_subscription_id
-}

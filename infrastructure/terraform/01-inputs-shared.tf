@@ -22,9 +22,6 @@ variable "secret_permissions" {
     "delete"
   ]
 }
-variable "cft_platform_subscription_id" {
-  description = "Subscription ID for the CFT Platform"
-}
 
 locals {
   common_tags   = module.ctags.common_tags
