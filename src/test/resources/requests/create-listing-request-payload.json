@@ -1,0 +1,45 @@
+{
+	"listingRequest": {
+		"meta": {},
+		"_case": {
+			"caseIdHMCTS": "SW810016",
+			"caseListingRequestId": "LR810016",
+			"caseTitle": "Smith vs Best Company PL",
+			"caseJurisdiction": "FAM",
+			"caseRegistered": "2020-09-14T20:20:39+00:00",
+			"caseCourt": "1",
+			"caseComments": "This is a direct listing case",
+			"caseRestrictedFlag": true,
+			"caseInterpreterRequiredFlag": true
+		},
+		"entities": [
+			{
+				"entityId": "E200017",
+				"entityTypeCode": "IND",
+				"entityRoleCode": "DEF",
+				"entitySubType": {
+					"entityClassCode": "PERSON",
+					"entityTitle": "Mr",
+					"entityFirstName": "Simon",
+					"entityLastName": "Smith"
+				}
+			},
+			{
+				"entityId": "12345",
+				"entityTypeCode": "ORG",
+				"entityRoleCode": "DEF",
+				"entitySubType": {
+					"entityClassCode": "ORG",
+					"entityCompanyName": "Best Company Ltd"
+				}
+			}
+		],
+		"listing": {
+			"listingType": "DECNIS",
+			"listingRoomId": "23",
+			"listingStartDate": "2021-11-14T14:00:00+00:00",
+			"listingDuration": 60,
+			"listingPiority": "Normal"
+		}
+	}
+}
