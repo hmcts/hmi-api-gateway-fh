@@ -7,6 +7,9 @@ if ($TfFiles.Count -eq 0)
 }
 else 
 {
+  ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
+    terraform fmt -check=true $Instance
+  }
   Describe 'Terraform files validation' {
     $TfTestCases = @()
     $TfFiles.ForEach{$TfTestCases += @{Instance = $_}}
@@ -26,9 +29,6 @@ else
           Param($Instance)
           Invoke-Expression "terraform fmt -check=true $Instance" | should BeNullOrEmpty            
       }
-    }
-    ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
-      terraform fmt -check=true $Instance
     }
   }
 }
