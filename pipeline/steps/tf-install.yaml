@@ -1,6 +1,6 @@
 steps:
 
 - task: TerraformInstaller@0
-  displayName: Install Terraform $(terraformVersion)
+  displayName: Install Terraform 1.0.4
   inputs:
-    terraformVersion: $(terraformVersion)
+    terraformVersion: 1.0.4
