@@ -5,7 +5,8 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = "sds-platform-${var.environment}-rg"
 }
 locals {
-  cert_name = local.env_long_name == "prod" ? "hmi-apim-platform-hmcts-net" : "hmi-apim-${local.env_long_name}-platform-hmcts-net"
+  host_name = local.env_long_name == "prod" ? "hmi-apim.platform.hmcts.net" : "hmi-apim.${var.environment}.platform.hmcts.net"
+  cert_name = replace(local.host_name, ".", "-")
 }
 data "azurerm_key_vault_certificate" "cert" {
   name         = local.cert_name
@@ -30,7 +31,7 @@ resource "azurerm_api_management_custom_domain" "custom_domain" {
   api_management_id = azurerm_api_management.hmi_apim.id
 
   proxy {
-    host_name    = "hmi-apim.${var.environment}.platform.hmcts.net"
+    host_name    = local.host_name
     key_vault_id = data.azurerm_key_vault_certificate.cert.secret_id
   }
 
