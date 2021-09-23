@@ -14,10 +14,8 @@ steps:
       $RootPath = "$(Build.SourcesDirectory)"
       $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
         ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
-          terraform fmt -check=true $Instance
+          terraform fmt -check=true $_
         }
-      Install-Module -Name Pester -MaximumVersion 4.99.99 -Force -Verbose -Scope CurrentUser
-      Invoke-Pester $(System.DefaultWorkingDirectory)/script -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
     azurePowerShellVersion: 'LatestVersion'
 
 - task: AzurePowerShell@5
