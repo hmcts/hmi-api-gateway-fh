@@ -17,7 +17,7 @@ parameters:
   - name: stage
     displayName: Stage to Run
     type: string
-    default: ALL
+    default: SBOX
     values:
       - SBOX
       - DEV

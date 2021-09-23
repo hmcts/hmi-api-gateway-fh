@@ -28,10 +28,10 @@ resource "azurerm_key_vault_access_policy" "policy" {
   storage_permissions     = []
 } */
 
-output "kv_id"{
+output "kv_id" {
   value = data.azurerm_key_vault.kv.id
 }
-output "cert_id"{
+output "cert_id" {
   value = data.azurerm_key_vault_certificate.cert.secret_id
 }
 
