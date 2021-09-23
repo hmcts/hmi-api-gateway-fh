@@ -3,21 +3,21 @@ parameters:
     type: string
 
 steps:
-
-
-- task: AzurePowerShell@5
-  displayName: Check tests
+- task: AzureCLI@2
+  displayName: 'checks'
   inputs:
     azureSubscription: ${{ parameters.subscription }}
-    ScriptType: 'InlineScript'
-    Inline: |
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
       Set-PSDebug -Trace 1
       $RootPath = "$(Build.SourcesDirectory)"
       $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
         ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
           terraform fmt -check=true $_
         }
-    azurePowerShellVersion: 'LatestVersion'
+      cd "$RootPath/infrastructure\terraform\"
+      terraform validate
 
 - task: AzurePowerShell@5
   displayName: Run tests
