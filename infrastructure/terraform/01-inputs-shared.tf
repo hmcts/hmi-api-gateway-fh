@@ -20,8 +20,7 @@ variable "secret_permissions" {
     "set",
     "list",
     "delete"
-  ]
-}
+  ]}
 
 locals {
   common_tags   = module.ctags.common_tags
