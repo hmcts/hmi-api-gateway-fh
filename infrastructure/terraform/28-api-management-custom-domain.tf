@@ -5,7 +5,7 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = "sds-platform-${var.environment}-rg"
 }
 locals {
-  cert_name = local.env_long_name == "" ? "hmi-apim-platform-hmcts-net" : "hmi-apim-${local.env_long_name}-platform-hmcts-net"
+  cert_name = local.env_long_name == "prod" ? "hmi-apim-platform-hmcts-net" : "hmi-apim-${local.env_long_name}-platform-hmcts-net"
 }
 data "azurerm_key_vault_certificate" "cert" {
   name         = local.cert_name
