@@ -24,9 +24,11 @@ else
       Context "Are correctly formatted" {
         It "All files in <Instance> are correctly formatted" -TestCases $TfFolderTestCases {
           Param($Instance)
-          Invoke-Expression "terraform fmt -check=true $Instance"
           Invoke-Expression "terraform fmt -check=true $Instance" | should BeNullOrEmpty            
       }
+    }
+    ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
+      terraform fmt -check=true $Instance
     }
   }
 }
