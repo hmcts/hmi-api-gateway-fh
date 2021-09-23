@@ -44,6 +44,6 @@ resource "azurerm_api_management_custom_domain" "custom_domain" {
   }
 
   depends_on = [
-    azurerm_key_vault_access_policy.policy
+    data.azurerm_key_vault_certificate.cert
   ]
 }
