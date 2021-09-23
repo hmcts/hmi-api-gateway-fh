@@ -34,6 +34,9 @@ output "kv_id" {
 output "cert_id" {
   value = data.azurerm_key_vault_certificate.cert.secret_id
 }
+output "cert_name" {
+  value = local.cert_name
+}
 
 resource "azurerm_api_management_custom_domain" "custom_domain" {
   api_management_id = azurerm_api_management.hmi_apim.id
