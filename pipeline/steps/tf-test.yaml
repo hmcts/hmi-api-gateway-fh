@@ -10,11 +10,6 @@ steps:
     azureSubscription: ${{ parameters.subscription }}
     ScriptType: 'InlineScript'
     Inline: |
-      $RootPath = Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path
-      $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
-        ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
-          terraform fmt -check=true $Instance
-        }
       Install-Module -Name Pester -MaximumVersion 4.99.99 -Force -Verbose -Scope CurrentUser
       Invoke-Pester $(System.DefaultWorkingDirectory)/script -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
     azurePowerShellVersion: 'LatestVersion'

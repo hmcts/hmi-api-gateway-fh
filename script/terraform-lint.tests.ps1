@@ -19,13 +19,13 @@ else
       }  
     }
 
-    $TfFolderTestCases=@()
+   <#  $TfFolderTestCases=@()
     ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{$TfFolderTestCases += @{Instance = $_}}
       Context "Are correctly formatted" {
         It "All files in <Instance> are correctly formatted" -TestCases $TfFolderTestCases {
           Param($Instance)
           Invoke-Expression "terraform fmt -check=true $Instance" | should BeNullOrEmpty            
       }
-    }
+    } #>
   }
 }
