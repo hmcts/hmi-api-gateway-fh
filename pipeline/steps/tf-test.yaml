@@ -4,6 +4,22 @@ parameters:
 
 steps:
 
+
+- task: AzurePowerShell@5
+  displayName: Check tests
+  inputs:
+    azureSubscription: ${{ parameters.subscription }}
+    ScriptType: 'InlineScript'
+    Inline: |
+      $RootPath = "$(Build.SourcesDirectory)"
+      $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
+        ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
+          terraform fmt -check=true $Instance
+        }
+      Install-Module -Name Pester -MaximumVersion 4.99.99 -Force -Verbose -Scope CurrentUser
+      Invoke-Pester $(System.DefaultWorkingDirectory)/script -OutputFormat NUnitXml -OutputFile ./TEST-CI.xml -EnableExit
+    azurePowerShellVersion: 'LatestVersion'
+
 - task: AzurePowerShell@5
   displayName: Run tests
   inputs:
