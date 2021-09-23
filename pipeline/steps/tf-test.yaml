@@ -11,6 +11,7 @@ steps:
     azureSubscription: ${{ parameters.subscription }}
     ScriptType: 'InlineScript'
     Inline: |
+      Set-PSDebug -Trace 1
       $RootPath = "$(Build.SourcesDirectory)"
       $TfFiles = @(@((Get-ChildItem $RootPath -filter '*.tf' -Recurse)))
         ((($TfFiles).DirectoryName | Select-Object -Unique)).ForEach{
