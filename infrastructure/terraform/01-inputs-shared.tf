@@ -24,8 +24,7 @@ variable "secret_permissions" {
 }
 
 locals {
-  common_tags   = module.ctags.common_tags
-  env_long_name = var.environment == "sbox" ? "sandbox" : (var.environment == "stg" ? "staging" : var.environment)
+  common_tags = module.ctags.common_tags
 }
 module "ctags" {
   source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
