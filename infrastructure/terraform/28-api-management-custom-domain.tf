@@ -4,8 +4,11 @@ data "azurerm_key_vault" "kv" {
   name                = "acmedtssds${var.environment}"
   resource_group_name = "sds-platform-${var.environment}-rg"
 }
+locals {
+  cert_name = local.env_long_name == "" ? "hmi-apim-platform-hmcts-net" : "hmi-apim-${local.env_long_name}-platform-hmcts-net"
+}
 data "azurerm_key_vault_certificate" "cert" {
-  name         = "hmi-apim-${local.env_long_name}-platform-hmcts-net"
+  name         = local.cert_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 

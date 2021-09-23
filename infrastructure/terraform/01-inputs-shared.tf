@@ -25,7 +25,7 @@ variable "secret_permissions" {
 
 locals {
   common_tags   = module.ctags.common_tags
-  env_long_name = var.environment == "sbox" ? "sandbox" : (var.environment == "stg" ? "staging" : var.environment)
+  env_long_name = var.environment == "sbox" ? "sandbox" : (var.environment == "stg" ? "staging" : (var.environment == "prod" ? "" : var.environment))
 }
 
 module "ctags" {
