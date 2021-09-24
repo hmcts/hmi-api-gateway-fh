@@ -66,10 +66,6 @@ stages:
         displayName: Remove default APIS
         subscription: DTS-SHAREDSERVICES-TEST
         dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-hostname.yaml
-      parameters:
-        displayName: Apply Custom Domain Configuration
-        dependsOn: TerraformApply
     - template: pipeline/jobs/apply-policies.yaml
       parameters:
         displayName: Apply API Policies
@@ -77,7 +73,6 @@ stages:
         environment: test
         dependsOn:
         - TerraformApply
-        - ApplyHostName
 
   - stage: TestTEST
     dependsOn: BuildTest
