@@ -1,6 +1,6 @@
 
 locals {
-  env_long_name = var.environment == "sbox" ? "sandbox" : var.environment == "stg" ? "staging" : var.environment
+  env_long_name = var.environment == "sbox" ? "sandbox" : ()
   host_name     = local.env_long_name == "prod" ? "hmi-apim.platform.hmcts.net" : "hmi-apim.${local.env_long_name}.platform.hmcts.net"
   cert_name     = replace(local.host_name, ".", "-")
 }
@@ -13,7 +13,7 @@ data "azurerm_key_vault_certificate" "cert" {
   name         = local.cert_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
-/* 
+ 
 data "azurerm_api_management" "hmi_apim_svc" {
   name                = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
@@ -26,16 +26,11 @@ resource "azurerm_key_vault_access_policy" "policy" {
   secret_permissions      = ["Get", "Set", "List", "Delete"]
   certificate_permissions = []
   storage_permissions     = []
-} */
-
-output "kv_id" {
-  value = data.azurerm_key_vault.kv.id
 }
-output "cert_id" {
-  value = data.azurerm_key_vault_certificate.cert.secret_id
-}
-output "cert_name" {
-  value = local.cert_name
+resource "azurerm_role_assignment" "kv_access" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id
 }
 
 resource "azurerm_api_management_custom_domain" "custom_domain" {
@@ -47,6 +42,7 @@ resource "azurerm_api_management_custom_domain" "custom_domain" {
   }
 
   depends_on = [
-    data.azurerm_key_vault_certificate.cert
+    data.azurerm_key_vault_certificate.cert,
+    azurerm_role_assignment.kv_access
   ]
 }
