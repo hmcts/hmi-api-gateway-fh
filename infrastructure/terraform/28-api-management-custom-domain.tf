@@ -1,6 +1,6 @@
 
 locals {
-  env_long_name = var.environment == "sbox" ? "sandbox" : ()
+  env_long_name = var.environment == "sbox" ? "sandbox" : var.environment == "stg" ? "staging" : var.environment
   host_name     = local.env_long_name == "prod" ? "hmi-apim.platform.hmcts.net" : "hmi-apim.${local.env_long_name}.platform.hmcts.net"
   cert_name     = replace(local.host_name, ".", "-")
 }
