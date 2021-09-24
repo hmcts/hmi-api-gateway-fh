@@ -13,7 +13,7 @@ data "azurerm_key_vault_certificate" "cert" {
   name         = local.cert_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
- 
+
 data "azurerm_api_management" "hmi_apim_svc" {
   name                = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
