@@ -18,19 +18,19 @@ data "azurerm_api_management" "hmi_apim_svc" {
   name                = azurerm_api_management.hmi_apim.name
   resource_group_name = azurerm_resource_group.hmi_apim_rg.name
 }
+resource "azurerm_role_assignment" "kv_access" {
+  scope                = data.azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id
+}
 resource "azurerm_key_vault_access_policy" "policy" {
   key_vault_id            = data.azurerm_key_vault.kv.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id
   key_permissions         = []
-  secret_permissions      = ["Get", "Set", "List", "Delete"]
-  certificate_permissions = []
+  secret_permissions      = ["Get", "List"]
+  certificate_permissions = ["Get", "List"]
   storage_permissions     = []
-}
-resource "azurerm_role_assignment" "kv_access" {
-  scope                = data.azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = data.azurerm_api_management.hmi_apim_svc.identity.0.principal_id
 }
 
 resource "azurerm_api_management_custom_domain" "custom_domain" {
