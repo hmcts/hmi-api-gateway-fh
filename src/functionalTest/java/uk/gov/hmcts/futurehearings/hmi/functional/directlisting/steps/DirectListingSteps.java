@@ -20,7 +20,7 @@ public class DirectListingSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, HttpMethod.POST, HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
+                body, HttpMethod.POST, HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND.value(),response.getStatusCode());
     }
 }
