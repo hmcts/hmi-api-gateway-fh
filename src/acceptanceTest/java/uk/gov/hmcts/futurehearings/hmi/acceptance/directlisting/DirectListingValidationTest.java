@@ -16,7 +16,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public class DirectListingValidationTest extends HMICommonHeaderTest {
+public abstract class DirectListingValidationTest extends HMICommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
