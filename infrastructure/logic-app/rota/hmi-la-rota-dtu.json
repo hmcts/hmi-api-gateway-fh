@@ -912,6 +912,18 @@
                                                                 "value": "]"
                                                             }
                                                         },
+                                                        "Append_to_scheduleErrorBodyIfScheduleFail": {
+                                                            "runAfter": {
+                                                                "Get_schedules_for_session": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "AppendToStringVariable",
+                                                            "inputs": {
+                                                                "name": "scheduleErrorBody",
+                                                                "value": "@outputs('Get_schedules_for_session')"
+                                                            }
+                                                        },
                                                         "Compose_Session_Payload": {
                                                             "runAfter": {
                                                                 "Is_Morning_Session": [
@@ -932,6 +944,18 @@
                                                         "For_schedule_in_the_session": {
                                                             "foreach": "@body('Get_schedules_for_session')?['value']",
                                                             "actions": {
+                                                                "Append_to_scheduleErrorBodyIfJohFail": {
+                                                                    "runAfter": {
+                                                                        "Get_joh_for_schedule": [
+                                                                            "Failed"
+                                                                        ]
+                                                                    },
+                                                                    "type": "AppendToStringVariable",
+                                                                    "inputs": {
+                                                                        "name": "scheduleErrorBody",
+                                                                        "value": "@outputs('Get_joh_for_schedule')"
+                                                                    }
+                                                                },
                                                                 "Get_joh_for_schedule": {
                                                                     "runAfter": {},
                                                                     "type": "ApiConnection",
@@ -947,8 +971,8 @@
                                                                 },
                                                                 "Update_johs": {
                                                                     "runAfter": {
-                                                                        "Get_joh_for_schedule": [
-                                                                            "Succeeded"
+                                                                        "Append_to_scheduleErrorBodyIfJohFail": [
+                                                                            "Skipped"
                                                                         ]
                                                                     },
                                                                     "type": "AppendToStringVariable",
@@ -1074,8 +1098,8 @@
                                                         },
                                                         "Set_jsonJohs_prefix": {
                                                             "runAfter": {
-                                                                "Get_schedules_for_session": [
-                                                                    "Succeeded"
+                                                                "Append_to_scheduleErrorBodyIfScheduleFail": [
+                                                                    "Skipped"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
