@@ -277,7 +277,7 @@
                                                     }
                                                 },
                                                 "method": "delete",
-                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                "path": "[parameters('storageACGetPathSuffix')]"
                                             }
                                         },
                                         "Get_SNow_Client": {
@@ -792,7 +792,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Judge": {
@@ -812,7 +812,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_File_if_invalid_Magistrates": {
@@ -832,7 +832,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        "path": "[parameters('storageACGetPathSuffix')]"
                                                     }
                                                 },
                                                 "Delete_Valid_XML_file_": {
@@ -1705,7 +1705,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                            "path": "[parameters('storageACGetPathSuffix')]"
                                                         }
                                                     }
                                                 }
