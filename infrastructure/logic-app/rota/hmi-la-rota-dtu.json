@@ -920,13 +920,13 @@
                                                             },
                                                             "type": "Compose",
                                                             "inputs": {
-                                                                "johs": "@variables('jsonJohs')",
                                                                 "locationReferenceType": "ROTA",
                                                                 "roomId": "",
                                                                 "sessionDuration": "@variables('sessionDuration')",
                                                                 "sessionReference": "@{items('For_each_Session')?['RowKey']}",
                                                                 "sessionStart": "@{variables('sessionStart')}",
-                                                                "venueId": "@{items('For_each_Session')?['venueId']}"
+                                                                "venueId": "@{items('For_each_Session')?['venueId']}",
+                                                                "johs": "@variables('jsonJohs')"
                                                             }
                                                         },
                                                         "For_schedule_in_the_session": {
