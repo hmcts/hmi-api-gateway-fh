@@ -351,20 +351,20 @@
                                                     "username": "@body('Get_SNow_Client')?['value']"
                                                 },
                                                 "body": {
-                                                    "assignment_group": "56b756774fbd368057db0b318110c7bd",
-                                                    "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                    "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                    "caller_id": "[parameters('serviceNowCallerId')]",
                                                     "category": "Data Issue",
                                                     "contact_type": "Alert",
                                                     "description": "",
                                                     "impact": "2",
-                                                    "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                    "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                                     "short_description": "HMI Rota File Error @{items('For_each_File')?['Path']}",
                                                     "subcategory": "Data or File Error - other",
-                                                    "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                    "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                                     "urgency": "3"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                "uri": "[parameters('serviceNowHostUrl')]"
                                             }
                                         },
                                         "Set_xmlPayload": {
@@ -665,6 +665,37 @@
                                                         "queries": {
                                                             "folderPath": "/rota/output/",
                                                             "name": "@items('For_each_File')?['Name']",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_blob_(V2)": {
+                                                    "runAfter": {
+                                                        "Delete_Valid_XML_file_": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('ROTA files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                                        "queries": {
+                                                            "folderPath": "/rota/input/",
+                                                            "name": "read.me",
                                                             "queryParametersSingleEncoded": true
                                                         }
                                                     },
@@ -979,7 +1010,7 @@
                                                                     "type": "AppendToStringVariable",
                                                                     "inputs": {
                                                                         "name": "jsonJohs",
-                                                                        "value": "{ \"johId: \"@{body('Get_joh_for_schedule')?['emailAddress']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
+                                                                        "value": "{ \"johId\": \"@{body('Get_joh_for_schedule')?['emailAddress']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
                                                                     }
                                                                 }
                                                             },
@@ -1057,7 +1088,7 @@
                                                                 }
                                                             },
                                                             "runAfter": {
-                                                                "Append_to_johs": [
+                                                                "Set_jsonHmiPayload": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1096,6 +1127,18 @@
                                                                 ]
                                                             },
                                                             "type": "If"
+                                                        },
+                                                        "Set_jsonHmiPayload": {
+                                                            "runAfter": {
+                                                                "Append_to_johs": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonHmiPayload",
+                                                                "value": "@{replace(variables('jsonJohs'),'}, ]','}]')}"
+                                                            }
                                                         },
                                                         "Set_jsonJohs_prefix": {
                                                             "runAfter": {
@@ -1313,6 +1356,37 @@
                                                 },
                                                 "Has_HMI_failed": {
                                                     "actions": {
+                                                        "Create_read.me_when_HMI_fails": {
+                                                            "runAfter": {
+                                                                "HTTP_ServiceNow_when_HMI_failed": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": "@concat('ROTA folder files to be processed')",
+                                                                "headers": {
+                                                                    "ReadFileMetadataFromServer": true
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "post",
+                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                                                "queries": {
+                                                                    "folderPath": "/rota/input/",
+                                                                    "name": "read.me",
+                                                                    "queryParametersSingleEncoded": true
+                                                                }
+                                                            },
+                                                            "runtimeConfiguration": {
+                                                                "contentTransfer": {
+                                                                    "transferMode": "Chunked"
+                                                                }
+                                                            }
+                                                        },
                                                         "Get_SNowClient": {
                                                             "runAfter": {},
                                                             "type": "ApiConnection",
@@ -1357,20 +1431,20 @@
                                                                     "username": "@body('Get_SNowClient')?['value']"
                                                                 },
                                                                 "body": {
-                                                                    "assignment_group": "56b756774fbd368057db0b318110c7bd",
-                                                                    "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                                    "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                                    "caller_id": "[parameters('serviceNowCallerId')]",
                                                                     "category": "Data Issue",
                                                                     "contact_type": "Alert",
                                                                     "description": "",
                                                                     "impact": "2",
-                                                                    "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                                    "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                                                     "short_description": "HMI Rota File Error @{variables('scheduleErrorBody')}",
                                                                     "subcategory": "Data or File Error - other",
-                                                                    "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                                    "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                                                     "urgency": "3"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                                "uri": "[parameters('serviceNowHostUrl')]"
                                                             }
                                                         }
                                                     },
@@ -1918,6 +1992,22 @@
                                 ]
                             }
                         },
+                        "Initialize_jsonHmiPayload": {
+                            "runAfter": {
+                                "Initialize_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonHmiPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_jsonJohs": {
                             "runAfter": {
                                 "Initialize_sessionErrorBody": [
@@ -1968,7 +2058,7 @@
                         },
                         "Initialize_jsonSchedules": {
                             "runAfter": {
-                                "Initialize_xmlPayload": [
+                                "Initialize_jsonHmiPayload": [
                                     "Succeeded"
                                 ]
                             },
