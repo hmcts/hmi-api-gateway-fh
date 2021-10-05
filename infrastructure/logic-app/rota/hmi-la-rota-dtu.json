@@ -143,6 +143,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
                 "[resourceId('Microsoft.Web/connections', 'keyvault')]"
             ],
             "properties": {
