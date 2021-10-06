@@ -1056,7 +1056,7 @@
                                                                 "headers": {
                                                                     "Accept": "application/json",
                                                                     "Content-Type": "application/json",
-                                                                    "Destination-System": "MOCK",
+                                                                    "Destination-System": "[parameters('hmiDestination')]",
                                                                     "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
                                                                     "Source-System": "CFT"
                                                                 },
@@ -1444,7 +1444,7 @@
                                                                     "urgency": "3"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "[parameters('serviceNowHostUrl')]"
+                                                                "uri": "[parameters('serviceNowHostUrl')]   "
                                                             }
                                                         }
                                                     },
