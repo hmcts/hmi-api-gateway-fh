@@ -1061,7 +1061,7 @@
                                                                     "Source-System": "CRIME"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                                             }
                                                         },
                                                         "Is_Morning_Session": {
