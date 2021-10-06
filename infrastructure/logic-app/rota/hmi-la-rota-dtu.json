@@ -1445,7 +1445,7 @@
                                                                     "urgency": "3"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "[parameters('serviceNowHostUrl')]   "
+                                                                "uri": "[parameters('serviceNowHostUrl')]"
                                                             }
                                                         }
                                                     },
