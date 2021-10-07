@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.people;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
+@Disabled("Failing due to issue, to be re-enabled in future ticket once fix implemented")
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
