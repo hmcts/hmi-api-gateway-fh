@@ -1,0 +1,21 @@
+parameters:
+  - name: environment
+    type: string
+
+
+stages:
+  - stage: Wait${{ parameters.environment }}
+    displayName: '${{ parameters.environment }} Waiting for Approval'
+    condition: succeeded()
+    dependsOn: Plan${{ parameters.environment }}
+    jobs:
+      - job: waitForValidation
+        displayName: '${{ parameters.environment }} Wait for external validation'
+        pool: server
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            instructions: 'Please validate the Terraform Plan for PROD environment to resume'
+            onTimeout: 'reject'

@@ -23,10 +23,5 @@ jobs:
   variables:
   - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
-  pool:
-    vmImage: 'ubuntu-18.04'
   steps:
-  - template: ../steps/tf-install.yaml
-  - template: ../steps/tf-test.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
+  - template: templates\tests\terraform\allTests.yaml@azTemplates

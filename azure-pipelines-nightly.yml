@@ -1,4 +1,3 @@
----
 trigger:
   - none
 
@@ -14,137 +13,114 @@ resources:
       endpoint: hmcts
 
 schedules:
-- cron: "0 4 * * *"
-  displayName: Daily midnight build
+- cron: "0 1 * * *"
+  displayName: Nightly
   branches:
     include:
     - master
   always: true
+#- cron: "0 2 1 * *"
+#  displayName: Monthly
+#  branches:
+#    include:
+#    - master
+#  always: true
 
-variables:
-  - group: HMI-APIM-Common
+parameters:
+  - name: envs
+    displayName: Environments
+    type: object
+    values: []
+    default: ['sbox','dev','test','stg','prod']
 
 stages:
-  - stage: Validate
-    jobs:
-    - template: pipeline/jobs/terraform-validate.yaml
-      parameters:
-          displayName: Validate TEST
-          subscription: DTS-SHAREDSERVICES-TEST
-          group: HMI-APIM-BUILD-TEST
-          environment: test
-
-  - stage: DeleteAPIM
-    dependsOn: Validate
-    jobs:
-    - template: pipeline/jobs/delete-resources.yaml
-      parameters:
-        subscription: DTS-SHAREDSERVICES-TEST
-        resourceGroup: hmi-apim-test-rg
-        apim: hmi-apim-svc-test
-
-  - stage: PlanTEST
-    dependsOn: DeleteAPIM
-    jobs:
-    - template: pipeline/jobs/terraform-plan.yaml
-      parameters:
-        displayName: Plan TEST
-        subscription: DTS-SHAREDSERVICES-TEST
-        group: HMI-APIM-BUILD-TEST
-
-  - stage: BuildTEST
-    dependsOn: PlanTest
+  - stage: 'GetDependencies'
+    displayName: 'Get Dependency Details'
+    dependsOn: []
     variables:
-      - group: HMI-APIM-BUILD-TEST
+      - template: pipeline/variables/shared.yaml
+      - group: HMI-APIM-Common
     jobs:
-    - template: pipeline/jobs/terraform-apply.yaml
-      parameters:
-        displayName: Build TEST
-        subscription: DTS-SHAREDSERVICES-TEST
-    - template: pipeline/jobs/remove-default-apis.yaml
-      parameters:
-        displayName: Remove default APIS
-        subscription: DTS-SHAREDSERVICES-TEST
-        dependsOn: TerraformApply
-    - template: pipeline/jobs/apply-policies.yaml
-      parameters:
-        displayName: Apply API Policies
-        subscription: DTS-SHAREDSERVICES-TEST
-        environment: test
-        dependsOn:
-        - TerraformApply
+      - job: GetScheduleName
+        displayName: 'Get Schedule Name'
+        steps: 
+          - download: none
+          - checkout: none
+          - template: templates\common\pipeline-details.yml@azTemplates
+            parameters:
+              buildId: $(Build.BuildId)
+              patToken: $(pipelinePAT)
+              propertyName: ".triggerInfo.scheduleName"
+              variableName: "scheduleName"
+              taskName: 'buildDetail'
 
-  - stage: TestTEST
-    dependsOn: BuildTest
-    pool:
-      vmImage: 'ubuntu-18.04'
-    variables:
-      - group: HMI-APIM-BUILD-TEST
-    jobs:
-      - template: pipeline/jobs/create-storage.yaml
-        parameters:
-          displayName: Create Storage for Test Results
-          subscription: DTS-SHAREDSERVICES-TEST
-      
-      - template: pipeline/jobs/export-keyvault.yaml
-        parameters:
-          displayName: Read APIM Subscription Key
-          subscription: DTS-SHAREDSERVICES-TEST
+  - template: pipelines/stages/validate.yaml
+    parameters:
+      dependsOn: GetDependencies
+      condition: eq(dependencies.GetDependencies.outputs['GetScheduleName.buildDetail.scheduleName'], 'Nightly' )
 
-      - template: pipeline/jobs/test-unit.yaml
-        parameters:
-          displayName: Unit Test
-          dependsOn:
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+  - ${{each environment in parameters.envs}}:
+    - template: pipeline/stages/plan.yaml
+      parameters:
+        environment: ${{ environment }}
+        subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+        dependsOn: Validate
  
-      - template: pipeline/jobs/test-acceptance.yaml
-        parameters:
-          displayName: Acceptance Test
-          dependsOn:
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]    
+    - stage: 'Validate${{ environment }}'
+      displayName: 'Validate ${{ environment }}'
+      dependsOn: 'Plan${{ environment }}'
+      variables:
+        - template: pipeline/variables/shared.yaml
+        - template: pipeline/variables/${{ environment }}.yaml
+        - group: HMI-APIM-Common
+        - group: HMI-APIM-BUILD-${{ upper(environment) }}
+      jobs:
+        - job: ValidateChanges${{ environment }}
+          displayName: '${{ environment }} Terraform changes'
+          steps: 
+            - download: current
+              artifact: 'tfplan-${{ environment }}.tfplan'
+              displayName: 'Download ${{ environment }} Plan file'
 
-      - template: pipeline/jobs/test-smoke.yaml
-        parameters:
-          displayName: Smoke Test
-          dependsOn:
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            - template: pipeline/steps/tf-show.yml
+              parameters: 
+                planOrStateFilePath: "$(Pipeline.Workspace)/tfplan-${{ environment }}.tfplan/tfplan-${{ environment }}.tfplan"
+                outputLocation: "$(Pipeline.Workspace)/${{ environment }}.json"
+                subscriptionName: ${{variables.subscriptionName}}
+                env: ${{variables.env}}
+                location: ${{variables.location}}
+                locationEng: ${{variables.locationEng}}
+                product: ${{variables.product}}
 
-      - template: pipeline/jobs/test-functional.yaml
-        parameters:
-          displayName: Functional Test
-          dependsOn:
-          - CreateStorage
-          - ExportKeyVault
-          subscription: DTS-SHAREDSERVICES-TEST
-          subscriptionKey: $(subscriptionKey)
-          storageContainer: $(storageContainer)
-          variables:
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+            - task: PowerShell@2
+              name: 'terraChanges'
+              displayName: 'Validate any changes'
+              inputs:
+                targetType: 'inline'
+                script: |
+                  $environment = "${{ environment }}"
+                  $planObj = Get-Content "$(Pipeline.Workspace)/${{ environment }}.json" | ConvertFrom-Json
+                  $resourceChanges = $planObj.resource_changes
 
-      - template: pipeline/jobs/test-codequality.yaml
-        parameters:
-          displayName: Code Quality Test
-          dependsOn:
-          - AcceptanceTest
+                  $addChanges = ($resourceChanges | Where {$_.change.actions -contains "create"}).length
+                  $changeChanges = ($resourceChanges | Where {$_.change.actions -contains "update"}).length
+                  $removeChanges = ($resourceChanges | Where {$_.change.actions -contains "delete"}).length
+                  $totalChanges = $addChanges + $changeChanges + $removeChanges
+
+                  $msg = "There are $totalChanges ($addChanges to add, $changeChanges to change, $removeChanges to remove) in the $environment Environment on HMI"
+                  Write-Host $msg
+
+                  $sendMsg = (&{If($addChanges -gt 0 -or $changeChanges -gt 0 -or $removeChanges -gt 0) {"true"} Else {"false"}})
+                  Write-Host "Should send message: $sendMsg"
+
+                  Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
+                  Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
+            
+            - template: pipeline/steps/send-im.yml
+              parameters:
+                logicAppUrl: $(logic_app_url)
+                title: "Terraform Changes in ${{ environment }}"
+                message: "$(terraChanges.msg)"
+                conditionAction: $(terraChanges.sendMsg)
+
+
