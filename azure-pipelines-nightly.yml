@@ -33,6 +33,9 @@ parameters:
     values: []
     default: ['sbox','dev','test','stg','prod']
 
+variables:
+  - group: HMI-APIM-Common
+  
 stages:
   - stage: 'GetDependencies'
     displayName: 'Get Dependency Details'
