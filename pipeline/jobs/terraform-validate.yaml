@@ -7,4 +7,4 @@ jobs:
       parameters:
         terraformPath: $(System.DefaultWorkingDirectory)/infrastructure/terraform
     - powershell: |
-        echo "branch ${{ Build.SourceBranch }}"
+        echo "branch $(Build.SourceBranch)"
