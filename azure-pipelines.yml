@@ -27,27 +27,27 @@ variables:
   - group: HMI-APIM-Common
 
 stages:
-  - template: pipelines/stages/validate.yaml
+  - template: pipeline/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
     - ${{ if or(ne(environment, 'stg'), ne(environment, 'prod'), contains(variables['Build.SourceBranch'], 'ref/tags/')) }}:
-      - template: pipelines/stages/build.yaml
+      - template: pipeline/stages/build.yaml
         parameters:
           environment: ${{ environment }}
           subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
 
       - ${{ if eq(environment, 'prod') }}:
-        - template: pipelines/stages/wait.yaml
+        - template: pipeline/stages/wait.yaml
           parameters:
             environment: ${{ environment }}
 
-      - template: pipelines/stages/apply.yaml
+      - template: pipeline/stages/apply.yaml
         parameters:
           environment: ${{ environment }}
           subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
       
       - ${{ if ne(environment, 'prod' )}}:
-        - template: pipelines/stages/test.yaml
+        - template: pipeline/stages/test.yaml
           parameters:
             environment: ${{ environment }}
             subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}

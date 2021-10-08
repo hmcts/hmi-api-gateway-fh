@@ -54,7 +54,7 @@ stages:
               variableName: "scheduleName"
               taskName: 'buildDetail'
 
-  - template: pipelines/stages/validate.yaml
+  - template: pipeline/stages/validate.yaml
     parameters:
       dependsOn: GetDependencies
       condition: eq(dependencies.GetDependencies.outputs['GetScheduleName.buildDetail.scheduleName'], 'Nightly' )
