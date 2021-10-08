@@ -38,7 +38,6 @@ stages:
     displayName: 'Get Dependency Details'
     dependsOn: []
     variables:
-      - template: pipeline/variables/shared.yaml
       - group: HMI-APIM-Common
     jobs:
       - job: GetScheduleName
