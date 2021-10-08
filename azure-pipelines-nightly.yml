@@ -70,7 +70,6 @@ stages:
       displayName: 'Validate ${{ environment }}'
       dependsOn: 'Plan${{ environment }}'
       variables:
-        - template: pipeline/variables/shared.yaml
         - template: pipeline/variables/${{ environment }}.yaml
         - group: HMI-APIM-Common
         - group: HMI-APIM-BUILD-${{ upper(environment) }}
