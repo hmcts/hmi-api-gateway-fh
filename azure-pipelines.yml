@@ -1,6 +1,8 @@
----
 trigger:
-  - master
+  branches:
+    include:
+      - releases
+      - master
 pr:
   - none
 
@@ -30,7 +32,7 @@ stages:
   - template: pipeline/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod')), contains(variables['Build.SourceBranch'], 'ref/tags/')) }}:
+    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod')), contains(variables['Build.SourceBranch'], 'refs/releases/')) }}:
       - template: pipeline/stages/plan.yaml
         parameters:
           environment: ${{ environment }}
