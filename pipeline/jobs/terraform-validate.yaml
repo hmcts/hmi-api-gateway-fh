@@ -1,6 +1,6 @@
 
 jobs:
-- job: Terraform Validation
+- job: TerraformValidation
   displayName: "Validate Terraform"
   steps:
     - template: templates\tests\terraform\allTests.yaml@azTemplates
