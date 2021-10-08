@@ -8,6 +8,7 @@ parameters:
     default: $(subscriptionName)
 
 steps:
+  - template: tf-install.yaml
 
   - template: tf-init.yaml
     parameters:
