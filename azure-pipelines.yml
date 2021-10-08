@@ -1,7 +1,6 @@
 trigger:
-  branches:
-    - release/*
-    - master
+  - release/*
+  - master
 pr:
   - none
 
