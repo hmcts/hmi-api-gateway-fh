@@ -35,7 +35,7 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
-  
+
 stages:
   - stage: 'GetDependencies'
     displayName: 'Get Dependency Details'
@@ -86,7 +86,7 @@ stages:
 
             - template: pipeline/steps/tf-show.yml
               parameters: 
-                planOrStateFilePath: "$(Pipeline.Workspace)/tfplan-${{ environment }}.tfplan/tfplan-${{ environment }}.tfplan"
+                planOrStateFilePath: "$(Pipeline.Workspace)/tfplan-${{ environment }}/tfplan-${{ environment }}"
                 outputLocation: "$(Pipeline.Workspace)/${{ environment }}.json"
                 subscriptionName: DTS-SHAREDSERVICES-${{ upper(environment) }}
 
