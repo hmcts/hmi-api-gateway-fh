@@ -11,11 +11,11 @@ parameters:
 stages:
   - stage: Plan${{ parameters.environment }}
     displayName: "${{ parameters.environment }} Plan"
-    ${{ if eq(length('${{ parameters.dependsOn }}'), 0) }}:
+    ${{ if eq(parameters.dependsOn, '') }}:
       dependsOn: ${{ parameters.dependsOn}}
-    ${{ elseif eq('${{ parameters.environment }}', 'stg') }}:
+    ${{ elseif eq(parameters.environment, 'stg') }}:
       dependsOn: Testtest
-    ${{ elseif eq('${{ parameters.environment }}', 'prod') }}:
+    ${{ elseif eq(parameters.environment, 'prod') }}:
       dependsOn: Teststg
     ${{ else }}:
       dependsOn: Validate
