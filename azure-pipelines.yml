@@ -31,7 +31,7 @@ stages:
 
   - ${{ each environment in parameters.environments }}:
     - ${{ if or(ne(environment, 'stg'), ne(environment, 'prod'), contains(variables['Build.SourceBranch'], 'ref/tags/')) }}:
-      - template: pipeline/stages/build.yaml
+      - template: pipeline/stages/plan.yaml
         parameters:
           environment: ${{ environment }}
           subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
