@@ -15,8 +15,3 @@ stages:
     condition: ${{ parameters.condition }}
     jobs:
       - template: pipeline/jobs/terraform-validate.yaml
-        parameters:
-          displayName: Validate ${{ environment.name }}
-          subscription: ${{ environment.subscription }} 
-          group: ${{ environment.group }}
-          environment: ${{ environment.name }}

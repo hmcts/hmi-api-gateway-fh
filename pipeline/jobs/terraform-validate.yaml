@@ -1,27 +1,6 @@
-parameters:
-  - name: subscription
-    type: string
-
-  - name: group
-    type: string
-
-  - name: displayName
-    type: string
-
-  - name: environment
-    type: string
-
-  - name: dependsOn
-    type: string
-    default: ''
 
 jobs:
-- job: Terraform${{ parameters.environment }}
-  dependsOn:
-  - ${{ if parameters.dependsOn }}:
-    - ${{ parameters.dependsOn }}
-  variables:
-  - group: ${{ parameters.group }}
-  displayName: ${{ parameters.displayName }}
+- job: Terraform Validation
+  displayName: "Validate Terraform"
   steps:
-  - template: templates\tests\terraform\allTests.yaml@azTemplates
+    - template: templates\tests\terraform\allTests.yaml@azTemplates
