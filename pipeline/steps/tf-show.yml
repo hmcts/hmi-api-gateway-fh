@@ -11,7 +11,7 @@ steps:
 
   - template: tf-init.yaml
     parameters:
-      subscriptionName: ${{parameters.subscriptionName}}
+      subscription: ${{parameters.subscriptionName}}
 
   - powershell: |
       $outputlocation = "${{parameters.outputLocation}}"
