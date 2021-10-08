@@ -7,7 +7,7 @@ parameters:
 stages:
   - stage: Build${{ parameters.environment }}
     displayName: "${{ parameters.environment }} Build"
-    ${{ if eq(environment, 'prod') }}:
+    ${{ if eq('${{ parameters.environment }}', 'prod') }}:
       dependsOn: Wait${{ parameters.environment }}
     ${{ else }}:
       dependsOn: Plan${{ parameters.environment }}

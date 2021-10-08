@@ -14,17 +14,17 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment }}
     jobs:
-      - template: pipeline/jobs/create-storage.yaml
+      - template: ../jobs/create-storage.yaml
         parameters:
           displayName: Create Storage for Test Results
           subscription: ${{ parameters.subscription }}
       
-      - template: pipeline/jobs/export-keyvault.yaml
+      - template: ../jobs/export-keyvault.yaml
         parameters:
           displayName: Read APIM Subscription Key
           subscription: ${{ parameters.subscription }}
 
-      - template: pipeline/jobs/test-unit.yaml
+      - template: ../jobs/test-unit.yaml
         parameters:
           displayName: Unit Test
           dependsOn:
@@ -37,7 +37,7 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - template: pipeline/jobs/test-acceptance.yaml
+      - template: ../jobs/test-acceptance.yaml
         parameters:
           displayName: Acceptance Test
           dependsOn:
@@ -50,15 +50,15 @@ stages:
             storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - ${{ if or(eq(environment, 'sbox'),eq(environment, 'test'),eq(environment, 'stg')) }}:
-        - template: pipeline/jobs/test-codequality.yaml
+      - ${{ if or(eq('${{ parameters.environment }}', 'sbox'),eq('${{ parameters.environment }}', 'test'),eq('${{ parameters.environment }}', 'stg')) }}:
+        - template: ../jobs/test-codequality.yaml
           parameters:
             displayName: Code Quality Test
             dependsOn:
             - AcceptanceTest
 
-      - ${{ if or(eq(environment, 'test'),eq(environment, 'stg')) }}:
-        - template: pipeline/jobs/test-smoke.yaml
+      - ${{ if or(eq('${{ parameters.environment }}', 'test'),eq('${{ parameters.environment }}', 'stg')) }}:
+        - template: ../jobs/test-smoke.yaml
           parameters:
             displayName: Smoke Test
             dependsOn:
@@ -71,8 +71,8 @@ stages:
               storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
               subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
-      - ${{ if or(eq(environment, 'test'),eq(environment, 'stg')) }}:
-        - template: pipeline/jobs/test-functional.yaml
+      - ${{ if or(eq('${{ parameters.environment }}', 'test'),eq('${{ parameters.environment }}', 'stg')) }}:
+        - template: ../jobs/test-functional.yaml
           parameters:
             displayName: Functional Test
             dependsOn:

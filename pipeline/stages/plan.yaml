@@ -13,16 +13,16 @@ stages:
     displayName: "${{ parameters.environment }} Plan"
     ${{ if ne('${{ parameters.dependsOn}}', '') }}:
       dependsOn: ${{ parameters.dependsOn}}
-    ${{ elseif eq(environment, 'stg') }}:
+    ${{ elseif eq('${{ parameters.environment }}', 'stg') }}:
       dependsOn: Testtest
-    ${{ elseif eq(environment, 'prod') }}:
+    ${{ elseif eq('${{ parameters.environment }}', 'prod') }}:
       dependsOn: Teststg
     ${{ else }}:
       dependsOn: Validate
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment}}
     jobs:
-    - template: pipeline/jobs/terraform-plan.yaml
+    - template: ../jobs/terraform-plan.yaml
       parameters:
         displayName: TF Plan ${{ parameters.environment }}
         subscription: ${{ parameters.subscription }}
