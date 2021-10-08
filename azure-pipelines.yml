@@ -30,7 +30,7 @@ stages:
   - template: pipelines/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(ne(environment, 'stg'), ne(environment, 'prod'), contains(Build.SourceBranch, 'ref/tags/')) }}:
+    - ${{ if or(ne(environment, 'stg'), ne(environment, 'prod'), contains($(Build.SourceBranch), 'ref/tags/')) }}:
       - template: pipelines/stages/build.yaml
         parameters:
           environment: ${{ environment }}
