@@ -35,7 +35,6 @@ stages:
         parameters:
           environment: ${{ environment }}
           subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
-          dependsOn: ''
 
       - ${{ if eq(environment, 'prod') }}:
         - template: pipeline/stages/wait.yaml
