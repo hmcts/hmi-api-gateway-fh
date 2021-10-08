@@ -11,8 +11,8 @@ parameters:
 stages:
   - stage: Plan${{ parameters.environment }}
     displayName: "${{ parameters.environment }} Plan"
-    ${{ if eq(parameters.dependsOn, '') }}:
-      dependsOn: ${{ parameters.dependsOn}}
+    ${{ if ne(parameters.dependsOn, '') }}:
+      dependsOn: ${{ parameters.dependsOn }}
     ${{ elseif eq(parameters.environment, 'stg') }}:
       dependsOn: Testtest
     ${{ elseif eq(parameters.environment, 'prod') }}:
