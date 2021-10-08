@@ -35,7 +35,7 @@ parameters:
 
 variables:
   - group: HMI-APIM-Common
-
+  
 stages:
   - stage: 'GetDependencies'
     displayName: 'Get Dependency Details'
@@ -81,12 +81,12 @@ stages:
           displayName: '${{ environment }} Terraform changes'
           steps: 
             - download: current
-              artifact: 'tfplan-${{ environment }}'
+              artifact: 'tfplan-${{ environment }}.tfplan'
               displayName: 'Download ${{ environment }} Plan file'
 
             - template: pipeline/steps/tf-show.yml
               parameters: 
-                planOrStateFilePath: "$(Pipeline.Workspace)/tfplan-${{ environment }}/tfplan-${{ environment }}"
+                planOrStateFilePath: "$(Pipeline.Workspace)/tfplan-${{ environment }}.tfplan/tfplan-${{ environment }}.tfplan"
                 outputLocation: "$(Pipeline.Workspace)/${{ environment }}.json"
                 subscriptionName: DTS-SHAREDSERVICES-${{ upper(environment) }}
 
