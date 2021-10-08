@@ -2,7 +2,8 @@ trigger:
   branches:
     include:
       - release/*
-      - master/*
+      - master
+      - HMIS-917
       - HMIS-917/*
 pr:
   - none
