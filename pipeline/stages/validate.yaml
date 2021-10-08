@@ -14,4 +14,4 @@ stages:
       dependsOn: '${{parameters.dependsOn}}'
     condition: ${{ parameters.condition }}
     jobs:
-      - template: pipeline/jobs/terraform-validate.yaml
+      - template: ../jobs/terraform-validate.yaml
