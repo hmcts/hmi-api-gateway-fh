@@ -23,37 +23,6 @@ parameters:
       - stg
       - prod
 
-  - name: stage
-    displayName: Stage to Run
-    type: string
-    default: SBOX
-    values:
-      - SBOX
-      - DEV
-      - TEST
-      - STG
-      - NONPROD
-      - ALL
-
-  - name: environments
-    type: object
-    default:
-    - name: sbox
-      subscription: DTS-SHAREDSERVICES-SBOX
-      group: HMI-APIM-BUILD-SBOX
-
-    - name: dev
-      subscription: DTS-SHAREDSERVICES-DEV
-      group: HMI-APIM-BUILD-DEV
-
-    - name: test
-      subscription: DTS-SHAREDSERVICES-TEST
-      group: HMI-APIM-BUILD-TEST
-
-    - name: stg
-      subscription: DTS-SHAREDSERVICES-STG
-      group: HMI-APIM-BUILD-STG
-
 variables:
   - group: HMI-APIM-Common
 
