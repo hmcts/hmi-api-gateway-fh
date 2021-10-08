@@ -3,8 +3,7 @@ jobs:
 - job: TerraformValidation
   displayName: "Validate Terraform"
   steps:
+    - template: ../steps/tf-install.yaml
     - template: templates\tests\terraform\allTests.yaml@azTemplates
       parameters:
         terraformPath: $(System.DefaultWorkingDirectory)/infrastructure/terraform
-    - powershell: |
-        echo "branch $(Build.SourceBranch)"
