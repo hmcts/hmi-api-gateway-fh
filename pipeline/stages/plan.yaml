@@ -20,7 +20,7 @@ stages:
     ${{ else }}:
       dependsOn: Validate
     variables:
-      - group: HMI-APIM-BUILD-${{ upper(environment) }}
+      - group: HMI-APIM-BUILD-${{ parameters.environment}}
     jobs:
     - template: pipeline/jobs/terraform-plan.yaml
       parameters:

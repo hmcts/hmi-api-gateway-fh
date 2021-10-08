@@ -12,7 +12,7 @@ stages:
     pool:
       vmImage: 'ubuntu-18.04'
     variables:
-      - group: HMI-APIM-BUILD-${{ upper(environment) }}
+      - group: HMI-APIM-BUILD-${{ parameters.environment }}
     jobs:
       - template: pipeline/jobs/create-storage.yaml
         parameters:
