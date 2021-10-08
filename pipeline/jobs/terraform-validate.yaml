@@ -6,3 +6,5 @@ jobs:
     - template: templates\tests\terraform\allTests.yaml@azTemplates
       parameters:
         terraformPath: $(System.DefaultWorkingDirectory)/infrastructure/terraform
+    - powershell: |
+        echo "branch ${{ Build.SourceBranch }}"

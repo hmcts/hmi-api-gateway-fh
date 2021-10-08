@@ -2,8 +2,8 @@ trigger:
   branches:
     include:
       - release/*
-      - master
-      - HMIS-917
+      - master/*
+      - HMIS-917/*
 pr:
   - none
 
@@ -33,7 +33,7 @@ stages:
   - template: pipeline/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'ref/tags/')) }}:
+    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
       - template: pipeline/stages/plan.yaml
         parameters:
           environment: ${{ environment }}
