@@ -4,3 +4,4 @@ jobs:
   displayName: "Validate Terraform"
   steps:
     - template: templates\tests\terraform\allTests.yaml@azTemplates
+      terraformPath: $(System.DefaultWorkingDirectory)/infrastructure/terraform
