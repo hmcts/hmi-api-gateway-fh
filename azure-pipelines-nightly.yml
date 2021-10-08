@@ -9,7 +9,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/tf-testing ##TODO: update to master
       endpoint: hmcts
 
 schedules:
@@ -57,7 +57,8 @@ stages:
   - template: pipeline/stages/validate.yaml
     parameters:
       dependsOn: GetDependencies
-      condition: eq(dependencies.GetDependencies.outputs['GetScheduleName.buildDetail.scheduleName'], 'Nightly' )
+      #condition: eq(dependencies.GetDependencies.outputs['GetScheduleName.buildDetail.scheduleName'], 'Nightly' )
+      ##TODO: add condition back in
 
   - ${{each environment in parameters.envs}}:
     - template: pipeline/stages/plan.yaml
@@ -116,7 +117,7 @@ stages:
                   Write-Host "##vso[task.setvariable variable=sendMsg;isOutput=true]$sendMsg"
                   Write-Host "##vso[task.setvariable variable=msg;isOutput=true]$msg"
             
-            - template: pipeline/steps/send-im.yml
+            - template: templates\Azure\LogicApp\send-message.yaml@azTemplates
               parameters:
                 logicAppUrl: $(logic_app_url)
                 title: "Terraform Changes in ${{ environment }}"

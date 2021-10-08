@@ -11,7 +11,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/tf-testing
+      ref: refs/heads/tf-testing ##TODO: update to master
       endpoint: hmcts
 
 parameters:
@@ -32,7 +32,7 @@ stages:
   - template: pipeline/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod'), ne(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), True)), and(or(eq(environment, 'stg'), eq(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) ) }}:
       - template: pipeline/stages/plan.yaml
         parameters:
           environment: ${{ environment }}
