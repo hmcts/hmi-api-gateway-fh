@@ -81,7 +81,7 @@ stages:
           displayName: '${{ environment }} Terraform changes'
           steps: 
             - download: current
-              artifact: 'tfplan-${{ environment }}.tfplan'
+              artifact: 'tfplan-${{ environment }}'
               displayName: 'Download ${{ environment }} Plan file'
 
             - template: pipeline/steps/tf-show.yml
