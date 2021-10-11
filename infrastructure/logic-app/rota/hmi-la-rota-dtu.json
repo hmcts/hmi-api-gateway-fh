@@ -675,37 +675,6 @@
                                                         }
                                                     }
                                                 },
-                                                "Create_blob_(V2)": {
-                                                    "runAfter": {
-                                                        "Delete_Valid_XML_file_": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "type": "ApiConnection",
-                                                    "inputs": {
-                                                        "body": "@concat('ROTA files to be processed')",
-                                                        "headers": {
-                                                            "ReadFileMetadataFromServer": true
-                                                        },
-                                                        "host": {
-                                                            "connection": {
-                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                            }
-                                                        },
-                                                        "method": "post",
-                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
-                                                        "queries": {
-                                                            "folderPath": "/rota/input/",
-                                                            "name": "read.me",
-                                                            "queryParametersSingleEncoded": true
-                                                        }
-                                                    },
-                                                    "runtimeConfiguration": {
-                                                        "contentTransfer": {
-                                                            "transferMode": "Chunked"
-                                                        }
-                                                    }
-                                                },
                                                 "Create_blob_read.me_when_invalid_shedules": {
                                                     "runAfter": {
                                                         "Delete_blob_if_invalid_schedules": [
@@ -930,6 +899,78 @@
                                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                     }
                                                 },
+                                                "For_each_CLP": {
+                                                    "foreach": "@body('Get_entities_CLP')?['value']",
+                                                    "actions": {
+                                                        "Delete_Entity_CLP": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_CLP')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_CLP')?['RowKey'])}')"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Get_entities_CLP": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "For_each_JOH": {
+                                                    "foreach": "@body('Get_entities_JOH')?['value']",
+                                                    "actions": {
+                                                        "Delete_Entity_JOH": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/Tables/@{encodeURIComponent('joh')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_JOH')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_JOH')?['RowKey'])}')"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Get_entities_JOH": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
+                                                "For_each_Schedule": {
+                                                    "foreach": "@body('Get_entities_Schedules')?['value']",
+                                                    "actions": {
+                                                        "Delete_Entity_Schedule": {
+                                                            "runAfter": {},
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "delete",
+                                                                "path": "/Tables/@{encodeURIComponent('schedule')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_Schedule')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_Schedule')?['RowKey'])}')"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Get_entities_Schedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Foreach"
+                                                },
                                                 "For_each_Session": {
                                                     "foreach": "@body('Get_All_Sessions')?['value']",
                                                     "actions": {
@@ -943,18 +984,6 @@
                                                             "inputs": {
                                                                 "name": "jsonJohs",
                                                                 "value": "]"
-                                                            }
-                                                        },
-                                                        "Append_to_scheduleErrorBodyIfScheduleFail": {
-                                                            "runAfter": {
-                                                                "Get_schedules_for_session": [
-                                                                    "Failed"
-                                                                ]
-                                                            },
-                                                            "type": "AppendToStringVariable",
-                                                            "inputs": {
-                                                                "name": "scheduleErrorBody",
-                                                                "value": "@outputs('Get_schedules_for_session')"
                                                             }
                                                         },
                                                         "Compose_Session_Payload": {
@@ -977,18 +1006,6 @@
                                                         "For_schedule_in_the_session": {
                                                             "foreach": "@body('Get_schedules_for_session')?['value']",
                                                             "actions": {
-                                                                "Append_to_scheduleErrorBodyIfJohFail": {
-                                                                    "runAfter": {
-                                                                        "Get_joh_for_schedule": [
-                                                                            "Failed"
-                                                                        ]
-                                                                    },
-                                                                    "type": "AppendToStringVariable",
-                                                                    "inputs": {
-                                                                        "name": "scheduleErrorBody",
-                                                                        "value": "@outputs('Get_joh_for_schedule')"
-                                                                    }
-                                                                },
                                                                 "Get_joh_for_schedule": {
                                                                     "runAfter": {},
                                                                     "type": "ApiConnection",
@@ -1004,14 +1021,14 @@
                                                                 },
                                                                 "Update_johs": {
                                                                     "runAfter": {
-                                                                        "Append_to_scheduleErrorBodyIfJohFail": [
-                                                                            "Skipped"
+                                                                        "Get_joh_for_schedule": [
+                                                                            "Succeeded"
                                                                         ]
                                                                     },
                                                                     "type": "AppendToStringVariable",
                                                                     "inputs": {
                                                                         "name": "jsonJohs",
-                                                                        "value": "{ \"johId\": \"@{body('Get_joh_for_schedule')?['emailAddress']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
+                                                                        "value": "{ \"johId: \"@{body('Get_joh_for_schedule')?['emailAddress']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
                                                                     }
                                                                 }
                                                             },
@@ -1089,7 +1106,7 @@
                                                                 }
                                                             },
                                                             "runAfter": {
-                                                                "Set_jsonHmiPayload": [
+                                                                "Append_to_johs": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1129,22 +1146,10 @@
                                                             },
                                                             "type": "If"
                                                         },
-                                                        "Set_jsonHmiPayload": {
-                                                            "runAfter": {
-                                                                "Append_to_johs": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "type": "SetVariable",
-                                                            "inputs": {
-                                                                "name": "jsonHmiPayload",
-                                                                "value": "@{replace(variables('jsonJohs'),'}, ]','}]')}"
-                                                            }
-                                                        },
                                                         "Set_jsonJohs_prefix": {
                                                             "runAfter": {
-                                                                "Append_to_scheduleErrorBodyIfScheduleFail": [
-                                                                    "Skipped"
+                                                                "Get_schedules_for_session": [
+                                                                    "Succeeded"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
@@ -1355,39 +1360,59 @@
                                                         "path": "/secrets/@{encodeURIComponent('hmi-client-app-secret')}/value"
                                                     }
                                                 },
-                                                "Has_HMI_failed": {
-                                                    "actions": {
-                                                        "Create_read.me_when_HMI_fails": {
-                                                            "runAfter": {
-                                                                "HTTP_ServiceNow_when_HMI_failed": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "type": "ApiConnection",
-                                                            "inputs": {
-                                                                "body": "@concat('ROTA folder files to be processed')",
-                                                                "headers": {
-                                                                    "ReadFileMetadataFromServer": true
-                                                                },
-                                                                "host": {
-                                                                    "connection": {
-                                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                    }
-                                                                },
-                                                                "method": "post",
-                                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
-                                                                "queries": {
-                                                                    "folderPath": "/rota/input/",
-                                                                    "name": "read.me",
-                                                                    "queryParametersSingleEncoded": true
-                                                                }
-                                                            },
-                                                            "runtimeConfiguration": {
-                                                                "contentTransfer": {
-                                                                    "transferMode": "Chunked"
-                                                                }
+                                                "Get_entities_CLP": {
+                                                    "runAfter": {
+                                                        "For_each_JOH": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                                             }
                                                         },
+                                                        "method": "get",
+                                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities"
+                                                    }
+                                                },
+                                                "Get_entities_JOH": {
+                                                    "runAfter": {
+                                                        "Set_jsonSchedules": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/Tables/@{encodeURIComponent('joh')}/entities"
+                                                    }
+                                                },
+                                                "Get_entities_Schedules": {
+                                                    "runAfter": {
+                                                        "For_each_JOH": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/Tables/@{encodeURIComponent('schedule')}/entities"
+                                                    }
+                                                },
+                                                "Has_HMI_failed": {
+                                                    "actions": {
                                                         "Get_SNowClient": {
                                                             "runAfter": {},
                                                             "type": "ApiConnection",
@@ -1468,7 +1493,7 @@
                                                 },
                                                 "Parse_CourtListingProfiles": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_CLP": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1539,7 +1564,7 @@
                                                 },
                                                 "Parse_Judges": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_JOH": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1590,7 +1615,7 @@
                                                 },
                                                 "Parse_Magistrates": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_JOH": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1641,7 +1666,7 @@
                                                 },
                                                 "Parse_Schedules": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_Schedule": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1993,22 +2018,6 @@
                                 ]
                             }
                         },
-                        "Initialize_jsonHmiPayload": {
-                            "runAfter": {
-                                "Initialize_xmlPayload": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonHmiPayload",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
                         "Initialize_jsonJohs": {
                             "runAfter": {
                                 "Initialize_sessionErrorBody": [
@@ -2059,7 +2068,7 @@
                         },
                         "Initialize_jsonSchedules": {
                             "runAfter": {
-                                "Initialize_jsonHmiPayload": [
+                                "Initialize_xmlPayload": [
                                     "Succeeded"
                                 ]
                             },
