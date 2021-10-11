@@ -856,7 +856,7 @@
                                                             }
                                                         },
                                                         "method": "delete",
-                                                        "path": "[parameters('storageACGetPathSuffix')]"
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                     }
                                                 },
                                                 "Delete_Valid_XML_file_": {
@@ -1019,10 +1019,22 @@
                                                                         "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_schedule_in_the_session')?['justice'])}',RowKey='@{encodeURIComponent(items('For_schedule_in_the_session')?['justice'])}')"
                                                                     }
                                                                 },
-                                                                "Update_johs": {
+                                                                "Update_Error_No_Joh": {
                                                                     "runAfter": {
                                                                         "Get_joh_for_schedule": [
-                                                                            "Succeeded"
+                                                                            "Failed"
+                                                                        ]
+                                                                    },
+                                                                    "type": "AppendToStringVariable",
+                                                                    "inputs": {
+                                                                        "name": "scheduleErrorBody",
+                                                                        "value": "@outputs('Get_joh_for_schedule')"
+                                                                    }
+                                                                },
+                                                                "Update_johs": {
+                                                                    "runAfter": {
+                                                                        "Update_Error_No_Joh": [
+                                                                            "Skipped"
                                                                         ]
                                                                     },
                                                                     "type": "AppendToStringVariable",
