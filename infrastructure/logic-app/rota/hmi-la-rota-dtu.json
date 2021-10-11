@@ -1180,7 +1180,7 @@
                                                             "type": "AppendToStringVariable",
                                                             "inputs": {
                                                                 "name": "scheduleErrorBody",
-                                                                "value": "@body('HTTP_HMI')"
+                                                                "value": "@actions('HTTP_HMI')['error']"
                                                             }
                                                         }
                                                     },
@@ -1374,7 +1374,7 @@
                                                 },
                                                 "Get_entities_CLP": {
                                                     "runAfter": {
-                                                        "For_each_JOH": [
+                                                        "Set_jsonSchedules": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1391,7 +1391,7 @@
                                                 },
                                                 "Get_entities_JOH": {
                                                     "runAfter": {
-                                                        "Set_jsonSchedules": [
+                                                        "For_each_Schedule": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1408,7 +1408,7 @@
                                                 },
                                                 "Get_entities_Schedules": {
                                                     "runAfter": {
-                                                        "For_each_JOH": [
+                                                        "For_each_CLP": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1505,7 +1505,7 @@
                                                 },
                                                 "Parse_CourtListingProfiles": {
                                                     "runAfter": {
-                                                        "For_each_CLP": [
+                                                        "For_each_JOH": [
                                                             "Succeeded"
                                                         ]
                                                     },
@@ -1678,7 +1678,7 @@
                                                 },
                                                 "Parse_Schedules": {
                                                     "runAfter": {
-                                                        "For_each_Schedule": [
+                                                        "For_each_JOH": [
                                                             "Succeeded"
                                                         ]
                                                     },
