@@ -1,0 +1,45 @@
+parameters:
+  - name: environment
+    type: string
+  - name: subscription
+    type: string
+
+stages:
+  - stage: Build${{ parameters.environment }}
+    displayName: "${{ parameters.environment }} Build"
+    ${{ if eq(parameters.environment, 'prod') }}:
+      dependsOn: Wait${{ parameters.environment }}
+    ${{ else }}:
+      dependsOn: Plan${{ parameters.environment }}
+    variables:
+      - group: HMI-APIM-BUILD-${{ parameters.environment }}
+      - template: ../variables/${{ parameters.environment }}.yaml
+    jobs:
+    - template: ../jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build ${{ parameters.environment }}
+        subscription: ${{ parameters.subscription }}
+    - template: ../jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: ${{ parameters.subscription }}
+        environment: ${{ parameters.environment }}
+        dependsOn: 
+        - TerraformApply
+    - template: ../jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: ${{ parameters.subscription }}
+        dependsOn: TerraformApply
+    - template: ../jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: ${{ parameters.subscription }}
+        dependsOn: TerraformApply
+        environmentName: ${{ variables.env_longname }}
+    - template: ../jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: ${{ parameters.subscription }}
+        environment: ${{ parameters.environment }}
+        dependsOn: createRotaStorage
