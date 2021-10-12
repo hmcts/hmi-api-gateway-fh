@@ -1,8 +1,5 @@
 trigger:
-  branches:
-    include:
-      - refs/tags/*
-      - master
+  - master
 pr:
   - none
 
@@ -16,41 +13,481 @@ resources:
 
 parameters:
 
+  - name: stage
+    displayName: Stage to Run
+    type: string
+    default: SBOX
+    values:
+      - SBOX
+      - DEV
+      - TEST
+      - STG
+      - NONPROD
+      - ALL
+
   - name: environments
     type: object
     default:
-      - sbox
-      - dev
-      - test
-      - stg
-      - prod
+    - name: sbox
+      subscription: DTS-SHAREDSERVICES-SBOX
+      group: HMI-APIM-BUILD-SBOX
+
+    - name: dev
+      subscription: DTS-SHAREDSERVICES-DEV
+      group: HMI-APIM-BUILD-DEV
+
+    - name: test
+      subscription: DTS-SHAREDSERVICES-TEST
+      group: HMI-APIM-BUILD-TEST
+
+    - name: stg
+      subscription: DTS-SHAREDSERVICES-STG
+      group: HMI-APIM-BUILD-STG
 
 variables:
   - group: HMI-APIM-Common
 
 stages:
-  - template: pipeline/stages/validate.yaml
-
-  - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod'), ne(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), True)), and(or(eq(environment, 'stg'), eq(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) ) }}:
-      - template: pipeline/stages/plan.yaml
+  - stage: Validate
+    jobs:
+    - ${{ each environment in parameters.environments }}:
+      - template: pipeline/jobs/terraform-validate.yaml
         parameters:
-          environment: ${{ environment }}
-          subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+          displayName: Validate ${{ environment.name }}
+          subscription: ${{ environment.subscription }} 
+          group: ${{ environment.group }}
+          environment: ${{ environment.name }}
 
-      - ${{ if eq(environment, 'prod') }}:
-        - template: pipeline/stages/wait.yaml
-          parameters:
-            environment: ${{ environment }}
+  - stage: PlanSBOX
+    dependsOn: Validate
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
+        group: HMI-APIM-BUILD-SBOX
 
-      - template: pipeline/stages/apply.yaml
+  - stage: PlanDEV
+    dependsOn: Validate
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+        group: HMI-APIM-BUILD-DEV
+
+  - stage: PlanTEST
+    dependsOn: Validate
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+        group: HMI-APIM-BUILD-TEST
+
+  - stage: PlanSTG
+    dependsOn: Validate
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'ALL')))
+    jobs:
+    - template: pipeline/jobs/terraform-plan.yaml
+      parameters:
+        displayName: Plan STG
+        subscription: DTS-SHAREDSERVICES-STG
+        group: HMI-APIM-BUILD-STG
+
+  - stage: BuildSBOX
+    dependsOn: PlanSbox
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    variables:
+      - group: HMI-APIM-BUILD-SBOX
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build SBOX
+        subscription: DTS-SHAREDSERVICES-SBOX
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-SBOX
+        environment: sbox
+        dependsOn: 
+        - TerraformApply
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-SBOX
+        dependsOn: TerraformApply
+        environmentName: sandbox
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-SBOX
+        environment: sbox
+        dependsOn: createRotaStorage
+
+  - stage: BuildDEV
+    dependsOn: PlanDev
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    variables:
+      - group: HMI-APIM-BUILD-DEV
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build DEV
+        subscription: DTS-SHAREDSERVICES-DEV
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
+        dependsOn: 
+        - TerraformApply
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-DEV
+        dependsOn: TerraformApply
+        environmentName: development
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-DEV
+        environment: dev
+        dependsOn: createRotaStorage
+
+  - stage: BuildTEST
+    dependsOn: PlanTest
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    variables:
+      - group: HMI-APIM-BUILD-TEST
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build TEST
+        subscription: DTS-SHAREDSERVICES-TEST
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
+        dependsOn:
+        - TerraformApply
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-TEST
+        dependsOn: TerraformApply
+        environmentName: test
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-TEST
+        environment: test
+        dependsOn: createRotaStorage
+
+  - stage: TestSBOX
+    dependsOn: BuildSbox
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'SBOX'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    pool:
+      vmImage: 'ubuntu-18.04'
+    variables:
+      - group: HMI-APIM-BUILD-SBOX
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
         parameters:
-          environment: ${{ environment }}
-          subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-SBOX
       
-      - ${{ if ne(environment, 'prod' )}}:
-        - template: pipeline/stages/test.yaml
-          parameters:
-            environment: ${{ environment }}
-            subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
-        
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-SBOX
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-SBOX
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+          dependsOn:
+          - AcceptanceTest
+
+
+  - stage: TestDEV
+    dependsOn: BuildDev
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'DEV'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    pool:
+      vmImage: 'ubuntu-18.04'
+    variables:
+      - group: HMI-APIM-BUILD-DEV
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-DEV
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-DEV
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-DEV
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+
+  - stage: TestTEST
+    dependsOn: BuildTest
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'TEST'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    pool:
+      vmImage: 'ubuntu-18.04'
+    variables:
+      - group: HMI-APIM-BUILD-TEST
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: DTS-SHAREDSERVICES-TEST
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: DTS-SHAREDSERVICES-TEST
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Functional Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: DTS-SHAREDSERVICES-TEST
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+          dependsOn:
+          - AcceptanceTest
+
+          
+  - stage: TestSTG
+    dependsOn: BuildSTG
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'NONPROD'), contains('${{ parameters.stage }}', 'ALL')))
+    pool:
+      vmImage: 'ubuntu-18.04'
+    variables:
+      - group: HMI-APIM-BUILD-STG
+      - name: 'env'
+        value: 'Test'
+      - name: 'subscriptionName'
+        value: 'DTS-SHAREDSERVICES-TEST'
+    jobs:
+      - template: pipeline/jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for ${{ variables.env }} Results
+          subscription: ${{ variables.subscriptionName }}
+      
+      - template: pipeline/jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: ${{ variables.subscriptionName }}
+
+      - template: pipeline/jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-smoke.yaml
+        parameters:
+          displayName: Smoke Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-functional.yaml
+        parameters:
+          displayName: Functional Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ variables.subscriptionName }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: pipeline/jobs/test-codequality.yaml
+        parameters:
+          displayName: Code Quality Test
+          dependsOn:
+          - AcceptanceTest
+
+  - stage: BuildSTG
+    dependsOn:
+      - PlanStg
+    condition: and(succeeded(), or(eq('${{ parameters.stage }}', 'STG'), contains('${{ parameters.stage }}', 'ALL')), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')))
+    variables:
+      - group: HMI-APIM-BUILD-STG
+    jobs:
+    - template: pipeline/jobs/terraform-apply.yaml
+      parameters:
+        displayName: Build STG
+        subscription: DTS-SHAREDSERVICES-STG
+    - template: pipeline/jobs/apply-policies.yaml
+      parameters:
+        displayName: Apply API Policies
+        subscription: DTS-SHAREDSERVICES-STG
+        environment: stg
+        dependsOn:
+        - TerraformApply
+    - template: pipeline/jobs/remove-default-apis.yaml
+      parameters:
+        displayName: Remove default APIS
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+    - template: pipeline/jobs/create-storage-rota.yaml
+      parameters:
+        displayName: Create ROTA Storage
+        subscription: DTS-SHAREDSERVICES-STG
+        dependsOn: TerraformApply
+        environmentName: staging
+    - template: pipeline/jobs/create-logicapp-dtu.yaml
+      parameters:
+        displayName: Create DTU Logic Application
+        subscription: DTS-SHAREDSERVICES-STG
+        environment: stg
+        dependsOn: createRotaStorag
