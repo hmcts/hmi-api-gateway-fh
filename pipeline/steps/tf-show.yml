@@ -1,0 +1,24 @@
+parameters:
+  - name: planOrStateFilePath
+    type: string
+  - name: outputLocation
+    type: string
+  - name: subscriptionName
+    type: string
+    default: $(subscriptionName)
+
+steps:
+  - template: tf-install.yaml
+
+  - template: tf-init.yaml
+    parameters:
+      subscription: ${{parameters.subscriptionName}}
+
+  - powershell: |
+      $outputlocation = "${{parameters.outputLocation}}"
+      if ($outputlocation -eq "") {
+        terraform show ${{parameters.planOrStateFilePath}}
+      } else {
+        terraform show -json -no-color ${{parameters.planOrStateFilePath}} > $outputlocation
+      }
+    displayName: 'Terraform Show'
