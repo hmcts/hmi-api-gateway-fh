@@ -111,11 +111,11 @@ public class DELETE_Participant_UnitTests {
     }
 
     private Response invokeAddParticipant() {
-        return httpClient.httpDelete(hmiApiRootContext + "/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
+        return httpClient.httpDelete("/hmi/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
     }
 
     private Response invokeAddParticipantNoAuth() {
-        return httpClient.httpDeleteNoAuth(hmiApiRootContext + "/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
+        return httpClient.httpDeleteNoAuth("/hmi/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
     }
 
 }
