@@ -91,7 +91,7 @@ public class PUT_Edit_Participant_UnitTests {
     @DisplayName("Test for Valid Headers")
     void testEditParticipantForValidHeaders() {
         final Response response = invokeEditParticipant();
-        thenValidateResponseForAddParticipant(response);
+        thenValidateResponseForUpdateParticipant(response);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class PUT_Edit_Participant_UnitTests {
     @Order(3)
     @DisplayName("Test for Invalid Token")
     void testEditParticipantForMissingToken() {
-        final Response response = invokeAddParticipantNoAuth();
+        final Response response = invokeEditParticipantNoAuth();
         thenValidateResponseForAddParticipantWithInvalidToken(response);
     }
 
@@ -122,7 +122,7 @@ public class PUT_Edit_Participant_UnitTests {
                 .when().put().then().extract().response();
     }
 
-    private Response invokeAddParticipantNoAuth() {
+    private Response invokeEditParticipantNoAuth() {
         return given()
                 .auth()
                 .oauth2("accessToken")
