@@ -89,7 +89,6 @@ public class POST_Add_Participant_UnitTests {
     @Order(1)
     @DisplayName("Test for Valid Headers")
     void testAddParticipantForValidHeaders() {
-        System.out.println("Target Instance: " + targetInstance);
         final Response response = invokeAddParticipant();
         thenValidateResponseForAddParticipant(response);
     }
