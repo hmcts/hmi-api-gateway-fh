@@ -111,10 +111,10 @@ public class POST_Add_Participant_UnitTests {
     }
 
     private Response invokeAddParticipant() {
-        return httpClient.httpPost(hmiApiRootContext + "/HID123456/participants", headersAsMap, paramsAsMap, "");
+        return httpClient.httpPost( "/hmi/HID123456/participants", headersAsMap, paramsAsMap, "");
     }
 
     private Response invokeAddParticipantNoAuth() {
-        return httpClient.httpPostNoAuth(hmiApiRootContext + "/HID123456/participants", headersAsMap, paramsAsMap, "");
+        return httpClient.httpPostNoAuth( "/hmi/HID123456/participants", headersAsMap, paramsAsMap, "");
     }
 }
