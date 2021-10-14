@@ -88,7 +88,7 @@ public class PUT_Edit_Participant_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Valid Headers")
+    @DisplayName("Test Edit Participant for Valid Headers")
     void testEditParticipantForValidHeaders() {
         final Response response = invokeEditParticipant();
         thenValidateResponseForUpdateParticipant(response);
@@ -96,7 +96,7 @@ public class PUT_Edit_Participant_UnitTests {
 
     @Test
     @Order(2)
-    @DisplayName("Test for Invalid Headers")
+    @DisplayName("Test Edit Participant for Invalid Headers")
     void testEditParticipantForInvalidHeaders() {
         headersAsMap.put("Source-System", "");
         final Response response = invokeEditParticipant();
@@ -105,7 +105,7 @@ public class PUT_Edit_Participant_UnitTests {
 
     @Test
     @Order(3)
-    @DisplayName("Test for Invalid Token")
+    @DisplayName("Test Edit Participant for Invalid Token")
     void testEditParticipantForMissingToken() {
         final Response response = invokeEditParticipantNoAuth();
         thenValidateResponseForAddParticipantWithInvalidToken(response);
