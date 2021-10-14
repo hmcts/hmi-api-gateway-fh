@@ -88,7 +88,8 @@ public class POST_Add_Participant_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Valid Headers")
-    void testRetrievePeopleForValidHeaders() {
+    void testAddParticipantForValidHeaders() {
+        System.out.println("Target Instance: " + targetInstance);
         final Response response = invokeAddParticipant();
         thenValidateResponseForAddParticipant(response);
     }
@@ -96,7 +97,7 @@ public class POST_Add_Participant_UnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for Invalid Headers")
-    void testRetrievePeopleForInvalidHeaders() {
+    void testAddParticipantForInvalidHeaders() {
         headersAsMap.put("Source-System", "");
         final Response response = invokeAddParticipant();
         thenValidateResponseForAddParticipantWithInvalidHeader(response);
@@ -105,7 +106,7 @@ public class POST_Add_Participant_UnitTests {
     @Test
     @Order(3)
     @DisplayName("Test for Invalid Token")
-    void testRetrievePeopleForMissingToken() {
+    void testAddParticipantForMissingToken() {
         final Response response = invokeAddParticipantNoAuth();
         thenValidateResponseForAddParticipantWithInvalidToken(response);
     }
