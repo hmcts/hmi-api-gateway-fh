@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,9 @@ class GET_health_UnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
+
+    @Value("${snlApiVersion}")
+    private String snlApiVersion;
 
     @Value("${hmiApiRootContext}")
     private String hmiApiRootContext;
@@ -96,11 +100,14 @@ class GET_health_UnitTests {
     }
 
     @Test
-    @Order(8)
+    @Order(2)
     @DisplayName("Test for Correct Headers and No Parameters")
     void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
         final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
         thenValidateResponseForRetrieve(response);
+        Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+
+        assertEquals(responseMap.get("project.version"), snlApiVersion);
     }
 
     private Response whenRetrieveHearingScheduleIsInvokedForInvalidResource() {
