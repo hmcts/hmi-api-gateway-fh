@@ -24,7 +24,7 @@
                     <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
                 <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
+                <set-backend-service base-url="https://vh-bookings-api-dev.hearings.reform.hmcts.net/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
