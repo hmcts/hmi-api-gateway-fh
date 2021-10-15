@@ -4,8 +4,6 @@ import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -94,46 +92,35 @@ class GET_health_UnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testRetrieveHearingSchedulesRequestForInvalidResource() {
-        final Response response = whenRetrieveHearingScheduleIsInvokedForInvalidResource();
+    void testRetrieveHealthCheckForInvaalidResource() {
+        final Response response = whenRetrieveHealthCheckForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
     @Order(2)
-    @DisplayName("Test for Correct Headers and No Parameters")
-    void testRetrieveHearingSchedulesRequestWithCorrectRequestAndNoParams() {
-        final Response response = whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams();
+    @DisplayName("Test for Correct Headers")
+    void testRetrieveSnlHealthcheckWithCorrectHeaders() {
+        final Response response = whenRetrieveSnlHealthcheckWithCorrectHeaders();
         thenValidateResponseForRetrieve(response);
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
 
         assertEquals(responseMap.get("project.version"), snlApiVersion);
     }
 
-    private Response whenRetrieveHearingScheduleIsInvokedForInvalidResource() {
-        return retrieveHearingSchedulesResponseForInvalidResource(hmiApiRootContext +"get", headersAsMap, targetInstance);
+    private Response whenRetrieveHealthCheckForInvalidResource() {
+        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext +"get", headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveHearingScheduleIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveHearingSchedulesResponseForCorrectRequestAndNoParams(hmiApiRootContext + "snl-health", headersAsMap, targetInstance);
+    private Response whenRetrieveSnlHealthcheckWithCorrectHeaders() {
+        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext + "snl-health", headersAsMap, targetInstance);
     }
 
-    private Response retrieveHearingSchedulesResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveSnlHealthcheckForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
          return given()
                  .auth()
                  .oauth2(accessToken)
-                .headers(headersAsMap)
-                .baseUri(basePath)
-                .basePath(api)
-                .when().get().then().extract().response();
-    }
-
-    private Response retrieveHearingSchedulesResponseForCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
-
-          return given()
-                  .auth()
-                  .oauth2(accessToken)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
