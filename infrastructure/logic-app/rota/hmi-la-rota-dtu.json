@@ -1180,7 +1180,7 @@
                                                             "type": "AppendToStringVariable",
                                                             "inputs": {
                                                                 "name": "scheduleErrorBody",
-                                                                "value": "@actions('HTTP_HMI')['error']"
+                                                                "value": "@body('HTTP_HMI')"
                                                             }
                                                         }
                                                     },
