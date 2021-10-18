@@ -1,0 +1,80 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
+                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+                <choose>
+                    <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
+                        <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                            <set-url>https://login.microsoftonline.com/fb6e0e22-0da3-4c35-972a-9d61eb256508/oauth2/token</set-url>
+                            <set-method>POST</set-method>
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/x-www-form-urlencoded</value>
+                            </set-header>
+                            <set-body>@{
+                                    return "client_id=#{vhAuthClient}#&resource=#{vhAuthResource}#&client_secret=#{vhAuthSecret}#&grant_type=client_credentials";
+                                }
+                            </set-body>
+                        </send-request>
+                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                    </when>
+                </choose>
+                <set-header name="Authorization" exists-action="override">
+                    <value>@((String)context.Variables["vhAuthToken"])</value>
+                </set-header>
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://vh-bookings-api-dev.hearings.reform.hmcts.net/hearings" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
+                <mock-response status-code="204" content-type="application/json" />
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="http://#{emulatorHost}#/hearings/create-video-hearing/" />
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+    <base />
+        <choose>
+            <when condition="@(context.Response.StatusCode == 401)">
+                <cache-remove-value key="vhAuth" />
+                <return-response>
+                    <set-status code="502" />
+                    <set-header name="Content-Type">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("message", "Successfully authenticated by HMI, however target system failed to autheticate. Please try again.")
+                        ).ToString();
+                        }
+                    </set-body>
+                </return-response>
+            </when>
+            <when condition="@(context.Response.StatusCode == 403)">
+                <cache-remove-value key="vhAuth" />
+                <return-response>
+                    <set-status code="502" />
+                    <set-header name="Content-Type">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                        return new JObject(
+                        new JProperty("message", "Successfully authorized by HMI, however target system failed to authorize. Please try again.")
+                        ).ToString();
+                        }
+                    </set-body>
+                </return-response>
+            </when>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
