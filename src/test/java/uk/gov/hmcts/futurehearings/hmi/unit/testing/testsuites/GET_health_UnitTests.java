@@ -99,7 +99,7 @@ class GET_health_UnitTests {
 
     @Test
     @Order(2)
-    @DisplayName("Test for Correct Headers")
+    @DisplayName("Test for Correct Headers and Version Number")
     void testRetrieveSnlHealthcheckWithCorrectHeaders() {
         final Response response = whenRetrieveSnlHealthcheckWithCorrectHeaders();
         thenValidateResponseForRetrieve(response);
