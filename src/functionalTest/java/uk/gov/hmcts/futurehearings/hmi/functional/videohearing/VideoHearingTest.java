@@ -39,6 +39,12 @@ public class VideoHearingTest extends FunctionalTest {
     @Value("${videohearings_idRootContext}")
     protected String videohearings_idRootContext;
 
+    @Value("${participantsRootContext}")
+    protected String participantsRootContext;
+
+    @Value("${participants_idRootContext}")
+    protected String participants_idRootContext;
+
     @Steps
     VideoHearingSteps videoHearingSteps;
 
@@ -97,5 +103,40 @@ public class VideoHearingTest extends FunctionalTest {
         videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext,
                 headersAsMap,
                 authorizationToken);
+    }
+
+    @Test
+    public void testPostParticipant() {
+        headersAsMap = createStandardHMIHeader("VH");
+        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        participantsRootContext = String.format(participantsRootContext, hearingId);
+        videoHearingSteps.performPostParticipant(participantsRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}");
+    }
+
+    @Test
+    public void testPutParticipant() {
+        headersAsMap = createStandardHMIHeader("VH");
+        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String participantId = String.valueOf(new Random().nextInt(99999999));
+        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
+        videoHearingSteps.performPutParticipant(participants_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}");
+    }
+
+    @Test
+    public void testDeleteParticipant() {
+        headersAsMap = createStandardHMIHeader("VH");
+        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String participantId = String.valueOf(new Random().nextInt(99999999));
+        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
+        videoHearingSteps.performDeleteParticipant(participants_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}");
     }
 }

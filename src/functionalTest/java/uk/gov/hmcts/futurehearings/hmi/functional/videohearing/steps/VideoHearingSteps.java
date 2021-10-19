@@ -73,4 +73,43 @@ public class VideoHearingSteps {
                 null, HttpMethod.GET,HttpStatus.OK);
         return response;
     }
+
+    @Step("User makes a request to add participant")
+    public Response performPostParticipant(final String apiURL,
+                                           final Map<String, Object> headersAsMap,
+                                           final String authorizationToken,
+                                           final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.POST, HttpStatus.BAD_REQUEST);
+        return response;
+    }
+
+    @Step("User makes a request to edit a participant")
+    public Response performPutParticipant(final String apiURL,
+                                          final Map<String, Object> headersAsMap,
+                                          final String authorizationToken,
+                                          final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.PUT, HttpStatus.BAD_REQUEST);
+        return response;
+    }
+
+    @Step("User makes a request to delete a participant")
+    public Response performDeleteParticipant(final String apiURL,
+                                             final Map<String, Object> headersAsMap,
+                                             final String authorizationToken,
+                                             final String body) {
+
+        Response response = callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.DELETE, HttpStatus.BAD_REQUEST);
+        return response;
+    }
 }
