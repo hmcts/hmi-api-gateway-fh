@@ -17,7 +17,6 @@ public class HealthResponseVerifier {
     public static void thenValidateResponseForInvalidResource(Response response) {
         try {
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            //assertEquals(2, responseMap.size());
             assertEquals(404, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 404");
             assertEquals("Resource not found", responseMap.get(("message")),"Status Code Message Validation:");
@@ -50,7 +49,6 @@ public class HealthResponseVerifier {
 
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            //assertEquals(2, responseMap.size());
             assertEquals(401, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 401");
             assertEquals("Access denied due to invalid OAuth information", responseMap.get(("message")),"Status Code Message Validation:");
@@ -71,7 +69,6 @@ public class HealthResponseVerifier {
 
         try {
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-            //assertEquals(2, responseMap.size());
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
             assertEquals("Missing/Invalid Header " + missingField, responseMap.get(("message")),"Status Code Message Validation:");

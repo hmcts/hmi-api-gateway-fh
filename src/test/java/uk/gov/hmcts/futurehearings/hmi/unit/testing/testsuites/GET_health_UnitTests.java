@@ -41,7 +41,6 @@ class GET_health_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -109,7 +108,7 @@ class GET_health_UnitTests {
     }
 
     private Response whenRetrieveHealthCheckForInvalidResource() {
-        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext +"get", headersAsMap, targetInstance);
+        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext + "get", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveSnlHealthcheckWithCorrectHeaders() {
