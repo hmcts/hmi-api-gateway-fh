@@ -10,7 +10,7 @@ stages:
     displayName: "${{ parameters.environment }} Test"
     dependsOn: Build${{ parameters.environment }}
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment }}
     jobs:
