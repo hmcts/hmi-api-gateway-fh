@@ -16,6 +16,17 @@ resources:
 
 parameters:
 
+  - name: release
+    displayName: "Release To"
+    type: string
+    default: pull-request
+    values:
+    - pull-request
+    - sbox
+    - dev
+    - test
+    - release
+
   - name: environments
     type: object
     default:
@@ -32,25 +43,26 @@ stages:
   - template: pipeline/stages/validate.yaml
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod'), ne(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), True)), and(or(eq(environment, 'stg'), eq(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) ) }}:
-      - template: pipeline/stages/plan.yaml
-        parameters:
-          environment: ${{ environment }}
-          subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
-
-      - ${{ if eq(environment, 'prod') }}:
-        - template: pipeline/stages/wait.yaml
-          parameters:
-            environment: ${{ environment }}
-
-      - template: pipeline/stages/apply.yaml
-        parameters:
-          environment: ${{ environment }}
-          subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
-      
-      - ${{ if ne(environment, 'prod' )}}:
-        - template: pipeline/stages/test.yaml
+    - ${{ if or(and(eq(environment, 'sbox'), eq(parameters.release, 'sbox')),and(eq(environment, 'dev'), eq(parameters.release, 'dev')),and(eq(environment, 'test'), eq(parameters.release, 'test')),and(or(eq(environment, 'stg'),eq(environment, 'prod')), eq(parameters.release, 'release'))) }}:
+      - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod'), ne(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), True)), and(or(eq(environment, 'stg'), eq(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) ) }}:
+        - template: pipeline/stages/plan.yaml
           parameters:
             environment: ${{ environment }}
             subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+
+        - ${{ if eq(environment, 'prod') }}:
+          - template: pipeline/stages/wait.yaml
+            parameters:
+              environment: ${{ environment }}
+
+        - template: pipeline/stages/apply.yaml
+          parameters:
+            environment: ${{ environment }}
+            subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+        
+        - ${{ if ne(environment, 'prod' )}}:
+          - template: pipeline/stages/test.yaml
+            parameters:
+              environment: ${{ environment }}
+              subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
         

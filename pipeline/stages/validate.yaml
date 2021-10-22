@@ -13,5 +13,7 @@ stages:
     ${{ if ne(parameters.dependsOn, '') }}:
       dependsOn: '${{parameters.dependsOn}}'
     condition: ${{ parameters.condition }}
+    pool:
+      vmImage: 'ubuntu-latest'
     jobs:
       - template: ../jobs/terraform-validate.yaml
