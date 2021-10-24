@@ -274,6 +274,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-request-direct-listing-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "snl-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-snl-health-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }

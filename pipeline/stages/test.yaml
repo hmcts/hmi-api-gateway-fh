@@ -1,0 +1,86 @@
+parameters:
+  - name: environment
+    type: string
+  - name: subscription
+    type: string
+
+
+stages:
+  - stage: Test${{ parameters.environment }}
+    displayName: "${{ parameters.environment }} Test"
+    dependsOn: Build${{ parameters.environment }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: HMI-APIM-BUILD-${{ parameters.environment }}
+    jobs:
+      - template: ../jobs/create-storage.yaml
+        parameters:
+          displayName: Create Storage for Test Results
+          subscription: ${{ parameters.subscription }}
+      
+      - template: ../jobs/export-keyvault.yaml
+        parameters:
+          displayName: Read APIM Subscription Key
+          subscription: ${{ parameters.subscription }}
+
+      - template: ../jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ parameters.subscription }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - template: ../jobs/test-acceptance.yaml
+        parameters:
+          displayName: Acceptance Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ parameters.subscription }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - ${{ if or(eq(parameters.environment, 'dev'), eq(parameters.environment, 'sbox'), eq(parameters.environment, 'test'), eq(parameters.environment, 'stg')) }}:
+        - template: ../jobs/test-codequality.yaml
+          parameters:
+            displayName: Code Quality Test
+            dependsOn:
+            - AcceptanceTest
+
+      - ${{ if or(eq(parameters.environment, 'test'), eq(parameters.environment, 'stg')) }}:
+        - template: ../jobs/test-smoke.yaml
+          parameters:
+            displayName: Smoke Test
+            dependsOn:
+            - CreateStorage
+            - ExportKeyVault
+            subscription: ${{ parameters.subscription }}
+            subscriptionKey: $(subscriptionKey)
+            storageContainer: $(storageContainer)
+            variables:
+              storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - ${{ if or(eq(parameters.environment, 'test'), eq(parameters.environment, 'stg')) }}:
+        - template: ../jobs/test-functional.yaml
+          parameters:
+            displayName: Functional Test
+            dependsOn:
+            - CreateStorage
+            - ExportKeyVault
+            subscription: ${{ parameters.subscription }}
+            subscriptionKey: $(subscriptionKey)
+            storageContainer: $(storageContainer)
+            variables:
+              storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]

@@ -1,0 +1,19 @@
+parameters:
+  - name: dependsOn
+    type: string
+    default: ''
+  - name: condition
+    type: string
+    default: 'always()'
+
+stages:
+  - stage: Validate
+    ${{ if eq(parameters.dependsOn, '') }}:
+      dependsOn: []
+    ${{ if ne(parameters.dependsOn, '') }}:
+      dependsOn: '${{parameters.dependsOn}}'
+    condition: ${{ parameters.condition }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    jobs:
+      - template: ../jobs/terraform-validate.yaml

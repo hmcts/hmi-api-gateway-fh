@@ -18,10 +18,10 @@ jobs:
   steps:
   - download: current
     displayName: 'Download tfplan'
-    artifact: tfplan-$(environment)
+    artifact: tfplan-$(environment).tfplan
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment)'
+      sourceFolder: '$(Pipeline.Workspace)/tfplan-$(environment).tfplan'
       targetFolder: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
   - template: ../steps/apim-availability.yaml
     parameters:

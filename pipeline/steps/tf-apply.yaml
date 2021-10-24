@@ -10,4 +10,4 @@ steps:
     command: apply
     workingDirectory: $(System.DefaultWorkingDirectory)/infrastructure/terraform/
     environmentServiceName: ${{ parameters.subscription }}
-    commandOptions: -auto-approve tfplan-$(environment)
+    commandOptions: -auto-approve tfplan-$(environment).tfplan
