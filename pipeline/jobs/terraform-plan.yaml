@@ -2,16 +2,11 @@ parameters:
   - name: subscription
     type: string
 
-  - name: group
-    type: string
-
   - name: displayName
     type: string
 
 jobs:
 - job: TerraformPlan
-  variables:
-  - group: ${{ parameters.group }}
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'ubuntu-18.04'

@@ -1,32 +1,9 @@
-parameters:
-  - name: subscription
-    type: string
-
-  - name: group
-    type: string
-
-  - name: displayName
-    type: string
-
-  - name: environment
-    type: string
-
-  - name: dependsOn
-    type: string
-    default: ''
 
 jobs:
-- job: Terraform${{ parameters.environment }}
-  dependsOn:
-  - ${{ if parameters.dependsOn }}:
-    - ${{ parameters.dependsOn }}
-  variables:
-  - group: ${{ parameters.group }}
-  displayName: ${{ parameters.displayName }}
-  pool:
-    vmImage: 'ubuntu-18.04'
+- job: TerraformValidation
+  displayName: "Validate Terraform"
   steps:
-  - template: ../steps/tf-install.yaml
-  - template: ../steps/tf-test.yaml
-    parameters:
-      subscription: ${{ parameters.subscription }}
+    - template: ../steps/tf-install.yaml
+    - template: templates/tests/terraform/allTests.yaml@azTemplates
+      parameters:
+        terraformPath: $(System.DefaultWorkingDirectory)/infrastructure/terraform
