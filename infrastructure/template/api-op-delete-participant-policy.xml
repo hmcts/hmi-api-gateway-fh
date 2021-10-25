@@ -23,7 +23,7 @@
                 <set-header name="Authorization" exists-action="override">
                     <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
-                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <rewrite-uri template="/{hearingId}/participants/{participantId}" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
