@@ -33,12 +33,18 @@ resource "azurerm_key_vault_access_policy" "policy" {
   storage_permissions     = []
 }
 
+locals {
+  cert_url = replace(data.azurerm_key_vault_certificate.cert.secret_id, "/${data.azurerm_key_vault_certificate.cert.version}", "")
+}
+
 resource "azurerm_api_management_custom_domain" "custom_domain" {
   api_management_id = azurerm_api_management.hmi_apim.id
 
   proxy {
-    host_name    = local.host_name
-    key_vault_id = data.azurerm_key_vault_certificate.cert.secret_id
+    host_name                    = local.host_name
+    key_vault_id                 = local.cert_url
+    negotiate_client_certificate = true
+    default_ssl_binding          = true
   }
 
   depends_on = [
