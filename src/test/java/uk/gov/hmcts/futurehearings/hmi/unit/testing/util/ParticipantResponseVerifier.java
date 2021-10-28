@@ -37,7 +37,7 @@ public class ParticipantResponseVerifier {
         }
     }
 
-    public static void  thenValidateResponseForAddParticipantWithInvalidHeader(Response response){
+    public static void thenValidateResponseForAddParticipantWithInvalidHeader(Response response){
         try{
             assertEquals(400, response.getStatusCode(),"Status Code Validation:");
             getObjStep().pass("Got the expected status code: 400");
