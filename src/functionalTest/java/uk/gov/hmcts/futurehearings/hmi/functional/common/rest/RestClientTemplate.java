@@ -50,8 +50,7 @@ public class RestClientTemplate {
                         .when().delete().then().extract().response();
                 break;
             case GET :
-                response =
-                         expect().that().statusCode(httpStatus.value())
+                response = expect().that().statusCode(httpStatus.value())
                         .given()
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
