@@ -23,8 +23,12 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForUpdateParticipant;
+
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -62,8 +66,6 @@ public class DELETE_Participant_UnitTests {
     @Value("${grantType}")
     private String grantType;
 
-    private static String accessToken;
-
     @Value("${invalidTokenURL}")
     private String invalidTokenURL;
 
@@ -76,12 +78,21 @@ public class DELETE_Participant_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    @Value("${participants_idRootContext}")
+    private String participantsIdRootContext;
+
+    private static String accessToken;
     private HmiHttpClient httpClient;
+
+    private String participantIdCtx;
+    private String hearingId = String.valueOf(new Random().nextInt(99999999));
+    private String participantId = String.valueOf(new Random().nextInt(99999999));
 
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
         this.httpClient = new HmiHttpClient(accessToken, targetInstance);
+        participantIdCtx = String.format(participantsIdRootContext, hearingId, participantId);
     }
 
     @BeforeEach
@@ -120,11 +131,11 @@ public class DELETE_Participant_UnitTests {
     }
 
     private Response invokeAddParticipant() {
-        return httpClient.httpDelete("/hmi/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
+        return httpClient.httpDelete(participantIdCtx, headersAsMap, paramsAsMap, "");
     }
 
     private Response invokeAddParticipantNoAuth() {
-        return httpClient.httpDeleteNoAuth("/hmi/HID123456/participants/PID123456", headersAsMap, paramsAsMap, "");
+        return httpClient.httpDeleteNoAuth(participantIdCtx, headersAsMap, paramsAsMap, "");
     }
 
 }
