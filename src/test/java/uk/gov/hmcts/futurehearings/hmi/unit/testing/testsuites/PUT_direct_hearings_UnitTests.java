@@ -29,7 +29,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /direct-hearings - Request Hearings")
 @SuppressWarnings("java:S2699")
-class POST_direct_hearings_UnitTests {
+class PUT_direct_hearings_UnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/create-hearing-request-payload.json";
 
