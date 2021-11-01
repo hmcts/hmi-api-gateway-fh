@@ -5,14 +5,8 @@ locals {
   cert_name     = replace(local.host_name, ".", "-")
 }
 
-
-data "azurerm_api_management" "hmi_apim_svc" {
-  name                = azurerm_api_management.hmi_apim.name
-  resource_group_name = azurerm_resource_group.hmi_apim_rg.name
-}
-
 module "cert" {
-  source        = "git::https://github.com/hmcts/terraform-module-certificate.git?ref=add-url"
+  source        = "git::https://github.com/hmcts/terraform-module-certificate.git?ref=master"
   environment   = var.environment
   domain_prefix = "hmi-apim"
   object_id     = azurerm_api_management.hmi_apim.identity.0.principal_id
