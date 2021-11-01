@@ -36,13 +36,13 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-//@Slf4j
-//@SpringBootTest(classes = { Application.class })
-//@ActiveProfiles("test")
-//@ExtendWith(TestReporter.class)
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@DisplayName("POST /direct-hearings - Request Hearings")
+@Slf4j
+@SpringBootTest(classes = { Application.class })
+@ActiveProfiles("test")
+@ExtendWith(TestReporter.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayName("POST /direct-hearings - Request Hearings")
 @SuppressWarnings("java:S2699")
 class POST_direct_hearings_UnitTests {
 
@@ -94,13 +94,13 @@ class POST_direct_hearings_UnitTests {
     
 	private HmiHttpClient httpClient;
 
-    //@BeforeAll
+    @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
 		this.httpClient = new HmiHttpClient(accessToken, targetInstance);
     }
 
-    //@BeforeEach
+    @BeforeEach
     void initialiseValues() {
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
