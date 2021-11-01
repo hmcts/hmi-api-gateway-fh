@@ -23,11 +23,11 @@ resource "azurerm_api_management" "hmi_apim" {
 
   certificate {
     encoded_certificate = filebase64("certificates/isrgrootx1.cer")
-    store_name = "Root"
+    store_name          = "Root"
   }
   certificate {
     encoded_certificate = filebase64("certificates/lets-encrypt-r3.cer")
-    store_name = "CertificateAuthority"
+    store_name          = "CertificateAuthority"
   }
- 
+
 }
