@@ -23,8 +23,11 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipant;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidToken;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -62,8 +65,6 @@ public class POST_Add_Participant_UnitTests {
     @Value("${grantType}")
     private String grantType;
 
-    private static String accessToken;
-
     @Value("${invalidTokenURL}")
     private String invalidTokenURL;
 
@@ -76,7 +77,13 @@ public class POST_Add_Participant_UnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    @Value("${participantsRootContext}")
+    private String participantsRootContext;
+
+    private static String accessToken;
     private HmiHttpClient httpClient;
+    private String participantCtx;
+    private String hearingId = String.valueOf(new Random().nextInt(99999999));
 
     @BeforeAll
     void setToken(){
@@ -92,6 +99,7 @@ public class POST_Add_Participant_UnitTests {
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
+        participantCtx = String.format(participantsRootContext, hearingId);
     }
 
     @Test
@@ -120,10 +128,10 @@ public class POST_Add_Participant_UnitTests {
     }
 
     private Response invokeAddParticipant() {
-        return httpClient.httpPost( "/hmi/HID123456/participants", headersAsMap, paramsAsMap, "");
+        return httpClient.httpPost(participantCtx, headersAsMap, paramsAsMap, "");
     }
 
     private Response invokeAddParticipantNoAuth() {
-        return httpClient.httpPostNoAuth( "/hmi/HID123456/participants", headersAsMap, paramsAsMap, "");
+        return httpClient.httpPostNoAuth(participantCtx, headersAsMap, paramsAsMap, "");
     }
 }
