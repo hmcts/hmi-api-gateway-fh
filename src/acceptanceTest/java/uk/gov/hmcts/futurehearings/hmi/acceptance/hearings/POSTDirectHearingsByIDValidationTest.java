@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
+import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
@@ -21,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(POSTDirectHearingsByIDValidationTest.class)
 @IncludeTags("Post")
+@Disabled
 class POSTDirectHearingsByIDValidationTest extends HearingValidationTest {
 
     @Value("${directhearings_idRootContext}")
