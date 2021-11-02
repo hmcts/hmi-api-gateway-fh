@@ -20,4 +20,14 @@ resource "azurerm_api_management" "hmi_apim" {
       subnet_id = data.azurerm_subnet.hmi_apim_subnet.id
     }
   }
+
+  certificate {
+    encoded_certificate = filebase64("certificates/isrgrootx1.cer")
+    store_name          = "Root"
+  }
+  certificate {
+    encoded_certificate = filebase64("certificates/lets-encrypt-r3.cer")
+    store_name          = "CertificateAuthority"
+  }
+
 }
