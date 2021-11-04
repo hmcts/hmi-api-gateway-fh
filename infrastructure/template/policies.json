@@ -276,6 +276,24 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "add-participant",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-add-participant-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "edit-participant",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-edit-participant-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "delete-participant",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-participant-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "snl-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-snl-health-policy.xml",
