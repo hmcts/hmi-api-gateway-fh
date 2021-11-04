@@ -34,8 +34,8 @@ public class RestClientTemplate {
                         .when().post().then().extract().response();
                 break;
             case PUT:
-//                response = expect().that().statusCode(httpStatus.value())
-                       response= RestAssured.given().body(payloadBody)
+                response = expect().that().statusCode(httpStatus.value())
+                        .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
                         .basePath(apiURL)
@@ -50,8 +50,7 @@ public class RestClientTemplate {
                         .when().delete().then().extract().response();
                 break;
             case GET :
-                response =
-                         expect().that().statusCode(httpStatus.value())
+                response = expect().that().statusCode(httpStatus.value())
                         .given()
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)

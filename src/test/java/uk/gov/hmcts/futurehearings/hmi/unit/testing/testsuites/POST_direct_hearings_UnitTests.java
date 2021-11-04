@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Value;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
@@ -110,6 +111,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(1)
     @DisplayName("Test for Invalid Resource")
     void testDirectHearingsForInvalidResource() throws IOException {
@@ -119,6 +121,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDirectHearingsWithMissingContentTypeHeader() throws IOException {
@@ -129,6 +132,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDirectHearingsWithInvalidContentTypeHeader() throws IOException {
@@ -140,6 +144,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDirectHearingsWithMissingAcceptHeader() throws IOException {
@@ -150,6 +155,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDirectHearingsWithInvalidAcceptHeader() throws IOException {
@@ -161,6 +167,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Order(6)
+    @Ignore
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDirectHearingsWithMissingHeader(String iteration) throws IOException {
@@ -171,6 +178,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Order(7)
+    @Ignore
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDirectHearingsWithInvalidHeader(String iteration) throws IOException {
@@ -182,6 +190,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(8)
     @DisplayName("Test for Correct Headers")
     void testDirectHearingsWithCorrectHeaders() throws IOException {
@@ -191,6 +200,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(9)
     @DisplayName("Test for missing Access Token")
     void testDirectHearingsWithMissingAccessToken() throws IOException {
@@ -201,6 +211,7 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
+    @Ignore
     @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testDirectHearingsWithInvalidAccessToken() throws IOException {

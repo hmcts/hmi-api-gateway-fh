@@ -109,6 +109,7 @@ test {
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
     include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
+    exclude "uk/gov/hmcts/futurehearings/hmi/unit/testing/testsuites/POST_direct_hearings_UnitTests.class"
     failFast = false
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
