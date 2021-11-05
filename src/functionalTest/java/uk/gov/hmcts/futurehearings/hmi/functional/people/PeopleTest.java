@@ -23,7 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
-@Ignore("Failing due to issue, to be re-enabled in future ticket once fix implemented")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"In order to test that the People Functionality is working properly",
         "As a tester",
