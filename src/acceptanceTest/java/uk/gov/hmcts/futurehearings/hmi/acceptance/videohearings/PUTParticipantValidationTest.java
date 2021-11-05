@@ -1,6 +1,5 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
-import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
@@ -16,27 +15,30 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Random;
+
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(POSTDirectHearingsByIDValidationTest.class)
-@IncludeTags("Post")
-@Disabled
-class POSTDirectHearingsByIDValidationTest extends HearingValidationTest {
+@SelectClasses(POSTVideoHearingsValidationTest.class)
+@IncludeTags("Put")
+public class PUTParticipantValidationTest extends VideoHearingValidationTest {
 
-    @Value("${directhearings_idRootContext}")
-    private String directhearings_idRootContext;
+    @Value("${participants_idRootContext}")
+    private String participants_idRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        directhearings_idRootContext = String.format(directhearings_idRootContext,"12345");
-        this.setRelativeURL(directhearings_idRootContext);
-        this.setHttpMethod(HttpMethod.POST);
-        this.setInputPayloadFileName("direct-hearing-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("/hearings/sessions","/hearings/session"));
+        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String participantId = String.valueOf(new Random().nextInt(99999999));
+        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
+        this.setRelativeURL(participants_idRootContext);
+        this.setHttpMethod(HttpMethod.PUT);
+        this.setInputPayloadFileName("put-participants-request.json");
+        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("participants","not-found"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
