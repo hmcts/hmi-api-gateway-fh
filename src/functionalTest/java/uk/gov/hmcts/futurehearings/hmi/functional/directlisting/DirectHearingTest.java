@@ -28,7 +28,6 @@ import org.springframework.test.context.ActiveProfiles;
         "I want to be able to execute the tests for Direct Listing a Hearing Request into a known Session"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@Ignore("To be fixed in future branch")
 @SuppressWarnings("java:S2699")
 public class DirectHearingTest extends FunctionalTest {
 
@@ -51,7 +50,7 @@ public class DirectHearingTest extends FunctionalTest {
         Map<String, String> queryParameters = new HashMap<String, String>();
         queryParameters.put("requestSessionType", "ADHOC");
 
-        String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/POST-Hearing-Direct-Listing-Payload.json");
+        String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
         directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
                 headersAsMap,
                 authorizationToken,
