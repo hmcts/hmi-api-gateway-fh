@@ -46,11 +46,7 @@ stages:
           displayName: Apply API Policies
           subscription: ${{ parameters.subscription }}
           environment: ${{ parameters.environment }}
-          ${{ if eq(parameters.deploymentType, 'app') }}:
-            dependsOn: TerraformApply
       - template: ../jobs/remove-default-apis.yaml
         parameters:
           displayName: Remove default APIS
           subscription: ${{ parameters.subscription }}
-          ${{ if eq(parameters.deploymentType, 'app') }}:
-            dependsOn: TerraformApply
