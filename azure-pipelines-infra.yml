@@ -60,9 +60,3 @@ stages:
             environment: ${{ environment }}
             subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
         
-        - ${{ if ne(environment, 'prod' )}}:
-          - template: pipeline/stages/test.yaml
-            parameters:
-              environment: ${{ environment }}
-              subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
-        

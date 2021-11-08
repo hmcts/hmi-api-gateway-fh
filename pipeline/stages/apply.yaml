@@ -40,7 +40,7 @@ stages:
 
 
         
-    - ${{ if or(eq(parameters.deploymentType, 'infra'), eq(parameters.deploymentType, 'app')) }}:
+    - ${{ if eq(parameters.deploymentType, 'app') }}:
       - template: ../jobs/apply-policies.yaml
         parameters:
           displayName: Apply API Policies
