@@ -19,7 +19,7 @@ public class DirectHearingSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, HttpMethod.POST,
+                body, HttpMethod.PUT,
                 HttpStatus.BAD_REQUEST);
         System.out.println(response.getBody().asString());
         assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());

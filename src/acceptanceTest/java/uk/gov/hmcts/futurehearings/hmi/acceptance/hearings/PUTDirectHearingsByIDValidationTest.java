@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
-import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
@@ -20,10 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(POSTDirectHearingsByIDValidationTest.class)
-@IncludeTags("Post")
-@Disabled
-class POSTDirectHearingsByIDValidationTest extends HearingValidationTest {
+@SelectClasses(PUTDirectHearingsByIDValidationTest.class)
+@IncludeTags("Put")
+class PUTDirectHearingsByIDValidationTest extends HearingValidationTest {
 
     @Value("${directhearings_idRootContext}")
     private String directhearings_idRootContext;
@@ -33,7 +31,7 @@ class POSTDirectHearingsByIDValidationTest extends HearingValidationTest {
         super.initialiseValues();
         directhearings_idRootContext = String.format(directhearings_idRootContext,"12345");
         this.setRelativeURL(directhearings_idRootContext);
-        this.setHttpMethod(HttpMethod.POST);
+        this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("direct-hearing-request-valid.json");
         this.setHttpSucessStatus(HttpStatus.ACCEPTED);
         this.setRelativeURLForNotFound(this.getRelativeURL().replace("/hearings/sessions","/hearings/session"));
