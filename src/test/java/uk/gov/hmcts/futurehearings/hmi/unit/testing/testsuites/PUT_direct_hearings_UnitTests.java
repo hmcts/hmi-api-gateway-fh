@@ -1,40 +1,39 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Value;
-
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForCreate;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
-
-import lombok.extern.slf4j.Slf4j;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForCreate;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+
 
 @Slf4j
 @SpringBootTest(classes = { Application.class })
@@ -44,7 +43,7 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /direct-hearings - Request Hearings")
 @SuppressWarnings("java:S2699")
-class POST_direct_hearings_UnitTests {
+class PUT_direct_hearings_UnitTests {
 
     private static final String PAYLOAD_WITH_ALL_FIELDS = "requests/create-hearing-request-payload.json";
 
@@ -111,17 +110,15 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(1)
     @DisplayName("Test for Invalid Resource")
     void testDirectHearingsForInvalidResource() throws IOException {
         final String input = givenAPayload(PAYLOAD_WITH_ALL_FIELDS);
-        final Response response = httpClient.httpPost(hearingApiRootContext + "/sessions/s123/post", headersAsMap, paramsAsMap, input);
+        final Response response = httpClient.httpPut(hearingApiRootContext + "/sessions/s123/post", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
     @Test
-    @Ignore
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDirectHearingsWithMissingContentTypeHeader() throws IOException {
@@ -132,7 +129,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDirectHearingsWithInvalidContentTypeHeader() throws IOException {
@@ -144,7 +140,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDirectHearingsWithMissingAcceptHeader() throws IOException {
@@ -155,7 +150,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDirectHearingsWithInvalidAcceptHeader() throws IOException {
@@ -167,7 +161,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Order(6)
-    @Ignore
     @ParameterizedTest(name = "Test for missing {0} header")
     @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDirectHearingsWithMissingHeader(String iteration) throws IOException {
@@ -178,7 +171,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Order(7)
-    @Ignore
     @ParameterizedTest(name = "Test for invalid {0} header")
     @ValueSource(strings = { "Source-System", "Destination-System", "Request-Created-At" })
     void testDirectHearingsWithInvalidHeader(String iteration) throws IOException {
@@ -190,7 +182,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(8)
     @DisplayName("Test for Correct Headers")
     void testDirectHearingsWithCorrectHeaders() throws IOException {
@@ -200,7 +191,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(9)
     @DisplayName("Test for missing Access Token")
     void testDirectHearingsWithMissingAccessToken() throws IOException {
@@ -211,7 +201,6 @@ class POST_direct_hearings_UnitTests {
     }
 
     @Test
-    @Ignore
     @Order(10)
     @DisplayName("Test for invalid Access Token")
     void testDirectHearingsWithInvalidAccessToken() throws IOException {
@@ -224,11 +213,11 @@ class POST_direct_hearings_UnitTests {
     }
 
     private Response requestDirectHearing(final String input) {
-        return httpClient.httpPost(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
+        return httpClient.httpPut(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
     }
 
     private Response requestDirectHearingNoAuth(final String input) {
-        return httpClient.httpPostNoAuth(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
+        return httpClient.httpPutNoAuth(hearingApiRootContext + "/sessions/s123", headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
