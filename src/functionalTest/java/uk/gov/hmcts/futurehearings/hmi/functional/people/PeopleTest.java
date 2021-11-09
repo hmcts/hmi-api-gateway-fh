@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.people;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
-import org.junit.Ignore;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
