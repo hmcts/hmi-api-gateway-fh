@@ -120,7 +120,7 @@
 							new JProperty("description", "HMI - Testing Error Handling"),
 							new JProperty("impact", "2"),
 							new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
-							new JProperty("short_description", "HMI - Testing Error Handling"),
+							new JProperty("short_description", "HMI - API Gatiway Error"),
 							new JProperty("subcategory", "HMI - Backend Service Failure"),
 							new JProperty("u_role_type", "c319bc4bdb41834074abffa9bf96199c"),
 							new JProperty("urgency", "3")
