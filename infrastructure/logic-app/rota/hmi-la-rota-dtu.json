@@ -1040,7 +1040,7 @@
                                                                     "type": "AppendToStringVariable",
                                                                     "inputs": {
                                                                         "name": "jsonJohs",
-                                                                        "value": "{ \"johId: \"@{body('Get_joh_for_schedule')?['RowKey']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
+                                                                        "value": "{ \"johId: \"@{body('Get_joh_for_schedule')?['emailAddress']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
                                                                     }
                                                                 }
                                                             },
