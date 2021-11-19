@@ -170,7 +170,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_milanJoh": [
+                                "Initialize_milanArray": [
                                     "Succeeded"
                                 ]
                             },
@@ -1107,7 +1107,7 @@
                                                                     "type": "SetVariable",
                                                                     "inputs": {
                                                                         "name": "sessionDuration",
-                                                                        "value": "180"
+                                                                        "value": "360"
                                                                     }
                                                                 },
                                                                 "Set_sessionStartAM": {
@@ -2128,23 +2128,6 @@
                                     {
                                         "name": "milanArray",
                                         "type": "array"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_milanJoh": {
-                            "runAfter": {
-                                "Initialize_milanArray": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "milanJoh",
-                                        "type": "object",
-                                        "value": "@json('{}')"
                                     }
                                 ]
                             }
