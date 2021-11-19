@@ -994,13 +994,15 @@
                                                             },
                                                             "type": "Compose",
                                                             "inputs": {
-                                                                "locationReferenceType": "ROTA",
-                                                                "roomId": "",
-                                                                "sessionDuration": "@variables('sessionDuration')",
-                                                                "sessionReference": "@{items('For_each_Session')?['RowKey']}",
-                                                                "sessionStart": "@{variables('sessionStart')}",
-                                                                "venueId": "@{items('For_each_Session')?['venueId']}",
-                                                                "johs": "@variables('jsonJohs')"
+                                                                "session": {
+                                                                    "johs": "@replace(replace(variables('jsonJohs'), ', ]', ']'), '\\\"', '\"')",
+                                                                    "locationReferenceType": "ROTA",
+                                                                    "roomId": "344",
+                                                                    "sessionDuration": "@int(variables('sessionDuration'))",
+                                                                    "sessionReference": "@{items('For_each_Session')?['RowKey']}",
+                                                                    "sessionStart": "@{variables('sessionStart')}",
+                                                                    "venueId": "@{items('For_each_Session')?['venueId']}"
+                                                                }
                                                             }
                                                         },
                                                         "For_schedule_in_the_session": {
@@ -1113,7 +1115,7 @@
                                                                     "type": "SetVariable",
                                                                     "inputs": {
                                                                         "name": "sessionStart",
-                                                                        "value": "@{items('For_each_Session')?['sessionDate']}T10:00Z"
+                                                                        "value": "@{items('For_each_Session')?['sessionDate']}T10:00:00Z"
                                                                     }
                                                                 }
                                                             },
@@ -1141,7 +1143,7 @@
                                                                         "type": "SetVariable",
                                                                         "inputs": {
                                                                             "name": "sessionStart",
-                                                                            "value": "@{items('For_each_Session')?['sessionDate']}T14:00Z"
+                                                                            "value": "@{items('For_each_Session')?['sessionDate']}T14:00:00Z"
                                                                         }
                                                                     }
                                                                 }
