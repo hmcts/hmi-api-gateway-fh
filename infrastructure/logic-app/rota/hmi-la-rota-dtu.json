@@ -170,7 +170,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_milanArray": [
+                                "Initialize_johDataArray": [
                                     "Succeeded"
                                 ]
                             },
@@ -1004,7 +1004,7 @@
                                                                     },
                                                                     "type": "AppendToArrayVariable",
                                                                     "inputs": {
-                                                                        "name": "milanArray",
+                                                                        "name": "johDataArray",
                                                                         "value": "@variables('jsonJohs')"
                                                                     }
                                                                 },
@@ -1173,7 +1173,7 @@
                                                             "type": "SetVariable",
                                                             "inputs": {
                                                                 "name": "jsonJohArray",
-                                                                "value": "@{replace(last(variables('milanArray')), '}{', '},{')}"
+                                                                "value": "@{replace(last(variables('johDataArray')), '}{', '},{')}"
                                                             }
                                                         },
                                                         "Update_with_error_from_HMI": {
@@ -2116,7 +2116,7 @@
                                 ]
                             }
                         },
-                        "Initialize_milanArray": {
+                        "Initialize_johDataArray": {
                             "runAfter": {
                                 "Initialize_jsonJohs": [
                                     "Succeeded"
@@ -2126,7 +2126,7 @@
                             "inputs": {
                                 "variables": [
                                     {
-                                        "name": "milanArray",
+                                        "name": "johDataArray",
                                         "type": "array"
                                     }
                                 ]
