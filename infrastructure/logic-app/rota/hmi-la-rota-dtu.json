@@ -170,7 +170,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_jsonJohs": [
+                                "Initialize_milanJoh": [
                                     "Succeeded"
                                 ]
                             },
@@ -974,29 +974,17 @@
                                                 "For_each_Session": {
                                                     "foreach": "@body('Get_All_Sessions')?['value']",
                                                     "actions": {
-                                                        "Append_to_johs": {
-                                                            "runAfter": {
-                                                                "For_schedule_in_the_session": [
-                                                                    "Succeeded"
-                                                                ]
-                                                            },
-                                                            "type": "AppendToStringVariable",
-                                                            "inputs": {
-                                                                "name": "jsonJohs",
-                                                                "value": "]"
-                                                            }
-                                                        },
                                                         "Compose_Session_Payload": {
                                                             "runAfter": {
-                                                                "Is_Morning_Session": [
+                                                                "Set_jsonJohArray": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
                                                             "type": "Compose",
                                                             "inputs": {
                                                                 "session": {
-                                                                    "johs": "@replace(replace(variables('jsonJohs'), ', ]', ']'), '\\\"', '\"')",
-                                                                    "locationReferenceType": "ROTA",
+                                                                    "johs": "@json(concat('[', variables('jsonJohArray'), ']'))",
+                                                                    "locationReferenceType": "EXTERNAL",
                                                                     "roomId": "344",
                                                                     "sessionDuration": "@int(variables('sessionDuration'))",
                                                                     "sessionReference": "@{items('For_each_Session')?['RowKey']}",
@@ -1008,6 +996,18 @@
                                                         "For_schedule_in_the_session": {
                                                             "foreach": "@body('Get_schedules_for_session')?['value']",
                                                             "actions": {
+                                                                "Append_to_array_variable": {
+                                                                    "runAfter": {
+                                                                        "Update_johs": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "AppendToArrayVariable",
+                                                                    "inputs": {
+                                                                        "name": "milanArray",
+                                                                        "value": "@variables('jsonJohs')"
+                                                                    }
+                                                                },
                                                                 "Get_joh_for_schedule": {
                                                                     "runAfter": {},
                                                                     "type": "ApiConnection",
@@ -1042,12 +1042,16 @@
                                                                     "type": "AppendToStringVariable",
                                                                     "inputs": {
                                                                         "name": "jsonJohs",
-                                                                        "value": "{ \"johId: \"@{body('Get_joh_for_schedule')?['RowKey']}\", \"slot\": \"@{items('For_schedule_in_the_session')?['slot']}\", \"isPresiding\": @{equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')}}, "
+                                                                        "value": {
+                                                                            "isPresiding": "@equals(items('For_schedule_in_the_session')?['slot'], 'CHAIR')",
+                                                                            "johId": "@{body('Get_joh_for_schedule')?['RowKey']}",
+                                                                            "slot": "@{items('For_schedule_in_the_session')?['slot']}"
+                                                                        }
                                                                     }
                                                                 }
                                                             },
                                                             "runAfter": {
-                                                                "Set_jsonJohs_prefix": [
+                                                                "Get_schedules_for_session": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1120,7 +1124,7 @@
                                                                 }
                                                             },
                                                             "runAfter": {
-                                                                "Append_to_johs": [
+                                                                "For_schedule_in_the_session": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1160,16 +1164,16 @@
                                                             },
                                                             "type": "If"
                                                         },
-                                                        "Set_jsonJohs_prefix": {
+                                                        "Set_jsonJohArray": {
                                                             "runAfter": {
-                                                                "Get_schedules_for_session": [
+                                                                "Is_Morning_Session": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
                                                             "inputs": {
-                                                                "name": "jsonJohs",
-                                                                "value": "["
+                                                                "name": "jsonJohArray",
+                                                                "value": "@{replace(last(variables('milanArray')), '}{', '},{')}"
                                                             }
                                                         },
                                                         "Update_with_error_from_HMI": {
@@ -2018,7 +2022,7 @@
                         },
                         "Initialize_jsonCourtLocatioinProfiles": {
                             "runAfter": {
-                                "Initialize_jsonJudges": [
+                                "Initialize_jsonJohArray": [
                                     "Succeeded"
                                 ]
                             },
@@ -2027,6 +2031,22 @@
                                 "variables": [
                                     {
                                         "name": "jsonCLProfiles",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonJohArray": {
+                            "runAfter": {
+                                "Initialize_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonJohArray",
                                         "type": "string"
                                     }
                                 ]
@@ -2092,6 +2112,39 @@
                                     {
                                         "name": "jsonSchedules",
                                         "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_milanArray": {
+                            "runAfter": {
+                                "Initialize_jsonJohs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "milanArray",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_milanJoh": {
+                            "runAfter": {
+                                "Initialize_milanArray": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "milanJoh",
+                                        "type": "object",
+                                        "value": "@json('{}')"
                                     }
                                 ]
                             }
