@@ -14,6 +14,8 @@ stages:
       vmImage: 'ubuntu-latest'
     ${{ if eq(parameters.environment, 'prod') }}:
       dependsOn: Wait${{ parameters.environment }}
+    ${{ elseif eq(parameters.deploymentType, 'app') }}:
+      dependsOn: Validate
     ${{ else }}:
       dependsOn: Plan${{ parameters.environment }}
     variables:
