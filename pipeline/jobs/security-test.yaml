@@ -4,6 +4,7 @@ parameters:
 
   - name: dependsOn
     type: object
+    default: ''
 
   - name: subscription
     type: string
