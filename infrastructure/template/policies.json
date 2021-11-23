@@ -304,6 +304,6 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-create-linked-hearing-group-policy.xml",
       "errorAction"  : "Stop"
-    },
+    }
   ]
 }
