@@ -298,6 +298,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-snl-health-policy.xml",
       "errorAction"  : "Stop"
-    }
+    },
+    {
+      "operationId"  : "create-linked-hearing-group",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-linked-hearing-group-policy.xml",
+      "errorAction"  : "Stop"
+    },
   ]
 }
