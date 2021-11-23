@@ -1107,7 +1107,7 @@
                                                                     "type": "SetVariable",
                                                                     "inputs": {
                                                                         "name": "sessionDuration",
-                                                                        "value": "360"
+                                                                        "value": "180"
                                                                     }
                                                                 },
                                                                 "Set_sessionStartAM": {
