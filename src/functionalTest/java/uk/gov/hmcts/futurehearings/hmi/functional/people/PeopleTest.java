@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.people;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
-import org.junit.Ignore;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
@@ -23,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
-@Ignore("Failing due to issue, to be re-enabled in future ticket once fix implemented")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"In order to test that the People Functionality is working properly",
         "As a tester",
