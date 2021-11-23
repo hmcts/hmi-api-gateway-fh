@@ -985,7 +985,7 @@
                                                                 "session": {
                                                                     "johs": "@json(concat('[', variables('jsonJohArray'), ']'))",
                                                                     "locationReferenceType": "EXTERNAL",
-                                                                    "roomId": "344",
+                                                                    "roomId": "@{items('For_each_Session')?['locationId']}",
                                                                     "sessionDuration": "@int(variables('sessionDuration'))",
                                                                     "sessionReference": "@{items('For_each_Session')?['RowKey']}",
                                                                     "sessionStart": "@{variables('sessionStart')}",
