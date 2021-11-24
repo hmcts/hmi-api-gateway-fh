@@ -191,7 +191,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     @Order(9)
     @DisplayName("Test for missing Access Token for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingAccessToken() throws IOException {
-
+        System.out.println("This is inside the Unit Test class for Linked Hearing Group");
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResourceNoAuth(input);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
