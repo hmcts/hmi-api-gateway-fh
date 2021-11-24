@@ -109,7 +109,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(1)
-    @DisplayName("Test for Invalid Resource")
+    @DisplayName("Test for Invalid Resource for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = httpClient.httpPost(resourcesApiRootContext+"/linkedHearingGroup"+"post", headersAsMap, paramsAsMap, input);
@@ -118,7 +118,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(2)
-    @DisplayName("Test for missing ContentType header")
+    @DisplayName("Test for missing ContentType header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
@@ -127,7 +127,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     }
     @Test
     @Order(3)
-    @DisplayName("Test for invalid ContentType header")
+    @DisplayName("Test for invalid ContentType header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
@@ -138,7 +138,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(4)
-    @DisplayName("Test for missing Accept header")
+    @DisplayName("Test for missing Accept header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
@@ -148,7 +148,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(5)
-    @DisplayName("Test for invalid Accept header")
+    @DisplayName("Test for invalid Accept header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
@@ -158,7 +158,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     }
 
     @Order(6)
-    @ParameterizedTest(name = "Test for missing {0} header")
+    @ParameterizedTest(name = "Test for missing {0} header for linked-hearing-group")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateLinkedHearingGroupResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
@@ -168,7 +168,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     }
 
     @Order(7)
-    @ParameterizedTest(name = "Test for invalid {0} header")
+    @ParameterizedTest(name = "Test for invalid {0} header for linked-hearing-group")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testCreateLinkedHearingGroupResourceWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
@@ -180,7 +180,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(8)
-    @DisplayName("Test for Correct Headers")
+    @DisplayName("Test for Correct Headers for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
@@ -189,7 +189,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(9)
-    @DisplayName("Test for missing Access Token")
+    @DisplayName("Test for missing Access Token for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingAccessToken() throws IOException {
 
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
@@ -199,7 +199,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
 
     @Test
     @Order(10)
-    @DisplayName("Test for invalid Access Token")
+    @DisplayName("Test for invalid Access Token for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
         httpClient.setAccessToken(accessToken);
