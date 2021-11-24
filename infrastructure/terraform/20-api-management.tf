@@ -29,5 +29,8 @@ resource "azurerm_api_management" "hmi_apim" {
     encoded_certificate = filebase64("certificates/lets-encrypt-r3.cer")
     store_name          = "CertificateAuthority"
   }
+  depends_on = [
+    module.cert
+  ]
 
 }
