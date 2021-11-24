@@ -51,8 +51,8 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     @Value("${targetSubscriptionKey}")
     private String targetSubscriptionKey;
 
-    @Value("${resourcesApiRootContext}")
-    private String resourcesApiRootContext;
+    @Value("${genericResourcesApiRootContext}")
+    private String genericResourcesApiRootContext;
 
     @Value("${destinationSystem}")
     private String destinationSystem;
@@ -90,11 +90,13 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     private String invalidClientSecret;
 
     private HmiHttpClient httpClient;
+    private String linkedHearingGroupCtx;
 
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
         this.httpClient = new HmiHttpClient(accessToken, targetInstance);
+        linkedHearingGroupCtx = String.format(genericResourcesApiRootContext, "linked-hearing-group");
     }
 
     @BeforeEach
@@ -112,7 +114,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for Invalid Resource for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
-        final Response response = httpClient.httpPost(resourcesApiRootContext+"/linkedHearingGrouppost", headersAsMap, paramsAsMap, input);
+        final Response response = httpClient.httpPost(genericResourcesApiRootContext +"/linkedHearingGrouppost", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -208,11 +210,11 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     }
 
     private Response createResourceNoAuth(final String input) {
-        return httpClient.httpPostNoAuth(resourcesApiRootContext+"/linked-hearing-group", headersAsMap, paramsAsMap, input);
+        return httpClient.httpPostNoAuth(linkedHearingGroupCtx, headersAsMap, paramsAsMap, input);
     }
 
     private Response createResource(final String input) {
-        return httpClient.httpPost(resourcesApiRootContext+"/linked-hearing-group", headersAsMap, paramsAsMap, input);
+        return httpClient.httpPost(linkedHearingGroupCtx, headersAsMap, paramsAsMap, input);
     }
 
     private String givenAPayload(final String path) throws IOException {
