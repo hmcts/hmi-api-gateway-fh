@@ -112,7 +112,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for Invalid Resource for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceForInvalidResource() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
-        final Response response = httpClient.httpPost(resourcesApiRootContext+"/linkedHearingGroup"+"post", headersAsMap, paramsAsMap, input);
+        final Response response = httpClient.httpPost(resourcesApiRootContext+"/linkedHearingGrouppost", headersAsMap, paramsAsMap, input);
         thenValidateResponseForInvalidResource(response);
     }
 
