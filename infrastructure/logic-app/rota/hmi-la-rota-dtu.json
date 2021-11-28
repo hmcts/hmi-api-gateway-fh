@@ -974,9 +974,22 @@
                                                 "For_each_Session": {
                                                     "foreach": "@body('Get_All_Sessions')?['value']",
                                                     "actions": {
+                                                        "Clear_jsonJohs": {
+                                                            "runAfter": {
+                                                                "Compose_Session_Payload": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonJohs",
+                                                                "value": " "
+                                                            }
+                                                        },
                                                         "Compose_Session_Payload": {
                                                             "runAfter": {
-                                                                "Set_jsonJohArray": [
+                                                                "Set_jsonJohArray_to_empty": [
+                                                                    "Skipped",
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1021,6 +1034,36 @@
                                                                         "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_schedule_in_the_session')?['justice'])}',RowKey='@{encodeURIComponent(items('For_schedule_in_the_session')?['justice'])}')"
                                                                     }
                                                                 },
+                                                                "Replace_Entity": {
+                                                                    "runAfter": {
+                                                                        "Update_johs": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "type": "ApiConnection",
+                                                                    "inputs": {
+                                                                        "body": {
+                                                                            "business": "@{items('For_each_Session')?['business']}",
+                                                                            "joh": "@{items('For_each_Session')?['joh']}@{variables('jsonJohs')}",
+                                                                            "locationId": "@{items('For_each_Session')?['locationId']}",
+                                                                            "panel": "@{items('For_each_Session')?['panel']}",
+                                                                            "session": "@{items('For_each_Session')?['session']}",
+                                                                            "sessionDate": "@{items('For_each_Session')?['sessionDate']}",
+                                                                            "venueId": "@{items('For_each_Session')?['venueId']}",
+                                                                            "welshSpeaking": "@{items('For_each_Session')?['welshSpeaking']}"
+                                                                        },
+                                                                        "headers": {
+                                                                            "If-Match": "*"
+                                                                        },
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "put",
+                                                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_Session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_Session')?['RowKey'])}')"
+                                                                    }
+                                                                },
                                                                 "Update_Error_No_Joh": {
                                                                     "runAfter": {
                                                                         "Get_joh_for_schedule": [
@@ -1055,7 +1098,29 @@
                                                                     "Succeeded"
                                                                 ]
                                                             },
-                                                            "type": "Foreach"
+                                                            "type": "Foreach",
+                                                            "runtimeConfiguration": {
+                                                                "concurrency": {
+                                                                    "repetitions": 1
+                                                                }
+                                                            }
+                                                        },
+                                                        "Get_Updated_Session": {
+                                                            "runAfter": {
+                                                                "Is_Morning_Session": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_Session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_Session')?['RowKey'])}')"
+                                                            }
                                                         },
                                                         "Get_schedules_for_session": {
                                                             "runAfter": {},
@@ -1075,7 +1140,7 @@
                                                         },
                                                         "HTTP_HMI": {
                                                             "runAfter": {
-                                                                "Compose_Session_Payload": [
+                                                                "Clear_jsonJohs": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
@@ -1166,14 +1231,26 @@
                                                         },
                                                         "Set_jsonJohArray": {
                                                             "runAfter": {
-                                                                "Is_Morning_Session": [
+                                                                "Get_Updated_Session": [
                                                                     "Succeeded"
                                                                 ]
                                                             },
                                                             "type": "SetVariable",
                                                             "inputs": {
                                                                 "name": "jsonJohArray",
-                                                                "value": "@{replace(last(variables('johDataArray')), '}{', '},{')}"
+                                                                "value": "@{replace(body('Get_Updated_Session')?['joh'], '}{', '},{')}"
+                                                            }
+                                                        },
+                                                        "Set_jsonJohArray_to_empty": {
+                                                            "runAfter": {
+                                                                "Set_jsonJohArray": [
+                                                                    "Failed"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonJohArray",
+                                                                "value": "{}"
                                                             }
                                                         },
                                                         "Update_with_error_from_HMI": {
@@ -1195,7 +1272,12 @@
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "type": "Foreach"
+                                                    "type": "Foreach",
+                                                    "runtimeConfiguration": {
+                                                        "concurrency": {
+                                                            "repetitions": 1
+                                                        }
+                                                    }
                                                 },
                                                 "For_jsonCLP": {
                                                     "foreach": "@body('Parse_CourtListingProfiles')?['courtListingProfiles']?['courtListingProfile']",
@@ -1206,6 +1288,7 @@
                                                             "inputs": {
                                                                 "body": {
                                                                     "business": "@{items('For_jsonCLP')?['business']}",
+                                                                    "johs": "",
                                                                     "locationId": "@{items('For_jsonCLP')?['locationId']}",
                                                                     "panel": "@{items('For_jsonCLP')?['panel']}",
                                                                     "session": "@{items('For_jsonCLP')?['session']}",
@@ -2003,6 +2086,22 @@
                                 ]
                             },
                             "type": "Foreach"
+                        },
+                        "Initialize_johDataArray": {
+                            "runAfter": {
+                                "Initialize_jsonJohs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "johDataArray",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
                         },
                         "Initialize_johIdIsPresiding": {
                             "runAfter": {
