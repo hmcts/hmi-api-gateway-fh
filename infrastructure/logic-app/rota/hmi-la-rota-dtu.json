@@ -167,7 +167,7 @@
                             "type": "Recurrence"
                         }
                     },
-                    "actions": {
+                   "actions": {
                         "Create_read.me": {
                             "runAfter": {
                                 "Initialize_johDataArray": [
@@ -1011,7 +1011,7 @@
                                                             "actions": {
                                                                 "Append_to_array_variable": {
                                                                     "runAfter": {
-                                                                        "Update_johs": [
+                                                                        "Replace_Entity": [
                                                                             "Succeeded"
                                                                         ]
                                                                     },
@@ -1562,10 +1562,10 @@
                                                                     "caller_id": "[parameters('serviceNowCallerId')]",
                                                                     "category": "Data Issue",
                                                                     "contact_type": "Alert",
-                                                                    "description": "",
+                                                                    "description": "Error details: @{variables('scheduleErrorBody')}",
                                                                     "impact": "2",
                                                                     "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                                                    "short_description": "HMI Rota File Error @{variables('scheduleErrorBody')}",
+                                                                    "short_description": "HMI Rota File Error occured",
                                                                     "subcategory": "Data or File Error - other",
                                                                     "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                                                     "urgency": "3"
@@ -2211,22 +2211,6 @@
                                     {
                                         "name": "jsonSchedules",
                                         "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_johDataArray": {
-                            "runAfter": {
-                                "Initialize_jsonJohs": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "johDataArray",
-                                        "type": "array"
                                     }
                                 ]
                             }
