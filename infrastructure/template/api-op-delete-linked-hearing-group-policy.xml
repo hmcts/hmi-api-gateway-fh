@@ -47,7 +47,7 @@
                 <set-backend-service base-url="https://www.hmcts.com/future-hearings/resources/linkedHearingGroup" />
                 <choose>
                     <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                        <mock-response status-code="201" content-type="application/json" />
+                        <mock-response status-code="202" content-type="application/json" />
                     </when>
                 </choose>
             </when>
