@@ -111,8 +111,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @Order(1)
     @DisplayName("Test for Invalid Resource")
     void testDeleteLinkedHearingGroupResourceForInvalidResource() throws IOException {
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedForInvalidResource(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -121,8 +120,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for missing ContentType header")
     void testDeleteLinkedHearingGroupResourceWithMissingContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -132,8 +130,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     void testDeleteLinkedHearingGroupResourceWithInvalidContentTypeHeader() throws IOException {
         headersAsMap.remove("Content-Type");
         headersAsMap.put("Content-Type", "application/xml");
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
 
@@ -142,8 +139,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for missing Accept header")
     void testDeleteLinkedHearingGroupResourceWithMissingAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -153,8 +149,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     void testDeleteLinkedHearingGroupResourceWithInvalidAcceptHeader() throws IOException {
         headersAsMap.remove("Accept");
         headersAsMap.put("Accept", "application/jsonxml");
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
 
@@ -163,8 +158,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testDeleteLinkedHearingGroupResourceWithMissingHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -174,8 +168,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     void testDeleteLinkedHearingGroupResourceWithInvalidHeader(String iteration) throws IOException {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
@@ -183,8 +176,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @Order(8)
     @DisplayName("Test for correct Headers")
     void testDeleteLinkedHearingGroupResourceRequestWithCorrectHeaders() throws IOException {
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithCorrectHeaders(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithCorrectHeaders();
         thenValidateResponseForLinkedHearingGroup(response);
     }
 
@@ -192,8 +184,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @Order(9)
     @DisplayName("Test for missing Access Token")
     void testDeleteLinkedHearingGroupResourceRequestWithMissingAccessToken() throws IOException {
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingAccessToken(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingAccessToken();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -202,8 +193,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for invalid Access Token")
     void testDeleteLinkedHearingGroupResourceRequestWithInvalidAccessToken() throws IOException {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
-        final String input = givenAPayload(CORRECT_DELETE_LOCATION_RESOURCE_PAYLOAD);
-        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
+        final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAccessToken(response);
     }
 
@@ -211,60 +201,56 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
         return readFileContents(path);
     }
 
-    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(final String input) {
-        return deleteLinkedHearingGroupResourceResponseForAMissingOrInvalidHeader(linkedHearingGroupCtx, headersAsMap, targetInstance, input);
+    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader() {
+        return deleteLinkedHearingGroupResourceResponseForAMissingOrInvalidHeader(linkedHearingGroupCtx, headersAsMap, targetInstance);
     }
 
-    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingAccessToken(final String input) {
-        return deleteLinkedHearingGroupResourceResponseForMissingAccessToken(linkedHearingGroupCtx, headersAsMap, targetInstance, input);
+    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingAccessToken() {
+        return deleteLinkedHearingGroupResourceResponseForMissingAccessToken(linkedHearingGroupCtx, headersAsMap, targetInstance);
     }
 
-    private Response whenDeleteLinkedHearingGroupResourceIsInvokedForInvalidResource(final String input) {
-        return deleteLinkedHearingGroupResourceResponseForInvalidResource(linkedHearingGroupCtx+"/put", headersAsMap, targetInstance, input);
+    private Response whenDeleteLinkedHearingGroupResourceIsInvokedForInvalidResource() {
+        return deleteLinkedHearingGroupResourceResponseForInvalidResource(linkedHearingGroupCtx+"/put", headersAsMap, targetInstance);
     }
 
-    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithCorrectHeaders(final String input) {
-        return deleteLinkedHearingGroupResourceResponseForCorrectHeadersAndParams(linkedHearingGroupCtx, headersAsMap, targetInstance, input);
+    private Response whenDeleteLinkedHearingGroupResourceIsInvokedWithCorrectHeaders() {
+        return deleteLinkedHearingGroupResourceResponseForCorrectHeadersAndParams(linkedHearingGroupCtx, headersAsMap, targetInstance);
     }
 
-    private Response deleteLinkedHearingGroupResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteLinkedHearingGroupResourceResponseForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().put().then().extract().response();
     }
 
-    private Response deleteLinkedHearingGroupResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteLinkedHearingGroupResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().delete().then().extract().response();
     }
 
-    private Response deleteLinkedHearingGroupResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteLinkedHearingGroupResourceResponseForAMissingOrInvalidHeader(final String api, final Map<String, Object> headersAsMap, final String basePath) {
         return given()
                 .auth()
                 .oauth2(accessToken)
-                .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
                 .when().delete().then().extract().response();
     }
 
-    private Response deleteLinkedHearingGroupResourceResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath, final String payloadBody) {
+    private Response deleteLinkedHearingGroupResourceResponseForMissingAccessToken(final String api, final Map<String, Object> headersAsMap, final String basePath) {
         return  given()
-                .body(payloadBody)
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
