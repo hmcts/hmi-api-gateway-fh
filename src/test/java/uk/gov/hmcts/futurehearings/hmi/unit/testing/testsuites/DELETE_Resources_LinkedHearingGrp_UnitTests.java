@@ -225,7 +225,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
                 .headers(headersAsMap)
                 .baseUri(basePath)
                 .basePath(api)
-                .when().put().then().extract().response();
+                .when().delete().then().extract().response();
     }
 
     private Response deleteLinkedHearingGroupResourceResponseForCorrectHeadersAndParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
