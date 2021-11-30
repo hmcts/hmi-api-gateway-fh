@@ -106,10 +106,9 @@
                     </set-header>
                     <set-body>@{
                         return new JObject(
-                            new JProperty("message", "Problem occured with Backend Service. Please try again.")
+                            new JProperty("message", "Problem occured with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "]")
                             ).ToString();
-                        }
-                    </set-body>
+                        }</set-body>
                 </return-response>
             </when>
         </choose>
