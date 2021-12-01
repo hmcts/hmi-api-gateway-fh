@@ -5,6 +5,9 @@ parameters:
   - name: condition
     type: string
     default: 'always()'
+  - name: deploymentType
+    type: string
+    default: 'infra'
 
 stages:
   - stage: Validate
@@ -16,4 +19,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     jobs:
-      - template: ../jobs/terraform-validate.yaml
+      - ${{ if eq(parameters.deploymentType, 'infra') }}:
+        - template: ../jobs/terraform-validate.yaml
+      - ${{ if eq(parameters.deploymentType, 'app') }}:
+        - template: ../jobs/test-polices.yaml

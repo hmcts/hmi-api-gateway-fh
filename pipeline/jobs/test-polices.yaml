@@ -1,0 +1,37 @@
+parameters:
+  - name: dependsOn
+    type: string
+    default: ''
+  - name: condition
+    type: string
+    default: 'always()'
+
+jobs:
+  - job: PolicyValidation
+    displayName: "Validate APIM Policies"
+    steps:
+      - powershell: |
+          $rootDir="$(Build.SourcesDirectory)"
+          $templatePath="$rootDir\infrastructure\template"
+          $policyJsonPath="$templatePath\policies.json"
+
+          $policyJson=Get-Content -Path $policyJsonPath | ConvertFrom-Json
+
+          $global:allValid = $true
+          foreach ($policy in $policyJson.policies){
+            $name = $policy.operationId
+            $file = $policy.templateFile
+            Write-Host "$name processing"
+            if (!(Test-Path -Path "$templatePath\$file")){
+              Write-Error "$file does not exist"
+              $global:allValid = $false
+            }
+          }
+
+          Write-Host " "
+          if ($global:allValid -eq $false){
+              Write-Host '##vso[task.complete result=Failed;]DONE'
+          } else {
+              Write-Host '##vso[task.complete result=Succeeded;]DONE'
+          }
+        displayName: "Polices in json exist"

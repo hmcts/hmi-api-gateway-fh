@@ -1,12 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
-import java.util.Map;
-
-import javax.net.ssl.SSLException;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 @Slf4j
 public class HmiHttpClient {
@@ -61,6 +59,18 @@ public class HmiHttpClient {
         }
     }
 
+    public Response httpPut(final String basePath, final Map<String, Object> headersAsMap,
+                             final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().put().then().extract().response();
+        } catch (Exception exc) {
+            log.error("SSL Exception occured. Trying again...", exc);
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().post().then().extract().response();
+        }
+    }
+
     public Response httpGetNoAuth(final String basePath, final Map<String, Object> headersAsMap,
             final Map<String, String> paramsAsMap, String payloadBody) {
         try {
@@ -90,6 +100,18 @@ public class HmiHttpClient {
         try {
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
+        } catch (Exception exc) {
+            log.error("SSL Exception occured. Trying again...", exc);
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().post().then().extract().response();
+        }
+    }
+
+    public Response httpPutNoAuth(final String basePath, final Map<String, Object> headersAsMap,
+                                   final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().put().then().extract().response();
         } catch (Exception exc) {
             log.error("SSL Exception occured. Trying again...", exc);
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
