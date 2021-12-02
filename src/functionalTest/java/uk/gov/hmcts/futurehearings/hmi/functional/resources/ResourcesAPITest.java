@@ -80,6 +80,8 @@ public class ResourcesAPITest extends FunctionalTest {
         int randomId = new Random().nextInt(99999999);
         resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, randomId);
         resourceSteps.shouldAmendLinkedHearingGroupWithEmptyPayload(resourcesLinkedHearingGroup_idRootContext,
-                headersAsMap, authorizationToken, HttpMethod.PUT, "{}" );
+                headersAsMap,
+                authorizationToken, HttpMethod.PUT,
+                "{}" );
     }
 }

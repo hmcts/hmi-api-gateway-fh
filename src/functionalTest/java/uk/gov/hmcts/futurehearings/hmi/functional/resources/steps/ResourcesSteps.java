@@ -26,7 +26,6 @@ public class ResourcesSteps {
                 body,
                 HttpMethod.POST,
                 HttpStatus.CREATED);
-        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
 
     }
@@ -44,7 +43,6 @@ public class ResourcesSteps {
                 body,
                 httpMethod,
                 HttpStatus.BAD_REQUEST);
-        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
 
     }
