@@ -42,6 +42,9 @@ public class ResourcesAPITest extends FunctionalTest {
     @Value("${resourcesByLocation_idRootContext}")
     protected String resourcesByLocation_idRootContext;
 
+    @Value("${resourcesLinkedHearingGroup_idRootContext}")
+    protected String resourcesLinkedHearingGroup_idRootContext;
+
     @Steps
     ResourcesSteps resourceSteps;
 
@@ -70,5 +73,15 @@ public class ResourcesAPITest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
                 "{}");
+    }
+
+    @Test
+    public void testDeleteLinkedHearingGroupInvalid() {
+        int randomId = new Random().nextInt(99999999);
+        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, randomId);
+        resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroup_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                HttpMethod.DELETE);
     }
 }

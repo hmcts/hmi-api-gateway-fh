@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.resources.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointDelete;
 
 import java.util.Map;
 
@@ -44,7 +45,6 @@ public class ResourcesSteps {
                 body,
                 httpMethod,
                 HttpStatus.BAD_REQUEST);
-        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
 
     }
@@ -64,5 +64,17 @@ public class ResourcesSteps {
                 HttpStatus.BAD_REQUEST);
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
 
+    }
+
+    @Step("User performs the deletion of a linked hearing group")
+    public void shouldDeleteLinkedHearingGroupInvalid(final String apiURL,
+                                                      final Map<String, Object> headersAsMap,
+                                                      final String authorizationToken,
+                                                      final HttpMethod httpMethod) {
+        Response response = callRestEndpointDelete(apiURL,
+                headersAsMap,
+                authorizationToken,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 }
