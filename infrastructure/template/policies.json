@@ -298,6 +298,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-snl-health-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "server-errror",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-server-error-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
