@@ -26,7 +26,6 @@ public class ResourcesSteps {
                 body,
                 HttpMethod.POST,
                 HttpStatus.CREATED);
-        log.debug("The value of the response body : " + response.getBody().prettyPrint());
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
 
     }
