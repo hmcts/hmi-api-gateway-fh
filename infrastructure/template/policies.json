@@ -300,7 +300,7 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "server-errror",
+      "operationId"  : "server-error",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-server-error-policy.xml",
       "errorAction"  : "Stop"
