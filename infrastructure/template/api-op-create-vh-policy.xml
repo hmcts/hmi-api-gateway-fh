@@ -89,7 +89,7 @@
 							new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
 							new JProperty("category", "Data Issue"),
 							new JProperty("contact_type", "Alert"),
-							new JProperty("description", "HMI - Testing Error Handling"),
+							new JProperty("description", "HMI - Create VH: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
 							new JProperty("impact", "2"),
 							new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
 							new JProperty("short_description", "HMI - API Gatiway Error"),
