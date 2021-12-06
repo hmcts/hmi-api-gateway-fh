@@ -127,7 +127,7 @@
                     </set-header>
                     <set-body>@{
                         return new JObject(
-                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "] [HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "])
+                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "] [HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]))
                             ).ToString();
                         }</set-body>
                 </return-response>
