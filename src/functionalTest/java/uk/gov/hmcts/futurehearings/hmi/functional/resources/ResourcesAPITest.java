@@ -1,13 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.resources;
 
-
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
-
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
 
-import java.io.IOException;
 import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +38,9 @@ public class ResourcesAPITest extends FunctionalTest {
     @Value("${resourcesByLocation_idRootContext}")
     protected String resourcesByLocation_idRootContext;
 
+    @Value("${resourcesLinkedHearingGroupRootContext}")
+    private String resourcesLinkedHearingGroupRootContext;
+
     @Value("${resourcesLinkedHearingGroup_idRootContext}")
     private String resourcesLinkedHearingGroup_idRootContext;
 
@@ -72,6 +71,13 @@ public class ResourcesAPITest extends FunctionalTest {
         resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocation_idRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
+                "{}");
+    }
+
+    @Test
+    public void testRequestLinkedHearingGroup() {
+        resourceSteps.shouldCreateLinkedHearingGroup(resourcesLinkedHearingGroupRootContext,
+                headersAsMap, authorizationToken, HttpMethod.POST,
                 "{}");
     }
 
