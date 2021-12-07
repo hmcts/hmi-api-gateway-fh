@@ -18,22 +18,22 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(POSTResourcesLinkedHearingGroup.class)
-@IncludeTags("POST")
-@SuppressWarnings("java:S2187")
-public class POSTResourcesLinkedHearingGroup extends ResourceValidationTest {
+@SelectClasses(DELETEResourcesValidationTest.class)
+@IncludeTags("Delete")
+public class DELETEResourcesLinkedHearingGroup extends ResourceValidationTest {
 
-    @Value("${resourcesLinkedHearingGroupRootContext}")
-    private String resourcesLinkedHearingGroupRootContext;
+    @Value("${resourcesLinkedHearingGroup_idRootContext}")
+    private String resourcesLinkedHearingGroup_idRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
-        this.setHttpMethod(HttpMethod.POST);
-        this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
+        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, "123456");
+        this.setRelativeURL(resourcesLinkedHearingGroup_idRootContext);
+        this.setHttpMethod(HttpMethod.DELETE);
+        this.setInputFileDirectory(null);
         this.setHttpSucessStatus(HttpStatus.ACCEPTED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/","resource/"));
+        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

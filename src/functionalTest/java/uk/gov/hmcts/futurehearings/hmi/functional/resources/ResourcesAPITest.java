@@ -90,4 +90,14 @@ public class ResourcesAPITest extends FunctionalTest {
                 authorizationToken, HttpMethod.PUT,
                 "{}" );
     }
+
+    @Test
+    public void testDeleteLinkedHearingGroupInvalid() {
+        int randomId = new Random().nextInt(99999999);
+        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, randomId);
+        resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroup_idRootContext,
+                headersAsMap,
+                authorizationToken,
+                HttpMethod.DELETE);
+    }
 }
