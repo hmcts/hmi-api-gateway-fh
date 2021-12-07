@@ -11,6 +11,24 @@
         "storageAccountName":{
             "value": "hmidtudev"
         },
+        "storageACPathFiles":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/GetFileContentByPath"
+        },
+        "storageACGetPathSuffix":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+        },
+        "storageACExistingCLPPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
+        },
+        "storageACExistingMagistrtePath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
+        },
+        "storageACExistingSchedulesPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
+        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
@@ -33,6 +51,9 @@
         },
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+        },
+        "hmiDestination":{
+            "value": "SNL"
         },
         "hmiScopeUrl":{
             "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
