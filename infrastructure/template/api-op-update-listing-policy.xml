@@ -95,12 +95,12 @@
             </when>
             <when condition="@(context.Response.StatusCode == 500)">
                 <send-request ignore-error="true" timeout="20" response-variable-name="snowAuth" mode="new">
-					<set-url>https://hmi-shared-kv-dev.vault.azure.net/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
+					<set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
 					<set-method>GET</set-method>
 					<authentication-managed-identity resource="https://vault.azure.net" />
 				</send-request>
 				<send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
-					<set-url>https://mojcpppreprod.service-now.com/api/now/table/incident?sysparm_fields=number</set-url>
+					<set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
 					<set-method>POST</set-method>
 					<set-header name="Authorization" exists-action="override">
 						<value>@("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As<JObject>()["value"].ToString())</value>
@@ -111,10 +111,10 @@
 							new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
 							new JProperty("category", "Data Issue"),
 							new JProperty("contact_type", "Alert"),
-							new JProperty("description", "HMI error when processing transaction: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
+							new JProperty("description", "HMI - Update Listing: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
 							new JProperty("impact", "2"),
 							new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
-							new JProperty("short_description", "HMI - API Gateway Error"),
+							new JProperty("short_description", "HMI - API Gatiway Error"),
 							new JProperty("subcategory", "HMI - Backend Service Failure"),
 							new JProperty("u_role_type", "c319bc4bdb41834074abffa9bf96199c"),
 							new JProperty("urgency", "3")
@@ -128,10 +128,9 @@
                     </set-header>
                     <set-body>@{
                         return new JObject(
-                            new JProperty("message", "Problem occured with Backend Service. Please try again.")
+                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "][HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]")
                             ).ToString();
-                        }
-                    </set-body>
+                        }</set-body>
                 </return-response>
             </when>
         </choose>
