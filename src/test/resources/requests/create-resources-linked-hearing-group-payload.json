@@ -1,0 +1,19 @@
+{
+  "linkedHearingGroup": {
+    "groupClientReference": "CR00110011",
+    "groupName": "A group name",
+    "groupReason": "AA",
+    "groupComment": "Some comment about the group",
+    "groupLinkType": "Ordered",
+    "groupHearings": [
+      {
+        "caseListingRequestId": "CLR00001",
+        "caseLinkOrder": 1
+      },
+      {
+        "caseListingRequestId": "CLR99999",
+        "caseLinkOrder": 2
+      }
+    ]
+  }
+}
