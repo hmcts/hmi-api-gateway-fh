@@ -45,6 +45,17 @@ public class RestClientTemplate {
                         .when()
                         .put().then().extract().response();
             case DELETE:
+                if(requestBodyPayload == null) {
+                    return RestAssured
+                            .expect().that().statusCode(expectedHttpStatus.value())
+                            .given()
+                            .headers(headers)
+                            .auth()
+                            .oauth2(authorizationToken)
+                            .basePath(requestURL)
+                            .when()
+                            .delete().then().extract().response();
+                }
                 return RestAssured
                         .expect().that().statusCode(expectedHttpStatus.value())
                         .given()

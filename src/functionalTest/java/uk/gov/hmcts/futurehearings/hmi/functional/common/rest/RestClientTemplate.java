@@ -77,4 +77,16 @@ public class RestClientTemplate {
                 .basePath(apiURL)
                 .when().get().then().extract().response();
     }
+
+    public static Response callRestEndpointDelete(final String apiURL,
+                                            final Map<String, Object> headersAsMap,
+                                            final String authorizationToken,
+                                            final HttpStatus httpStatus) {
+        return expect().that().statusCode(httpStatus.value())
+                .given()
+                .headers(headersAsMap)
+                .auth().oauth2(authorizationToken)
+                .basePath(apiURL)
+                .when().delete().then().extract().response();
+    }
 }
