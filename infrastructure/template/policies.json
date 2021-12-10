@@ -304,6 +304,24 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-server-error-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "create-linked-hearing-group",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-create-linked-hearing-group-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "update-linked-hearing-group",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-update-linked-hearing-group-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "delete-linked-hearing-group",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-delete-linked-hearing-group-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
