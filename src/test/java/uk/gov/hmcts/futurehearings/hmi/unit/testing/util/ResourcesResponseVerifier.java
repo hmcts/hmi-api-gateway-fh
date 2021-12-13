@@ -62,6 +62,21 @@ public class ResourcesResponseVerifier {
         }
     }
 
+    public static void  thenValidateResponseForLinkedHearingGroup(Response response){
+        try{
+            assertEquals(202, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 202");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
     public static void  thenValidateResponseForDelete(Response response){
         try{
             Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");

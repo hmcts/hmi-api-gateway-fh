@@ -64,8 +64,14 @@ public class CommonDelegateImpl implements CommonDelegate {
         switch (httpMethod) {
             case POST:
             case PUT:
-            case DELETE:
                 inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                hmiVerifier.verify(status, expectedMessage,
+                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
+                break;
+            case DELETE:
+                if(inputFileDirectory != null) {
+                    inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                }
                 hmiVerifier.verify(status, expectedMessage,
                         performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
                 break;
