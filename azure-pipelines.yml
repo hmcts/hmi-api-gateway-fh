@@ -51,16 +51,22 @@ stages:
           - template: pipeline/stages/wait.yaml
             parameters:
               environment: ${{ environment }}
+              dependsOn: Teststg
 
         - template: pipeline/stages/apply.yaml
           parameters:
             environment: ${{ environment }}
             subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
             deploymentType: "app"
+            ${{ if eq(environment, 'prod') }}:
+              dependsOn: Wait${{ environment }}
+            ${{ else }}:
+              dependsOn: Validate
         
         - ${{ if ne(environment, 'prod' )}}:
           - template: pipeline/stages/test.yaml
             parameters:
               environment: ${{ environment }}
               subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+              dependsOn: Build${{ environment }}
         
