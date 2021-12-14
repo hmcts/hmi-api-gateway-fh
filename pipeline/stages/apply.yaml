@@ -6,18 +6,16 @@ parameters:
   - name: deploymentType
     type: string
     default: 'infra'
+  - name: dependsOn
+    type: string
+    default: ''
 
 stages:
   - stage: Build${{ parameters.environment }}
     displayName: "${{ parameters.environment }} Build"
     pool:
       vmImage: 'ubuntu-latest'
-    ${{ if eq(parameters.environment, 'prod') }}:
-      dependsOn: Wait${{ parameters.environment }}
-    ${{ elseif eq(parameters.deploymentType, 'app') }}:
-      dependsOn: Validate
-    ${{ else }}:
-      dependsOn: Plan${{ parameters.environment }}
+    dependsOn: ${{ parameters.dependsOn }}
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment }}
       - template: ../variables/${{ parameters.environment }}.yaml

@@ -13,12 +13,7 @@ stages:
     displayName: "${{ parameters.environment }} Plan"
     pool:
       vmImage: 'ubuntu-latest'
-    ${{ if ne(parameters.dependsOn, '') }}:
-      dependsOn: ${{ parameters.dependsOn }}
-    ${{ elseif eq(parameters.environment, 'prod') }}:
-      dependsOn: Teststg
-    ${{ else }}:
-      dependsOn: Validate
+    dependsOn: ${{ parameters.dependsOn }}
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment}}
     jobs:
