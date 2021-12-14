@@ -67,5 +67,5 @@ stages:
             ${{ if eq(parameters.environment, 'prod') }}:
               dependsOn: Wait${{ environment }}
             ${{ else }}:
-              dependsOn: Plan${{ parameters.environment }}
+              dependsOn: Plan${{ environment }}
         
