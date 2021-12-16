@@ -19,6 +19,7 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment }}
       - template: ../variables/${{ parameters.environment }}.yaml
+      - template: ../variables/shared.yaml
     jobs:
     - ${{ if eq(parameters.deploymentType, 'infra') }}:
       - template: ../jobs/terraform-apply.yaml
@@ -41,11 +42,23 @@ stages:
 
         
     - ${{ if eq(parameters.deploymentType, 'app') }}:
+      - template: ../jobs/update-apim-api.yaml
+        parameters:
+          subscriptionName: ${{ parameters.subscription }}
+          environment: ${{ parameters.environment }}
+          apis: 
+            - name: hmi-apim-api
+              format: Swagger
+              specUrl: ${{ variables.api_spec }}
+            - name: hmi-apim-api-health
+              format: Swagger
+              specUrl: ${{ variables.health_api_spec }}
       - template: ../jobs/apply-policies.yaml
         parameters:
           displayName: Apply API Policies
           subscription: ${{ parameters.subscription }}
           environment: ${{ parameters.environment }}
+          dependsOn: UpdateApimApi
       - template: ../jobs/remove-default-apis.yaml
         parameters:
           displayName: Remove default APIS
