@@ -26,7 +26,7 @@ jobs:
       parameters:
         subscriptionName: ${{ parameters.subscriptionName }}
         apimRgName: "hmi-apim-${{ parameters.environment }}-rg"
-        apimName: "hmi-apim-${{ parameters.environment }}-sbox"
+        apimName: "hmi-apim-svc-${{ parameters.environment }}"
         apiName: ${{ api.name }}
         format: ${{ api.format }}
         specUrl: ${{ api.specUrl }}
