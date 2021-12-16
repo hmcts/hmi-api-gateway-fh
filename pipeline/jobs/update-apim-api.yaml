@@ -21,7 +21,7 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
 
-  - ${{ for api in parameters.apis }}:
+  - ${{ each api in parameters.apis }}:
     - template: templates\Azure\ApiManagement\update-apim-api.yaml@azTemplates
       parameters:
         subscriptionName: ${{ parameters.subscriptionName }}
