@@ -3,12 +3,15 @@ parameters:
     type: string
   - name: subscription
     type: string
+  - name: dependsOn
+    type: string
+    default: ''
 
 
 stages:
   - stage: Test${{ parameters.environment }}
     displayName: "${{ parameters.environment }} Test"
-    dependsOn: Build${{ parameters.environment }}
+    dependsOn: ${{ parameters.dependsOn }}
     pool:
       vmImage: 'ubuntu-latest'
     variables:

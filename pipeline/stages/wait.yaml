@@ -1,13 +1,16 @@
 parameters:
   - name: environment
     type: string
+  - name: dependsOn
+    type: string
+    default: ''
 
 
 stages:
   - stage: Wait${{ parameters.environment }}
     displayName: '${{ parameters.environment }} Waiting for Approval'
     condition: succeeded()
-    dependsOn: Plan${{ parameters.environment }}
+    dependsOn: ${{ parameters.dependsOn }}
     jobs:
       - job: waitForValidation
         displayName: '${{ parameters.environment }} Wait for external validation'
