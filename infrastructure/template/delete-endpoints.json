@@ -8,6 +8,9 @@
     },
     {
       "operationId"  : "pact-health"
+    },
+    {
+      "operationId"  : "server-error"
     }
   ]
 }

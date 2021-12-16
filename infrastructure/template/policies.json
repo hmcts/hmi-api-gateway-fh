@@ -300,6 +300,12 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "server-error",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-server-error-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "create-linked-hearing-group",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-create-linked-hearing-group-policy.xml",
