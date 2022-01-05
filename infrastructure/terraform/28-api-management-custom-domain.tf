@@ -9,7 +9,7 @@ module "cert" {
   source        = "git::https://github.com/hmcts/terraform-module-certificate.git?ref=master"
   environment   = var.environment
   domain_prefix = "hmi-apim"
-  object_id     = azurerm_api_management.hmi_apim.identity.0.principal_id
+  object_id     = data.azurerm_user_assigned_identity.mi.principal_id
 }
 
 resource "azurerm_api_management_custom_domain" "custom_domain" {
