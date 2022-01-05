@@ -11,8 +11,12 @@ module "cert" {
   domain_prefix = "hmi-apim"
   #object_id     = azurerm_api_management.hmi_apim.identity.0.principal_id
 }
+data "azurerm_key_vault" "acmekv" {
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "sds-platform-${var.environment}-rg"
+}
 resource "azurerm_role_assignment" "kv_access" {
-  scope                = data.azurerm_key_vault.kv.id
+  scope                = data.azurerm_key_vault.acmekv.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_api_management.hmi_apim.identity.0.principal_id
 }
