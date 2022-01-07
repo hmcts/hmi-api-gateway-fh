@@ -30,9 +30,46 @@ public class HealthResponseVerifier {
         }
     }
 
+    public static void  thenValidateResponseForMissingOrInvalidAcceptHeader(Response response){
+
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            //assertEquals(2, responseMap.size());
+            assertEquals(406, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 406");
+            assertEquals("Missing/Invalid Media Type", responseMap.get(("message")),"Status Code Message Validation:");
+            getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void thenValidateResponseForMissingOrInvalidContentTypeHeader(final Response response){
+        try{
+            Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
+            assertEquals(400, response.getStatusCode(),"Status Code Validation:");
+            getObjStep().pass("Got the expected status code: 400");
+            assertEquals("Missing/Invalid Media Type", responseMap.get(("message")),"Status Code Message Validation:");
+            getObjStep().pass("Got the expected message: " + responseMap.get(("message")));
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
     public static void thenValidateResponseForRetrieve(Response response) {
         try {
-
             assertEquals(200, response.getStatusCode(),"Response Code Validation:");
             getObjStep().pass("Got the expected response code: 200");
 
@@ -81,5 +118,50 @@ public class HealthResponseVerifier {
             throw e;
         }
 
+    }
+
+    public static void  thenValidateResponseForDeletePublication(Response response){
+        try{
+            assertEquals(202, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 202");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForPublicationRelatedCreation(Response response){
+        try{
+            assertEquals(201, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 201");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
+    }
+
+    public static void  thenValidateResponseForPublicationRelatedUpdate(Response response){
+        try{
+            assertEquals(204, response.getStatusCode(),"Response Code Validation:");
+            getObjStep().pass("Got the expected response code: 201");
+        }
+        catch (AssertionError e){
+            getObjStep().fail("Exception in "+e.getMessage());
+            throw e;
+        }
+        catch (Exception e){
+            getObjStep().fail("Exception: "+e.getClass());
+            throw e;
+        }
     }
 }

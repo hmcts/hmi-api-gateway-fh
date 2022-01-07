@@ -6,7 +6,7 @@
                 <set-backend-service base-url="https://www.hmcts.com/future-hearings/publication/outcome" />
                 <choose>
                     <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                        <mock-response status-code="202" content-type="application/json" />
+                        <mock-response status-code="204" content-type="application/json" />
                     </when>
                 </choose>
             </when>
