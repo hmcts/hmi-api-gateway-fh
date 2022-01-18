@@ -6,6 +6,10 @@
                 <mock-response status-code="201" content-type="application/json" />
             </when>
         </choose>
+        <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
+            <rewrite-uri template="/" copy-unmatched-params="true" />
+            <set-backend-service base-url="https://#{pihHost}#/" />
+        </when>
     </inbound>
     <backend>
         <base />
