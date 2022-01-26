@@ -7,7 +7,7 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
                 <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{pihHost}#/" />
+                <set-backend-service base-url="https://pip-data-management.staging.platform.hmcts.net/" />
             </when>
         </choose>
     </inbound>

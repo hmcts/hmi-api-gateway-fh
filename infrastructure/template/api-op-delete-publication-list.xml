@@ -6,6 +6,10 @@
                 <set-backend-service base-url="https://www.hmcts.com/request-hearings/delete-publication-list" />
                 <mock-response status-code="202" content-type="application/json" />
             </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
+                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://pip-data-management.staging.platform.hmcts.net/" />
+            </when>
         </choose>
     </inbound>
     <backend>
