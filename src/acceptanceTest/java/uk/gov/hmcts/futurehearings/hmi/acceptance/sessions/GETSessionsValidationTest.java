@@ -1,12 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.sessions;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithEmulatorValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.CaseHQCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.verify.GETSessionsValidationVerifier;
 
@@ -46,8 +44,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         this.setRelativeURL(sessionsRootContext);
         this.setUrlParams(buildQueryParams("requestSessionType", "1234"));
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions", "session"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSessionsValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

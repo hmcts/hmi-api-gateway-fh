@@ -34,8 +34,7 @@ public class POSTPublishingValidationTest extends PublishingValidationTest {
         this.setRelativeURL(publishingCreateRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-test-publishing.json");
-        this.setHttpSucessStatus(HttpStatus.CREATED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace(publishingCreateRootContext, publishingCreateRootContext + "s"));
+        this.setHttpSuccessStatus(HttpStatus.CREATED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

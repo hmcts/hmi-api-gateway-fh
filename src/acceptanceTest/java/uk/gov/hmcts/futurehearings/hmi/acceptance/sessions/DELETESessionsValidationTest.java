@@ -37,8 +37,7 @@ class DELETESessionsValidationTest extends SessionsValidationTest {
         this.setRelativeURL(sessions_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-sessions-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("sessions","session"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

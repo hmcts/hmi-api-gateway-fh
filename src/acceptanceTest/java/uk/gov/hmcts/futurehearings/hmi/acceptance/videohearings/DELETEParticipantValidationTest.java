@@ -37,8 +37,7 @@ class DELETEParticipantValidationTest extends VideoHearingValidationTest {
         this.setRelativeURL(participants_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-participants-request.json");
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("participants","not-found"));
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

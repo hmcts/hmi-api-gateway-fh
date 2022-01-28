@@ -42,8 +42,7 @@ class PUTListingsValidationTest extends ListingsValidationTest {
         this.setRelativeURL(listings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-listings-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings/","listing/"));
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

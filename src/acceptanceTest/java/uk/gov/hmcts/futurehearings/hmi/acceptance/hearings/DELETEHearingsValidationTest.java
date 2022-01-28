@@ -32,8 +32,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
         this.setRelativeURL(String.format(hearings_idRootContext,"12345"));
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

@@ -34,8 +34,7 @@ public class GETPublishingValidationTest extends PublishingValidationTest {
         publishingGetRootContext = String.format(publishingGetRootContext, "12345");
         this.setRelativeURL(publishingGetRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace(publishingGetRootContext, publishingGetRootContext + "s"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

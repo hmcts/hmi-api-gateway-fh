@@ -33,8 +33,7 @@ class DELETEListingsValidationTest extends ListingsValidationTest {
         this.setRelativeURL(listings_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-listings-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings", "listing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

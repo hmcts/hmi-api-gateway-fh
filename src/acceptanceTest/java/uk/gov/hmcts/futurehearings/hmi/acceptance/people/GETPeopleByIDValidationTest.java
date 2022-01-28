@@ -32,8 +32,7 @@ class GETPeopleByIDValidationTest extends PeopleValidationTest {
         people_idRootContext = String.format(people_idRootContext,"12345");
         this.setRelativeURL(people_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("people","peopl"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

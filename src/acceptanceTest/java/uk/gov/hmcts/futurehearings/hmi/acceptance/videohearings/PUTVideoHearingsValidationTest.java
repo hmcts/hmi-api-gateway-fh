@@ -1,7 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -35,8 +32,7 @@ class PUTVideoHearingsValidationTest extends VideoHearingValidationTest {
         this.setRelativeURL(videohearings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-video-hearing-request.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("video-hearing","video-hearings"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

@@ -39,8 +39,7 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
         super.initialiseValues();
         this.setRelativeURL(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/video-hearing","resource/video-hearing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

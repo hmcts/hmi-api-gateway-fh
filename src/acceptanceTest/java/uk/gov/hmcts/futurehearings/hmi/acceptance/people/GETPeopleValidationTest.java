@@ -39,8 +39,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
         super.initialiseValues();
         this.setRelativeURL(peopleRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("people","peopl"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
         this.setUrlParams(Map.of("updated_since","2020-10-01"));

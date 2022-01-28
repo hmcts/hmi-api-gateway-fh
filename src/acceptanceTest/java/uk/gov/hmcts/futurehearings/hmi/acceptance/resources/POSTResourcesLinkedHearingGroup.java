@@ -32,8 +32,7 @@ public class POSTResourcesLinkedHearingGroup extends ResourceValidationTest {
         this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
-        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/","resource/"));
+        this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

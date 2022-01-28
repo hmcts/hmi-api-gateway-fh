@@ -51,8 +51,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
         this.setRelativeURL(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setInputPayloadFileName("hearing-request-standard.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("hearings","hearing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETHearingsValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
