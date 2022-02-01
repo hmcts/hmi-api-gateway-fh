@@ -29,8 +29,7 @@ class GETResourceByIDValidationTest extends ResourceValidationTest {
         resources_idRootContext = String.format(resources_idRootContext,"12345");
         this.setRelativeURL(resources_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

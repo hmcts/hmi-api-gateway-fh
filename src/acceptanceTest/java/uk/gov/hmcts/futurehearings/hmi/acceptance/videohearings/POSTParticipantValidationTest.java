@@ -36,8 +36,7 @@ public class POSTParticipantValidationTest extends VideoHearingValidationTest {
         this.setRelativeURL(participantsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-participants-request.json");
-        this.setHttpSucessStatus(HttpStatus.CREATED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("participants","not-found"));
+        this.setHttpSuccessStatus(HttpStatus.CREATED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

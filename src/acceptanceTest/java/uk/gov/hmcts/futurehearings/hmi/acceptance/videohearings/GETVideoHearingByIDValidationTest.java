@@ -30,8 +30,7 @@ class GETVideoHearingByIDValidationTest extends PeopleValidationTest {
         videohearings_idRootContext = String.format(videohearings_idRootContext,"12345");
         this.setRelativeURL(videohearings_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("video-hearing","video-hearings"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

@@ -37,8 +37,7 @@ public class PUTPublishingValidationTest extends PublishingValidationTest {
         this.setRelativeURL(publishingAmendRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-test-publishing.json");
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace(publishingAmendRootContext, publishingAmendRootContext + "s"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

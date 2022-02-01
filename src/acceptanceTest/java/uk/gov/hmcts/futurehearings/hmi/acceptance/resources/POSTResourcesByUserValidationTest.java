@@ -41,8 +41,7 @@ class POSTResourcesByUserValidationTest extends ResourceValidationTest {
         this.setRelativeURL(resourcesByUserRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-user-as-resource-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.CREATED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources/user","resource/user"));
+        this.setHttpSuccessStatus(HttpStatus.CREATED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

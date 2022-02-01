@@ -30,8 +30,7 @@ public class PUTResourcesByLocationValidationTest extends ResourceValidationTest
         this.setRelativeURL(resourcesByLocation_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-resource-by-location-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("location","locatio"));
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

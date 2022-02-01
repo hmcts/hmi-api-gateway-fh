@@ -27,8 +27,7 @@ public class POSTDirectListingValidationTest extends DirectListingValidationTest
         this.setRelativeURL(listingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-direct-listing-mock.json");
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound("notfound");
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

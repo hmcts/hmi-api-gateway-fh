@@ -39,8 +39,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
         super.initialiseValues();
         this.setRelativeURL(listingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETListingsValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

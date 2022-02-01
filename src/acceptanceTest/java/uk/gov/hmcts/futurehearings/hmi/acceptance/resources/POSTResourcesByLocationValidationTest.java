@@ -29,8 +29,7 @@ public class POSTResourcesByLocationValidationTest extends ResourceValidationTes
         this.setRelativeURL(resourcesByLocationRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-resource-by-location-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.CREATED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("location","locatio"));
+        this.setHttpSuccessStatus(HttpStatus.CREATED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

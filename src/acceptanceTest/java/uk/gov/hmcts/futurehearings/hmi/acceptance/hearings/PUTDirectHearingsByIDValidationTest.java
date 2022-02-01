@@ -33,8 +33,7 @@ class PUTDirectHearingsByIDValidationTest extends HearingValidationTest {
         this.setRelativeURL(directhearings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("direct-hearing-request-valid.json");
-        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("/hearings/sessions","/hearings/session"));
+        this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

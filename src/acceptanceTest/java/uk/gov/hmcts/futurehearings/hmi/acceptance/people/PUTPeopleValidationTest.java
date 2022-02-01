@@ -30,8 +30,7 @@ class PUTPeopleValidationTest extends PeopleValidationTest {
         this.setRelativeURL(people_idRootContext);
         this.setInputPayloadFileName("PUT-people-payload.json");
         this.setHttpMethod(HttpMethod.PUT);
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("people","peopl"));
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

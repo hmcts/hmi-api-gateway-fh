@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -39,9 +38,8 @@ import org.springframework.http.HttpStatus;
 public abstract class HMICommonHeaderTest {
     private String authorizationToken;
     private String relativeURL;
-    private String relativeURLForNotFound;
     private HttpMethod httpMethod;
-    private HttpStatus httpSucessStatus;
+    private HttpStatus httpSuccessStatus;
     private String inputFileDirectory;
     private String outputFileDirectory;
     private String inputPayloadFileName;
@@ -84,7 +82,7 @@ public abstract class HMICommonHeaderTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(),
+                this.getHttpSuccessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(), "The request was received successfully.",null);
     }
@@ -205,7 +203,7 @@ public abstract class HMICommonHeaderTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                getHttpSucessStatus(),
+                this.getHttpSuccessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
                 "The request was received successfully.",null);

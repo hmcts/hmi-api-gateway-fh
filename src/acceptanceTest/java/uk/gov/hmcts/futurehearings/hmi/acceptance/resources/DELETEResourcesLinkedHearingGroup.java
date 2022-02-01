@@ -32,8 +32,7 @@ public class DELETEResourcesLinkedHearingGroup extends ResourceValidationTest {
         this.setRelativeURL(resourcesLinkedHearingGroup_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputFileDirectory(null);
-        this.setHttpSucessStatus(HttpStatus.ACCEPTED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("resources","resource"));
+        this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

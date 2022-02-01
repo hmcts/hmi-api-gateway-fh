@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
@@ -23,7 +22,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 public class DELETEPublishingValidationTest extends PublishingValidationTest {
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
-    private CommonDelegate commonDelegate;
 
     @Value("${publishingDeleteRootContext}")
     private String publishingDeleteRootContext;
@@ -35,8 +33,7 @@ public class DELETEPublishingValidationTest extends PublishingValidationTest {
         this.setRelativeURL(publishingDeleteRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-test-publishing.json");
-        this.setHttpSucessStatus(HttpStatus.NO_CONTENT);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace(publishingDeleteRootContext, publishingDeleteRootContext + "s"));
+        this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

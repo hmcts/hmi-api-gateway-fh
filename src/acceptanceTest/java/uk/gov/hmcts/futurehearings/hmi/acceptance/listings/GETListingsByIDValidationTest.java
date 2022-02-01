@@ -29,8 +29,7 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
         listings_idRootContext = String.format(listings_idRootContext,"12345");
         this.setRelativeURL(listings_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
-        this.setHttpSucessStatus(HttpStatus.OK);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("listings","listing"));
+        this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETListingsByIdValidationVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }

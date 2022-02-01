@@ -27,8 +27,7 @@ public class POSTSchedulesValidationTest extends SchedulesValidationTest {
         this.setRelativeURL(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("POST-schedules-payload.json");
-        this.setHttpSucessStatus(HttpStatus.CREATED);
-        this.setRelativeURLForNotFound(this.getRelativeURL().replace("schedules", "schedule"));
+        this.setHttpSuccessStatus(HttpStatus.CREATED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
