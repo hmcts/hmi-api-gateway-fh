@@ -364,6 +364,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-delete-linked-hearing-group-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "update-publication",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-publication-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
