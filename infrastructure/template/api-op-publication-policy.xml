@@ -34,6 +34,7 @@
                 <set-header name="Subscription-Key" exists-action="override">
                     <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
                 </set-header-->
+                <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://#{pihHost}#/publication" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
