@@ -1,19 +1,21 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.publication;
 
 import io.restassured.RestAssured;
-        import lombok.extern.slf4j.Slf4j;
-        import org.junit.jupiter.api.BeforeAll;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.boot.test.context.SpringBootTest;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.test.context.ActiveProfiles;
-        import uk.gov.hmcts.futurehearings.hmi.Application;
-        import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
 
-        import static io.restassured.config.EncoderConfig.encoderConfig;
-        import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
+import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 @Slf4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 public abstract class PublicationValidationTest extends HMICommonHeaderTest {
