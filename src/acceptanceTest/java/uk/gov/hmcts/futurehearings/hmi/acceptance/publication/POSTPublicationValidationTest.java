@@ -20,13 +20,13 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 public class POSTPublicationValidationTest extends PublicationValidationTest {
     @Qualifier("CommonDelegate")
 
-    @Value("${publicationPublicationRootContext}")
-    private String publicationPublicationRootContext;
+    @Value("${pihPublicationRootContext}")
+    private String pihPublicationRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(publicationPublicationRootContext);
+        this.setRelativeURL(pihPublicationRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-test-publication.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);
