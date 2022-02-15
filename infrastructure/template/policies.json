@@ -366,9 +366,15 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "update-publication",
+      "operationId"  : "publication",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-publication-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "publication-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-publication-health-policy.xml",
       "errorAction"  : "Stop"
     }
   ]
