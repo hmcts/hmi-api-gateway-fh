@@ -342,7 +342,7 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "publication",
+      "operationId"  : "update-publication",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-publication-policy.xml",
       "errorAction"  : "Stop"
