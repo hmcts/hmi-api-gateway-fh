@@ -82,7 +82,7 @@ public abstract class HMICommonHeaderTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                this.getHttpSuccessStatus(),
+                getHttpSuccessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(), "The request was received successfully.",null);
     }
@@ -203,7 +203,7 @@ public abstract class HMICommonHeaderTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                this.getHttpSuccessStatus(),
+                getHttpSuccessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
                 "The request was received successfully.",null);
