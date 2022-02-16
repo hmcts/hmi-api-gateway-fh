@@ -1,7 +1,8 @@
-package uk.gov.hmcts.futurehearings.hmi.acceptance.publishing;
+package uk.gov.hmcts.futurehearings.hmi.acceptance.publication;
 
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +14,11 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTes
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
-import org.junit.jupiter.api.Disabled;
-
-@Disabled("Test failed due to removal of the endpoints under the test")
 @Slf4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class PublishingValidationTest extends HMICommonHeaderTest {
+public abstract class PublicationValidationTest extends HMICommonHeaderTest {
     @Value("${targetInstance}")
     private String targetInstance;
 
@@ -47,10 +46,11 @@ public abstract class PublishingValidationTest extends HMICommonHeaderTest {
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        this.setInputFileDirectory("publishing");
+        this.setInputFileDirectory("publication");
         String authorizationToken = generateOAuthToken (token_apiURL,
                 token_apiTenantId,
-                grantType, clientID,
+                grantType,
+                clientID,
                 clientSecret,
                 scope,
                 HttpStatus.OK);
