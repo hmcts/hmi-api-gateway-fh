@@ -13,6 +13,9 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTes
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
+import org.junit.jupiter.api.Disabled;
+
+@Disabled("Test failed due to removal of the endpoints under the test")
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")

@@ -20,6 +20,9 @@ import uk.gov.hmcts.futurehearings.hmi.functional.publishing.steps.PublishingSte
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
+import org.junit.jupiter.api.Disabled;
+
+@Disabled("Test failed due to removal of the endpoints under the test")
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"Testing the Publishing API is working correctly"})
@@ -47,7 +50,7 @@ public class PublishingTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-    @Test
+//    @Test
     public void testCreatePublishedEmptyPayload() {
         headersAsMap = createStandardHMIHeader("MOCK");
         publishingSteps.shouldCreatePublishingWithInvalidPayload(publishingCreateRootContext,
@@ -56,7 +59,7 @@ public class PublishingTest extends FunctionalTest {
                 "{}");
     }
 
-    @Test
+//    @Test
     public void testAmendPublishedEmptyPayload() {
         headersAsMap = createStandardHMIHeader("MOCK");
         publishingSteps.shouldAmendPublishingWithInvalidPayload(publishingAmendRootContext,
@@ -65,7 +68,7 @@ public class PublishingTest extends FunctionalTest {
                 "{}");
     }
 
-    @Test
+//    @Test
     public void testGetPublished() {
         headersAsMap = createStandardHMIHeader("MOCK");
         Map<String, String> queryParameters = new HashMap<String, String>();
@@ -76,7 +79,7 @@ public class PublishingTest extends FunctionalTest {
                 queryParameters);
     }
 
-    @Test
+//    @Test
     public void testDeletePublished() {
         headersAsMap = createStandardHMIHeader("MOCK");
         publishingSteps.shouldDeletePublishing(publishingDeleteRootContext,
