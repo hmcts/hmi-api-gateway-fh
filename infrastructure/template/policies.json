@@ -240,30 +240,6 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "create-info",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-pub-hub-create-policy.xml",
-      "errorAction"  : "Stop"
-    },
-    {
-      "operationId"  : "get-info",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-pub-hub-read-policy.xml",
-      "errorAction"  : "Stop"
-    },
-    {
-      "operationId"  : "update-info",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-pub-hub-update-policy.xml",
-      "errorAction"  : "Stop"
-    },
-    {
-      "operationId"  : "delete-info",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-pub-hub-delete-policy.xml",
-      "errorAction"  : "Stop"
-    },
-    {
       "operationId"  : "sitting-patterns",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-get-sitting-patterns-policy.xml",
@@ -363,6 +339,12 @@
       "operationId"  : "delete-linked-hearing-group",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-delete-linked-hearing-group-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "update-publication",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-publication-policy.xml",
       "errorAction"  : "Stop"
     },
     {

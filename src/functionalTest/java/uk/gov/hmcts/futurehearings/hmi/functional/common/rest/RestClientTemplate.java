@@ -1,10 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.rest;
 
 import static net.serenitybdd.rest.SerenityRest.expect;
-
 import java.util.Map;
-
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
