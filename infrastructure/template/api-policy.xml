@@ -78,6 +78,7 @@
             <value>application/json; version=1.2</value><!--Additional header for passing McGirr tests -->
         </check-header>
         <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
+            <value>multipart/form-data</value>
             <value>application/json</value>
             <value>application/json;charset=UTF-8</value>
             <value>application/json; charset=UTF-8</value>
