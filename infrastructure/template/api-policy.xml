@@ -79,7 +79,6 @@
         </check-header>
         <check-header name="Content-Type" failed-check-httpcode="400" failed-check-error-message="Missing/Invalid Media Type" ignore-case="true">
             <value>multipart/form-data</value>
-            <value>multipart/form-data; boundary=<calculated when request is sent></value>
             <value>application/json</value>
             <value>application/json;charset=UTF-8</value>
             <value>application/json; charset=UTF-8</value>
