@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,11 +40,10 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
     public void testSuccessfulGetSessionForSessionRequestType() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "DS");
-        headersAsMap.put("Destination-System", "MOCK");
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -51,12 +51,11 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore("Ignored as failing due to defect with API, will remove ignore when fixed")
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
+        Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "DS");
         queryParameters.put("requestDuration", "360");
-        headersAsMap.put("Destination-System", "MOCK");
+        headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -64,11 +63,15 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
+    @Ignore("Ignored as failing due to unsupported paramaters of requestLocationType and requestLocationReferenceType, will remove ignore when fixed")
+    @Disabled("As ignore works locally but not on the pipeline before, so add this as well.")
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "DS");
-        queryParameters.put("requestLocationId", "301");
-        headersAsMap.put("Destination-System", "MOCK");
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestLocationId", "300");
+        queryParameters.put("requestLocationType", "COURT");
+        queryParameters.put("requestLocationReferenceType ", "CASEHQ");
+        headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -77,10 +80,10 @@ public class SessionsLookUpTest extends FunctionalTest {
 
     @Test
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestJudgeType() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "DS");
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
         queryParameters.put("requestJudgeType", "PUBLAW");
-        headersAsMap.put("Destination-System", "MOCK");
+        headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -89,11 +92,11 @@ public class SessionsLookUpTest extends FunctionalTest {
 
     @Test
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestStartDateAndRequestEndDate() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "DS");
-        queryParameters.put("requestStartDate", "2020-12-01T10:00:00Z");
-        queryParameters.put("requestEndDate", "2020-12-09T10:00:00Z");
-        headersAsMap.put("Destination-System", "MOCK");
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestStartDate", "2022-02-25T09:00:00Z");
+        queryParameters.put("requestEndDate", "2022-03-01T09:00:00Z");
+        headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
                 authorizationToken,
