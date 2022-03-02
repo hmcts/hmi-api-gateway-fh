@@ -35,7 +35,7 @@ public class SchedulesAPITest extends FunctionalTest {
 
     @Test
     public void testCreateScheduleWithEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("MOCK");
+        headersAsMap = createStandardHMIHeader("SNL");
         schedulesSteps.shouldPostSessionsWithPayload(schedulesApiRootContext,
                 headersAsMap, authorizationToken, HttpMethod.POST, "{}");
     }
