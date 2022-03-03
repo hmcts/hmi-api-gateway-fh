@@ -1,8 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.PubHubResponseVerifier.thenValidateResponseForPost;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForLinkedHearingGroup;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
+
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -31,9 +32,18 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -44,6 +54,7 @@ import java.util.Map;
 @DisplayName("POST /pih/publication - Create/Update Publication")
 public class POST_Publication_UnitTests {
     private static final String CORRECT_UPDATE_PUBLICATION_PAYLOAD = "requests/create-publication-payload.json";
+    private static final String CORRECT_UPDATE_PUBLICATION_PDF_PAYLOAD = "requests/publication.pdf";
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -191,6 +202,17 @@ public class POST_Publication_UnitTests {
 
     @Test
     @Order(9)
+    @DisplayName("Test for Correct Content-Type Headers for publication")
+    void testUpdatePublicationWithCorrectContentTypeHeaders() throws IOException {
+        headersAsMap.remove("Content-Type");
+        headersAsMap.put("Content-Type", "multipart/form-data");
+        final File input = givenAPDFPayload(CORRECT_UPDATE_PUBLICATION_PDF_PAYLOAD);
+        final Response response = createResource(input);
+        thenValidateResponseForPost(response);
+    }
+
+    @Test
+    @Order(10)
     @DisplayName("Test for missing Access Token for publication")
     void testUpdatePublicationWithMissingAccessToken() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_PUBLICATION_PAYLOAD);
@@ -199,7 +221,7 @@ public class POST_Publication_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     @DisplayName("Test for invalid Access Token for publication")
     void testUpdatePublicationWithInvalidAccessToken() throws IOException {
         httpClient.setAccessToken("accessToken");
@@ -216,8 +238,16 @@ public class POST_Publication_UnitTests {
         return httpClient.httpPost(linkedHearingGroupCtx, headersAsMap, paramsAsMap, input);
     }
 
+    private Response createResource(final File input) {
+        return httpClient.httpPostMultiPart(linkedHearingGroupCtx, headersAsMap, paramsAsMap, input);
+    }
+
     private String givenAPayload(final String path) throws IOException {
         return readFileContents(path);
+    }
+
+    private File givenAPDFPayload(String path) throws IOException{
+        return ResourceUtils.getFile("classpath:" + path);
     }
 }
 

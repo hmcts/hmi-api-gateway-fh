@@ -19,6 +19,10 @@ public class TestUtilities {
         return new String(Files.readAllBytes(Paths.get(file.toURI())));
     }
 
+    public static File readFile(final String path) throws IOException {
+        return ResourceUtils.getFile("classpath:" + path);
+    }
+
     public static String getToken(String grantType, String clientID, String clientSecret, String tokenURL, String scope) {
         final String body = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s", grantType, clientID, clientSecret, scope);
         Response response = expect().that().statusCode(200).
