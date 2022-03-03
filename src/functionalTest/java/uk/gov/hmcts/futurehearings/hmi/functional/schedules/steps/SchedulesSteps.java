@@ -18,12 +18,11 @@ public class SchedulesSteps {
                                               final String authorizationToken,
                                               final HttpMethod httpMethod,
                                               final String body) {
-        Response response = callRestEndpointWithPayload(apiURL,
+                callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
                 body,
                 httpMethod,
-                HttpStatus.CREATED);
-        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+                HttpStatus.BAD_REQUEST);
     }
 }
