@@ -170,16 +170,6 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("Test for Invalid Parameter")
-    void testRetrieveSessionsRequestWithAdditionalParam() {
-        paramsAsMap.put("requestSessionType", "ADHOC");
-        paramsAsMap.put("Invalid-Param","Value");
-        final Response response = whenRetrieveSessionsIsInvokedWithAdditionalParam();
-        thenValidateResponseFoInvalidParam("Invalid-Param", response);
-    }
-
 
     @Order(9)
     @ParameterizedTest(name = "Test for mandatory parameter - {0}")
