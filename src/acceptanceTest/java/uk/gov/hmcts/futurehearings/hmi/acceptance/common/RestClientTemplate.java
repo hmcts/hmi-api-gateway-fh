@@ -69,7 +69,7 @@ public class RestClientTemplate {
             case GET:
                 if (Objects.isNull(params) || params.size() == 0) {
                     return RestAssured
-                            //.expect().that().statusCode(expectedHttpStatus.value())
+                            .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
                             .auth()
@@ -81,7 +81,7 @@ public class RestClientTemplate {
                     log.debug("Query Params " + params);
                     Response response = null;
                     response = RestAssured
-                            //.expect().that().statusCode(expectedHttpStatus.value())
+                            .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .queryParams(params)
                             .headers(headers)
