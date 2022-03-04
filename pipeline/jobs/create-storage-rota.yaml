@@ -34,7 +34,10 @@ jobs:
         resourceGroup="hmi-sharedinfra-$(environment)-rg"
         kvName="hmi-shared-kv-$(environment)"
 
-        az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags application=hearing-management-interface businessarea=cross-cutting environment=${{ parameters.environmentName }}
+        $tags="businessArea=cross-cutting application=hearing-management-interface builtFrom=hmcts/hmi-api-gateway-fh environment=${{ parameters.environmentName }}"
+        Write-Host "tag: $tags"
+
+        az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags $tags
         echo "Acquiring storage key"
         key=$(az storage account keys list -g $resourceGroup --account-name $accountName --query "[0].value" -o tsv)
         echo "##vso[task.setvariable variable=storageKey;issecret=true;]$key"
