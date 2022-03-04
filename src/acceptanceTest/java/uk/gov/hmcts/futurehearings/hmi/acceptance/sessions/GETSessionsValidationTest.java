@@ -38,15 +38,15 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     private static final String REQUEST_TYPE_MANDATORY_ERROR_MSG = "You need to provide mandatory parameter: 'requestSessionType'";
     private static final String EXTRA_PARAM_ERROR_MSG = "Unsupported Query Param detected: 'extra_params'";
 
-    //@BeforeAll
+    @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(sessionsRootContext);
+        /*this.setRelativeURL(sessionsRootContext);
         this.setUrlParams(buildQueryParams("requestSessionType", "1234"));
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSessionsValidationVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());*/
     }
 
     //@Test
