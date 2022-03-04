@@ -30,4 +30,7 @@ resource "azurerm_api_management" "hmi_apim" {
     store_name          = "CertificateAuthority"
   }
 
+  security {
+    triple_des_ciphers_enabled = false
+  }
 }
