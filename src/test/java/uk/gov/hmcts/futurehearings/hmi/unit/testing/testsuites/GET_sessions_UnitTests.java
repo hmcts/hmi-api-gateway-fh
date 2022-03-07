@@ -170,16 +170,6 @@ class GET_sessions_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("Test for Invalid Parameter")
-    void testRetrieveSessionsRequestWithAdditionalParam() {
-        paramsAsMap.put("requestSessionType", "ADHOC");
-        paramsAsMap.put("Invalid-Param","Value");
-        final Response response = whenRetrieveSessionsIsInvokedWithAdditionalParam();
-        thenValidateResponseFoInvalidParam("Invalid-Param", response);
-    }
-
 
     @Order(9)
     @ParameterizedTest(name = "Test for mandatory parameter - {0}")
@@ -193,51 +183,6 @@ class GET_sessions_UnitTests {
 
     @Test
     @Order(10)
-    @DisplayName("Test with one non-mandatory and one mandatory parameters")
-    void testRetrieveSessionsRequestWithOneNonMandatoryParams() {
-        paramsAsMap.clear();
-        paramsAsMap.put("requestSessionType", "ADHOC");
-        paramsAsMap.put("requestStartDate", "2020-12-13T20:00:00Z");
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForNoMandatoryParams(response);
-    }
-
-    @Test
-    @Order(11)
-    @DisplayName("Test with two non-mandatory and one mandatory parameters")
-    void testRetrieveSessionsRequestWithTwoNonMandatoryParams() {
-        paramsAsMap.remove("requestEndDate");
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForNoMandatoryParams(response);
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("Test with no mandatory parameters")
-    void testRetrieveSessionsRequestWithNoMandatoryParams() {
-        paramsAsMap.clear();
-            final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForNoMandatoryParams(response);
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("Test for Correct Headers with No Parameters")
-    void testRetrieveSessionsRequestWithCorrectHeadersAndNoParams() {
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndNoParams();
-        thenValidateResponseForRetrieve(response);
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("Test for Correct Headers and Parameters")
-    void testRetrieveSessionsRequestWithCorrectHeadersAndParams() {
-        final Response response = whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams();
-        thenValidateResponseForRetrieve(response);
-    }
-
-    @Test
-    @Order(15)
     @DisplayName("Test for missing Access Token")
     void testRetrieveSessionsRequestWithMissingAccessToken() {
         final Response response = whenRetrieveSessionsIsInvokedWithMissingAccessToken();
@@ -245,7 +190,7 @@ class GET_sessions_UnitTests {
     }
 
     @Test
-    @Order(16)
+    @Order(11)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveSessionsRequestWithInvalidAccessToken()  {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
