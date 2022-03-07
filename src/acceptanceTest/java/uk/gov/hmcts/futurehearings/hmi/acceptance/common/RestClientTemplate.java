@@ -79,8 +79,7 @@ public class RestClientTemplate {
                             .get().then().extract().response();
                 } else {
                     log.debug("Query Params " + params);
-                    Response response = null;
-                    response = RestAssured
+                    Response response = RestAssured
                             .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .queryParams(params)
