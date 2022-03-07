@@ -1,49 +1,6 @@
 <policies>
     <inbound>
         <base />
-        <set-variable name="mandatoryMissing" value="@{
-                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-
-                return !qryPrmKeys.Contains("requestSessionType");
-            }" />
-        <choose>
-            <when condition="@((bool)context.Variables["mandatoryMissing"])">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("statusCode", 400),
-                            new JProperty("message", "You need to provide mandatory parameter: 'requestSessionType'")
-                        ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
-        </choose>
-        <set-variable name="invalidQueryParamMsg" value="@{
-            string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-            string[] validQueryParams = new String[]{"requestSessionType", "requestStartDate", "requestEndDate", "requestJudgeType", "requestLocationId", "requestDuration"};
-
-            foreach (string queryParam in qryPrmKeys)
-            {
-                if(!validQueryParams.Contains(queryParam)){
-                    return "Unsupported Query Param detected: '" + queryParam + "'";
-                }  
-            }
-            return null;
-        }" />
-        <choose>
-            <when condition="@(context.Variables["invalidQueryParamMsg"] != null)">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("statusCode", 400),
-                            new JProperty("message", context.Variables["invalidQueryParamMsg"])
-                        ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
-        </choose>
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
                 <rewrite-uri template="/" copy-unmatched-params="true" /> 
