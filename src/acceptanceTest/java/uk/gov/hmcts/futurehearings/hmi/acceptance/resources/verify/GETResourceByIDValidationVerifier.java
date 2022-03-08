@@ -21,8 +21,5 @@ public class GETResourceByIDValidationVerifier implements HMISuccessVerifier {
                        Response response) {
         log.debug(response.getBody().asString());
         assertEquals(22, response.getBody().jsonPath().getMap("$").size());
-        /*Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(),responseMap.get(("statusCode")));
-        assertEquals(expectedMessage,responseMap.get(("message")));*/
     }
 }

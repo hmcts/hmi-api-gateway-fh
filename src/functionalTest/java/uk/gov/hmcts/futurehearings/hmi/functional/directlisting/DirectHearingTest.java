@@ -47,8 +47,8 @@ public class DirectHearingTest extends FunctionalTest {
 
     @Test
     public void testDirectHearing() throws Exception {
-        Map<String, String> queryParameters = new HashMap<String, String>();
-        queryParameters.put("requestSessionType", "ADHOC");
+//        Map<String, String> queryParameters = new HashMap<String, String>();
+//        queryParameters.put("requestSessionType", "ADHOC");
 
         String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
         directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,

@@ -27,10 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 @IncludeTags("Post")
 class POSTVideoHearingsValidationTest extends VideoHearingValidationTest {
 
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
-
     @Value("${videohearingsRootContext}")
     private String videohearingsRootContext;
 
