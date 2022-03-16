@@ -31,6 +31,7 @@ resource "azurerm_api_management" "hmi_apim" {
   }
 
   security {
-    enable_triple_des_ciphers = false
+	triple_des_ciphers_enabled = false
+	enable_triple_des_ciphers = false
   }
 }
