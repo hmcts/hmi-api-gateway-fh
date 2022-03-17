@@ -352,6 +352,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-publication-health-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "reservations",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-get-reservations-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
