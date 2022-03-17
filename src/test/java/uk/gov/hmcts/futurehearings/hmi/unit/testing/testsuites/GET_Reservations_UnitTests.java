@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HealthResponseVe
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("GET /listings - Retrieve Reservations")
+@DisplayName("GET /reservations - Retrieve Reservations")
 public class GET_Reservations_UnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
