@@ -23,10 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 class DELETESessionsValidationTest extends SessionsValidationTest {
 
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
-
     @Value("${sessions_idRootContext}")
     private String sessions_idRootContext;
 

@@ -20,9 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 class GETPeopleByIDValidationTest extends PeopleValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${people_idRootContext}")
     private String people_idRootContext;
 
