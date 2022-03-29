@@ -14,8 +14,8 @@ import org.springframework.http.HttpStatus;
 
 @Slf4j
 public class ResourcesSteps {
-
-    @Step("User performs the creation of a location using the Resources API")
+//    Needs Confirming - Not supported - Mocked response for this test (potentially will be needed - ASK SNL.
+//    @Step("User performs the creation of a location using the Resources API")
     public void shouldCreateALocation(final String apiURL,
                                       final Map<String, Object> headersAsMap,
                                       final String authorizationToken,

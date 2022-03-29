@@ -23,10 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 class GETHearingsByIDValidationTest extends HearingValidationTest {
 
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
-
     @Value("${hearings_idRootContext}")
     private String hearings_idRootContext;
 

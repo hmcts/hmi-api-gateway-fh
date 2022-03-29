@@ -27,10 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 @IncludeTags("Delete")
 class DELETEResourcesValidationTest extends ResourceValidationTest {
 
-    @Qualifier("CommonDelegate")
-    @Autowired(required = true)
-    private CommonDelegate commonDelegate;
-
     @Value("${resources_idRootContext}")
     private String resources_idRootContext;
 
