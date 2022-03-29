@@ -1,0 +1,54 @@
+<policies>
+    <inbound>
+        <base />
+            <choose>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                </when>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                </when>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+                    <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
+                    <choose>
+                        <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
+                            <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+                                <set-url>#{sAndLOauthUrl}#</set-url>
+                                <set-method>POST</set-method>
+                                <set-header name="Content-Type" exists-action="override">
+                                    <value>application/x-www-form-urlencoded</value>
+                                </set-header>
+                                <set-body>@{
+                                    return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
+                            </send-request>
+                            <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                        </when>
+                    </choose>
+                    <set-header name="Authorization" exists-action="override">
+                        <value>@((String)context.Variables["snlAuthToken"])</value>
+                    </set-header>
+                    <rewrite-uri template="/" copy-unmatched-params="true" />
+                    <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/reservations" />
+                </when>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
+                </when>
+                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                    <set-backend-service base-url="https://www.hmcts.com/request-hearings/hearings/id" />
+                    <mock-response status-code="200" content-type="application/json" />
+                </when>
+            </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
