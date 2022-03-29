@@ -15,18 +15,6 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class CaseHQCommonErrorVerifier implements HMIErrorVerifier {
 
-    private String returnHttpCode;
-    private String returnErrorCode;
-    private String returnDescription;
-
-    public CaseHQCommonErrorVerifier(String returnHttpCode,
-                                     String returnErrorCode,
-                                     String returnDescription) {
-        this.returnHttpCode = returnHttpCode;
-        this.returnErrorCode = returnErrorCode;
-        this.returnDescription = returnDescription;
-    }
-
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {

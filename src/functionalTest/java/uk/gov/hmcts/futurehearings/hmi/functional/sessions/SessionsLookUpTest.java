@@ -63,14 +63,12 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore("Ignored as failing due to unsupported paramaters of requestLocationType and requestLocationReferenceType, will remove ignore when fixed")
-    @Disabled("As ignore works locally but not on the pipeline before, so add this as well.")
     public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() {
         Map<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestSessionType", "DS");
         queryParameters.put("requestLocationId", "300");
-        queryParameters.put("requestLocationType", "COURT");
-        queryParameters.put("requestLocationReferenceType ", "CASEHQ");
+        queryParameters.put("requestLocationType", "Court");
+        queryParameters.put("requestLocationReferenceType", "CASEHQ");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
