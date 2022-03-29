@@ -16,10 +16,10 @@ variable "sp_object_id" {
 variable "secret_permissions" {
   description = "The permissions (list) for the creating principal accessing secrets."
   default = [
-    "get",
-    "set",
-    "list",
-    "delete"
+    "Get",
+    "Set",
+    "List",
+    "Delete"
   ]
 }
 
