@@ -7,22 +7,45 @@
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
             </when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<!--rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" /-->
-				<return-response>
-					<set-status code="202" />
-					<set-header name="Content-Type">
-						<value>application/json</value>
-					</set-header>
-					<set-body>@{
-						return new JObject(
-							new JProperty("response code", 202),
-							new JProperty("description", "The request was received successfully.")
-						).ToString();
-						}
-					</set-body>
-				</return-response>
-			</when>
+                <choose>
+                    <when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
+                        <send-request ignore-error="false" timeout="20" response-variable-name="cftClientResponse" mode="new">
+                            <set-url>https://#{keyVaultHost}#/secrets/cft-client-app-client/?api-version=7.0</set-url>
+                            <set-method>GET</set-method>
+                            <authentication-managed-identity resource="https://vault.azure.net" />
+                        </send-request>
+                        <set-variable name="cftClient" value="@{
+                            var secret = ((IResponse)context.Variables["cftClientResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
+                        }" />
+                        <send-request ignore-error="false" timeout="20" response-variable-name="cftSecretResponse" mode="new">
+                            <set-url>https://#{keyVaultHost}#/secrets/cft-client-app-secret/?api-version=7.0</set-url>
+                            <set-method>GET</set-method>
+                            <authentication-managed-identity resource="https://vault.azure.net" />
+                        </send-request>
+                        <set-variable name="cftSecret" value="@{
+                            var secret = ((IResponse)context.Variables["cftSecretResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
+                        }" />
+                        <send-request ignore-error="true" timeout="20" response-variable-name="cftBearerToken" mode="new">
+                            <set-url>https://idam-web-public.demo.platform.hmcts.net/o/token</set-url>
+                            <set-method>POST</set-method>
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/x-www-form-urlencoded</value>
+                            </set-header>
+                            <set-body>@{
+                                return "client_id=" + (string)context.Variables["cftClient"] + "&client_secret=" + (string)context.Variables["cftSecret"] + "&grant_type=client_credentials&scope=profile";}</set-body>
+                        </send-request>
+                        <cache-store-value key="cftAuth" value="@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+						<cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
+                    </when>
+                </choose>
+                <set-header name="Authorization" exists-action="override">
+                    <value>@((String)context.Variables["cftAuthToken"])</value>
+                </set-header>
+                <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://cft-api-mgmt.demo.platform.hmcts.net/hmc/listings" />
+            </when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>
