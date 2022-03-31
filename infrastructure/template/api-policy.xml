@@ -29,6 +29,15 @@
         <set-header name="_EnableMocks" exists-action="override">
             <value>true</value>
         </set-header>
+        <set-header name="Strict-Transport-Security" exists-action="override">
+            <value>max-age=31536000</value>
+        </set-header>
+        <set-header name="Content-Security-Policy" exists-action="override">
+            <value>script-src 'self'</value>
+        </set-header>
+        <set-header name="X-Content-Type-Options" exists-action="override">
+            <value>nosniff</value>
+        </set-header>
         <set-header name="Request-Processed-At" exists-action="override">
             <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
         </set-header>
