@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 import java.util.Map;
 
@@ -28,4 +29,32 @@ public class HearingsSteps {
         assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
 
     }
+
+    @Step("User retrieves Reservations")
+    public void shouldGETReservations(final String apiURL,
+                                                       final Map<String, Object> headersAsMap,
+                                                       final String authorizationToken,
+                                      final Map<String, String> queryParameters) {
+
+        Response response = callRestEndpointWithQueryParams(apiURL,
+                headersAsMap,
+                authorizationToken,
+                queryParameters,
+                HttpStatus.OK);
+        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+    }
+
+    public void GETReservationsInvalidParams(final String apiURL,
+                                      final Map<String, Object> headersAsMap,
+                                      final String authorizationToken,
+                                      final Map<String, String> queryParameters) {
+
+        Response response = callRestEndpointWithQueryParams(apiURL,
+                headersAsMap,
+                authorizationToken,
+                queryParameters,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
+    }
+
 }
