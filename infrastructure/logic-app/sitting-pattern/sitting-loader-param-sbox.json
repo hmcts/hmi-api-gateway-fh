@@ -14,7 +14,7 @@
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
-                   "id": "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/hmi-sharedservices-sbox-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-sbox"
+                   "id": "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/hmi-sharedinfra-sbox-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-sbox"
                 },
                 "secretName": "dtu-storage-account-key"
              }
