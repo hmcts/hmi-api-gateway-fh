@@ -149,7 +149,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         test_response_for_supplied_parameter();
     }
 
-    @ParameterizedTest(name = "Test with All 5 Query Parameters - Param : {0} --> {1}")
+    @ParameterizedTest(name = "Test with 5 Query Parameters - Param : {0} --> {1}")
     @CsvSource({"requestSessionType,ADHOC,requestStartDate,10/37/2001,requestEndDate,01/JAN/2011,requestLocationId,301,requestDuration,360"})
     void test_all_five_query_params(final String paramKey1,
                                           final String paramVal1,
@@ -169,8 +169,8 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         test_response_for_supplied_parameter();
     }
 
-    @ParameterizedTest(name = "Test with All Query Parameters with an extra param - Param : {0} --> {1}")
-    @CsvSource({"requestSessionType,ADHOC,requestLocation,301,requestDuration,360,requestStartDate,2011-10-37,requestEndDate,01/JAN/2011,extra_param,extra", "requestSessionType,,requestLocation,,requestDuration,,requestStartDate,,requestEndDate,,extra_param,"})
+    @ParameterizedTest(name = "Test with multiple Query Parameters with an extra param - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC, requestLocation,301, requestDuration,360, requestStartDate,2011-10-37, requestEndDate,01/JAN/2011, extra_param,extra", "requestSessionType,, requestLocation,, requestDuration,, requestStartDate,, requestEndDate,, extra_param,"})
     void test_all_five_query_params_with_extra_param(final String paramKey1,
                                                  final String paramVal1,
                                                  final String paramKey2,
@@ -189,6 +189,55 @@ class GETSessionsValidationTest extends SessionsValidationTest {
                                             paramKey4, paramVal4,
                                             paramKey5, paramVal5,
                                             paramKey6, paramVal6));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestPanelType : {0} --> {1}")
+    @CsvSource(value = {"requestPanelType, Adult", "requestPanelType, Youth", "requestPanelType, unknown", "requestPanelType, ''", "requestPanelType, ' '", "requestPanelType, NIL"}, nullValues = "NIL")
+    void test_request_panelType_query_param(final String requestPanelTypeKey, final String requestPanelTypeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestPanelTypeKey, requestPanelTypeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestJurisdiction : {0} --> {1}")
+    @CsvSource(value = {"requestJurisdiction, CIV", "requestJurisdiction, unknown", "requestJurisdiction, ''", "requestJurisdiction, ' '", "requestJurisdiction, NIL"}, nullValues = "NIL")
+    void test_request_jurisdiction_query_param(final String requestJurisdictionKey, final String requestJurisdictionValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestJurisdictionKey, requestJurisdictionValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestGroupBooking : {0} --> {1}")
+    @CsvSource(value = {"requestGroupBooking, false", "requestGroupBooking, true", "requestGroupBooking, non-boolean-value", "requestGroupBooking, ''", "requestGroupBooking, ' '", "requestGroupBooking, NIL"}, nullValues = "NIL")
+    void test_request_groupBooking_query_param(final String requestGroupBookingKey, final String requestGroupBookingValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestGroupBookingKey, requestGroupBookingValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestAvailableDuration : {0} --> {1}")
+    @CsvSource(value = {"requestAvailableDuration, 180", "requestAvailableDuration,non-digital", "requestAvailableDuration, ''", "requestAvailableDuration, ' '", "requestAvailableDuration, NIL"}, nullValues = "NIL")
+    void test_request_available_duration_query_param(final String requestAvailableDurationKey, final String requestAvailableDurationValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestAvailableDurationKey, requestAvailableDurationValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestAvailableSlotCount : {0} --> {1}")
+    @CsvSource(value = {"requestAvailableSlotCount, 2", "requestAvailableSlotCount, non-digital", "requestAvailableSlotCount, ''", "requestAvailableSlotCount, ' '", "requestAvailableSlotCount, NIL"}, nullValues = "NIL")
+    void test_request_available_slot_Count_query_param(final String requestAvailableSlotCountKey, final String requestAvailableSlotCountValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestAvailableSlotCountKey, requestAvailableSlotCountValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestReturnAllSessions : {0} --> {1}")
+    @CsvSource(value = {"requestReturnAllSessions, false", "requestReturnAllSessions, non-boolean-value", "requestReturnAllSessions, ''", "requestReturnAllSessions, ' '", "requestReturnAllSessions, NIL"}, nullValues = "NIL")
+    void test_request_return_all_sessions_query_param(final String requestReturnAllSessionsKey, final String requestReturnAllSessionsValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestReturnAllSessionsKey, requestReturnAllSessionsValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestIncludeDummyRooms : {0} --> {1}")
+    @CsvSource(value = {"requestIncludeDummyRooms, false", "requestIncludeDummyRooms, non-boolean-value", "requestIncludeDummyRooms, ''", "requestIncludeDummyRooms, ' '", "requestIncludeDummyRooms, NIL"}, nullValues = "NIL")
+    void test_request_include_dummy_rooms_query_param(final String requestIncludeDummyRoomsKey, final String requestIncludeDummyRoomsValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestIncludeDummyRoomsKey, requestIncludeDummyRoomsValue));
         test_response_for_supplied_parameter();
     }
 }

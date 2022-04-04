@@ -40,7 +40,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestType() {
+    public void testSuccessfulGetSessionForRequestSessionType() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
         headersAsMap.put("Destination-System", "SNL");
@@ -51,7 +51,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestDuration() {
+    public void testSuccessfulGetSessionForRequestSessionTypeAndDuration() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "DS");
         queryParameters.put("requestDuration", "360");
@@ -63,7 +63,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestLocation() {
+    public void testSuccessfulGetSessionForRequestSessionTypeAndLocation() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "DS");
         queryParameters.put("requestLocationId", "300");
@@ -77,10 +77,11 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestJudgeType() {
+    public void testSuccessfulGetSessionForRequestSessionTypeAndStartDateAndEndDate() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
-        queryParameters.put("requestJudgeType", "PUBLAW");
+        queryParameters.put("requestStartDate", "2022-02-25T09:00:00Z");
+        queryParameters.put("requestEndDate", "2022-03-01T09:00:00Z");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
@@ -89,11 +90,84 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndRequestStartDateAndRequestEndDate() {
+    @Ignore
+    @Disabled
+    public void testSuccessfulGetSessionForRequestSessionTypeAndPanelType() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
-        queryParameters.put("requestStartDate", "2022-02-25T09:00:00Z");
-        queryParameters.put("requestEndDate", "2022-03-01T09:00:00Z");
+        queryParameters.put("requestPanelType", "Adult");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestJurisdiction", "CIV");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndGroupBooking() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestGroupBooking", "false");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndAvailableDuration() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestAvailableDuration", "200");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndAvailableSlotCount() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestAvailableSlotCount", "2");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndReturnAllSessions() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestReturnAllSessions", "false");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForRequestSessionTypeAndIncludeDummyRooms() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestIncludeDummyRooms", "false");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
