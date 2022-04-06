@@ -31,6 +31,6 @@ variable "service_url" {
 variable "enable_mock_header_string" {
   description = "mock header static string for adding development headers injected to requests"
 }
-variable key_vault_rg {
+variable "key_vault_rg" {
   description = "group name for KV"
 }
