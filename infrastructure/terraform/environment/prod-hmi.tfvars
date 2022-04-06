@@ -9,5 +9,6 @@ open_api_health_spec_content_value = "https://raw.githubusercontent.com/hmcts/re
 revision                           = "44"
 service_url                        = ""
 
-enable_mock_header_string = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
-virtual_network_type      = "Internal"
+enable_mock_header_string          = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
+virtual_network_type               = "Internal"
+key_vault_rg                       = "hmi-sharedservices-prod-rg"
