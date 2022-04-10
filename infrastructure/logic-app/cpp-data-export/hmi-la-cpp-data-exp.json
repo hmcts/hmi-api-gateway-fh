@@ -12,49 +12,7 @@
         "storageAccessKey": {
             "type": "securestring"
         },
-        "storageACPathFiles": {
-            "type": "string"
-        },
-        "storageACGetPathSuffix": {
-            "type": "string"
-        },
         "environmentName": {
-            "type": "string"
-        },
-        "hmiDestination": {
-            "type": "string"
-        },
-         "appId": {
-            "type": "securestring"
-        }, 
-        "appSecret": {
-            "type": "securestring"
-        }, 
-        "tenantId": {
-            "type": "securestring"
-        }, 
-        "keyvaultName": {
-            "type": "string"
-        },
-        "hmiSchedulesUrl": {
-            "type": "string"
-        },
-        "serviceNowHostUrl": {
-            "type": "string"
-        },
-        "hmiScopeUrl": {
-            "type": "string"
-        },
-        "serviceNowAssignemntGroupId": {
-            "type": "string"
-        },
-        "serviceNowUserRoleTypeId": {
-            "type": "string"
-        },
-        "serviceNowServiceOfferingId": {
-            "type": "string"
-        },
-        "serviceNowCallerId": {
             "type": "string"
         }
     },
