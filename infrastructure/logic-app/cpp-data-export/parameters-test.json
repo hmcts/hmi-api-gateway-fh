@@ -6,7 +6,7 @@
             "value": "test"
         },
         "workflows_hmidtucppdataex_name": {
-            "value": "hmidtucppdataextestla"
+            "value": "hmi-la-listing-data-export-test"
         },
         "storageAccountName":{
             "value": "hmidtutest"

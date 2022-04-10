@@ -6,7 +6,7 @@
             "value": "prod"
         },
         "workflows_hmidtucppdataex_name": {
-            "value": "hmidtucppdataexprodla"
+            "value": "hmi-la-listing-data-export-prod"
         },
         "storageAccountName":{
             "value": "hmidtuprod"

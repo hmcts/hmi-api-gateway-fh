@@ -6,7 +6,7 @@
             "value": "sbox"
         },
         "workflows_hmidtucppdataex_name": {
-            "value": "hmidtucppdataexsboxla"
+            "value": "hmi-la-listing-data-export-sbox"
         },
         "storageAccountName":{
             "value": "hmidtusbox"
