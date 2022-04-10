@@ -52,9 +52,7 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
-                "[resourceId('Microsoft.Web/connections', 'keyvault')]"
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]"
             ],
             "properties": {
                 "state": "Enabled",
