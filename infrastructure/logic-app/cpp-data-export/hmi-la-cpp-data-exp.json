@@ -68,7 +68,7 @@
             "tags": {
                 "environment": "[parameters('environmentName')]",
                 "application": "hearing-management-interface",
-                "businessarea": "cross-cutting",
+                "businessArea": "cross-cutting",
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "properties": {
