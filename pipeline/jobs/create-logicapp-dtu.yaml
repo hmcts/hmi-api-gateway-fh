@@ -39,5 +39,7 @@ jobs:
         echo "Creating DTU Logic Application - Sitting Patterns"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-loader-param-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
+         echo "Creating DTU Logic Application - CPP Data Export"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\hmi-la-cpp-data-exp.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\parameters-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
         
