@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "prod"
+            "value": "production"
         },
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-prod"
@@ -32,7 +32,7 @@
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
-                   "id": "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/hmi-sharedinfra-prod-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-prod"
+                   "id": "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/hmi-sharedservices-prod-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-prod"
                 },
                 "secretName": "dtu-storage-account-key"
              }
