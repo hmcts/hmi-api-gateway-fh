@@ -1016,8 +1016,11 @@
                                                             "inputs": {
                                                                 "session": {
                                                                     "johs": "@json(concat('[', variables('jsonJohArray'), ']'))",
-                                                                    "locationReferenceType": "EXTERNAL",
-                                                                    "roomId": "@{items('For_each_Session')?['locationId']}",
+                                                                    "room": {
+                                                                        "locationId": "@{items('For_each_Session')?['locationId']}",
+                                                                        "locationReferenceType": "EXTERNAL",
+                                                                        "locationType": "Room"
+                                                                    },
                                                                     "sessionDuration": "@int(variables('sessionDuration'))",
                                                                     "sessionReference": "@{items('For_each_Session')?['RowKey']}",
                                                                     "sessionStart": "@{variables('sessionStart')}",
