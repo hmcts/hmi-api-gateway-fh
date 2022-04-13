@@ -6,7 +6,7 @@
             "value": "development"
         },
         "workflows_hmi-la-listing-data-export_name": {
-            "value": "hmi-la-listing-data-exportdevla"
+            "value": "hmi-la-listing-data-export-dev"
         },
         "storageAccountName":{
             "value": "hmidtudev"
