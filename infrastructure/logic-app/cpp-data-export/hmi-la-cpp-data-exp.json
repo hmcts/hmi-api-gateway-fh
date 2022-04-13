@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "workflows_hmidtucppdataex_name": {
-            "defaultValue": "hmidtucppdataexdevla",
+        "workflows_hmi-la-listing-data-export_name": {
+            "defaultValue": "hmi-la-listing-data-export-dev",
             "type": "String"
         },
         "storageAccountName": {
@@ -43,7 +43,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_hmidtucppdataex_name')]",
+            "name": "[parameters('workflows_hmi-la-listing-data-export_name')]",
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",

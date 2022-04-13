@@ -5,7 +5,7 @@
         "environmentName":{
             "value": "sbox"
         },
-        "workflows_hmidtucppdataex_name": {
+        "workflows_hmi-la-listing-data-export_name": {
             "value": "hmi-la-listing-data-export-sbox"
         },
         "storageAccountName":{

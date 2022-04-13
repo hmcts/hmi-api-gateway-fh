@@ -3,9 +3,9 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "stg"
+            "value": "staging"
         },
-        "workflows_hmidtucppdataex_name": {
+        "workflows_hmi-la-listing-data-export_name": {
             "value": "hmi-la-listing-data-export-stg"
         },
         "storageAccountName":{

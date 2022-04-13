@@ -5,8 +5,8 @@
         "environmentName":{
             "value": "development"
         },
-        "workflows_hmidtucppdataex_name": {
-            "value": "hmidtucppdataexdevla"
+        "workflows_hmi-la-listing-data-export_name": {
+            "value": "hmi-la-listing-data-exportdevla"
         },
         "storageAccountName":{
             "value": "hmidtudev"
