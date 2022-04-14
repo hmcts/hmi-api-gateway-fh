@@ -189,29 +189,149 @@
                                         "For_each_record": {
                                             "foreach": "@variables('csvRecords')",
                                             "actions": {
-                                                "Set_csvRecord": {
-                                                    "runAfter": {
-                                                        "Set_jsonProperties": [
-                                                            "Succeeded"
-                                                        ]
+                                                "Condition__isHearing": {
+                                                    "actions": {
+                                                        "Parse_JSON": {
+                                                            "runAfter": {
+                                                                "Set_cleanJsonProperties": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ParseJson",
+                                                            "inputs": {
+                                                                "content": "@variables('cleanJsonProperties')",
+                                                                "schema": {
+                                                                    "properties": {
+                                                                        "allocated": {
+                                                                            "type": "boolean"
+                                                                        },
+                                                                        "courtApplications": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "courtCentreId": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "courtRoomId": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "estimatedMinutes": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "hearingDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "hearingLanguage": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "id": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "judiciary": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "jurisdictionType": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "listedCases": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "nonDefaultDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "nonSittingDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "type": {
+                                                                            "properties": {
+                                                                                "description": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "typeOfList": {
+                                                                            "properties": {
+                                                                                "description": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "unscheduled": {
+                                                                            "type": "boolean"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "Set_cleanJsonProperties": {
+                                                            "runAfter": {
+                                                                "Set_jsonProperties": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "cleanJsonProperties",
+                                                                "value": "@{substring(variables('jsonProperties'),1,lastIndexOf(variables('jsonProperties'), '}'))}"
+                                                            }
+                                                        },
+                                                        "Set_csvRecord": {
+                                                            "runAfter": {
+                                                                "Parse_JSON": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "csvRecord",
+                                                                "value": "@{replace(variables('rawRecord'), variables('jsonProperties'),'')}"
+                                                            }
+                                                        },
+                                                        "Set_jsonProperties": {
+                                                            "runAfter": {},
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonProperties",
+                                                                "value": "@{replace(substring(variables('rawProperties'),0,lastIndexOf(variables('rawProperties'), ',')),'\"\"', '\"')}"
+                                                            }
+                                                        },
+                                                        "Set_record": {
+                                                            "runAfter": {
+                                                                "Set_csvRecord": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "record",
+                                                                "value": "@split(variables('csvRecord'), ',')"
+                                                            }
+                                                        }
                                                     },
-                                                    "type": "SetVariable",
-                                                    "inputs": {
-                                                        "name": "csvRecord",
-                                                        "value": "@{replace(variables('rawRecord'), variables('jsonProperties'),'')}"
-                                                    }
-                                                },
-                                                "Set_jsonProperties": {
                                                     "runAfter": {
                                                         "Set_rawProperties": [
                                                             "Succeeded"
                                                         ]
                                                     },
-                                                    "type": "SetVariable",
-                                                    "inputs": {
-                                                        "name": "jsonProperties",
-                                                        "value": "@{substring(variables('rawProperties'),0,lastIndexOf(variables('rawProperties'), ','))}"
-                                                    }
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "greater": [
+                                                                    "@indexOf(variables('rawRecord'), '\"\"description\"\": \"\"Hearing\"\"')",
+                                                                    0
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
                                                 },
                                                 "Set_rawProperties": {
                                                     "runAfter": {
@@ -231,18 +351,6 @@
                                                     "inputs": {
                                                         "name": "rawRecord",
                                                         "value": "@{items('For_each_record')}"
-                                                    }
-                                                },
-                                                "Set_record": {
-                                                    "runAfter": {
-                                                        "Set_csvRecord": [
-                                                            "Succeeded"
-                                                        ]
-                                                    },
-                                                    "type": "SetVariable",
-                                                    "inputs": {
-                                                        "name": "record",
-                                                        "value": "@split(variables('csvRecord'), ',')"
                                                     }
                                                 }
                                             },
@@ -372,6 +480,22 @@
                             },
                             "type": "Foreach"
                         },
+                        "Initialize_cleanJsonProperties": {
+                            "runAfter": {
+                                "Initialize_jsonProperties": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "cleanJsonProperties",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_csvPayload": {
                             "runAfter": {},
                             "type": "InitializeVariable",
@@ -466,7 +590,7 @@
                         },
                         "Initialize_record": {
                             "runAfter": {
-                                "Initialize_jsonProperties": [
+                                "Initialize_cleanJsonProperties": [
                                     "Succeeded"
                                 ]
                             },
