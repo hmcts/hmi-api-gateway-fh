@@ -43,7 +43,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_hmi-la-listing-data-export_name')]",
+            "name": "[parameters('workflows_hmi-la-sacred_name')]",
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",
