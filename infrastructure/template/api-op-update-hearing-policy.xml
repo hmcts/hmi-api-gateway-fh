@@ -6,22 +6,33 @@
 				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
             </when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<!--rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" /-->
-				<return-response>
-					<set-status code="202" />
-					<set-header name="Content-Type">
-						<value>application/json</value>
-					</set-header>
-					<set-body>@{
-						return new JObject(
-							new JProperty("response code", 202),
-							new JProperty("description", "The request was received successfully.")
-						).ToString();
-						}
-					</set-body>
-				</return-response>
+		    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+				<cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
+				<choose>
+					<when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
+						<send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+							<set-url>#{cftAuthUrl}#</set-url>
+							<set-method>POST</set-method>
+							<set-header name="Content-Type" exists-action="override">
+								<value>application/x-www-form-urlencoded</value>
+							</set-header>
+							<set-body>@{
+								return "client_id=#{cftAuthClient}#&client_secret=#{cftAuthClientSecret}#&grant_type=client_credentials&scope=profile";}</set-body>
+						</send-request>
+						<cache-store-value key="cftAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+					</when>
+				</choose>
+				<set-header name="Authorization" exists-action="override">
+					<value>@((String)context.Variables["cftAuthToken"])</value>
+				</set-header>
+				<set-header name="Content-Type" exists-action="override">
+					<value>application/json; charset=utf-8</value>
+				</set-header>
+				<set-header name="Request-Type" exists-action="override">
+					<value>text</value>
+				</set-header>
+				<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
+				<set-backend-service base-url="https://#{cftHost}#/listings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
