@@ -5,12 +5,11 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
@@ -90,8 +89,6 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore
-    @Disabled
     public void testSuccessfulGetSessionForRequestSessionTypeAndPanelType() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
@@ -168,6 +165,67 @@ public class SessionsLookUpTest extends FunctionalTest {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
         queryParameters.put("requestIncludeDummyRooms", "false");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testInvalidGetSessionForSessionRequestTypeAndAvailableSlotCountMinValueMinusOne() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestAvailableSlotCount", "0");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValue() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestAvailableSlotCount", "1");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValuePlusOne() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestAvailableSlotCount", "2");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndHearingType() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestHearingType", "LISTING");
+        headersAsMap.put("Destination-System", "SNL");
+        sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
+                headersAsMap,
+                authorizationToken,
+                queryParameters);
+    }
+
+    @Test
+    public void testSuccessfulGetSessionForSessionRequestTypeAndRoomAttributes() {
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("requestSessionType", "CJ");
+        queryParameters.put("requestRoomAttributes ", "???");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
