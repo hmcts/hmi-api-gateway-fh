@@ -41,7 +41,5 @@ jobs:
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
         echo "Creating DTU Logic Application - CPP Data Export"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\hmi-la-cpp-data-exp.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\parameters-$(environment).json"
-        echo "Creating DTU Logic Application - Sacred"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\hmi-sacred\hmi-la-sacred.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\hmi-sacred\parameters-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
         
