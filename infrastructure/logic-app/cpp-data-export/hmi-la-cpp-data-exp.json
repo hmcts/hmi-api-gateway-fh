@@ -191,6 +191,76 @@
                                             "actions": {
                                                 "Condition__isHearing": {
                                                     "actions": {
+                                                        "Compose_Json_Payload": {
+                                                            "runAfter": {
+                                                                "Set_record": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Compose",
+                                                            "inputs": {}
+                                                        },
+                                                        "Get_HMI_Client": {
+                                                            "runAfter": {
+                                                                "Compose_Json_Payload": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
+                                                            }
+                                                        },
+                                                        "Get_HMI_Secret": {
+                                                            "runAfter": {
+                                                                "Get_HMI_Client": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
+                                                            }
+                                                        },
+                                                        "HTTP_HMI": {
+                                                            "runAfter": {
+                                                                "Get_HMI_Secret": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Http",
+                                                            "inputs": {
+                                                                "authentication": {
+                                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                                    "clientId": "@body('Get_HMI_Client')?['value']",
+                                                                    "secret": "@body('Get_HMI_Secret')?['value']",
+                                                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                                    "type": "ActiveDirectoryOAuth"
+                                                                },
+                                                                "body": {},
+                                                                "headers": {
+                                                                    "Accept": "application/json",
+                                                                    "Content-Type": "application/json",
+                                                                    "Destination-System": "SNL",
+                                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                                    "Source-System": "CRIME"
+                                                                },
+                                                                "method": "POST",
+                                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                                            }
+                                                        },
                                                         "Parse_JSON": {
                                                             "runAfter": {
                                                                 "Set_cleanJsonProperties": [
@@ -332,6 +402,128 @@
                                                         ]
                                                     },
                                                     "type": "If"
+                                                },
+                                                "Copy_invalid_File": {
+                                                    "runAfter": {
+                                                        "Set_rawProperties": [
+                                                            "Failed",
+                                                            "TimedOut"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                                        "queries": {
+                                                            "destination": "/listing-data-export/output",
+                                                            "overwrite": true,
+                                                            "queryParametersSingleEncoded": true,
+                                                            "source": "@items('For_each_File')?['Path']"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_csv": {
+                                                    "runAfter": {
+                                                        "Copy_invalid_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('CPP listing export data files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                                        "queries": {
+                                                            "folderPath": "/listing-data-export/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Get_SNow_client": {
+                                                    "runAfter": {
+                                                        "Create_read.me_when_invalid_csv": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                    }
+                                                },
+                                                "Get_SNow_secret": {
+                                                    "runAfter": {
+                                                        "Get_SNow_client": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                    }
+                                                },
+                                                "HTTP_ServiceNow_invalid_CSV": {
+                                                    "runAfter": {
+                                                        "Get_SNow_secret": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "authentication": {
+                                                            "password": "@body('Get_SNow_secret')?['value']",
+                                                            "type": "Basic",
+                                                            "username": "@body('Get_SNow_client')?['value']"
+                                                        },
+                                                        "body": {
+                                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                            "category": "Data Issue",
+                                                            "contact_type": "Alert",
+                                                            "description": "",
+                                                            "impact": "2",
+                                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                            "short_description": "HMI Listing Export Data error",
+                                                            "subcategory": "Data or File Error - other",
+                                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                            "urgency": "3"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                    }
                                                 },
                                                 "Set_rawProperties": {
                                                     "runAfter": {
