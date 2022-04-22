@@ -14,6 +14,27 @@
         },
         "environmentName": {
             "type": "string"
+        },
+        "hmiDestination": {
+            "type": "string"
+        },
+        "hmiSchedulesUrl": {
+            "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
+        },
+         "serviceNowAssignemntGroupId": {
+            "type": "string"
+        },
+        "serviceNowUserRoleTypeId": {
+            "type": "string"
+        },
+        "serviceNowServiceOfferingId": {
+            "type": "string"
+        },
+        "serviceNowCallerId": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -253,12 +274,12 @@
                                                                 "headers": {
                                                                     "Accept": "application/json",
                                                                     "Content-Type": "application/json",
-                                                                    "Destination-System": "SNL",
+                                                                    "Destination-System": "[parameters('hmiDestination')]",
                                                                     "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
                                                                     "Source-System": "CRIME"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                                                "uri": "[parameters('hmiSchedulesUrl')]"
                                                             }
                                                         },
                                                         "Parse_JSON": {
@@ -509,20 +530,20 @@
                                                             "username": "@body('Get_SNow_client')?['value']"
                                                         },
                                                         "body": {
-                                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
-                                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                            "caller_id": "[parameters('serviceNowCallerId')]",
                                                             "category": "Data Issue",
                                                             "contact_type": "Alert",
-                                                            "description": "",
+                                                            "description": "Error details: ",
                                                             "impact": "2",
-                                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                                             "short_description": "HMI Listing Export Data error",
                                                             "subcategory": "Data or File Error - other",
-                                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                                             "urgency": "3"
                                                         },
                                                         "method": "POST",
-                                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                                        "uri": "[parameters('serviceNowHostUrl')]"
                                                     }
                                                 },
                                                 "Set_rawProperties": {
