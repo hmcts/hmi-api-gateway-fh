@@ -135,7 +135,7 @@
                             "type": "Recurrence"
                         }
                     },
-                   "actions": {
+                    "actions": {
                         "Create_read.me": {
                             "runAfter": {
                                 "Initialize_record": [
@@ -218,7 +218,7 @@
                                         },
                                         "Create_Read_me_file": {
                                             "runAfter": {
-                                                "Copy_valid_csv_file": [
+                                                "Delete_processed_csv": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -245,6 +245,26 @@
                                                 "contentTransfer": {
                                                     "transferMode": "Chunked"
                                                 }
+                                            }
+                                        },
+                                        "Delete_processed_csv": {
+                                            "runAfter": {
+                                                "Copy_valid_csv_file": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "headers": {
+                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                             }
                                         },
                                         "For_each_record": {
