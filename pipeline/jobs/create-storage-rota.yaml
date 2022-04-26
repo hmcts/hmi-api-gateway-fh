@@ -34,8 +34,7 @@ jobs:
         resourceGroup="hmi-sharedinfra-$(environment)-rg"
         kvName="hmi-shared-kv-$(environment)"
 
-        $tags="businessArea=cross-cutting application=hearing-management-interface builtFrom=hmcts/hmi-api-gateway-fh environment=${{ parameters.environmentName }}"
-        Write-Host "tag: $tags"
+        tags="businessArea=cross-cutting application=hearing-management-interface builtFrom=hmcts/hmi-api-gateway-fh environment=${{ parameters.environmentName }}"
 
         az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags $tags
         echo "Acquiring storage key"
@@ -44,6 +43,7 @@ jobs:
         echo "Creating containers..."
         az storage container create --name "rota" --account-name $accountName --account-key $key
         az storage container create --name "sitting-pattern" --account-name $accountName --account-key $key
+        az storage container create --name "listing-data-export" --account-name $accountName --account-key $key
         echo "- rota"
         echo "Updating Key Vault $kvName"
         az keyvault secret set --name "dtu-storage-account-key" --value $key --vault-name $kvName
