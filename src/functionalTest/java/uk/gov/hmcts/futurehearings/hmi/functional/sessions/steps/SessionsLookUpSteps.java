@@ -16,10 +16,19 @@ public class SessionsLookUpSteps {
                                                               final Map<String, Object> headersAsMap,
                                                               final String authorizationToken,
                                                               final Map<String, String> queryParameters) {
+        checkSessionsForAllTheRelevantQueryParameters(apiURL, headersAsMap, authorizationToken, queryParameters, HttpStatus.OK);
+    }
+
+    @Step("User makes a request to Get the Sessions with valid and invalid Query parameter values")
+    public void checkSessionsForAllTheRelevantQueryParameters(final String apiURL,
+                                                              final Map<String, Object> headersAsMap,
+                                                              final String authorizationToken,
+                                                              final Map<String, String> queryParameters,
+                                                              HttpStatus expectedStatusCode) {
 
          callRestEndpointWithQueryParams(apiURL,
                 headersAsMap,
                 authorizationToken,
-                queryParameters, HttpStatus.OK);
+                queryParameters, expectedStatusCode);
     }
 }
