@@ -228,16 +228,37 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestReturnAllSessions : {0} --> {1}")
-    @CsvSource(value = {"requestReturnAllSessions, false", "requestReturnAllSessions, non-boolean-value", "requestReturnAllSessions, ''", "requestReturnAllSessions, ' '", "requestReturnAllSessions, NIL"}, nullValues = "NIL")
+    @CsvSource(value = {"requestReturnAllSessions, false", "requestReturnAllSessions, true", "requestReturnAllSessions, non-boolean-value", "requestReturnAllSessions, ''", "requestReturnAllSessions, ' '", "requestReturnAllSessions, NIL"}, nullValues = "NIL")
     void test_request_return_all_sessions_query_param(final String requestReturnAllSessionsKey, final String requestReturnAllSessionsValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestReturnAllSessionsKey, requestReturnAllSessionsValue));
         test_response_for_supplied_parameter();
     }
 
     @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestIncludeDummyRooms : {0} --> {1}")
-    @CsvSource(value = {"requestIncludeDummyRooms, false", "requestIncludeDummyRooms, non-boolean-value", "requestIncludeDummyRooms, ''", "requestIncludeDummyRooms, ' '", "requestIncludeDummyRooms, NIL"}, nullValues = "NIL")
+    @CsvSource(value = {"requestIncludeDummyRooms, false", "requestIncludeDummyRooms, true", "requestIncludeDummyRooms, non-boolean-value", "requestIncludeDummyRooms, ''", "requestIncludeDummyRooms, ' '", "requestIncludeDummyRooms, NIL"}, nullValues = "NIL")
     void test_request_include_dummy_rooms_query_param(final String requestIncludeDummyRoomsKey, final String requestIncludeDummyRoomsValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestIncludeDummyRoomsKey, requestIncludeDummyRoomsValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestServiceCode : {0} --> {1}")
+    @CsvSource(value = {"requestServiceCode, 1", "requestServiceCode, InvalidOne", "requestServiceCode, ''", "requestServiceCode, ' '", "requestServiceCode, NIL"}, nullValues = "NIL")
+    void test_request_service_code_query_param(final String requestServiceCodeKey, final String requestServiceCodeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestServiceCodeKey, requestServiceCodeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestHearingType : {0} --> {1}")
+    @CsvSource(value = {"requestHearingType, 8", "requestHearingType, InvalidOne", "requestHearingType, ''", "requestHearingType, ' '", "requestHearingType, NIL"}, nullValues = "NIL")
+    void test_request_hearing_type_query_param(final String requestHearingTypeKey, final String requestHearingTypeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestHearingTypeKey, requestHearingTypeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestRoomAttributes : {0} --> {1}")
+    @CsvSource(value = {"requestRoomAttributes, 8", "requestRoomAttributes, InvalidOne", "requestRoomAttributes, ''", "requestRoomAttributes, ' '", "requestRoomAttributes, NIL"}, nullValues = "NIL")
+    void test_request_room_attributes_query_param(final String requestRoomAttributesKey, final String requestRoomAttributesValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestRoomAttributesKey, requestRoomAttributesValue));
         test_response_for_supplied_parameter();
     }
 }
