@@ -44,6 +44,7 @@ public class ReservationTest extends FunctionalTest {
         Map<String, String> queryParameters = new HashMap<String, String>();
 
         headersAsMap = createStandardHMIHeader("SNL");
+        headersAsMap.put("Content-Type", "application/json; charset=utf-8");
         reservationSteps.shouldFetchListOfReservations(reservationsApiRootContext,
                 headersAsMap,
                 authorizationToken,
