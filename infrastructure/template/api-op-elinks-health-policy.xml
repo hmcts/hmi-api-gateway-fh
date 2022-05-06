@@ -1,7 +1,16 @@
 <policies>
     <inbound>
+        <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
+            <set-url>https://#{keyVaultHost}#/secrets/snl-client-app-client/?api-version=7.0</set-url>
+            <set-method>GET</set-method>
+            <authentication-managed-identity resource="https://vault.azure.net" />
+        </send-request>
+        <set-variable name="elinksToken" value="@{
+													  var secret = ((IResponse)context.Variables["elinksOAuthToken"]).Body.As<JObject>();
+													  return secret["value"].ToString();
+												}" />
         <set-header name="Authorization" exists-action="override">
-            <value>Bearer #{elinksToken}#</value>
+            <value>Bearer (string)context.Variables["elinksToken"]</value>
         </set-header>
         <rewrite-uri template="/people?updated_since=4018-04-10 " copy-unmatched-params="true" />
         <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/api/" />

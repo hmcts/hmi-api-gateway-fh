@@ -9,7 +9,7 @@
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                     <choose>
-                        <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
+                        <!--when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
                             <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
                                 <set-url>#{sAndLOauthUrl}#</set-url>
                                 <set-method>POST</set-method>
@@ -20,6 +20,37 @@
                                     return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
                             </send-request>
                             <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                        </when-->
+                        <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
+                            <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
+                                <set-url>https://#{keyVaultHost}#/secrets/snl-client-app-client/?api-version=7.0</set-url>
+                                <set-method>GET</set-method>
+                                <authentication-managed-identity resource="https://vault.azure.net" />
+                            </send-request>
+                            <set-variable name="snlClient" value="@{
+                                                                       var secret = ((IResponse)context.Variables["snlClientResponse"]).Body.As<JObject>();
+                                                                       return secret["value"].ToString();
+                                                                   }" />
+                            <send-request ignore-error="false" timeout="20" response-variable-name="snlSecretResponse" mode="new">
+                                <set-url>https://#{keyVaultHost}#/secrets/snl-client-app-secret/?api-version=7.0</set-url>
+                                <set-method>GET</set-method>
+                                <authentication-managed-identity resource="https://vault.azure.net" />
+                            </send-request>
+                            <set-variable name="snlSecret" value="@{
+                                                                       var secret = ((IResponse)context.Variables["snlSecretResponse"]).Body.As<JObject>();
+                                                                       return secret["value"].ToString();
+                                                                   }" />
+                            <send-request ignore-error="true" timeout="20" response-variable-name="snlBearerToken" mode="new">
+                                <set-url>#{sAndLOauthUrl}#</set-url>
+                                <set-method>POST</set-method>
+                                <set-header name="Content-Type" exists-action="override">
+                                    <value>application/x-www-form-urlencoded</value>
+                                </set-header>
+                                <set-body>@{
+                                    return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
+                            </send-request>
+                            <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                            <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                         </when>
                     </choose>
                     <set-header name="Authorization" exists-action="override">
