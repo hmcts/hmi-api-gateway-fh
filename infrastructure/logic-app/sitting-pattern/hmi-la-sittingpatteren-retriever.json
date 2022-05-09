@@ -41,7 +41,7 @@
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
+                "application": "hearings-management-interface",
                 "businessarea": "cross-cutting"
             },
             "dependsOn": [
