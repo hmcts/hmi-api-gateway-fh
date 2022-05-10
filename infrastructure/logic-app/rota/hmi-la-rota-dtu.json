@@ -140,7 +140,8 @@
             "tags": {
                 "environment": "[parameters('environmentName')]",
                 "application": "hearings-management-interface",
-                "businessarea": "cross-cutting"
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
