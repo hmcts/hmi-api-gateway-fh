@@ -29,7 +29,7 @@
                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
         </send-request>
         <set-header name="Authorization" exists-action="override">
-                <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])</value>
+                <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])</value>
         </set-header>
         <set-header name="Content-Type" exists-action="override">
             <value>application/json; charset=utf-8</value>
