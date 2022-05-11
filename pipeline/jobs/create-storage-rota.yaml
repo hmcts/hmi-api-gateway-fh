@@ -34,7 +34,7 @@ jobs:
         resourceGroup="hmi-sharedinfra-$(environment)-rg"
         kvName="hmi-shared-kv-$(environment)"
 
-        $tags="businessArea=cross-cutting application=hearing-management-interface builtFrom=hmcts/hmi-api-gateway-fh environment=${{ parameters.environmentName }}"
+        $tags="businessArea=cross-cutting application=hearings-management-interface builtFrom=hmcts/hmi-api-gateway-fh environment=${{ parameters.environmentName }}"
         Write-Host "tag: $tags"
 
         az storage account create -n $accountName -g $resourceGroup -l "uksouth" --sku Standard_LRS --kind StorageV2 --tags $tags
