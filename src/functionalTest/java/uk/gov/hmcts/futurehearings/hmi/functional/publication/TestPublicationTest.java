@@ -57,12 +57,9 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 );
     }
 
-    @Disabled("Test fails as the header x-source-artefact-id is incorrectly required as mandatory at P&I end. P&I needs fix this")
-   // @Test
+    @Test
     public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
-
         setMandatoryHeaders(headersAsMap);
-
         publicationSteps.createPublicationWithValidHeadersAndPayload(
                 pihPublicationRootContext,
                 headersAsMap,
