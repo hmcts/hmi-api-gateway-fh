@@ -46,9 +46,9 @@
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
+                "application": "hearings-management-interface",
                 "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]"
