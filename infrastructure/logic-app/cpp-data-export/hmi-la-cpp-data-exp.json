@@ -18,7 +18,7 @@
         "hmiDestination": {
             "type": "string"
         },
-        "hmiSchedulesUrl": {
+        "hmiDirectListingsUrl": {
             "type": "string"
         },
         "appId": {
@@ -339,7 +339,7 @@
                                                                     "Source-System": "CRIME"
                                                                 },
                                                                 "method": "POST",
-                                                                "uri": "[parameters('hmiSchedulesUrl')]"
+                                                                "uri": "[parameters('hmiDirectListingsUrl')]"
                                                             }
                                                         },
                                                         "Parse_JSON": {

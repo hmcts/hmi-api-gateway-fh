@@ -19,7 +19,7 @@
                 "secretName": "dtu-storage-account-key"
              }
         },
-        "hmiSchedulesUrl":{
+        "hmiDirectListingsUrl":{
             "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
         },
         "hmiDestination":{
