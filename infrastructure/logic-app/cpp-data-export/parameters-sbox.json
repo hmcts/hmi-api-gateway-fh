@@ -34,9 +34,6 @@
         "hmiDirectListingsUrl":{
             "value": "https://hmi-apim.sandbox.platform.hmcts.net/hmi/listings"
         },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
-        },
         "hmiDestination":{
             "value": "SNL"
         },
