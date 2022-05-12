@@ -31,7 +31,7 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-prod"
         },
-        "hmiSchedulesUrl":{
+        "hmiDirectListingsUrl":{
             "value": "https://hmi-apim.platform.hmcts.net/hmi/listings"
         },
         "hmiDestination":{

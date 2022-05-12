@@ -31,7 +31,7 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-sbox"
         },
-        "hmiSchedulesUrl":{
+        "hmiDirectListingsUrl":{
             "value": "https://hmi-apim.sandbox.platform.hmcts.net/hmi/listings"
         },
         "hmiScopeUrl":{
