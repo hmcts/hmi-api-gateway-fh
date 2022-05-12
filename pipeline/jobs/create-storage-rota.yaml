@@ -47,4 +47,4 @@ jobs:
         echo "- rota"
         echo "Updating Key Vault $kvName"
         az keyvault secret set --name "dtu-storage-account-key" --value $key --vault-name $kvName
-        echo "Creating containers complete"
+        echo "Creating containers complete."
