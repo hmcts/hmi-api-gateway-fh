@@ -52,6 +52,8 @@ jobs:
         $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
         $resourceGroupName="hmi-sharedinfra-$env-rg"
         $kv_name="hmi-shared-kv-$env"
+        
+        az config set extension.use_dynamic_install=yes_without_prompt
 
         foreach ($workflowName in $workflowNames){
 
