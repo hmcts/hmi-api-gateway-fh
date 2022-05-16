@@ -52,7 +52,7 @@ jobs:
         $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
         $resourceGroupName="hmi-sharedinfra-$env-rg"
         $kv_name="hmi-shared-kv-$env"
-        
+
         az config set extension.use_dynamic_install=yes_without_prompt
 
         foreach ($workflowName in $workflowNames){
@@ -66,9 +66,8 @@ jobs:
                 Write-Host $( $workflowIdentity | ConvertTo-Json)
 
                 Write-Host "Give Permissions to $kv_name"
-                $secret_permissions_read="get list"
                 $sp_id=$workflowIdentity.principalId
-                az keyvault set-policy --name $kv_name --object-id $sp_id --secret-permissions $secret_permissions_read 
+                az keyvault set-policy --name $kv_name --object-id $sp_id --secret-permissions get list
             }
         }
 
