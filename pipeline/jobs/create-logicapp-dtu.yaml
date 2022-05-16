@@ -43,7 +43,6 @@ jobs:
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
     name: kv_access
-    dependsOn: createLogicApp
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: pscore
