@@ -143,6 +143,9 @@
                 "businessarea": "cross-cutting",
 				"builtFrom": "hmcts/hmi-api-gateway-fh"
             },
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables')]",
