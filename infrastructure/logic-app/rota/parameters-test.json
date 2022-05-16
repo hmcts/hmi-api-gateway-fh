@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "test"
+            "value": "testing"
         },
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-test"
