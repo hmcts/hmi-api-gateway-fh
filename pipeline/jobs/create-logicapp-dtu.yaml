@@ -42,4 +42,35 @@ jobs:
         echo "Creating DTU Logic Application - CPP Data Export"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\hmi-la-cpp-data-exp.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\cpp-data-export\parameters-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
+  - task: AzureCLI@2
+    displayName: Give Logic App Access to Key Vault
+    name: kv_access
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env="$(environment)"
+        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
+        $resourceGroupName="hmi-sharedinfra-$env-rg"
+        $kv_name="hmi-shared-kv-$env"
+
+        az config set extension.use_dynamic_install=yes_without_prompt
+
+        foreach ($workflowName in $workflowNames){
+
+            $workflowIdentity = az logic workflow list --resource-group "$resourceGroupName" --query "[? name=='$workflowName'].identity" --only-show-errors | ConvertFrom-Json
+
+            if ($null -eq  $workflowIdentity.principalId -or "" -eq $workflowIdentity.principalId ){
+                Write-Host "No Identities found in $workflowName."
+            } else {
+                Write-Host "$workflowName identities."
+                Write-Host $( $workflowIdentity | ConvertTo-Json)
+
+                Write-Host "Give Permissions to $kv_name"
+                $sp_id=$workflowIdentity.principalId
+                az keyvault set-policy --name $kv_name --object-id $sp_id --secret-permissions get list
+            }
+        }
+
         

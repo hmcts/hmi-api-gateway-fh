@@ -28,6 +28,12 @@
             "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "name": "azureblob",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
@@ -49,6 +55,9 @@
                 "application": "hearings-management-interface",
                 "businessarea": "cross-cutting",
 				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]"
