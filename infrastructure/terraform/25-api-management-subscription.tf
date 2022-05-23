@@ -18,6 +18,7 @@ resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
   allow_tracing       = var.environment == "sbox" || var.environment == "dev" || var.environment == "test" ? true : false
 }
 
+
 resource "azurerm_key_vault_access_policy" "shared_kv_premissions" {
   key_vault_id       = data.azurerm_key_vault.infra_key_vault.id
   tenant_id          = data.azurerm_key_vault.infra_key_vault.tenant_id

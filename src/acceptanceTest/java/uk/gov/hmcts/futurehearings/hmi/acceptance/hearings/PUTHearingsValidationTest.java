@@ -34,8 +34,6 @@ class PUTHearingsValidationTest extends HearingValidationTest {
     @Value("${hearings_idRootContext}")
     private String hearings_idRootContext;
 
-    private HttpMethod httpMethod;
-
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();

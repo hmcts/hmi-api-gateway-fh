@@ -25,9 +25,6 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2187")
 class GETVideoHearingValidationTest extends VideoHearingValidationTest {
 
-    @Value("${targetInstance}")
-    private String targetInstance;
-
     @Value("${videohearingsRootContext}")
     private String videohearingsRootContext;
 

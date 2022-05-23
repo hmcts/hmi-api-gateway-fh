@@ -4,7 +4,6 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.verify.GETSessionsValidationVerifier;
 
@@ -21,239 +20,138 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-/*@Slf4j
+@Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)*/
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2187")
-class GETSessionsValidationTest {
-
-    @Value("${targetInstance}")
-    private String targetInstance;
+class GETSessionsValidationTest extends SessionsValidationTest {
 
     @Value("${sessionsRootContext}")
     private String sessionsRootContext;
 
-    private static final String SESSIONS_SUCCESS_MSG = "The request was received successfully.";
-    private static final String REQUEST_TYPE_MANDATORY_ERROR_MSG = "You need to provide mandatory parameter: 'requestSessionType'";
-    private static final String EXTRA_PARAM_ERROR_MSG = "Unsupported Query Param detected: 'extra_params'";
-
-    //@BeforeAll
-    //public static void initialiseValues() throws Exception {
-        //super.initialiseValues();
-        /*this.setRelativeURL(sessionsRootContext);
+    @BeforeAll
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+        this.setRelativeURL(sessionsRootContext);
         this.setUrlParams(buildQueryParams("requestSessionType", "1234"));
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSessionsValidationVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());*/
-    //}
-
-    //@Test
-    //@DisplayName("Testing the Endpoint with an Invalid Query Parameter")
-    void test_invalid_query_param_with_value() throws Exception {
-        /*this.setUrlParams(buildQueryParams("extra_param_key", " "));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    //@ParameterizedTest(name = "Testing the valid mandatory value of the query parameter : {0} --> {1}")
-    //@CsvSource(value = {"requestSessionType,ADHOC", "requestSessionType,1234", "requestSessionType,''", "requestSessionType,' '", "requestSessionType,NIL"}, nullValues = "NIL")
-    void test_valid_query_param_with_value(final String sessionStartDateHQKey, final String sessionStartDateValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(sessionStartDateHQKey, sessionStartDateValue));
+    private void test_response_for_supplied_parameter() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeURL(),
+                getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
+                HttpStatus.OK,
+                getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
-    }
-
-    //@ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestStartDate : {0} --> {1}")
-    //@CsvSource(value = {"requestStartDate,AD12H", "requestStartDate,''", "requestStartDate,' '", "requestStartDate,NIL"}, nullValues = "NIL")
-    void test_request_start_date_query_param_with_value(final String requestStartDate, final String requestStartDateValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(requestStartDate, requestStartDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
                 null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+                null);
     }
 
-    //@ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestEndDate : {0} --> {1}")
-    //@CsvSource(value = {"requestEndDate,AD12H", "requestEndDate,''", "requestEndDate,' '", "requestEndDate,NIL"}, nullValues = "NIL")
-    void test_request_end_date_query_param_with_value(final String requestEndDate, final String requestEndDateValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(requestEndDate, requestEndDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+    @Test
+    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
+    void test_invalid_query_param_with_value() throws Exception {
+        this.setUrlParams(buildQueryParams("non-existing-param", "Verify no validation from HMI "));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestJudgeType : {0} --> {1}")
-    //@CsvSource(value = {"requestJudgeType,AD12H", "requestJudgeType,''", "requestJudgeType,' '", "requestJudgeType,NIL"}, nullValues = "NIL")
-    void test_request_judge_type_query_param_with_value(final String requestJudgeType, final String requestJudgeTypeValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(requestJudgeType, requestJudgeTypeValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestSessionType : {0} --> {1}")
+    @CsvSource(value = {"requestSessionType,DS", "requestSessionType,ADHOC", "requestSessionType,''", "requestSessionType,' '", "requestSessionType,NIL"}, nullValues = "NIL")
+    void test_request_session_type_query_param(final String requestSessionType, final String requestSessionValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestSessionType, requestSessionValue));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestLocationId : {0} --> {1}")
-    //@CsvSource(value = {"requestLocationId, R012", "requestLocationId,''", "requestLocationId,' '", "requestLocationId,NIL"}, nullValues = "NIL")
-    void test_request_location_id_without_mandatory_query_params(final String roomNameKey, final String roomNameValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestStartDate : {0} --> {1}")
+    @CsvSource(value = {"requestStartDate,2018-01-29 20:36:01Z", "requestStartDate,AD12H", "requestStartDate,''", "requestStartDate,' '", "requestStartDate,NIL"}, nullValues = "NIL")
+    void test_request_start_date_query_param(final String requestStartDate, final String requestStartDateValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestStartDate, requestStartDateValue));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Testing the invalid optional only value of the query parameter - requestDuration : {0} --> {1}")
-    //@CsvSource(value = {"requestDuration, case01", "requestDuration,''", "requestDuration,' '", "requestDuration,NIL"}, nullValues = "NIL")
-    void test_request_duration_without_mandatory_query_params(final String requestDurationKey, final String requestDurationValue) throws Exception {
-        /*this.setUrlParams(buildQueryParams(requestDurationKey, requestDurationValue));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                REQUEST_TYPE_MANDATORY_ERROR_MSG, null);*/
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestEndDate : {0} --> {1}")
+    @CsvSource(value = {"requestEndDate,2018-01-29 20:36:01Z", "requestEndDate,AD12H", "requestEndDate,''", "requestEndDate,' '", "requestEndDate,NIL"}, nullValues = "NIL")
+    void test_request_end_date_query_param(final String requestEndDate, final String requestEndDateValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestEndDate, requestEndDateValue));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Multiple params - RoomName with mandatory requestSessionType, requestJudge and requestStartDate - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestStartDate,R012",
-            //"requestSessionType,,requestJudgeType,,requestStartDate,",
-            //"requestSessionType,ADHOC,requestJudgeType,TESTjudge,requestStartDate,2001-01-54",
-            //"requestSessionType,ADHOC,requestJudgeType,Judging321,requestStartDate,01/MON/2011"})
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestLocationId : {0} --> {1}")
+    @CsvSource(value = {"requestLocationId, 300", "requestLocationId, R012", "requestLocationId,''", "requestLocationId,' '", "requestLocationId,NIL"}, nullValues = "NIL")
+    void test_request_location_id_query_param(final String roomNameKey, final String roomNameValue) throws Exception {
+        this.setUrlParams(buildQueryParams(roomNameKey, roomNameValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestDuration : {0} --> {1}")
+    @CsvSource(value = {"requestDuration, 360", "requestDuration, case01", "requestDuration,''", "requestDuration,' '", "requestDuration,NIL"}, nullValues = "NIL")
+    void test_request_duration_query_param(final String requestDurationKey, final String requestDurationValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestDurationKey, requestDurationValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Multiple params - requestSessionType, requestStartDate - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC,requestStartDate,R012",
+            "requestSessionType,,requestStartDate,",
+            "requestSessionType,ADHOC,requestStartDate,2001-01-54",
+            "requestSessionType,ADHOC,requestStartDate,01/MON/2011"})
     void test_request_start_date_with_multiple_query_params(final String paramKey1,
                                                             final String paramVal1,
                                                             final String paramKey2,
-                                                            final String paramVal2,
-                                                            final String paramKey3,
-                                                            final String paramVal3) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
+                                                            final String paramVal2) throws Exception {
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Multiple params - RoomName with mandatory requestSessionType, requestLocationId and requestEndDate - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestLocationId,1234,requestEndDate,R012",
-            //"requestSessionType,,requestLocationId,,requestEndDate,",
-            //"requestSessionType,ADHOC,requestLocationId,TESTjudge,requestEndDate,2001-01-54",
-            //"requestSessionType,ADHOC,requestLocationId,Judging321,requestEndDate,01/JAN/2011"})
+    @ParameterizedTest(name = "Multiple params - requestSessionType, requestLocationId and requestEndDate - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC,requestLocationId,1234,requestEndDate,R012",
+            "requestSessionType,,requestLocationId,,requestEndDate,",
+            "requestSessionType,ADHOC,requestLocationId,nil,requestEndDate,2001-01-54",
+            "requestSessionType,ADHOC,requestLocationId,Anything321,requestEndDate,01/JAN/2011"})
     void test_request_end_date_with_multiple_query_params(final String paramKey1,
                                                           final String paramVal1,
                                                           final String paramKey2,
                                                           final String paramVal2,
                                                           final String paramKey3,
                                                           final String paramVal3) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Multiple params - RoomName with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocationId,R012", "requestSessionType,,requestJudgeType,,requestLocationId,"})
+    @ParameterizedTest(name = "Multiple params - requestSessionType and requestLocationId - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC,requestLocationId,R012", "requestSessionType,,requestLocationId,"})
     void test_request_location_id_with_multiple_query_params(final String paramKey1,
                                                              final String paramVal1,
                                                              final String paramKey2,
-                                                             final String paramVal2,
-                                                             final String paramKey3,
-                                                             final String paramVal3) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
+                                                             final String paramVal2) throws Exception {
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Multiple params - CourtCase with mandatory SessionStartDate and SessionEndDate - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestLocationId,301,requestDuration,360", "requestSessionType,1234,requestLocationId,280,requestDuration,-1"})
+    @ParameterizedTest(name = "Multiple params - requestSessionType, requestLocationId and requestDuration - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC,requestLocationId,301,requestDuration,360", "requestSessionType,1234,requestLocationId,280,requestDuration,-1"})
     void test_request_duration_with_multiple_query_params(final String paramKey1,
                                                           final String paramVal1,
                                                           final String paramKey2,
                                                           final String paramVal2,
                                                           final String paramKey3,
                                                           final String paramVal3) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Test with All Query Parameters - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestStartDate,10/37/2001,requestEndDate,01/JAN/2011,requestJudgeType,1234,requestLocationId,301,requestDuration,360"})
-    void test_all_query_params_with_value(final String paramKey1,
+    @ParameterizedTest(name = "Test with 5 Query Parameters - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC,requestStartDate,10/37/2001,requestEndDate,01/JAN/2011,requestLocationId,301,requestDuration,360"})
+    void test_all_five_query_params(final String paramKey1,
                                           final String paramVal1,
                                           final String paramKey2,
                                           final String paramVal2,
@@ -262,30 +160,18 @@ class GETSessionsValidationTest {
                                           final String paramKey4,
                                           final String paramVal4,
                                           final String paramKey5,
-                                          final String paramVal5,
-                                          final String paramKey6,
-                                          final String paramVal6) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1,
-                paramKey2, paramVal2,
-                paramKey3, paramVal3,
-                paramKey4, paramVal4,
-                paramKey5, paramVal5,
-                paramKey6, paramVal6));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                SESSIONS_SUCCESS_MSG, null);*/
+                                          final String paramVal5) throws Exception {
+        this.setUrlParams(buildQueryParams( paramKey1, paramVal1,
+                                            paramKey2, paramVal2,
+                                            paramKey3, paramVal3,
+                                            paramKey4, paramVal4,
+                                            paramKey5, paramVal5));
+        test_response_for_supplied_parameter();
     }
 
-    //@ParameterizedTest(name = "Test with All Query Parameters with extra params - Param : {0} --> {1}")
-    //@CsvSource({"requestSessionType,ADHOC,requestJudgeType,1234,requestLocation,301,requestDuration,360,requestStartDate,2011-10-37,requestEndDate,01/JAN/2011,extra_params,extra", "requestSessionType,,requestJudgeType,,requestLocation,,requestDuration,,requestStartDate,,requestEndDate,,extra_params,"})
-    void test_all_query_params_with_extra_params(final String paramKey1,
+    @ParameterizedTest(name = "Test with multiple Query Parameters with an extra param - Param : {0} --> {1}")
+    @CsvSource({"requestSessionType,ADHOC, requestLocation,301, requestDuration,360, requestStartDate,2011-10-37, requestEndDate,01/JAN/2011, extra_param,extra", "requestSessionType,, requestLocation,, requestDuration,, requestStartDate,, requestEndDate,, extra_param,"})
+    void test_all_five_query_params_with_extra_param(final String paramKey1,
                                                  final String paramVal1,
                                                  final String paramKey2,
                                                  final String paramVal2,
@@ -296,25 +182,83 @@ class GETSessionsValidationTest {
                                                  final String paramKey5,
                                                  final String paramVal5,
                                                  final String paramKey6,
-                                                 final String paramVal6,
-                                                 final String paramKey7,
-                                                 final String paramVal7) throws Exception {
-        /*this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1,
-                paramKey2, paramVal2,
-                paramKey3, paramVal3,
-                paramKey4, paramVal4,
-                paramKey5, paramVal5,
-                paramKey6, paramVal6,
-                paramKey7, paramVal7));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                EXTRA_PARAM_ERROR_MSG, null);*/
+                                                 final String paramVal6) throws Exception {
+        this.setUrlParams(buildQueryParams( paramKey1, paramVal1,
+                                            paramKey2, paramVal2,
+                                            paramKey3, paramVal3,
+                                            paramKey4, paramVal4,
+                                            paramKey5, paramVal5,
+                                            paramKey6, paramVal6));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestPanelType : {0} --> {1}")
+    @CsvSource(value = {"requestPanelType, Adult", "requestPanelType, Youth", "requestPanelType, unknown", "requestPanelType, ''", "requestPanelType, ' '", "requestPanelType, NIL"}, nullValues = "NIL")
+    void test_request_panelType_query_param(final String requestPanelTypeKey, final String requestPanelTypeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestPanelTypeKey, requestPanelTypeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestJurisdiction : {0} --> {1}")
+    @CsvSource(value = {"requestJurisdiction, CIV", "requestJurisdiction, unknown", "requestJurisdiction, ''", "requestJurisdiction, ' '", "requestJurisdiction, NIL"}, nullValues = "NIL")
+    void test_request_jurisdiction_query_param(final String requestJurisdictionKey, final String requestJurisdictionValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestJurisdictionKey, requestJurisdictionValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestGroupBooking : {0} --> {1}")
+    @CsvSource(value = {"requestGroupBooking, false", "requestGroupBooking, true", "requestGroupBooking, non-boolean-value", "requestGroupBooking, ''", "requestGroupBooking, ' '", "requestGroupBooking, NIL"}, nullValues = "NIL")
+    void test_request_groupBooking_query_param(final String requestGroupBookingKey, final String requestGroupBookingValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestGroupBookingKey, requestGroupBookingValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestAvailableDuration : {0} --> {1}")
+    @CsvSource(value = {"requestAvailableDuration, 180", "requestAvailableDuration,non-digital", "requestAvailableDuration, ''", "requestAvailableDuration, ' '", "requestAvailableDuration, NIL"}, nullValues = "NIL")
+    void test_request_available_duration_query_param(final String requestAvailableDurationKey, final String requestAvailableDurationValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestAvailableDurationKey, requestAvailableDurationValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestAvailableSlotCount : {0} --> {1}")
+    @CsvSource(value = {"requestAvailableSlotCount, 2", "requestAvailableSlotCount, non-digital", "requestAvailableSlotCount, ''", "requestAvailableSlotCount, ' '", "requestAvailableSlotCount, NIL"}, nullValues = "NIL")
+    void test_request_available_slot_Count_query_param(final String requestAvailableSlotCountKey, final String requestAvailableSlotCountValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestAvailableSlotCountKey, requestAvailableSlotCountValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestReturnAllSessions : {0} --> {1}")
+    @CsvSource(value = {"requestReturnAllSessions, false", "requestReturnAllSessions, true", "requestReturnAllSessions, non-boolean-value", "requestReturnAllSessions, ''", "requestReturnAllSessions, ' '", "requestReturnAllSessions, NIL"}, nullValues = "NIL")
+    void test_request_return_all_sessions_query_param(final String requestReturnAllSessionsKey, final String requestReturnAllSessionsValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestReturnAllSessionsKey, requestReturnAllSessionsValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestIncludeDummyRooms : {0} --> {1}")
+    @CsvSource(value = {"requestIncludeDummyRooms, false", "requestIncludeDummyRooms, true", "requestIncludeDummyRooms, non-boolean-value", "requestIncludeDummyRooms, ''", "requestIncludeDummyRooms, ' '", "requestIncludeDummyRooms, NIL"}, nullValues = "NIL")
+    void test_request_include_dummy_rooms_query_param(final String requestIncludeDummyRoomsKey, final String requestIncludeDummyRoomsValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestIncludeDummyRoomsKey, requestIncludeDummyRoomsValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestServiceCode : {0} --> {1}")
+    @CsvSource(value = {"requestServiceCode, 1", "requestServiceCode, InvalidOne", "requestServiceCode, ''", "requestServiceCode, ' '", "requestServiceCode, NIL"}, nullValues = "NIL")
+    void test_request_service_code_query_param(final String requestServiceCodeKey, final String requestServiceCodeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestServiceCodeKey, requestServiceCodeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestHearingType : {0} --> {1}")
+    @CsvSource(value = {"requestHearingType, 8", "requestHearingType, InvalidOne", "requestHearingType, ''", "requestHearingType, ' '", "requestHearingType, NIL"}, nullValues = "NIL")
+    void test_request_hearing_type_query_param(final String requestHearingTypeKey, final String requestHearingTypeValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestHearingTypeKey, requestHearingTypeValue));
+        test_response_for_supplied_parameter();
+    }
+
+    @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestRoomAttributes : {0} --> {1}")
+    @CsvSource(value = {"requestRoomAttributes, 8", "requestRoomAttributes, InvalidOne", "requestRoomAttributes, ''", "requestRoomAttributes, ' '", "requestRoomAttributes, NIL"}, nullValues = "NIL")
+    void test_request_room_attributes_query_param(final String requestRoomAttributesKey, final String requestRoomAttributesValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestRoomAttributesKey, requestRoomAttributesValue));
+        test_response_for_supplied_parameter();
     }
 }

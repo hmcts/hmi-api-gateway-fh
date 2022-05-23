@@ -1,0 +1,926 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmi-la-listing-data-export_name": {
+            "defaultValue": "hmi-la-listing-data-export-dev",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
+        },
+        "environmentName": {
+            "type": "string"
+        },
+        "hmiDestination": {
+            "type": "string"
+        },
+        "hmiDirectListingsUrl": {
+            "type": "string"
+        },
+        "appId": {
+            "type": "securestring"
+        }, 
+        "appSecret": {
+            "type": "securestring"
+        }, 
+        "tenantId": {
+            "type": "securestring"
+        }, 
+        "keyvaultName": {
+            "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
+        },
+         "serviceNowAssignemntGroupId": {
+            "type": "string"
+        },
+        "serviceNowUserRoleTypeId": {
+            "type": "string"
+        },
+        "serviceNowServiceOfferingId": {
+            "type": "string"
+        },
+        "serviceNowCallerId": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "name": "azureblob",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessArea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                },
+                "displayName": "HMI DTU Rota",
+                "parameterValues": {
+                    "accountName": "[parameters('storageAccountName')]",
+                    "accessKey": "[parameters('storageAccessKey')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "keyvault",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "displayName": "HMI Key Vault",
+                "customParameterValues": {
+                },
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
+                },
+                "parameterValues": {
+                    "token:clientId": "[parameters('appId')]",
+                    "token:clientSecret": "[parameters('appSecret')]",
+                    "token:TenantId": "[parameters('tenantId')]",
+                    "token:grantType": "client_credentials",
+                    "vaultName": "[parameters('keyvaultName')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmi-la-listing-data-export_name')]",
+            "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'keyvault')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Hour",
+                                "interval": 8
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Create_read.me": {
+                            "runAfter": {
+                                "Initialize_record": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('CPP listing export files to be placed here')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                "queries": {
+                                    "folderPath": "/listing-data-export/input/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "For_each_File": {
+                            "foreach": "@body('List_blobs')?['value']",
+                            "actions": {
+                                "Get_blob_content_using_path": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/GetFileContentByPath",
+                                        "queries": {
+                                            "inferContentType": true,
+                                            "path": "@items('For_each_File')?['Path']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                },
+                                "is_file_csv": {
+                                    "actions": {
+                                        "Copy_valid_csv_file": {
+                                            "runAfter": {
+                                                "For_each_record": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "headers": {
+                                                    "ReadFileMetadataFromServer": true
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                                "queries": {
+                                                    "destination": "/listing-data-export/output",
+                                                    "overwrite": true,
+                                                    "queryParametersSingleEncoded": true,
+                                                    "source": "@items('For_each_File')?['Path']"
+                                                }
+                                            }
+                                        },
+                                        "Create_Read_me_file": {
+                                            "runAfter": {
+                                                "Delete_processed_csv": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": "@concat('CPP listing export data files to be processed')",
+                                                "headers": {
+                                                    "ReadFileMetadataFromServer": true
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files",
+                                                "queries": {
+                                                    "folderPath": "/listing-data-export/input/",
+                                                    "name": "read.me",
+                                                    "queryParametersSingleEncoded": true
+                                                }
+                                            },
+                                            "runtimeConfiguration": {
+                                                "contentTransfer": {
+                                                    "transferMode": "Chunked"
+                                                }
+                                            }
+                                        },
+                                        "Delete_processed_csv": {
+                                            "runAfter": {
+                                                "Copy_valid_csv_file": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "headers": {
+                                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                            }
+                                        },
+                                        "For_each_record": {
+                                            "foreach": "@variables('csvRecords')",
+                                            "actions": {
+                                                "Condition__isHearing": {
+                                                    "actions": {
+                                                        "Compose_Json_Payload": {
+                                                            "runAfter": {
+                                                                "Set_record": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Compose",
+                                                            "inputs": {}
+                                                        },
+                                                        "Get_HMI_Client": {
+                                                            "runAfter": {
+                                                                "Compose_Json_Payload": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
+                                                            }
+                                                        },
+                                                        "Get_HMI_Secret": {
+                                                            "runAfter": {
+                                                                "Get_HMI_Client": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "get",
+                                                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
+                                                            }
+                                                        },
+                                                        "HTTP_HMI": {
+                                                            "runAfter": {
+                                                                "Get_HMI_Secret": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "Http",
+                                                            "inputs": {
+                                                                "authentication": {
+                                                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                                                    "clientId": "@body('Get_HMI_Client')?['value']",
+                                                                    "secret": "@body('Get_HMI_Secret')?['value']",
+                                                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                                                    "type": "ActiveDirectoryOAuth"
+                                                                },
+                                                                "body": {},
+                                                                "headers": {
+                                                                    "Accept": "application/json",
+                                                                    "Content-Type": "application/json",
+                                                                    "Destination-System": "[parameters('hmiDestination')]",
+                                                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                                                    "Source-System": "CRIME"
+                                                                },
+                                                                "method": "POST",
+                                                                "uri": "[parameters('hmiDirectListingsUrl')]"
+                                                            }
+                                                        },
+                                                        "Parse_JSON": {
+                                                            "runAfter": {
+                                                                "Set_cleanJsonProperties": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ParseJson",
+                                                            "inputs": {
+                                                                "content": "@variables('cleanJsonProperties')",
+                                                                "schema": {
+                                                                    "properties": {
+                                                                        "allocated": {
+                                                                            "type": "boolean"
+                                                                        },
+                                                                        "courtApplications": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "courtCentreId": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "courtRoomId": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "estimatedMinutes": {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        "hearingDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "hearingLanguage": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "id": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "judiciary": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "jurisdictionType": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "listedCases": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "nonDefaultDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "nonSittingDays": {
+                                                                            "type": "array"
+                                                                        },
+                                                                        "type": {
+                                                                            "properties": {
+                                                                                "description": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "typeOfList": {
+                                                                            "properties": {
+                                                                                "description": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "id": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "unscheduled": {
+                                                                            "type": "boolean"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "Set_cleanJsonProperties": {
+                                                            "runAfter": {
+                                                                "Set_jsonProperties": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "cleanJsonProperties",
+                                                                "value": "@{substring(variables('jsonProperties'),1,lastIndexOf(variables('jsonProperties'), '}'))}"
+                                                            }
+                                                        },
+                                                        "Set_csvRecord": {
+                                                            "runAfter": {
+                                                                "Parse_JSON": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "csvRecord",
+                                                                "value": "@{replace(variables('rawRecord'), variables('jsonProperties'),'')}"
+                                                            }
+                                                        },
+                                                        "Set_jsonProperties": {
+                                                            "runAfter": {},
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "jsonProperties",
+                                                                "value": "@{replace(substring(variables('rawProperties'),0,lastIndexOf(variables('rawProperties'), ',')),'\"\"', '\"')}"
+                                                            }
+                                                        },
+                                                        "Set_record": {
+                                                            "runAfter": {
+                                                                "Set_csvRecord": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "SetVariable",
+                                                            "inputs": {
+                                                                "name": "record",
+                                                                "value": "@split(variables('csvRecord'), ',')"
+                                                            }
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Set_rawProperties": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "expression": {
+                                                        "and": [
+                                                            {
+                                                                "greater": [
+                                                                    "@indexOf(variables('rawRecord'), '\"\"description\"\": \"\"Hearing\"\"')",
+                                                                    0
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "type": "If"
+                                                },
+                                                "Copy_invalid_File": {
+                                                    "runAfter": {
+                                                        "Set_rawProperties": [
+                                                            "Failed",
+                                                            "TimedOut"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                                        "queries": {
+                                                            "destination": "/listing-data-export/output",
+                                                            "overwrite": true,
+                                                            "queryParametersSingleEncoded": true,
+                                                            "source": "@items('For_each_File')?['Path']"
+                                                        }
+                                                    }
+                                                },
+                                                "Create_read.me_when_invalid_csv": {
+                                                    "runAfter": {
+                                                        "Copy_invalid_File": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": "@concat('CPP listing export data files to be processed')",
+                                                        "headers": {
+                                                            "ReadFileMetadataFromServer": true
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                                        "queries": {
+                                                            "folderPath": "/listing-data-export/input/",
+                                                            "name": "read.me",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    }
+                                                },
+                                                "Get_SNow_client": {
+                                                    "runAfter": {
+                                                        "Create_read.me_when_invalid_csv": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                                    }
+                                                },
+                                                "Get_SNow_secret": {
+                                                    "runAfter": {
+                                                        "Get_SNow_client": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                                    }
+                                                },
+                                                "HTTP_ServiceNow_invalid_CSV": {
+                                                    "runAfter": {
+                                                        "Get_SNow_secret": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "authentication": {
+                                                            "password": "@body('Get_SNow_secret')?['value']",
+                                                            "type": "Basic",
+                                                            "username": "@body('Get_SNow_client')?['value']"
+                                                        },
+                                                        "body": {
+                                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                                            "caller_id": "[parameters('serviceNowCallerId')]",
+                                                            "category": "Data Issue",
+                                                            "contact_type": "Alert",
+                                                            "description": "Error details: ",
+                                                            "impact": "2",
+                                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                                            "short_description": "HMI Listing Export Data error",
+                                                            "subcategory": "Data or File Error - other",
+                                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                                            "urgency": "3"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "[parameters('serviceNowHostUrl')]"
+                                                    }
+                                                },
+                                                "Set_rawProperties": {
+                                                    "runAfter": {
+                                                        "Set_rawRecord": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                        "name": "rawProperties",
+                                                        "value": "@{substring(variables('rawRecord'), indexOf(variables('rawRecord'), '\"{'), lastIndexOf(variables('rawRecord'), '}\",'))}"
+                                                    }
+                                                },
+                                                "Set_rawRecord": {
+                                                    "runAfter": {},
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                        "name": "rawRecord",
+                                                        "value": "@{items('For_each_record')}"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Set_csvRecords": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
+                                        "Set_csvPayload": {
+                                            "runAfter": {},
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "csvPayload",
+                                                "value": "@body('Get_blob_content_using_path')"
+                                            }
+                                        },
+                                        "Set_csvRecords": {
+                                            "runAfter": {
+                                                "Set_csvPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "csvRecords",
+                                                "value": "@skip(split(trim(variables('csvPayload')), '\n'), 1)"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Get_blob_content_using_path": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "else": {
+                                        "actions": {
+                                            "Create_File_in_Error_Folder": {
+                                                "runAfter": {},
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@body('Get_blob_content_using_path')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/listing-data-export/output/",
+                                                        "name": "@items('For_each_File')?['Name']",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Delete_blob": {
+                                                "runAfter": {
+                                                    "Create_File_in_Error_Folder": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "delete",
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                }
+                                            },
+                                            "Update_read.me": {
+                                                "runAfter": {
+                                                    "Delete_blob": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@concat('CPP listing export data files to be processed')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/listing-data-export/input/",
+                                                        "name": "read.me",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "endsWith": [
+                                                    "@items('For_each_File')?['Path']",
+                                                    ".csv"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "type": "If"
+                                }
+                            },
+                            "runAfter": {
+                                "List_blobs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Initialize_cleanJsonProperties": {
+                            "runAfter": {
+                                "Initialize_jsonProperties": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "cleanJsonProperties",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_csvPayload": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "csvPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_csvRecord": {
+                            "runAfter": {
+                                "Initialize_rawRecord": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "csvRecord",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_csvRecords": {
+                            "runAfter": {
+                                "Initialize_csvPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "csvRecords",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonProperties": {
+                            "runAfter": {
+                                "Initialize_rawProperties": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonProperties",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_rawProperties": {
+                            "runAfter": {
+                                "Initialize_csvRecord": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "rawProperties",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_rawRecord": {
+                            "runAfter": {
+                                "Initialize_csvRecords": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "rawRecord",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_record": {
+                            "runAfter": {
+                                "Initialize_cleanJsonProperties": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "record",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "List_blobs": {
+                            "runAfter": {
+                                "Create_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "metadata": {
+                                "JTJmbGlzdGluZy1kYXRhLWV4cG9ydCUyZmlucHV0JTJm": "/listing-data-export/input/"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmbGlzdGluZy1kYXRhLWV4cG9ydCUyZmlucHV0JTJm'))}",
+                                "queries": {
+                                    "nextPageMarker": "",
+                                    "useFlatListing": false
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionName": "azureblob",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            },
+                            "keyvault": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
+                                "connectionName": "keyvault",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

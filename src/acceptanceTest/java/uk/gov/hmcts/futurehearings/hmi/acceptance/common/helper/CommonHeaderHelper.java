@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 public class CommonHeaderHelper {
 
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
-    private static final String SNL_DESTINATION_SYSTEM = "SNL";
-    private static final String RM_DESTINATION_SYSTEM = "RM";
     private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
     public static final Map<String, String> createCompletePayloadHeader() {
@@ -43,17 +41,6 @@ public class CommonHeaderHelper {
                 "2012-03-19T07:22:00Z",
                 "CFT",
                 DESTINATION_SYSTEM
-        );
-    }
-
-    public static final Map<String, String> createPayloadWithCFTDestinationHeader(final String sourceSystem,
-                                                                                  final String destinationSystem) {
-
-        return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                "2012-03-19T07:22:00Z",
-                sourceSystem,
-                destinationSystem
         );
     }
 

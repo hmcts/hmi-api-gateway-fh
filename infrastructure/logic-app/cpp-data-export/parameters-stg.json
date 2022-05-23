@@ -5,29 +5,11 @@
         "environmentName":{
             "value": "staging"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-stg"
+        "workflows_hmi-la-listing-data-export_name": {
+            "value": "hmi-la-listing-data-export-stg"
         },
         "storageAccountName":{
             "value": "hmidtustg"
-        },
-        "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files"
-        },
-        "storageACGetPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/GetFileContentByPath"
-        },
-        "storageACGetPathSuffix":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-        },
-        "storageACExistingCLPPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
-        },
-        "storageACExistingMagistrtePath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
-        },
-        "storageACExistingSchedulesPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtustg'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
         },
         "storageAccessKey":{
             "reference": {
@@ -49,11 +31,8 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-stg"
         },
-        "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.staging.platform.hmcts.net/hmi/schedules"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
+        "hmiDirectListingsUrl":{
+            "value": "https://hmi-apim.staging.platform.hmcts.net/hmi/listings"
         },
         "hmiDestination":{
             "value": "SNL"

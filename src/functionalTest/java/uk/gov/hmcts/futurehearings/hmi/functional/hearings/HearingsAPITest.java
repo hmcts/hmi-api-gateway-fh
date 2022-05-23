@@ -26,8 +26,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("functional")
 public class HearingsAPITest extends FunctionalTest {
 
-    public static final String HEARINGS_INPUT_PATH = "uk/gov/hmcts/futurehearings/hmi/functional/hearings/input";
-
     @Value("${hearingsApiRootContext}")
     protected String hearingsApiRootContext;
 

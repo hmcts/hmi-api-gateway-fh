@@ -26,7 +26,7 @@ resource "azurerm_role_assignment" "kv_access" {
 resource "azurerm_api_management_custom_domain" "custom_domain" {
   api_management_id = azurerm_api_management.hmi_apim.id
 
-  proxy {
+  gateway {
     host_name                    = local.host_name
     key_vault_id                 = module.cert.url
     negotiate_client_certificate = true
