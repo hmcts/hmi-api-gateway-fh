@@ -430,7 +430,7 @@ dependencies {
     acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-    acceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
+    acceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.2'
     acceptanceTestImplementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
 
     acceptanceTestImplementation sourceSets.main.runtimeClasspath
