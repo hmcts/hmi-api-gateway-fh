@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +59,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 );
     }
 
-    @Test
+    // @Test
     public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
         setMandatoryHeaders(headersAsMap);
         publicationSteps.createPublicationWithValidHeadersAndPayload(
@@ -67,7 +69,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 "{}");
     }
 
-    @Test
+    // @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() {
 
         setMandatoryHeaders(headersAsMap);
@@ -91,6 +93,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
     }
 
     @Test
+    @Ignore
     public void tesCreatePublicationWithInvalidHeader() {
         setMandatoryHeaders(headersAsMap);
         publicationHeaders.setAHeader(headersAsMap,"x-type","invalid x-type");
