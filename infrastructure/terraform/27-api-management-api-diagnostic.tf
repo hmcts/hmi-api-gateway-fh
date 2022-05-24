@@ -11,50 +11,38 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
   http_correlation_protocol = "W3C"
 
   frontend_request {
-    body_bytes = 500
+    body_bytes = 32
     headers_to_log = [
       "content-type",
       "accept",
       "origin",
-      "Source-System",
-      "Destination-System",
-      "x-forwarded-for",
     ]
   }
 
   frontend_response {
-    body_bytes = 500
+    body_bytes = 32
     headers_to_log = [
       "content-type",
       "content-length",
       "origin",
-      "Source-System",
-      "Destination-System",
-      "x-forwarded-for",
     ]
   }
 
   backend_request {
-    body_bytes = 500
+    body_bytes = 32
     headers_to_log = [
       "content-type",
       "accept",
       "origin",
-      "Source-System",
-      "Destination-System",
-      "x-forwarded-for",
     ]
   }
 
   backend_response {
-    body_bytes = 500
+    body_bytes = 32
     headers_to_log = [
       "content-type",
       "content-length",
       "origin",
-      "Source-System",
-      "Destination-System",
-      "x-forwarded-for",
     ]
   }
 }
