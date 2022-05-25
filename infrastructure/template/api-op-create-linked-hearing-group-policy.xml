@@ -37,7 +37,7 @@
                                 <set-body>@{
                                     return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
                             </send-request>
-                            <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                            <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
                             <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                         </when>
                     </choose>
