@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@DisplayName("Smoke Test for the HMI P&I API Health Check endpoint")
+@DisplayName("Smoke Test for the HMI P&I API Context")
 @SuppressWarnings("java:S2187")
 class PublicationApiSmokeTest extends SmokeTest {
 
@@ -32,11 +32,11 @@ class PublicationApiSmokeTest extends SmokeTest {
     }
 
     @Test
-    @DisplayName("Smoke Test to test the listings endpoint")
+    @DisplayName("Smoke Test to test the health endpoint")
     public void testPublicationHmiApiGet() {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
                 getRootContext());
 
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
     }
 }

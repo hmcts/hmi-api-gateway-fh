@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "test"
+            "value": "testing"
         },
         "workflows_hmidtusittingpatterns_name": {
             "value": "hmi-la-sittingpattern-retriever-test"
@@ -14,7 +14,7 @@
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
-                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedservices-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
+                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedinfra-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
                 },
                 "secretName": "dtu-storage-account-key"
              }

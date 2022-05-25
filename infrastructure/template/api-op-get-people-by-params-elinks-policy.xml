@@ -59,8 +59,8 @@
                 <set-header name="Authorization" exists-action="override">
                     <value>Bearer #{elinksToken}#</value>
                 </set-header>
-                <rewrite-uri template="/api/people" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <rewrite-uri template="/people" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
