@@ -77,6 +77,12 @@
             "apiVersion": "2016-06-01",
             "location": "[resourceGroup().location]",
             "name": "azureblob",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
@@ -93,6 +99,12 @@
             "apiVersion": "2016-06-01",
             "name": "keyvault",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "displayName": "HMI Key Vault",
                 "customParameterValues": {
@@ -115,6 +127,12 @@
             "name": "azuretables",
             "location": "[resourceGroup().location]",
             "kind": "V1",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -142,6 +160,9 @@
                 "application": "hearings-management-interface",
                 "businessarea": "cross-cutting",
 				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",

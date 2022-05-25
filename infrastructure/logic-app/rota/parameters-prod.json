@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentName":{
-            "value": "prod"
+            "value": "production"
         },
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-prod"
