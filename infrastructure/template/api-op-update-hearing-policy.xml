@@ -7,7 +7,6 @@
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
             </when>
 		    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
 				<choose>
 					<when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
 						<send-request ignore-error="false" timeout="20" response-variable-name="cftClientResponse" mode="new">
@@ -54,7 +53,6 @@
 				<set-backend-service base-url="https://#{cftHost}#/listings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
