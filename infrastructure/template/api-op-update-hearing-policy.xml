@@ -7,11 +7,10 @@
                 <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
             </when>
 		    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
 				<choose>
 					<when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
 						<send-request ignore-error="false" timeout="20" response-variable-name="cftClientResponse" mode="new">
-							<set-url>https://#{keyVaultHost}#/secrets/snl-user-id/?api-version=7.0</set-url>
+							<set-url>https://#{keyVaultHost}#/secrets/cft-client-app-client/?api-version=7.0</set-url>
 							<set-method>GET</set-method>
 							<authentication-managed-identity resource="https://vault.azure.net" />
 						</send-request>
@@ -20,7 +19,7 @@
 							return secret["value"].ToString();
 						}" />
 						<send-request ignore-error="false" timeout="20" response-variable-name="cftSecretResponse" mode="new">
-							<set-url>https://#{keyVaultHost}#/secrets/snl-user-pwd/?api-version=7.0</set-url>
+							<set-url>https://#{keyVaultHost}#/secrets/cft-client-app-secret/?api-version=7.0</set-url>
 							<set-method>GET</set-method>
 							<authentication-managed-identity resource="https://vault.azure.net" />
 						</send-request>
@@ -54,7 +53,6 @@
 				<set-backend-service base-url="https://#{cftHost}#/listings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
@@ -84,7 +82,7 @@
                             <set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
                         </send-request>
-						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
                         <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                     </when>
                 </choose>
