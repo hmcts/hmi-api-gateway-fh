@@ -83,6 +83,12 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "name": "azureblob",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
@@ -101,9 +107,9 @@
             "location": "[resourceGroup().location]",
             "tags": {
                 "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
+                "application": "hearings-management-interface",
                 "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "properties": {
                 "displayName": "HMI Key Vault",
@@ -133,6 +139,12 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -157,9 +169,12 @@
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
+                "application": "hearings-management-interface",
                 "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
