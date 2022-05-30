@@ -76,6 +76,12 @@
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "name": "azureblob",
             "tags": {
                 "environment": "[parameters('environmentName')]",
@@ -126,6 +132,12 @@
             "apiVersion": "2016-06-01",
             "name": "azuretables",
             "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
             "kind": "V1",
             "tags": {
                 "environment": "[parameters('environmentName')]",
@@ -1019,12 +1031,19 @@
                                                             "inputs": {
                                                                 "session": {
                                                                     "johs": "@json(concat('[', variables('jsonJohArray'), ']'))",
-                                                                    "locationReferenceType": "EXTERNAL",
-                                                                    "roomId": "@{items('For_each_Session')?['locationId']}",
+                                                                    "room": {
+                                                                        "locationId": "@{items('For_each_Session')?['locationId']}",
+                                                                        "locationReferenceType": "EXTERNAL",
+                                                                        "locationType": "Room"
+                                                                    },
                                                                     "sessionDuration": "@int(variables('sessionDuration'))",
                                                                     "sessionReference": "@{items('For_each_Session')?['RowKey']}",
                                                                     "sessionStart": "@{variables('sessionStart')}",
-                                                                    "venueId": "@{items('For_each_Session')?['venueId']}"
+                                                                    "venue": {
+                                                                        "locationId": "@{items('For_each_Session')?['venueId']}",
+                                                                        "locationReferenceType": "EXTERNAL",
+                                                                        "locationType": "Court"
+                                                                    }
                                                                 }
                                                             }
                                                         },
@@ -1275,6 +1294,29 @@
                                                                 "value": "{}"
                                                             }
                                                         },
+                                                        "Update_hmiProcessed": {
+                                                            "runAfter": {
+                                                                "Update_with_error_from_HMI": [
+                                                                    "Succeeded"
+                                                                ]
+                                                            },
+                                                            "type": "ApiConnection",
+                                                            "inputs": {
+                                                                "body": {
+                                                                    "hmiProcessed": true
+                                                                },
+                                                                "headers": {
+                                                                    "If-Match": "*"
+                                                                },
+                                                                "host": {
+                                                                    "connection": {
+                                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                    }
+                                                                },
+                                                                "method": "put",
+                                                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_Session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_Session')?['RowKey'])}')"
+                                                            }
+                                                        },
                                                         "Update_with_error_from_HMI": {
                                                             "runAfter": {
                                                                 "HTTP_HMI": [
@@ -1310,6 +1352,7 @@
                                                             "inputs": {
                                                                 "body": {
                                                                     "business": "@{items('For_jsonCLP')?['business']}",
+                                                                    "hmiProcessed": false,
                                                                     "johs": "",
                                                                     "locationId": "@{items('For_jsonCLP')?['locationId']}",
                                                                     "panel": "@{items('For_jsonCLP')?['panel']}",
@@ -1447,6 +1490,11 @@
                                                         },
                                                         "method": "get",
                                                         "path": "/Tables/@{encodeURIComponent('CLP')}/entities"
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "paginationPolicy": {
+                                                            "minimumItemCount": 10000
+                                                        }
                                                     }
                                                 },
                                                 "Get_HMI_Client": {
@@ -1498,6 +1546,11 @@
                                                         },
                                                         "method": "get",
                                                         "path": "/Tables/@{encodeURIComponent('CLP')}/entities"
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "paginationPolicy": {
+                                                            "minimumItemCount": 10000
+                                                        }
                                                     }
                                                 },
                                                 "Get_entities_JOH": {
@@ -1515,6 +1568,11 @@
                                                         },
                                                         "method": "get",
                                                         "path": "/Tables/@{encodeURIComponent('joh')}/entities"
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "paginationPolicy": {
+                                                            "minimumItemCount": 10000
+                                                        }
                                                     }
                                                 },
                                                 "Get_entities_Schedules": {
@@ -1532,6 +1590,11 @@
                                                         },
                                                         "method": "get",
                                                         "path": "/Tables/@{encodeURIComponent('schedule')}/entities"
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "paginationPolicy": {
+                                                            "minimumItemCount": 10000
+                                                        }
                                                     }
                                                 },
                                                 "Has_HMI_failed": {
@@ -1975,7 +2038,7 @@
                                                                 }
                                                             },
                                                             "method": "delete",
-                                                            "path": "[parameters('storageACGetPathSuffix')]"
+                                                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtudev'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
                                                         }
                                                     }
                                                 }
