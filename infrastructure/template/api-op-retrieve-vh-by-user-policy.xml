@@ -65,7 +65,7 @@
                                 <value>application/x-www-form-urlencoded</value>
                             </set-header>
                             <set-body>@{
-                            return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
+                            return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
                         </send-request>
                         <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
                         <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
