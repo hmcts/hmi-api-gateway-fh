@@ -81,7 +81,7 @@
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 				<rewrite-uri template="/snl-in/hearings" copy-unmatched-params="true" />
-				<authentication-certificate certificate-id="hmicerttest" />
+				<!-- <authentication-certificate certificate-id="hmicerttest" /> -->
 				<set-header name="Authorization" exists-action="delete" />
 				<set-backend-service base-url="https://apigw.sit.cjscp.org.uk/cppi/v3/" />
 			</when>
