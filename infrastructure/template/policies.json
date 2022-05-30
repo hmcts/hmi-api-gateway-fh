@@ -270,12 +270,6 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "snl-health",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-snl-health-policy.xml",
-      "errorAction"  : "Stop"
-    },
-    {
       "operationId"  : "crime-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-crime-health-policy.xml",
