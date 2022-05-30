@@ -1,5 +1,5 @@
 variables:  
   - name: api_spec
-    value: "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/fh-request-hearing.json"
+    value: "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/hmi-gateway.json"
   - name: health_api_spec
     value: "https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/specs/future-hearings-hmi-api-health.json"
