@@ -3,8 +3,8 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <!-- <choose>
-                    <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")"> -->
+                <choose>
+                    <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
                             <set-method>GET</set-method>
@@ -32,12 +32,12 @@
                             <set-body>@{
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
                         </send-request>
-                        <!-- <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-                        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                       <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value=""/>
                     </when>
-                </choose> -->
+                </choose>
                 <set-header name="Authorization" exists-action="override">
-                    <value>@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])</value>
+                    <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
                 <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
