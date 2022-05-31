@@ -234,6 +234,12 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "clone",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-clone-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "elinks-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-elinks-health-policy.xml",
