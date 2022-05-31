@@ -1,7 +1,6 @@
 <policies>
     <inbound>
         <base />
-        <base />
         <rewrite-uri template="/knock-knock" copy-unmatched-params="true" />
         <!-- <authentication-certificate certificate-id="hmicerttest" /> -->
         <set-header name="Authorization" exists-action="delete" />
