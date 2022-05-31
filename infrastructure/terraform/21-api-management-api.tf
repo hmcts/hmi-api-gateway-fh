@@ -7,7 +7,7 @@ resource "azurerm_api_management_api" "hmi_apim_api" {
   path                = var.prefix
   protocols           = var.protocols
 
-  service_url         = var.service_url
+  service_url = var.service_url
 
   subscription_required = false
 
