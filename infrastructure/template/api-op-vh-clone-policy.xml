@@ -2,115 +2,50 @@
     <inbound>
         <base />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-            <rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-            <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-        </when>
-        <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-        <choose>
-            <when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
-            <send-request ignore-error="false" timeout="20" response-variable-name="cftClientResponse" mode="new">
-                <set-url>https://#{keyVaultHost}#/secrets/cft-client-app-client/?api-version=7.0</set-url>
-                <set-method>GET</set-method>
-                <authentication-managed-identity resource="https://vault.azure.net" />
-            </send-request>
-            <set-variable name="cftClient" value="@{
-                            var secret = ((IResponse)context.Variables["cftClientResponse"]).Body.As<JObject>();
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
+            <choose>
+            <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
+                <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
+                    <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <set-variable name="vhClient" value="@{
+                            var secret = ((IResponse)context.Variables["vhClientResponse"]).Body.As<JObject>();
                             return secret["value"].ToString();
                         }" />
-            <send-request ignore-error="false" timeout="20" response-variable-name="cftSecretResponse" mode="new">
-                <set-url>https://#{keyVaultHost}#/secrets/cft-client-app-secret/?api-version=7.0</set-url>
-                <set-method>GET</set-method>
-                <authentication-managed-identity resource="https://vault.azure.net" />
-            </send-request>
-            <set-variable name="cftSecret" value="@{
-                            var secret = ((IResponse)context.Variables["cftSecretResponse"]).Body.As<JObject>();
+                <send-request ignore-error="false" timeout="20" response-variable-name="vhSecretResponse" mode="new">
+                    <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-secret/?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <set-variable name="vhSecret" value="@{
+                            var secret = ((IResponse)context.Variables["vhSecretResponse"]).Body.As<JObject>();
                             return secret["value"].ToString();
                         }" />
-            <send-request ignore-error="true" timeout="20" response-variable-name="cftBearerToken" mode="new">
-                <set-url>https://idam-web-public.demo.platform.hmcts.net/o/token</set-url>
-                <set-method>POST</set-method>
-                <set-header name="Content-Type" exists-action="override">
+                <send-request ignore-error="true" timeout="20" response-variable-name="vhBearerToken" mode="new">
+                    <set-url>https://login.microsoftonline.com/fb6e0e22-0da3-4c35-972a-9d61eb256508/oauth2/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
                     <value>application/x-www-form-urlencoded</value>
-                </set-header>
-                <set-body>@{
-                    return "client_id=" + (string)context.Variables["cftClient"] + "&client_secret=" + (string)context.Variables["cftSecret"] + "&grant_type=client_credentials&scope=profile";}</set-body>
-            </send-request>
-            <cache-store-value key="cftAuth" value="@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-            <cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
-        </when>
-    </choose>
-    <set-header name="Authorization" exists-action="override">
-        <value>@((String)context.Variables["cftAuthToken"])</value>
-    </set-header>
-    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-    <set-backend-service base-url="https://cft-api-mgmt.demo.platform.hmcts.net/hmc/listings" />
-</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
-<choose>
-<when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
-<send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
-    <set-url>#{sAndLOauthUrl}#</set-url>
-    <set-method>POST</set-method>
-    <set-header name="Content-Type" exists-action="override">
-        <value>application/x-www-form-urlencoded</value>
-    </set-header>
-    <set-body>@{
-        return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
-</send-request>
-<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
-</when>
+                    </set-header>
+                    <set-body>@{
+                        return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
+                </send-request>
+                <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value=""/>
+            </when>
         </choose>
-<set-header name="Authorization" exists-action="override">
-<value>@((String)context.Variables["snlAuthToken"])</value>
-</set-header>
-<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-<set-header name="Content-Type" exists-action="override">
-<value>application/json; charset=utf-8</value>
-</set-header>
-<set-header name="Request-Type" exists-action="override">
-<value>text</value>
-</set-header>
-<set-header name="Subscription-Key" exists-action="override">
-<value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
-</set-header>
-        <!--  Don't expose APIM subscription key to the backend. -->
-<set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
-<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/hearings" />
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-        <!--rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-        <set-backend-service base-url="https://#{emulatorHost}#/hearings/" /-->
-<return-response>
-<set-status code="202" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("response code", 202),
-    new JProperty("description", "The request was received successfully.")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-<return-response>
-<set-status code="202" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("response code", 202),
-    new JProperty("description", "The request was received successfully.")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
+        <set-header name="Authorization" exists-action="override">
+            <value>@((String)context.Variables["vhAuthToken"])</value>
+        </set-header>
+        <rewrite-uri template="/{hearingId}/clone" copy-unmatched-params="true" />
+        <set-backend-service base-url="#{vhHost}#/hearings" />
+    </when>
+    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+    <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
+    <mock-response status-code="200" content-type="application/json" />
+</when>
         </choose>
         </inbound>
 <backend>
@@ -120,7 +55,7 @@
 <base />
 <choose>
     <when condition="@(context.Response.StatusCode == 401)">
-        <cache-remove-value key="snlAuth" />
+        <cache-remove-value key="vhAuth" />
         <return-response>
             <set-status code="502" />
             <set-header name="Content-Type">
@@ -135,7 +70,7 @@
         </return-response>
     </when>
     <when condition="@(context.Response.StatusCode == 403)">
-        <cache-remove-value key="snlAuth" />
+        <cache-remove-value key="vhAuth" />
         <return-response>
             <set-status code="502" />
             <set-header name="Content-Type">
@@ -167,7 +102,7 @@
                 new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
                 new JProperty("category", "Data Issue"),
                 new JProperty("contact_type", "Alert"),
-                new JProperty("description", "HMI - Update Hearing: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
+                new JProperty("description", "HMI - Update VH By ID: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
                 new JProperty("impact", "2"),
                 new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
                 new JProperty("short_description", "HMI - API Gateway Error"),
