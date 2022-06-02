@@ -234,9 +234,9 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "clone",
+      "operationId"  : "clone-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-vh-clone-policy.xml",
+      "templateFile" : "api-op-vh-clone-hearing-policy.xml",
       "errorAction"  : "Stop"
     },
     {
