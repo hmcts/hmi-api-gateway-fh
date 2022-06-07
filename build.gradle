@@ -303,7 +303,7 @@ ext.libraries = [
 ext {
     slf4jVersion = '1.7.7'
     serenityCoreVersion = '2.2.9'
-    junitVersion = '4.13'
+    junitVersion = '4.13.2'
     assertJVersion = '3.8.0'
     logbackVersion = '1.2.11'
 }
