@@ -1,35 +1,49 @@
 <policies>
     <inbound>
-        <!--cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
-        <choose>
-            <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
-                <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
-                    <set-url>#{sAndLOauthUrl}#</set-url>
-                    <set-method>POST</set-method>
-                    <set-header name="Content-Type" exists-action="override">
-                        <value>application/x-www-form-urlencoded</value>
-                    </set-header>
-                    <set-body>@{
-                        return "username=#{sAndLAuthClient}#&password=#{sAndLAuthSecret}#&grant_type=password_credentials";}</set-body>
-                </send-request>
-                <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
-            </when>
-        </choose>
-        <set-header name="Authorization" exists-action="override">
-            <value>@((String)context.Variables["snlAuthToken"])</value>
-        </set-header>
-        <rewrite-uri template="/" copy-unmatched-params="true" />
-        <set-header name="Content-Type" exists-action="override">
-            <value>application/json; charset=utf-8</value>
-        </set-header>
-        <set-header name="Request-Type" exists-action="override">
-            <value>text</value>
-        </set-header>
-        <set-header name="ApiVersion" exists-action="override">
-            <value>1.9</value>
-        </set-header-->
-        <rewrite-uri template="/" copy-unmatched-params="true" />
-        <set-backend-service base-url="https://#{pihHost}#/" />
+        <base />
+            <send-request ignore-error="false" timeout="20" response-variable-name="pipClientResponse" mode="new">
+                <set-url>https://#{keyVaultHost}#/secrets/pip-client-id/?api-version=7.0</set-url>
+                <set-method>GET</set-method>
+                <authentication-managed-identity resource="https://vault.azure.net" />
+            </send-request>
+            <set-variable name="pipClient" value="@{
+                var secret = ((IResponse)context.Variables["pipClientResponse"]).Body.As<JObject>();
+                return secret["value"].ToString();
+            }" />
+            <send-request ignore-error="false" timeout="20" response-variable-name="pipSecretResponse" mode="new">
+                <set-url>https://#{keyVaultHost}#/secrets/pip-client-pwd/?api-version=7.0</set-url>
+                <set-method>GET</set-method>
+                <authentication-managed-identity resource="https://vault.azure.net" />
+            </send-request>
+            <set-variable name="pipSecret" value="@{
+                var secret = ((IResponse)context.Variables["pipSecretResponse"]).Body.As<JObject>();
+                return secret["value"].ToString();
+            }" />
+            <send-request ignore-error="false" timeout="20" response-variable-name="pipScopeResponse" mode="new">
+                <set-url>https://#{keyVaultHost}#/secrets/pip-data-mgnt-scope/?api-version=7.0</set-url>
+                <set-method>GET</set-method>
+                <authentication-managed-identity resource="https://vault.azure.net" />
+            </send-request>
+            <set-variable name="pipScope" value="@{
+                var secret = ((IResponse)context.Variables["pipScopeResponse"]).Body.As<JObject>();
+                return secret["value"].ToString();
+            }" />
+            <send-request ignore-error="true" timeout="20" response-variable-name="pipBearerToken" mode="new">
+                <set-url>https://login.microsoftonline.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/oauth2/v2.0/token</set-url>
+                <set-method>POST</set-method>
+                <set-header name="Content-Type" exists-action="override">
+                    <value>application/x-www-form-urlencoded</value>
+                </set-header>
+                <set-body>@{
+                    return "client_id=" + (string)context.Variables["pipClient"] + "&scope=" + (string)context.Variables["pipScope"] + "/.default&client_secret=" + (string)context.Variables["pipSecret"] + "&grant_type=client_credentials";
+                    }</set-body>
+            </send-request>
+            <set-variable name="pipAuthToken" value="@("Bearer " + (String)((IResponse)context.Variables["pipBearerToken"]).Body.As<JObject>()["access_token"])" />
+            <set-header name="Authorization" exists-action="override">
+                <value>@((String)context.Variables["pipAuthToken"])</value>
+            </set-header>
+            <rewrite-uri template="/" copy-unmatched-params="true" />
+            <set-backend-service base-url="https://#{pihHost}#/pip/data-management" />
     </inbound>
     <backend>
         <base />
