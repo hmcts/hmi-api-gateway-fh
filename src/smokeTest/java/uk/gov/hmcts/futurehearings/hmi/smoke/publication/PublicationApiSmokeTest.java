@@ -37,6 +37,6 @@ class PublicationApiSmokeTest extends SmokeTest {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
                 getRootContext());
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
