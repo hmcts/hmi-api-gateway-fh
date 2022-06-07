@@ -327,8 +327,8 @@ dependencies {
 
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.37'
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.37'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
 
     compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
@@ -354,8 +354,8 @@ dependencies {
     testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
 
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testImplementation "ch.qos.logback:logback-classic:1.2.11"
     testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
@@ -381,8 +381,8 @@ dependencies {
     smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
     smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
     smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
-    smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+    smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    smokeTestCompileOnly 'org.projectlombok:lombok:1.18.24'
     smokeTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     smokeTestImplementation sourceSets.main.runtimeClasspath
     //Smoke Test Dependencies - FINISH
@@ -396,8 +396,8 @@ dependencies {
     integrationTestImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: versions.serenity
     integrationTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
     integrationTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
-    integrationTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    integrationTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+    integrationTestAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    integrationTestCompileOnly 'org.projectlombok:lombok:1.18.24'
     integrationTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     integrationTestImplementation "org.assertj:assertj-core:3.8.0"
     integrationTestImplementation "junit:junit:${junitVersion}"
@@ -427,8 +427,8 @@ dependencies {
     acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
     acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.6.2'
 
-    acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+    acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.24'
     acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     acceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
     acceptanceTestImplementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
@@ -444,8 +444,8 @@ dependencies {
     functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     functionalTestCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: versions.serenity
-    functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    functionalTestCompileOnly 'org.projectlombok:lombok:1.18.12'
+    functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    functionalTestCompileOnly 'org.projectlombok:lombok:1.18.24'
     functionalTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     functionalTestImplementation "org.assertj:assertj-core:3.8.0"
     functionalTestImplementation "junit:junit:${junitVersion}"
