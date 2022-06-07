@@ -305,7 +305,7 @@ ext {
     serenityCoreVersion = '2.2.9'
     junitVersion = '4.13'
     assertJVersion = '3.8.0'
-    logbackVersion = '1.2.3'
+    logbackVersion = '1.2.11'
 }
 
 dependencies {
@@ -356,7 +356,7 @@ dependencies {
 
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    testImplementation "ch.qos.logback:logback-classic:1.2.3"
+    testImplementation "ch.qos.logback:logback-classic:1.2.11"
     testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
     //Smoke Test Dependencies - START
@@ -383,7 +383,7 @@ dependencies {
     smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
     smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    smokeTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+    smokeTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     smokeTestImplementation sourceSets.main.runtimeClasspath
     //Smoke Test Dependencies - FINISH
 
@@ -398,7 +398,7 @@ dependencies {
     integrationTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
     integrationTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     integrationTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    integrationTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+    integrationTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     integrationTestImplementation "org.assertj:assertj-core:3.8.0"
     integrationTestImplementation "junit:junit:${junitVersion}"
     integrationTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
@@ -429,7 +429,7 @@ dependencies {
 
     acceptanceTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     acceptanceTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+    acceptanceTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     acceptanceTestImplementation group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.27.1'
     acceptanceTestImplementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
 
@@ -446,7 +446,7 @@ dependencies {
     functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: versions.serenity
     functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     functionalTestCompileOnly 'org.projectlombok:lombok:1.18.12'
-    functionalTestImplementation "ch.qos.logback:logback-classic:1.2.3"
+    functionalTestImplementation "ch.qos.logback:logback-classic:1.2.11"
     functionalTestImplementation "org.assertj:assertj-core:3.8.0"
     functionalTestImplementation "junit:junit:${junitVersion}"
     functionalTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
