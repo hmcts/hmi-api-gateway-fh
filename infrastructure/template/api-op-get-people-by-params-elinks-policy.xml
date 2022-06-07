@@ -56,14 +56,23 @@
                 </return-response>
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
+                <send-request ignore-error="false" timeout="20" response-variable-name="elinksTokenResponse" mode="new">
+                    <set-url>https://#{keyVaultHost}#/secrets/elinks-token/?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <set-variable name="elinksToken" value="@{
+                    var secret = ((IResponse)context.Variables["elinksTokenResponse"]).Body.As<JObject>();
+                    return secret["value"].ToString();
+                }" />
                 <set-header name="Authorization" exists-action="override">
-                    <value>Bearer #{elinksToken}#</value>
+                    <value>@("Bearer " + (String)context.Variables["elinksToken"])</value>
                 </set-header>
-                <rewrite-uri template="/api/people" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <rewrite-uri template="/people" copy-unmatched-params="true" />
+                <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/" />
+                <set-backend-service base-url="https://#{elinksHost}#/" />
                 <mock-response status-code="200" content-type="application/json" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
