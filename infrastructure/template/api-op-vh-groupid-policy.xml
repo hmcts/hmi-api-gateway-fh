@@ -1,0 +1,132 @@
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
+            <choose>
+                <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
+                <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
+                    <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <set-variable name="vhClient" value="@{
+                            var secret = ((IResponse)context.Variables["vhClientResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
+                        }" />
+                <send-request ignore-error="false" timeout="20" response-variable-name="vhSecretResponse" mode="new">
+                    <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-secret/?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <set-variable name="vhSecret" value="@{
+                            var secret = ((IResponse)context.Variables["vhSecretResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
+                        }" />
+                <send-request ignore-error="true" timeout="20" response-variable-name="vhBearerToken" mode="new">
+                    <set-url>https://login.microsoftonline.com/fb6e0e22-0da3-4c35-972a-9d61eb256508/oauth2/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                    <set-body>@{
+                        return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
+                </send-request>
+                <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value=""/>
+            </when>
+        </choose>
+        <set-header name="Authorization" exists-action="override">
+            <value>@((String)context.Variables["vhAuthToken"])</value>
+        </set-header>
+        <rewrite-uri template="/groups/{groupId}" copy-unmatched-params="true" />
+        <set-backend-service base-url="#{vhHost}#/hearings" />
+    </when>
+    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+    <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
+    <mock-response status-code="200" content-type="application/json" />
+</when>
+        </choose>
+        </inbound>
+<backend>
+<base />
+</backend>
+<outbound>
+<base />
+<choose>
+    <when condition="@(context.Response.StatusCode == 401)">
+        <cache-remove-value key="vhAuth" />
+        <return-response>
+            <set-status code="502" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("message", "Successfully autheticated by HMI, however target system failed to autheticate. Please try again.")
+                ).ToString();
+                }
+            </set-body>
+        </return-response>
+    </when>
+    <when condition="@(context.Response.StatusCode == 403)">
+        <cache-remove-value key="vhAuth" />
+        <return-response>
+            <set-status code="502" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("message", "Successfully authorized by HMI, however target system failed to authorize. Please try again.")
+                ).ToString();
+                }
+            </set-body>
+        </return-response>
+    </when>
+    <when condition="@(context.Response.StatusCode == 500)">
+        <send-request ignore-error="true" timeout="20" response-variable-name="snowAuth" mode="new">
+            <set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
+            <set-method>GET</set-method>
+            <authentication-managed-identity resource="https://vault.azure.net" />
+        </send-request>
+        <send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
+            <set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
+            <set-method>POST</set-method>
+            <set-header name="Authorization" exists-action="override">
+                <value>@("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As<JObject>()["value"].ToString())</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("assignment_group", "56b756774fbd368057db0b318110c7bd"),
+                new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
+                new JProperty("category", "Data Issue"),
+                new JProperty("contact_type", "Alert"),
+                new JProperty("description", "HMI - Update VH By ID: " + context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","")),
+                new JProperty("impact", "2"),
+                new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
+                new JProperty("short_description", "HMI - API Gateway Error"),
+                new JProperty("subcategory", "HMI - Backend Service Failure"),
+                new JProperty("u_role_type", "c319bc4bdb41834074abffa9bf96199c"),
+                new JProperty("urgency", "3")
+                ).ToString();
+                }</set-body>
+        </send-request>
+        <return-response>
+            <set-status code="502" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "][HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]")
+                ).ToString();
+                }</set-body>
+        </return-response>
+    </when>
+</choose>
+</outbound>
+<on-error>
+<base />
+</on-error>
+        </policies>
