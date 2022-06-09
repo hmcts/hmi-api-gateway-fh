@@ -92,7 +92,7 @@
         </send-request>
         <send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
             <set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
-            <set-method>GET</set-method>
+            <set-method>POST</set-method>
             <set-header name="Authorization" exists-action="override">
                 <value>@("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As<JObject>()["value"].ToString())</value>
             </set-header>
