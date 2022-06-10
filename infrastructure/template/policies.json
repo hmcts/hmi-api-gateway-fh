@@ -234,6 +234,12 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "groupid-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-groupid-hearing-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "elinks-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-elinks-health-policy.xml",
