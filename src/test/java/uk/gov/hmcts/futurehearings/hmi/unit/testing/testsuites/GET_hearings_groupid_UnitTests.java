@@ -10,16 +10,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.*;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.sessionId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HealthResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HealthResponseVerifier.thenValidateResponseForRetrieve;
@@ -44,8 +43,8 @@ class GET_hearings_groupid_UnitTests {
     @Value("${snlApiVersion}")
     private String snlApiVersion;
 
-    @Value("${hmiApiRootContext}")
-    private String hmiApiRootContext;
+    @Value("${hearinggroupidApiRootContext}")
+    private String hearinggroupidApiRootContext;
 
     @Value("${destinationSystem}")
     private String destinationSystem;
@@ -80,7 +79,6 @@ class GET_hearings_groupid_UnitTests {
 
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
-
     @BeforeAll
     void setToken(){
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenURL, scope);
@@ -99,33 +97,43 @@ class GET_hearings_groupid_UnitTests {
     }
 
     @Test
-    @Order(1)
-    @DisplayName("Test for Invalid Resource")
-    void testRetrieveHealthCheckForInvaalidResource() {
-        final Response response = whenRetrieveHealthCheckForInvalidResource();
-        thenValidateResponseForInvalidResource(response);
+    @Order(8)
+    @DisplayName("Test for Correct Headers and No Parameters")
+    void testRetrieveGroupidRequestWithCorrectRequestAndNoParams() {
+        final Response response = whenRetrieveGroupidIsInvokedWithCorrectHeadersAndNoParams();
+        SchedulesResponseVerifier.thenValidateResponseForRetrieve(response);
     }
 
     @Test
     @Order(2)
     @DisplayName("Test for Correct Headers and Version Number")
-    void testRetrieveSnlHealthcheckWithCorrectHeaders() {
-        final Response response = whenRetrieveSnlHealthcheckWithCorrectHeaders();
+    void testRetrieveGroupidWithCorrectHeaders() {
+        final Response response = whenRetrieveGroupidWithCorrectHeaders();
         thenValidateResponseForRetrieve(response);
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
 
-        assertEquals(responseMap.get("project.version"), snlApiVersion);
+        assertEquals(responseMap.get("project.version"),sessionId);
     }
 
-    private Response whenRetrieveHealthCheckForInvalidResource() {
-        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext + "get", headersAsMap, targetInstance);
+    private Response whenRetrieveGroupidWithCorrectHeaders() {
+        return retrieveGroupidForInvalidResource(hearinggroupidApiRootContext , headersAsMap, targetInstance);
     }
 
-    private Response whenRetrieveSnlHealthcheckWithCorrectHeaders() {
-        return retrieveSnlHealthcheckForInvalidResource(hmiApiRootContext + "snl-health", headersAsMap, targetInstance);
+    private Response whenRetrieveGroupidIsInvokedWithCorrectHeadersAndNoParams() {
+        return retrieveGroupidResponseForCorrectRequestAndNoParams(hearinggroupidApiRootContext, headersAsMap, targetInstance);
     }
 
-    private Response retrieveSnlHealthcheckForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+    private Response retrieveGroupidResponseForCorrectRequestAndNoParams(final String api, final Map<String, Object> headersAsMap, final String basePath) {
+
+        return given()
+                .auth()
+                .oauth2(accessToken)
+                .headers(headersAsMap)
+                .baseUri(basePath)
+                .basePath(api)
+                .when().get().then().extract().response();
+    }
+    private Response retrieveGroupidForInvalidResource(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
         return given()
                 .auth()
