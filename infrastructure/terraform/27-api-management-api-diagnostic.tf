@@ -11,7 +11,7 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
   http_correlation_protocol = "W3C"
 
   frontend_request {
-    body_bytes = 500
+    body_bytes = 5000
     headers_to_log = [
       "content-type",
       "accept",
@@ -23,7 +23,7 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
   }
 
   frontend_response {
-    body_bytes = 500
+    body_bytes = 5000
     headers_to_log = [
       "content-type",
       "content-length",
@@ -35,7 +35,7 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
   }
 
   backend_request {
-    body_bytes = 500
+    body_bytes = 5000
     headers_to_log = [
       "content-type",
       "accept",
@@ -47,7 +47,7 @@ resource "azurerm_api_management_api_diagnostic" "hmi_apim_diag" {
   }
 
   backend_response {
-    body_bytes = 500
+    body_bytes = 5000
     headers_to_log = [
       "content-type",
       "content-length",
