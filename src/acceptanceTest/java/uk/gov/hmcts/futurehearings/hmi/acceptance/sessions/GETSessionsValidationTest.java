@@ -249,7 +249,7 @@ class GETSessionsValidationTest extends SessionsValidationTest {
     }
 
     @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestHearingType : {0} --> {1}")
-    @CsvSource(value = {"requestHearingType, 8", "requestHearingType, InvalidOne", "requestHearingType, ''", "requestHearingType, ' '", "requestHearingType, NIL"}, nullValues = "NIL")
+    @CsvSource(value = {"requestHearingType, APPEAL", "requestHearingType, InvalidOne", "requestHearingType, ''", "requestHearingType, ' '", "requestHearingType, NIL"}, nullValues = "NIL")
     void test_request_hearing_type_query_param(final String requestHearingTypeKey, final String requestHearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestHearingTypeKey, requestHearingTypeValue));
         test_response_for_supplied_parameter();
