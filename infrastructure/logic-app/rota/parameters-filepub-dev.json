@@ -49,6 +49,9 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-dev"
         },
+        "hmiRotaFileUrl":{
+            "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+        },
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
         },
