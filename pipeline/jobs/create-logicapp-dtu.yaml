@@ -35,7 +35,9 @@ jobs:
       inlineScript: |
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
+        echo "Creating DTU Logic Application - ROTA"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-$(environment).json"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-$(environment).json"
         echo "Creating DTU Logic Application - Sitting Patterns"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-loader-param-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
@@ -49,7 +51,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         $env="$(environment)"
-        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
+        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-dturota-file-pub-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
         $resourceGroupName="hmi-sharedinfra-$env-rg"
         $kv_name="hmi-shared-kv-$env"
 
