@@ -5,8 +5,8 @@
         "environmentName":{
             "value": "development"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-dev"
+        "workflows_hmirotafilepub_name": {
+            "value": "hmi-la-dturota-file-pub-dev"
         },
         "storageAccountName":{
             "value": "hmidtudev"
