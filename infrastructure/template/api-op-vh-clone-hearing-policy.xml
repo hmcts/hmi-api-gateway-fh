@@ -46,6 +46,10 @@
     <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
     <mock-response status-code="200" content-type="application/json" />
 </when>
+<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL || P&I || CFT")">
+<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
+<mock-response status-code="400" content-type="application/json" />
+        </when>
         </choose>
         </inbound>
 <backend>
@@ -54,6 +58,21 @@
 <outbound>
 <base />
 <choose>
+    <when condition="@(context.Response.StatusCode == 400)">
+        <cache-remove-value key="vhAuth" />
+        <return-response>
+            <set-status code="5400" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("message", "Bad Request.")
+                ).ToString();
+                }
+            </set-body>
+        </return-response>
+    </when>
     <when condition="@(context.Response.StatusCode == 401)">
         <cache-remove-value key="vhAuth" />
         <return-response>
