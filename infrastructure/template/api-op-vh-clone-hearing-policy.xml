@@ -61,7 +61,7 @@
     <when condition="@(context.Response.StatusCode == 400)">
         <cache-remove-value key="vhAuth" />
         <return-response>
-            <set-status code="5400" />
+            <set-status code="400" />
             <set-header name="Content-Type">
                 <value>application/json</value>
             </set-header>
