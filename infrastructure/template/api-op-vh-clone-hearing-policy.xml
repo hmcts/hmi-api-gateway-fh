@@ -46,7 +46,15 @@
     <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
     <mock-response status-code="200" content-type="application/json" />
 </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL || P&I || CFT")">
+<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
+<mock-response status-code="400" content-type="application/json" />
+        </when>
+<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "P&I")">
+<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
+<mock-response status-code="400" content-type="application/json" />
+        </when>
+<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
 <mock-response status-code="400" content-type="application/json" />
         </when>
