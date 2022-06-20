@@ -224,7 +224,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     @Test
     public void testSuccessfulGetSessionForRequestHearingType() {
         Map<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("requestHearingType", "21");
+        queryParameters.put("requestHearingType", "APPEAL");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,

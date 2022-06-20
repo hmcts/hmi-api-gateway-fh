@@ -3,7 +3,6 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
-            <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
             <send-request ignore-error="false" timeout="20" response-variable-name="pipClientResponse" mode="new">
                 <set-url>https://#{keyVaultHost}#/secrets/pip-client-id/?api-version=7.0</set-url>
                 <set-method>GET</set-method>
