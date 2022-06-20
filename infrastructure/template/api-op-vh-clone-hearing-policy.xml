@@ -46,9 +46,8 @@
     <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
     <mock-response status-code="200" content-type="application/json" />
 </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME","CRIME","CFT")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<mock-response status-code="400" content-type="application/json" />
 <return-response>
 <set-status code="400" />
 <set-header name="Content-Type">
@@ -56,39 +55,7 @@
 </set-header>
 <set-body>@{
     return new JObject(
-    new JProperty("message", "Bad Request.")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<mock-response status-code="400" content-type="application/json" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "Bad Request.")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<mock-response status-code="400" content-type="application/json" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "Bad Request.")
+    new JProperty("message", "Bad Request,Invalid Destination")
     ).ToString();
     }
 </set-body>
