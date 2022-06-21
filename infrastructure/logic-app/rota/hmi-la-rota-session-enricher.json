@@ -1,0 +1,805 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmirotasessionenrich_name": {
+            "defaultValue": "hmidturotasessionenrichdevla",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
+        },
+        "storageACPathFiles": {
+            "type": "string"
+        },
+        "storageACGetPath": {
+            "type": "string"
+        },
+        "storageACExistingMagistrtePath": {
+            "type": "string"
+        },
+        "storageACExistingSchedulesPath": {
+            "type": "string"
+        },
+        "storageACExistingCLPPath": {
+            "type": "string"
+        },
+        "storageACGetPathSuffix": {
+            "type": "string"
+        },
+        "environmentName": {
+            "type": "string"
+        },
+        "hmiDestination": {
+            "type": "string"
+        },
+         "appId": {
+            "type": "securestring"
+        }, 
+        "appSecret": {
+            "type": "securestring"
+        }, 
+        "tenantId": {
+            "type": "securestring"
+        }, 
+        "keyvaultName": {
+            "type": "string"
+        },
+        "hmiRotaFileUrl": {
+            "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
+        },
+        "hmiScopeUrl": {
+            "type": "string"
+        },
+        "serviceNowAssignemntGroupId": {
+            "type": "string"
+        },
+        "serviceNowUserRoleTypeId": {
+            "type": "string"
+        },
+        "serviceNowServiceOfferingId": {
+            "type": "string"
+        },
+        "serviceNowCallerId": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "name": "azureblob",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                },
+                "displayName": "HMI DTU Rota",
+                "parameterValues": {
+                    "accountName": "[parameters('storageAccountName')]",
+                    "accessKey": "[parameters('storageAccessKey')]"
+                }
+            }
+        }
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmirotasessionenrich_name')]",
+            "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "properties": {
+                                        "filename": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Delete_file": {
+                            "runAfter": {
+                                "Update_record_status_to_ready": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "headers": {
+                                    "SkipDeleteIfFileNotFoundOnServer": false
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "delete",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/input/', body('Parse_JSON')?['filename'])))}"
+                            }
+                        },
+                        "For_each_CLP": {
+                            "foreach": "@body('Parse_jsonCLP')?['courtListingProfiles']?['courtListingProfile']",
+                            "actions": {
+                                "Insert_or_Merge_CLP": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "business": "@{items('For_each_CLP')?['business']}",
+                                            "hmiProcessed": false,
+                                            "johs": "",
+                                            "locationId": "@{items('For_each_CLP')?['locationId']}",
+                                            "panel": "@{items('For_each_CLP')?['panel']}",
+                                            "session": "@{items('For_each_CLP')?['session']}",
+                                            "sessionDate": "@{items('For_each_CLP')?['sessionDate']}",
+                                            "status": "READY",
+                                            "venueId": "@{items('For_each_CLP')?['venueId']}",
+                                            "welshSpeaking": "@{items('For_each_CLP')?['welshSpeaking']}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_CLP')?['@id'])}',RowKey='@{encodeURIComponent(items('For_each_CLP')?['@id'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_jsonCLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_Judge": {
+                            "foreach": "@body('Parse_jsonJudges')?['districtJudges']?['districtJudge']",
+                            "actions": {
+                                "Insert_or_Merge_Judges": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "emailAddress": "@{items('For_each_Judge')?['emailAddress']}",
+                                            "forenames": "@{items('For_each_Judge')?['forenames']}",
+                                            "surname": "@{items('For_each_Judge')?['surname']}",
+                                            "title": "@{items('For_each_Judge')?['title']}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_Judge')?['@id'])}',RowKey='@{encodeURIComponent(items('For_each_Judge')?['@id'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_Magistrate": {
+                            "foreach": "@body('Parse_jsonMagistrates')?['magistrates']?['magistrate']",
+                            "actions": {
+                                "Insert_or_Merge_Magistrate": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "emailAddress": "@{items('For_each_Magistrate')?['emailAddress']}",
+                                            "forenames": "@{items('For_each_Magistrate')?['forenames']}",
+                                            "surname": "@{items('For_each_Magistrate')?['surname']}",
+                                            "title": "@{items('For_each_Magistrate')?['title']}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_Magistrate')?['@id'])}',RowKey='@{encodeURIComponent(items('For_each_Magistrate')?['@id'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_jsonMagistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_Schedule": {
+                            "foreach": "@body('Parse_jsonSchedules')?['schedules']?['schedule']",
+                            "actions": {
+                                "Insert_or_Merge_schedule": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "justice": "@{items('For_each_Schedule')?['justice']?['@idref']}",
+                                            "slot": "@{items('For_each_Schedule')?['slot']}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('schedule')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_Schedule')?['@id'])}',RowKey='@{encodeURIComponent(items('For_each_Schedule')?['courtListingProfile']?['@idref'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_filename": {
+                            "runAfter": {
+                                "Update_record_status_to_loading": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/input/', body('Parse_JSON')?['filename'])))}/content",
+                                "queries": {
+                                    "inferContentType": true
+                                }
+                            }
+                        },
+                        "Initialize_jsonCLP": {
+                            "runAfter": {
+                                "Initialize_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonCLP",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonJudges": {
+                            "runAfter": {
+                                "Initialize_jsonMagistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonJudges",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonMagistrates": {
+                            "runAfter": {
+                                "Initialize_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonMagistrates",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_jsonSchedules": {
+                            "runAfter": {
+                                "Initialize_jsonCLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonSchedules",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_xmlPayload": {
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "xmlPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {},
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@triggerBody()",
+                                "schema": {
+                                    "properties": {
+                                        "filename": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Parse_jsonCLP": {
+                            "runAfter": {
+                                "For_each_Judge": [
+                                    "Succeeded"
+                                ],
+                                "For_each_Magistrate": [
+                                    "Succeeded"
+                                ],
+                                "For_each_Schedule": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@variables('jsonCLP')",
+                                "schema": {
+                                    "properties": {
+                                        "courtListingProfiles": {
+                                            "properties": {
+                                                "courtListingProfile": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@id": {
+                                                                "type": "string"
+                                                            },
+                                                            "business": {
+                                                                "type": "string"
+                                                            },
+                                                            "locationId": {
+                                                                "type": "string"
+                                                            },
+                                                            "panel": {
+                                                                "type": "string"
+                                                            },
+                                                            "session": {
+                                                                "type": "string"
+                                                            },
+                                                            "sessionDate": {
+                                                                "type": "string"
+                                                            },
+                                                            "updatedDate": {
+                                                                "type": "string"
+                                                            },
+                                                            "venueId": {
+                                                                "type": "string"
+                                                            },
+                                                            "welshSpeaking": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "@@id",
+                                                            "sessionDate",
+                                                            "session",
+                                                            "panel",
+                                                            "business",
+                                                            "venueId",
+                                                            "locationId",
+                                                            "welshSpeaking",
+                                                            "updatedDate"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Parse_jsonJudges": {
+                            "runAfter": {
+                                "Set_variable_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@variables('jsonJudges')",
+                                "schema": {
+                                    "properties": {
+                                        "districtJudges": {
+                                            "properties": {
+                                                "districtJudge": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@id": {
+                                                                "type": "string"
+                                                            },
+                                                            "emailAddress": {
+                                                                "type": "string"
+                                                            },
+                                                            "forenames": {
+                                                                "type": "string"
+                                                            },
+                                                            "surname": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "@@id",
+                                                            "title",
+                                                            "surname",
+                                                            "forenames",
+                                                            "emailAddress"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Parse_jsonMagistrates": {
+                            "runAfter": {
+                                "Set_variable_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@variables('jsonMagistrates')",
+                                "schema": {
+                                    "properties": {
+                                        "magistrates": {
+                                            "properties": {
+                                                "magistrate": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@id": {
+                                                                "type": "string"
+                                                            },
+                                                            "emailAddress": {
+                                                                "type": "string"
+                                                            },
+                                                            "forenames": {
+                                                                "type": "string"
+                                                            },
+                                                            "surname": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "@@id",
+                                                            "title",
+                                                            "surname",
+                                                            "forenames",
+                                                            "emailAddress"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Parse_jsonSchedules": {
+                            "runAfter": {
+                                "Set_variable_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@variables('jsonSchedules')",
+                                "schema": {
+                                    "properties": {
+                                        "schedules": {
+                                            "properties": {
+                                                "schedule": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@id": {
+                                                                "type": "string"
+                                                            },
+                                                            "courtListingProfile": {
+                                                                "properties": {
+                                                                    "@@idref": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "justice": {
+                                                                "properties": {
+                                                                    "@@idref": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "slot": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "@@id",
+                                                            "courtListingProfile",
+                                                            "justice",
+                                                            "slot"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Set_variable_jsonCLP": {
+                            "runAfter": {
+                                "Set_variable_jsonMagistrates": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "jsonCLP",
+                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<courtListingProfiles>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</courtListingProfiles>'), length('</courtListingProfiles>')),\n        indexOf(variables('xmlPayload'), '<courtListingProfiles>')\n    )\n)))}"
+                            }
+                        },
+                        "Set_variable_jsonJudges": {
+                            "runAfter": {
+                                "Set_variable_jsonCLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "jsonJudges",
+                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<districtJudges>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</districtJudges>'), length('</districtJudges>')),\n        indexOf(variables('xmlPayload'), '<districtJudges>')\n    )\n)))}"
+                            }
+                        },
+                        "Set_variable_jsonMagistrates": {
+                            "runAfter": {
+                                "Set_variable_xmlPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "jsonMagistrates",
+                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<magistrates>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</magistrates>'), length('</magistrates>')),\n        indexOf(variables('xmlPayload'), '<magistrates>')\n    )\n)))}"
+                            }
+                        },
+                        "Set_variable_jsonSchedules": {
+                            "runAfter": {
+                                "Set_variable_jsonJudges": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "jsonSchedules",
+                                "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<schedules>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</schedules>'), length('</schedules>')),\n        indexOf(variables('xmlPayload'), '<schedules>')\n    )\n)))}"
+                            }
+                        },
+                        "Set_variable_xmlPayload": {
+                            "runAfter": {
+                                "Get_filename": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "xmlPayload",
+                                "value": "@{body('Get_filename')}"
+                            }
+                        },
+                        "Update_record_status_to_loading": {
+                            "runAfter": {
+                                "Initialize_jsonSchedules": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "status": "LOADING"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+                            }
+                        },
+                        "Update_record_status_to_ready": {
+                            "runAfter": {
+                                "For_each_CLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "status": "READY"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionName": "azureblob",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            },
+                            "azuretables": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
