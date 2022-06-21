@@ -99,7 +99,7 @@
                     "accessKey": "[parameters('storageAccessKey')]"
                 }
             }
-        }
+        },
         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
