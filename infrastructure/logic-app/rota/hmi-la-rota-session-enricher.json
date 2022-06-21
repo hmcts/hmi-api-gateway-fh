@@ -222,7 +222,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -252,7 +252,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -282,7 +282,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -310,7 +310,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -753,7 +753,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -773,7 +773,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,5))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
