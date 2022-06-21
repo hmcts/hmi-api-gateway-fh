@@ -222,7 +222,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -252,7 +252,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -282,7 +282,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -310,7 +310,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -753,7 +753,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -773,7 +773,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,10))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -791,9 +791,29 @@
                                 "connectionName": "azureblob",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
                             },
-                            "azuretables": {
+                            "azuretables-1": {
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
-                                "connectionName": "azuretables",
+                                "connectionName": "azuretables-1",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-2": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables-2",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-3": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables-3",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-4": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables-4",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-5": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables-5",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
                         }
