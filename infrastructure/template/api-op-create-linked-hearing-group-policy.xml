@@ -97,7 +97,6 @@
 </set-body>
 </return-response>
         </when>
-        </when>
 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
 <return-response>
