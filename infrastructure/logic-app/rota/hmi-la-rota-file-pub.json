@@ -196,11 +196,11 @@
                         "Recurrence": {
                             "recurrence": {
                                 "frequency": "Minute",
-                                "interval": 5
+                                "interval": 10
                             },
                             "evaluatedRecurrence": {
                                 "frequency": "Minute",
-                                "interval": 5
+                                "interval": 10
                             },
                             "type": "Recurrence"
                         }
@@ -208,7 +208,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_johDataArray": [
+                                "Initialize_xmlPayload": [
                                     "Succeeded"
                                 ]
                             },
@@ -260,6 +260,37 @@
                                 },
                                 "is_file_xml": {
                                     "actions": {
+                                        "Condition": {
+                                            "actions": {
+                                                "HTTP": {
+                                                    "runAfter": {},
+                                                    "type": "Http",
+                                                    "inputs": {
+                                                        "body": {
+                                                            "filename": "@{items('For_each_File')?['Name']}"
+                                                        },
+                                                        "method": "POST",
+                                                        "uri": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Get_entity": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "equals": [
+                                                            "@body('Get_entity')?['status']",
+                                                            "NEW"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
+                                        },
                                         "Create_blob_in_error_folder": {
                                             "runAfter": {
                                                 "Parse_JSON": [
@@ -293,16 +324,11 @@
                                         },
                                         "Create_readme_file": {
                                             "runAfter": {
-                                                "Delete_invalid_xml_file": [
-                                                    "Succeeded",
-                                                    "Skipped",
-                                                    "Failed"
+                                                "Condition": [
+                                                    "Succeeded"
                                                 ],
-                                                "Insert_new_filename": [
-                                                    "Succeeded",
-                                                    "Skipped",
-                                                    "Failed",
-                                                    "TimedOut"
+                                                "Delete_xml_file": [
+                                                    "Succeeded"
                                                 ]
                                             },
                                             "type": "ApiConnection",
@@ -330,7 +356,7 @@
                                                 }
                                             }
                                         },
-                                        "Delete_invalid_xml_file": {
+                                        "Delete_xml_file": {
                                             "runAfter": {
                                                 "Create_blob_in_error_folder": [
                                                     "Succeeded"
@@ -354,6 +380,24 @@
                                             "runAfter": {
                                                 "Parse_JSON": [
                                                     "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                            }
+                                        },
+                                        "Get_entity": {
+                                            "runAfter": {
+                                                "Insert_new_filename": [
+                                                    "Succeeded",
+                                                    "Skipped"
                                                 ]
                                             },
                                             "type": "ApiConnection",
@@ -759,182 +803,6 @@
                                 ]
                             },
                             "type": "Foreach"
-                        },
-                        "Initialize_johDataArray": {
-                            "runAfter": {
-                                "Initialize_jsonJohs": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "johDataArray",
-                                        "type": "array"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_johIdIsPresiding": {
-                            "runAfter": {
-                                "Initialize_sessionDuration": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "johIdIsPresiding",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonCourtLocatioinProfiles": {
-                            "runAfter": {
-                                "Initialize_jsonJohArray": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonCLProfiles",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonJohArray": {
-                            "runAfter": {
-                                "Initialize_jsonJudges": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonJohArray",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonJohs": {
-                            "runAfter": {
-                                "Initialize_sessionErrorBody": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonJohs",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonJudges": {
-                            "runAfter": {
-                                "Initialize_jsonMagistrates": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonJudges",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonMagistrates": {
-                            "runAfter": {
-                                "Initialize_jsonSchedules": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonMagistrates",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonSchedules": {
-                            "runAfter": {
-                                "Initialize_xmlPayload": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonSchedules",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_sessionDuration": {
-                            "runAfter": {
-                                "Initialize_sessionStart": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "sessionDuration",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_sessionErrorBody": {
-                            "runAfter": {
-                                "Initialize_johIdIsPresiding": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "scheduleErrorBody",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_sessionStart": {
-                            "runAfter": {
-                                "Initialize_jsonCourtLocatioinProfiles": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "sessionStart",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
                         },
                         "Initialize_xmlPayload": {
                             "runAfter": {},
