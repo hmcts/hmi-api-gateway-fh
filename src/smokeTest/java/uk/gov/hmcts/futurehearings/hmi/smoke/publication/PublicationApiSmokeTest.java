@@ -33,7 +33,7 @@ class PublicationApiSmokeTest extends SmokeTest {
     }
 
     @Test
-    @DisplayName("Smoke Test to test the health endpoint")
+    @DisplayName("Smoke Test to test the publication health endpoint")
     public void testPublicationHmiApiGet() {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
                 getRootContext());
