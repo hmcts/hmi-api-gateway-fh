@@ -27,4 +27,18 @@ public class HeaderFactory {
         //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
+    public static Map<String,Object> createStandardHMIHeader(final String sourceSystem, final String destinationSystem) {
+
+        final LocalDateTime now = LocalDateTime.now();
+        final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
+
+        Map<String,Object> headersAsMap = new HashMap<String,Object>();
+        headersAsMap.put("Content-Type", "application/json");
+        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put("Source-System", sourceSystem);
+        headersAsMap.put("Destination-System", destinationSystem);
+        headersAsMap.put("Request-Created-At", requestCreatedAt);
+        //return Collections.unmodifiableMap(headersAsMap);
+        return headersAsMap;
+    }
 }
