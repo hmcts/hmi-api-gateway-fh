@@ -3,15 +3,12 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersAdded;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersRemoved;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterTruncatingHeaderKey;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import io.restassured.http.Headers;
@@ -22,19 +19,19 @@ public class CommonHeaderHelper {
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
     private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
-    public static final Map<String, String> createCompletePayloadHeader() {
+    public static Map<String, String> createCompletePayloadHeader(final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "CFT",
+                sourceSystem,
                 DESTINATION_SYSTEM
         );
     }
 
-    public static final Map<String, String> createStandardPayloadHeader() {
+    public static Map<String, String> createStandardPayloadHeader() {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -44,20 +41,20 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static final Headers createStandardPayloadHeaderWithDuplicateValues(Map<String, String> duplicateHeaderValues) {
+    public static Headers createStandardPayloadHeaderWithDuplicateValues(final Map<String, String> duplicateHeaderValues, final String sourceSystem) {
 
         return buildHeaderWithDoubleValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "no-cache",
                 null,
                 "2012-03-19T07:22:00Z",
-                "CFT",
+                sourceSystem,
                 DESTINATION_SYSTEM,
                 duplicateHeaderValues
         );
     }
 
-    public static final Map<String, String> createHeaderWithAllValuesEmpty() {
+    public static Map<String, String> createHeaderWithAllValuesEmpty() {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 "",
@@ -79,12 +76,12 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithDestinationSystemValue(final String destinationSystem) {
+    public static Map<String, String> createHeaderWithDestinationSystemValue(final String destinationSystem, final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 "2012-03-19T07:22:00Z",
-                "CFT",
+                sourceSystem,
                 destinationSystem
         );
     }
@@ -108,22 +105,22 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt) {
+    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt, final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
                 requestCreatedAt,
-                "CFT",
+                sourceSystem,
                 DESTINATION_SYSTEM
         );
     }
 
-    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType) {
+    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType, final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
                 "2012-03-19T07:22:00Z",
-                "CFT",
+                sourceSystem,
                 DESTINATION_SYSTEM
         );
     }

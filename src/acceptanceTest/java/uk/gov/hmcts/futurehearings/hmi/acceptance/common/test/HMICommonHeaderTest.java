@@ -44,6 +44,7 @@ public abstract class HMICommonHeaderTest {
     private String outputFileDirectory;
     private String inputPayloadFileName;
     private Map<String, String> urlParams;
+    private String sourceSystem;
 
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
@@ -55,6 +56,7 @@ public abstract class HMICommonHeaderTest {
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
+        sourceSystem = "CFT";
     }
 
     @BeforeEach
@@ -78,7 +80,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createCompletePayloadHeader(),
+                createCompletePayloadHeader(sourceSystem),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -132,7 +134,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithDestinationSystemValue("R&M"),
+                createHeaderWithDestinationSystemValue("R&M", sourceSystem),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -170,7 +172,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithRequestCreatedAtSystemValue( requestCreatedAtVal),
+                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -199,7 +201,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal),
+                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -215,7 +217,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithAcceptTypeAtSystemValue("application/pdf"),
+                createHeaderWithAcceptTypeAtSystemValue("application/pdf", sourceSystem),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
@@ -237,14 +239,13 @@ public abstract class HMICommonHeaderTest {
 
         final String expectedErrorMessage =
                         "Missing/Invalid Header " + duplicateHeaderKey;
-        Map<String,String> duplicateHeaderField  = new HashMap<String,String>();
+        Map<String,String> duplicateHeaderField  = new HashMap<>();
         duplicateHeaderField.put(duplicateHeaderKey,duplicateHeaderValue);
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
                 null,
-                createStandardPayloadHeaderWithDuplicateValues(
-                        duplicateHeaderField),
+                createStandardPayloadHeaderWithDuplicateValues(duplicateHeaderField, sourceSystem),
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,

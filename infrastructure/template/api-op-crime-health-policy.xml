@@ -1,0 +1,18 @@
+<policies>
+    <inbound>
+        <base />
+        <rewrite-uri template="/knock-knock" copy-unmatched-params="true" />
+        <authentication-certificate certificate-id="hmicrimecert" />
+        <set-header name="Authorization" exists-action="delete" />
+        <set-backend-service base-url="https://apigw.sit.cjscp.org.uk/cppi/v3/" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
