@@ -293,8 +293,8 @@
                                         },
                                         "Create_blob_in_error_folder": {
                                             "runAfter": {
-                                                "Parse_JSON": [
-                                                    "Failed"
+                                                "Insert_invalid_filename": [
+                                                    "Succeeded"
                                                 ]
                                             },
                                             "type": "ApiConnection",
@@ -408,6 +408,26 @@
                                                     }
                                                 },
                                                 "method": "get",
+                                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                            }
+                                        },
+                                        "Insert_invalid_filename": {
+                                            "runAfter": {
+                                                "Parse_JSON": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": {
+                                                    "status": "ERROR"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "patch",
                                                 "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
                                             }
                                         },
