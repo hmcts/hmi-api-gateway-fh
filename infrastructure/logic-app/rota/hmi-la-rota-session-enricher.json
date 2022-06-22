@@ -814,7 +814,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',''1'')]['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
