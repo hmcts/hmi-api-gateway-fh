@@ -364,6 +364,12 @@
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-get-reservations-policy.xml",
       "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "groupid-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-groupid-hearing-policy.xml",
+      "errorAction"  : "Stop"
     }
   ]
 }
