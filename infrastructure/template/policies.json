@@ -326,7 +326,7 @@
     {
       "operationId"  : "snl-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-vh-groupid-hearing-policy.xml",
+      "templateFile" : "api-op-snl-health-policy.xml",
       "errorAction"  : "Stop"
     },
     {
