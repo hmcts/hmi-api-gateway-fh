@@ -39,7 +39,7 @@
         <set-header name="Authorization" exists-action="override">
             <value>@((String)context.Variables["vhAuthToken"])</value>
         </set-header>
-        <rewrite-uri template="/groups/{groupId}" copy-unmatched-params="true" />
+        <rewrite-uri template="/{groupId}/hearings" copy-unmatched-params="true" />
         <set-backend-service base-url="#{vhHost}#/hearings" />
     </when>
     <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
