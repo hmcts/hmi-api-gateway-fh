@@ -368,7 +368,7 @@
     {
       "operationId"  : "groupid-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-groupid-hearing-policy.xml",
+      "templateFile" : "api-op-vh-groupid-hearing-policy.xml",
       "errorAction"  : "Stop"
     }
   ]
