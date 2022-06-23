@@ -10,20 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.*;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-import java.io.IOException;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.sessionId;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HealthResponseVerifier.thenValidateResponseForInvalidResource;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HealthResponseVerifier.thenValidateResponseForRetrieve;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.*;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRequestVideoHearingWithInvalidHeader;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -31,7 +25,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ExtendWith(TestReporter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Retrieve Hearings groupid Endpoints")
+@DisplayName("GET /hearings - Retrieve Hearings")
 @SuppressWarnings("java:S2699")
 class GET_hearings_groupid_UnitTests {
 
@@ -48,6 +42,7 @@ class GET_hearings_groupid_UnitTests {
     private String destinationSystem;
 
     private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, String> paramsAsMap = new HashMap<>();
 
     @Value("${tokenURL}")
     private String tokenURL;
@@ -92,6 +87,7 @@ class GET_hearings_groupid_UnitTests {
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
+
         paramsAsMap.put("hearingType", "THEFT");
         paramsAsMap.put("hearingDate", "2018-02-29T20:36:01Z");
     }
@@ -166,7 +162,6 @@ class GET_hearings_groupid_UnitTests {
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
-
     }
 
     @Test
@@ -289,7 +284,6 @@ class GET_hearings_groupid_UnitTests {
 
     private Response retrieveHearingsResponseForCorrectHeadersAndPathParam(final String api, final Map<String, Object> headersAsMap, final String basePath) {
 
-
         return given()
                 .auth()
                 .oauth2(accessToken)
@@ -333,5 +327,4 @@ class GET_hearings_groupid_UnitTests {
                 .when().get().then().extract().response();
 
     }
-
 }
