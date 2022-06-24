@@ -285,7 +285,7 @@
                                                     {
                                                         "equals": [
                                                             "@body('Get_entity')?['status']",
-                                                            "NEW"
+                                                            "TEST"
                                                         ]
                                                     }
                                                 ]
