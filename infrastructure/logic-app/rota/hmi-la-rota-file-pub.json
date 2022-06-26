@@ -208,7 +208,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_variable": [
+                                "Initialize_newFilesToSend_": [
                                     "Succeeded"
                                 ]
                             },
@@ -687,7 +687,27 @@
                             },
                             "type": "Foreach"
                         },
-                        "Initialize_variable": {
+                        "Get_entities_with_status_loading": {
+                            "runAfter": {
+                                "For_each_File": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'LOADING'"
+                                }
+                            }
+                        },
+                        "Initialize_loadingCount": {
                             "runAfter": {
                                 "Initialize_xmlPayload": [
                                     "Succeeded"
@@ -697,9 +717,42 @@
                             "inputs": {
                                 "variables": [
                                     {
-                                        "name": "parseJsonError",
-                                        "type": "boolean",
-                                        "value": false
+                                        "name": "loadingCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_loadingSpareCount": {
+                            "runAfter": {
+                                "Initialize_loadingCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "loadingSpareCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_newFilesToSend_": {
+                            "runAfter": {
+                                "Initialize_loadingSpareCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "newFilesToSend",
+                                        "type": "array"
                                     }
                                 ]
                             }
@@ -715,6 +768,104 @@
                                     }
                                 ]
                             }
+                        },
+                        "Is_loadingCount_below_limit": {
+                            "actions": {
+                                "For_each_file_to_load": {
+                                    "foreach": "@variables('newFilesToSend')",
+                                    "actions": {
+                                        "Parse_new_record_to_load": {
+                                            "runAfter": {},
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@items('For_each_file_to_load')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "PartitionKey": {
+                                                            "type": "string"
+                                                        },
+                                                        "RowKey": {
+                                                            "type": "string"
+                                                        },
+                                                        "Timestamp": {
+                                                            "type": "string"
+                                                        },
+                                                        "odata.etag": {
+                                                            "type": "string"
+                                                        },
+                                                        "status": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Set_newFilesToSend": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Get_entities_new": {
+                                    "runAfter": {
+                                        "Set_loadingSpareCount": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
+                                        "queries": {
+                                            "$filter": "status eq 'NEW'"
+                                        }
+                                    }
+                                },
+                                "Set_loadingSpareCount": {
+                                    "runAfter": {},
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "loadingSpareCount",
+                                        "value": "@sub(5, variables('loadingCount'))"
+                                    }
+                                },
+                                "Set_newFilesToSend": {
+                                    "runAfter": {
+                                        "Get_entities_new": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "newFilesToSend",
+                                        "value": "@take(body('Get_entities_new')?['value'], variables('loadingSpareCount'))"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Set_variable_loadingCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "less": [
+                                            "@variables('loadingCount')",
+                                            5
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
                         },
                         "List_blobs": {
                             "runAfter": {
@@ -735,6 +886,18 @@
                                     "nextPageMarker": "",
                                     "useFlatListing": false
                                 }
+                            }
+                        },
+                        "Set_variable_loadingCount": {
+                            "runAfter": {
+                                "Get_entities_with_status_loading": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "loadingCount",
+                                "value": "@length(body('Get_entities_with_status_loading')?['value'])"
                             }
                         }
                     },
