@@ -834,7 +834,7 @@
                                     "type": "SetVariable",
                                     "inputs": {
                                         "name": "loadingSpareCount",
-                                        "value": "@sub(5, variables('loadingCount'))"
+                                        "value": "@sub(2, variables('loadingCount'))"
                                     }
                                 },
                                 "Set_newFilesToSend": {
@@ -860,7 +860,7 @@
                                     {
                                         "less": [
                                             "@variables('loadingCount')",
-                                            5
+                                            2
                                         ]
                                     }
                                 ]
