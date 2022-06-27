@@ -196,11 +196,11 @@
                         "Recurrence": {
                             "recurrence": {
                                 "frequency": "Minute",
-                                "interval": 10
+                                "interval": 5
                             },
                             "evaluatedRecurrence": {
                                 "frequency": "Minute",
-                                "interval": 10
+                                "interval": 5
                             },
                             "type": "Recurrence"
                         }
