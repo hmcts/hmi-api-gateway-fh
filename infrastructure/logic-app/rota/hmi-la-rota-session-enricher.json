@@ -726,7 +726,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -756,7 +756,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -786,7 +786,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -814,7 +814,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -945,7 +945,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1283,6 +1283,18 @@
                                 "value": "@{json(xml(substring(\n    variables('xmlPayload'), \n    indexOf(variables('xmlPayload'), '<districtJudges>'), \n    sub(\n        add(indexOf(variables('xmlPayload'), '</districtJudges>'), length('</districtJudges>')),\n        indexOf(variables('xmlPayload'), '<districtJudges>')\n    )\n)))}"
                             }
                         },
+                        "Set_variable_jsonJudges_to_empty": {
+                            "runAfter": {
+                                "Set_variable_jsonJudges": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "jsonJudges",
+                                "value": "{}"
+                            }
+                        },
                         "Set_variable_jsonMagistrates": {
                             "runAfter": {
                                 "Set_variable_xmlPayload": [
@@ -1297,8 +1309,9 @@
                         },
                         "Set_variable_jsonSchedules": {
                             "runAfter": {
-                                "Set_variable_jsonJudges": [
-                                    "Succeeded"
+                                "Set_variable_jsonJudges_to_empty": [
+                                    "Succeeded",
+                                    "Skipped"
                                 ]
                             },
                             "type": "SetVariable",
@@ -1332,7 +1345,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1352,7 +1365,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
