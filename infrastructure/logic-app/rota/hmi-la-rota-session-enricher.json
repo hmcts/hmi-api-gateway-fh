@@ -641,7 +641,21 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables')]"
+                "[resourceId('Microsoft.Web/connections', 'azuretables-1')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-2')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-3')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-4')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-5')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-6')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-7')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-8')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-9')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-10')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-11')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-12')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-13')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-14')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-15')]"
             ],
             "properties": {
                 "state": "Enabled",
@@ -712,7 +726,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -742,7 +756,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -772,7 +786,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -800,7 +814,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -1243,7 +1257,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1263,7 +1277,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
