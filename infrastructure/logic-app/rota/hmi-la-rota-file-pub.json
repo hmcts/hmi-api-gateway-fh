@@ -774,6 +774,21 @@
                                 "For_each_file_to_load": {
                                     "foreach": "@variables('newFilesToSend')",
                                     "actions": {
+                                        "HTTP_Session_Enricher": {
+                                            "runAfter": {
+                                                "Parse_new_record_to_load": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "body": {
+                                                    "filename": "@{body('Parse_new_record_to_load')?['RowKey']}"
+                                                },
+                                                "method": "POST",
+                                                "uri": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
+                                            }
+                                        },
                                         "Parse_new_record_to_load": {
                                             "runAfter": {},
                                             "type": "ParseJson",
@@ -834,7 +849,7 @@
                                     "type": "SetVariable",
                                     "inputs": {
                                         "name": "loadingSpareCount",
-                                        "value": "@sub(2, variables('loadingCount'))"
+                                        "value": "@sub(1, variables('loadingCount'))"
                                     }
                                 },
                                 "Set_newFilesToSend": {
@@ -860,7 +875,7 @@
                                     {
                                         "less": [
                                             "@variables('loadingCount')",
-                                            2
+                                            1
                                         ]
                                     }
                                 ]
