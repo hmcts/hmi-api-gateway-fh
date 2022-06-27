@@ -726,7 +726,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -756,7 +756,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -765,8 +765,8 @@
                                 }
                             },
                             "runAfter": {
-                                "Parse_jsonJudges": [
-                                    "Succeeded"
+                                "Insert_or_Merge_Entity": [
+                                    "Skipped"
                                 ]
                             },
                             "type": "Foreach"
@@ -786,7 +786,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -814,7 +814,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -929,6 +929,29 @@
                                 ]
                             }
                         },
+                        "Insert_or_Merge_Entity": {
+                            "runAfter": {
+                                "Parse_jsonJudges_single": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "emailAddress": "@{body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['emailAddress']}",
+                                    "forenames": "@{body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['forenames']}",
+                                    "surname": "@{body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['surname']}",
+                                    "title": "@{body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['title']}"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['@id'])}',RowKey='@{encodeURIComponent(body('Parse_jsonJudges_single')?['districtJudges']?['districtJudge']?['@id'])}')"
+                            }
+                        },
                         "Parse_JSON": {
                             "runAfter": {},
                             "type": "ParseJson",
@@ -947,7 +970,8 @@
                         "Parse_jsonCLP": {
                             "runAfter": {
                                 "For_each_Judge": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Skipped"
                                 ],
                                 "For_each_Magistrate": [
                                     "Succeeded"
@@ -1063,6 +1087,57 @@
                                                         "type": "object"
                                                     },
                                                     "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Parse_jsonJudges_single": {
+                            "runAfter": {
+                                "Parse_jsonJudges": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@variables('jsonJudges')",
+                                "schema": {
+                                    "properties": {
+                                        "districtJudges": {
+                                            "properties": {
+                                                "districtJudge": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@id": {
+                                                                "type": "string"
+                                                            },
+                                                            "emailAddress": {
+                                                                "type": "string"
+                                                            },
+                                                            "forenames": {
+                                                                "type": "string"
+                                                            },
+                                                            "surname": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "@@id",
+                                                            "title",
+                                                            "surname",
+                                                            "forenames",
+                                                            "emailAddress"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -1257,7 +1332,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1277,7 +1352,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "patch",
