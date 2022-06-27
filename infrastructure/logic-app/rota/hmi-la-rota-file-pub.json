@@ -260,42 +260,11 @@
                                 },
                                 "is_file_xml": {
                                     "actions": {
-                                        "Condition": {
-                                            "actions": {
-                                                "HTTP": {
-                                                    "runAfter": {},
-                                                    "type": "Http",
-                                                    "inputs": {
-                                                        "body": {
-                                                            "filename": "@{items('For_each_File')?['Name']}"
-                                                        },
-                                                        "method": "POST",
-                                                        "uri": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
-                                                    }
-                                                }
-                                            },
-                                            "runAfter": {
-                                                "Insert_or_Merge_Entity_new": [
-                                                    "Succeeded",
-                                                    "Skipped"
-                                                ]
-                                            },
-                                            "expression": {
-                                                "and": [
-                                                    {
-                                                        "equals": [
-                                                            "@body('Get_entity')?['status']",
-                                                            "TEST"
-                                                        ]
-                                                    }
-                                                ]
-                                            },
-                                            "type": "If"
-                                        },
                                         "Get_entity": {
                                             "runAfter": {
                                                 "Insert_or_Merge_Entity_error": [
-                                                    "Skipped"
+                                                    "Skipped",
+                                                    "Succeeded"
                                                 ]
                                             },
                                             "type": "ApiConnection",
@@ -311,7 +280,7 @@
                                         },
                                         "Insert_or_Merge_Entity_error": {
                                             "runAfter": {
-                                                "Parse_JSON": [
+                                                "Parse_JSON_object": [
                                                     "Failed"
                                                 ]
                                             },
@@ -569,6 +538,57 @@
                                                                             },
                                                                             "type": "array"
                                                                         }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "Parse_JSON_object": {
+                                            "runAfter": {
+                                                "Parse_JSON": [
+                                                    "Failed"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@json(xml(variables('xmlPayload')))",
+                                                "schema": {
+                                                    "properties": {
+                                                        "districtJudges": {
+                                                            "properties": {
+                                                                "districtJudge": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "emailAddress": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "forenames": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "surname": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "title": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "@@id",
+                                                                            "title",
+                                                                            "surname",
+                                                                            "forenames",
+                                                                            "emailAddress"
+                                                                        ],
+                                                                        "type": "object"
                                                                     },
                                                                     "type": "object"
                                                                 }
