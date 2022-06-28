@@ -1345,7 +1345,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')-1']['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
                                     }
                                 },
                                 "method": "patch",
