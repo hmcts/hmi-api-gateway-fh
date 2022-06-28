@@ -48,7 +48,7 @@
                 <value>@(context.Request.Headers.GetValueOrDefault("Source-System","unknown"))</value>
             </set-header>
             <rewrite-uri template="/" copy-unmatched-params="true" />
-            <set-backend-service base-url="https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication" />
+            <set-backend-service base-url="https://#{pihHost}#/pip/data-management/publication" />
         </when>
         <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
         <mock-response status-code="201" content-type="application/json" />
