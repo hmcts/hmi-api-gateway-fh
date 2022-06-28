@@ -715,7 +715,7 @@
                                         "body": {
                                             "business": "@{items('For_each_CLP')?['business']}",
                                             "hmiProcessed": false,
-                                            "johs": "",
+                                            "joh": "",
                                             "locationId": "@{items('For_each_CLP')?['locationId']}",
                                             "panel": "@{items('For_each_CLP')?['panel']}",
                                             "session": "@{items('For_each_CLP')?['session']}",
