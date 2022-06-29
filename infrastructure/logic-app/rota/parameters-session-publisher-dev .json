@@ -5,7 +5,7 @@
         "environmentName":{
             "value": "development"
         },
-        "workflows_hmirotasessionenrich_name": {
+        "workflows_hmirotasessionpublisher_name": {
             "value": "hmi-la-dturota-session-publisher-dev"
         },
         "appId":{
