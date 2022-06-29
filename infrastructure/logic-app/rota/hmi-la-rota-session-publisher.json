@@ -582,7 +582,7 @@
         {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
-            "name": "[parameters('workflows_hmirotasessionenrich_name')]",
+            "name": "[parameters('workflows_hmirotasessionpublisher_name')]",
             "location": "uksouth",
             "tags": {
                 "environment": "[parameters('environmentName')]",
