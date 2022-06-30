@@ -6,9 +6,6 @@
             "defaultValue": "hmidturotafilepubdevla",
             "type": "String"
         },
-        "keyvaultName": {
-            "type": "string"
-        },
         "storageAccountName": {
             "type": "string"
         },
@@ -61,33 +58,6 @@
                 "parameterValues": {
                     "accountName": "[parameters('storageAccountName')]",
                     "accessKey": "[parameters('storageAccessKey')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Web/connections",
-            "apiVersion": "2016-06-01",
-            "name": "keyvault",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
-            "properties": {
-                "displayName": "HMI Key Vault",
-                "customParameterValues": {
-                },
-                "api": {
-                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
-                },
-                "parameterValues": {
-                    "token:clientId": "[parameters('appId')]",
-                    "token:clientSecret": "[parameters('appSecret')]",
-                    "token:TenantId": "[parameters('tenantId')]",
-                    "token:grantType": "client_credentials",
-                    "vaultName": "[parameters('keyvaultName')]"
                 }
             }
         },
@@ -914,11 +884,6 @@
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
                                 "connectionName": "azuretables",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
-                            },
-                            "keyvault": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
-                                "connectionName": "keyvault",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
                             }
                         }
                     }
