@@ -12,43 +12,7 @@
         "storageAccessKey": {
             "type": "securestring"
         },
-        "storageACPathFiles": {
-            "type": "string"
-        },
-        "storageACGetPath": {
-            "type": "string"
-        },
-        "storageACExistingMagistrtePath": {
-            "type": "string"
-        },
-        "storageACExistingSchedulesPath": {
-            "type": "string"
-        },
-        "storageACExistingCLPPath": {
-            "type": "string"
-        },
-        "storageACGetPathSuffix": {
-            "type": "string"
-        },
         "environmentName": {
-            "type": "string"
-        },
-        "hmiDestination": {
-            "type": "string"
-        },
-         "appId": {
-            "type": "securestring"
-        }, 
-        "appSecret": {
-            "type": "securestring"
-        }, 
-        "tenantId": {
-            "type": "securestring"
-        }, 
-        "keyvaultName": {
-            "type": "string"
-        },
-        "hmiRotaFileUrl": {
             "type": "string"
         },
         "serviceNowHostUrl": {
