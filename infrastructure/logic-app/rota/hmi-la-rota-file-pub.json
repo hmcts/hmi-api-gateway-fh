@@ -6,6 +6,9 @@
             "defaultValue": "hmidturotafilepubdevla",
             "type": "String"
         },
+        "keyvaultName": {
+            "type": "string"
+        },
         "storageAccountName": {
             "type": "string"
         },
