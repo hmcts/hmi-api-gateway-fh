@@ -663,6 +663,25 @@
                         }
                     },
                     "actions": {
+                        "For_each_failed_CLP": {
+                            "foreach": "@body('Get_entities_CLP_failed')?['value']",
+                            "actions": {
+                                "Append_to_string_variable": {
+                                    "runAfter": {},
+                                    "type": "AppendToStringVariable",
+                                    "inputs": {
+                                        "name": "scheduleErrorBody",
+                                        "value": "@{items('For_each_failed_CLP')?['PartitionKey']} - @{items('For_each_failed_CLP')?['errorMsg']}"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_CLP_failed": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
                         "For_each_session": {
                             "foreach": "@body('Get_entities_with_status_ready')?['value']",
                             "actions": {
@@ -997,6 +1016,26 @@
                             },
                             "type": "Foreach"
                         },
+                        "Get_entities_CLP_failed": {
+                            "runAfter": {
+                                "For_each_session": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'FAILED'"
+                                }
+                            }
+                        },
                         "Get_entities_with_status_ready": {
                             "runAfter": {
                                 "Get_secret_hmi-secret": [
@@ -1050,6 +1089,86 @@
                                 "method": "get",
                                 "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
                             }
+                        },
+                        "Has_HMI_failed": {
+                            "actions": {
+                                "Get_secret_Snow_client": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                    }
+                                },
+                                "Get_secret_Snow_secret": {
+                                    "runAfter": {
+                                        "Get_secret_Snow_client": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                    }
+                                },
+                                "HTTP_ServiceNow": {
+                                    "runAfter": {
+                                        "Get_secret_Snow_secret": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "password": "@body('Get_secret_Snow_secret')?['value']",
+                                            "type": "Basic",
+                                            "username": "@body('Get_secret_Snow_client')?['value']"
+                                        },
+                                        "body": {
+                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                            "category": "Data Issue",
+                                            "contact_type": "Alert",
+                                            "description": "Error details: @{variables('scheduleErrorBody')}",
+                                            "impact": "2",
+                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                            "short_description": "HMI Rota File Error occured",
+                                            "subcategory": "Data or File Error - other",
+                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                            "urgency": "3"
+                                        },
+                                        "method": "POST",
+                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "For_each_failed_CLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "greater": [
+                                            "@length(variables('scheduleErrorBody'))",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
                         },
                         "Initialize_johDataArray": {
                             "runAfter": {
