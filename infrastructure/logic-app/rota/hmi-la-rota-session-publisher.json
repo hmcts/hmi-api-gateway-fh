@@ -789,6 +789,54 @@
                                         "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
                                     }
                                 },
+                                "HTTP_HMI": {
+                                    "runAfter": {
+                                        "Compose_session_payload": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                                            "clientId": "@body('Get_secret_hmi-client')?['value']",
+                                            "secret": "@body('Get_secret_hmi-secret')?['value']",
+                                            "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                                            "type": "ActiveDirectoryOAuth"
+                                        },
+                                        "body": "@outputs('Compose_session_payload')",
+                                        "headers": {
+                                            "Accept": "application/json",
+                                            "Content-Type": "application/json",
+                                            "Destination-System": "MOCK",
+                                            "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                                            "Source-System": "CRIME"
+                                        },
+                                        "method": "POST",
+                                        "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                    }
+                                },
+                                "Insert_or_Merge_Entity_with_errorMsg": {
+                                    "runAfter": {
+                                        "HTTP_HMI": [
+                                            "Failed"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "errorMsg": "@{body('HTTP_HMI')}",
+                                            "status": "FAILED"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                                    }
+                                },
                                 "Is_morning_session": {
                                     "actions": {
                                         "Set_variable_sessionDurationAM": {
@@ -879,8 +927,8 @@
                                 },
                                 "Update_session_status_complete": {
                                     "runAfter": {
-                                        "Compose_session_payload": [
-                                            "Succeeded"
+                                        "Insert_or_Merge_Entity_with_errorMsg": [
+                                            "Skipped"
                                         ]
                                     },
                                     "type": "ApiConnection",
@@ -923,7 +971,7 @@
                         },
                         "Get_entities_with_status_ready": {
                             "runAfter": {
-                                "Initialize_jsonJohList": [
+                                "Get_secret_hmi-secret": [
                                     "Succeeded"
                                 ]
                             },
@@ -939,6 +987,40 @@
                                 "queries": {
                                     "$filter": "status eq 'READY'"
                                 }
+                            }
+                        },
+                        "Get_secret_hmi-client": {
+                            "runAfter": {
+                                "Initialize_jsonJohList": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
+                            }
+                        },
+                        "Get_secret_hmi-secret": {
+                            "runAfter": {
+                                "Get_secret_hmi-client": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
                             }
                         },
                         "Initialize_johDataArray": {
