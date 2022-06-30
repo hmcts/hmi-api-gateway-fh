@@ -858,7 +858,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
