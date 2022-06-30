@@ -1,0 +1,77 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName":{
+            "value": "testing"
+        },
+        "workflows_hmirotafilepub_name": {
+            "value": "hmi-la-dturota-file-pub-test"
+        },
+        "storageAccountName":{
+            "value": "hmidtutest"
+        },
+        "storageACPathFiles":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files"
+        },
+        "storageACGetPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/GetFileContentByPath"
+        },
+        "storageACGetPathSuffix":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+        },
+        "storageACExistingCLPPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
+        },
+        "storageACExistingMagistrtePath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
+        },
+        "storageACExistingSchedulesPath":{
+            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
+        },
+        "storageAccessKey":{
+            "reference": {
+                "keyVault": {
+                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedinfra-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
+                },
+                "secretName": "dtu-storage-account-key"
+             }
+        },
+        "appId":{
+            "value": "#{keyVaultUserId}#"
+        },
+        "appSecret":{
+            "value": "#{keyVaultUserSecret}#"
+        },
+        "tenantId":{
+            "value": "#{azureTenant}#"
+        },
+        "keyvaultName":{
+            "value": "hmi-shared-kv-test"
+        },
+        "hmiSchedulesUrl":{
+            "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
+        },
+        "hmiScopeUrl":{
+            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
+        },
+        "hmiDestination":{
+            "value": "SNL"
+        },
+        "serviceNowHostUrl": {
+            "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+        },
+        "serviceNowAssignemntGroupId": {
+            "value": "56b756774fbd368057db0b318110c7bd"
+        },
+        "serviceNowUserRoleTypeId": {
+            "value": "c319bc4bdb41834074abffa9bf96199c"
+        },
+        "serviceNowServiceOfferingId": {
+            "value": "138e0c541bc5bc507bdaddf0b24bcb2a"
+        },
+        "serviceNowCallerId": {
+            "value": "1475a0491b743414f0dc85e4464bcb7a"
+        }
+    }
+}
