@@ -36,7 +36,6 @@ jobs:
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         echo "Creating DTU Logic Application - ROTA"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-filepub-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-session-enricher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-session-enricher-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-session-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-session-publisher-$(environment).json"
