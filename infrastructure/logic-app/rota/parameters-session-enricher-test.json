@@ -11,24 +11,6 @@
         "storageAccountName":{
             "value": "hmidtutest"
         },
-        "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files"
-        },
-        "storageACGetPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/GetFileContentByPath"
-        },
-        "storageACGetPathSuffix":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-        },
-        "storageACExistingCLPPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
-        },
-        "storageACExistingMagistrtePath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
-        },
-        "storageACExistingSchedulesPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
-        },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
@@ -36,27 +18,6 @@
                 },
                 "secretName": "dtu-storage-account-key"
              }
-        },
-        "appId":{
-            "value": "#{keyVaultUserId}#"
-        },
-        "appSecret":{
-            "value": "#{keyVaultUserSecret}#"
-        },
-        "tenantId":{
-            "value": "#{azureTenant}#"
-        },
-        "keyvaultName":{
-            "value": "hmi-shared-kv-test"
-        },
-        "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
-        },
-        "hmiDestination":{
-            "value": "SNL"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
