@@ -8,6 +8,9 @@
         "workflows_hmirotafilepub_name": {
             "value": "hmi-la-dturota-file-pub-test"
         },
+        "rotaSessionEnricherUrl":{
+            "value": "https://prod-11.uksouth.logic.azure.com:443/workflows/d257a445d55e42f5a4072cce2e931216/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ev5HE-lVx5QDeg2QMRIXpuHQm5PIwDqHetU-Pjj0EkY"
+        },
         "storageAccountName":{
             "value": "hmidtutest"
         },
