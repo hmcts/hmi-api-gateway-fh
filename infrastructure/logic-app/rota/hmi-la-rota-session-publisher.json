@@ -30,7 +30,7 @@
         "keyvaultName": {
             "type": "string"
         },
-        "hmiRotaFileUrl": {
+        "hmiSchedulesUrl": {
             "type": "string"
         },
         "serviceNowHostUrl": {
