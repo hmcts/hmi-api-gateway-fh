@@ -855,12 +855,12 @@
                                         "headers": {
                                             "Accept": "application/json",
                                             "Content-Type": "application/json",
-                                            "Destination-System": "MOCK",
+                                            "Destination-System": "[parameters('hmiDestination')]",
                                             "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
                                             "Source-System": "CRIME"
                                         },
                                         "method": "POST",
-                                        "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                                        "uri": "[parameters('hmiSchedulesUrl')]"
                                     }
                                 },
                                 "Insert_or_Merge_Entity_with_errorMsg": {
