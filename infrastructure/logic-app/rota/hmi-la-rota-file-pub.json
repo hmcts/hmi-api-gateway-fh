@@ -6,6 +6,9 @@
             "defaultValue": "hmidturotafilepubdevla",
             "type": "String"
         },
+        "rotaSessionEnricherUrl": {
+            "type": "string"
+        },
         "storageAccountName": {
             "type": "string"
         },
@@ -739,7 +742,7 @@
                                                     "filename": "@{body('Parse_new_record_to_load')?['RowKey']}"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
+                                                "uri": "[parameters('rotaSessionEnricherUrl')]"
                                             }
                                         },
                                         "Parse_new_record_to_load": {
