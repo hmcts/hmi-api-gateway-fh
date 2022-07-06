@@ -660,7 +660,7 @@
                                     "type": "AppendToStringVariable",
                                     "inputs": {
                                         "name": "snowErrorMessage",
-                                        "value": "@items('For_each_error_file')?['PartitionKey']"
+                                        "value": "@{items('For_each_error_file')?['PartitionKey']},"
                                     }
                                 },
                                 "Copy_error_file_to_error_folder": {
@@ -703,6 +703,70 @@
                                         },
                                         "method": "delete",
                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/input/',items('For_each_error_file')?['PartitionKey']))}"
+                                    }
+                                },
+                                "Get_secret_SNow_client": {
+                                    "runAfter": {
+                                        "Append_to_snowErrorMessage": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                    }
+                                },
+                                "Get_secret_SNow_secret": {
+                                    "runAfter": {
+                                        "Get_secret_SNow_client": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                    }
+                                },
+                                "HTTP_ServiceNow": {
+                                    "runAfter": {
+                                        "Get_secret_SNow_secret": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "password": "@body('Get_secret_SNow_secret')?['value']",
+                                            "type": "Basic",
+                                            "username": "@body('Get_secret_SNow_client')?['value']"
+                                        },
+                                        "body": {
+                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                            "caller_id": "[parameters('serviceNowCallerId')]",
+                                            "category": "Data Issue",
+                                            "contact_type": "Alert",
+                                            "description": "Invalid Rota files: @{variables('snowErrorMessage')}",
+                                            "impact": "2",
+                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                                            "short_description": "HMI Rota File Error occured",
+                                            "subcategory": "Data or File Error - other",
+                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                                            "urgency": "3"
+                                        },
+                                        "method": "POST",
+                                        "uri": "[parameters('serviceNowHostUrl')]"
                                     }
                                 },
                                 "Insert_or_Merge_Entity": {
