@@ -692,7 +692,7 @@
                             "actions": {
                                 "Append_to_snowErrorMessage": {
                                     "runAfter": {
-                                        "Insert_or_Merge_Entity": [
+                                        "Insert_or_Merge_Entity_with_status_invalid": [
                                             "Succeeded"
                                         ]
                                     },
@@ -808,7 +808,7 @@
                                         "uri": "[parameters('serviceNowHostUrl')]"
                                     }
                                 },
-                                "Insert_or_Merge_Entity": {
+                                "Insert_or_Merge_Entity_with_status_invalid": {
                                     "runAfter": {
                                         "Delete_error_file": [
                                             "Succeeded"
