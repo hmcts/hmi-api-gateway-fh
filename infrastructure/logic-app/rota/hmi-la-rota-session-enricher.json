@@ -646,9 +646,35 @@
                         }
                     },
                     "actions": {
-                        "Delete_file": {
+                        "Copy_file_to_output_folder": {
                             "runAfter": {
                                 "Update_record_status_to_ready": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                "queries": {
+                                    "destination": "@{concat('rota/output/', body('Parse_JSON')?['filename'])}",
+                                    "overwrite": true,
+                                    "queryParametersSingleEncoded": true,
+                                    "source": "@{concat('rota/input/', body('Parse_JSON')?['filename'])}"
+                                }
+                            }
+                        },
+                        "Delete_file": {
+                            "runAfter": {
+                                "Copy_file_to_output_folder": [
                                     "Succeeded"
                                 ]
                             },
