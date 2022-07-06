@@ -1,0 +1,542 @@
+{
+	"definition": {
+		"$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+		"contentVersion": "1.0.0.0",
+		"parameters": {
+			"$connections": {
+				"defaultValue": {},
+				"type": "Object"
+			}
+		},
+		"triggers": {
+			"Recurrence": {
+				"recurrence": {
+					"frequency": "Minute",
+					"interval": 5
+				},
+				"type": "Recurrence"
+			}
+		},
+		"actions": {
+			"Create_read.me": {
+				"runAfter": {},
+				"type": "ApiConnection",
+				"inputs": {
+					"body": "@concat('Sitting Pattern files to be processed')",
+					"host": {
+						"connection": {
+							"name": "@parameters('$connections')['azureblob']['connectionId']"
+						}
+					},
+					"method": "post",
+					"path": "/datasets/default/files",
+					"queries": {
+						"folderPath": "/sitting-pattern/input/",
+						"name": "read.me",
+						"queryParametersSingleEncoded": true
+					}
+				},
+				"runtimeConfiguration": {
+					"contentTransfer": {
+						"transferMode": "Chunked"
+					}
+				}
+			},
+			"For_each": {
+				"foreach": "@body('List_blobs')?['value']",
+				"actions": {
+					"Get_blob_content_using_path": {
+						"runAfter": {},
+						"type": "ApiConnection",
+						"inputs": {
+							"host": {
+								"connection": {
+									"name": "@parameters('$connections')['azureblob']['connectionId']"
+								}
+							},
+							"method": "get",
+							"path": "/datasets/default/GetFileContentByPath",
+							"queries": {
+								"inferContentType": true,
+								"path": "@items('For_each')?['Path']",
+								"queryParametersSingleEncoded": true
+							}
+						}
+					},
+					"is_file_csv": {
+						"actions": {
+							"Blob_Meta": {
+								"runAfter": {
+									"Create_file_in_output_folder": [
+										"Succeeded"
+									]
+								},
+								"type": "ApiConnection",
+								"inputs": {
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "get",
+									"path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Create_file_in_output_folder')?['Path']))}"
+								}
+							},
+							"Compose": {
+								"runAfter": {
+									"Set_FileCSV": [
+										"Succeeded"
+									]
+								},
+								"type": "Compose",
+								"inputs": "@replace(variables('csvFileContent'), '\\r\\n', '|')"
+							},
+							"Create_file_in_output_folder": {
+								"runAfter": {},
+								"type": "ApiConnection",
+								"inputs": {
+									"body": "@body('Get_blob_content_using_path')",
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "post",
+									"path": "/datasets/default/files",
+									"queries": {
+										"folderPath": "/sitting-pattern/output/",
+										"name": "@items('For_each')?['Name']",
+										"queryParametersSingleEncoded": true
+									}
+								},
+								"runtimeConfiguration": {
+									"contentTransfer": {
+										"transferMode": "Chunked"
+									}
+								}
+							},
+							"Delete_SP_file": {
+								"runAfter": {
+									"Recreate_read.me": [
+										"Succeeded"
+									]
+								},
+								"type": "ApiConnection",
+								"inputs": {
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "delete",
+									"path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+								}
+							},
+							"For_each_2": {
+								"foreach": "@split(variables('csvFileContent'), '\n')",
+								"actions": {
+									"Condition": {
+										"actions": {
+											"Append_to_jsonOutputArray": {
+												"runAfter": {
+													"Set_jsonRecord": [
+														"Succeeded"
+													]
+												},
+												"type": "AppendToArrayVariable",
+												"inputs": {
+													"name": "jsonOutputArray",
+													"value": "@variables('jsonRecord')"
+												}
+											},
+											"Set_jsonRecord": {
+												"runAfter": {
+													"Set_spRecord": [
+														"Succeeded"
+													]
+												},
+												"type": "SetVariable",
+												"inputs": {
+													"name": "jsonRecord",
+													"value": "@json(variables('spRecord'))"
+												}
+											},
+											"Set_spRecord": {
+												"runAfter": {
+													"Set_variable": [
+														"Succeeded"
+													]
+												},
+												"type": "SetVariable",
+												"inputs": {
+													"name": "spRecord",
+													"value": "{\n  \"id\": \"@{if(greater(length(variables('spRecordArr')),0),variables('spRecordArr')[0],'')}\",\n  \"oucode\": \"@{if(greater(length(variables('spRecordArr')),1),variables('spRecordArr')[1],'')}\",\n  \"courtroom_id\": \"@{if(greater(length(variables('spRecordArr')),2),variables('spRecordArr')[2],'')}\",\n  \"max_slot\": \"@{if(greater(length(variables('spRecordArr')),3),variables('spRecordArr')[3],'')}\",\n  \"max_duration_mins\": \"@{if(greater(length(variables('spRecordArr')),4),variables('spRecordArr')[4],'')}\",\n  \"court_session\": \"@{if(greater(length(variables('spRecordArr')),5),variables('spRecordArr')[5],'')}\",\n  \"rota_business_type_code\": \"@{if(greater(length(variables('spRecordArr')),6),variables('spRecordArr')[6],'')}\",\n  \"valid_from\": \"@{if(greater(length(variables('spRecordArr')),7),variables('spRecordArr')[7],'')}\",\n  \"valid_to\": \"@{if(greater(length(variables('spRecordArr')),8),variables('spRecordArr')[8],'')}\"\n}"
+												}
+											},
+											"Set_variable": {
+												"runAfter": {},
+												"type": "SetVariable",
+												"inputs": {
+													"name": "spRecordArr",
+													"value": "@split(items('For_each_2'), ',')"
+												}
+											}
+										},
+										"runAfter": {
+											"Increment_variable": [
+												"Succeeded"
+											]
+										},
+										"expression": {
+											"and": [
+												{
+													"greater": [
+														"@variables('recordCount')",
+														1
+													]
+												}
+											]
+										},
+										"type": "If"
+									},
+									"Increment_variable": {
+										"runAfter": {},
+										"type": "IncrementVariable",
+										"inputs": {
+											"name": "recordCount",
+											"value": 1
+										}
+									}
+								},
+								"runAfter": {
+									"Compose": [
+										"Succeeded"
+									]
+								},
+								"type": "Foreach"
+							},
+							"Get_csv": {
+								"runAfter": {
+									"Blob_Meta": [
+										"Succeeded"
+									]
+								},
+								"type": "ApiConnection",
+								"inputs": {
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "get",
+									"path": "/datasets/default/GetFileContentByPath",
+									"queries": {
+										"inferContentType": true,
+										"path": "@items('For_each')?['Path']",
+										"queryParametersSingleEncoded": true
+									}
+								}
+							},
+							"Recreate_read.me": {
+								"runAfter": {
+									"Update_Repository": [
+										"Succeeded"
+									]
+								},
+								"type": "ApiConnection",
+								"inputs": {
+									"body": "@concat('Sitting Pattern SCV files to be processed')",
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "post",
+									"path": "/datasets/default/files",
+									"queries": {
+										"folderPath": "/sitting-pattern/input/",
+										"name": "read.me",
+										"queryParametersSingleEncoded": true
+									}
+								},
+								"runtimeConfiguration": {
+									"contentTransfer": {
+										"transferMode": "Chunked"
+									}
+								}
+							},
+							"Set_FileCSV": {
+								"runAfter": {
+									"Get_csv": [
+										"Succeeded"
+									]
+								},
+								"type": "SetVariable",
+								"inputs": {
+									"name": "csvFileContent",
+									"value": "@{body('Get_csv')}"
+								}
+							},
+							"Update_Repository": {
+								"runAfter": {
+									"For_each_2": [
+										"Succeeded"
+									]
+								},
+								"type": "ApiConnection",
+								"inputs": {
+									"body": "@variables('jsonOutputArray')",
+									"host": {
+										"connection": {
+											"name": "@parameters('$connections')['azureblob']['connectionId']"
+										}
+									},
+									"method": "post",
+									"path": "/datasets/default/files",
+									"queries": {
+										"folderPath": "/sitting-pattern/data/",
+										"name": "repository.json",
+										"queryParametersSingleEncoded": true
+									}
+								},
+								"runtimeConfiguration": {
+									"contentTransfer": {
+										"transferMode": "Chunked"
+									}
+								}
+							}
+						},
+						"runAfter": {
+							"Get_blob_content_using_path": [
+								"Succeeded"
+							]
+						},
+						"else": {
+							"actions": {
+								"Create_File_in_Error_Folder": {
+									"runAfter": {},
+									"type": "ApiConnection",
+									"inputs": {
+										"body": "@body('Get_blob_content_using_path')",
+										"host": {
+											"connection": {
+												"name": "@parameters('$connections')['azureblob']['connectionId']"
+											}
+										},
+										"method": "post",
+										"path": "/datasets/default/files",
+										"queries": {
+											"folderPath": "/sitting-pattern/error/",
+											"name": "@items('For_each')?['Name']",
+											"queryParametersSingleEncoded": true
+										}
+									},
+									"runtimeConfiguration": {
+										"contentTransfer": {
+											"transferMode": "Chunked"
+										}
+									}
+								},
+								"Delete_blob": {
+									"runAfter": {
+										"Create_File_in_Error_Folder": [
+											"Succeeded"
+										]
+									},
+									"type": "ApiConnection",
+									"inputs": {
+										"host": {
+											"connection": {
+												"name": "@parameters('$connections')['azureblob']['connectionId']"
+											}
+										},
+										"method": "delete",
+										"path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+									}
+								},
+								"Update_read.me": {
+									"runAfter": {
+										"Delete_blob": [
+											"Succeeded"
+										]
+									},
+									"type": "ApiConnection",
+									"inputs": {
+										"body": "@concat('Sitting Pattern CSV files to be processed')",
+										"host": {
+											"connection": {
+												"name": "@parameters('$connections')['azureblob']['connectionId']"
+											}
+										},
+										"method": "post",
+										"path": "/datasets/default/files",
+										"queries": {
+											"folderPath": "/sitting-pattern/input/",
+											"name": "read.me",
+											"queryParametersSingleEncoded": true
+										}
+									},
+									"runtimeConfiguration": {
+										"contentTransfer": {
+											"transferMode": "Chunked"
+										}
+									}
+								}
+							}
+						},
+						"expression": {
+							"and": [
+								{
+									"endsWith": [
+										"@items('For_each')?['Path']",
+										".csv"
+									]
+								}
+							]
+						},
+						"type": "If"
+					}
+				},
+				"runAfter": {
+					"List_blobs": [
+						"Succeeded"
+					]
+				},
+				"type": "Foreach"
+			},
+			"Initialize_csvFileContent": {
+				"runAfter": {
+					"Create_read.me": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "csvFileContent",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"Initialize_jsonOutputArray": {
+				"runAfter": {
+					"Initialize_jsonRecord": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "jsonOutputArray",
+							"type": "array"
+						}
+					]
+				}
+			},
+			"Initialize_jsonRecord": {
+				"runAfter": {
+					"Initialize_spRecordArr": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "jsonRecord",
+							"type": "object"
+						}
+					]
+				}
+			},
+			"Initialize_spRecord": {
+				"runAfter": {
+					"Initialize_csvFileContent": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "spRecord",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"Initialize_spRecordArr": {
+				"runAfter": {
+					"Initialize_spRecord": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "spRecordArr",
+							"type": "array"
+						}
+					]
+				}
+			},
+			"Initialize_variable": {
+				"runAfter": {
+					"Initialize_jsonOutputArray": [
+						"Succeeded"
+					]
+				},
+				"type": "InitializeVariable",
+				"inputs": {
+					"variables": [
+						{
+							"name": "recordCount",
+							"type": "integer",
+							"value": 0
+						}
+					]
+				}
+			},
+			"List_blobs": {
+				"runAfter": {
+					"Initialize_variable": [
+						"Succeeded"
+					]
+				},
+				"metadata": {
+					"JTJmc2l0dGluZy1wYXR0ZXJuJTJmaW5wdXQlMmY=": "/sitting-pattern/input/"
+				},
+				"type": "ApiConnection",
+				"inputs": {
+					"host": {
+						"connection": {
+							"name": "@parameters('$connections')['azureblob']['connectionId']"
+						}
+					},
+					"method": "get",
+					"path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmc2l0dGluZy1wYXR0ZXJuJTJmaW5wdXQlMmY='))}",
+					"queries": {
+						"nextPageMarker": "",
+						"useFlatListing": false
+					}
+				}
+			}
+		},
+		"outputs": {}
+	},
+	"parameters": {
+		"$connections": {
+			"value": {
+				"azureblob": {
+					"connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+					"connectionName": "azureblob",
+					"id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+				}
+			}
+		}
+	}
+}
