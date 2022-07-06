@@ -35,10 +35,10 @@ jobs:
       inlineScript: |
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        az logic workflow create --name "hmi-la-dturota-$(enviornment)" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
+        az logic workflow create --name "hmi-la-dturota-$(enviornment)-test" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
         echo "Creating DTU Logic Application - Sitting Patterns"
-        az logic workflow create --name "hmi-la-sittingpattern-publisher-$(enviornment)" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher-la.json"
-        az logic workflow create --name "hmi-la-sittingpattern-retriever-$(enviornment)" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever-la.json"
+        az logic workflow create --name "hmi-la-sittingpattern-publisher-$(enviornment)-test" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher-la.json"
+        az logic workflow create --name "hmi-la-sittingpattern-retriever-$(enviornment)-test" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever-la.json"
         echo "Creating DTU Logic Applications is complete"
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
