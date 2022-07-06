@@ -22,6 +22,18 @@
                 "secretName": "dtu-storage-account-key"
              }
         },
+        "appId":{
+            "value": "#{keyVaultUserId}#"
+        },
+        "appSecret":{
+            "value": "#{keyVaultUserSecret}#"
+        },
+        "tenantId":{
+            "value": "#{azureTenant}#"
+        },
+        "keyvaultName":{
+            "value": "hmi-shared-kv-prod"
+        },
         "serviceNowHostUrl": {
             "value": "https://mojcppprod.service-now.com/api/now/table/incident?sysparm_fields=number"
         },
