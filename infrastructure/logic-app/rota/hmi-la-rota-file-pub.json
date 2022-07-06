@@ -144,7 +144,7 @@
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_newFilesToSend_": [
+                                "Initialize_snowErrorMessage": [
                                     "Succeeded"
                                 ]
                             },
@@ -641,7 +641,117 @@
                                     "Succeeded"
                                 ]
                             },
+                            "type": "Foreach",
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "repetitions": 1
+                                }
+                            }
+                        },
+                        "For_each_error_file": {
+                            "foreach": "@body('Get_entities_with_status_error')?['value']",
+                            "actions": {
+                                "Append_to_snowErrorMessage": {
+                                    "runAfter": {
+                                        "Insert_or_Merge_Entity": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToStringVariable",
+                                    "inputs": {
+                                        "name": "snowErrorMessage",
+                                        "value": "@items('For_each_error_file')?['PartitionKey']"
+                                    }
+                                },
+                                "Copy_error_file_to_error_folder": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                        "queries": {
+                                            "destination": "/rota/input@{items('For_each_error_file')?['PartitionKey']}",
+                                            "overwrite": true,
+                                            "queryParametersSingleEncoded": true,
+                                            "source": "/rota/input/@{items('For_each_error_file')?['PartitionKey']}"
+                                        }
+                                    }
+                                },
+                                "Delete_error_file": {
+                                    "runAfter": {
+                                        "Copy_error_file_to_error_folder": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/input/',items('For_each_error_file')?['PartitionKey']))}"
+                                    }
+                                },
+                                "Insert_or_Merge_Entity": {
+                                    "runAfter": {
+                                        "Delete_error_file": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "status": "INVALID"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_error_file')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_error_file')?['RowKey'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_with_status_error": [
+                                    "Succeeded"
+                                ]
+                            },
                             "type": "Foreach"
+                        },
+                        "Get_entities_with_status_error": {
+                            "runAfter": {
+                                "Is_loadingCount_below_limit": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'ERROR'"
+                                }
+                            }
                         },
                         "Get_entities_with_status_loading": {
                             "runAfter": {
@@ -709,6 +819,22 @@
                                     {
                                         "name": "newFilesToSend",
                                         "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_snowErrorMessage": {
+                            "runAfter": {
+                                "Initialize_newFilesToSend_": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "snowErrorMessage",
+                                        "type": "string"
                                     }
                                 ]
                             }
