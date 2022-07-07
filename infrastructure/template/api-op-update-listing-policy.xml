@@ -147,7 +147,7 @@
                      </set-header>
                      <set-body>@{
                          return new JObject(
-                         new JProperty("message", "Unsupported Destination")
+                         new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
                          ).ToString();
                          }</set-body>
                  </return-response>
