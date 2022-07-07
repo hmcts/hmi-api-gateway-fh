@@ -24,7 +24,7 @@
 							return secret["value"].ToString();
 						}" />
 						<send-request ignore-error="true" timeout="20" response-variable-name="cftBearerToken" mode="new">
-							<set-url>https://idam-web-public.demo.platform.hmcts.net/o/token</set-url>
+							<set-url>#{cftAuthUrl}#</set-url>
 							<set-method>POST</set-method>
 							<set-header name="Content-Type" exists-action="override">
 								<value>application/x-www-form-urlencoded</value>
