@@ -33,6 +33,8 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
+        echo "Install az logic CLI extension"
+        az extension add --name logic
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         az logic workflow create --name "hmi-la-dturota-$(enviornment)-test" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
