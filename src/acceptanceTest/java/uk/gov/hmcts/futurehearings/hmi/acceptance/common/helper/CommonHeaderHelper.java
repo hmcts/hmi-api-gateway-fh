@@ -76,7 +76,7 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithDestinationSystemValue(final String destinationSystem, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues( final String sourceSystem, final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,

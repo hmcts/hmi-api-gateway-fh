@@ -12,16 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(POSTResourcesLinkedHearingGroup.class)
+@SelectClasses(POSTResourcesLinkedHearingGroupTest.class)
 @IncludeTags("POST")
 @SuppressWarnings("java:S2187")
-public class POSTResourcesLinkedHearingGroup extends ResourceValidationTest {
+public class POSTResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
     @Value("${resourcesLinkedHearingGroupRootContext}")
     private String resourcesLinkedHearingGroupRootContext;
@@ -35,5 +36,7 @@ public class POSTResourcesLinkedHearingGroup extends ResourceValidationTest {
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        this.unsupportedDestinations = this.getUnsupportedDestinations6NoSNL().clone();
+        this.setHmiUnsupportedDestinationsErrorVerifier(new HMIUnsupportedDestinationsErrorVerifier());
     }
 }

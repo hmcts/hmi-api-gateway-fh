@@ -3,13 +3,15 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithDestinationSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceAndDestinationSystemValues;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeaderWithDuplicateValues;
 
+import org.junit.jupiter.params.provider.MethodSource;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
 import java.util.HashMap;
@@ -45,6 +47,15 @@ public abstract class HMICommonHeaderTest {
     private String inputPayloadFileName;
     private Map<String, String> urlParams;
     private String sourceSystem;
+    private String destinationSystem;
+    private final String[] UnsupportedDestinations8 = {"VH", "SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] UnsupportedDestinations7NoVH = {"SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] UnsupportedDestinations7NoSNL = {"VH", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] UnsupportedDestinations6NoSNL = {"CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] UnsupportedDestinations6NoCFT = {"SNL", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] UnsupportedDestinations5 = {"CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    protected String[] unsupportedDestinations;
+    private String NotApplicableDestination = "NOT Applicable";
 
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
@@ -53,10 +64,13 @@ public abstract class HMICommonHeaderTest {
 
     public HMIErrorVerifier hmiErrorVerifier;
 
+    public HMIUnsupportedDestinationsErrorVerifier hmiUnsupportedDestinationsErrorVerifier;
+
     @BeforeAll
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
         sourceSystem = "CFT";
+        unsupportedDestinations = new String[]{NotApplicableDestination};
     }
 
     @BeforeEach
@@ -72,6 +86,33 @@ public abstract class HMICommonHeaderTest {
     @AfterAll
     public void afterAll(TestInfo info) {
         log.debug("Test execution Class Completed: " + info.getTestClass().get().getName());
+    }
+
+    //For individual API end points, Destination-System Header valid values are different and
+    //unsupported destinations may be all or a subset of the eight of these {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"}
+    //This is to test specified unsupported destinations for the specified API end point URL
+    @ParameterizedTest (name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
+    @MethodSource ("getUnsupportedDestinationsMethodSource")
+    void test_destination_system_unsupported_value(String unsupportedDestinationSystem) throws Exception {
+        if (!unsupportedDestinationSystem.equals(NotApplicableDestination)) {
+            commonDelegate.test_expected_response_for_supplied_header(
+                    getAuthorizationToken(),
+                    getRelativeURL(),
+                    getInputPayloadFileName(),
+                    createHeaderWithSourceAndDestinationSystemValues(sourceSystem, unsupportedDestinationSystem),
+                    null,
+                    getUrlParams(),
+                    getHttpMethod(),
+                    HttpStatus.BAD_REQUEST,
+                    getInputFileDirectory(),
+                    getHmiUnsupportedDestinationsErrorVerifier(),
+                    unsupportedDestinationSystem + " doesn't support this functionality",
+                    null);
+        }
+    }
+
+    private String[] getUnsupportedDestinationsMethodSource() {
+        return getUnsupportedDestinations();
     }
 
     @Test
@@ -134,7 +175,7 @@ public abstract class HMICommonHeaderTest {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
-                createHeaderWithDestinationSystemValue("R&M", sourceSystem),
+                createHeaderWithSourceAndDestinationSystemValues(sourceSystem, "R&M"),
                 null,
                 getUrlParams(),
                 getHttpMethod(),
