@@ -79,8 +79,6 @@
 </return-response>
 </otherwise>
                 </choose>
-            </when>
-        </choose>
     </inbound>
     <backend>
         <base />
