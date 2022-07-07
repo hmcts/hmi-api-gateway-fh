@@ -46,10 +46,6 @@
                 <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/resources/video-hearing" />
                 <mock-response status-code="200" content-type="application/json" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-video-hearing/" />
-            </when>
 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
 <return-response>

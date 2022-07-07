@@ -2,14 +2,6 @@
     <inbound>
         <base />
             <choose>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
-                </when>
                 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                     <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
@@ -60,10 +52,6 @@
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/reservations" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
                 </when>
                 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                     <set-backend-service base-url="https://www.hmcts.com/request-hearings/hearings/id" />

@@ -2,14 +2,6 @@
     <inbound>
         <base/>
         <choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <choose>
 					<when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
@@ -60,10 +52,6 @@
                 <!--  Don't expose APIM subscription key to the backend. -->
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
 				<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/locations" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-				<rewrite-uri template="/update-resource/{locationCaseHQId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>

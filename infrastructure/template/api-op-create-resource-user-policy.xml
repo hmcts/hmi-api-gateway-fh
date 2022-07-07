@@ -2,14 +2,6 @@
     <inbound>
         <base />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
@@ -61,15 +53,9 @@
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
                 <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/users" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/create-resource" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/future-hearings/resources/update-resources-user" />
-                <choose>
-                    <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                        <mock-response status-code="201" content-type="application/json" />
+                        <mock-response status-code="200" content-type="application/json" />
                     </when>
 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
@@ -147,8 +133,6 @@
 </return-response>
         </when>
                 </choose>
-            </when>
-        </choose>
     </inbound>
     <backend>
         <base />
