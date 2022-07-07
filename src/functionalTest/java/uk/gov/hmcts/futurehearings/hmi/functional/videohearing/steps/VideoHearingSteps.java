@@ -23,6 +23,19 @@ public class VideoHearingSteps {
                 body, httpMethod, HttpStatus.BAD_REQUEST);
     }
 
+    @Step("User makes a request to Clone Video Hearing API")
+    public void shouldRequestCloneVideoHearing(final String apiURL,
+                                               final Map<String, Object> headersAsMap,
+                                               final String authorizationToken,
+                                               final HttpMethod httpMethod,
+                                               final HttpStatus httpStatus,
+                                               final String body) {
+        callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, httpMethod, httpStatus);
+    }
+
     @Step("User makes a request to Video Hearing API with invalid payload")
     public void shouldAmendVideoHearingWithInvalidPayload(final String apiURL,
                                                             final Map<String, Object> headersAsMap,
@@ -56,7 +69,19 @@ public class VideoHearingSteps {
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
     }
-    
+
+    @Step("User makes a request to Get Video Hearings by Group ID")
+    public void performGetVideoHearingsByGroupIdWithSpecifiedStatus(final String apiURL,
+                                                                    final Map<String, Object> headersAsMap,
+                                                                    final String authorizationToken,
+                                                                    final HttpStatus httpStatus,
+                                                                    final String body) {
+        callRestEndpointWithPayload(apiURL,
+                headersAsMap,
+                authorizationToken,
+                body, HttpMethod.GET, httpStatus);
+    }
+
     @Step("User makes a request to Get Video hearing by ID")
     public void performVideoHearingGetByHearingId(final String apiURL,
                                                        final Map<String, Object> headersAsMap,

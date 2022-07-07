@@ -3,7 +3,6 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
-            <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
             <send-request ignore-error="false" timeout="20" response-variable-name="pipClientResponse" mode="new">
                 <set-url>https://#{keyVaultHost}#/secrets/pip-client-id/?api-version=7.0</set-url>
                 <set-method>GET</set-method>
@@ -49,7 +48,7 @@
                 <value>@(context.Request.Headers.GetValueOrDefault("Source-System","unknown"))</value>
             </set-header>
             <rewrite-uri template="/" copy-unmatched-params="true" />
-            <set-backend-service base-url="https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication" />
+            <set-backend-service base-url="https://#{pihHost}#/pip/data-management/publication" />
         </when>
         <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
         <mock-response status-code="201" content-type="application/json" />

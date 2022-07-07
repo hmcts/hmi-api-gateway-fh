@@ -276,9 +276,9 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "snl-health",
+      "operationId"  : "crime-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-snl-health-policy.xml",
+      "templateFile" : "api-op-crime-health-policy.xml",
       "errorAction"  : "Stop"
     },
     {
@@ -363,6 +363,12 @@
       "operationId"  : "reservations",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-get-reservations-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "groupid-hearing",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-groupid-hearing-policy.xml",
       "errorAction"  : "Stop"
     }
   ]

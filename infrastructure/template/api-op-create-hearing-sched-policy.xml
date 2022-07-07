@@ -68,21 +68,6 @@
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 				<mock-response status-code="201" content-type="application/json" />		
         	</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "SNL doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
 <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 <set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
 <return-response>
