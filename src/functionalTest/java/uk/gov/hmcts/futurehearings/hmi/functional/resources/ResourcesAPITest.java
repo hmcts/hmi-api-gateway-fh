@@ -47,7 +47,7 @@ public class ResourcesAPITest extends FunctionalTest {
     @Steps
     ResourcesSteps resourceSteps;
 
-    @Test
+//    @Test
     public void testRequestUserWithEmptyPayload() {
         log.debug("In the testRequestAndAmendAResourceByUser() method");
         resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
@@ -56,7 +56,7 @@ public class ResourcesAPITest extends FunctionalTest {
                 "{}");
     }
 
-    @Test
+//    @Test
     public void testRequestLocationWithEmptyPayload() {
         resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
                 headersAsMap,
@@ -64,7 +64,7 @@ public class ResourcesAPITest extends FunctionalTest {
                 "{}");
     }
 
-    @Test
+//    @Test
     public void testAmendLocationWithEmptyPayload() {
         int randomId = new Random().nextInt(99999999);
         resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
