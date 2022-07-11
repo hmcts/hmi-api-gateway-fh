@@ -2,10 +2,6 @@
 	<inbound>
 		<base />
 		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/update-hearing/{hearing-id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-            </when>
 		    <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
 				<choose>
 					<when condition="@(context.Variables.GetValueOrDefault("cftAuthToken","") == "")">
@@ -28,7 +24,7 @@
 							return secret["value"].ToString();
 						}" />
 						<send-request ignore-error="true" timeout="20" response-variable-name="cftBearerToken" mode="new">
-							<set-url>https://idam-web-public.demo.platform.hmcts.net/o/token</set-url>
+							<set-url>#{cftAuthUrl}#</set-url>
 							<set-method>POST</set-method>
 							<set-header name="Content-Type" exists-action="override">
 								<value>application/x-www-form-urlencoded</value>
@@ -102,12 +98,6 @@
                 <!--  Don't expose APIM subscription key to the backend. -->
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
 				<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/hearings" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-				<rewrite-uri template="/sandl-in/hearings/{hearing-id}" copy-unmatched-params="true" />
-				<authentication-certificate certificate-id="hmicrimecert" />
-				<set-header name="Authorization" exists-action="delete" />
-				<set-backend-service base-url="https://apigw.sit.cjscp.org.uk/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>
@@ -202,82 +192,20 @@
                         }</set-body>
                 </return-response>
             </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-	<value>application/json</value>
-</set-header>
-<set-body>@{
-	return new JObject(
-	new JProperty("message", "CRIME doesn't support this functionality")
-	).ToString();
-	}
-</set-body>
-</return-response>
-		</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-	<value>application/json</value>
-</set-header>
-<set-body>@{
-	return new JObject(
-	new JProperty("message", "ELINKS doesn't support this functionality")
-	).ToString();
-	}
-</set-body>
-</return-response>
-		</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "RM")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-	<value>application/json</value>
-</set-header>
-<set-body>@{
-	return new JObject(
-	new JProperty("message", "RM doesn't support this functionality")
-	).ToString();
-	}
-</set-body>
-</return-response>
-		</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-	<value>application/json</value>
-</set-header>
-<set-body>@{
-	return new JObject(
-	new JProperty("message", "PIH doesn't support this functionality")
-	).ToString();
-	}
-</set-body>
-</return-response>
-		</when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "HMI-DTU")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-	<value>application/json</value>
-</set-header>
-<set-body>@{
-	return new JObject(
-	new JProperty("message", "HMI-DTU doesn't support this functionality")
-	).ToString();
-	}
-</set-body>
-</return-response>
-		</when>
-        </choose>
+			 <otherwise>
+				 <return-response>
+					 <set-status code="400" />
+					 <set-header name="Content-Type" exists-action="override">
+						 <value>application/json</value>
+					 </set-header>
+					 <set-body>@{
+						 return new JObject(
+						 new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+						 ).ToString();
+						 }</set-body>
+				 </return-response>
+			 </otherwise>
+		 </choose>
     </outbound>
 	<on-error>
 		<base />
