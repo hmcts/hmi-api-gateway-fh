@@ -31,6 +31,9 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-prod"
         },
+        "serviceNowHostUrl": {
+            "value": "https://mojcppprod.service-now.com/api/now/table/incident?sysparm_fields=number"
+        },
         "serviceNowAssignemntGroupId": {
             "value": "56b756774fbd368057db0b318110c7bd"
         },
