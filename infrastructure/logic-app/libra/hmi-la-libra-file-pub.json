@@ -1,0 +1,1080 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmi_la_dtulibra_file_pub_dev_name": {
+            "defaultValue": "hmi-la-dtulibra-file-pub-dev",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
+        },
+        "storageACPathFiles": {
+            "type": "string"
+        },
+        "storageACGetPath": {
+            "type": "string"
+        },
+        "storageACExistingMagistrtePath": {
+            "type": "string"
+        },
+        "storageACExistingSchedulesPath": {
+            "type": "string"
+        },
+        "storageACExistingCLPPath": {
+            "type": "string"
+        },
+        "storageACGetPathSuffix": {
+            "type": "string"
+        },
+        "environmentName": {
+            "type": "string"
+        },
+        "hmiDestination": {
+            "type": "string"
+        },
+         "appId": {
+            "type": "securestring"
+        }, 
+        "appSecret": {
+            "type": "securestring"
+        }, 
+        "tenantId": {
+            "type": "securestring"
+        }, 
+        "keyvaultName": {
+            "type": "string"
+        },
+        "hmiSchedulesUrl": {
+            "type": "string"
+        },
+        "serviceNowHostUrl": {
+            "type": "string"
+        },
+        "hmiScopeUrl": {
+            "type": "string"
+        },
+        "serviceNowAssignemntGroupId": {
+            "type": "string"
+        },
+        "serviceNowUserRoleTypeId": {
+            "type": "string"
+        },
+        "serviceNowServiceOfferingId": {
+            "type": "string"
+        },
+        "serviceNowCallerId": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "name": "azureblob",
+            "properties": {
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                },
+                "displayName": "HMI DTU Rota",
+                "parameterValues": {
+                    "accountName": "[parameters('storageAccountName')]",
+                    "accessKey": "[parameters('storageAccessKey')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "keyvault",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "displayName": "HMI Key Vault",
+                "customParameterValues": {
+                },
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
+                },
+                "parameterValues": {
+                    "token:clientId": "[parameters('appId')]",
+                    "token:clientSecret": "[parameters('appSecret')]",
+                    "token:TenantId": "[parameters('tenantId')]",
+                    "token:grantType": "client_credentials",
+                    "vaultName": "[parameters('keyvaultName')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmi_la_dtulibra_file_pub_dev_name')]",
+            "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
+                "[resourceId('Microsoft.Web/connections', 'keyvault')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 5
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Minute",
+                                "interval": 5
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Create_read.me": {
+                            "runAfter": {
+                                "Initialize_snowErrorMessage": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@concat('Rota files to be placed here')",
+                                "headers": {
+                                    "ReadFileMetadataFromServer": true
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                                "queries": {
+                                    "folderPath": "/libra/input/",
+                                    "name": "read.me",
+                                    "queryParametersSingleEncoded": true
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        },
+                        "For_each_File": {
+                            "foreach": "@body('List_blobs')?['value']",
+                            "actions": {
+                                "Get_blob_content_using_path": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/default/GetFileContentByPath",
+                                        "queries": {
+                                            "inferContentType": true,
+                                            "path": "@items('For_each_File')?['Path']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    }
+                                },
+                                "is_file_json": {
+                                    "actions": {
+                                        "Get_entity": {
+                                            "runAfter": {
+                                                "Insert_or_Merge_Entity_Error": [
+                                                    "Skipped",
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "get",
+                                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                            }
+                                        },
+                                        "Insert_or_Merge_Entity_Error": {
+                                            "runAfter": {
+                                                "Parse_JSON": [
+                                                    "Failed"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": {
+                                                    "status": "ERROR"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "patch",
+                                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                            }
+                                        },
+                                        "Insert_or_Merge_Entity_new": {
+                                            "runAfter": {
+                                                "Get_entity": [
+                                                    "Failed"
+                                                ]
+                                            },
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": {
+                                                    "status": "NEW"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "patch",
+                                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                            }
+                                        },
+                                        "Parse_JSON": {
+                                            "runAfter": {
+                                                "Set_jsonPayload": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@variables('jsonPayload')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "?xml": {
+                                                            "properties": {
+                                                                "@@encoding": {
+                                                                    "type": "string"
+                                                                },
+                                                                "@@standalone": {
+                                                                    "type": "string"
+                                                                },
+                                                                "@@version": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "rotaSchedule": {
+                                                            "properties": {
+                                                                "@@xmlns": {
+                                                                    "type": "string"
+                                                                },
+                                                                "courtListingProfiles": {
+                                                                    "properties": {
+                                                                        "courtListingProfile": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "@@linkedSessionId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "business": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "locationId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "panel": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "session": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "sessionDate": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "updatedDate": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "venueId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "welshSpeaking": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "sessionDate",
+                                                                                    "session",
+                                                                                    "panel",
+                                                                                    "business",
+                                                                                    "venueId",
+                                                                                    "locationId",
+                                                                                    "welshSpeaking",
+                                                                                    "updatedDate"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "locations": {
+                                                                    "properties": {
+                                                                        "location": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "locationId": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "name": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "locationId",
+                                                                                    "name"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "magistrates": {
+                                                                    "properties": {
+                                                                        "magistrate": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "emailAddress": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "forenames": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "surname": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "title": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "title",
+                                                                                    "surname",
+                                                                                    "forenames",
+                                                                                    "emailAddress"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "rotaPeriod": {
+                                                                    "properties": {
+                                                                        "endDate": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "justiceAreaName": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "justiceAreaType": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "startDate": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "schedules": {
+                                                                    "properties": {
+                                                                        "schedule": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "@@id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "courtListingProfile": {
+                                                                                        "properties": {
+                                                                                            "@@idref": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "justice": {
+                                                                                        "properties": {
+                                                                                            "@@idref": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "slot": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "@@id",
+                                                                                    "courtListingProfile",
+                                                                                    "justice",
+                                                                                    "slot"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "venues": {
+                                                                    "properties": {
+                                                                        "venue": {
+                                                                            "items": {
+                                                                                "properties": {
+                                                                                    "name": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "venueId": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "venueId",
+                                                                                    "name"
+                                                                                ],
+                                                                                "type": "object"
+                                                                            },
+                                                                            "type": "array"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        },
+                                        "Set_jsonPayload": {
+                                            "runAfter": {},
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "jsonPayload",
+                                                "value": "@{body('Get_blob_content_using_path')}"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Get_blob_content_using_path": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "else": {
+                                        "actions": {
+                                            "Create_File_in_Error_Folder": {
+                                                "runAfter": {},
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@body('Get_blob_content_using_path')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/libra/error/",
+                                                        "name": "@items('For_each_File')?['Name']",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Delete_blob": {
+                                                "runAfter": {
+                                                    "Create_File_in_Error_Folder": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "delete",
+                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                }
+                                            },
+                                            "Update_read.me": {
+                                                "runAfter": {
+                                                    "Delete_blob": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "body": "@concat('Rota files to be processed')",
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "path": "/datasets/default/files",
+                                                    "queries": {
+                                                        "folderPath": "/libra/input",
+                                                        "name": "read.me",
+                                                        "queryParametersSingleEncoded": true
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "endsWith": [
+                                                    "@items('For_each_File')?['Path']",
+                                                    ".json"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "type": "If"
+                                }
+                            },
+                            "runAfter": {
+                                "List_blobs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach",
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "repetitions": 1
+                                }
+                            }
+                        },
+                        "For_each_error_file": {
+                            "foreach": "@body('Get_entities_with_status_error')?['value']",
+                            "actions": {
+                                "Append_to_snowErrorMessage": {
+                                    "runAfter": {
+                                        "Insert_or_Merge_Entity_with_status_invalid": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToStringVariable",
+                                    "inputs": {
+                                        "name": "snowErrorMessage",
+                                        "value": "@{items('For_each_error_file')?['PartitionKey']},"
+                                    }
+                                },
+                                "Copy_error_file_to_error_folder": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "ReadFileMetadataFromServer": true
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                                        "queries": {
+                                            "destination": "/Libra/error/@{items('For_each_error_file')?['PartitionKey']}",
+                                            "overwrite": true,
+                                            "queryParametersSingleEncoded": true,
+                                            "source": "/Libra/input/@{items('For_each_error_file')?['PartitionKey']}"
+                                        }
+                                    }
+                                },
+                                "Delete_error_file": {
+                                    "runAfter": {
+                                        "Copy_error_file_to_error_folder": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "headers": {
+                                            "SkipDeleteIfFileNotFoundOnServer": false
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/Libra/input/',items('For_each_error_file')?['PartitionKey']))}"
+                                    }
+                                },
+                                "Get_secret_SNow_client": {
+                                    "runAfter": {
+                                        "Append_to_snowErrorMessage": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                                    }
+                                },
+                                "Get_secret_SNow_secret": {
+                                    "runAfter": {
+                                        "Get_secret_SNow_client": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                                    }
+                                },
+                                "HTTP_ServiceNow": {
+                                    "runAfter": {
+                                        "Get_secret_SNow_secret": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "authentication": {
+                                            "password": "@body('Get_secret_SNow_secret')?['value']",
+                                            "type": "Basic",
+                                            "username": "@body('Get_secret_SNow_client')?['value']"
+                                        },
+                                        "body": {
+                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                            "category": "Data Issue",
+                                            "contact_type": "Alert",
+                                            "description": "Invalid Libra files: @{variables('snowErrorMessage')}",
+                                            "impact": "2",
+                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                            "short_description": "HMI Rota File Error occured",
+                                            "subcategory": "Data or File Error - other",
+                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                            "urgency": "3"
+                                        },
+                                        "method": "POST",
+                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                    }
+                                },
+                                "Insert_or_Merge_Entity_with_status_invalid": {
+                                    "runAfter": {
+                                        "Delete_error_file": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "status": "INVALID"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "patch",
+                                        "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_error_file')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_error_file')?['RowKey'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_with_status_error": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_entities_with_status_error": {
+                            "runAfter": {
+                                "Is_loadingCount_below_limit": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'ERROR'"
+                                }
+                            }
+                        },
+                        "Get_entities_with_status_loading": {
+                            "runAfter": {
+                                "For_each_File": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'LOADING'"
+                                }
+                            }
+                        },
+                        "Initialize_jsonPayload": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "jsonPayload",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_loadingCount": {
+                            "runAfter": {
+                                "Initialize_jsonPayload": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "loadingCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_loadingSpareCount": {
+                            "runAfter": {
+                                "Initialize_loadingCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "loadingSpareCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_newFilesToSend_": {
+                            "runAfter": {
+                                "Initialize_loadingSpareCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "newFilesToSend",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_snowErrorMessage": {
+                            "runAfter": {
+                                "Initialize_newFilesToSend_": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "snowErrorMessage",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Is_loadingCount_below_limit": {
+                            "actions": {
+                                "For_each_file_to_load": {
+                                    "foreach": "@variables('newFilesToSend')",
+                                    "actions": {
+                                        "Parse_new_record_to_load": {
+                                            "runAfter": {},
+                                            "type": "ParseJson",
+                                            "inputs": {
+                                                "content": "@items('For_each_file_to_load')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "PartitionKey": {
+                                                            "type": "string"
+                                                        },
+                                                        "RowKey": {
+                                                            "type": "string"
+                                                        },
+                                                        "Timestamp": {
+                                                            "type": "string"
+                                                        },
+                                                        "odata.etag": {
+                                                            "type": "string"
+                                                        },
+                                                        "status": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Set_newFilesToSend": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Get_entities_new": {
+                                    "runAfter": {
+                                        "Set_loadingSpareCount": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities",
+                                        "queries": {
+                                            "$filter": "status eq 'NEW'"
+                                        }
+                                    }
+                                },
+                                "Set_loadingSpareCount": {
+                                    "runAfter": {},
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "loadingSpareCount",
+                                        "value": "@sub(1, variables('loadingCount'))"
+                                    }
+                                },
+                                "Set_newFilesToSend": {
+                                    "runAfter": {
+                                        "Get_entities_new": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "newFilesToSend",
+                                        "value": "@take(body('Get_entities_new')?['value'], variables('loadingSpareCount'))"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Set_variable_loadingCount": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "less": [
+                                            "@variables('loadingCount')",
+                                            1
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        },
+                        "List_blobs": {
+                            "runAfter": {
+                                "Create_read.me": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "metadata": {
+                                "JTJmbGlicmElMmZpbnB1dCUyZg==": "/libra/input/"
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmbGlicmElMmZpbnB1dCUyZg=='))}",
+                                "queries": {
+                                    "nextPageMarker": "",
+                                    "useFlatListing": false
+                                }
+                            }
+                        },
+                        "Set_variable_loadingCount": {
+                            "runAfter": {
+                                "Get_entities_with_status_loading": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "loadingCount",
+                                "value": "@length(body('Get_entities_with_status_loading')?['value'])"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureblob": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionName": "azureblob",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            },
+                            "azuretables": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "keyvault": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
+                                "connectionName": "keyvault",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
