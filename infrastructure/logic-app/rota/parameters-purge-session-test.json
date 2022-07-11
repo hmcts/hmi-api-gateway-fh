@@ -9,7 +9,7 @@
             "value": "hmi-la-dturota-purge-session-test"
         },
         "storageAccountName":{
-            "value": "hmidtustest"
+            "value": "hmidtutest"
         }
     }
 }
