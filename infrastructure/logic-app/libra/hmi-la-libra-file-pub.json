@@ -30,9 +30,6 @@
         "serviceNowHostUrl": {
             "type": "string"
         },
-        "hmiScopeUrl": {
-            "type": "string"
-        },
         "serviceNowAssignemntGroupId": {
             "type": "string"
         },
