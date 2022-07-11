@@ -39,6 +39,8 @@ jobs:
         echo "Creating DTU Logic Application - Sitting Patterns"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-loader-param-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
+        echo "Creating DTU Logic Application - Libra"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-libra-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\parameters-libra-file-pub-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
