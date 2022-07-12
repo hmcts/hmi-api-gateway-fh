@@ -77,7 +77,7 @@
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault(" Destination-System"," ELINKS")">
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
                 <send-request ignore-error="false" timeout="20" response-variable-name="elinksTokenResponse" mode="new">
                     <set-url>https://#{keyVaultHost}#/secrets/elinks-token/?api-version=7.0</set-url>
                     <set-method>GET</set-method>
