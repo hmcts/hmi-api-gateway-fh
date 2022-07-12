@@ -1,7 +1,8 @@
 <policies>
     <inbound>
         <base />
-        <cho <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
+        <chose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
             <choose>
                 <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
