@@ -180,15 +180,6 @@ class DELETE_hearings_UnitTests {
 
 	@Test
 	@Order(8)
-	@DisplayName("Test for Correct Headers and Payload")
-	void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
-		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
-		final Response response = deleteHearingAuth(input);
-		thenValidateResponseForDelete(response);
-	}
-
-	@Test
-	@Order(9)
 	@DisplayName("Test for missing Access Token")
 	void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
 
@@ -198,7 +189,7 @@ class DELETE_hearings_UnitTests {
 	}
 
 	@Test
-	@Order(10)
+	@Order(9)
 	@DisplayName("Test for invalid Access Token")
 	void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
 		accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
