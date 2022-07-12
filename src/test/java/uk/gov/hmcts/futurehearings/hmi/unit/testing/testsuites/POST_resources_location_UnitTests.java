@@ -180,7 +180,7 @@ class POST_resources_location_UnitTests {
     void testCreateLocationResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForCreate(response);
     }
 
     @Test

@@ -180,7 +180,7 @@ public class POST_Resources_LinkedHearingGrp_UnitTests {
     void testCreateLinkedHearingGroupResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForLinkedHearingGroup(response);
     }
 
     @Test

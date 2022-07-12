@@ -1,10 +1,10 @@
 <policies>
-    <inbound>
-        <base />
-        <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "HMI-DTU")">
+	<inbound>
+		<base />
+		<choose>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "DTU")">
 				<set-header name="AUTHORIZATION" exists-action="delete" />
-                <rewrite-uri template="/" copy-unmatched-params="true" />
+				<rewrite-uri template="/" copy-unmatched-params="true" />
 				<set-query-parameter name="api-version" exists-action="skip">
 					<value>2016-10-01</value>
 				</set-query-parameter>
@@ -17,15 +17,15 @@
 				<set-query-parameter name="sig" exists-action="skip">
 					<value>#{laHmiSittingPatternSig}#</value>
 				</set-query-parameter>
-                <set-backend-service base-url="https://#{laHmiSittingPatternHost}#/triggers/manual/paths/invoke" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <return-response>
-                    <set-status code="200" />
-                    <set-header name="Content-Type" exists-action="override">
-                        <value>application/json</value>
-                    </set-header>
-                    <set-body>@{
+				<set-backend-service base-url="https://#{laHmiSittingPatternHost}#/triggers/manual/paths/invoke" />
+			</when>
+			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+				<return-response>
+					<set-status code="200" />
+					<set-header name="Content-Type" exists-action="override">
+						<value>application/json</value>
+					</set-header>
+					<set-body>@{
 	                        var data = new JArray();
 	                        JObject recordOne = new JObject(
 	                            new JProperty("id", "4a62691e-cbf2-3c96-a880-08123c67a5e5"),
@@ -59,45 +59,30 @@
 	                        data.Add(recordThree);
 	                        return data.ToString();
 	                    }</set-body>
-                </return-response>
-            </when>
-	<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-	<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-	<return-response>
-		<set-status code="400" />
-		<set-header name="Content-Type">
-			<value>application/json</value>
-		</set-header>
-		<set-body>@{
-			return new JObject(
-			new JProperty("message", "SNL doesn't support this functionality")
-			).ToString();
-			}
-		</set-body>
-	</return-response>
-</when>
-<otherwise>
-<return-response>
-	<set-status code="400" />
-	<set-header name="Content-Type" exists-action="override">
-		<value>application/json</value>
-	</set-header>
-	<set-body>@{
-		return new JObject(
-		new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
-		).ToString();
-		}</set-body>
-</return-response>
-</otherwise>
-        </choose>
-    </inbound>
-    <backend>
-        <base />
-    </backend>
-    <outbound>
-        <base />
-    </outbound>
-    <on-error>
-        <base />
-    </on-error>
+				</return-response>
+			</when>
+			<otherwise>
+				<return-response>
+					<set-status code="400" />
+					<set-header name="Content-Type" exists-action="override">
+						<value>application/json</value>
+					</set-header>
+					<set-body>@{
+					return new JObject(
+					new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+					).ToString();
+					}</set-body>
+				</return-response>
+			</otherwise>
+		</choose>
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
 </policies>
