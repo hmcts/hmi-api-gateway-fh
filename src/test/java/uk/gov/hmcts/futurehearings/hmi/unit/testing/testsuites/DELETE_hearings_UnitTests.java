@@ -184,7 +184,7 @@ class DELETE_hearings_UnitTests {
 	void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
 		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
 		final Response response = deleteHearingAuth(input);
-		thenValidateResponseForCreate(response);
+		thenValidateResponseForDelete(response);
 	}
 
 	@Test
