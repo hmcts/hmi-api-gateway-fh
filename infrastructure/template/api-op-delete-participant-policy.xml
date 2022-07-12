@@ -24,13 +24,13 @@
                             return secret[" value"].ToString();
                         }" />
                         <send-request ignore-error="true" timeout="20" response-variable-name="vhBearerToken" mode="new">
-                            <set-url>https://login.microsoftonline.com/fb6e0e22-0da3-4c35-972a-9d61eb256508/oauth2/token</set-url>
+                            <set-url>#{vhOauthUrl}#</set-url>
                             <set-method>POST</set-method>
                             <set-header name="Content-Type" exists-action="override">
                                 <value>application/x-www-form-urlencoded</value>
                             </set-header>
                             <set-body>@{
-                            return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=https://vh-bookings-api-test1.azurewebsites.net";}</set-body>
+                            return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=#{vhHost}#";}</set-body>
                         </send-request>
                         <cache-store-value key="vhAuth" value="@(" Bearer" + (String)((IResponse)context.Variables[" vhBearerToken"]).Body.As<JObject>()[" access_token"])" duration="2700" />
                         <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
@@ -40,7 +40,7 @@
                     <value>@((String)context.Variables["vhAuthToken"])</value>
                 </set-header>
                 <rewrite-uri template="/{hearingId}/participants/{participantId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://vh-bookings-api-test1.azurewebsites.net/hearings" />
+                <set-backend-service base-url="#{vhHost}#/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <mock-response status-code="204" content-type="application/json" />
