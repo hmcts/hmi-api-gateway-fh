@@ -172,7 +172,7 @@ public class DELETE_Resources_LinkedHearingGrp_UnitTests {
     @DisplayName("Test for correct Headers")
     void testDeleteLinkedHearingGroupResourceRequestWithCorrectHeaders() throws IOException {
         final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithCorrectHeaders();
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForLinkedHearingGroup(response);
     }
 
     @Test
