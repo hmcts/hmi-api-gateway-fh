@@ -1,7 +1,7 @@
 <policies>
     <inbound>
         <base />
-        <chose>
+        <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
             <choose>
                 <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
