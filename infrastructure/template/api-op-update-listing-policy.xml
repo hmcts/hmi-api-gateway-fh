@@ -2,14 +2,6 @@
     <inbound>
         <base />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
@@ -19,8 +11,8 @@
                             <authentication-managed-identity resource="https://vault.azure.net" />
                         </send-request>
                         <set-variable name="snlClient" value="@{
-                            var secret = ((IResponse)context.Variables["snlClientResponse"]).Body.As<JObject>();
-                            return secret["value"].ToString();
+                            var secret = ((IResponse)context.Variables[" snlClientResponse"]).Body.As<JObject>();
+                            return secret[" value"].ToString();
                         }" />
                         <send-request ignore-error="false" timeout="20" response-variable-name="snlSecretResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/snl-user-pwd/?api-version=7.0</set-url>
@@ -28,8 +20,8 @@
                             <authentication-managed-identity resource="https://vault.azure.net" />
                         </send-request>
                         <set-variable name="snlSecret" value="@{
-                            var secret = ((IResponse)context.Variables["snlSecretResponse"]).Body.As<JObject>();
-                            return secret["value"].ToString();
+                            var secret = ((IResponse)context.Variables[" snlSecretResponse"]).Body.As<JObject>();
+                            return secret[" value"].ToString();
                         }" />
                         <send-request ignore-error="true" timeout="20" response-variable-name="snlBearerToken" mode="new">
                             <set-url>#{sAndLOauthUrl}#</set-url>
@@ -40,15 +32,15 @@
                             <set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
                         </send-request>
-                        <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                        <cache-store-value key="snlAuth" value="@(" Bearer" + (String)((IResponse)context.Variables[" snlBearerToken"]).Body.As<JObject>()[" idToken"])" duration="2700" />
                         <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                     </when>
                 </choose>
                 <set-header name="Authorization" exists-action="override">
-                     <value>@((String)context.Variables["snlAuthToken"])</value>
+                    <value>@((String)context.Variables["snlAuthToken"])</value>
                 </set-header>
                 <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-               <set-header name="Content-Type" exists-action="override">
+                <set-header name="Content-Type" exists-action="override">
                     <value>application/json; charset=utf-8</value>
                 </set-header>
                 <set-header name="Request-Type" exists-action="override">
@@ -61,18 +53,22 @@
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-listing" />
-                <choose>
-                    <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                        <mock-response status-code="204" content-type="application/json" />
-                    </when>
-                </choose>
+                <mock-response status-code="204" content-type="application/json" />
             </when>
+            <otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
         </choose>
     </inbound>
     <backend>
@@ -80,50 +76,54 @@
     </backend>
     <outbound>
         <base />
-         <choose>
+        <choose>
             <when condition="@(context.Response.StatusCode == 401)">
                 <cache-remove-value key="snlAuth" />
                 <return-response>
-						<set-status code="502" />
-						<set-header name="Content-Type">
-							<value>application/json</value>
-						</set-header>
-						<set-body>@{
+                    <set-status code="502" />
+                    <set-header name="Content-Type">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
 						return new JObject(
 							new JProperty("message", "Successfully autheticated by HMI, however target system failed to autheticate. Please try again.")
 						    ).ToString();
 						}
 					</set-body>
-				</return-response>
+                </return-response>
             </when>
-             <when condition="@(context.Response.StatusCode == 403)">
+            <when condition="@(context.Response.StatusCode == 403)">
                 <cache-remove-value key="snlAuth" />
                 <return-response>
-						<set-status code="502" />
-						<set-header name="Content-Type">
-							<value>application/json</value>
-						</set-header>
-						<set-body>@{
+                    <set-status code="502" />
+                    <set-header name="Content-Type">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
 						return new JObject(
 							new JProperty("message", "Successfully authorized by HMI, however target system failed to authorize. Please try again.")
 						    ).ToString();
 						}
 					</set-body>
-				</return-response>
+                </return-response>
             </when>
             <when condition="@(context.Response.StatusCode == 500)">
                 <send-request ignore-error="true" timeout="20" response-variable-name="snowAuth" mode="new">
-					<set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
-					<set-method>GET</set-method>
-					<authentication-managed-identity resource="https://vault.azure.net" />
-				</send-request>
-				<send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
-					<set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
-					<set-method>POST</set-method>
-					<set-header name="Authorization" exists-action="override">
-						<value>@("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As<JObject>()["value"].ToString())</value>
-					</set-header>
-					<set-body>@{
+                    <set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
+                    <set-method>GET</set-method>
+                    <authentication-managed-identity resource="https://vault.azure.net" />
+                </send-request>
+                <send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
+                    <set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Authorization" exists-action="override">
+                        <value>
+                            @("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As
+                            <JObject>()["value"].ToString())
+                        
+                        </value>
+                    </set-header>
+                    <set-body>@{
 						return new JObject(
 							new JProperty("assignment_group", "56b756774fbd368057db0b318110c7bd"),
 							new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
@@ -138,94 +138,23 @@
 							new JProperty("urgency", "3")
 							).ToString();    
 					}</set-body>
-				</send-request>
-				<return-response>
+                </send-request>
+                <return-response>
                     <set-status code="502" />
                     <set-header name="Content-Type">
                         <value>application/json</value>
                     </set-header>
-                    <set-body>@{
+                    <set-body>
+                        @{
                         return new JObject(
-                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "][HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]")
+                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As
+                        <JObject>()["result"]["number"].ToString()  + "][HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]")
                             ).ToString();
-                        }</set-body>
+                        }
+                    
+                    </set-body>
                 </return-response>
             </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "CRIME doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "ELINKS doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "RM")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "RM doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "PIH")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "PIH doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
-<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "HMI-DTU")">
-<set-backend-service base-url="https://vh-bookings-api-dev.azurewebsites.net/hearings/update" />
-<return-response>
-<set-status code="400" />
-<set-header name="Content-Type">
-    <value>application/json</value>
-</set-header>
-<set-body>@{
-    return new JObject(
-    new JProperty("message", "HMI-DTU doesn't support this functionality")
-    ).ToString();
-    }
-</set-body>
-</return-response>
-        </when>
         </choose>
     </outbound>
     <on-error>
