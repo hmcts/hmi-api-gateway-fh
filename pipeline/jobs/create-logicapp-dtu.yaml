@@ -27,7 +27,7 @@ jobs:
       environment: ${{ parameters.environment }}
   - template: templates/Azure/Common/get-service-connection-details.yaml@azTemplates
     parameters:
-      subscriptionName: $(subscription)
+      subscriptionName: ${{ parameters.subscription }}
   - task: replacetokens@3
     displayName: Replace variables in Logic App workflow JSON
     inputs:
