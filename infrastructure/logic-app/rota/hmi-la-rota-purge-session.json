@@ -27,12 +27,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -62,12 +56,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -97,12 +85,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -132,12 +114,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -167,12 +143,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -202,12 +172,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -237,12 +201,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -272,12 +230,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -307,12 +259,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -342,12 +288,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -377,12 +317,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -410,13 +344,6 @@
                 "application": "hearing-management-interface",
                 "businessarea": "cross-cutting",
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
-            "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "properties": {
                 "displayName": "HMI DTU Rota",
@@ -447,12 +374,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -482,12 +403,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -517,12 +432,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -609,7 +518,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "delete",
@@ -625,7 +534,7 @@
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                     }
                                                 },
                                                 "method": "delete",
@@ -646,7 +555,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "get",
@@ -673,7 +582,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "delete",
@@ -698,7 +607,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -718,7 +627,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
