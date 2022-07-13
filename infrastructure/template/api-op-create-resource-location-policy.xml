@@ -54,7 +54,7 @@
                 <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/locations" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <mock-response status-code="200" content-type="application/json" />
+                <mock-response status-code="201" content-type="application/json" />
             </when>
             <otherwise>
                 <return-response>

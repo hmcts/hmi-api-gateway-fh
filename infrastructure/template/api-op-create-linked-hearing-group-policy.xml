@@ -4,7 +4,7 @@
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <choose>
-                    <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
+                    <when condition="@(context.Variables.GetValueOrDefault(" snlAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/snl-user-id/?api-version=7.0</set-url>
                             <set-method>GET</set-method>
@@ -54,7 +54,7 @@
                 <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/linkedHearingGroup" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <mock-response status-code="200" content-type="application/json" />
+                <mock-response status-code="202" content-type="application/json" />
             </when>
             <otherwise>
                 <return-response>
