@@ -43,8 +43,8 @@
         <set-backend-service base-url="#{vhHost}#/hearings" />
     </when>
     <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-    <mock-response status-code="200" content-type="application/json" />
-</when>
+        <mock-response status-code="200" content-type="application/json" />
+    </when>
         </choose>
         </inbound>
 <backend>

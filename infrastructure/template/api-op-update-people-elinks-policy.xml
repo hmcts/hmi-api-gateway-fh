@@ -9,8 +9,8 @@
                     <authentication-managed-identity resource="https://vault.azure.net" />
                 </send-request>
                 <set-variable name="elinksToken" value="@{
-                    var secret = ((IResponse)context.Variables[" elinksTokenResponse"]).Body.As<JObject>();
-                    return secret[" value"].ToString();
+                    var secret = ((IResponse)context.Variables["elinksTokenResponse"]).Body.As<JObject>();
+                    return secret["value"].ToString();
                 }" />
                 <set-header name="Authorization" exists-action="override">
                     <value>@("Bearer " + (String)context.Variables["elinksToken"])</value>
