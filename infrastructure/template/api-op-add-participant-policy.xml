@@ -12,7 +12,7 @@
                         </send-request>
                         <set-variable name="vhClient" value="@{
                         var secret = ((IResponse)context.Variables["vhClientResponse"]).Body.As<JObject>();
-                        return secret[" value"].ToString();
+                        return secret["value"].ToString();
                         }" />
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhSecretResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-secret/?api-version=7.0</set-url>
@@ -21,7 +21,7 @@
                         </send-request>
                         <set-variable name="vhSecret" value="@{
                         var secret = ((IResponse)context.Variables["vhSecretResponse"]).Body.As<JObject>();
-                        return secret[" value"].ToString();
+                        return secret["value"].ToString();
                         }" />
                         <send-request ignore-error="true" timeout="20" response-variable-name="vhBearerToken" mode="new">
                             <set-url>#{vhOauthUrl}#</set-url>
