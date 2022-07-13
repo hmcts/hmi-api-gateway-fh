@@ -1,9 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,9 +35,8 @@ public class POSTParticipantValidationTest extends VideoHearingValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-participants-request.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-        this.unsupportedDestinations = this.getUnsupportedDestinations7NoVH().clone();
-        this.setHmiUnsupportedDestinationsErrorVerifier(new HMIUnsupportedDestinationsErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"VH"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

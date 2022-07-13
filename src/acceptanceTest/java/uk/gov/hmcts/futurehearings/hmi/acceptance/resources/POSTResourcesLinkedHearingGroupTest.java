@@ -11,9 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -33,10 +30,9 @@ public class POSTResourcesLinkedHearingGroupTest extends ResourceValidationTest 
         this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
-        this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-        this.unsupportedDestinations = this.getUnsupportedDestinations6NoSNL().clone();
-        this.setHmiUnsupportedDestinationsErrorVerifier(new HMIUnsupportedDestinationsErrorVerifier());
+        this.setHttpSuccessStatus(HttpStatus.OK);
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
