@@ -1,7 +1,7 @@
 <policies>
-	<inbound>
-		<base />
-		<set-variable name="invalidQueryParams" value="@{
+    <inbound>
+        <base />
+        <set-variable name="invalidQueryParams" value="@{
                 string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
                 string[] allowedKeys = {"hearingDate","hearingType"};
                 bool invalidQueryParam = false;
@@ -25,43 +25,43 @@
 
                 return invalidQueryParam;
             }" />
-		<choose>
-			<when condition="@(context.Request.Url.Query.Count > 2 || (bool)context.Variables["invalidQueryParams"])">
-				<return-response>
-					<set-status code="400" reason="Malformed request." />
-					<set-body>@{
+            <choose>
+                <when condition="@(context.Request.Url.Query.Count > 2 || (bool)context.Variables["invalidQueryParams"])">
+                    <return-response>
+                        <set-status code="400" reason="Malformed request." />
+                        <set-body>@{
                             return new JObject(
                             new JProperty("statusCode", 400),
                             new JProperty("message", "Invalid query parameter/s in the request URL.")
                             ).ToString();
                             }</set-body>
-				</return-response>
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-				<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-				<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-				<choose>
-					<when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault(" hearingIdCaseHQ") != null)">
-						<return-response>
-							<set-status code="200" />
-							<set-header name="Content-Type" exists-action="override">
-								<value>application/json</value>
-							</set-header>
-							<set-body>@{
+                    </return-response>
+                </when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+				</when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+				</when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+				</when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
+					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
+					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
+				</when>
+				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+					<choose>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
 		                         return new JObject(
 		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
 		                            new JProperty("hearingIdCaseHQ", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ")),
@@ -78,15 +78,15 @@
 		                            new JProperty("hearingRoomId", "R2345")
 		                        ).ToString();
 		                    }</set-body>
-						</return-response>
-					</when>
-					<when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate") != null)">
-						<return-response>
-							<set-status code="200" />
-							<set-header name="Content-Type" exists-action="override">
-								<value>application/json</value>
-							</set-header>
-							<set-body>@{
+		                </return-response>
+		            </when>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
 		                        var data = new JArray();
 		                        JObject recordOne = new JObject(
 		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
@@ -122,15 +122,15 @@
 		                        data.Add(recordTwo);
 		                        return data.ToString();
 		                    }</set-body>
-						</return-response>
-					</when>
-					<when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType") != null)">
-						<return-response>
-							<set-status code="200" />
-							<set-header name="Content-Type" exists-action="override">
-								<value>application/json</value>
-							</set-header>
-							<set-body>@{
+		                </return-response>
+		            </when>
+		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType") != null)">
+		                <return-response>
+		                    <set-status code="200" />
+		                    <set-header name="Content-Type" exists-action="override">
+		                        <value>application/json</value>
+		                    </set-header>
+		                    <set-body>@{
 		                        var data = new JArray();
 		                        JObject recordOne = new JObject(
 		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
@@ -166,15 +166,15 @@
 		                        data.Add(recordTwo);
 		                        return data.ToString();
 		                    }</set-body>
-						</return-response>
-					</when>
-					<otherwise>
-						<return-response>
-							<set-status code="200" />
-							<set-header name="Content-Type">
-								<value>application/json</value>
+		                </return-response>
+		            </when>
+		            <otherwise>
+		            	<return-response>
+		                	<set-status code="200" />
+		                    <set-header name="Content-Type">
+		    					<value>application/json</value>
 							</set-header>
-							<set-body>@{
+		                    <set-body>@{
 		                        var data = new JArray();
 		                        JObject recordOne = new JObject(
 		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
@@ -210,19 +210,19 @@
 		                        data.Add(recordTwo);
 		                        return data.ToString();
 		                    }</set-body>
-						</return-response>
-					</otherwise>
-				</choose>
-			</when>
-		</choose>
-	</inbound>
-	<backend>
-		<base />
-	</backend>
-	<outbound>
-		<base />
-	</outbound>
-	<on-error>
-		<base />
-	</on-error>
+		                </return-response>
+		            </otherwise>
+		        </choose>
+                </when>
+			</choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
 </policies>
