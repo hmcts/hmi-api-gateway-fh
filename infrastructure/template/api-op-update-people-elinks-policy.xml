@@ -19,21 +19,9 @@
                 <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <set-backend-service base-url="https://#{elinksHost}#/api" />
                 <mock-response status-code="204" content-type="application/json" />
             </when>
-            <otherwise>
-                <return-response>
-                    <set-status code="400" />
-                    <set-header name="Content-Type" exists-action="override">
-                        <value>application/json</value>
-                    </set-header>
-                    <set-body>@{
-                    return new JObject(
-                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
-                    ).ToString();
-                    }</set-body>
-                </return-response>
-            </otherwise>
         </choose>
     </inbound>
     <backend>
