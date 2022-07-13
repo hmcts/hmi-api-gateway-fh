@@ -664,6 +664,30 @@
                             },
                             "type": "Foreach"
                         },
+                        "For_each_loading_file": {
+                            "foreach": "@body('Get_entities_rotaFiles_loading')?['value']",
+                            "actions": {
+                                "Delete_entity_loading": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_loading_file')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_loading_file')?['RowKey'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_rotaFiles_loading": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
                         "Get_entities_CLP_complete": {
                             "runAfter": {
                                 "Initialize_oneWeekFromNow": [
@@ -681,6 +705,26 @@
                                 "path": "/Tables/@{encodeURIComponent('CLP')}/entities",
                                 "queries": {
                                     "$filter": "status eq 'COMPLETE' and Timestamp lt datetime'@{addToTime(utcNow(), -1, 'Day')}'"
+                                }
+                            }
+                        },
+                        "Get_entities_rotaFiles_loading": {
+                            "runAfter": {
+                                "For_each_CLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'LOADING' and Timestamp lt datetime'@{addToTime(utcNow(), -1, 'Day')}'"
                                 }
                             }
                         },
