@@ -1,4 +1,5 @@
 {
+	"definition": {
 		"$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
 		"contentVersion": "1.0.0.0",
 		"parameters": {
@@ -59,10 +60,11 @@
 		"$connections": {
 			"value": {
 				"azureblob": {
-					"connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+					"connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azureblob')]",
 					"connectionName": "azureblob",
-					"id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+					"id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azureblob')]"
 				}
 			}
 		}
 	}
+}

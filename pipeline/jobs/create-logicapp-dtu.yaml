@@ -25,6 +25,49 @@ jobs:
     parameters:
       path: '**/parameters-*.json'
       environment: ${{ parameters.environment }}
+  - template: templates/Azure/Common/get-service-connection-details.yaml@azTemplates
+    parameters:
+      subscriptionName: $(subscription)
+  - task: AzureCLI@2
+    displayName: Get API Connections for Logic Apps
+    name: getApiConnections
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env="dev"
+
+        $logicAppName="hmi-la-dturota-$env"
+        $resourceGroupName="hmi-sharedinfra-$env-rg"
+
+        $workflow = az logic workflow show --resource-group $resourceGroupName --name $logicAppName --only-show-errors | ConvertFrom-Json
+
+        if ($null -ne $workflow.parameters -and $null -ne $workflow.parameters."`$connections" -and $null -ne $workflow.parameters."`$connections".value) {
+          Write-Host "Found API Connections"
+
+          foreach ($connection in $workflow.parameters."`$connections".value.PSObject.properties) {
+            $name = $connection.value.connectionName
+            $connection_id = $connection.value.connectionId
+            Write-Host "$name - $connection_id"
+            Write-Host "##vso[task.setvariable variable=apiconnection_$name;isOutput=true]$connection_id"
+          }
+        } else {
+          Write-Error "No API Connections found"
+        }
+  - task: replacetokens@3
+    displayName: Replace variables in Logic App workflow JSON
+    inputs:
+      targetFiles: '../../infrastructure/logic-app/**/*-la.json'
+      encoding: 'auto'
+      escapeType: 'html'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      tokenPrefix: '#{'
+      tokenSuffix: '}#'
+      useLegacyPattern: false
+      enableTelemetry: true
   - task: AzureCLI@2
     displayName: Create DTU Logic App
     name: createLogicApp
@@ -35,7 +78,7 @@ jobs:
       inlineScript: |
         echo "Install az logic CLI extension"
         az extension add --name logic
-        echo "Creating DTU Logic Application for $(environment)"
+        echo "Creating DTU Logic Application for $(environment)"ooh
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         az logic workflow create --name "hmi-la-dturota-$(environment)-test" --resource-group $resourceGroupName --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
         echo "Creating DTU Logic Application - Sitting Patterns"
