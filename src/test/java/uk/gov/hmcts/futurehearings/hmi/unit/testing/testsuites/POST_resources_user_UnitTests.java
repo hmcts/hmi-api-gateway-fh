@@ -180,7 +180,7 @@ class POST_resources_user_UnitTests {
     void testCreateUserResourceWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_CREATE_USER_RESOURCE_PAYLOAD);
         final Response response = createUser(input);
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForCreate(response);
     }
 
 

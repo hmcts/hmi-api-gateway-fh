@@ -180,7 +180,7 @@ public class PUT_Resources_LinkedHearingGrp_UnitTests {
     void testUpdateLinkedHearingGroupResourceRequestWithCorrectHeaders() throws IOException {
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLinkedHearingGroupResourceIsInvokedWithCorrectHeaders(input);
-        thenValidateResponseForRetrieve(response);
+        thenValidateResponseForLinkedHearingGroup(response);
     }
 
     @Test
