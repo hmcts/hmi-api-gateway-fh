@@ -28,33 +28,6 @@ jobs:
   - template: templates/Azure/Common/get-service-connection-details.yaml@azTemplates
     parameters:
       subscriptionName: $(subscription)
-  - task: AzureCLI@2
-    displayName: Get API Connections for Logic Apps
-    name: getApiConnections
-    inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        $env="dev"
-
-        $logicAppName="hmi-la-dturota-$env"
-        $resourceGroupName="hmi-sharedinfra-$env-rg"
-
-        $workflow = az logic workflow show --resource-group $resourceGroupName --name $logicAppName --only-show-errors | ConvertFrom-Json
-
-        if ($null -ne $workflow.parameters -and $null -ne $workflow.parameters."`$connections" -and $null -ne $workflow.parameters."`$connections".value) {
-          Write-Host "Found API Connections"
-
-          foreach ($connection in $workflow.parameters."`$connections".value.PSObject.properties) {
-            $name = $connection.value.connectionName
-            $connection_id = $connection.value.connectionId
-            Write-Host "$name - $connection_id"
-            Write-Host "##vso[task.setvariable variable=apiconnection_$name;isOutput=true]$connection_id"
-          }
-        } else {
-          Write-Error "No API Connections found"
-        }
   - task: replacetokens@3
     displayName: Replace variables in Logic App workflow JSON
     inputs:
