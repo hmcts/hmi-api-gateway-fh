@@ -41,6 +41,7 @@ jobs:
       tokenPrefix: '#{'
       tokenSuffix: '}#'
       useLegacyPattern: false
+      variableFiles: 'create-logicapp-dtu.yaml'
       enableTelemetry: true
   - task: AzureCLI@2
     displayName: Create DTU Logic App
