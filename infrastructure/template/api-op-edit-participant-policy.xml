@@ -33,7 +33,7 @@
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=#{vhHost}#";
                             }</set-body>
                         </send-request>
-                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables[" bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
+                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
                         <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
                     </when>
                 </choose>
