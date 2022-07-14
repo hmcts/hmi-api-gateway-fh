@@ -31,7 +31,7 @@ jobs:
   - task: replacetokens@3
     displayName: Replace variables in Logic App workflow JSON
     inputs:
-      targetFiles: '$(Build.SourceDirectory/../../infrastructure/logic-app/**/*-la.json'
+      targetFiles: '$(Build.SourceDirectory)/../../infrastructure/logic-app/**/*-la.json'
       encoding: 'auto'
       escapeType: 'html'
       writeBOM: true
