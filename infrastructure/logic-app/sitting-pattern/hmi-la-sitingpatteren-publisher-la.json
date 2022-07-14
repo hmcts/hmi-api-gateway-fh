@@ -532,9 +532,9 @@
 		"$connections": {
 			"value": {
 				"azureblob": {
-					"connectionId": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azureblob')]",
+					"connectionId": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azureblob')]",
 					"connectionName": "azureblob",
-					"id": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azureblob')]"
+					"id": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azureblob')]"
 				}
 			}
 		}

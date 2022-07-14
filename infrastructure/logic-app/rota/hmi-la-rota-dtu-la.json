@@ -2204,19 +2204,19 @@
 		"$connections": {
 			"value": {
 				"azureblob": {
-					"connectionId": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azureblob')]",
+					"connectionId": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azureblob')]",
 					"connectionName": "azureblob",
-					"id": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azureblob')]"
+					"id": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azureblob')]"
 				},
 				"azuretables": {
-					"connectionId": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azuretables')]",
+					"connectionId": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/azuretables')]",
 					"connectionName": "azuretables",
-					"id": "[concat('subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azuretables')]"
+					"id": "[concat('subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/azuretables')]"
 				},
 				"keyvault": {
-					"connectionId": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/keyvault')]",
+					"connectionId": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/resourceGroups/hmi-sharedinfra-', '#{environment}#', '-rg/providers/Microsoft.Web/connections/keyvault')]",
 					"connectionName": "keyvault",
-					"id": "[concat('/subscriptions/', '#{setOutput.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/keyvault')]"
+					"id": "[concat('/subscriptions/', '#{serviceConnection.ARM_SUBSCRIPTION_ID}#', '/providers/Microsoft.Web/locations/', 'uksouth', '/managedApis/keyvault')]"
 				}
 			}
 		}
