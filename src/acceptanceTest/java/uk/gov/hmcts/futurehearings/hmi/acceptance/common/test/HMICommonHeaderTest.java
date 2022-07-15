@@ -46,7 +46,7 @@ public abstract class HMICommonHeaderTest {
     private String destinationSystem;
     private final String[] AllAvailableDestinations = {"VH", "SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
 
-    protected String[] unsupportedDestinations;
+    protected String[] unsupportedDestinations = {"CFT"};
     private boolean CheckUnsupportedDestinations;
 
     @Autowired(required = false)

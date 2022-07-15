@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,8 +35,9 @@ public class GETReservationsValidationTest extends HearingValidationTest {
         this.setRelativeURL(hearings_ReservationsApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 
     private void test_response_for_supplied_parameter() throws Exception {
@@ -99,8 +98,8 @@ public class GETReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Testing valid and invalid values of the query parameter - requestComments : {0} --> {1}")
     @CsvSource(value = {"requestComments, civil case", "requestComments, ADHOC", "requestComments, ''", "requestComments, ' '", "requestComments, NIL"}, nullValues = "NIL")
-    void test_request_Comments_query_param(final String requesCommentsKey, final String requestCommentsValue) throws Exception {
-        this.setUrlParams(buildQueryParams(requesCommentsKey, requestCommentsValue));
+    void test_request_Comments_query_param(final String requestCommentsKey, final String requestCommentsValue) throws Exception {
+        this.setUrlParams(buildQueryParams(requestCommentsKey, requestCommentsValue));
         test_response_for_supplied_parameter();
     }
 

@@ -11,8 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -20,7 +18,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DELETEResourcesValidationTest.class)
 @IncludeTags("Delete")
-public class DELETEResourcesLinkedHearingGroup extends ResourceValidationTest {
+public class DELETEResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
     @Value("${resourcesLinkedHearingGroup_idRootContext}")
     private String resourcesLinkedHearingGroup_idRootContext;
@@ -33,7 +31,8 @@ public class DELETEResourcesLinkedHearingGroup extends ResourceValidationTest {
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputFileDirectory(null);
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
