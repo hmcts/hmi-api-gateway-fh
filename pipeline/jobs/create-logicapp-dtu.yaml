@@ -57,7 +57,7 @@ jobs:
         az extension add --name logic
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        $tags="businessArea=cross-cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }}"
+        tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low"
         az logic workflow create --name "hmi-la-dturota-$(environment)-test" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
         echo "Creating DTU Logic Application - Sitting Patterns"
         az logic workflow create --name "hmi-la-sittingpattern-publisher-$(environment)-test" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher-la.json"
