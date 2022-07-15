@@ -20,6 +20,8 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
+  variables:
+    - template: ../variables/${{ parameters.environment }}.yaml
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
