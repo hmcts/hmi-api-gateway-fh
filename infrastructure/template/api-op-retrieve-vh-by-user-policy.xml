@@ -46,8 +46,8 @@
                             <authentication-managed-identity resource="https://vault.azure.net" />
                         </send-request>
                         <set-variable name="vhClient" value="@{
-                            var secret = ((IResponse)context.Variables[" vhClientResponse"]).Body.As<JObject>();
-                            return secret[" value"].ToString();
+                            var secret = ((IResponse)context.Variables["vhClientResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
                         }" />
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhSecretResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-secret/?api-version=7.0</set-url>
@@ -55,8 +55,8 @@
                             <authentication-managed-identity resource="https://vault.azure.net" />
                         </send-request>
                         <set-variable name="vhSecret" value="@{
-                            var secret = ((IResponse)context.Variables[" vhSecretResponse"]).Body.As<JObject>();
-                            return secret[" value"].ToString();
+                            var secret = ((IResponse)context.Variables["vhSecretResponse"]).Body.As<JObject>();
+                            return secret["value"].ToString();
                         }" />
                         <send-request ignore-error="true" timeout="20" response-variable-name="vhBearerToken" mode="new">
                             <set-url>#{vhOauthUrl}#</set-url>
@@ -67,7 +67,7 @@
                             <set-body>@{
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=#{vhHost}#t";}</set-body>
                         </send-request>
-                        <cache-store-value key="vhAuth" value="@(" Bearer" + (String)((IResponse)context.Variables[" vhBearerToken"]).Body.As<JObject>()[" access_token"])" duration="2700" />
+                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()[" access_token"])" duration="2700" />
                         <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
                     </when>
                 </choose>
@@ -76,22 +76,6 @@
                 </set-header>
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
-                <send-request ignore-error="false" timeout="20" response-variable-name="elinksTokenResponse" mode="new">
-                    <set-url>https://#{keyVaultHost}#/secrets/elinks-token/?api-version=7.0</set-url>
-                    <set-method>GET</set-method>
-                    <authentication-managed-identity resource="https://vault.azure.net" />
-                </send-request>
-                <set-variable name="elinksToken" value="@{
-                    var secret = ((IResponse)context.Variables[" elinksTokenResponse"]).Body.As<JObject>();
-                    return secret[" value"].ToString();
-                }" />
-                <set-header name="Authorization" exists-action="override">
-                    <value>@("Bearer " + (String)context.Variables["elinksToken"])</value>
-                </set-header>
-                <rewrite-uri template="/people" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <mock-response status-code="200" content-type="application/json" />
