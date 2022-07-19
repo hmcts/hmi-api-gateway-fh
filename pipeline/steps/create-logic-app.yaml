@@ -5,17 +5,14 @@ parameters:
   - name: environment
     type: string
 
-  - name: name
-    type: string
-
-  - name: path
-    type: string
+  - name: logicApps
+    type: object
 
 steps:
 
   - task: AzureCLI@2
     displayName: Create Logic App
-    name: createLogicApp_${{ parameters.name }}
+    name: createLogicApps
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
@@ -23,8 +20,12 @@ steps:
       inlineScript: |
         echo "Install az logic CLI extension"
         az extension add --name logic
-        echo "Creating Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low"
-        az logic workflow create --name "$(name)-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)$(path)"
-        echo "Creating Logic Applications is complete"
+
+        for la in $(logicApps)
+        do
+          echo "Creating Logic Application $la"
+          az logic workflow create --name "$la-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)**/$la-la.json"
+          echo "Finished creating Logic Application $la"
+        done

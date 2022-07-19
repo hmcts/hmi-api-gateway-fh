@@ -48,13 +48,11 @@ jobs:
       useLegacyPattern: false
       variableFiles: 'create-logicapp-dtu.yaml'
       enableTelemetry: true
-  - ${{ each la in parameters.logicApps }}:
-    - template: ..\steps\create-logic-app.yaml
+  - template: ..\steps\create-logic-app.yaml
       parameters:
-        subscription: ${{ parameters.environment }}
+        subscription: ${{ parameters.subscription }}
         environment: ${{ parameters.environment }}
-        name: ${{ la }}
-        path: "**/${{ la }}-la.json"
+        logicApps: ${{ parameters.logicApps }}
 
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
