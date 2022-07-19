@@ -15,7 +15,7 @@ steps:
 
   - task: AzureCLI@2
     displayName: Create Logic App
-    name: createLogicApp
+    name: createLogicApp_${{ parameters.name }}
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
