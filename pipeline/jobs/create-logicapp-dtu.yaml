@@ -42,6 +42,8 @@ jobs:
         echo "Creating DTU Logic Application - Libra"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-libra-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\parameters-libra-file-pub-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-libra-session-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\parameters-libra-session-pub-$(environment).json"
+               echo "Creating DTU Logic Applications is complete"
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
     name: kv_access

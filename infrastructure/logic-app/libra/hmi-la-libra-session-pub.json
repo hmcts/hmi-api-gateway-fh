@@ -1,0 +1,742 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workflows_hmi_la_dtulibra_session_publisher_dev_name": {
+      "defaultValue": "hmi-la-dtulibra-session-publisher-dev",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('workflows_hmi_la_dtulibra_session_publisher_dev_name')]",
+      "location": "uksouth",
+      "tags": {
+        "environment": "development",
+        "application": "hearings-management-interface",
+        "businessarea": "cross-cutting",
+        "builtFrom": "hmcts/hmi-api-gateway-fh"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Disabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+            "$connections": {
+              "defaultValue": {},
+              "type": "Object"
+            }
+          },
+          "triggers": {
+            "Recurrence": {
+              "recurrence": {
+                "frequency": "Minute",
+                "interval": 5
+              },
+              "evaluatedRecurrence": {
+                "frequency": "Minute",
+                "interval": 5
+              },
+              "type": "Recurrence"
+            }
+          },
+          "actions": {
+            "For_each_failed_CLP": {
+              "foreach": "@body('Get_entities_CLP_failed')?['value']",
+              "actions": {
+                "Append_to_string_variable": {
+                  "runAfter": {},
+                  "type": "AppendToStringVariable",
+                  "inputs": {
+                    "name": "scheduleErrorBody",
+                    "value": "@{items('For_each_failed_CLP')?['PartitionKey']} - @{items('For_each_failed_CLP')?['errorMsg']}"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_entities_CLP_failed": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "For_each_session": {
+              "foreach": "@body('Get_entities_with_status_ready')?['value']",
+              "actions": {
+                "Compose_session_payload": {
+                  "runAfter": {
+                    "Set_variable_jsonJohList_to_empty": [
+                      "Succeeded",
+                      "Skipped"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": {
+                    "session": {
+                      "johs": "@json(concat('[', variables('jsonJohList'), ']'))",
+                      "room": {
+                        "locationId": "@{items('For_each_Session')?['locationId']}",
+                        "locationReferenceType": "EXTERNAL",
+                        "locationType": "Room"
+                      },
+                      "sessionDuration": "@int(variables('sessionDuration'))",
+                      "sessionReference": "@{items('For_each_Session')?['RowKey']}",
+                      "sessionStart": "@{variables('sessionStart')}",
+                      "venue": {
+                        "locationId": "@{items('For_each_Session')?['venueId']}",
+                        "locationReferenceType": "EXTERNAL",
+                        "locationType": "Court"
+                      }
+                    }
+                  }
+                },
+                "For_each_schedule_in_session": {
+                  "foreach": "@body('Get_all_schedules_for_session')?['value']",
+                  "actions": {
+                    "Append_to_array_variable_johDataArray": {
+                      "runAfter": {
+                        "Insert_or_Merge_Entity_CLP": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "AppendToArrayVariable",
+                      "inputs": {
+                        "name": "johDataArray",
+                        "value": "@variables('jsonJohs')"
+                      }
+                    },
+                    "Get_joh_for_schedule": {
+                      "runAfter": {},
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                          }
+                        },
+                        "method": "get",
+                        "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}',RowKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}')"
+                      }
+                    },
+                    "Insert_or_Merge_Entity_CLP": {
+                      "runAfter": {
+                        "Set_variable_jsonJohs": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "body": {
+                          "business": "@{items('For_each_Session')?['business']}",
+                          "joh": "@{items('For_each_Session')?['joh']}@{variables('jsonJohs')}",
+                          "locationId": "@{items('For_each_Session')?['locationId']}",
+                          "panel": "@{items('For_each_Session')?['panel']}",
+                          "session": "@{items('For_each_Session')?['session']}",
+                          "sessionDate": "@{items('For_each_Session')?['sessionDate']}",
+                          "venueId": "@{items('For_each_Session')?['venueId']}",
+                          "welshSpeaking": "@{items('For_each_Session')?['welshSpeaking']}"
+                        },
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                          }
+                        },
+                        "method": "patch",
+                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                      }
+                    },
+                    "Set_variable_jsonJohs": {
+                      "runAfter": {
+                        "Set_variable_scheduleErrorBody": [
+                          "Skipped"
+                        ]
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "jsonJohs",
+                        "value": "{\n  \"isPresiding\": @{tolower(string(equals(items('For_each_schedule_in_session')?['slot'], 'CHAIR')))},\n  \"johId\": \"@{body('Get_joh_for_schedule')?['RowKey']}\",\n  \"slot\": \"@{items('For_each_schedule_in_session')?['slot']}\"\n}"
+                      }
+                    },
+                    "Set_variable_scheduleErrorBody": {
+                      "runAfter": {
+                        "Get_joh_for_schedule": [
+                          "Failed"
+                        ]
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "scheduleErrorBody",
+                        "value": "@{outputs('Get_joh_for_schedule')}"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Get_all_schedules_for_session": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Foreach"
+                },
+                "Get_all_schedules_for_session": {
+                  "runAfter": {
+                    "Update_status_to_loading": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/Tables/@{encodeURIComponent('schedule')}/entities",
+                    "queries": {
+                      "$filter": "RowKey eq '@{items('For_each_session')?['RowKey']}'"
+                    }
+                  }
+                },
+                "Get_entity_updated_session": {
+                  "runAfter": {
+                    "Is_morning_session": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                  }
+                },
+                "HTTP_HMI": {
+                  "runAfter": {
+                    "Compose_session_payload": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "authentication": {
+                      "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                      "clientId": "@body('Get_secret_hmi-client')?['value']",
+                      "secret": "@body('Get_secret_hmi-secret')?['value']",
+                      "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                      "type": "ActiveDirectoryOAuth"
+                    },
+                    "body": "@outputs('Compose_session_payload')",
+                    "headers": {
+                      "Accept": "application/json",
+                      "Content-Type": "application/json",
+                      "Destination-System": "MOCK",
+                      "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                      "Source-System": "CRIME"
+                    },
+                    "method": "POST",
+                    "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/schedules"
+                  }
+                },
+                "Insert_or_Merge_Entity_with_errorMsg": {
+                  "runAfter": {
+                    "HTTP_HMI": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "errorMsg": "@{body('HTTP_HMI')}",
+                      "status": "FAILED"
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                      }
+                    },
+                    "method": "patch",
+                    "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                  }
+                },
+                "Is_morning_session": {
+                  "actions": {
+                    "Set_variable_sessionDurationAM": {
+                      "runAfter": {},
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "sessionDuration",
+                        "value": "180"
+                      }
+                    },
+                    "Set_variable_sessionStartAM": {
+                      "runAfter": {
+                        "Set_variable_sessionDurationAM": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "sessionStart",
+                        "value": "@{items('For_each_session')?['sessionDate']}TT10:00:00Z"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "For_each_schedule_in_session": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_variable_sessionDurationPM": {
+                        "runAfter": {},
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "sessionDuration",
+                          "value": "120"
+                        }
+                      },
+                      "Set_variable_sessionStartPM": {
+                        "runAfter": {
+                          "Set_variable_sessionDurationPM": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "sessionStart",
+                          "value": "@{items('For_each_session')?['sessionDate']}T14:00:00Z"
+                        }
+                      }
+                    }
+                  },
+                  "expression": {
+                    "and": [
+                      {
+                        "equals": [
+                          "@items('For_each_session')?['session']",
+                          "AM"
+                        ]
+                      }
+                    ]
+                  },
+                  "type": "If"
+                },
+                "Set_variable_jsonJohList": {
+                  "runAfter": {
+                    "Get_entity_updated_session": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "jsonJohList",
+                    "value": "@{replace(body('Get_entity_updated_session')?['joh'], '}{', '},{')}"
+                  }
+                },
+                "Set_variable_jsonJohList_to_empty": {
+                  "runAfter": {
+                    "Set_variable_jsonJohList": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "jsonJohList",
+                    "value": "{}"
+                  }
+                },
+                "Update_session_status_complete": {
+                  "runAfter": {
+                    "Insert_or_Merge_Entity_with_errorMsg": [
+                      "Skipped"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "status": "COMPLETE"
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                      }
+                    },
+                    "method": "patch",
+                    "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                  }
+                },
+                "Update_status_to_loading": {
+                  "runAfter": {},
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "status": "PROCESSING"
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                      }
+                    },
+                    "method": "patch",
+                    "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_entities_with_status_ready": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "Get_entities_CLP_failed": {
+              "runAfter": {
+                "For_each_session": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/Tables/@{encodeURIComponent('CLP')}/entities",
+                "queries": {
+                  "$filter": "status eq 'FAILED'"
+                }
+              }
+            },
+            "Get_entities_with_status_ready": {
+              "runAfter": {
+                "Get_secret_hmi-secret": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/Tables/@{encodeURIComponent('CLP')}/entities",
+                "queries": {
+                  "$filter": "status eq 'READY'"
+                }
+              }
+            },
+            "Get_secret_hmi-client": {
+              "runAfter": {
+                "Initialize_jsonJohList": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
+              }
+            },
+            "Get_secret_hmi-secret": {
+              "runAfter": {
+                "Get_secret_hmi-client": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
+              }
+            },
+            "Has_HMI_failed": {
+              "actions": {
+                "Get_secret_Snow_client": {
+                  "runAfter": {},
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                  }
+                },
+                "Get_secret_Snow_secret": {
+                  "runAfter": {
+                    "Get_secret_Snow_client": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                  }
+                },
+                "HTTP_ServiceNow": {
+                  "runAfter": {
+                    "Get_secret_Snow_secret": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "authentication": {
+                      "password": "@body('Get_secret_Snow_secret')?['value']",
+                      "type": "Basic",
+                      "username": "@body('Get_secret_Snow_client')?['value']"
+                    },
+                    "body": {
+                      "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                      "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                      "category": "Data Issue",
+                      "contact_type": "Alert",
+                      "description": "Error details: @{variables('scheduleErrorBody')}",
+                      "impact": "2",
+                      "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                      "short_description": "HMI Rota File Error occured",
+                      "subcategory": "Data or File Error - other",
+                      "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                      "urgency": "3"
+                    },
+                    "method": "POST",
+                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                  }
+                }
+              },
+              "runAfter": {
+                "For_each_failed_CLP": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "greater": [
+                      "@length(variables('scheduleErrorBody'))",
+                      0
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "Initialize_johDataArray": {
+              "runAfter": {
+                "Initialize_jsonJohs": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "johDataArray",
+                    "type": "array"
+                  }
+                ]
+              }
+            },
+            "Initialize_jsonJohList": {
+              "runAfter": {
+                "Initialize_sessionStart": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "jsonJohList",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Initialize_jsonJohs": {
+              "runAfter": {
+                "Initialize_scheduleErrorBody": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "jsonJohs",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Initialize_scheduleErrorBody": {
+              "runAfter": {},
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "scheduleErrorBody",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Initialize_sessionDuration": {
+              "runAfter": {
+                "Initialize_johDataArray": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "sessionDuration",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Initialize_sessionStart": {
+              "runAfter": {
+                "Initialize_sessionDuration": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "sessionStart",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "azuretables-1": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-1",
+                "connectionName": "azuretables-1",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-2": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-2",
+                "connectionName": "azuretables-2",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-3": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3",
+                "connectionName": "azuretables-3",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-4": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-4",
+                "connectionName": "azuretables-4",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-5": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-5",
+                "connectionName": "azuretables-5",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-6": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-6",
+                "connectionName": "azuretables-6",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-7": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-7",
+                "connectionName": "azuretables-7",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-8": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-8",
+                "connectionName": "azuretables-8",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-9": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-9",
+                "connectionName": "azuretables-9",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-10": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-10",
+                "connectionName": "azuretables-10",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-11": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-11",
+                "connectionName": "azuretables-11",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-12": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-12",
+                "connectionName": "azuretables-12",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-13": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-13",
+                "connectionName": "azuretables-13",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-14": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-14",
+                "connectionName": "azuretables-14",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "azuretables-15": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-15",
+                "connectionName": "azuretables-15",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+              },
+              "keyvault": {
+                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/keyvault",
+                "connectionName": "keyvault",
+                "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/keyvault"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
