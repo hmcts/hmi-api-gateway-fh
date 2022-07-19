@@ -30,7 +30,7 @@ public class POSTResourcesLinkedHearingGroupTest extends ResourceValidationTest 
         this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
-        this.setHttpSuccessStatus(HttpStatus.OK);
+        this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
         setCheckUnsupportedDestinations(true);
         String[] supportedDestinations = {"SNL"};
         this.extractUnsupportedDestinations(supportedDestinations);
