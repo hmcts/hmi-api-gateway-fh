@@ -38,6 +38,7 @@ stages:
           subscription: ${{ parameters.subscription }}
           environment: ${{ parameters.environment }}
           dependsOn: createRotaStorage
+          logicApps: ["hmi-la-rota-dtu", "hmi-la-sittingpattern-publisher", "hmi-la-sittingpattern-retriever"]
 
 
         

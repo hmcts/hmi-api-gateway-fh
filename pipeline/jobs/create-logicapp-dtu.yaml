@@ -12,6 +12,9 @@ parameters:
   - name: environment
     type: string
 
+  - name: logicApps
+    type: object
+
 jobs:
 - job: CreateDtuLogicApp
   dependsOn:
@@ -22,9 +25,6 @@ jobs:
     vmImage: 'windows-latest'
   variables:
     - template: ../variables/${{ parameters.environment }}.yaml
-
-    - name: logicApps
-      value: ["hmi-la-rota-dtu", "hmi-la-sittingpatteren-publisher", "hmi-la-sittingpatteren-retriever"]
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
@@ -48,7 +48,7 @@ jobs:
       useLegacyPattern: false
       variableFiles: 'create-logicapp-dtu.yaml'
       enableTelemetry: true
-  - ${{ each la in variables.logicApps }}:
+  - ${{ each la in parameters.logicApps }}:
     - template: ..\steps\create-logic-app.yaml
       parameters:
         subscription: ${{ parameters.environment }}
