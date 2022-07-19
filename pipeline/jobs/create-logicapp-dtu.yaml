@@ -22,6 +22,9 @@ jobs:
     vmImage: 'windows-latest'
   variables:
     - template: ../variables/${{ parameters.environment }}.yaml
+
+    - name: logicApps
+      value: ["hmi-la-rota-dtu", "hmi-la-sittingpatteren-publisher", "hmi-la-sittingpatteren-retriever"]
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
@@ -45,24 +48,14 @@ jobs:
       useLegacyPattern: false
       variableFiles: 'create-logicapp-dtu.yaml'
       enableTelemetry: true
-  - task: AzureCLI@2
-    displayName: Create DTU Logic App
-    name: createLogicApp
-    inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        echo "Install az logic CLI extension"
-        az extension add --name logic
-        echo "Creating DTU Logic Application for $(environment)"
-        resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low"
-        az logic workflow create --name "hmi-la-dturota-$(environment)-test" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
-        echo "Creating DTU Logic Application - Sitting Patterns"
-        az logic workflow create --name "hmi-la-sittingpattern-publisher-$(environment)-test" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher-la.json"
-        az logic workflow create --name "hmi-la-sittingpattern-retriever-$(environment)-test" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever-la.json"
-        echo "Creating DTU Logic Applications is complete"
+  - ${{ each la in variables.logicApps }}:
+    - template: ..\steps\create-logic-app.yaml
+      parameters:
+        subscription: ${{ parameters.environment }}
+        environment: ${{ parameters.environment }}
+        name: ${{ la }}
+        path: "**/${{ la }}-la.json"
+
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
     name: kv_access
