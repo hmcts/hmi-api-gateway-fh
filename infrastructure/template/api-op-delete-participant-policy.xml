@@ -75,7 +75,7 @@
                     </set-header>
                     <set-body>@{
                         return new JObject(
-                        new JProperty("message", "Successfully authenticated by HMI, however target system failed to autheticate. Please try again.")
+                        new JProperty("message", "Successfully authenticated by HMI, however target system failed to authenticate. Please try again.")
                         ).ToString();
                         }
                     </set-body>
