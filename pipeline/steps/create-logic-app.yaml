@@ -18,13 +18,11 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        Write-Output "Install az logic CLI extension"
+        Write-Output 'Install az logic CLI extension'
         az extension add --name logic
-        $resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        $tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low"
-        Write-Output "${{ convertToJson(parameters.logicApps) }}""
+        $resourceGroupName='hmi-sharedinfra-$(environment)-rg'
+        $tags='businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low'
         $laArray = '${{ convertToJson(parameters.logicApps) }}' | ConvertFrom-Json
-        Write-Output "Object: $laArray"
 
         foreach ($la in $laArray) {
           $name = $la.name
