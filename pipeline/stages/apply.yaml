@@ -40,15 +40,15 @@ stages:
           dependsOn: createRotaStorage
           logicApps: [{
             name: "hmi-la-rota-dtu",
-            path: "**/hmi-la-rota-dtu-la.json"
+            path: "\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
           },
           {
             name: "hmi-la-sittingpattern-publisher",
-            path: "**/hmi-la-sittingpattern-publisher-la.json"
+            path: "\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json"
           },
           {
             name: "hmi-la-sittingpattern-retriever",
-            path: "**/hmi-la-sittingpattern-retriever-la.json"
+            path: "\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-retriever-la.json"
           }]
 
 
