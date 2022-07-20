@@ -186,7 +186,7 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "retrieve-video-hering-by-user",
+      "operationId"  : "retrieve-video-hearing-by-user",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-retrieve-vh-by-user-policy.xml",
       "errorAction"  : "Stop"
