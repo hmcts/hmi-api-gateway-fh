@@ -32,5 +32,5 @@ steps:
           
           Write-Output "Creating Logic Application $name"
           az logic workflow create --name "$name-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$(System.DefaultWorkingDirectory)$path"
-          Write-Output "Finished creating Logic Application $name"
+          Write-Output "Finished creating Logic Application $name "
         }
