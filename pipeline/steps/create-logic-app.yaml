@@ -26,6 +26,6 @@ steps:
 
         foreach ($la in $laArray) {
           Write-Output "Creating Logic Application $la"
-          az logic workflow create --name "$la-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "@$(System.DefaultWorkingDirectory)**/$la-la.json"
+          az --% logic workflow create --name "$la-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "@$(System.DefaultWorkingDirectory)**/$la-la.json"
           Write-Output "Finished creating Logic Application $la"
         }
