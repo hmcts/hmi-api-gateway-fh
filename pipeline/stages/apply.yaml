@@ -44,11 +44,11 @@ stages:
           },
           {
             name: "hmi-la-sittingpattern-publisher",
-            path: "\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json"
+            path: '\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json'
           },
           {
             name: "hmi-la-sittingpattern-retriever",
-            path: "\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-retriever-la.json"
+            path: '\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-retriever-la.json'
           }]
 
 
