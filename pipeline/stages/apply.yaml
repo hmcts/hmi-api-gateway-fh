@@ -38,10 +38,20 @@ stages:
           subscription: ${{ parameters.subscription }}
           environment: ${{ parameters.environment }}
           dependsOn: createRotaStorage
-          logicApps: ["hmi-la-rota-dtu", "hmi-la-sittingpattern-publisher", "hmi-la-sittingpattern-retriever"]
+          logicApps: [{
+            name: "hmi-la-rota-dtu",
+            path: "**/hmi-la-rota-dtu-la.json"
+          },
+          {
+            name: "hmi-la-sittingpattern-publisher",
+            path: "**/hmi-la-sittingpattern-publisher-la.json"
+          },
+          {
+            name: "hmi-la-sittingpattern-retriever",
+            path: "**/hmi-la-sittingpattern-retriever-la.json"
+          }]
 
 
-        
     - ${{ if eq(parameters.deploymentType, 'app') }}:
       - template: ../jobs/update-apim-api.yaml
         parameters:
