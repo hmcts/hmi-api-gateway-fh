@@ -40,7 +40,7 @@ stages:
           dependsOn: createRotaStorage
           logicApps: [{
             name: "hmi-la-rota-dtu",
-            path: "\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json"
+            path: '\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json'
           },
           {
             name: "hmi-la-sittingpattern-publisher",
