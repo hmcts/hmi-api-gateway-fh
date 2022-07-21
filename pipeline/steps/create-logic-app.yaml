@@ -19,7 +19,7 @@ steps:
       inlineScript: |
         $env_name=$($env:env_name)
         $env_longname=$($env:env_longname)
-        $apps = "$($env:logicApps)"
+        $apps = "$($env:logicApps)" -replace "\" "\\"
         Write-Host $apps
         $laArray = $($env:logicApps) | ConvertFrom-Json
         Write-Output "deploying to $env_longname ($env_name)"
@@ -41,4 +41,4 @@ steps:
     env:
       env_name: ${{ parameters.environment }}
       env_longname: ${{ variables.env_longname }}
-      logicApps: ${{ replace(convertToJson(parameters.logicApps), '\', '\\') }}
+      logicApps: ${{ convertToJson(parameters.logicApps) }}
