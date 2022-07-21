@@ -37,7 +37,7 @@ steps:
           $path = $la.path
 
           Write-Output "Creating Logic Application $name"
-          az logic workflow update --name "$name-$env_name" --resource-group $resourceGroupName --tags $tags --definition "$path"
+          az logic workflow create --name "$name-$env_name" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$path"
           Write-Output "Finished creating Logic Application $name"
         }
     env:
