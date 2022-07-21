@@ -40,12 +40,11 @@ stages:
           dependsOn: createRotaStorage
           logicApps:
             - name: "hmi-la-rota-dtu",
-              path: '$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json'  
+              path: '$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-dtu-la.json' 
             - name: "hmi-la-sittingpattern-publisher",
-              path: '$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json'   
+              path: '$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json'
             - name: "hmi-la-sittingpattern-retriever",
               path: '$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-retriever-la.json'
-
 
     - ${{ if eq(parameters.deploymentType, 'app') }}:
       - template: ../jobs/update-apim-api.yaml
