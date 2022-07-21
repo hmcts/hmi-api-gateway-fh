@@ -41,4 +41,4 @@ steps:
     env:
       env_name: ${{ parameters.environment }}
       env_longname: ${{ variables.env_longname }}
-      logicApps: ${{ convertToJson(parameters.logicApps) }}
+      logicApps: ${{ convertToJson(replace(parameters.logicApps, '\', '\\')) }}
