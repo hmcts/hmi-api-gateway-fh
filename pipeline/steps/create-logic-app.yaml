@@ -20,8 +20,9 @@ steps:
         $env_name=$($env:env_name)
         $env_longname=$($env:env_longname)
         $apps = "$($env:logicApps)" -replace "\\","\\"
+        Write-Host "deploy Apps: "
         Write-Host $apps
-        $laArray = $($env:logicApps) | ConvertFrom-Json
+        $laArray = $apps | ConvertFrom-Json
         Write-Output "deploying to $env_longname ($env_name)"
 
         Write-Output "Install az logic CLI extension"
