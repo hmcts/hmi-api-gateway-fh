@@ -17,17 +17,25 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
+        $env_name=$($env:env_name)
+        $env_longname=$($env:env_longname)
+        $laArray = $($env:logicApps) | ConvertFrom-Json
+
         Write-Output "Install az logic CLI extension"
         az extension add --name logic
-        $resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        $tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=${{ variables.env_longname }} criticality=Low"
-        $laArray = "${{ convertToJson(parameters.logicApps) }}" | ConvertFrom-Json
+
+        $resourceGroupName="hmi-sharedinfra-$env_name-rg"
+        $tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=$env_longname criticality=Low"
 
         foreach ($la in $laArray) {
           $name = $la.name
           $path = $la.path
 
           Write-Output "Creating Logic Application $name"
-          az logic workflow create --name "$name-$(environment)" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$path"
+          az logic workflow create --name "$name-$env_name" --resource-group $resourceGroupName --location "uksouth" --tags $tags --definition "$path"
           Write-Output "Finished creating Logic Application $name"
         }
+    env:
+      env_name: ${{ parameters.environment }}
+      env_longname: ${{ variables.env_longname }}
+      logicApps: ${{ convertToJson(parameters.logicApps) }}
