@@ -29,7 +29,7 @@ steps:
         az extension add --name logic
 
         $resourceGroupName="hmi-sharedinfra-$env_name-rg"
-        $tags="businessArea=Cross-Cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=$env_longname"
+        $tags="businessArea=cross-cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=$env_longname"
         Write-Output $tags
 
         foreach ($la in $laArray) {
