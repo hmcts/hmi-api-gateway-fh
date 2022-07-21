@@ -22,16 +22,6 @@ stages:
       - template: ../variables/shared.yaml
     jobs:
     - ${{ if eq(parameters.deploymentType, 'infra') }}:
-      - template: ../jobs/terraform-apply.yaml
-        parameters:
-          displayName: Build ${{ parameters.environment }}
-          subscription: ${{ parameters.subscription }}
-      - template: ../jobs/create-storage-rota.yaml
-        parameters:
-          displayName: Create ROTA Storage
-          subscription: ${{ parameters.subscription }}
-          dependsOn: TerraformApply
-          environmentName: ${{ variables.env_longname }}
       - template: ../jobs/create-logicapp-dtu.yaml
         parameters:
           displayName: Create DTU Logic Application
@@ -45,6 +35,16 @@ stages:
               path: "$(System.DefaultWorkingDirectory)/infrastructure/logic-app/sitting-pattern/hmi-la-sittingpattern-publisher-la.json"
             - name: "hmi-la-sittingpattern-retriever"
               path: "$(System.DefaultWorkingDirectory)/infrastructure/logic-app/sitting-pattern/hmi-la-sittingpattern-retriever-la.json"
+      - template: ../jobs/terraform-apply.yaml
+        parameters:
+          displayName: Build ${{ parameters.environment }}
+          subscription: ${{ parameters.subscription }}
+      - template: ../jobs/create-storage-rota.yaml
+        parameters:
+          displayName: Create ROTA Storage
+          subscription: ${{ parameters.subscription }}
+          dependsOn: TerraformApply
+          environmentName: ${{ variables.env_longname }}
 
     - ${{ if eq(parameters.deploymentType, 'app') }}:
       - template: ../jobs/update-apim-api.yaml
