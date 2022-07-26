@@ -38,8 +38,8 @@
                 </return-response>
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <choose>
-                    <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+        <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
