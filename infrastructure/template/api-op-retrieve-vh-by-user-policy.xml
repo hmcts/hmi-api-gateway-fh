@@ -38,7 +38,8 @@
                 </return-response>
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <choose>
+        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+        <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
@@ -67,8 +68,8 @@
                             <set-body>@{
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=#{vhHost}#t";}</set-body>
                         </send-request>
-                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-                        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
+                    <set-variable name="vhAuthToken" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" />
+                    <cache-store-value key="vhAuth" value="@((String)context.Variables["vhAuthToken"])" duration="2700" />
                     </when>
                 </choose>
                 <set-header name="Authorization" exists-action="override">
