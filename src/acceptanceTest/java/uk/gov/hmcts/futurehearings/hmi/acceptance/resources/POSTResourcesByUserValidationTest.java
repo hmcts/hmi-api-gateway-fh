@@ -42,7 +42,8 @@ class POSTResourcesByUserValidationTest extends ResourceValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-user-as-resource-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

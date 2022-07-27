@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
 import io.restassured.http.Headers;
 import org.springframework.http.MediaType;
 
@@ -76,7 +77,7 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithDestinationSystemValue(final String destinationSystem, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues( final String sourceSystem, final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -91,7 +92,7 @@ public class CommonHeaderHelper {
                                                                      final String returnErrorCode,
                                                                      final String returnDescription) {
 
-        Map<String,String> emulatorHeaderValues = new HashMap<String,String>();
+        Map<String,String> emulatorHeaderValues = new HashMap<>();
         emulatorHeaderValues.put("returnHttpCode",returnHttpCode);
         emulatorHeaderValues.put("returnErrorCode",returnErrorCode);
         emulatorHeaderValues.put("returnDescription",returnDescription);
@@ -199,5 +200,13 @@ public class CommonHeaderHelper {
                         sourceSystem,
                         destinationSystem
                         ), extraHeaderValue);
+    }
+
+    public static String[] RemoveItemsFromArray (String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
+        var updatedArray = arrayToRemoveItemsFrom;
+        if (!(arrayToRemoveItemsFrom == null) && arrayToRemoveItemsFrom.length > 0) {
+            for (String s : itemsToBeRemoved) updatedArray = ArrayUtils.removeElement(updatedArray, s);
+        }
+        return updatedArray;
     }
 }

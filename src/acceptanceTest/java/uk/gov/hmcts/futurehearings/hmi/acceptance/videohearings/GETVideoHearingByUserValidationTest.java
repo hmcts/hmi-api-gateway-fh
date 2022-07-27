@@ -4,8 +4,6 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S2187")
-class GETVideoHearingValidationTest extends VideoHearingValidationTest {
+class GETVideoHearingByUserValidationTest extends VideoHearingValidationTest {
 
     @Value("${videohearingsRootContext}")
     private String videohearingsRootContext;
@@ -37,8 +35,9 @@ class GETVideoHearingValidationTest extends VideoHearingValidationTest {
         this.setRelativeURL(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"VH"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 
     @ParameterizedTest(name = "Test username with invalid values  - Param : {0} --> {1}")
