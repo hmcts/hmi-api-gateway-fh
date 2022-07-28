@@ -4,7 +4,6 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.sessions.verify.GETSessionsValidationVerifier;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,9 @@ class GETSessionsValidationTest extends SessionsValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSessionsValidationVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 
     private void test_response_for_supplied_parameter() throws Exception {

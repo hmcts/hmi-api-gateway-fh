@@ -1,8 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,7 +31,8 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

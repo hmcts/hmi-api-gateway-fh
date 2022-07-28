@@ -38,7 +38,8 @@
                 </return-response>
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
-                <choose>
+        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+        <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("vhAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="vhClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/vh-client-app-client/?api-version=7.0</set-url>
@@ -67,8 +68,8 @@
                             <set-body>@{
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&resource=#{vhHost}#t";}</set-body>
                         </send-request>
-                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-                        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
+                    <set-variable name="vhAuthToken" value="@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["access_token"])" />
+                    <cache-store-value key="vhAuth" value="@((String)context.Variables["vhAuthToken"])" duration="2700" />
                     </when>
                 </choose>
                 <set-header name="Authorization" exists-action="override">
@@ -76,22 +77,6 @@
                 </set-header>
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "ELINKS")">
-                <send-request ignore-error="false" timeout="20" response-variable-name="elinksTokenResponse" mode="new">
-                    <set-url>https://#{keyVaultHost}#/secrets/elinks-token/?api-version=7.0</set-url>
-                    <set-method>GET</set-method>
-                    <authentication-managed-identity resource="https://vault.azure.net" />
-                </send-request>
-                <set-variable name="elinksToken" value="@{
-                    var secret = ((IResponse)context.Variables["elinksTokenResponse"]).Body.As<JObject>();
-                    return secret["value"].ToString();
-                }" />
-                <set-header name="Authorization" exists-action="override">
-                    <value>@("Bearer " + (String)context.Variables["elinksToken"])</value>
-                </set-header>
-                <rewrite-uri template="/people" copy-unmatched-params="true" />
-                <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <mock-response status-code="200" content-type="application/json" />
@@ -126,7 +111,7 @@
                     </set-header>
                     <set-body>@{
 						return new JObject(
-							new JProperty("message", "Successfully autheticated by HMI, however target system failed to autheticate. Please try again.")
+							new JProperty("message", "Successfully authenticated by HMI, however target system failed to authenticate. Please try again.")
 						    ).ToString();
 						}
 					</set-body>

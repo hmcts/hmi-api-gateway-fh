@@ -1,17 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -37,7 +32,8 @@ class POSTVideoHearingsValidationTest extends VideoHearingValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("video-hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"VH"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
