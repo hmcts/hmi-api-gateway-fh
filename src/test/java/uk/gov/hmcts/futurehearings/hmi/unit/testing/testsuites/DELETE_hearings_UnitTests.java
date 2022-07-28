@@ -1,6 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.*;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForDelete;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
@@ -180,6 +185,15 @@ class DELETE_hearings_UnitTests {
 
 	@Test
 	@Order(8)
+	@DisplayName("Test for Correct Headers and Payload")
+	void testDeleteHearingRequestWithCorrectHeaders() throws IOException {
+		final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
+		final Response response = deleteHearingAuth(input);
+		thenValidateResponseForDelete(response);
+	}
+
+	@Test
+	@Order(9)
 	@DisplayName("Test for missing Access Token")
 	void testDeleteHearingRequestWithMissingAccessToken() throws IOException {
 
@@ -189,7 +203,7 @@ class DELETE_hearings_UnitTests {
 	}
 
 	@Test
-	@Order(9)
+	@Order(10)
 	@DisplayName("Test for invalid Access Token")
 	void testDeleteHearingRequestWithInvalidAccessToken() throws IOException {
 		accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);

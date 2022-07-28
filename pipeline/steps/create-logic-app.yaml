@@ -1,0 +1,46 @@
+parameters:
+  - name: subscription
+    type: string
+
+  - name: environment
+    type: string
+
+  - name: logicApps
+    type: object
+
+steps:
+
+  - task: AzureCLI@2
+    displayName: Create Logic App
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env_name=$($env:env_name)
+        $env_longname=$($env:env_longname)
+        $apps = "$($env:logicApps)" -replace "\\","\\"
+        Write-Host "deploy Apps: "
+        Write-Host $apps
+        $laArray = $apps | ConvertFrom-Json
+        Write-Output "deploying to $env_longname ($env_name)"
+
+        Write-Output "Install az logic CLI extension"
+        az extension add --name logic
+
+        $resourceGroupName="hmi-sharedinfra-$env_name-rg"
+        $tags="businessArea=cross-cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=$env_longname"
+        Write-Output $tags
+
+        foreach ($la in $laArray) {
+          $name = $la.name
+          $path = $la.path
+
+          Write-Output "Creating Logic Application $name"
+          az logic workflow create --name "$name-$env_name" --resource-group $resourceGroupName --location "uksouth" --tags businessArea=cross-cutting application=hearings-management-interface builtFrom=hmcts/hmi-shared-infrastructure environment=$env_longname --definition "$path"
+          Write-Output "Finished creating Logic Application $name"
+        }
+    env:
+      env_name: ${{ parameters.environment }}
+      env_longname: ${{ variables.env_longname }}
+      logicApps: ${{ convertToJson(parameters.logicApps) }}
