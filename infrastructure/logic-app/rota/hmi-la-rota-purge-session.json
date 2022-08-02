@@ -1,0 +1,738 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_hmirotapurgesession_name": {
+            "defaultValue": "hmidturotapurgesessiondevla",
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "environmentName": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-1",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-2",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-3",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-4",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-5",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-6",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-7",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-8",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-9",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-10",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-11",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-12",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-13",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-14",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-15",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_hmirotapurgesession_name')]",
+            "location": "uksouth",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearings-management-interface",
+                "businessarea": "cross-cutting",
+				"builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'azuretables-1')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-2')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-3')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-4')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-5')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-6')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-7')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-8')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-9')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-10')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-11')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-12')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-13')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-14')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-15')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 5
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Minute",
+                                "interval": 5
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "For_each_CLP": {
+                            "foreach": "@body('Get_entities_CLP_complete')?['value']",
+                            "actions": {
+                                "Delete_CLP": {
+                                    "runAfter": {
+                                        "For_each_session": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_CLP')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_CLP')?['RowKey'])}')"
+                                    }
+                                },
+                                "For_each_session": {
+                                    "foreach": "@body('Get_entities_sessions')?['value']",
+                                    "actions": {
+                                        "Delete_schedule": {
+                                            "runAfter": {},
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                    }
+                                                },
+                                                "method": "delete",
+                                                "path": "/Tables/@{encodeURIComponent('schedule')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Get_entities_sessions": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Get_entities_sessions": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/Tables/@{encodeURIComponent('schedule')}/entities",
+                                        "queries": {
+                                            "$filter": "RowKey eq '@{items('For_each_CLP')?['RowKey']}'"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_CLP_complete": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "For_each_loading_file": {
+                            "foreach": "@body('Get_entities_rotaFiles_loading')?['value']",
+                            "actions": {
+                                "Delete_entity_loading": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                            }
+                                        },
+                                        "method": "delete",
+                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_loading_file')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_loading_file')?['RowKey'])}')"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_entities_rotaFiles_loading": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_entities_CLP_complete": {
+                            "runAfter": {
+                                "Initialize_oneWeekFromNow": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'COMPLETE' and Timestamp lt datetime'@{addToTime(utcNow(), -1, 'Day')}'"
+                                }
+                            }
+                        },
+                        "Get_entities_rotaFiles_loading": {
+                            "runAfter": {
+                                "For_each_CLP": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
+                                "queries": {
+                                    "$filter": "status eq 'LOADING' and Timestamp lt datetime'@{addToTime(utcNow(), -1, 'Day')}'"
+                                }
+                            }
+                        },
+                        "Initialize_oneWeekFromNow": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "oneWeekFromNow",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azuretables-1": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-1')]",
+                                "connectionName": "azuretables-1",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-2": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-2')]",
+                                "connectionName": "azuretables-2",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-3": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-3')]",
+                                "connectionName": "azuretables-3",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-4": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-4')]",
+                                "connectionName": "azuretables-4",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-5": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-5')]",
+                                "connectionName": "azuretables-5",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-6": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-6')]",
+                                "connectionName": "azuretables-6",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-7": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-7')]",
+                                "connectionName": "azuretables-7",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-8": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-8')]",
+                                "connectionName": "azuretables-8",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-9": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-9')]",
+                                "connectionName": "azuretables-9",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-10": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-10')]",
+                                "connectionName": "azuretables-10",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-11": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-11')]",
+                                "connectionName": "azuretables-11",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-12": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-12')]",
+                                "connectionName": "azuretables-12",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-13": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-13')]",
+                                "connectionName": "azuretables-13",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },"azuretables-14": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-14')]",
+                                "connectionName": "azuretables-14",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            },
+                            "azuretables-15": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-15')]",
+                                "connectionName": "azuretables-15",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

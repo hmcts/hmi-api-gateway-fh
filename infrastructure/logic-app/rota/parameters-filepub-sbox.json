@@ -5,33 +5,14 @@
         "environmentName":{
             "value": "sandbox"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-sbox"
-        },
-
         "workflows_hmirotafilepub_name": {
             "value": "hmi-la-dturota-file-pub-sbox"
         },
+        "rotaSessionEnricherUrl":{
+            "value": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
+        },
         "storageAccountName":{
             "value": "hmidtusbox"
-        },
-        "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files"
-        },
-        "storageACGetPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/GetFileContentByPath"
-        },
-        "storageACGetPathSuffix":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-        },
-        "storageACExistingCLPPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
-        },
-        "storageACExistingMagistrtePath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
-        },
-        "storageACExistingSchedulesPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
         },
         "storageAccessKey":{
             "reference": {
@@ -52,15 +33,6 @@
         },
         "keyvaultName":{
             "value": "hmi-shared-kv-sbox"
-        },
-        "hmiSchedulesUrl":{
-            "value": "https://hmi-apim.sandbox.platform.hmcts.net/hmi/schedules"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
-        },
-        "hmiDestination":{
-            "value": "SNL"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"

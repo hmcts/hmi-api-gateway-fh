@@ -5,33 +5,11 @@
         "environmentName":{
             "value": "sandbox"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-sbox"
-        },
-
-        "workflows_hmirotafilepub_name": {
-            "value": "hmi-la-dturota-file-pub-sbox"
+        "workflows_hmirotasessionpublisher_name": {
+            "value": "hmi-la-dturota-session-publisher-sbox"
         },
         "storageAccountName":{
             "value": "hmidtusbox"
-        },
-        "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files"
-        },
-        "storageACGetPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/GetFileContentByPath"
-        },
-        "storageACGetPathSuffix":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-        },
-        "storageACExistingCLPPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
-        },
-        "storageACExistingMagistrtePath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
-        },
-        "storageACExistingSchedulesPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtusbox'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
         },
         "storageAccessKey":{
             "reference": {
