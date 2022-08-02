@@ -1,0 +1,70 @@
+{
+	"definition": {
+		"$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+		"contentVersion": "1.0.0.0",
+		"parameters": {
+			"$connections": {
+				"defaultValue": {},
+				"type": "Object"
+			}
+		},
+		"triggers": {
+			"manual": {
+				"type": "Request",
+				"kind": "Http",
+				"inputs": {
+					"method": "GET"
+				}
+			}
+		},
+		"actions": {
+			"Get_blob_content": {
+				"runAfter": {},
+				"metadata": {
+					"JTJmc2l0dGluZy1wYXR0ZXJuJTJmZGF0YSUyZnJlcG9zaXRvcnkuanNvbg==": "/sitting-pattern/data/repository.json"
+				},
+				"type": "ApiConnection",
+				"inputs": {
+					"host": {
+						"connection": {
+							"name": "@parameters('$connections')['azureblob']['connectionId']"
+						}
+					},
+					"method": "get",
+					"path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent('JTJmc2l0dGluZy1wYXR0ZXJuJTJmZGF0YSUyZnJlcG9zaXRvcnkuanNvbg=='))}/content",
+					"queries": {
+						"inferContentType": true
+					}
+				}
+			},
+			"Response": {
+				"runAfter": {
+					"Get_blob_content": [
+						"Succeeded"
+					]
+				},
+				"type": "Response",
+				"kind": "Http",
+				"inputs": {
+					"body": "@body('Get_blob_content')",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"statusCode": 200
+				}
+			}
+		},
+		"outputs": {}
+	},
+	"parameters": {
+		"$connections": {
+			"value": {
+				"azureblob": {
+					"connectionId": "/subscriptions/#{serviceConnection.ARM_SUBSCRIPTION_ID}#/resourceGroups/hmi-sharedinfra-#{environment}#-rg/providers/Microsoft.Web/connections/azureblob",
+					"connectionName": "azureblob",
+					"id": "/subscriptions/#{serviceConnection.ARM_SUBSCRIPTION_ID}#/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
+				}
+			}
+		}
+	}
+}

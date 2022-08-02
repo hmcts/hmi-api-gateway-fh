@@ -12,6 +12,9 @@ parameters:
   - name: environment
     type: string
 
+  - name: logicApps
+    type: object
+
 jobs:
 - job: CreateDtuLogicApp
   dependsOn:
@@ -20,30 +23,37 @@ jobs:
   displayName: ${{ parameters.displayName }}
   pool:
     vmImage: 'windows-latest'
+  variables:
+    - template: ../variables/${{ parameters.environment }}.yaml
   steps:
   - template: ../steps/replace-token.yaml
     parameters:
       path: '**/parameters-*.json'
       environment: ${{ parameters.environment }}
-  - task: AzureCLI@2
-    displayName: Create DTU Logic App
-    name: createLogicApp
+  - template: templates/Azure/Common/get-service-connection-details.yaml@azTemplates
+    parameters:
+      subscriptionName: ${{ parameters.subscription }}
+  - task: replacetokens@3
+    displayName: Replace variables in Logic App workflow JSON
     inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        echo "Creating DTU Logic Application for $(environment)"
-        resourceGroupName="hmi-sharedinfra-$(environment)-rg"
-        echo "Creating DTU Logic Application - ROTA"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-filepub-$(environment).json"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-session-enricher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-session-enricher-$(environment).json"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-session-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-session-publisher-$(environment).json"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-purge-session.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-purge-session-$(environment).json"
-        echo "Creating DTU Logic Application - Sitting Patterns"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-publisher.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-loader-param-$(environment).json"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpatteren-retriever.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
-        echo "Creating DTU Logic Applications is complete"
+      rootDirectory: $(Build.SourcesDirectory)
+      targetFiles: '**/*-la.json'
+      encoding: 'auto'
+      escapeType: 'html'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      tokenPrefix: '#{'
+      tokenSuffix: '}#'
+      useLegacyPattern: false
+      variableFiles: 'create-logicapp-dtu.yaml'
+      enableTelemetry: true
+  - template: ..\steps\create-logic-app.yaml
+    parameters:
+      subscription: ${{ parameters.subscription }}
+      environment: ${{ parameters.environment }}
+      logicApps: ${{ parameters.logicApps }}
+
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
     name: kv_access

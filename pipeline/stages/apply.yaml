@@ -37,10 +37,15 @@ stages:
           displayName: Create DTU Logic Application
           subscription: ${{ parameters.subscription }}
           environment: ${{ parameters.environment }}
-          dependsOn: createRotaStorage
+          #dependsOn: createRotaStorage
+          logicApps:
+            - name: "hmi-la-dturota"
+              path: "$(System.DefaultWorkingDirectory)/infrastructure/logic-app/rota/hmi-la-rota-dtu-la.json"
+            - name: "hmi-la-sittingpattern-publisher"
+              path: "$(System.DefaultWorkingDirectory)/infrastructure/logic-app/sitting-pattern/hmi-la-sittingpattern-publisher-la.json"
+            - name: "hmi-la-sittingpattern-retriever"
+              path: "$(System.DefaultWorkingDirectory)/infrastructure/logic-app/sitting-pattern/hmi-la-sittingpattern-retriever-la.json"
 
-
-        
     - ${{ if eq(parameters.deploymentType, 'app') }}:
       - template: ../jobs/update-apim-api.yaml
         parameters:
