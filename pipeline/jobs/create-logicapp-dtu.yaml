@@ -63,7 +63,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         $env="$(environment)"
-        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
+        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-dturota-file-pub-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
         $resourceGroupName="hmi-sharedinfra-$env-rg"
         $kv_name="hmi-shared-kv-$env"
 

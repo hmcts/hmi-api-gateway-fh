@@ -5,32 +5,11 @@
         "environmentName":{
             "value": "testing"
         },
-        "workflows_hmidturota_name": {
-            "value": "hmi-la-dturota-test"
-        },
-        "workflows_hmirotafilepub_name": {
-            "value": "hmi-la-dturota-file-pub-test"
+        "workflows_hmirotasessionpublisher_name": {
+            "value": "hmi-la-dturota-session-publisher-test"
         },
         "storageAccountName":{
             "value": "hmidtutest"
-        },
-        "storageACPathFiles":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files"
-        },
-        "storageACGetPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/GetFileContentByPath"
-        },
-        "storageACGetPathSuffix":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-        },
-        "storageACExistingCLPPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_CLP')?['Path']))}"
-        },
-        "storageACExistingMagistrtePath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Magistrate')?['Path']))}"
-        },
-        "storageACExistingSchedulesPath":{
-            "value": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('hmidtutest'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each_Repo_Existing_Schedules')?['Path']))}"
         },
         "storageAccessKey":{
             "reference": {
@@ -59,7 +38,7 @@
             "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "hmiDestination":{
-            "value": "SNL"
+            "value": "MOCK"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"

@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName":{
+            "value": "development"
+        },
+        "workflows_hmirotafilepub_name": {
+            "value": "hmi-la-dturota-file-pub-dev"
+        },
+        "rotaSessionEnricherUrl":{
+            "value": "https://prod-03.uksouth.logic.azure.com:443/workflows/1841ef5046ee439a87f4a84f09e9adfb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DidaEFB5Oe-mmfy18G0-VsEdbEd4Dqc39y6MAKIPxI"
+        },
+        "storageAccountName":{
+            "value": "hmidtudev"
+        },
+        "storageAccessKey":{
+            "reference": {
+                "keyVault": {
+                   "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-dev"
+                },
+                "secretName": "dtu-storage-account-key"
+             }
+        },
+        "appId":{
+            "value": "#{keyVaultUserId}#"
+        },
+        "appSecret":{
+            "value": "#{keyVaultUserSecret}#"
+        },
+        "tenantId":{
+            "value": "#{azureTenant}#"
+        },
+        "keyvaultName":{
+            "value": "hmi-shared-kv-dev"
+        },
+        "serviceNowHostUrl": {
+            "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+        },
+        "serviceNowAssignemntGroupId": {
+            "value": "56b756774fbd368057db0b318110c7bd"
+        },
+        "serviceNowUserRoleTypeId": {
+            "value": "c319bc4bdb41834074abffa9bf96199c"
+        },
+        "serviceNowServiceOfferingId": {
+            "value": "138e0c541bc5bc507bdaddf0b24bcb2a"
+        },
+        "serviceNowCallerId": {
+            "value": "1475a0491b743414f0dc85e4464bcb7a"
+        }
+    }
+}
