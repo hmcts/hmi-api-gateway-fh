@@ -57,10 +57,6 @@
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-listing" />
                 <choose>
