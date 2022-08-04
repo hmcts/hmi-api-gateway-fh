@@ -6,10 +6,6 @@
                 <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
                 <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
