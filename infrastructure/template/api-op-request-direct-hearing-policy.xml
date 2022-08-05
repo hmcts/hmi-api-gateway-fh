@@ -72,6 +72,19 @@
 					</set-body>
 				</return-response>
 			</when>
+			<otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
 		</choose>
     </inbound>
     <backend>
@@ -89,7 +102,7 @@
 						</set-header>
 						<set-body>@{
 						return new JObject(
-							new JProperty("message", "Successfully autheticated by HMI, however target system failed to autheticate. Please try again.")
+							new JProperty("message", "Successfully authenticated by HMI, however target system failed to authenticate. Please try again.")
 						    ).ToString();
 						}
 					</set-body>

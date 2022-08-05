@@ -26,18 +26,6 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("functional")
 public class ResourcesAPITest extends FunctionalTest {
 
-    @Value("${resourcesByUserRootContext}")
-    protected String resourcesByUserRootContext;
-
-    @Value("${resourcesByUser_idRootContext}")
-    protected String resourcesByUser_idRootContext;
-
-    @Value("${resourcesByLocationRootContext}")
-    protected String resourcesByLocationRootContext;
-
-    @Value("${resourcesByLocation_idRootContext}")
-    protected String resourcesByLocation_idRootContext;
-
     @Value("${resourcesLinkedHearingGroupRootContext}")
     private String resourcesLinkedHearingGroupRootContext;
 
@@ -46,33 +34,6 @@ public class ResourcesAPITest extends FunctionalTest {
 
     @Steps
     ResourcesSteps resourceSteps;
-
-    @Test
-    public void testRequestUserWithEmptyPayload() {
-        log.debug("In the testRequestAndAmendAResourceByUser() method");
-        resourceSteps.shouldCreateOrAmendUserWithInvalidPayload(resourcesByUserRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.POST,
-                "{}");
-    }
-
-    @Test
-    public void testRequestLocationWithEmptyPayload() {
-        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocationRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.POST,
-                "{}");
-    }
-
-    @Test
-    public void testAmendLocationWithEmptyPayload() {
-        int randomId = new Random().nextInt(99999999);
-        resourcesByLocation_idRootContext = String.format(resourcesByLocation_idRootContext,randomId);
-        resourceSteps.shouldCreateOrAmendLocationWithInvalidPayload(resourcesByLocation_idRootContext,
-                headersAsMap,
-                authorizationToken, HttpMethod.PUT,
-                "{}");
-    }
 
     @Test
     public void testRequestLinkedHearingGroup() {
