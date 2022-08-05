@@ -1,8 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.people.PeopleValidationTest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,8 @@ class GETVideoHearingByIDValidationTest extends PeopleValidationTest {
         this.setRelativeURL(videohearings_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"VH"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

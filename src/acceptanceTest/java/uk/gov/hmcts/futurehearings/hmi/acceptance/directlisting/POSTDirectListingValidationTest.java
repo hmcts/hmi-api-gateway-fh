@@ -9,8 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -28,8 +26,9 @@ public class POSTDirectListingValidationTest extends DirectListingValidationTest
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-direct-listing-mock.json");
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
 

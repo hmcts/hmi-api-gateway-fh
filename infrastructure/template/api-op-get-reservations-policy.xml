@@ -1,17 +1,9 @@
 <policies>
     <inbound>
         <base />
-            <choose>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-                    <choose>
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
+                <choose>
                     <when condition="@(context.Variables.GetValueOrDefault("snlAuthToken","") == "")">
                         <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
                             <set-url>https://#{keyVaultHost}#/secrets/snl-user-id/?api-version=7.0</set-url>
@@ -40,14 +32,14 @@
                             <set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
                         </send-request>
-						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                        <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
                         <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                     </when>
                 </choose>
                 <set-header name="Authorization" exists-action="override">
-                     <value>@((String)context.Variables["snlAuthToken"])</value>
+                    <value>@((String)context.Variables["snlAuthToken"])</value>
                 </set-header>
-				<set-header name="Content-Type" exists-action="override">
+                <set-header name="Content-Type" exists-action="override">
                     <value>application/json; charset=utf-8</value>
                 </set-header>
                 <set-header name="Request-Type" exists-action="override">
@@ -60,16 +52,24 @@
                 <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
                 <rewrite-uri template="/" copy-unmatched-params="true" />
                 <set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/reservations" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                    <rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-                    <set-backend-service base-url="http://#{emulatorHost}#/hearings/retrieve-hearing/" />
-                </when>
-                <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                    <set-backend-service base-url="https://www.hmcts.com/request-hearings/hearings/id" />
-                    <mock-response status-code="200" content-type="application/json" />
-                </when>
-            </choose>
+            </when>
+            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
+                <mock-response status-code="200" content-type="application/json" />
+            </when>
+            <otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
+        </choose>
     </inbound>
     <backend>
         <base />
