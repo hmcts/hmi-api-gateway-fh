@@ -1,6 +1,20 @@
 <policies>
     <inbound>
         <base />
+        <return-response>
+            <set-status code="500" />
+            <set-header name="Content-Type">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                return new JObject(
+                new JProperty("statusCode", "500"),
+                new JProperty("message", "Internal server error"),
+                new JProperty("message", "79c1bef9-a05d-4734-b729-0657c1749e40")
+                ).ToString();
+                }
+            </set-body>
+        </return-response>
         <mock-response status-code="500" content-type="application/json" />
     </inbound>
     <backend>
