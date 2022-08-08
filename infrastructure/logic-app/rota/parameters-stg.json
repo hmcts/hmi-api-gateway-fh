@@ -8,6 +8,9 @@
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-stg"
         },
+        "workflows_hmirotafilepub_name": {
+            "value": "hmi-la-dturota-file-pub-stg"
+        },
         "storageAccountName":{
             "value": "hmidtustg"
         },

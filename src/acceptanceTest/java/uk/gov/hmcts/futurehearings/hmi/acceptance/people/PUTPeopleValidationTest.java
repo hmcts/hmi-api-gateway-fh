@@ -1,8 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.people;
 
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +29,8 @@ class PUTPeopleValidationTest extends PeopleValidationTest {
         this.setInputPayloadFileName("PUT-people-payload.json");
         this.setHttpMethod(HttpMethod.PUT);
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"ELINKS"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

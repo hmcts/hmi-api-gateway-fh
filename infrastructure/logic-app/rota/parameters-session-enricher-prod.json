@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName":{
+            "value": "production"
+        },
+        "workflows_hmirotasessionenrich_name": {
+            "value": "hmi-la-dturota-session-enricher-prod"
+        },
+        "storageAccountName":{
+            "value": "hmidtuprod"
+        },
+        "storageAccessKey":{
+            "reference": {
+                "keyVault": {
+                   "id": "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/hmi-sharedservices-prod-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-prod"
+                },
+                "secretName": "dtu-storage-account-key"
+             }
+        },
+        "serviceNowHostUrl": {
+            "value": "https://mojcppprod.service-now.com/api/now/table/incident?sysparm_fields=number"
+        },
+        "serviceNowAssignemntGroupId": {
+            "value": "56b756774fbd368057db0b318110c7bd"
+        },
+        "serviceNowUserRoleTypeId": {
+            "value": "c319bc4bdb41834074abffa9bf96199c"
+        },
+        "serviceNowServiceOfferingId": {
+            "value": "138e0c541bc5bc507bdaddf0b24bcb2a"
+        },
+        "serviceNowCallerId": {
+            "value": "1475a0491b743414f0dc85e4464bcb7a"
+        }
+    }
+}

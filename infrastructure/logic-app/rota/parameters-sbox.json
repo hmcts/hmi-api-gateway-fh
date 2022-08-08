@@ -8,6 +8,10 @@
         "workflows_hmidturota_name": {
             "value": "hmi-la-dturota-sbox"
         },
+
+        "workflows_hmirotafilepub_name": {
+            "value": "hmi-la-dturota-file-pub-sbox"
+        },
         "storageAccountName":{
             "value": "hmidtusbox"
         },

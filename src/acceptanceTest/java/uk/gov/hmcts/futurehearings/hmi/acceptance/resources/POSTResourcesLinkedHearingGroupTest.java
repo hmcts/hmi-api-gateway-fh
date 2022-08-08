@@ -11,29 +11,28 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SelectClasses(DELETEResourcesValidationTest.class)
-@IncludeTags("Delete")
-public class DELETEResourcesLinkedHearingGroup extends ResourceValidationTest {
+@SelectClasses(POSTResourcesLinkedHearingGroupTest.class)
+@IncludeTags("POST")
+@SuppressWarnings("java:S2187")
+public class POSTResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
-    @Value("${resourcesLinkedHearingGroup_idRootContext}")
-    private String resourcesLinkedHearingGroup_idRootContext;
+    @Value("${resourcesLinkedHearingGroupRootContext}")
+    private String resourcesLinkedHearingGroupRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, "123456");
-        this.setRelativeURL(resourcesLinkedHearingGroup_idRootContext);
-        this.setHttpMethod(HttpMethod.DELETE);
-        this.setInputFileDirectory(null);
+        this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
+        this.setHttpMethod(HttpMethod.POST);
+        this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"SNL"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }

@@ -10,8 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -30,7 +28,8 @@ public class POSTPublicationValidationTest extends PublicationValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-test-publication.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);
-        this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HMICommonErrorVerifier());
+        setCheckUnsupportedDestinations(true);
+        String[] supportedDestinations = {"PIH"};
+        this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
