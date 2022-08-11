@@ -729,7 +729,7 @@
                 "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
               },
               "keyvault": {
-                "connectionId": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/keyvault",
+                "connectionId": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/keyvault",
                 "connectionName": "keyvault",
                 "id": "subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/keyvault"
               }
