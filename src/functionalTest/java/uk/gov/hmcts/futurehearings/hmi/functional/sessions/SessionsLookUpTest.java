@@ -232,8 +232,7 @@ public class SessionsLookUpTest extends FunctionalTest {
                 queryParameters);
     }
 
-    @Disabled("Test fails as requestRoomAttributes does not accept any valid values. Waiting for McGirr to fix this.")
-    // @Test
+    @Test
     public void testSuccessfulGetSessionForRequestRoomAttributes() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestRoomAttributes", "8");
