@@ -15,7 +15,7 @@
       "name": "[parameters('workflows_hmi_la_dtulibra_session_publisher_dev_name')]",
       "location": "uksouth",
       "tags": {
-        "environment": "development",
+        "environment": "[parameters('environmentName')]",
         "application": "hearings-management-interface",
         "businessarea": "cross-cutting",
         "builtFrom": "hmcts/hmi-api-gateway-fh"
