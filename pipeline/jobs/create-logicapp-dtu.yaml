@@ -39,7 +39,7 @@ jobs:
         echo "Creating DTU Logic Application for $(environment)"
         resourceGroupName="hmi-sharedinfra-$(environment)-rg"
         echo "Creating DTU Logic Application - LIBRA"
-        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-libra-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\parameters-libra-filepub-$(environment).json"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-libra-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\parameters-libra-file-pub-$(environment).json"
         echo "Creating DTU Logic Application - ROTA"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-file-pub.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-filepub-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\hmi-la-rota-purge-session.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\rota\parameters-purge-session-$(environment).json"
