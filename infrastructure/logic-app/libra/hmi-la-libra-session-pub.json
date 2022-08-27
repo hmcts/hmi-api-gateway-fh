@@ -5,6 +5,42 @@
     "workflows_hmi_la_dtulibra_session_publisher_dev_name": {
       "defaultValue": "hmi-la-dtulibra-session-publisher-dev",
       "type": "String"
+    },
+    "storageAccountName": {
+        "type": "string"
+    },
+    "storageAccessKey": {
+        "type": "securestring"
+    },
+    "environmentName": {
+        "type": "string"
+    },
+     "appId": {
+        "type": "securestring"
+    }, 
+    "appSecret": {
+        "type": "securestring"
+    }, 
+    "tenantId": {
+        "type": "securestring"
+    }, 
+    "keyvaultName": {
+        "type": "string"
+    },
+    "serviceNowHostUrl": {
+        "type": "string"
+    },
+    "serviceNowAssignemntGroupId": {
+        "type": "string"
+    },
+    "serviceNowUserRoleTypeId": {
+        "type": "string"
+    },
+    "serviceNowServiceOfferingId": {
+        "type": "string"
+    },
+    "serviceNowCallerId": {
+        "type": "string"
     }
   },
   "variables": {},
