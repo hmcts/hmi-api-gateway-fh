@@ -33,8 +33,8 @@
 							<set-body>@{
 								return "client_id=" + (string)context.Variables["cftClient"] + "&client_secret=" + (string)context.Variables["cftSecret"] + "&grant_type=client_credentials&scope=profile";}</set-body>
 						</send-request>
+                        <set-variable name="cftAuthToken" value="@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])" />
 						<cache-store-value key="cftAuth" value="@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-						<cache-lookup-value key="cftAuth" variable-name="cftAuthToken" />
 					</when>
 				</choose>
 				<set-header name="Authorization" exists-action="override">
@@ -80,8 +80,8 @@
 							<set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
 						</send-request>
+                        <set-variable name="snlAuthToken" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" />
 						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
-						<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
 					</when>
 				</choose>
 				<set-header name="Authorization" exists-action="override">
