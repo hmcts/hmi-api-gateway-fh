@@ -4,7 +4,7 @@
         <rewrite-uri template="/knock-knock" copy-unmatched-params="true" />
         <authentication-certificate certificate-id="hmicrimecert" />
         <set-header name="Authorization" exists-action="delete" />
-        <set-backend-service base-url="https://apigw.sit.cjscp.org.uk/cppi/v3/" />
+        <set-backend-service base-url="https://#{crimeHost}#/cppi/v3/" />
     </inbound>
     <backend>
         <base />

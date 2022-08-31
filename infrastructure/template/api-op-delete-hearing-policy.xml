@@ -147,17 +147,6 @@
 							).ToString();    
 					}</set-body>
 				</send-request>
-				<return-response>
-                    <set-status code="502" />
-                    <set-header name="Content-Type">
-                        <value>application/json</value>
-                    </set-header>
-                    <set-body>@{
-                        return new JObject(
-                            new JProperty("message", "Problem occurred with Backend Service. Please try again. [SNOW:" + ((IResponse)context.Variables["serviceNow"]).Body.As<JObject>()["result"]["number"].ToString()  + "][HMI:" +  context.Request.Headers.GetValueOrDefault("transactionIdHMCTS","") + "]")
-                            ).ToString();
-                        }</set-body>
-                </return-response>
             </when>
         </choose>
     </outbound>
