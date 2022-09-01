@@ -100,102 +100,71 @@
             }
           },
           "triggers": {
-            "Recurrence": {
-              "recurrence": {
-                "frequency": "Minute",
-                "interval": 5
-              },
-              "evaluatedRecurrence": {
-                "frequency": "Minute",
-                "interval": 5
-              },
-              "type": "Recurrence"
+            "manual": {
+              "type": "Request",
+              "kind": "Http",
+              "inputs": {
+                "schema": {
+                  "properties": {
+                    "filename": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
             }
           },
           "actions": {
-            "For_each_file": {
-              "foreach": "@body('Get_entities_with_status_new')?['value']",
-              "actions": {
-                "Compose_session_payload": {
-                  "runAfter": {
-                    "Update_status_to_loading": [
-                      "Succeeded"
-                    ]
-                  },
-                  "type": "Compose",
-                  "inputs": {
-                    "session": {
-                      "johs": "",
-                      "room": {
-                        "locationId": "",
-                        "locationReferenceType": "EXTERNAL",
-                        "locationType": "Room"
-                      },
-                      "sessionDuration": 0,
-                      "sessionReference": "",
-                      "sessionStart": "",
-                      "venue": {
-                        "locationId": "",
-                        "locationReferenceType": "EXTERNAL",
-                        "locationType": "Court"
-                      }
-                    }
-                  }
-                },
-                "HTTP_HMI": {
-                  "runAfter": {
-                    "Compose_session_payload": [
-                      "Succeeded"
-                    ]
-                  },
-                  "type": "Http",
-                  "inputs": {
-                    "authentication": {
-                      "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
-                      "clientId": "@body('Get_secret_hmi-client')?['value']",
-                      "secret": "@body('Get_secret_hmi-secret')?['value']",
-                      "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
-                      "type": "ActiveDirectoryOAuth"
-                    },
-                    "body": "@outputs('Compose_session_payload')",
-                    "headers": {
-                      "Accept": "application/json",
-                      "Content-Type": "application/json",
-                      "Destination-System": "MOCK",
-                      "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
-                      "Source-System": "CFT"
-                    },
-                    "method": "POST",
-                    "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
-                  }
-                },
-                "Update_status_to_loading": {
-                  "runAfter": {},
-                  "type": "ApiConnection",
-                  "inputs": {
-                    "body": {
-                      "status": "PROCESSING"
-                    },
-                    "host": {
-                      "connection": {
-                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                      }
-                    },
-                    "method": "patch",
-                    "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_file')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_file')?['RowKey'])}')"
-                  }
-                }
-              },
+            "Copy_blob_(V2)": {
               "runAfter": {
-                "Get_entities_with_status_new": [
+                "Get_blob_content_(V2)": [
                   "Succeeded"
                 ]
               },
-              "type": "Foreach"
+              "type": "ApiConnection",
+              "inputs": {
+                "headers": {
+                  "ReadFileMetadataFromServer": true
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                "queries": {
+                  "destination": "@{concat('libra/output/', body('Parse_JSON')?['filename'])}",
+                  "overwrite": true,
+                  "queryParametersSingleEncoded": true,
+                  "source": "@{concat('libra/input/', body('Parse_JSON')?['filename'])}"
+                }
+              }
             },
-            "Get_entities_with_status_new": {
+            "Delete_blob_(V2)": {
               "runAfter": {
-                "Get_secret_hmi-secret": [
+                "Copy_blob_(V2)": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "headers": {
+                  "SkipDeleteIfFileNotFoundOnServer": false
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "delete",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}"
+              }
+            },
+            "Get_blob_content_(V2)": {
+              "runAfter": {
+                "Update_status_to_Loading": [
                   "Succeeded"
                 ]
               },
@@ -203,18 +172,22 @@
               "inputs": {
                 "host": {
                   "connection": {
-                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
                   }
                 },
                 "method": "get",
-                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}/content",
                 "queries": {
-                  "$filter": "status eq 'NEW'"
+                  "inferContentType": true
                 }
               }
             },
             "Get_secret_hmi-client": {
-              "runAfter": {},
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
               "type": "ApiConnection",
               "inputs": {
                 "host": {
@@ -241,6 +214,92 @@
                 },
                 "method": "get",
                 "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
+              }
+            },
+            "Insert_or_Merge_Entity": {
+              "runAfter": {
+                "Delete_blob_(V2)": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "status": "COMPLETE"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "Parse_JSON": {
+              "runAfter": {},
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()",
+                "schema": {
+                  "properties": {
+                    "filename": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "Update_status_to_Loading": {
+              "runAfter": {
+                "Get_secret_hmi-secret": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "status": "LOADING"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "read.me": {
+              "runAfter": {
+                "Insert_or_Merge_Entity": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": "@concat('contains libra files')",
+                "headers": {
+                  "ReadFileMetadataFromServer": true
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                "queries": {
+                  "folderPath": "/libra/input/",
+                  "name": "read.me",
+                  "queryParametersSingleEncoded": true
+                }
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
               }
             }
           },

@@ -894,6 +894,24 @@
                                 "For_each_file_to_load": {
                                     "foreach": "@variables('newFilesToSend')",
                                     "actions": {
+                                        "HTTP": {
+                                            "runAfter": {
+                                                "Parse_new_record_to_load": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http",
+                                            "inputs": {
+                                                "body": {
+                                                    "Filename": "@{body('Parse_new_record_to_load')?['RowKey']}"
+                                                },
+                                                "headers": {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                "method": "POST",
+                                                "uri": "https://prod-02.uksouth.logic.azure.com:443/workflows/618ce3b058b24de1bf81abc6ca6213ac/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tbe_k4-ByrfixTu7yTUzPpXTPGi8rUtOC2PPCmjprw0"
+                                            }
+                                        },
                                         "Parse_new_record_to_load": {
                                             "runAfter": {},
                                             "type": "ParseJson",
