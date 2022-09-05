@@ -12,9 +12,6 @@
         "storageAccountName": {
             "type": "string"
         },
-        "storageAccessKey": {
-            "type": "securestring"
-        },
         "hmiDestination": {
             "type": "string"
         },
@@ -34,9 +31,6 @@
             "type": "string"
         },
         "serviceNowHostUrl": {
-            "type": "string"
-        },
-        "hmiScopeUrl": {
             "type": "string"
         },
         "serviceNowAssignemntGroupId": {
@@ -93,12 +87,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -128,12 +116,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -163,12 +145,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -198,12 +174,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -233,12 +203,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -268,12 +232,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -303,12 +261,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -338,12 +290,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -373,12 +319,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -408,12 +348,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -443,12 +377,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -478,12 +406,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -513,12 +435,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -548,12 +464,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -583,12 +493,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -1136,20 +1040,20 @@
                                             "username": "@body('Get_secret_Snow_client')?['value']"
                                         },
                                         "body": {
-                                            "assignment_group": "56b756774fbd368057db0b318110c7bd",
-                                            "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                                            "caller_id": "[parameters('serviceNowCallerId')]",
                                             "category": "Data Issue",
                                             "contact_type": "Alert",
-                                            "description": "Error details: @{variables('scheduleErrorBody')}",
+                                            "description": "Invalid Rota files: @{variables('snowErrorMessage')}",
                                             "impact": "2",
-                                            "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                             "short_description": "HMI Rota File Error occured",
                                             "subcategory": "Data or File Error - other",
-                                            "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
                                             "urgency": "3"
                                         },
                                         "method": "POST",
-                                        "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                                        "uri": "[parameters('serviceNowHostUrl')]"
                                     }
                                 }
                             },

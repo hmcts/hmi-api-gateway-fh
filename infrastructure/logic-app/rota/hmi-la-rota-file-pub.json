@@ -86,12 +86,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "name": "azureblob",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
@@ -115,12 +109,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
