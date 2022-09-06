@@ -1044,7 +1044,7 @@
                                             "caller_id": "[parameters('serviceNowCallerId')]",
                                             "category": "Data Issue",
                                             "contact_type": "Alert",
-                                            "description": "Invalid Rota files: @{variables('snowErrorMessage')}",
+                                            "description": "Error details: @{variables('scheduleErrorBody')}",
                                             "impact": "2",
                                             "service_offering": "[parameters('serviceNowServiceOfferingId')]",
                                             "short_description": "HMI Rota File Error occured",
