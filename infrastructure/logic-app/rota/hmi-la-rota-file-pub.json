@@ -86,12 +86,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "name": "azureblob",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "api": {
                     "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
@@ -115,12 +109,6 @@
                 "builtFrom": "hmcts/hmi-api-gateway-fh"
             },
             "kind": "V1",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearings-management-interface",
-                "businessarea": "cross-cutting",
-				"builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
             "properties": {
                 "displayName": "HMI DTU Rota",
                 "statuses": [
@@ -246,7 +234,7 @@
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                     }
                                                 },
                                                 "method": "get",
@@ -266,7 +254,7 @@
                                                 },
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]s['connectionId']"
                                                     }
                                                 },
                                                 "method": "patch",
@@ -286,7 +274,7 @@
                                                 },
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                     }
                                                 },
                                                 "method": "patch",
@@ -821,7 +809,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -846,7 +834,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -866,7 +854,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -1019,7 +1007,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "get",

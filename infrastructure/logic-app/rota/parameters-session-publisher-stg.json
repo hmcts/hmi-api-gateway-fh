@@ -11,14 +11,6 @@
         "storageAccountName":{
             "value": "hmidtustg"
         },
-        "storageAccessKey":{
-            "reference": {
-                "keyVault": {
-                   "id": "/subscriptions/74dacd4f-a248-45bb-a2f0-af700dc4cf68/resourceGroups/hmi-sharedservices-stg-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-stg"
-                },
-                "secretName": "dtu-storage-account-key"
-             }
-        },
         "appId":{
             "value": "#{keyVaultUserId}#"
         },
@@ -33,9 +25,6 @@
         },
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.staging.platform.hmcts.net/hmi/schedules"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "hmiDestination":{
             "value": "SNL"
