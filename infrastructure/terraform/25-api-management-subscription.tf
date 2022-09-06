@@ -15,7 +15,7 @@ resource "azurerm_api_management_subscription" "hmi_apim_subscription" {
   product_id          = azurerm_api_management_product.hmi_apim_product.id
   display_name        = "Test Subscription"
   state               = "active"
-  allow_tracing       = var.environment == "sbox" || var.environment == "dev" || var.environment == "test" ? true : false
+  allow_tracing       = var.environment == "sbox" || var.environment == "dev" || var.environment == "test" || var.environment == "ithc"  ? true : false
 }
 
 
