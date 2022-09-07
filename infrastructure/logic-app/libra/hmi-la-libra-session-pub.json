@@ -110,6 +110,10 @@
       "identity": {
         "type": "SystemAssigned"
       },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+        "[resourceId('Microsoft.Web/connections', 'azuretables')]"
+      ],  
       "properties": {
         "state": "Disabled",
         "definition": {
