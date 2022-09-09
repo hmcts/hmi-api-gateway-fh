@@ -27,6 +27,9 @@
     "keyvaultName": {
       "type": "string"
     },
+    "hmiListingUrl": {
+      "type": "string"
+    },
     "serviceNowHostUrl": {
       "type": "string"
     },
@@ -382,7 +385,7 @@
                       "Source-System": "CRIME"
                     },
                     "method": "POST",
-                    "uri": "https://hmi-apim.staging.platform.hmcts.net/hmi/listings"
+                    "uri": "[parameters('hmiListingUrl')]"
                   }
                 }
               },

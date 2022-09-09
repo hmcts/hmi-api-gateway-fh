@@ -6,15 +6,15 @@
             "value": "development"
         },
         "workflows_hmi_la_dtulibra_session_publisher_dev_name": {
-            "value": "hmi-la-dtulibra-session-pub-stg"
+            "value": "hmi-la-dtulibra-session-pub-dev"
         },
         "storageAccountName":{
-            "value": "hmidtustg"
+            "value": "hmidtutest"
         },
         "storageAccessKey":{
             "reference": {
                 "keyVault": {
-                   "id": "/subscriptions/74dacd4f-a248-45bb-a2f0-af700dc4cf68/resourceGroups/hmi-sharedinfra-stg-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-stg"
+                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedinfra-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
                 },
                 "secretName": "dtu-storage-account-key"
              }
@@ -29,10 +29,10 @@
             "value": "#{azureTenant}#"
         },
         "keyvaultName":{
-            "value": "hmi-shared-kv-stg"
+            "value": "hmi-shared-kv-test"
         },
         "hmiListingUrl": {
-            "value": "https://hmi-apim.staging.platform.hmcts.net/hmi/listings"
+            "value": "https://hmi-apim.test.platform.hmcts.net/hmi/listings"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"

@@ -31,6 +31,9 @@
         "keyvaultName":{
             "value": "hmi-shared-kv-dev"
         },
+        "hmiListingUrl": {
+            "value": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
+        },
         "serviceNowHostUrl": {
             "value": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
         },
