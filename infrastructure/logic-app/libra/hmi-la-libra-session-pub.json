@@ -169,9 +169,133 @@
             }
           },
           "actions": {
-            "Copy_blob_(V2)": {
+            "Condition": {
+              "actions": {
+                "For_each_record_to_delete": {
+                  "foreach": "@body('Get_failed_entities_to_delete')?['value']",
+                  "actions": {
+                    "Delete_Entity": {
+                      "runAfter": {},
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                          }
+                        },
+                        "method": "delete",
+                        "path": "/Tables/@{encodeURIComponent('libraError')}/entities/etag(PartitionKey='@{encodeURIComponent(items('For_each_record_to_delete')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_record_to_delete')?['RowKey'])}')"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Get_failed_entities_to_delete": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Foreach"
+                },
+                "Get_SNow_client": {
+                  "runAfter": {},
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                  }
+                },
+                "Get_SNow_secret": {
+                  "runAfter": {
+                    "Get_SNow_client": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                  }
+                },
+                "Get_failed_entities_to_delete": {
+                  "runAfter": {
+                    "HTTP_Service_Now": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/Tables/@{encodeURIComponent('libraError')}/entities",
+                    "queries": {
+                      "$filter": "PartitionKey eq '@{body('Parse_JSON')?['filename']}'"
+                    }
+                  }
+                },
+                "HTTP_Service_Now": {
+                  "runAfter": {
+                    "Get_SNow_secret": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "authentication": {
+                      "password": "@body('Get_SNow_secret')?['value']",
+                      "type": "Basic",
+                      "username": "@body('Get_SNow_client')?['value']"
+                    },
+                    "body": {
+                      "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                      "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
+                      "category": "Data Issue",
+                      "contact_type": "Alert",
+                      "description": "Error details: @{variables('errorBody')}",
+                      "impact": "2",
+                      "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
+                      "short_description": "HMI Rota File Error occured",
+                      "subcategory": "Data or File Error - other",
+                      "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
+                      "urgency": "3"
+                    },
+                    "method": "POST",
+                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
+                  }
+                }
+              },
               "runAfter": {
-                "Get_blob_content_(V2)": [
+                "Set_errorBody": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "greater": [
+                      "@length(variables('errorBody'))",
+                      3
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "Copy_input_file_to_output": {
+              "runAfter": {
+                "For_each_json_record": [
                   "Succeeded"
                 ]
               },
@@ -195,9 +319,9 @@
                 }
               }
             },
-            "Delete_blob_(V2)": {
+            "Delete_input_file": {
               "runAfter": {
-                "Copy_blob_(V2)": [
+                "Copy_input_file_to_output": [
                   "Succeeded"
                 ]
               },
@@ -215,7 +339,81 @@
                 "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}"
               }
             },
-            "Get_blob_content_(V2)": {
+            "For_each_json_record": {
+              "foreach": "@body('Parse_jsonFileContent')",
+              "actions": {
+                "Create_Error_record": {
+                  "runAfter": {
+                    "HTTP_HMI": [
+                      "Failed"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "body": {
+                      "errorMessage": "@{body('HTTP_HMI')}"
+                    },
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                      }
+                    },
+                    "method": "patch",
+                    "path": "/Tables/@{encodeURIComponent('libraError')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(items('For_each_json_record')?['listingRequest']?['_case']?['caseIdHMCTS'])}')"
+                  }
+                },
+                "HTTP_HMI": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "authentication": {
+                      "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                      "clientId": "@body('Get_secret_hmi-client')?['value']",
+                      "secret": "@body('Get_secret_hmi-secret')?['value']",
+                      "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                      "type": "ActiveDirectoryOAuth"
+                    },
+                    "body": "@items('For_each_json_record')",
+                    "headers": {
+                      "Accept": "application/json",
+                      "Content-Type": "application/json",
+                      "Destination-System": "SNL",
+                      "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                      "Source-System": "CRIME"
+                    },
+                    "method": "POST",
+                    "uri": "https://hmi-apim.staging.platform.hmcts.net/hmi/listings"
+                  }
+                }
+              },
+              "runAfter": {
+                "Parse_jsonFileContent": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "Get_failed_entities": {
+              "runAfter": {
+                "Initialize_errorBody": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/Tables/@{encodeURIComponent('libraError')}/entities",
+                "queries": {
+                  "$filter": "PartitionKey eq '@{body('Parse_JSON')?['filename']}'"
+                }
+              }
+            },
+            "Get_file_to_process": {
               "runAfter": {
                 "Update_status_to_Loading": [
                   "Succeeded"
@@ -269,24 +467,36 @@
                 "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
               }
             },
-            "Insert_or_Merge_Entity": {
+            "Initialize_errorBody": {
               "runAfter": {
-                "Delete_blob_(V2)": [
+                "Update_Status_to_Complete": [
                   "Succeeded"
                 ]
               },
-              "type": "ApiConnection",
+              "type": "InitializeVariable",
               "inputs": {
-                "body": {
-                  "status": "COMPLETE"
-                },
-                "host": {
-                  "connection": {
-                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                "variables": [
+                  {
+                    "name": "errorBody",
+                    "type": "string"
                   }
-                },
-                "method": "patch",
-                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+                ]
+              }
+            },
+            "Initialize_jsonFileContent": {
+              "runAfter": {
+                "Get_secret_hmi-secret": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "jsonFileContennt",
+                    "type": "string"
+                  }
+                ]
               }
             },
             "Parse_JSON": {
@@ -304,9 +514,253 @@
                 }
               }
             },
+            "Parse_jsonFileContent": {
+              "runAfter": {
+                "Set_jsonFileContent": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@variables('jsonFileContennt')",
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "listingRequest": {
+                        "properties": {
+                          "_case": {
+                            "properties": {
+                              "caseClassifications": {
+                                "properties": {
+                                  "caseClassificationService": {
+                                    "type": "string"
+                                  },
+                                  "caseClassificationSubType": {
+                                    "type": "string"
+                                  },
+                                  "caseClassificationType": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "caseCourt": {
+                                "properties": {
+                                  "locationId": {
+                                    "type": "string"
+                                  },
+                                  "locationReferenceType": {
+                                    "type": "string"
+                                  },
+                                  "locationType": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "caseIdHMCTS": {
+                                "type": "string"
+                              },
+                              "caseJurisdiction": {
+                                "type": "string"
+                              },
+                              "caseListingRequestId": {
+                                "type": "integer"
+                              },
+                              "caseRegistered": {
+                                "type": "string"
+                              },
+                              "caseReportingRestrictions": {
+                                "type": "string"
+                              },
+                              "caseTitle": {
+                                "type": "string"
+                              },
+                              "caseVersionID": {
+                                "properties": {},
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "entities": {
+                            "items": {
+                              "properties": {
+                                "entityId": {
+                                  "type": "integer"
+                                },
+                                "entityOffences": {
+                                  "items": {
+                                    "properties": {
+                                      "offenceClass": {
+                                        "type": "string"
+                                      },
+                                      "offenceDate": {
+                                        "type": "string"
+                                      },
+                                      "offenceId": {
+                                        "type": "integer"
+                                      },
+                                      "offenceLegislation": {
+                                        "type": "string"
+                                      },
+                                      "offenceTitle": {
+                                        "type": "string"
+                                      },
+                                      "offenceWording": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "offenceId",
+                                      "offenceClass",
+                                      "offenceTitle",
+                                      "offenceWording",
+                                      "offenceLegislation",
+                                      "offenceDate"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                },
+                                "entityRoleCode": {
+                                  "type": "string"
+                                },
+                                "entitySubType": {
+                                  "properties": {
+                                    "entityClassCode": {
+                                      "type": "string"
+                                    },
+                                    "entityDateOfBirth": {
+                                      "type": "string"
+                                    },
+                                    "entityFirstName": {
+                                      "type": "string"
+                                    },
+                                    "entityLastName": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "entityTypeCode": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "entityId",
+                                "entityTypeCode",
+                                "entityRoleCode",
+                                "entitySubType",
+                                "entityOffences"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "listing": {
+                            "properties": {
+                              "listingSessions": {
+                                "properties": {
+                                  "listingDuration": {
+                                    "type": "integer"
+                                  },
+                                  "listingRoom": {
+                                    "properties": {
+                                      "locationId": {
+                                        "type": "string"
+                                      },
+                                      "locationReferenceType": {
+                                        "type": "string"
+                                      },
+                                      "locationType": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "type": "object"
+                                  },
+                                  "listingStartDate": {
+                                    "type": "string"
+                                  },
+                                  "listingStartTime": {
+                                    "type": "string"
+                                  },
+                                  "listingStatus": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "listingType": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "meta": {
+                            "properties": {},
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "listingRequest"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "Set_errorBody": {
+              "runAfter": {
+                "Get_failed_entities": [
+                  "Succeeded"
+                ]
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "errorBody",
+                "value": "@{body('Get_failed_entities')?['value']}"
+              }
+            },
+            "Set_jsonFileContent": {
+              "runAfter": {
+                "Get_file_to_process": [
+                  "Succeeded"
+                ]
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "jsonFileContennt",
+                "value": "@{body('Get_file_to_process')}"
+              }
+            },
+            "Update_Status_to_Complete": {
+              "runAfter": {
+                "Delete_input_file": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "status": "COMPLETE"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
             "Update_status_to_Loading": {
               "runAfter": {
-                "Get_secret_hmi-secret": [
+                "Initialize_jsonFileContent": [
                   "Succeeded"
                 ]
               },
@@ -326,7 +780,7 @@
             },
             "read.me": {
               "runAfter": {
-                "Insert_or_Merge_Entity": [
+                "Condition": [
                   "Succeeded"
                 ]
               },
