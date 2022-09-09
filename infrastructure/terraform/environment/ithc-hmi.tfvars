@@ -10,3 +10,11 @@ revision                           = "47"
 service_url                        = ""
 enable_mock_header_string          = "<set-header name=\"_EnableMocks\" exists-action=\"override\"><value>true</value></set-header>"
 virtual_network_type               = "Internal"
+
+custom_certificates = {
+  "crime" = {
+    id                   = "hmicrimecert"
+    certificate_filename = "hmicrimecert.pfx"
+    certificate_password = "#{hmicrimecert_password}#"
+  }
+}

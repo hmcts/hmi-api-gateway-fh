@@ -3,6 +3,22 @@ parameters:
     type: string
 
 steps:
+- task: replacetokens@5
+  inputs:
+    rootDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform/'
+    targetFiles: 'environment/*.tfvars'
+    encoding: 'auto'
+    tokenPattern: 'default'
+    writeBOM: true
+    verbosity: 'detailed'
+    actionOnMissing: 'warn'
+    keepToken: false
+    actionOnNoFiles: 'continue'
+    enableTransforms: false
+    enableRecursion: false
+    useLegacyPattern: false
+    enableTelemetry: true
+
 - task: TerraformCLI@0
   displayName: Terraform plan
   inputs:
