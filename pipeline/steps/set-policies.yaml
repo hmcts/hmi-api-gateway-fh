@@ -9,7 +9,7 @@ steps:
     azureSubscription: ${{ parameters.subscription }}
     ScriptType: 'InlineScript'
     Inline: |
-      $apimContext = New-AzApiManagementContext -ResourceGroupName $(resourceGroup) -ServiceName "hmi-apim-svc-$(environment)"
+      $apimContext = New-AzApiManagementContext -ResourceGroupName "hmi-apim-$(environment)-rg" -ServiceName "hmi-apim-svc-$(environment)"
       $policies = (Get-Content $(System.DefaultWorkingDirectory)\infrastructure\template\policies.json -Raw | ConvertFrom-Json).policies
       foreach ($_ in $policies) {
         $format = $_.format
