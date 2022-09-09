@@ -493,7 +493,7 @@
               "inputs": {
                 "variables": [
                   {
-                    "name": "jsonFileContennt",
+                    "name": "jsonFileContent",
                     "type": "string"
                   }
                 ]
@@ -522,7 +522,7 @@
               },
               "type": "ParseJson",
               "inputs": {
-                "content": "@variables('jsonFileContennt')",
+                "content": "@variables('jsonFileContent')",
                 "schema": {
                   "items": {
                     "properties": {
@@ -734,7 +734,7 @@
               },
               "type": "SetVariable",
               "inputs": {
-                "name": "jsonFileContennt",
+                "name": "jsonFileContent",
                 "value": "@{body('Get_file_to_process')}"
               }
             },
