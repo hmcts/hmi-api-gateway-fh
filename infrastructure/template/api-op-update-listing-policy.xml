@@ -58,12 +58,7 @@
                 <set-backend-service base-url="https://#{sAndLHost}#/casehqapi/rest/hmcts/resources/listings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://www.hmcts.com/request-hearings/update-listing" />
-                <choose>
-                    <when condition="@(context.Request.Headers.GetValueOrDefault("_EnableMocks", "false")=="true")">
-                        <mock-response status-code="204" content-type="application/json" />
-                    </when>
-                </choose>
+                 <mock-response status-code="204" content-type="application/json" />
             </when>
             <otherwise>
                 <return-response>

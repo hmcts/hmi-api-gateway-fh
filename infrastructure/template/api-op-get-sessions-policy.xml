@@ -2,10 +2,6 @@
     <inbound>
         <base />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/" copy-unmatched-params="true" /> 
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/sessions" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>
@@ -59,46 +55,11 @@
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <return-response>
-                    <set-status code="200" />
+                    <set-status code="222" />
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/json</value>
                     </set-header>
-                    <set-body>@{
-                            var data = new JArray();
-                            JObject recordOne = new JObject(
-                                new JProperty("sessionStartDate", "2018-01-29 20:36:01Z"),
-                                new JProperty("sessionEndDate", "2018-01-29 20:36:01Z"),
-                                new JProperty("caseCourt", "Milton Keynes"),
-                                new JProperty("room-Name", "RM012"),
-                                new JProperty("JoH", new JObject(
-                                    new JProperty("PersonRoleID", "PR012"),
-                                    new JProperty("PersonID", "P012"),
-                                    new JProperty("PersonRole", "Judge"),
-                                    new JProperty("personName", "Marcus Trescothic"),
-                                    new JProperty("TicketName", "T123")
-                                )),
-                                new JProperty("SessionType", "DS"),
-                                new JProperty("SessionIDCaseHQ", "SID012")
-                            );
-                            JObject recordTwo = new JObject(
-                                new JProperty("sessionStartDate", "2018-01-29 10:36:01Z"),
-                                new JProperty("sessionEndDate", "2018-01-29 12:36:01Z"),
-                                new JProperty("caseCourt", "Oxford"),
-                                new JProperty("room-Name", "RM012"),
-                                new JProperty("JoH", new JObject(
-                                    new JProperty("PersonRoleID", "PR012"),
-                                    new JProperty("PersonID", "P012"),
-                                    new JProperty("PersonRole", "Judge"),
-                                    new JProperty("personName", "Donald Duck"),
-                                    new JProperty("TicketName", "T123")
-                                )),
-                                new JProperty("SessionType", "DS"),
-                                new JProperty("SessionIDCaseHQ", "SID015")
-                            );
-                            data.Add(recordOne);
-                            data.Add(recordTwo);
-                            return data.ToString();
-                        }</set-body>
+                    <set-body></set-body>
                 </return-response>
             </when>
             <otherwise>

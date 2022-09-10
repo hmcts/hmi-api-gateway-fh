@@ -37,22 +37,6 @@
                             }</set-body>
                     </return-response>
                 </when>
-				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-				</when>
-				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-				</when>
-				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-				</when>
-				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-					<rewrite-uri template="/retrieve-hearing" copy-unmatched-params="true" />
-					<set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-				</when>
 				<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<choose>
 		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ") != null)">
