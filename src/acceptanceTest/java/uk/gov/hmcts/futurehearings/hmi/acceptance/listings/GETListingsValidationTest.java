@@ -44,22 +44,6 @@ class GETListingsValidationTest extends ListingsValidationTest {
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
 
-    @Test
-    @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
-    void test_date_of_listing_with_invalid_queryparam() throws Exception {
-        this.setUrlParams(buildQueryParams("test_param", ""));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
-    }
-
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws Exception {
@@ -116,21 +100,4 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 "The request was received successfully.",null);
     }
 
-    @Test
-    void test_multiple_query_params_with_an_error_parameter() throws Exception {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams("date_of_listing",
-                "2018-01-29 20:36:01Z",
-                "hearing_type",
-                "VH","test_extra_param",""));
-        commonDelegate.test_expected_response_for_supplied_header(
-                getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
-                createStandardPayloadHeader(),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
-    }
 }
