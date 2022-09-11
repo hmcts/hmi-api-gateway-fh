@@ -105,7 +105,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 INVALID_QUERY_PARAMETER_MSG,null);
     }
 
-    @ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
+    //@ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingType, Theft", "hearingType,''", "hearingType,' '", "hearingType,NIL"}, nullValues = "NIL")
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingIdCaseHQValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingIdCaseHQValue));
