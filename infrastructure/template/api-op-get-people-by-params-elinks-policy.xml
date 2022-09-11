@@ -72,7 +72,353 @@
                 <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <mock-response status-code="200" content-type="application/json" />
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>{
+                        "pagination": {
+                            "results": 3,
+                            "pages": 1,
+                            "current_page": 1,
+                            "results_per_page": 50,
+                            "more_pages": false
+                        },
+                        "results": [
+                            {
+                                "id": "306c9326-13c7-4acb-ac57-3f324d237a69",
+                                "per_id": 57829,
+                                "leaver": true,
+                                "left_on": "2022-08-03"
+                            },
+                            {
+                                "id": "80a126f8-6594-4741-8485-0ac4442cb5de",
+                                "per_id": 57820,
+                                "personal_code": "0049931065",
+                                "title": "Judge",
+                                "known_as": "Test",
+                                "surname": "HMI",
+                                "fullname": "Judge Test HMI",
+                                "post_nominals": null,
+                                "email": "Test.HMI.JP@judiciarystaging.onmicrosoft.com",
+                                "sex": "female",
+                                "work_phone": "+440746376252",
+                                "disability": true,
+                                "retirement_date": "2050-11-22",
+                                "leaving_on": null,
+                                "appointments": [
+                                    {
+                                        "appointment_id": 114327,
+                                        "role": "Magistrate",
+                                        "role_name": "Magistrate",
+                                        "role_name_id": null,
+                                        "type": "Courts",
+                                        "court_name": "Aberystwyth Justice Centre - County",
+                                        "court_type": "County Court",
+                                        "circuit": "Wales",
+                                        "bench": null,
+                                        "advisory_committee_area": null,
+                                        "location": "Bradford",
+                                        "base_location": "Aberystwyth Justice Centre - County",
+                                        "base_location_id": 994,
+                                        "is_principal": true,
+                                        "start_date": "2022-07-18",
+                                        "end_date": null,
+                                        "superseded": false,
+                                        "contract_type": "voluntary",
+                                        "contract_type_id": 2,
+                                        "work_pattern": "No Work Pattern (M to F)",
+                                        "work_pattern_id": 1,
+                                        "fte_percent": 100
+                                    }
+                                ],
+                                "training_records": [],
+                                "authorisations": [
+                                    {
+                                        "jurisdiction": "Criminal",
+                                        "tickets": [
+                                            "Appeals in Crown Court"
+                                        ]
+                                    },
+                                    {
+                                        "jurisdiction": "Tribunals",
+                                        "tickets": [
+                                            "03 - Disability Living Allowance"
+                                        ]
+                                    }
+                                ],
+                                "authorisations_with_dates": [
+                                    {
+                                        "authorisation_id": 29692,
+                                        "jurisdiction": "Criminal",
+                                        "jurisdiction_id": 25,
+                                        "ticket": "Appeals in Crown Court",
+                                        "ticket_id": 303,
+                                        "start_date": "2022-07-18",
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 29693,
+                                        "jurisdiction": "Tribunals",
+                                        "jurisdiction_id": 27,
+                                        "ticket": "03 - Disability Living Allowance",
+                                        "ticket_id": 365,
+                                        "start_date": "2022-07-13",
+                                        "end_date": null
+                                    }
+                                ]
+                            },
+                            {
+                                "id": null,
+                                "per_id": 57824,
+                                "leaver": true,
+                                "left_on": "2022-08-01"
+                            },
+                            {
+                                "id": "eb4ba980-0b9e-4482-9351-fe9257ff229b",
+                                "per_id": 57825,
+                                "personal_code": "0049931070",
+                                "title": "Mr",
+                                "known_as": "LMS",
+                                "surname": "TestAccount Tribs",
+                                "fullname": "Mr LMS TestAccount Tribs",
+                                "post_nominals": null,
+                                "email": "TribunalMember.LMSTestAccountTribs@judiciarystaging.onmicrosoft.com",
+                                "sex": "male",
+                                "work_phone": null,
+                                "disability": false,
+                                "retirement_date": null,
+                                "leaving_on": null,
+                                "appointments": [
+                                    {
+                                        "appointment_id": 114338,
+                                        "role": "Tribunal Member",
+                                        "role_name": "Tribunal Member Medical",
+                                        "role_name_id": null,
+                                        "type": "Courts",
+                                        "court_name": "Aylesbury County Court",
+                                        "court_type": "County Court",
+                                        "circuit": "South East",
+                                        "bench": null,
+                                        "advisory_committee_area": null,
+                                        "location": "South East",
+                                        "base_location": "Aylesbury County Court",
+                                        "base_location_id": 799,
+                                        "is_principal": false,
+                                        "start_date": "2022-06-30",
+                                        "end_date": null,
+                                        "superseded": false,
+                                        "contract_type": "fee_paid",
+                                        "contract_type_id": 1,
+                                        "work_pattern": "Fee Paid Judiciary 5 Days Mon - Fri",
+                                        "work_pattern_id": 10,
+                                        "fte_percent": 100
+                                    },
+                                    {
+                                        "appointment_id": 114341,
+                                        "role": "Magistrate",
+                                        "role_name": "Magistrate",
+                                        "role_name_id": null,
+                                        "type": "Courts",
+                                        "court_name": "Barkingside Magistrates Court",
+                                        "court_type": "County Court",
+                                        "circuit": "London",
+                                        "bench": null,
+                                        "advisory_committee_area": null,
+                                        "location": "London East",
+                                        "base_location": "Barkingside Magistrates Court",
+                                        "base_location_id": 1170,
+                                        "is_principal": true,
+                                        "start_date": "2022-08-01",
+                                        "end_date": "2022-08-05",
+                                        "superseded": false,
+                                        "contract_type": "fee_paid",
+                                        "contract_type_id": 1,
+                                        "work_pattern": "Fee Paid Judiciary 5 Days Mon - Fri",
+                                        "work_pattern_id": 10,
+                                        "fte_percent": 100
+                                    }
+                                ],
+                                "training_records": [],
+                                "authorisations": [
+                                    {
+                                        "jurisdiction": "Magistrate",
+                                        "tickets": [
+                                            "Family Court",
+                                            "Adult Court"
+                                        ]
+                                    },
+                                    {
+                                        "jurisdiction": "Tribunals",
+                                        "tickets": [
+                                            "Mental Health",
+                                            "00 - Interlocutory"
+                                        ]
+                                    }
+                                ],
+                                "authorisations_with_dates": [
+                                    {
+                                        "authorisation_id": 29709,
+                                        "jurisdiction": "Magistrate",
+                                        "jurisdiction_id": 29,
+                                        "ticket": "Adult Court",
+                                        "ticket_id": 387,
+                                        "start_date": "2022-08-01",
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 29710,
+                                        "jurisdiction": "Magistrate",
+                                        "jurisdiction_id": 29,
+                                        "ticket": "Family Court",
+                                        "ticket_id": 389,
+                                        "start_date": "2022-08-02",
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 29711,
+                                        "jurisdiction": "Tribunals",
+                                        "jurisdiction_id": 27,
+                                        "ticket": "00 - Interlocutory",
+                                        "ticket_id": 368,
+                                        "start_date": "2022-07-01",
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 29712,
+                                        "jurisdiction": "Tribunals",
+                                        "jurisdiction_id": 27,
+                                        "ticket": "Mental Health",
+                                        "ticket_id": 342,
+                                        "start_date": "2022-07-01",
+                                        "end_date": null
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "c9b2a0ab-f46c-4011-972c-91e0325804a3",
+                                "per_id": 40360,
+                                "personal_code": "4921399",
+                                "title": "Mr",
+                                "known_as": "Steve",
+                                "surname": "Jobs",
+                                "fullname": "Mr Steve Jobs",
+                                "post_nominals": "QC",
+                                "email": "HHJ.Chuck.Schumer.QC@judiciarystaging.onmicrosoft.com",
+                                "sex": "male",
+                                "work_phone": "0121 246 7000",
+                                "disability": false,
+                                "retirement_date": "2035-03-15",
+                                "leaving_on": null,
+                                "appointments": [
+                                    {
+                                        "appointment_id": 114351,
+                                        "role": "Magistrate",
+                                        "role_name": "Magistrate",
+                                        "role_name_id": null,
+                                        "type": "LJA",
+                                        "court_name": null,
+                                        "court_type": null,
+                                        "circuit": null,
+                                        "bench": "Birmingham and Solihull LJA",
+                                        "advisory_committee_area": "Birmingham and Solihull",
+                                        "location": null,
+                                        "base_location": "Birmingham and Solihull LJA",
+                                        "base_location_id": 37,
+                                        "is_principal": true,
+                                        "start_date": "2022-09-01",
+                                        "end_date": null,
+                                        "superseded": false,
+                                        "contract_type": "voluntary",
+                                        "contract_type_id": 2,
+                                        "work_pattern": "No Work Pattern (M to F)",
+                                        "work_pattern_id": 1,
+                                        "fte_percent": 100
+                                    }
+                                ],
+                                "training_records": [
+                                    {
+                                        "course": "Serious Sexual Offences",
+                                        "event_delegate_status": "Fully Attended",
+                                        "start_date": "2009-07-06",
+                                        "end_date": "2009-07-08"
+                                    },
+                                    {
+                                        "course": "Serious Sexual Offences",
+                                        "event_delegate_status": "Fully Attended",
+                                        "start_date": "2011-11-28",
+                                        "end_date": "2011-11-30"
+                                    },
+                                    {
+                                        "course": "Sentencing Seminar",
+                                        "event_delegate_status": "Cancelled",
+                                        "start_date": "2015-03-16",
+                                        "end_date": "2015-03-17"
+                                    },
+                                    {
+                                        "course": "Sentencing Seminar",
+                                        "event_delegate_status": "Cancelled",
+                                        "start_date": "2016-03-16",
+                                        "end_date": "2016-03-17"
+                                    },
+                                    {
+                                        "course": "Sentencing Seminar",
+                                        "event_delegate_status": "Fully Attended",
+                                        "start_date": "2018-03-07",
+                                        "end_date": "2018-03-08"
+                                    },
+                                    {
+                                        "course": "Sentencing Seminar",
+                                        "event_delegate_status": "Booked",
+                                        "start_date": "2019-02-27",
+                                        "end_date": "2019-02-28"
+                                    }
+                                ],
+                                "authorisations": [
+                                    {
+                                        "jurisdiction": "Criminal",
+                                        "tickets": [
+                                            "Attempted Murder",
+                                            "Murder",
+                                            "Serious Sexual Offences"
+                                        ]
+                                    }
+                                ],
+                                "authorisations_with_dates": [
+                                    {
+                                        "authorisation_id": 22938,
+                                        "jurisdiction": "Criminal",
+                                        "jurisdiction_id": 25,
+                                        "ticket": "Attempted Murder",
+                                        "ticket_id": 304,
+                                        "start_date": null,
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 2534,
+                                        "jurisdiction": "Criminal",
+                                        "jurisdiction_id": 25,
+                                        "ticket": "Murder",
+                                        "ticket_id": 309,
+                                        "start_date": "2011-09-27",
+                                        "end_date": null
+                                    },
+                                    {
+                                        "authorisation_id": 2932,
+                                        "jurisdiction": "Criminal",
+                                        "jurisdiction_id": 25,
+                                        "ticket": "Serious Sexual Offences",
+                                        "ticket_id": 311,
+                                        "start_date": "2009-07-06",
+                                        "end_date": null
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                    </set-body>
+                </return-response>
             </when>
             <otherwise>
                 <return-response>

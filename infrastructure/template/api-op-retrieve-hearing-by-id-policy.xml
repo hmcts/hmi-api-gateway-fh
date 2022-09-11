@@ -3,7 +3,224 @@
         <base />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <mock-response status-code="200" content-type="application/json" />
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>{
+						"requestDetails": {
+							"status": "LISTED",
+							"timestamp": "2022-09-09T12:41:55.656892",
+							"versionNumber": 1,
+							"hearingRequestID": "2000003219"
+						},
+						"hearingDetails": {
+							"hearingType": "BBA3-SUB",
+							"hearingWindow": {
+								"dateRangeStart": "2022-10-07"
+							},
+							"duration": 60,
+							"hearingPriorityType": "Standard",
+							"numberOfPhysicalAttendees": 1,
+							"hearingInWelshFlag": false,
+							"hearingLocations": [
+								{
+									"locationType": "court",
+									"locationId": "372653"
+								}
+							],
+							"privateHearingRequiredFlag": false,
+							"panelRequirements": {
+								"roleType": [],
+								"authorisationTypes": [],
+								"authorisationSubType": [],
+								"panelPreferences": [],
+								"panelSpecialisms": []
+							},
+							"hearingIsLinkedFlag": false,
+							"hearingChannels": [
+								"INTER"
+							],
+							"autolistFlag": true
+						},
+						"caseDetails": {
+							"hmctsServiceCode": "BBA3",
+							"caseRef": "1662727267950439",
+							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
+							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
+							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"caseAdditionalSecurityFlag": false,
+							"caseInterpreterRequiredFlag": false,
+							"caseCategories": [
+								{
+									"categoryType": "caseType",
+									"categoryValue": "BBA3-002"
+								},
+								{
+									"categoryType": "caseSubType",
+									"categoryValue": "BBA3-002ML",
+									"categoryParent": "BBA3-002"
+								}
+							],
+							"caseManagementLocationCode": "372653",
+							"caserestrictedFlag": false,
+							"caseSLAStartDate": "2022-09-09"
+						},
+						"partyDetails": [
+							{
+								"partyID": "1",
+								"partyType": "IND",
+								"partyRole": "APEL",
+								"individualDetails": {
+									"title": null,
+									"firstName": "Mcybgpip",
+									"lastName": "Gzlnjpip",
+									"preferredHearingChannel": "INTER",
+									"interpreterLanguage": null,
+									"reasonableAdjustments": [],
+									"vulnerableFlag": false,
+									"vulnerabilityDetails": null,
+									"hearingChannelEmail": [],
+									"hearingChannelPhone": [],
+									"relatedParties": [],
+									"custodyStatus": null,
+									"otherReasonableAdjustmentDetails": null
+								}
+							}
+						],
+						"hearingResponse": {
+							"hearingDaySchedule": [
+								{
+									"hearingStartDateTime": "2022-10-12T11:00:00",
+									"hearingEndDateTime": "2022-10-12T12:00:00",
+									"hearingVenueId": "372653",
+									"hearingRoomId": "Cardiff SSCS - Hearing Room 02",
+									"hearingJudgeId": null,
+									"panelMemberIds": [
+										"4923393"
+									],
+									"attendees": [
+										{
+											"hearingSubChannel": "INTER",
+											"partyID": "1"
+										}
+									],
+									"listAssistSessionID": null
+								}
+							],
+							"laCaseStatus": "LISTED",
+							"listingStatus": "FIXED",
+							"receivedDateTime": "2022-09-09T13:02:49"
+						}
+					}{
+						"requestDetails": {
+							"status": "LISTED",
+							"timestamp": "2022-09-09T12:41:55.656892",
+							"versionNumber": 1,
+							"hearingRequestID": "2000003219"
+						},
+						"hearingDetails": {
+							"hearingType": "BBA3-SUB",
+							"hearingWindow": {
+								"dateRangeStart": "2022-10-07"
+							},
+							"duration": 60,
+							"hearingPriorityType": "Standard",
+							"numberOfPhysicalAttendees": 1,
+							"hearingInWelshFlag": false,
+							"hearingLocations": [
+								{
+									"locationType": "court",
+									"locationId": "372653"
+								}
+							],
+							"privateHearingRequiredFlag": false,
+							"panelRequirements": {
+								"roleType": [],
+								"authorisationTypes": [],
+								"authorisationSubType": [],
+								"panelPreferences": [],
+								"panelSpecialisms": []
+							},
+							"hearingIsLinkedFlag": false,
+							"hearingChannels": [
+								"INTER"
+							],
+							"autolistFlag": true
+						},
+						"caseDetails": {
+							"hmctsServiceCode": "BBA3",
+							"caseRef": "1662727267950439",
+							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
+							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
+							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"caseAdditionalSecurityFlag": false,
+							"caseInterpreterRequiredFlag": false,
+							"caseCategories": [
+								{
+									"categoryType": "caseType",
+									"categoryValue": "BBA3-002"
+								},
+								{
+									"categoryType": "caseSubType",
+									"categoryValue": "BBA3-002ML",
+									"categoryParent": "BBA3-002"
+								}
+							],
+							"caseManagementLocationCode": "372653",
+							"caserestrictedFlag": false,
+							"caseSLAStartDate": "2022-09-09"
+						},
+						"partyDetails": [
+							{
+								"partyID": "1",
+								"partyType": "IND",
+								"partyRole": "APEL",
+								"individualDetails": {
+									"title": null,
+									"firstName": "Mcybgpip",
+									"lastName": "Gzlnjpip",
+									"preferredHearingChannel": "INTER",
+									"interpreterLanguage": null,
+									"reasonableAdjustments": [],
+									"vulnerableFlag": false,
+									"vulnerabilityDetails": null,
+									"hearingChannelEmail": [],
+									"hearingChannelPhone": [],
+									"relatedParties": [],
+									"custodyStatus": null,
+									"otherReasonableAdjustmentDetails": null
+								}
+							}
+						],
+						"hearingResponse": {
+							"hearingDaySchedule": [
+								{
+									"hearingStartDateTime": "2022-10-12T11:00:00",
+									"hearingEndDateTime": "2022-10-12T12:00:00",
+									"hearingVenueId": "372653",
+									"hearingRoomId": "Cardiff SSCS - Hearing Room 02",
+									"hearingJudgeId": null,
+									"panelMemberIds": [
+										"4923393"
+									],
+									"attendees": [
+										{
+											"hearingSubChannel": "INTER",
+											"partyID": "1"
+										}
+									],
+									"listAssistSessionID": null
+								}
+							],
+							"laCaseStatus": "LISTED",
+							"listingStatus": "FIXED",
+							"receivedDateTime": "2022-09-09T13:02:49"
+						}
+					}
+                    </set-body>
+                </return-response>
             </when>
             <otherwise>
                 <return-response>

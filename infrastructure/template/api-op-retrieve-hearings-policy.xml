@@ -38,166 +38,225 @@
 				</return-response>
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-				<choose>
-		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ") != null)">
-		                <return-response>
-		                    <set-status code="200" />
-		                    <set-header name="Content-Type" exists-action="override">
-		                        <value>application/json</value>
-		                    </set-header>
-		                    <set-body>@{
-		                         return new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingIdCaseHQ")),
-		                            new JProperty("hearingType", "Crime"),
-		                            new JProperty("hearingDate", "2020-01-28"),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        ).ToString();
-		                    }</set-body>
-		                </return-response>
-		            </when>
-		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate") != null)">
-		                <return-response>
-		                    <set-status code="200" />
-		                    <set-header name="Content-Type" exists-action="override">
-		                        <value>application/json</value>
-		                    </set-header>
-		                    <set-body>@{
-		                        var data = new JArray();
-		                        JObject recordOne = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
-		                            new JProperty("hearingType", "Crime"),
-		                            new JProperty("hearingDate", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate")),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        JObject recordTwo = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
-		                            new JProperty("hearingType", "Crime"),
-		                            new JProperty("hearingDate", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingDate")),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        data.Add(recordOne);
-		                        data.Add(recordTwo);
-		                        return data.ToString();
-		                    }</set-body>
-		                </return-response>
-		            </when>
-		            <when condition="@(context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType") != null)">
-		                <return-response>
-		                    <set-status code="200" />
-		                    <set-header name="Content-Type" exists-action="override">
-		                        <value>application/json</value>
-		                    </set-header>
-		                    <set-body>@{
-		                        var data = new JArray();
-		                        JObject recordOne = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
-		                            new JProperty("hearingType", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType")),
-		                            new JProperty("hearingDate", "2020-09-16"),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        JObject recordTwo = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
-		                            new JProperty("hearingType", context.Request.OriginalUrl.Query.GetValueOrDefault("hearingType")),
-		                            new JProperty("hearingDate", "2020-09-16"),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        data.Add(recordOne);
-		                        data.Add(recordTwo);
-		                        return data.ToString();
-		                    }</set-body>
-		                </return-response>
-		            </when>
-		            <otherwise>
-		            	<return-response>
-		                	<set-status code="200" />
-		                    <set-header name="Content-Type">
-		    					<value>application/json</value>
-							</set-header>
-		                    <set-body>@{
-		                        var data = new JArray();
-		                        JObject recordOne = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7499"),
-		                            new JProperty("hearingType", "Traffic"),
-		                            new JProperty("hearingDate", "2020-09-16"),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        JObject recordTwo = new JObject(
-		                            new JProperty("listingRequestId", "5f2bffce29c77b6fef1e7488"),
-		                            new JProperty("hearingIdCaseHQ", "5f2bffce29c77b6fef1e7777"),
-		                            new JProperty("hearingType", "Traffic"),
-		                            new JProperty("hearingDate", "2020-09-16"),
-		                            new JProperty("hearingStartTime", "08:45"),
-		                            new JProperty("hearingEndTime", "10:45"),
-		                            new JProperty("hearingCaseIdHMCTS", "5f2bffcee0b6aa870e82f007"),
-		                            new JProperty("hearingSessionIdCaseHQ", "5f2bffceef36b0eaf339d884"),
-		                            new JProperty("hearingTranslatorRequired", "No"),
-		                            new JProperty("hearingCreatedDate", "2020-09-16"),
-		                            new JProperty("hearingCreatedBy", "Donald Duck"),
-		                            new JProperty("hearingVenueId", "V3455"),
-		                            new JProperty("hearingRoomId", "R2345")
-		                        );
-		                        data.Add(recordOne);
-		                        data.Add(recordTwo);
-		                        return data.ToString();
-		                    }</set-body>
-		                </return-response>
-		            </otherwise>
-		        </choose>
-			</when>
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>{
+						"requestDetails": {
+							"status": "LISTED",
+							"timestamp": "2022-09-09T12:41:55.656892",
+							"versionNumber": 1,
+							"hearingRequestID": "2000003219"
+						},
+						"hearingDetails": {
+							"hearingType": "BBA3-SUB",
+							"hearingWindow": {
+								"dateRangeStart": "2022-10-07"
+							},
+							"duration": 60,
+							"hearingPriorityType": "Standard",
+							"numberOfPhysicalAttendees": 1,
+							"hearingInWelshFlag": false,
+							"hearingLocations": [
+								{
+									"locationType": "court",
+									"locationId": "372653"
+								}
+							],
+							"privateHearingRequiredFlag": false,
+							"panelRequirements": {
+								"roleType": [],
+								"authorisationTypes": [],
+								"authorisationSubType": [],
+								"panelPreferences": [],
+								"panelSpecialisms": []
+							},
+							"hearingIsLinkedFlag": false,
+							"hearingChannels": [
+								"INTER"
+							],
+							"autolistFlag": true
+						},
+						"caseDetails": {
+							"hmctsServiceCode": "BBA3",
+							"caseRef": "1662727267950439",
+							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
+							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
+							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"caseAdditionalSecurityFlag": false,
+							"caseInterpreterRequiredFlag": false,
+							"caseCategories": [
+								{
+									"categoryType": "caseType",
+									"categoryValue": "BBA3-002"
+								},
+								{
+									"categoryType": "caseSubType",
+									"categoryValue": "BBA3-002ML",
+									"categoryParent": "BBA3-002"
+								}
+							],
+							"caseManagementLocationCode": "372653",
+							"caserestrictedFlag": false,
+							"caseSLAStartDate": "2022-09-09"
+						},
+						"partyDetails": [
+							{
+								"partyID": "1",
+								"partyType": "IND",
+								"partyRole": "APEL",
+								"individualDetails": {
+									"title": null,
+									"firstName": "Mcybgpip",
+									"lastName": "Gzlnjpip",
+									"preferredHearingChannel": "INTER",
+									"interpreterLanguage": null,
+									"reasonableAdjustments": [],
+									"vulnerableFlag": false,
+									"vulnerabilityDetails": null,
+									"hearingChannelEmail": [],
+									"hearingChannelPhone": [],
+									"relatedParties": [],
+									"custodyStatus": null,
+									"otherReasonableAdjustmentDetails": null
+								}
+							}
+						],
+						"hearingResponse": {
+							"hearingDaySchedule": [
+								{
+									"hearingStartDateTime": "2022-10-12T11:00:00",
+									"hearingEndDateTime": "2022-10-12T12:00:00",
+									"hearingVenueId": "372653",
+									"hearingRoomId": "Cardiff SSCS - Hearing Room 02",
+									"hearingJudgeId": null,
+									"panelMemberIds": [
+										"4923393"
+									],
+									"attendees": [
+										{
+											"hearingSubChannel": "INTER",
+											"partyID": "1"
+										}
+									],
+									"listAssistSessionID": null
+								}
+							],
+							"laCaseStatus": "LISTED",
+							"listingStatus": "FIXED",
+							"receivedDateTime": "2022-09-09T13:02:49"
+						}
+					}{
+						"requestDetails": {
+							"status": "LISTED",
+							"timestamp": "2022-09-09T12:41:55.656892",
+							"versionNumber": 1,
+							"hearingRequestID": "2000003219"
+						},
+						"hearingDetails": {
+							"hearingType": "BBA3-SUB",
+							"hearingWindow": {
+								"dateRangeStart": "2022-10-07"
+							},
+							"duration": 60,
+							"hearingPriorityType": "Standard",
+							"numberOfPhysicalAttendees": 1,
+							"hearingInWelshFlag": false,
+							"hearingLocations": [
+								{
+									"locationType": "court",
+									"locationId": "372653"
+								}
+							],
+							"privateHearingRequiredFlag": false,
+							"panelRequirements": {
+								"roleType": [],
+								"authorisationTypes": [],
+								"authorisationSubType": [],
+								"panelPreferences": [],
+								"panelSpecialisms": []
+							},
+							"hearingIsLinkedFlag": false,
+							"hearingChannels": [
+								"INTER"
+							],
+							"autolistFlag": true
+						},
+						"caseDetails": {
+							"hmctsServiceCode": "BBA3",
+							"caseRef": "1662727267950439",
+							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
+							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
+							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"caseAdditionalSecurityFlag": false,
+							"caseInterpreterRequiredFlag": false,
+							"caseCategories": [
+								{
+									"categoryType": "caseType",
+									"categoryValue": "BBA3-002"
+								},
+								{
+									"categoryType": "caseSubType",
+									"categoryValue": "BBA3-002ML",
+									"categoryParent": "BBA3-002"
+								}
+							],
+							"caseManagementLocationCode": "372653",
+							"caserestrictedFlag": false,
+							"caseSLAStartDate": "2022-09-09"
+						},
+						"partyDetails": [
+							{
+								"partyID": "1",
+								"partyType": "IND",
+								"partyRole": "APEL",
+								"individualDetails": {
+									"title": null,
+									"firstName": "Mcybgpip",
+									"lastName": "Gzlnjpip",
+									"preferredHearingChannel": "INTER",
+									"interpreterLanguage": null,
+									"reasonableAdjustments": [],
+									"vulnerableFlag": false,
+									"vulnerabilityDetails": null,
+									"hearingChannelEmail": [],
+									"hearingChannelPhone": [],
+									"relatedParties": [],
+									"custodyStatus": null,
+									"otherReasonableAdjustmentDetails": null
+								}
+							}
+						],
+						"hearingResponse": {
+							"hearingDaySchedule": [
+								{
+									"hearingStartDateTime": "2022-10-12T11:00:00",
+									"hearingEndDateTime": "2022-10-12T12:00:00",
+									"hearingVenueId": "372653",
+									"hearingRoomId": "Cardiff SSCS - Hearing Room 02",
+									"hearingJudgeId": null,
+									"panelMemberIds": [
+										"4923393"
+									],
+									"attendees": [
+										{
+											"hearingSubChannel": "INTER",
+											"partyID": "1"
+										}
+									],
+									"listAssistSessionID": null
+								}
+							],
+							"laCaseStatus": "LISTED",
+							"listingStatus": "FIXED",
+							"receivedDateTime": "2022-09-09T13:02:49"
+						}
+					}
+                    </set-body>
+                </return-response>
+            </when>
 			<otherwise>
                 <return-response>
                     <set-status code="400" />
