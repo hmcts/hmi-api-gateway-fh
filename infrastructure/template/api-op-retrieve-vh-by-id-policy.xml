@@ -33,13 +33,16 @@
                             <set-body>@{
                             return "client_id=" + (string)context.Variables["vhClient"] + "&client_secret=" + (string)context.Variables["vhSecret"] + "&grant_type=client_credentials&&resource=#{vhHost}#";}</set-body>
                         </send-request>
-                        <cache-store-value key="vhAuth" value="@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-                        <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" />
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])</value>
+                        </set-header>
                     </when>
+                    <otherwise>
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@((String)context.Variables["vhAuthToken"])</value>
+                        </set-header>
+                    </otherwise>
                 </choose>
-                <set-header name="Authorization" exists-action="override">
-                    <value>@((String)context.Variables["vhAuthToken"])</value>
-                </set-header>
                 <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
                 <set-backend-service base-url="#{vhHost}#/hearings" />
             </when>
