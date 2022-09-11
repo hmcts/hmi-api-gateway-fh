@@ -36,6 +36,7 @@
                         <set-header name="Authorization" exists-action="override">
                             <value>@("Bearer " + (String)((IResponse)context.Variables["vhBearerToken"]).Body.As<JObject>()["access_token"])</value>
                         </set-header>
+                        <cache-store-value key="vhAuth" value="@(context.Request.Headers.GetValueOrDefault("Authorization", ""))" duration="2700" />
                     </when>
                     <otherwise>
                         <set-header name="Authorization" exists-action="override">
