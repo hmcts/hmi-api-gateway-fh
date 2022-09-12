@@ -33,12 +33,17 @@
                             <set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
                         </send-request>
-                        <cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])</value>
+                        </set-header>
+                        <cache-store-value key="snlAuth" value="@(context.Request.Headers.GetValueOrDefault("Authorization", ""))" duration="2700" />
                     </when>
+                    <otherwise>
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@((String)context.Variables["snlAuthToken"])</value>
+                        </set-header>
+                    </otherwise>
                 </choose>
-                <set-header name="Authorization" exists-action="override">
-                     <value>@((String)context.Variables["snlAuthToken"])</value>
-                </set-header>
 				<rewrite-uri template="/" copy-unmatched-params="true" />
 				<set-header name="Content-Type" exists-action="override">
 					<value>application/json; charset=utf-8</value>
