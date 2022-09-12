@@ -8,3 +8,11 @@ resource "azurerm_api_management_certificate" "this" {
   data                = filebase64("certificates/${each.value.certificate_filename}")
   password            = each.value.certificate_password
 }
+
+resource "azurerm_key_vault_secret" "apim_cert" {
+  for_each     = var.custom_certificates
+  name         = "apim-cert-${each.value.id}"
+  value        = each.value.certificate_password
+  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
+  tags         = local.common_tags
+}
