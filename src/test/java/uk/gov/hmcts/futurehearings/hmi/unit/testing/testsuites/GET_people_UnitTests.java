@@ -113,17 +113,6 @@ public class GET_people_UnitTests {
 
     @Test
     @Order(2)
-    @DisplayName("Test for Valid Query Params")
-    void testGetPeopleForValidQueryParams() {
-        queryParams.put("updated_since", "PID012");
-        queryParams.put("per_page", "100");
-        queryParams.put("page", "2");
-        final Response response = whenGetPeopleRequestIsInvokedForWithQueryParam();
-        thenValidateResponseForGetPeopleByParams(response);
-    }
-
-    @Test
-    @Order(3)
     @DisplayName("Test for Invalid Query Params")
     void testGetPeopleForInvalidQueryParams() {
         queryParams.clear();
@@ -134,7 +123,7 @@ public class GET_people_UnitTests {
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     @DisplayName("Test for Invalid Query Params")
     void testGetPeopleForInvalidNoOfQueryParams() {
         queryParams.clear();
@@ -147,7 +136,7 @@ public class GET_people_UnitTests {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     @DisplayName("Test for Invalid AccessToken for Get People with ID")
     void testRetrievePeopleWithParamsForInvalidAccessToken() {
         final Response response = whenGetPeopleRequestIsInvokedForWithQueryParamAnInvalidToken();

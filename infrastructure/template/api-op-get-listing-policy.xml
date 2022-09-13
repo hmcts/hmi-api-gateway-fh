@@ -1,63 +1,23 @@
 <policies>
     <inbound>
         <base />
-        <set-variable name="invalidKeys" value="@{
-                string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
-                string[] allowedKeys = {"date_of_listing","hearing_type"};
-                bool invalidKey = false;
-                if(context.Request.Url.Query.Count &gt; 0){
-                    for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
-                    {
-                        bool keyFound = false;
-                        for (int j = 0; j &lt; allowedKeys.Count(); j++)
-                        {
-                            if (qryPrmKeys[i] == allowedKeys[j]){
-                                keyFound = true;
-                                break;
-                            }
-                        }
-                        if(!keyFound){
-                            invalidKey = true;
-                            break;
-                        }
-                    }
-                }
-                return invalidKey;
-            }" />
         <choose>
-            <when condition="@(context.Request.Url.Query.Count > 2 || (bool)context.Variables["invalidKeys"])">
-                <return-response>
-                    <set-status code="400" reason="Malformed request." />
-                    <set-body>@{
-                        return new JObject(
-                        new JProperty("statusCode", 400),
-                        new JProperty("message", "Invalid query parameter/s in the request URL.")
-                        ).ToString();
-                        }</set-body>
-                </return-response>
-            </when>
-        </choose>
-        <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-                <rewrite-uri template="/" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://www.hmcts.com/request-hearings/sessions" />
                 <mock-response status-code="200" content-type="application/json" />
             </when>
+            <otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
         </choose>
     </inbound>
     <backend>

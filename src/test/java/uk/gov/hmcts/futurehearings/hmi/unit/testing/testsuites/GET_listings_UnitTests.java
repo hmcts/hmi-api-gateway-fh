@@ -180,17 +180,6 @@ class GET_listings_UnitTests {
 
     @Test
     @Order(8)
-    @DisplayName("Test for Invalid Parameter")
-    void testRetrieveListingsRequestWithAdditionalParam() {
-        paramsAsMap.put("Invalid-Param","Value");
-
-        final Response response = whenRetrieveListingsIsInvokedWithAdditionalParam();
-        thenValidateResponseForAdditionalParam(response);
-        paramsAsMap.remove("Invalid-Param");
-    }
-
-    @Test
-    @Order(9)
     @DisplayName("Test for Correct Headers with No Parameters")
     void testRetrieveListingsRequestWithCorrectHeadersAndNoParams() {
 
@@ -199,7 +188,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(10)
+    @Order(9)
     @DisplayName("Test for Correct Headers and Parameters")
     void testRetrieveListingsRequestWithCorrectHeadersAndParams() {
 
@@ -208,7 +197,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(11)
+    @Order(10)
     @DisplayName("Test for missing Access Token")
     void testRetrieveListingsRequestWithMissingAccessToken() {
 
@@ -217,7 +206,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(12)
+    @Order(11)
     @DisplayName("Test for invalid Access Token")
     void testRetrieveListingsRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
@@ -254,7 +243,7 @@ class GET_listings_UnitTests {
     //Listings by ID
 
     @Test
-    @Order(13)
+    @Order(12)
     @DisplayName("Test for Invalid Resource - By ID")
     void testRetrieveListingsByIDRequestForInvalidResource() {
 
@@ -263,7 +252,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(14)
+    @Order(13)
     @DisplayName("Test for missing ContentType header - By ID")
     void testRetrieveListingsByIDRequestWithMissingContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -273,7 +262,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(15)
+    @Order(14)
     @DisplayName("Test for invalid ContentType header - By ID")
     void testRetrieveListingsByIDRequestWithInvalidContentTypeHeader() {
         headersAsMap.remove("Content-Type");
@@ -284,7 +273,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(16)
+    @Order(15)
     @DisplayName("Test for missing Accept header - By ID")
     void testRetrieveListingsByIDRequestWithMissingAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -294,7 +283,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     @DisplayName("Test for invalid Accept header - By ID")
     void testRetrieveListingsByIDRequestWithInvalidAcceptHeader() {
         headersAsMap.remove("Accept");
@@ -305,7 +294,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(18)
+    @Order(17)
     @DisplayName("Test for missing Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveListingsByIDRequestWithMissingOcpSubKey() {
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
@@ -315,7 +304,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     @DisplayName("Test for invalid Ocp-Apim-Subscription-Key header - By ID")
     void testRetrieveListingsByIDRequestWithInvalidOcpSubKey(){
         headersAsMap.remove("Ocp-Apim-Subscription-Key");
@@ -325,7 +314,7 @@ class GET_listings_UnitTests {
         thenValidateResponseForRetrieve(response);
     }
 
-    @Order(20)
+    @Order(19)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsByIDRequestWithMissingHeader(String iteration) {
@@ -335,7 +324,7 @@ class GET_listings_UnitTests {
         thenValidateResponseForMissingOrInvalidHeader(response, iteration);
     }
 
-    @Order(21)
+    @Order(20)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
     @ValueSource(strings = {"Source-System","Destination-System","Request-Created-At"})
     void testRetrieveListingsByIDRequestWithInvalidHeader(String iteration) {
@@ -347,7 +336,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     @DisplayName("Test for Correct Headers with No Parameters - By ID")
     void testRetrieveListingsByIDRequestWithCorrectHeadersAndNoParams() {
 
@@ -356,7 +345,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     @DisplayName("Test for missing Access Token - By ID")
     void testRetrieveListingsByIDRequestWithMissingAccessToken() {
 
@@ -365,7 +354,7 @@ class GET_listings_UnitTests {
     }
 
     @Test
-    @Order(24)
+    @Order(23)
     @DisplayName("Test for invalid Access Token - By ID")
     void testRetrieveListingsByIDRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
