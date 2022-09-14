@@ -11,14 +11,6 @@
         "storageAccountName":{
             "value": "hmidtutest"
         },
-        "storageAccessKey":{
-            "reference": {
-                "keyVault": {
-                   "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedinfra-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
-                },
-                "secretName": "dtu-storage-account-key"
-             }
-        },
         "appId":{
             "value": "#{keyVaultUserId}#"
         },
@@ -33,9 +25,6 @@
         },
         "hmiSchedulesUrl":{
             "value": "https://hmi-apim.test.platform.hmcts.net/hmi/schedules"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "hmiDestination":{
             "value": "MOCK"
