@@ -2,22 +2,6 @@
     <inbound>
         <base />
         <choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CFT")">
-				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-				<rewrite-uri template="/delete-resource/{resourceId}" copy-unmatched-params="true" />
-				<set-backend-service base-url="http://#{emulatorHost}#/resources/" />
-			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
 					<return-response>
 	                    <set-status code="200" />
@@ -33,6 +17,19 @@
 		       		</set-body>
 		        </return-response>
 		    </when>
+			<otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
 		</choose>
     </inbound>
     <backend>

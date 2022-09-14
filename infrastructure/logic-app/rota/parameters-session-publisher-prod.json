@@ -11,14 +11,6 @@
         "storageAccountName":{
             "value": "hmidtuprod"
         },
-        "storageAccessKey":{
-            "reference": {
-                "keyVault": {
-                   "id": "/subscriptions/5ca62022-6aa2-4cee-aaa7-e7536c8d566c/resourceGroups/hmi-sharedservices-prod-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-prod"
-                },
-                "secretName": "dtu-storage-account-key"
-             }
-        },
         "appId":{
             "value": "#{keyVaultUserId}#"
         },
@@ -36,9 +28,6 @@
         },
         "hmiDestination":{
             "value": "SNL"
-        },
-        "hmiScopeUrl":{
-            "value": "api://d49d7fa2-6904-4223-a907-3b8992af4190"
         },
         "serviceNowHostUrl": {
             "value": "https://mojcppprod.service-now.com/api/now/table/incident?sysparm_fields=number"

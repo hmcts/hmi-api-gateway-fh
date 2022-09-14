@@ -33,12 +33,17 @@
 							<set-body>@{
 								return "client_id=" + (string)context.Variables["cftClient"] + "&client_secret=" + (string)context.Variables["cftSecret"] + "&grant_type=client_credentials&scope=profile";}</set-body>
 						</send-request>
-						<cache-store-value key="cftAuth" value="@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])" duration="2700" />
-					</when>
-				</choose>
-				<set-header name="Authorization" exists-action="override">
-					<value>@((String)context.Variables["cftAuthToken"])</value>
-				</set-header>
+						<set-header name="Authorization" exists-action="override">
+                            <value>@("Bearer " + (String)((IResponse)context.Variables["cftBearerToken"]).Body.As<JObject>()["access_token"])</value>
+                        </set-header>
+                        <cache-store-value key="cftAuth" value="@(context.Request.Headers.GetValueOrDefault("Authorization", ""))" duration="2700" />
+                    </when>
+                    <otherwise>
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@((String)context.Variables["cftAuthToken"])</value>
+                        </set-header>
+                    </otherwise>
+                </choose>
 				<set-header name="Content-Type" exists-action="override">
 					<value>application/json; charset=utf-8</value>
 				</set-header>
@@ -79,12 +84,17 @@
 							<set-body>@{
                                 return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
 						</send-request>
-						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
-					</when>
-				</choose>
-				<set-header name="Authorization" exists-action="override">
-					<value>@((String)context.Variables["snlAuthToken"])</value>
-				</set-header>
+						<set-header name="Authorization" exists-action="override">
+                            <value>@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])</value>
+                        </set-header>
+                        <cache-store-value key="snlAuth" value="@(context.Request.Headers.GetValueOrDefault("Authorization", ""))" duration="2700" />
+                    </when>
+                    <otherwise>
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@((String)context.Variables["snlAuthToken"])</value>
+                        </set-header>
+                    </otherwise>
+                </choose>
 				<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
 				<set-header name="Content-Type" exists-action="override">
 					<value>application/json; charset=utf-8</value>
