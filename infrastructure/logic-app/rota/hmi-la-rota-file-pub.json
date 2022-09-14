@@ -127,6 +127,441 @@
             }
         },
         {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-1",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-2",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-3",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-4",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-5",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-6",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-7",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-8",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-9",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-10",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-11",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-12",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-13",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-14",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "azuretables-15",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmirotafilepub_name')]",
