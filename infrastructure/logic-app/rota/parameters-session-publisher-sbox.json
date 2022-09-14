@@ -12,10 +12,10 @@
             "value": "hmidtusbox"
         },
         "appId":{
-            "value": "#{keyVaultUserId}#"
+            "value": "#{tf_secret_hmi-dtu-client-nonprod-id}#"
         },
         "appSecret":{
-            "value": "#{keyVaultUserSecret}#"
+            "value": "#{tf_secret_hmi-dtu-client-nonprod-pwd}#"
         },
         "tenantId":{
             "value": "#{azureTenant}#"
