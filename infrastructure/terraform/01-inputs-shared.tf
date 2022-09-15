@@ -34,3 +34,14 @@ module "ctags" {
 }
 
 data "azurerm_client_config" "current" {}
+
+
+variable "custom_certificates" {
+  type = map(object({
+    id                   = string
+    certificate_filename = string
+    certificate_password = string
+  }))
+  description = "Custom Certificates to upload to HMI"
+  default     = {}
+}
