@@ -85,7 +85,7 @@
                                     "sessionOverBooking": false,
                                     "sessionCluster": {
                                         "code": "HSY",
-                                        "description": "Humber & South Yorkshire"
+                                        "description": "Humber South Yorkshire"
                                     },
                                     "sessionVenue": {
                                         "locationIdCaseHQ": "1050",
@@ -96,7 +96,7 @@
                                         },
                                         "locationCluster": {
                                             "code": "HSY",
-                                            "description": "Humber & South Yorkshire"
+                                            "description": "Humber South Yorkshire"
                                         },
                                         "locationReferences": [
                                             {
@@ -116,7 +116,7 @@
                                         },
                                         "locationCluster": {
                                             "code": "HSY",
-                                            "description": "Humber & South Yorkshire"
+                                            "description": "Humber South Yorkshire"
                                         },
                                         "locationReferences": [
                                             {
@@ -152,7 +152,7 @@
                                     "sessionOverBooking": false,
                                     "sessionCluster": {
                                         "code": "HSY",
-                                        "description": "Humber & South Yorkshire"
+                                        "description": "Humber South Yorkshire"
                                     },
                                     "sessionVenue": {
                                         "locationIdCaseHQ": "1050",
@@ -163,7 +163,7 @@
                                         },
                                         "locationCluster": {
                                             "code": "HSY",
-                                            "description": "Humber & South Yorkshire"
+                                            "description": "Humber South Yorkshire"
                                         },
                                         "locationReferences": [
                                             {
@@ -183,7 +183,7 @@
                                         },
                                         "locationCluster": {
                                             "code": "HSY",
-                                            "description": "Humber & South Yorkshire"
+                                            "description": "Humber South Yorkshire"
                                         },
                                         "locationReferences": [
                                             {
