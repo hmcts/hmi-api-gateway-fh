@@ -117,13 +117,6 @@
                 </return-response>
             </when>
         </choose>
-        <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
-                <set-header name="Destination-System" exists-action="override">
-                    <value>MOCK</value>
-                </set-header>
-            </when>
-        </choose>
     </inbound>
     <backend>
         <base />
