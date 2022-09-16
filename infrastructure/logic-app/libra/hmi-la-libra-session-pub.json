@@ -262,20 +262,20 @@
                       "username": "@body('Get_SNow_client')?['value']"
                     },
                     "body": {
-                      "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                      "caller_id": "[parameters('serviceNowCallerId')]",
+                      "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                      "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
                       "category": "Data Issue",
                       "contact_type": "Alert",
                       "description": "Error details: @{variables('errorBody')}",
                       "impact": "2",
-                      "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                      "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
                       "short_description": "HMI Libra File Error occured",
                       "subcategory": "Data or File Error - other",
-                      "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                      "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
                       "urgency": "3"
                     },
                     "method": "POST",
-                    "uri": "[parameters('serviceNowHostUrl')]"
+                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
                   }
                 }
               },
@@ -298,8 +298,10 @@
             },
             "Copy_input_file_to_output": {
               "runAfter": {
-                "For_each_json_record": [
-                  "Succeeded"
+                "Create_Error_record": [
+                  "Succeeded",
+                  "TimedOut",
+                  "Skipped"
                 ]
               },
               "type": "ApiConnection",
@@ -322,6 +324,26 @@
                 }
               }
             },
+            "Create_Error_record": {
+              "runAfter": {
+                "HTTP_HMI": [
+                  "Failed"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "errorMessage": "@{body('HTTP_HMI')}"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraError')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_jsonFileContent')?['listingRequest']?['_case']?['caseIdHMCTS'])}')"
+              }
+            },
             "Delete_input_file": {
               "runAfter": {
                 "Copy_input_file_to_output": [
@@ -341,60 +363,6 @@
                 "method": "delete",
                 "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}"
               }
-            },
-            "For_each_json_record": {
-              "foreach": "@body('Parse_jsonFileContent')",
-              "actions": {
-                "Create_Error_record": {
-                  "runAfter": {
-                    "HTTP_HMI": [
-                      "Failed"
-                    ]
-                  },
-                  "type": "ApiConnection",
-                  "inputs": {
-                    "body": {
-                      "errorMessage": "@{body('HTTP_HMI')}"
-                    },
-                    "host": {
-                      "connection": {
-                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                      }
-                    },
-                    "method": "patch",
-                    "path": "/Tables/@{encodeURIComponent('libraError')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(items('For_each_json_record')?['listingRequest']?['_case']?['caseIdHMCTS'])}')"
-                  }
-                },
-                "HTTP_HMI": {
-                  "runAfter": {},
-                  "type": "Http",
-                  "inputs": {
-                    "authentication": {
-                      "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
-                      "clientId": "@body('Get_secret_hmi-client')?['value']",
-                      "secret": "@body('Get_secret_hmi-secret')?['value']",
-                      "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
-                      "type": "ActiveDirectoryOAuth"
-                    },
-                    "body": "@items('For_each_json_record')",
-                    "headers": {
-                      "Accept": "application/json",
-                      "Content-Type": "application/json",
-                      "Destination-System": "SNL",
-                      "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
-                      "Source-System": "CRIME"
-                    },
-                    "method": "POST",
-                    "uri": "[parameters('hmiListingUrl')]"
-                  }
-                }
-              },
-              "runAfter": {
-                "Parse_jsonFileContent": [
-                  "Succeeded"
-                ]
-              },
-              "type": "Foreach"
             },
             "Get_failed_entities": {
               "runAfter": {
@@ -470,6 +438,33 @@
                 "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
               }
             },
+            "HTTP_HMI": {
+              "runAfter": {
+                "Parse_jsonFileContent": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "authentication": {
+                  "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                  "clientId": "@body('Get_secret_hmi-client')?['value']",
+                  "secret": "@body('Get_secret_hmi-secret')?['value']",
+                  "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                  "type": "ActiveDirectoryOAuth"
+                },
+                "body": "@body('Parse_jsonFileContent')",
+                "headers": {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+                  "Destination-System": "SNL",
+                  "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                  "Source-System": "CRIME"
+                },
+                "method": "POST",
+                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
+              }
+            },
             "Initialize_errorBody": {
               "runAfter": {
                 "Update_Status_to_Complete": [
@@ -527,13 +522,13 @@
               "inputs": {
                 "content": "@variables('jsonFileContent')",
                 "schema": {
-                  "items": {
-                    "properties": {
-                      "listingRequest": {
-                        "properties": {
-                          "_case": {
-                            "properties": {
-                              "caseClassifications": {
+                  "properties": {
+                    "listingRequest": {
+                      "properties": {
+                        "_case": {
+                          "properties": {
+                            "caseClassifications": {
+                              "items": {
                                 "properties": {
                                   "caseClassificationService": {
                                     "type": "string"
@@ -545,125 +540,132 @@
                                     "type": "string"
                                   }
                                 },
+                                "required": [
+                                  "caseClassificationService",
+                                  "caseClassificationType",
+                                  "caseClassificationSubType"
+                                ],
                                 "type": "object"
                               },
-                              "caseCourt": {
+                              "type": "array"
+                            },
+                            "caseCourt": {
+                              "properties": {
+                                "locationId": {
+                                  "type": "string"
+                                },
+                                "locationReferenceType": {
+                                  "type": "string"
+                                },
+                                "locationType": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "caseIdHMCTS": {
+                              "type": "string"
+                            },
+                            "caseJurisdiction": {
+                              "type": "string"
+                            },
+                            "caseListingRequestId": {
+                              "type": "string"
+                            },
+                            "caseRegistered": {
+                              "type": "string"
+                            },
+                            "caseReportingRestrictions": {
+                              "type": "string"
+                            },
+                            "caseTitle": {
+                              "type": "string"
+                            },
+                            "caseVersionID": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "entities": {
+                          "items": {
+                            "properties": {
+                              "entityId": {
+                                "type": "string"
+                              },
+                              "entityOffences": {
+                                "items": {
+                                  "properties": {
+                                    "offenceClass": {
+                                      "type": "string"
+                                    },
+                                    "offenceDate": {
+                                      "type": "string"
+                                    },
+                                    "offenceId": {
+                                      "type": "string"
+                                    },
+                                    "offenceLegislation": {
+                                      "type": "string"
+                                    },
+                                    "offenceTitle": {
+                                      "type": "string"
+                                    },
+                                    "offenceWording": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "offenceId",
+                                    "offenceClass",
+                                    "offenceTitle",
+                                    "offenceWording",
+                                    "offenceLegislation",
+                                    "offenceDate"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "entityRoleCode": {
+                                "type": "string"
+                              },
+                              "entitySubType": {
                                 "properties": {
-                                  "locationId": {
+                                  "entityClassCode": {
                                     "type": "string"
                                   },
-                                  "locationReferenceType": {
+                                  "entityDateOfBirth": {
                                     "type": "string"
                                   },
-                                  "locationType": {
+                                  "entityFirstName": {
+                                    "type": "string"
+                                  },
+                                  "entityLastName": {
                                     "type": "string"
                                   }
                                 },
                                 "type": "object"
                               },
-                              "caseIdHMCTS": {
+                              "entityTypeCode": {
                                 "type": "string"
-                              },
-                              "caseJurisdiction": {
-                                "type": "string"
-                              },
-                              "caseListingRequestId": {
-                                "type": "integer"
-                              },
-                              "caseRegistered": {
-                                "type": "string"
-                              },
-                              "caseReportingRestrictions": {
-                                "type": "string"
-                              },
-                              "caseTitle": {
-                                "type": "string"
-                              },
-                              "caseVersionID": {
-                                "properties": {},
-                                "type": "object"
                               }
                             },
+                            "required": [
+                              "entityId",
+                              "entityTypeCode",
+                              "entityRoleCode",
+                              "entitySubType",
+                              "entityOffences"
+                            ],
                             "type": "object"
                           },
-                          "entities": {
-                            "items": {
-                              "properties": {
-                                "entityId": {
-                                  "type": "integer"
-                                },
-                                "entityOffences": {
-                                  "items": {
-                                    "properties": {
-                                      "offenceClass": {
-                                        "type": "string"
-                                      },
-                                      "offenceDate": {
-                                        "type": "string"
-                                      },
-                                      "offenceId": {
-                                        "type": "integer"
-                                      },
-                                      "offenceLegislation": {
-                                        "type": "string"
-                                      },
-                                      "offenceTitle": {
-                                        "type": "string"
-                                      },
-                                      "offenceWording": {
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "offenceId",
-                                      "offenceClass",
-                                      "offenceTitle",
-                                      "offenceWording",
-                                      "offenceLegislation",
-                                      "offenceDate"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "type": "array"
-                                },
-                                "entityRoleCode": {
-                                  "type": "string"
-                                },
-                                "entitySubType": {
-                                  "properties": {
-                                    "entityClassCode": {
-                                      "type": "string"
-                                    },
-                                    "entityDateOfBirth": {
-                                      "type": "string"
-                                    },
-                                    "entityFirstName": {
-                                      "type": "string"
-                                    },
-                                    "entityLastName": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "type": "object"
-                                },
-                                "entityTypeCode": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "entityId",
-                                "entityTypeCode",
-                                "entityRoleCode",
-                                "entitySubType",
-                                "entityOffences"
-                              ],
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "listing": {
-                            "properties": {
-                              "listingSessions": {
+                          "type": "array"
+                        },
+                        "listing": {
+                          "properties": {
+                            "listingSessions": {
+                              "items": {
                                 "properties": {
                                   "listingDuration": {
                                     "type": "integer"
@@ -685,35 +687,34 @@
                                   "listingStartDate": {
                                     "type": "string"
                                   },
-                                  "listingStartTime": {
-                                    "type": "string"
-                                  },
                                   "listingStatus": {
                                     "type": "string"
                                   }
                                 },
+                                "required": [
+                                  "listingRoom",
+                                  "listingStartDate",
+                                  "listingDuration",
+                                  "listingStatus"
+                                ],
                                 "type": "object"
                               },
-                              "listingType": {
-                                "type": "string"
-                              }
+                              "type": "array"
                             },
-                            "type": "object"
+                            "listingType": {
+                              "type": "string"
+                            }
                           },
-                          "meta": {
-                            "properties": {},
-                            "type": "object"
-                          }
+                          "type": "object"
                         },
-                        "type": "object"
-                      }
-                    },
-                    "required": [
-                      "listingRequest"
-                    ],
-                    "type": "object"
+                        "meta": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
                   },
-                  "type": "array"
+                  "type": "object"
                 }
               }
             },
