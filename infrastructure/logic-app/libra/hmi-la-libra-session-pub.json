@@ -183,7 +183,7 @@
                       "inputs": {
                         "host": {
                           "connection": {
-                            "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                            "name": "@parameters('$connections')['azuretables']['connectionId']"
                           }
                         },
                         "method": "delete",
@@ -238,7 +238,7 @@
                   "inputs": {
                     "host": {
                       "connection": {
-                        "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                       }
                     },
                     "method": "get",
@@ -358,7 +358,7 @@
                     },
                     "host": {
                       "connection": {
-                        "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                       }
                     },
                     "method": "patch",
@@ -406,7 +406,7 @@
               "inputs": {
                 "host": {
                   "connection": {
-                    "name": "@parameters('$connections')['azuretables_1']['connectionId']"
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
                   }
                 },
                 "method": "get",
