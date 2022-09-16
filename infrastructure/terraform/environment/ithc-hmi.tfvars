@@ -13,7 +13,7 @@ virtual_network_type               = "Internal"
 
 custom_certificates = {
   "crime" = {
-    id                   = "hmicrimecert"
+    id                   = "crimecert"
     certificate_filename = "crime-nonprod.pfx"
     certificate_password = "#{cert_crime_nonprod_password}#"
   }
