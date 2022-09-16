@@ -19,13 +19,72 @@
                 <set-backend-service base-url="https://#{elinksHost}#/api/v4" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <set-backend-service base-url="https://#{elinksHost}#/" />
-                <mock-response status-code="200" content-type="application/json" />
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>{
+                        "id": "7d4d5ccb-b19f-405c-8e2a-808616c93192",
+                        "per_id": 46413,
+                        "personal_code": "4911272",
+                        "title": "Mr",
+                        "known_as": "John",
+                        "surname": "Smith",
+                        "fullname": "Mr John Smith",
+                        "post_nominals": null,
+                        "email": "DDJMC.Hugo.Lockett@judiciarystaging.onmicrosoft.com",
+                        "sex": "male",
+                        "work_phone": null,
+                        "disability": false,
+                        "retirement_date": "2024-09-04",
+                        "leaving_on": null,
+                        "appointments": [
+                            {
+                                "appointment_id": 80041,
+                                "role": "Deputy District Judge (Magistrate's Courts)",
+                                "role_name": "Deputy District Judge (MC)- Fee paid",
+                                "role_name_id": null,
+                                "type": "Courts",
+                                "court_name": "Bristol Magistrates Court",
+                                "court_type": "County Court",
+                                "circuit": "South West",
+                                "bench": null,
+                                "advisory_committee_area": null,
+                                "location": null,
+                                "base_location": "Bristol Magistrates Court",
+                                "base_location_id": 1120,
+                                "is_principal": true,
+                                "start_date": "2014-10-01",
+                                "end_date": null,
+                                "superseded": false,
+                                "contract_type": "fee_paid",
+                                "contract_type_id": 1,
+                                "work_pattern": "Fee Paid Judiciary 5 Days Mon - Fri",
+                                "work_pattern_id": 10,
+                                "fte_percent": 100
+                            }
+                        ],
+                        "training_records": [],
+                        "authorisations": [],
+                        "authorisations_with_dates": []
+                        }
+                    </set-body>
+                </return-response>
             </when>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/resources/retrieve-peope/" />
-            </when>
+            <otherwise>
+                <return-response>
+                    <set-status code="400" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>@{
+                    return new JObject(
+                    new JProperty("message", context.Request.Headers.GetValueOrDefault("Destination-System","") + " destination doesn't support this functionality")
+                    ).ToString();
+                    }</set-body>
+                </return-response>
+            </otherwise>
         </choose>
     </inbound>
     <backend>

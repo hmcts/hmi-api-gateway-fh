@@ -27,6 +27,7 @@ parameters:
       - sbox
       - dev
       - test
+      - ithc
       - stg
 
 variables:

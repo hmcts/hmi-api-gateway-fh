@@ -2,10 +2,6 @@
 	<inbound>
 		<base />
 		<choose>
-			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/create-hearing" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/hearings/" />
-            </when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>
@@ -37,12 +33,17 @@
 							<set-body>@{
 								return "username=" + (string)context.Variables["snlClient"] + "&password=" + (string)context.Variables["snlSecret"] + "&grant_type=password_credentials";}</set-body>
 						</send-request>
-						<cache-store-value key="snlAuth" value="@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])" duration="2700" />
-					</when>
+						<set-header name="Authorization" exists-action="override">
+                            <value>@("Bearer " + (String)((IResponse)context.Variables["snlBearerToken"]).Body.As<JObject>()["idToken"])</value>
+                        </set-header>
+                        <cache-store-value key="snlAuth" value="@(context.Request.Headers.GetValueOrDefault("Authorization", ""))" duration="2700" />
+                    </when>
+                    <otherwise>
+                        <set-header name="Authorization" exists-action="override">
+                            <value>@((String)context.Variables["snlAuthToken"])</value>
+                        </set-header>
+                    </otherwise>
                 </choose>
-                <set-header name="Authorization" exists-action="override">
-                     <value>@((String)context.Variables["snlAuthToken"])</value>
-                </set-header>
 				<rewrite-uri template="/" copy-unmatched-params="true" />
 				<set-header name="Content-Type" exists-action="override">
                     <value>application/json; charset=utf-8</value>
@@ -58,17 +59,17 @@
 				<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/hearings" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-					<return-response>
-	                    <set-status code="202" />
-	                    <set-header name="Content-Type">
-	    					<value>application/json</value>
-						</set-header>
-						<set-body>@{
-		               return new JObject(
-		                   new JProperty("response code", 202),
-		                   new JProperty("description", "The request was received successfully.")
-		               ).ToString();
-		               }
+				<return-response>
+					<set-status code="202" />
+					<set-header name="Content-Type">
+						<value>application/json</value>
+					</set-header>
+					<set-body>@{
+					return new JObject(
+						new JProperty("response code", 202),
+						new JProperty("description", "The request was received successfully.")
+					).ToString();
+					}
 		       		</set-body>
 		        </return-response>
 		    </when>
