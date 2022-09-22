@@ -12,14 +12,9 @@ enable_mock_header_string          = "<set-header name=\"_EnableMocks\" exists-a
 virtual_network_type               = "Internal"
 
 custom_certificates = {
-  /*   "crime" = {
-    id                   = "hmicrimecert"
-    certificate_filename = "hmicrimecert.pfx"
-    certificate_password = "#{hmicrimecert_password}#"
-  }, */
-  "crimetest" = {
-    id                   = "hmicrimecert"
-    certificate_filename = "fullchain-nopass.pfx"
-    certificate_password = ""
+  "crime" = {
+    id                   = "crimecert"
+    certificate_filename = "crime-nonprod.pfx"
+    certificate_password = "#{cert_crime_nonprod_password}#"
   }
 }
