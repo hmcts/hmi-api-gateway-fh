@@ -172,627 +172,627 @@
             }
           },
           "actions": {
-                        "Condition": {
-                            "actions": {
-                                "Get_SNow_client": {
-                                    "runAfter": {},
-                                    "type": "ApiConnection",
-                                    "inputs": {
-                                        "host": {
-                                            "connection": {
-                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                            }
-                                        },
-                                        "method": "get",
-                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
-                                    }
-                                },
-                                "Get_SNow_secret": {
-                                    "runAfter": {
-                                        "Get_SNow_client": [
-                                            "Succeeded"
-                                        ]
-                                    },
-                                    "type": "ApiConnection",
-                                    "inputs": {
-                                        "host": {
-                                            "connection": {
-                                                "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                            }
-                                        },
-                                        "method": "get",
-                                        "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
-                                    }
-                                },
-                                "HTTP_Service_Now": {
-                                    "runAfter": {
-                                        "Get_SNow_secret": [
-                                            "Succeeded"
-                                        ]
-                                    },
-                                    "type": "Http",
-                                    "inputs": {
-                                        "authentication": {
-                                            "password": "@body('Get_SNow_secret')?['value']",
-                                            "type": "Basic",
-                                            "username": "@body('Get_SNow_client')?['value']"
-                                        },
-                                        "body": {
-                                            "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                                            "caller_id": "[parameters('serviceNowCallerId')]",
-                                            "category": "Data Issue",
-                                            "contact_type": "Alert",
-                                            "description": "Error details: @{variables('errorBody')}",
-                                            "impact": "2",
-                                            "service_offering": "[parameters('serviceNowServiceOfferingId')]",
-                                            "short_description": "HMI Libra File Error occured",
-                                            "subcategory": "Data or File Error - other",
-                                            "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
-                                            "urgency": "3"
-                                        },
-                                        "method": "POST",
-                                        "uri": "[parameters('serviceNowHostUrl')]"
-                                    }
-                                }
-                            },
-                            "runAfter": {
-                                "Set_errorBody": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "expression": {
-                                "and": [
-                                    {
-                                        "greater": [
-                                            "@length(variables('errorBody'))",
-                                            0
-                                        ]
-                                    }
-                                ]
-                            },
-                            "type": "If"
-                        },
-                        "Copy_input_file_to_output": {
-                            "runAfter": {
-                                "Create_Error_record": [
-                                    "Succeeded",
-                                    "TimedOut",
-                                    "Skipped"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
-                                "queries": {
-                                    "destination": "@{concat('libra/output/', body('Parse_JSON')?['filename'])}",
-                                    "overwrite": true,
-                                    "queryParametersSingleEncoded": true,
-                                    "source": "@{concat('libra/input/', body('Parse_JSON')?['filename'])}"
-                                }
-                            }
-                        },
-                        "Create_Error_record": {
-                            "runAfter": {
-                                "HTTP_HMI": [
-                                    "Failed"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "errorMessage": "@{body('HTTP_HMI')}"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                                    }
-                                },
-                                "method": "patch",
-                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_jsonFileContent')?['listingRequest']?['_case']?['caseIdHMCTS'])}')"
-                            }
-                        },
-                        "Delete_input_file": {
-                            "runAfter": {
-                                "Copy_input_file_to_output": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "headers": {
-                                    "SkipDeleteIfFileNotFoundOnServer": false
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "delete",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}"
-                            }
-                        },
-                        "Get_file_to_process": {
-                            "runAfter": {
-                                "Update_status_to_Loading": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}/content",
-                                "queries": {
-                                    "inferContentType": true
-                                }
-                            }
-                        },
-                        "Get_record_from_libraFiles": {
-                            "runAfter": {
-                                "Initialize_errorBody": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                                    }
-                                },
-                                "method": "get",
-                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
-                            }
-                        },
-                        "Get_secret_hmi-client": {
-                            "runAfter": {
-                                "Parse_JSON": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                    }
-                                },
-                                "method": "get",
-                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
-                            }
-                        },
-                        "Get_secret_hmi-secret": {
-                            "runAfter": {
-                                "Get_secret_hmi-client": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
-                                    }
-                                },
-                                "method": "get",
-                                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
-                            }
-                        },
-                        "HTTP_HMI": {
-                            "runAfter": {
-                                "Update_Error_invalid_schema": [
-                                    "Skipped"
-                                ]
-                            },
-                            "type": "Http",
-                            "inputs": {
-                                "authentication": {
-                                    "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
-                                    "clientId": "@body('Get_secret_hmi-client')?['value']",
-                                    "secret": "@body('Get_secret_hmi-secret')?['value']",
-                                    "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
-                                    "type": "ActiveDirectoryOAuth"
-                                },
-                                "body": "@body('Parse_jsonFileContent')",
-                                "headers": {
-                                    "Accept": "application/json",
-                                    "Content-Type": "application/json",
-                                    "Destination-System": "SNL",
-                                    "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
-                                    "Source-System": "CRIME"
-                                },
-                                "method": "POST",
-                                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
-                            }
-                        },
-                        "Initialize_errorBody": {
-                            "runAfter": {
-                                "Delete_input_file": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "errorBody",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Initialize_jsonFileContent": {
-                            "runAfter": {
-                                "Get_secret_hmi-secret": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "InitializeVariable",
-                            "inputs": {
-                                "variables": [
-                                    {
-                                        "name": "jsonFileContent",
-                                        "type": "string"
-                                    }
-                                ]
-                            }
-                        },
-                        "Parse_JSON": {
-                            "runAfter": {},
-                            "type": "ParseJson",
-                            "inputs": {
-                                "content": "@triggerBody()",
-                                "schema": {
-                                    "properties": {
-                                        "filename": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        },
-                        "Parse_jsonFileContent": {
-                            "runAfter": {
-                                "Set_jsonFileContent": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ParseJson",
-                            "inputs": {
-                                "content": "@variables('jsonFileContent')",
-                                "schema": {
-                                    "properties": {
-                                        "listingRequest": {
-                                            "properties": {
-                                                "_case": {
-                                                    "properties": {
-                                                        "caseClassifications": {
-                                                            "items": {
-                                                                "properties": {
-                                                                    "caseClassificationService": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "caseClassificationSubType": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "caseClassificationType": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "required": [
-                                                                    "caseClassificationService",
-                                                                    "caseClassificationType",
-                                                                    "caseClassificationSubType"
-                                                                ],
-                                                                "type": "object"
-                                                            },
-                                                            "type": "array"
-                                                        },
-                                                        "caseCourt": {
-                                                            "properties": {
-                                                                "locationId": {
-                                                                    "type": "string"
-                                                                },
-                                                                "locationReferenceType": {
-                                                                    "type": "string"
-                                                                },
-                                                                "locationType": {
-                                                                    "type": "string"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        },
-                                                        "caseIdHMCTS": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseJurisdiction": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseListingRequestId": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseRegistered": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseReportingRestrictions": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseTitle": {
-                                                            "type": "string"
-                                                        },
-                                                        "caseVersionID": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "entities": {
-                                                    "items": {
-                                                        "properties": {
-                                                            "entityId": {
-                                                                "type": "string"
-                                                            },
-                                                            "entityOffences": {
-                                                                "items": {
-                                                                    "properties": {
-                                                                        "offenceClass": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "offenceDate": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "offenceId": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "offenceLegislation": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "offenceTitle": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "offenceWording": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "required": [
-                                                                        "offenceId",
-                                                                        "offenceClass",
-                                                                        "offenceTitle",
-                                                                        "offenceWording",
-                                                                        "offenceLegislation",
-                                                                        "offenceDate"
-                                                                    ],
-                                                                    "type": "object"
-                                                                },
-                                                                "type": "array"
-                                                            },
-                                                            "entityRoleCode": {
-                                                                "type": "string"
-                                                            },
-                                                            "entitySubType": {
-                                                                "properties": {
-                                                                    "entityClassCode": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "entityDateOfBirth": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "entityFirstName": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "entityLastName": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "type": "object"
-                                                            },
-                                                            "entityTypeCode": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "entityId",
-                                                            "entityTypeCode",
-                                                            "entityRoleCode",
-                                                            "entitySubType",
-                                                            "entityOffences"
-                                                        ],
-                                                        "type": "object"
-                                                    },
-                                                    "type": "array"
-                                                },
-                                                "listing": {
-                                                    "properties": {
-                                                        "listingSessions": {
-                                                            "items": {
-                                                                "properties": {
-                                                                    "listingDuration": {
-                                                                        "type": "integer"
-                                                                    },
-                                                                    "listingRoom": {
-                                                                        "properties": {
-                                                                            "locationId": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "locationReferenceType": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "locationType": {
-                                                                                "type": "string"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    },
-                                                                    "listingStartDate": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "listingStatus": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "required": [
-                                                                    "listingRoom",
-                                                                    "listingStartDate",
-                                                                    "listingDuration",
-                                                                    "listingStatus"
-                                                                ],
-                                                                "type": "object"
-                                                            },
-                                                            "type": "array"
-                                                        },
-                                                        "listingType": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "meta": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        },
-                        "Set_errorBody": {
-                            "runAfter": {
-                                "Get_record_from_libraFiles": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "SetVariable",
-                            "inputs": {
-                                "name": "errorBody",
-                                "value": "@{body('Get_record_from_libraFiles')?['errorMessage']}"
-                            }
-                        },
-                        "Set_jsonFileContent": {
-                            "runAfter": {
-                                "Get_file_to_process": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "SetVariable",
-                            "inputs": {
-                                "name": "jsonFileContent",
-                                "value": "@{body('Get_file_to_process')}"
-                            }
-                        },
-                        "Update_Error_invalid_schema": {
-                            "runAfter": {
-                                "Parse_jsonFileContent": [
-                                    "Failed"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "errorMessage": "@{outputs('Parse_jsonFileContent')}",
-                                    "status": "INVALID"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                                    }
-                                },
-                                "method": "patch",
-                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
-                            }
-                        },
-                        "Update_Status_to_Complete": {
-                            "runAfter": {
-                                "Condition": [
-                                    "Succeeded",
-                                    "TimedOut",
-                                    "Skipped",
-                                    "Failed"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "status": "COMPLETE"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                                    }
-                                },
-                                "method": "patch",
-                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
-                            }
-                        },
-                        "Update_status_to_Loading": {
-                            "runAfter": {
-                                "Initialize_jsonFileContent": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": {
-                                    "status": "LOADING"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
-                                    }
-                                },
-                                "method": "patch",
-                                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
-                            }
-                        },
-                        "read.me": {
-                            "runAfter": {
-                                "Update_Status_to_Complete": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "ApiConnection",
-                            "inputs": {
-                                "body": "@concat('contains libra files')",
-                                "headers": {
-                                    "ReadFileMetadataFromServer": true
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                    }
-                                },
-                                "method": "post",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
-                                "queries": {
-                                    "folderPath": "/libra/input/",
-                                    "name": "read.me",
-                                    "queryParametersSingleEncoded": true
-                                }
-                            },
-                            "runtimeConfiguration": {
-                                "contentTransfer": {
-                                    "transferMode": "Chunked"
-                                }
-                            }
-                        }
+            "Condition": {
+              "actions": {
+                "Get_SNow_client": {
+                  "runAfter": {},
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
                     },
-                    "outputs": {}
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-client')}/value"
+                  }
                 },
+                "Get_SNow_secret": {
+                  "runAfter": {
+                    "Get_SNow_client": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/secrets/@{encodeURIComponent('hmi-servicenow-secret')}/value"
+                  }
+                },
+                "HTTP_Service_Now": {
+                  "runAfter": {
+                    "Get_SNow_secret": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "authentication": {
+                      "password": "@body('Get_SNow_secret')?['value']",
+                      "type": "Basic",
+                      "username": "@body('Get_SNow_client')?['value']"
+                    },
+                    "body": {
+                      "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
+                      "caller_id": "[parameters('serviceNowCallerId')]",
+                      "category": "Data Issue",
+                      "contact_type": "Alert",
+                      "description": "Error details: @{variables('errorBody')}",
+                      "impact": "2",
+                      "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                      "short_description": "HMI Libra File Error occured",
+                      "subcategory": "Data or File Error - other",
+                      "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                      "urgency": "3"
+                    },
+                    "method": "POST",
+                    "uri": "[parameters('serviceNowHostUrl')]"
+                  }
+                }
+              },
+              "runAfter": {
+                "Set_errorBody": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "and": [
+                  {
+                    "greater": [
+                      "@length(variables('errorBody'))",
+                      0
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
+            "Copy_input_file_to_output": {
+              "runAfter": {
+                "Create_Error_record": [
+                  "Succeeded",
+                  "TimedOut",
+                  "Skipped"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "headers": {
+                  "ReadFileMetadataFromServer": true
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
+                "queries": {
+                  "destination": "@{concat('libra/output/', body('Parse_JSON')?['filename'])}",
+                  "overwrite": true,
+                  "queryParametersSingleEncoded": true,
+                  "source": "@{concat('libra/input/', body('Parse_JSON')?['filename'])}"
+                }
+              }
+            },
+            "Create_Error_record": {
+              "runAfter": {
+                "HTTP_HMI": [
+                  "Failed"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "errorMessage": "@{body('HTTP_HMI')}"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "Delete_input_file": {
+              "runAfter": {
+                "Copy_input_file_to_output": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "headers": {
+                  "SkipDeleteIfFileNotFoundOnServer": false
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "delete",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}"
+              }
+            },
+            "Get_file_to_process": {
+              "runAfter": {
+                "Update_status_to_Loading": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('libra/input/', body('Parse_JSON')?['filename'])))}/content",
+                "queries": {
+                  "inferContentType": true
+                }
+              }
+            },
+            "Get_record_from_libraFiles": {
+              "runAfter": {
+                "Initialize_errorBody": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "Get_secret_hmi-client": {
+              "runAfter": {
+                "Parse_JSON": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-id')}/value"
+              }
+            },
+            "Get_secret_hmi-secret": {
+              "runAfter": {
+                "Get_secret_hmi-client": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['keyvault']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/secrets/@{encodeURIComponent('hmi-dtu-client-nonprod-pwd')}/value"
+              }
+            },
+            "HTTP_HMI": {
+              "runAfter": {
+                "Update_Error_invalid_schema": [
+                  "Skipped"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "authentication": {
+                  "audience": "api://d49d7fa2-6904-4223-a907-3b8992af4190",
+                  "clientId": "@body('Get_secret_hmi-client')?['value']",
+                  "secret": "@body('Get_secret_hmi-secret')?['value']",
+                  "tenant": "531ff96d-0ae9-462a-8d2d-bec7c0b42082",
+                  "type": "ActiveDirectoryOAuth"
+                },
+                "body": "@body('Parse_jsonFileContent')",
+                "headers": {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+                  "Destination-System": "SNL",
+                  "Request-Created-At": "@{utcNow('yyyy-MM-ddTHH:mm:ssZ')}",
+                  "Source-System": "CRIME"
+                },
+                "method": "POST",
+                "uri": "[parameters('hmiListingUrl')]"
+              }
+            },
+            "Initialize_errorBody": {
+              "runAfter": {
+                "Delete_input_file": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "errorBody",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Initialize_jsonFileContent": {
+              "runAfter": {
+                "Get_secret_hmi-secret": [
+                  "Succeeded"
+                ]
+              },
+              "type": "InitializeVariable",
+              "inputs": {
+                "variables": [
+                  {
+                    "name": "jsonFileContent",
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "Parse_JSON": {
+              "runAfter": {},
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@triggerBody()",
+                "schema": {
+                  "properties": {
+                    "filename": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "Parse_jsonFileContent": {
+              "runAfter": {
+                "Set_jsonFileContent": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@variables('jsonFileContent')",
+                "schema": {
+                  "properties": {
+                    "listingRequest": {
+                      "properties": {
+                        "_case": {
+                          "properties": {
+                            "caseClassifications": {
+                              "items": {
+                                "properties": {
+                                  "caseClassificationService": {
+                                    "type": "string"
+                                  },
+                                  "caseClassificationSubType": {
+                                    "type": "string"
+                                  },
+                                  "caseClassificationType": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "caseClassificationService",
+                                  "caseClassificationType",
+                                  "caseClassificationSubType"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "caseCourt": {
+                              "properties": {
+                                "locationId": {
+                                  "type": "string"
+                                },
+                                "locationReferenceType": {
+                                  "type": "string"
+                                },
+                                "locationType": {
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "caseIdHMCTS": {
+                              "type": "string"
+                            },
+                            "caseJurisdiction": {
+                              "type": "string"
+                            },
+                            "caseListingRequestId": {
+                              "type": "string"
+                            },
+                            "caseRegistered": {
+                              "type": "string"
+                            },
+                            "caseReportingRestrictions": {
+                              "type": "string"
+                            },
+                            "caseTitle": {
+                              "type": "string"
+                            },
+                            "caseVersionID": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "entities": {
+                          "items": {
+                            "properties": {
+                              "entityId": {
+                                "type": "string"
+                              },
+                              "entityOffences": {
+                                "items": {
+                                  "properties": {
+                                    "offenceClass": {
+                                      "type": "string"
+                                    },
+                                    "offenceDate": {
+                                      "type": "string"
+                                    },
+                                    "offenceId": {
+                                      "type": "string"
+                                    },
+                                    "offenceLegislation": {
+                                      "type": "string"
+                                    },
+                                    "offenceTitle": {
+                                      "type": "string"
+                                    },
+                                    "offenceWording": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "offenceId",
+                                    "offenceClass",
+                                    "offenceTitle",
+                                    "offenceWording",
+                                    "offenceLegislation",
+                                    "offenceDate"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "entityRoleCode": {
+                                "type": "string"
+                              },
+                              "entitySubType": {
+                                "properties": {
+                                  "entityClassCode": {
+                                    "type": "string"
+                                  },
+                                  "entityDateOfBirth": {
+                                    "type": "string"
+                                  },
+                                  "entityFirstName": {
+                                    "type": "string"
+                                  },
+                                  "entityLastName": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "entityTypeCode": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "entityId",
+                              "entityTypeCode",
+                              "entityRoleCode",
+                              "entitySubType",
+                              "entityOffences"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "listing": {
+                          "properties": {
+                            "listingSessions": {
+                              "items": {
+                                "properties": {
+                                  "listingDuration": {
+                                    "type": "integer"
+                                  },
+                                  "listingRoom": {
+                                    "properties": {
+                                      "locationId": {
+                                        "type": "string"
+                                      },
+                                      "locationReferenceType": {
+                                        "type": "string"
+                                      },
+                                      "locationType": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "type": "object"
+                                  },
+                                  "listingStartDate": {
+                                    "type": "string"
+                                  },
+                                  "listingStatus": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "listingRoom",
+                                  "listingStartDate",
+                                  "listingDuration",
+                                  "listingStatus"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "listingType": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "meta": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "Set_errorBody": {
+              "runAfter": {
+                "Get_record_from_libraFiles": [
+                  "Succeeded"
+                ]
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "errorBody",
+                "value": "@{body('Get_record_from_libraFiles')?['errorMessage']}"
+              }
+            },
+            "Set_jsonFileContent": {
+              "runAfter": {
+                "Get_file_to_process": [
+                  "Succeeded"
+                ]
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "jsonFileContent",
+                "value": "@{body('Get_file_to_process')}"
+              }
+            },
+            "Update_Error_invalid_schema": {
+              "runAfter": {
+                "Parse_jsonFileContent": [
+                  "Failed"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "errorMessage": "@{outputs('Parse_jsonFileContent')}",
+                  "status": "INVALID"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "Update_Status_to_Complete": {
+              "runAfter": {
+                "Condition": [
+                  "Succeeded",
+                  "TimedOut",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "status": "COMPLETE"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "Update_status_to_Loading": {
+              "runAfter": {
+                "Initialize_jsonFileContent": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": {
+                  "status": "LOADING"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "path": "/Tables/@{encodeURIComponent('libraFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+              }
+            },
+            "read.me": {
+              "runAfter": {
+                "Update_Status_to_Complete": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "body": "@concat('contains libra files')",
+                "headers": {
+                  "ReadFileMetadataFromServer": true
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
+                "queries": {
+                  "folderPath": "/libra/input/",
+                  "name": "read.me",
+                  "queryParametersSingleEncoded": true
+                }
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
+              }
+            }
+          },
+          "outputs": {}
+        },
         "parameters": {
           "$connections": {
             "value": {
