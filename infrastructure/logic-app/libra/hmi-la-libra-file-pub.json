@@ -6,6 +6,9 @@
             "defaultValue": "hmi-la-dtulibra-file-pub-dev",
             "type": "String"
         },
+        "libraSessionPublisherUrl": {
+            "type": "string"
+        },
         "storageAccountName": {
             "type": "string"
         },
@@ -909,7 +912,7 @@
                                                     "Content-Type": "application/json"
                                                 },
                                                 "method": "POST",
-                                                "uri": "https://prod-02.uksouth.logic.azure.com:443/workflows/618ce3b058b24de1bf81abc6ca6213ac/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=tbe_k4-ByrfixTu7yTUzPpXTPGi8rUtOC2PPCmjprw0"
+                                                "uri": "[parameters('libraSessionPublisherUrl')]"
                                             }
                                         },
                                         "Parse_new_record_to_load": {

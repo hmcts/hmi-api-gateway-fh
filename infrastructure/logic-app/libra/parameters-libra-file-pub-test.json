@@ -8,6 +8,9 @@
         "workflows_hmi_la_dtulibra_file_pub_dev_name": {
             "value": "hmi-la-dtulibra-file-pub-test"
         },
+        "libraSessionPublisherUrl":{
+            "value": "#{libraSessionPublisherUrl}#"
+        },
         "storageAccountName":{
             "value": "hmidtutest"
         },
