@@ -6,7 +6,7 @@
             "value": "development"
         },
         "workflows_hmi_la_dtulibra_session_publisher_dev_name": {
-            "value": "hmi-la-dtulibra-session-pub-dev"
+            "value": "hmi-la-dtulibra-session-pub-test"
         },
         "storageAccountName":{
             "value": "hmidtutest"
