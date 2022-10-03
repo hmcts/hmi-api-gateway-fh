@@ -59,7 +59,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 );
     }
 
-    // @Test
+     @Test
     public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
         setMandatoryHeaders(headersAsMap);
         publicationSteps.createPublicationWithValidHeadersAndPayload(
@@ -69,7 +69,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 "{}");
     }
 
-    // @Test
+     @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() {
 
         setMandatoryHeaders(headersAsMap);
@@ -93,7 +93,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void tesCreatePublicationWithInvalidHeader() {
         setMandatoryHeaders(headersAsMap);
         publicationHeaders.setAHeader(headersAsMap,"x-type","invalid x-type");
