@@ -46,6 +46,9 @@ jobs:
         echo "Creating DTU Logic Application - Sitting Patterns"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-publisher-la.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-loader-param-$(environment).json"
         az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\hmi-la-sittingpattern-retriever-la.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\sitting-pattern\sitting-retriever-param-$(environment).json"
+        echo "Creating Libra Logic Application"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-dtulibra-file-pub-la.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-dtulibra-file-pub-param-$(environment).json"
+        az deployment group create --resource-group $resourceGroupName --template-file "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-dtulibra-session-pub-la.json" --parameters "$(System.DefaultWorkingDirectory)\infrastructure\logic-app\libra\hmi-la-dtulibra-session-pub-param-$(environment).json"
         echo "Creating DTU Logic Applications is complete"
   - task: AzureCLI@2
     displayName: Give Logic App Access to Key Vault
@@ -56,7 +59,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
         $env="$(environment)"
-        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env")
+        $workflowNames=@("hmi-la-dturota-$env", "hmi-la-listing-data-export-$env", "hmi-la-sittingpattern-publisher-$env", "hmi-la-sittingpattern-retriever-$env", "hmi-la-dtulibra-session-pub-$env", "hmi-la-dtulibra-file-pub-$env")
         $resourceGroupName="hmi-sharedinfra-$env-rg"
         $kv_name="hmi-shared-kv-$env"
         az config set extension.use_dynamic_install=yes_without_prompt
