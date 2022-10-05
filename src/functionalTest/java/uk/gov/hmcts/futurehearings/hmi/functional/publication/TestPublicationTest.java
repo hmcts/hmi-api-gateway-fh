@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +43,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
         super.initialiseValues();
     }
 
-    private void setMandatoryHeaders(Map<String, Object> headersAsMap) {
+    private void setPnIMandatoryHeaders(Map<String, Object> headersAsMap) {
         publicationHeaders.setPnIMandatoryHeaders(headersAsMap,
                 "GENERAL_PUBLICATION",
                 "SJP_PUBLIC_LIST",
@@ -50,7 +52,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 "ENGLISH");
     }
 
-    private void setAdditionalHeaders(Map<String, Object> headersAsMap) {
+    private void setPnIAdditionalHeaders(Map<String, Object> headersAsMap) {
         publicationHeaders.setPnIAdditionalHeaders(headersAsMap,
                 "daily-ward",
                 "PUBLIC",
@@ -61,24 +63,28 @@ public class TestPublicationTest extends PIHFunctionalTest {
 
      @Test
     public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
-        setMandatoryHeaders(headersAsMap);
+         setPnIMandatoryHeaders(headersAsMap);
         publicationSteps.createPublicationWithValidHeadersAndPayload(
                 pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
+                HttpMethod.POST,
+                HttpStatus.CREATED,
                 "{}");
     }
 
      @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() {
 
-        setMandatoryHeaders(headersAsMap);
-        setAdditionalHeaders(headersAsMap);
+         setPnIMandatoryHeaders(headersAsMap);
+         setPnIAdditionalHeaders(headersAsMap);
 
         publicationSteps.createPublicationWithValidHeadersAndPayload(
                 pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
+                HttpMethod.POST,
+                HttpStatus.CREATED,
                 "{}");
     }
 
@@ -95,7 +101,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
     @Test
     //@Ignore
     public void tesCreatePublicationWithInvalidHeader() {
-        setMandatoryHeaders(headersAsMap);
+        setPnIMandatoryHeaders(headersAsMap);
         publicationHeaders.setAHeader(headersAsMap,"x-type","invalid x-type");
 
         publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
@@ -106,7 +112,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
 
     @Test
     public void testCreatePublicationUnauthorized() {
-        setMandatoryHeaders(headersAsMap);
+        setPnIMandatoryHeaders(headersAsMap);
         publicationSteps.createPublicationUnauthorized(pihPublicationRootContext,
                 headersAsMap,
                 "Invalid token 123456",
