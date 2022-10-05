@@ -218,20 +218,20 @@
                       "username": "@body('Get_SNow_client')?['value']"
                     },
                     "body": {
-                      "assignment_group": "[parameters('serviceNowAssignemntGroupId')]",
-                      "caller_id": "[parameters('serviceNowCallerId')]",
+                      "assignment_group": "56b756774fbd368057db0b318110c7bd",
+                      "caller_id": "1475a0491b743414f0dc85e4464bcb7a",
                       "category": "Data Issue",
                       "contact_type": "Alert",
                       "description": "Error details: @{variables('errorBody')}",
                       "impact": "2",
-                      "service_offering": "[parameters('serviceNowServiceOfferingId')]",
+                      "service_offering": "138e0c541bc5bc507bdaddf0b24bcb2a",
                       "short_description": "HMI Libra File Error occured",
                       "subcategory": "Data or File Error - other",
-                      "u_role_type": "[parameters('serviceNowUserRoleTypeId')]",
+                      "u_role_type": "c319bc4bdb41834074abffa9bf96199c",
                       "urgency": "3"
                     },
                     "method": "POST",
-                    "uri": "[parameters('serviceNowHostUrl')]"
+                    "uri": "https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number"
                   }
                 }
               },
@@ -415,7 +415,7 @@
                   "Source-System": "CRIME"
                 },
                 "method": "POST",
-                "uri": "[parameters('hmiListingUrl')]"
+                "uri": "https://hmi-apim.dev.platform.hmcts.net/hmi/listings"
               }
             },
             "Initialize_errorBody": {
@@ -661,7 +661,8 @@
                           "type": "object"
                         },
                         "meta": {
-                          "type": "string"
+                          "properties": {},
+                          "type": "object"
                         }
                       },
                       "type": "object"
