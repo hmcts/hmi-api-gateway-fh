@@ -35,6 +35,7 @@ class PeopleApiSmokeTest extends SmokeTest {
     }
 
     @Test
+    @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
                 getAuthorizationToken(),
