@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-@Disabled("Failing due to issue, to be re-enabled in future ticket once fix implemented")
+//@Disabled("Failing due to issue, to be re-enabled in future ticket once fix implemented")
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
@@ -37,7 +37,7 @@ class PeopleApiSmokeTest extends SmokeTest {
     }
 
     @Test
-    @DisplayName("Smoke Test to test the people endpoint")
+   // @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
                 getAuthorizationToken(),

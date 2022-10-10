@@ -12,8 +12,8 @@
         <set-header name="Authorization" exists-action="override">
             <value>@("Bearer " + (String)context.Variables["elinksToken"])</value>
         </set-header>
-        <rewrite-uri template="/people?updated_since=4018-04-10 " copy-unmatched-params="true" />
-        <set-backend-service base-url="https://jo-staging.elinks.judiciary.uk/api/" />
+        <rewrite-uri template="/healthcheck" copy-unmatched-params="true" />
+        <set-backend-service base-url="https://#{elinksHost}#/api/" />
     </inbound>
     <backend>
         <base />
