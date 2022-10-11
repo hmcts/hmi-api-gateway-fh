@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -28,6 +29,7 @@ class PeopleApiSmokeTest extends SmokeTest {
     @Value("${peopleHealthcheck}")
     private String peopleHealthcheck;
 
+    @BeforeAll
     public void initialiseValues() throws Exception {
         this.setDestinationSystem("ELINKS");
         super.initialiseValues();
@@ -37,10 +39,15 @@ class PeopleApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(),
-                getRootContext());
-
+        Response response = makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
+
+    public static Response makeGetRequest(final String rootContext) {
+        Response response = given()
+                .baseUri(rootContext)
+                .when()
+                .get();
+        return response;
     }
 }
