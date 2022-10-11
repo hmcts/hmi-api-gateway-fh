@@ -7,8 +7,8 @@ locals {
 
 data "azurerm_key_vault" "acme" {
   provider            = azurerm.control
-  name                = local.key_vault_name
-  resource_group_name = "enterprise-${var.env}-rg"
+  name                = "acmedtssds${var.environment}"
+  resource_group_name = "enterprise-${var.environment}-rg"
 }
 
 module "cert" {
@@ -20,7 +20,7 @@ module "cert" {
 }
 
 resource "azurerm_role_assignment" "kv_access" {
-  scope                = data.azurerm_key_vault.acmekv.id
+  scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_api_management.hmi_apim.identity.0.principal_id
 }
