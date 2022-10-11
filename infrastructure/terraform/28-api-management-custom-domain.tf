@@ -5,16 +5,20 @@ locals {
   cert_name     = replace(local.host_name, ".", "-")
 }
 
+data "azurerm_key_vault" "acme" {
+  provider            = azurerm.control
+  name                = local.key_vault_name
+  resource_group_name = "enterprise-${var.env}-rg"
+}
+
 module "cert" {
-  source        = "git::https://github.com/hmcts/terraform-module-certificate.git?ref=master"
+  source        = "git::https://github.com/hmcts/terraform-module-certificate.git?ref=DTSPO-9746/fix-kv"
   environment   = var.environment
   domain_prefix = "hmi-apim"
   #object_id     = azurerm_api_management.hmi_apim.identity.0.principal_id
+  key_vault_id = data.azurerm_key_vault.acme.id
 }
-data "azurerm_key_vault" "acmekv" {
-  name                = "acmedtssds${var.environment}"
-  resource_group_name = "sds-platform-${var.environment}-rg"
-}
+
 resource "azurerm_role_assignment" "kv_access" {
   scope                = data.azurerm_key_vault.acmekv.id
   role_definition_name = "Key Vault Secrets User"
