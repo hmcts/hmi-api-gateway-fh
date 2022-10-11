@@ -26,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SuppressWarnings("java:S2187")
 class PeopleApiSmokeTest extends SmokeTest {
 
-    @Value("${peopleHealthcheck}")
-    private String peopleHealthcheck;
+    private String peopleHealthcheck = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
 
     @BeforeAll
     public void initialiseValues() throws Exception {
