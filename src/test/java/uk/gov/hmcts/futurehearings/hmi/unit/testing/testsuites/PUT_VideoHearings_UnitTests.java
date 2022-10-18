@@ -145,6 +145,7 @@ public class PUT_VideoHearings_UnitTests {
     @Test
     @Order(7)
     @DisplayName("Test for invalid Access Token")
+    @Disabled
     void testUpdateHearingRequestWithInvalidAccessToken() {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret, invalidTokenURL, invalidScope);
 
