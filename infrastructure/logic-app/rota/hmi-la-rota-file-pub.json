@@ -828,7 +828,10 @@
                         "Get_entities_with_status_error": {
                             "runAfter": {
                                 "Is_loadingCount_below_limit": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "TimedOut",
+                                    "Skipped",
+                                    "Failed"
                                 ]
                             },
                             "type": "ApiConnection",
@@ -848,7 +851,10 @@
                         "Get_entities_with_status_loading": {
                             "runAfter": {
                                 "For_each_File": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Skipped",
+                                    "Failed",
+                                    "TimedOut"
                                 ]
                             },
                             "type": "ApiConnection",
