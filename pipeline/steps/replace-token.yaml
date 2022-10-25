@@ -6,11 +6,6 @@ parameters:
     type: string
 
 steps:
-- task: DownloadSecureFile@1
-  displayName: 'Download secure file'
-  name: policy_variables_${{ parameters.environment }}
-  inputs:
-    secureFile: policy-variables-${{ parameters.environment }}.json
 - task: replacetokens@3
   displayName: Replace Tokens in Policy files
   inputs:
