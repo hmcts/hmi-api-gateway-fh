@@ -21,6 +21,10 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
+  - template: ../steps/replace-token.yaml
+    parameters:
+      path: '**/*-policy.xml'
+      environment: ${{ parameters.environment }}
   - template: ../steps/set-policies.yaml
     parameters:
       subscription: ${{ parameters.subscription }}
