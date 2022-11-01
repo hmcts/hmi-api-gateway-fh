@@ -142,6 +142,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'keyvault')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables')]"
             ],
             "properties": {
@@ -234,7 +235,7 @@
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                                     }
                                                 },
                                                 "method": "get",
@@ -254,7 +255,7 @@
                                                 },
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                                     }
                                                 },
                                                 "method": "patch",
@@ -274,7 +275,7 @@
                                                 },
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                                     }
                                                 },
                                                 "method": "patch",
@@ -809,7 +810,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -827,14 +828,17 @@
                         "Get_entities_with_status_error": {
                             "runAfter": {
                                 "Is_loadingCount_below_limit": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "TimedOut",
+                                    "Skipped",
+                                    "Failed"
                                 ]
                             },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -847,14 +851,17 @@
                         "Get_entities_with_status_loading": {
                             "runAfter": {
                                 "For_each_File": [
-                                    "Succeeded"
+                                    "Succeeded",
+                                    "Skipped",
+                                    "Failed",
+                                    "TimedOut"
                                 ]
                             },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -1007,7 +1014,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "get",
