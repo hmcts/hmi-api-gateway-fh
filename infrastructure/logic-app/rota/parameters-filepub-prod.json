@@ -23,10 +23,10 @@
              }
         },
         "appId":{
-            "value": "#{keyVaultUserId}#"
+            "value": "#{tf_secret_hmi-dtu-client-prod-id}#"
         },
         "appSecret":{
-            "value": "#{keyVaultUserSecret}#"
+            "value": "#{tf_secret_hmi-dtu-client-prod-pwd}#"
         },
         "tenantId":{
             "value": "#{azureTenant}#"
