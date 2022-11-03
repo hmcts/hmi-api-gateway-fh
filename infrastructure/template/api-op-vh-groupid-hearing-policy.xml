@@ -48,7 +48,96 @@
                 <set-backend-service base-url="#{vhHost}#/hearings" />
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
-                <mock-response status-code="200" content-type="application/json" />
+                <return-response>
+                    <set-status code="200" />
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/json</value>
+                    </set-header>
+                    <set-body>[
+                    {
+                        "id": "string",
+                        "scheduled_date_time": "2022-09-21T09:46:21.853Z",
+                        "scheduled_duration": 0,
+                        "hearing_venue_name": "string",
+                        "case_type_name": "string",
+                        "hearing_type_name": "string",
+                        "cases": [
+                        {
+                            "number": "string",
+                            "name": "string",
+                            "is_lead_case": true
+                        }
+                        ],
+                        "participants": [
+                        {
+                            "id": "string",
+                            "display_name": "string",
+                            "case_role_name": "string",
+                            "hearing_role_name": "string",
+                            "user_role_name": "string",
+                            "title": "string",
+                            "first_name": "string",
+                            "middle_names": "string",
+                            "last_name": "string",
+                            "contact_email": "string",
+                            "telephone_number": "string",
+                            "username": "string",
+                            "organisation": "string",
+                            "representee": "string",
+                            "linked_participants": [
+                            {
+                                "linked_id": "string",
+                                "type": "Interpreter"
+                            }
+                            ]
+                        }
+                        ],
+                        "telephone_participants": [
+                        {
+                            "id": "string",
+                            "case_role_name": "string",
+                            "hearing_role_name": "string",
+                            "first_name": "string",
+                            "last_name": "string",
+                            "contact_email": "string",
+                            "telephone_number": "string",
+                            "mobile_number": "string",
+                            "representee": "string",
+                            "linked_participants": [
+                            {
+                                "linked_id": "string",
+                                "type": "Interpreter"
+                            }
+                            ]
+                        }
+                        ],
+                        "hearing_room_name": "string",
+                        "other_information": "string",
+                        "created_date": "2022-09-21T09:46:21.853Z",
+                        "created_by": "string",
+                        "updated_by": "string",
+                        "updated_date": "2022-09-21T09:46:21.853Z",
+                        "confirmed_by": "string",
+                        "confirmed_date": "2022-09-21T09:46:21.853Z",
+                        "status": "Booked",
+                        "questionnaire_not_required": true,
+                        "audio_recording_required": true,
+                        "cancel_reason": "string",
+                        "endpoints": [
+                        {
+                            "id": "string",
+                            "display_name": "string",
+                            "sip": "string",
+                            "pin": "string",
+                            "defence_advocate_id": "string"
+                        }
+                        ],
+                        "group_id": "string",
+                        "hearing_type_code": "string"
+                    }
+                    ]
+                    </set-body>
+                </return-response>
             </when>
             <otherwise>
                 <return-response>

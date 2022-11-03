@@ -6,7 +6,7 @@
             "value": "ithc"
         },
         "workflows_hmidtusittingpatterns_name": {
-            "value": "hmi-la-sittingpattern-retriever-ithc"
+            "value": "hmi-la-sittingpattern-publisher-ithc"
         },
         "storageAccountName":{
             "value": "hmidtuithc"
