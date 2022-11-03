@@ -2,10 +2,6 @@
     <inbound>
         <base />
         <choose>
-            <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "EMULATOR")">
-                <rewrite-uri template="/{listing_id}" copy-unmatched-params="true" />
-                <set-backend-service base-url="http://#{emulatorHost}#/rest/hmcts/resources/listings/" />
-            </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
                 <cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />
                 <choose>

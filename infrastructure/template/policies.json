@@ -168,18 +168,6 @@
       "errorAction"  : "Stop"
     },
     {
-      "operationId"  : "emulator-health",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-emulator-health-policy.xml",
-      "errorAction"  : "Ignore"
-    },
-    {
-      "operationId"  : "pact-health",
-      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
-      "templateFile" : "api-op-pact-health-policy.xml",
-      "errorAction"  : "Ignore"
-    },
-    {
       "operationId"  : "direct-hearing",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-request-direct-hearing-policy.xml",

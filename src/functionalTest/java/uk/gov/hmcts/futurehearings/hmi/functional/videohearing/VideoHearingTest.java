@@ -95,10 +95,9 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    @Ignore("Ignored due to response")
     public void testGetVideoHearingById() {
         headersAsMap = createStandardHMIHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = "4564616C-0F7E-4D70-B0D7-A1BBF0874D5D";
         videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
         videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext,
                 headersAsMap,

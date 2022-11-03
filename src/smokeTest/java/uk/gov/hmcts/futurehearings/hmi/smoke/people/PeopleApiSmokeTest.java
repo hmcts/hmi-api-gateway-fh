@@ -16,18 +16,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-@Disabled("Failing due to issue, to be re-enabled in future ticket once fix implemented")
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
 @SuppressWarnings("java:S2187")
 class PeopleApiSmokeTest extends SmokeTest {
 
-    @Value("${peopleHealthcheck}")
-    private String peopleHealthcheck;
+    private String peopleHealthcheck = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
 
     @BeforeAll
     public void initialiseValues() throws Exception {
@@ -39,10 +38,15 @@ class PeopleApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(),
-                getRootContext());
-
+        Response response = makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    }
+
+    public static Response makeGetRequest(final String rootContext) {
+        Response response = given()
+                .baseUri(rootContext)
+                .when()
+                .get();
+        return response;
     }
 }
