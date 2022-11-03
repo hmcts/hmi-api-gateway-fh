@@ -31,6 +31,8 @@ public class SessionsLookUpTest extends FunctionalTest {
     @Value("${sessionsRootContext}")
     protected String sessionsRootContext;
 
+    @Value("${sessionsRootContext}")
+    protected String sessions_idRootContext;
     @Steps
     SessionsLookUpSteps sessionsLookUpSteps;
 
@@ -224,7 +226,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     @Test
     public void testSuccessfulGetSessionForRequestHearingType() {
         Map<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("requestHearingType", "APPEAL");
+        queryParameters.put("requestHearingType", "AC");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
