@@ -491,6 +491,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-1')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-2')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-3')]",
@@ -602,7 +603,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -632,7 +633,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -662,7 +663,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -690,7 +691,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -821,7 +822,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1222,7 +1223,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1242,7 +1243,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')[concat('azuretables-','1')]['connectionId']"
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
                                     }
                                 },
                                 "method": "patch",
@@ -1259,6 +1260,11 @@
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
                                 "connectionName": "azureblob",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            },
+                            "azuretables": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             },
                             "azuretables-1": {
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-1')]",
