@@ -43,6 +43,35 @@
         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
+            "name": "azuretables",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environmentName')]",
+                "application": "hearing-management-interface",
+                "businessarea": "cross-cutting",
+                "builtFrom": "hmcts/hmi-api-gateway-fh"
+            },
+            "kind": "V1",
+            "properties": {
+                "displayName": "HMI DTU Rota",
+                "statuses": [
+                    {
+                        "status": "Connected"
+                    }
+                ],
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                },
+                "parameterValues": {
+                    "storageaccount": "[parameters('storageAccountName')]",
+                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
             "name": "azuretables-1",
             "location": "[resourceGroup().location]",
             "tags": {
@@ -491,6 +520,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-1')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-2')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables-3')]",
@@ -707,7 +737,7 @@
                         },
                         "Get_filename": {
                             "runAfter": {
-                                "Update_record_status_to_loading": [
+                                "Initialize_jsonSchedules": [
                                     "Succeeded"
                                 ]
                             },
@@ -1199,7 +1229,7 @@
                         },
                         "Set_variable_xmlPayload": {
                             "runAfter": {
-                                "Get_filename": [
+                                "Update_record_status_to_loading": [
                                     "Succeeded"
                                 ]
                             },
@@ -1209,10 +1239,30 @@
                                 "value": "@{body('Get_filename')}"
                             }
                         },
+                        "Update_record_status_to_Error": {
+                            "runAfter": {
+                                "Get_filename": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "status": "ERROR"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+                            }
+                        },
                         "Update_record_status_to_loading": {
                             "runAfter": {
-                                "Initialize_jsonSchedules": [
-                                    "Succeeded"
+                                "Update_record_status_to_Error": [
+                                    "Skipped"
                                 ]
                             },
                             "type": "ApiConnection",
@@ -1259,6 +1309,11 @@
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
                                 "connectionName": "azureblob",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                            },
+                            "azuretables": {
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionName": "azuretables",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             },
                             "azuretables-1": {
                                 "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables-1')]",
