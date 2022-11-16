@@ -737,7 +737,7 @@
                         },
                         "Get_filename": {
                             "runAfter": {
-                                "Update_record_status_to_loading": [
+                                "Initialize_jsonSchedules": [
                                     "Succeeded"
                                 ]
                             },
@@ -1229,7 +1229,7 @@
                         },
                         "Set_variable_xmlPayload": {
                             "runAfter": {
-                                "Get_filename": [
+                                "Update_record_status_to_loading": [
                                     "Succeeded"
                                 ]
                             },
@@ -1239,10 +1239,30 @@
                                 "value": "@{body('Get_filename')}"
                             }
                         },
+                        "Update_record_status_to_Error": {
+                            "runAfter": {
+                                "Get_filename": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "status": "ERROR"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables-3']['connectionId']"
+                                    }
+                                },
+                                "method": "patch",
+                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}',RowKey='@{encodeURIComponent(body('Parse_JSON')?['filename'])}')"
+                            }
+                        },
                         "Update_record_status_to_loading": {
                             "runAfter": {
-                                "Initialize_jsonSchedules": [
-                                    "Succeeded"
+                                "Update_record_status_to_Error": [
+                                    "Skipped"
                                 ]
                             },
                             "type": "ApiConnection",
