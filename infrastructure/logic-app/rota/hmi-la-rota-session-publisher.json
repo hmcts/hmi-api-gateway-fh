@@ -807,7 +807,7 @@
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "sessionStart",
-                                                "value": "@{items('For_each_session')?['sessionDate']}TT10:00:00Z"
+                                                "value": "@{items('For_each_session')?['sessionDate']}T10:00:00Z"
                                             }
                                         }
                                     },
