@@ -12,6 +12,9 @@ public class RestClient {
     public static Response makeGetRequest(final Map<String, String> headersAsMap,
                                           final String authorizationToken,
                                           final String rootContext) {
+        System.out.println("headersAsMap====>"+headersAsMap);
+        System.out.println("authorizationToken====>"+authorizationToken);
+        System.out.println("rootContext====>"+rootContext);
         return given()
                 .headers(headersAsMap)
                 .auth().oauth2(authorizationToken)
