@@ -601,16 +601,16 @@
                                         "session": {
                                             "johs": "@json(concat('[', variables('jsonJohList'), ']'))",
                                             "room": {
-                                                "locationId": "@{items('For_each_Session')?['locationId']}",
-                                                "locationReferenceType": "EXTERNAL",
+                                                "locationId": "@{items('For_each_Session')?['venueId']}",
+                                                "locationReferenceType": "ROTA",
                                                 "locationType": "Room"
                                             },
                                             "sessionDuration": "@int(variables('sessionDuration'))",
                                             "sessionReference": "@{items('For_each_Session')?['RowKey']}",
                                             "sessionStart": "@{variables('sessionStart')}",
                                             "venue": {
-                                                "locationId": "@{items('For_each_Session')?['venueId']}",
-                                                "locationReferenceType": "EXTERNAL",
+                                                "locationId": "@{items('For_each_Session')?['locationId']}",
+                                                "locationReferenceType": "ROTA",
                                                 "locationType": "Court"
                                             }
                                         }
