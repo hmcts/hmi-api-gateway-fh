@@ -602,7 +602,7 @@
                                             "johs": "@json(concat('[', variables('jsonJohList'), ']'))",
                                             "room": {
                                                 "locationId": "@{items('For_each_Session')?['venueId']}",
-                                                "locationReferenceType": "EXTERNAL",
+                                                "locationReferenceType": "ROTA",
                                                 "locationType": "Room"
                                             },
                                             "sessionDuration": "@int(variables('sessionDuration'))",
