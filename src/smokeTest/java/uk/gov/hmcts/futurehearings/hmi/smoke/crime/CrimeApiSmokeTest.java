@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.crime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
@@ -19,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
+@Disabled
 @DisplayName("Smoke Test for the HMI Hearing Context")
 @SuppressWarnings("java:S2187")
 public class CrimeApiSmokeTest extends SmokeTest {
