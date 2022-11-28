@@ -102,6 +102,7 @@
                     new JProperty("urgency", "3")
                     ).ToString();
                     }</set-body>
+                </send-request>
                 <return-response>
                     <set-status code="502" />
                     <set-header name="Content-Type">
