@@ -12,8 +12,8 @@
     <outbound>
         <base />
         <choose>
-            <when condition="@(context.Response.StatusCode != 200)">
-                <cache-remove-value key="vhAuth" />
+            <when condition="@(context.Response.StatusCode == 404 || context.Response.StatusCode == 403 || context.Response.StatusCode == 503 || context.Response.StatusCode == 401 || context.Response.StatusCode == 400)">
+                <cache-remove-value key="CrimeAuth" />
                 <send-request ignore-error="true" timeout="20" response-variable-name="snowAuth" mode="new">
                     <set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
                     <set-method>GET</set-method>
