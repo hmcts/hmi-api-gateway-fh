@@ -75,12 +75,12 @@
         <choose>
             <when condition="@(context.Response.StatusCode != 200)">
                 <send-request ignore-error="true" timeout="20" response-variable-name="snowAuth" mode="new">
-                    <set-url>https://hmi-shared-kv-dev.vault.azure.net/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
+                    <set-url>https://#{keyVaultHost}#/secrets/hmi-servicenow-auth?api-version=7.0</set-url>
                     <set-method>GET</set-method>
                     <authentication-managed-identity resource="https://vault.azure.net" />
                 </send-request>
                 <send-request ignore-error="false" timeout="20" response-variable-name="serviceNow" mode="new">
-                    <set-url>https://mojcppdev.service-now.com/api/now/table/incident?sysparm_fields=number</set-url>
+                    <set-url>https://#{snowHost}#/api/now/table/incident?sysparm_fields=number</set-url>
                     <set-method>POST</set-method>
                     <set-header name="Authorization" exists-action="override">
                         <value>@("Basic " + ((IResponse)context.Variables["snowAuth"]).Body.As
