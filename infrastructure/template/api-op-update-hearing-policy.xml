@@ -51,7 +51,7 @@
 					<value>text</value>
 				</set-header>
 				<rewrite-uri template="/{hearing-id}" copy-unmatched-params="true" />
-				<set-backend-service base-url="https://#{cftHost}#/listings/" />
+				<set-backend-service base-url="https://#{cftHost}#/hmc/listings/" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "SNL")">
 				<cache-lookup-value key="snlAuth" variable-name="snlAuthToken" />

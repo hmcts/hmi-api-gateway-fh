@@ -246,6 +246,12 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "cft-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-cft-health-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "server-error",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-server-error-policy.xml",
