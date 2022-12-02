@@ -1,6 +1,5 @@
 <policies>
     <inbound>
-        <base />
         <rewrite-uri template="/" copy-unmatched-params="true" />
         <set-backend-service base-url="#{vhHost}#/health/liveness" />
     </inbound>
