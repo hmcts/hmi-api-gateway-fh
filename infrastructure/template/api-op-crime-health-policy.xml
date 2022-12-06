@@ -1,6 +1,5 @@
 <policies>
     <inbound>
-        <base />
         <rewrite-uri template="/knock-knock" copy-unmatched-params="true" />
         <authentication-certificate certificate-id="crimecert" />
         <set-header name="Authorization" exists-action="delete" />

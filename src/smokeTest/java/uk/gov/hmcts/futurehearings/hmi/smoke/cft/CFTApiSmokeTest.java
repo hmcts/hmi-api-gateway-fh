@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@Disabled
 @DisplayName("Smoke Test for the HMI CFT Health Check Context")
 @SuppressWarnings("java:S2187")
 public class CFTApiSmokeTest extends SmokeTest {
@@ -29,17 +28,14 @@ public class CFTApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("CFT");
-        super.initialiseValues();
+        super.initialiseValuesDefault();
         setRootContext(cftHealthCheckRootContext);
     }
 
     @Test
     @DisplayName("Smoke Test to test the hearings endpoint")
     void testHearingHmiApiGet() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
-                getRootContext());
-
+        Response response = RestClient.makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }

@@ -33,16 +33,13 @@ class VideoHearingApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("VH");
-        super.initialiseValues();
+        super.initialiseValuesDefault();
         setRootContext(videohearingsRootContext);
     }
 
     @Test
     void testVideoHearingHmiHealthCheck() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(),
-                getAuthorizationToken(), getRootContext());
-
+        Response response = RestClient.makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }

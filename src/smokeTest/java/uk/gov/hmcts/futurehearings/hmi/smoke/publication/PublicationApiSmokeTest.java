@@ -27,17 +27,14 @@ class PublicationApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("PIH");
-        super.initialiseValues();
+        super.initialiseValuesDefault();
         setRootContext(publicationHealthCheckRootContext);
     }
 
     @Test
     @DisplayName("Smoke Test to test the publication health endpoint")
     public void testPublicationHmiApiGet() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
-                getRootContext());
-
+        Response response = RestClient.makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }

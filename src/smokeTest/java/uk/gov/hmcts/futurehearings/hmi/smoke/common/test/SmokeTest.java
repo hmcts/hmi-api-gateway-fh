@@ -82,4 +82,13 @@ public abstract class SmokeTest {
 
         headersAsMap = createStandardHMIHeader(destinationSystem);
     }
+
+    @BeforeAll
+    public void initialiseValuesDefault() throws Exception {
+        RestAssured.baseURI = targetInstance;
+        RestAssured.useRelaxedHTTPSValidation();
+        RestAssured.config = RestAssured.config()
+                .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
+        headersAsMap = createStandardHMIHeader(destinationSystem);
+    }
 }

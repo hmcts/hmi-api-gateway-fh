@@ -20,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@Disabled
 @DisplayName("Smoke Test for the HMI Hearing Context")
 @SuppressWarnings("java:S2187")
 public class CrimeApiSmokeTest extends SmokeTest {
@@ -30,17 +29,14 @@ public class CrimeApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("CRIME");
-        super.initialiseValues();
+        super.initialiseValuesDefault();
         setRootContext(crimeHealthCheckRootContext);
     }
 
     @Test
     @DisplayName("Smoke Test to test the hearings endpoint")
     void testHearingHmiApiGet() {
-        Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
-                getRootContext());
-
+        Response response = RestClient.makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 }
