@@ -30,7 +30,7 @@
 							new JProperty("hearingTranslatorLanguage", "n/a"),
 							new JProperty("hearingOutcome", "To be hanged till death"),
 							new JProperty("hearingCreatedDate", "2019-12-28T07:57:08 -00:00"),
-							new JProperty("hearingCreatedBy", "Dimitry Mascaranhus"),
+							new JProperty("hearingCreatedBy", "MOCK SCHEDULE - HMI MOCK"),
 							new JProperty("hearingParticipantId", "5f2bffce90a69eb81aaec725"),
 							new JProperty("hearingVenueId", "V3455"),
 							new JProperty("hearingRoomId", "R2345"),

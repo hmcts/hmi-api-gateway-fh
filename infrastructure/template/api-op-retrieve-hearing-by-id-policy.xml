@@ -48,8 +48,8 @@
 							"hmctsServiceCode": "BBA3",
 							"caseRef": "1662727267950439",
 							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
-							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
-							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"hmctsInternalCaseName": "MOCK TEST CASE 1 - HMI MOCK",
+							"publicCaseName": "MOCK TEST CASE - HMI MOCK",
 							"caseAdditionalSecurityFlag": false,
 							"caseInterpreterRequiredFlag": false,
 							"caseCategories": [
@@ -154,7 +154,7 @@
 							"caseRef": "1662727267950439",
 							"caseDeepLink": "https://manage-case.demo.platform.hmcts.net/cases/case-details/1662727267950439",
 							"hmctsInternalCaseName": "Mcybgpip Gzlnjpip",
-							"publicCaseName": "Mcybgpip Gzlnjpip",
+							"publicCaseName": "MOCK TEST CASE 2 - HMI MOCK",
 							"caseAdditionalSecurityFlag": false,
 							"caseInterpreterRequiredFlag": false,
 							"caseCategories": [
