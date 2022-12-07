@@ -89,6 +89,5 @@ public abstract class SmokeTest {
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        headersAsMap = createStandardHMIHeader(destinationSystem);
     }
 }
