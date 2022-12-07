@@ -19,6 +19,12 @@ public class RestClient {
                 .when().get();
     }
 
+    public static Response makeGetRequest(final String rootContext) {
+        return given()
+                .basePath(rootContext)
+                .when().get();
+    }
+
     public static Response makeGetRequest(final Map<String, String> headersAsMap,
                                           final String authorizationToken,
                                           final Map<String, String> queryParams,

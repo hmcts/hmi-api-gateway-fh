@@ -30,8 +30,7 @@ class PeopleApiSmokeTest extends SmokeTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        this.setDestinationSystem("ELINKS");
-        super.initialiseValues();
+        super.initialiseValuesDefault();
         setRootContext(peopleHealthcheck);
     }
 
