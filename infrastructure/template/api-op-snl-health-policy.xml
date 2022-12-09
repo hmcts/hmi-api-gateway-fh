@@ -1,6 +1,6 @@
 <policies>
     <inbound>
-        <base />
+
         <send-request ignore-error="false" timeout="20" response-variable-name="snlClientResponse" mode="new">
             <set-url>https://#{keyVaultHost}#/secrets/snl-user-id/?api-version=7.0</set-url>
             <set-method>GET</set-method>
@@ -55,6 +55,15 @@
                 Array.Copy(bytes, 0, guidBinary, 10, 6);
                 return new Guid(guidBinary).ToString();
             }</value>
+        </set-header>
+        <set-header name="Source-System" exists-action="override">
+            <value>CFT</value>
+        </set-header>
+        <set-header name="Request-Created-At" exists-action="override">
+            <value>@(DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"))</value>
+        </set-header>
+        <set-header name="Accept" exists-action="override">
+            <value>application/json</value>
         </set-header>
         <set-header name="Destination-System" exists-action="override">
             <value>SNL</value>
