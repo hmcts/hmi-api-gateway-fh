@@ -9,7 +9,7 @@ jobs:
 - job: TerraformPlan
   displayName: ${{ parameters.displayName }}
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   steps:
   - template: ../steps/tf-install.yaml
   - template: ../steps/tf-init.yaml
