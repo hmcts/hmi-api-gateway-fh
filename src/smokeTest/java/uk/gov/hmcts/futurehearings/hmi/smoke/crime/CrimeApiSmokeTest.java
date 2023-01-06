@@ -20,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
-@Disabled
 @DisplayName("Smoke Test for the HMI Hearing Context")
 @SuppressWarnings("java:S2187")
 public class CrimeApiSmokeTest extends SmokeTest {
