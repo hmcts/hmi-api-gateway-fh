@@ -4,9 +4,8 @@ parameters:
   - name: dependsOn
     type: object
     default: ''
-  - name: subscription
+  - name: environment
     type: string
-
 
 jobs:
 - job: AcceptanceTest
