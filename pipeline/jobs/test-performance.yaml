@@ -22,7 +22,7 @@ jobs:
   - task: replacetokens@3
     inputs:
       rootDirectory: '$(Build.sourcesdirectory)/src/test/resources/properties'
-      targetFiles: 'application.properties'
+      targetFiles: "${{ parameters.environment }}.application.properties"
       encoding: 'auto'
       writeBOM: true
       actionOnMissing: 'warn'
@@ -41,4 +41,4 @@ jobs:
       javaHomeOption: 'JDKVersion'
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
-      goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation'
+      goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation -Denv=${{ parameters.environment }}'
