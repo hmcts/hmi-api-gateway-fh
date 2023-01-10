@@ -12,9 +12,26 @@ jobs:
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
+  variables:
+  - group: HMI-PERF-BUILD-${{ parameters.environment }}
   displayName: ${{ parameters.displayName }}
   steps:
+
   - checkout: fh-hmi-performance
+
+  - task: replacetokens@3
+    inputs:
+      rootDirectory: '$(Build.sourcesdirectory)/src/test/resources/properties'
+      targetFiles: 'application.properties'
+      encoding: 'auto'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      tokenPrefix: '${'
+      tokenSuffix: '}'
+      useLegacyPattern: false
+      enableTransforms: false
+      enableTelemetry: true
 
   - task: Maven@4
     displayName: 'Maven pom.xml'
@@ -24,4 +41,4 @@ jobs:
       javaHomeOption: 'JDKVersion'
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
-      goals: 'clean compile gatling:test -Denv=dev -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation'    
+      goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation'
