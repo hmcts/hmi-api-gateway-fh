@@ -98,6 +98,4 @@ stages:
             dependsOn:
             - CreateStorage
             - ExportKeyVault
-            subscription: ${{ parameters.subscription }}
-            subscriptionKey: $(subscriptionKey)
             environment: ${{ parameters.environment }}
