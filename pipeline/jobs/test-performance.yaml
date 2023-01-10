@@ -23,7 +23,7 @@ jobs:
   variables:
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
   - group: HMI-APIM-BUILD-${{ parameters.environment }}
-    ${{ insert }}: ${{ parameters.variables }}
+    storageContainer: ${{ parameters.variables.storageContainer }}
   displayName: ${{ parameters.displayName }}
   steps:
 
