@@ -19,5 +19,5 @@ jobs:
   - task: Maven@4
     displayName: 'Maven pom.xml'
 
-  - powershell: 'mvn gatling:test -Denv=dev -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation'
+  - powershell: mvn gatling:test -Denv=dev -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation
     displayName: 'Run gatling test'
