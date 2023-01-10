@@ -15,4 +15,9 @@ jobs:
   displayName: ${{ parameters.displayName }}
   steps:
   - checkout: fh-hmi-performance
-  - powershell: mvn gatling:test -Denv=${{ parameters.environment }} -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation
+
+  - task: Maven@4
+    displayName: 'Maven pom.xml'
+
+  - powershell: 'mvn gatling:test -Denv=dev -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation'
+    displayName: 'Run gatling test'
