@@ -6,6 +6,10 @@ parameters:
     default: ''
   - name: environment
     type: string
+  - name: storageContainer
+    type: string
+  - name: subscription
+    type: string
 
 jobs:
 - job: PerformanceTest
@@ -42,3 +46,16 @@ jobs:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
       goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation -Denv=${{ parameters.environment }}'
+  
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_performance
+      directory: /target/gatling
+
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: test_performance
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
+      storageContainer: $(storageContainer)
