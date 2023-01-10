@@ -36,7 +36,7 @@ parameters:
       - ithc
       - stg
 
-  - name: run-perf
+  - name: runPerfTestIn
     type: object
     default:
       - dev
@@ -50,4 +50,5 @@ stages:
       parameters:
         environment: ${{ environment }}
         subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+        runPerfTestIn: ${{ parameters.runPerfTestIn }}
         

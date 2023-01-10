@@ -1,13 +1,12 @@
 parameters:
   - name: displayName
     type: string
-
   - name: dependsOn
     type: object
     default: ''
-
   - name: subscription
     type: string
+
 
 jobs:
 - job: AcceptanceTest
