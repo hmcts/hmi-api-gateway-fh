@@ -96,6 +96,6 @@ stages:
           parameters:
             displayName: Performance Test
             dependsOn:
-            - CreateStorage
-            - ExportKeyVault
+            # - CreateStorage
+            # - ExportKeyVault
             environment: ${{ parameters.environment }}
