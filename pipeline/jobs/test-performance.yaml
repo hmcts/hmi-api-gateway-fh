@@ -22,7 +22,8 @@ jobs:
     - ${{ parameters.dependsOn }}
   variables:
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
-    storageContainer: ${{ parameters.variables.storageContainer }}
+  - name: storageContainer
+    value: ${{ parameters.variables.storageContainer }}
   displayName: ${{ parameters.displayName }}
   steps:
 
