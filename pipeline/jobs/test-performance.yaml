@@ -19,12 +19,12 @@ jobs:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
   variables:
+    ${{ insert }}: ${{ parameters.variables }}
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
   displayName: ${{ parameters.displayName }}
-  variables:
-    ${{ insert }}: ${{ parameters.variables }}
+    
   steps:
-  
+
   - checkout: fh-hmi-performance
   - task: replacetokens@3
     inputs:
