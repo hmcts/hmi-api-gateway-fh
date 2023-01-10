@@ -99,5 +99,6 @@ stages:
             - CreateStorage
             - ExportKeyVault
             environment: ${{ parameters.environment }}
-            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscription: ${{ parameters.subscription }}
+            variables:
+              storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
