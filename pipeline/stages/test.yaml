@@ -20,15 +20,15 @@ stages:
     variables:
       - group: HMI-APIM-BUILD-${{ parameters.environment }}
     jobs:
-      - template: ../jobs/create-storage.yaml
-        parameters:
-          displayName: Create Storage for Test Results
-          subscription: ${{ parameters.subscription }}
+      # - template: ../jobs/create-storage.yaml
+      #   parameters:
+      #     displayName: Create Storage for Test Results
+      #     subscription: ${{ parameters.subscription }}
       
-      - template: ../jobs/export-keyvault.yaml
-        parameters:
-          displayName: Read APIM Subscription Key
-          subscription: ${{ parameters.subscription }}
+      # - template: ../jobs/export-keyvault.yaml
+      #   parameters:
+      #     displayName: Read APIM Subscription Key
+      #     subscription: ${{ parameters.subscription }}
 
       # - template: ../jobs/test-unit.yaml
       #   parameters:

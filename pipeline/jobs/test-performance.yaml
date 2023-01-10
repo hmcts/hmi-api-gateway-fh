@@ -15,4 +15,4 @@ jobs:
   displayName: ${{ parameters.displayName }}
   steps:
   - checkout: fh-hmi-performance
-  - script: dir $(Build.SourcesDirectory)
+  - powershell: mvn gatling:test -Denv=${{ parameters.environment }} -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation
