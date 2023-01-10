@@ -10,6 +10,8 @@ parameters:
     type: string
   - name: subscription
     type: string
+  - name: variables
+    type: object
 
 jobs:
 - job: PerformanceTest
@@ -19,10 +21,11 @@ jobs:
   variables:
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
   displayName: ${{ parameters.displayName }}
+  variables:
+    ${{ insert }}: ${{ parameters.variables }}
   steps:
-
+  
   - checkout: fh-hmi-performance
-
   - task: replacetokens@3
     inputs:
       rootDirectory: '$(Build.sourcesdirectory)/src/test/resources/properties'
@@ -36,7 +39,6 @@ jobs:
       useLegacyPattern: false
       enableTransforms: false
       enableTelemetry: true
-
   - task: Maven@4
     displayName: 'Maven pom.xml'
     inputs:
@@ -46,12 +48,10 @@ jobs:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
       goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation -Denv=${{ parameters.environment }}'
-  
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_performance
       directory: /target/gatling
-
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: test_performance
