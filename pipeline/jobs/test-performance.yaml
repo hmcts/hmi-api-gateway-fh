@@ -19,10 +19,9 @@ jobs:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
   variables:
-    ${{ insert }}: ${{ parameters.variables }}
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
+    ${{ insert }}: ${{ parameters.variables }}
   displayName: ${{ parameters.displayName }}
-    
   steps:
 
   - checkout: fh-hmi-performance
