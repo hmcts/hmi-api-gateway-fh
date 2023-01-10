@@ -87,3 +87,14 @@ stages:
             variables:
               storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
               subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - ${{ or( and(eq(parameters.environment, 'stg'), containsValue(parameters.runTestsIn, 'stg')), and(eq(parameters.environment, 'dev'), containsValue(parameters.runTestsIn, 'dev')), and(eq(parameters.environment, 'test'), containsValue(parameters.runTestsIn, 'test')) ) }}:
+        - template: ../jobs/test-performance.yaml
+          parameters:
+            displayName: Performance Test
+            dependsOn:
+            - CreateStorage
+            - ExportKeyVault
+            subscription: ${{ parameters.subscription }}
+            subscriptionKey: $(subscriptionKey)
+            environment: ${{ parameters.environment }}

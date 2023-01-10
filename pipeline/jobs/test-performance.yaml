@@ -1,0 +1,23 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: subscription
+    type: string
+
+jobs:
+- job: AcceptanceTest
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  displayName: ${{ parameters.displayName }}
+  steps:
+  - checkout: fh-hmi-performance
+  - powershell: |
+      cd $(Build.SourcesDirectory)/fh-hmi-performance
+      dir 
+      mvn gatling:test -Denv=${{ parameters.environment }} -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation

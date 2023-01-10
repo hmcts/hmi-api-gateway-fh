@@ -12,6 +12,12 @@ resources:
       ref: refs/heads/master
       endpoint: hmcts
 
+    - repository: fh-hmi-performance
+      type: github
+      name: hmcts/fh-hmi-performance
+      ref: perftest #need to move to master once working
+      endpoint: hmcts
+
 schedules:
 - cron: "0 1 * * *"
   displayName: Nightly
@@ -29,6 +35,11 @@ parameters:
       - test
       - ithc
       - stg
+
+  - name: run-perf
+    type: object
+    default:
+      - dev
 
 variables:
   - group: HMI-APIM-Common
