@@ -99,8 +99,5 @@ stages:
             - CreateStorage
             - ExportKeyVault
             environment: ${{ parameters.environment }}
-            storageContainer: $(storageContainer)
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
             subscription: ${{ parameters.subscription }}
-            variables:
-              storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-              subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]

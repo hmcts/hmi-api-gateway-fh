@@ -1,17 +1,22 @@
 parameters:
   - name: displayName
     type: string
+
   - name: dependsOn
     type: object
     default: ''
-  - name: environment
-    type: string
+
   - name: storageContainer
     type: string
-  - name: subscription
-    type: string
+
   - name: variables
     type: object
+
+  - name: environment
+    type: string
+
+  - name: subscription
+    type: string
 
 jobs:
 - job: PerformanceTest
@@ -20,7 +25,7 @@ jobs:
     - ${{ parameters.dependsOn }}
   variables:
   - group: HMI-PERF-BUILD-${{ parameters.environment }}
-    ${{ insert }}: ${{ parameters.variables }}
+  - group: HMI-APIM-BUILD-${{ parameters.environment }}
   displayName: ${{ parameters.displayName }}
   steps:
 
@@ -57,4 +62,4 @@ jobs:
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
-      storageContainer: $(storageContainer)
+      storageContainer: ${{ parameters.storageContainer }}
