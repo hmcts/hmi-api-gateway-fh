@@ -8,7 +8,7 @@ parameters:
     type: string
 
 jobs:
-- job: AcceptanceTest
+- job: PerformanceTest
   dependsOn:
   - ${{ if parameters.dependsOn }}:
     - ${{ parameters.dependsOn }}
