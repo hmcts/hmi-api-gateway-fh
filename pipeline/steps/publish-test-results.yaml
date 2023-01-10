@@ -39,5 +39,5 @@ steps:
         echo "Obtaining storage key..."
         key=$(az storage account keys list -g ${{ parameters.resourceGroup }} --account-name ${{ parameters.storageAccount }} --query "[0].value" -o tsv)
         echo "Uploading ${{ parameters.zipName }} to ${{ parameters.storageContainer }} in ${{ parameters.storageAccount }}"
-        az storage blob upload -n ${{ parameters.zipName }} -c ${{ parameters.storageContainer }} -f $(System.DefaultWorkingDirectory)/$(Build.BuildId)/$(Build.BuildId)-${{ parameters.zipName }}.zip --account-name ${{ parameters.storageAccount }} --account-key $key
+        az storage blob upload -n $(Build.BuildId)/$(Build.BuildId)-${{ parameters.zipName }}.zip -c ${{ parameters.storageContainer }} -f $(System.DefaultWorkingDirectory)/$(Build.BuildId)/$(Build.BuildId)-${{ parameters.zipName }}.zip --account-name ${{ parameters.storageAccount }} --account-key $key
     condition: succeededOrFailed()

@@ -30,18 +30,18 @@ stages:
           displayName: Read APIM Subscription Key
           subscription: ${{ parameters.subscription }}
 
-      # - template: ../jobs/test-unit.yaml
-      #   parameters:
-      #     displayName: Unit Test
-      #     dependsOn:
-      #     - CreateStorage
-      #     - ExportKeyVault
-      #     subscription: ${{ parameters.subscription }}
-      #     subscriptionKey: $(subscriptionKey)
-      #     storageContainer: $(storageContainer)
-      #     variables:
-      #       storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
-      #       subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+      - template: ../jobs/test-unit.yaml
+        parameters:
+          displayName: Unit Test
+          dependsOn:
+          - CreateStorage
+          - ExportKeyVault
+          subscription: ${{ parameters.subscription }}
+          subscriptionKey: $(subscriptionKey)
+          storageContainer: $(storageContainer)
+          variables:
+            storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
+            subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
 
       # - template: ../jobs/test-acceptance.yaml
       #   parameters:
