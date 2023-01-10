@@ -6,9 +6,6 @@ parameters:
     type: object
     default: ''
 
-  - name: storageContainer
-    type: string
-
   - name: environment
     type: string
 
