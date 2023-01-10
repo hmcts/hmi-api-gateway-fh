@@ -50,7 +50,14 @@ jobs:
       directory: /build/reports/tests/test
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: unit_tests
+      zipName: test_unit_unittests
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
+      storageContainer: $(storageContainer)
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: test_unit_gradle
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
