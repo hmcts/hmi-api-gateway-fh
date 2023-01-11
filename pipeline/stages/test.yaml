@@ -6,6 +6,9 @@ parameters:
   - name: dependsOn
     type: string
     default: ''
+  - name: runPerfTestIn
+    type: object
+  
 
 
 stages:
@@ -87,3 +90,15 @@ stages:
             variables:
               storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]
               subscriptionKey: $[dependencies.ExportKeyVault.outputs['exportKeyVaultSecret.hmi-apim-sub-key']]
+
+      - ${{ if or( and(eq(parameters.environment, 'stg'), containsValue(parameters.runPerfTestIn, 'stg')), and(eq(parameters.environment, 'dev'), containsValue(parameters.runPerfTestIn, 'dev')), and(eq(parameters.environment, 'test'), containsValue(parameters.runPerfTestIn, 'test')) ) }}:
+        - template: ../jobs/test-performance.yaml
+          parameters:
+            displayName: Performance Test
+            dependsOn:
+            - CreateStorage
+            - ExportKeyVault
+            environment: ${{ parameters.environment }}
+            subscription: ${{ parameters.subscription }}
+            variables:
+              storageContainer: $[dependencies.CreateStorage.outputs['createContainer.container']]

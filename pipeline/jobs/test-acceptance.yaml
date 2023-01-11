@@ -41,7 +41,7 @@ jobs:
       directory: /build/reports/tests/acceptance
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: acceptance_tests
+      zipName: test_acceptance
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)

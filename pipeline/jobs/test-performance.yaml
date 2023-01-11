@@ -1,0 +1,63 @@
+parameters:
+  - name: displayName
+    type: string
+
+  - name: dependsOn
+    type: object
+    default: ''
+
+  - name: environment
+    type: string
+
+  - name: subscription
+    type: string
+
+  - name: variables
+    type: object
+
+jobs:
+- job: PerformanceTest
+  dependsOn:
+  - ${{ if parameters.dependsOn }}:
+    - ${{ parameters.dependsOn }}
+  variables:
+  - group: HMI-PERF-BUILD-${{ parameters.environment }}
+  - name: storageContainer
+    value: ${{ parameters.variables.storageContainer }}
+  displayName: ${{ parameters.displayName }}
+  steps:
+
+  - checkout: fh-hmi-performance
+  - task: replacetokens@3
+    inputs:
+      rootDirectory: '$(Build.sourcesdirectory)/src/test/resources/properties'
+      targetFiles: "${{ parameters.environment }}.application.properties"
+      encoding: 'auto'
+      writeBOM: true
+      actionOnMissing: 'warn'
+      keepToken: false
+      tokenPrefix: '${'
+      tokenSuffix: '}'
+      useLegacyPattern: false
+      enableTransforms: false
+      enableTelemetry: true
+  - task: Maven@4
+    displayName: 'Maven pom.xml'
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: false
+      goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation -Denv=${{ parameters.environment }}'
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_performance
+      directory: /target/gatling
+  - template: ../steps/publish-test-results.yaml
+    parameters:
+      zipName: test_performance
+      subscription: ${{ parameters.subscription }}
+      resourceGroup: $(devopsResourceGroup)
+      storageAccount: $(devopsStorageAccount)
+      storageContainer: $(storageContainer)

@@ -42,7 +42,7 @@ jobs:
       directory: /build/reports/tests/smoke
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: smoke_tests
+      zipName: test_smoke
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
