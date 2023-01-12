@@ -15,7 +15,7 @@ resources:
     - repository: fh-hmi-performance
       type: github
       name: hmcts/fh-hmi-performance
-      ref: ${{ parameters.runPerfTestIn }}
+      ref: ${{ parameters.perfTestBranch }}
       endpoint: hmcts
 
 schedules:
