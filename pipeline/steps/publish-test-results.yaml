@@ -30,7 +30,7 @@ steps:
   #   condition: succeededOrFailed()
   - task: AzureCLI@2
     displayName: Upload Test Results
-    name: uploadBlob
+    name: uploadBlob_${{ parameters.zipName }}
     inputs:
       azureSubscription: ${{ parameters.subscription }}
       scriptType: bash
