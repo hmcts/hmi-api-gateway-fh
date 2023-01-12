@@ -15,7 +15,7 @@ resources:
     - repository: fh-hmi-performance
       type: github
       name: hmcts/fh-hmi-performance
-      ref: perftest #need to move to master once working
+      ref: ${{ parameters.runPerfTestIn }}
       endpoint: hmcts
 
 schedules:
@@ -26,6 +26,11 @@ schedules:
     - master
 
 parameters:
+
+  - name: perfTestBranch
+    type: string
+    default: perftest
+    displayName: Enter Perf test branch (hmcts/fh-hmi-performance)
 
   - name: environments
     type: object
