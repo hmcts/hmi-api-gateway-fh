@@ -49,7 +49,8 @@ jobs:
       javaHomeOption: 'JDKVersion'
       jdkArchitectureOption: 'x64'
       publishJUnitResults: false
-      goals: 'clean compile gatling:test -Dgatling.simulationClass=simulations.SIT.CreateHMCSimulation -Denv=${{ parameters.environment }}'
+      # below command executes the performance test for all Simulation in dev env
+      goals: 'clean compile gatling:test -Denv=${{ parameters.environment }}'
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_performance
