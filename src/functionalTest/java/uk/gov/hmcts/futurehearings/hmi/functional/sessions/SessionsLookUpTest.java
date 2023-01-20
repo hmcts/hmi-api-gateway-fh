@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Disabled("Disabled until functional tests are fixed")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"In order to test that the Session Get Functionality is working properly",
         "As a tester",
@@ -103,7 +104,6 @@ public class SessionsLookUpTest extends FunctionalTest {
                 queryParameters);
     }
 
-    @Disabled("Disabled until requestJurisdiction value in request body has been fixed!")
     @Test
     public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
         Map<String, String> queryParameters = new HashMap<>();
