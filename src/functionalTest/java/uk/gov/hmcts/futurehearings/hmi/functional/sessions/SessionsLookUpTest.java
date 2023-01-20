@@ -107,7 +107,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("requestSessionType", "CJ");
-        queryParameters.put("requestJurisdiction", "CIV");
+        queryParameters.put("requestJurisdiction", "AA");
         headersAsMap.put("Destination-System", "SNL");
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
