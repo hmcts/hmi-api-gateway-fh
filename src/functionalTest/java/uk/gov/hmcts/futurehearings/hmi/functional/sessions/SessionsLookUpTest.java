@@ -103,7 +103,7 @@ public class SessionsLookUpTest extends FunctionalTest {
                 queryParameters);
     }
 
-    @Disabled
+    @Disabled("Disabled until requestJurisdiction value in request body has been fixed!")
     @Test
     public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
         Map<String, String> queryParameters = new HashMap<>();
