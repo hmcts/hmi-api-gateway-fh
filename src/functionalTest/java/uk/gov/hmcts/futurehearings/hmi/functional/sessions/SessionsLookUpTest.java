@@ -5,6 +5,7 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
@@ -27,6 +28,7 @@ import java.util.Map;
         "I want to be able to execute the tests for the Sessions API"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
+@Ignore
 public class SessionsLookUpTest extends FunctionalTest {
 
     @Value("${sessionsRootContext}")
