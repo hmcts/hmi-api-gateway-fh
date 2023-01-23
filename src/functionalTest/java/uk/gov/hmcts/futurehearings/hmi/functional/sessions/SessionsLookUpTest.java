@@ -7,7 +7,6 @@ import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Disabled("Disabled until functional tests are fixed")
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"In order to test that the Session Get Functionality is working properly",
         "As a tester",
