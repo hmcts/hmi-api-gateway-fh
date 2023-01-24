@@ -601,6 +601,11 @@
                                 "frequency": "Minute",
                                 "interval": 5
                             },
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "runs": 1
+                                }
+                            },
                             "type": "Recurrence"
                         }
                     },
@@ -1626,6 +1631,12 @@
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
                         }
+                    }
+                },
+                "runtimeConfiguration": {
+                    "lifetime": {
+                        "unit": "day",
+                        "count": 10
                     }
                 }
             }
