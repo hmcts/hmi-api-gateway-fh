@@ -680,7 +680,7 @@
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "jsonJohs",
-                                                "value": "{\n  \"isPresiding\": @{tolower(string(equals(items('For_each_schedule_in_session')?['slot'], 'CHAIR')))},\n  \"johId\": \"@{body('Get_joh_for_schedule')?['RowKey']}\",\n  \"slot\": \"@{items('For_each_schedule_in_session')?['slot']}\"\n}"
+                                                "value": "{\n  \"isPresiding\": @{tolower(string(equals(items('For_each_schedule_in_session')?['slot'], 'CHAIR')))},\n  \"johId\": \"@{body('Get_joh_for_schedule')?['emailAddress']}\",\n  \"slot\": \"@{items('For_each_schedule_in_session')?['slot']}\"\n}"
                                             }
                                         },
                                         "Set_variable_scheduleErrorBody": {
