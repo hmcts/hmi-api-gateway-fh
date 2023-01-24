@@ -641,7 +641,7 @@
                                                     }
                                                 },
                                                 "method": "get",
-                                                "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['emailAddress'])}',RowKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['emailAddress'])}')"
+                                                "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}',RowKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}')"
                                             }
                                         },
                                         "Insert_or_Merge_Entity_CLP": {
