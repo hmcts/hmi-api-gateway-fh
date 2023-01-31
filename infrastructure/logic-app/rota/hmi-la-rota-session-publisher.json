@@ -1066,8 +1066,8 @@
                                 "and": [
                                     {
                                         "greater": [
-                                            "@length(variables('scheduleErrorBody'))",
-                                            0
+                                            "@indexOf(variables('scheduleErrorBody'), 'errCode')",
+                                            -1
                                         ]
                                     }
                                 ]
