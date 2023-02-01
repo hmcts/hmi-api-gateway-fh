@@ -731,6 +731,12 @@
                             }
                         }
                     }
+                },
+                "runtimeConfiguration": {
+                    "lifetime": {
+                        "unit": "day",
+                        "count": 10
+                    }
                 }
             }
         }
