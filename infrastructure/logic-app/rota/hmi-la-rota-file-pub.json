@@ -601,13 +601,18 @@
                                 "frequency": "Minute",
                                 "interval": 5
                             },
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "runs": 1
+                                }
+                            },
                             "type": "Recurrence"
                         }
                     },
                     "actions": {
                         "Create_read.me": {
                             "runAfter": {
-                                "Initialize_snowErrorMessage": [
+                                "Initialize_variable_rotaFilesRowCount": [
                                     "Succeeded"
                                 ]
                             },
@@ -639,194 +644,359 @@
                         "For_each_File": {
                             "foreach": "@body('List_blobs')?['value']",
                             "actions": {
-                                "Get_blob_content_using_path": {
+                                "Get_entities_for_rota_files": {
                                     "runAfter": {},
                                     "type": "ApiConnection",
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
                                             }
                                         },
                                         "method": "get",
-                                        "path": "/datasets/default/GetFileContentByPath",
+                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities",
                                         "queries": {
-                                            "inferContentType": true,
-                                            "path": "@items('For_each_File')?['Path']",
-                                            "queryParametersSingleEncoded": true
+                                            "$filter": "RowKey eq '@{items('For_each_File')?['Name']}'"
                                         }
                                     }
                                 },
-                                "is_file_xml": {
+                                "Set_variable_rota_files_row_count": {
+                                    "runAfter": {
+                                        "Get_entities_for_rota_files": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "rotaFilesRowCount",
+                                        "value": "@length(body('Get_entities_for_rota_files')?['value'])"
+                                    }
+                                },
+                                "check_if_File_processing_is_not_in_progress": {
                                     "actions": {
-                                        "Get_entity": {
-                                            "runAfter": {
-                                                "Insert_or_Merge_Entity_error": [
-                                                    "Skipped",
-                                                    "Succeeded"
-                                                ]
-                                            },
+                                        "Get_blob_content_using_path": {
+                                            "runAfter": {},
                                             "type": "ApiConnection",
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                        "name": "@parameters('$connections')['azureblob']['connectionId']"
                                                     }
                                                 },
                                                 "method": "get",
-                                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                                "path": "/datasets/default/GetFileContentByPath",
+                                                "queries": {
+                                                    "inferContentType": true,
+                                                    "path": "@items('For_each_File')?['Path']",
+                                                    "queryParametersSingleEncoded": true
+                                                }
                                             }
                                         },
-                                        "Insert_or_Merge_Entity_error": {
-                                            "runAfter": {
-                                                "Parse_JSON_object": [
-                                                    "Failed"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": {
-                                                    "status": "ERROR"
-                                                },
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "is_file_xml": {
+                                            "actions": {
+                                                "Get_entity": {
+                                                    "runAfter": {
+                                                        "Insert_or_Merge_Entity_error": [
+                                                            "Skipped",
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
                                                     }
                                                 },
-                                                "method": "patch",
-                                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
-                                            }
-                                        },
-                                        "Insert_or_Merge_Entity_new": {
-                                            "runAfter": {
-                                                "Get_entity": [
-                                                    "Failed"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
-                                            "inputs": {
-                                                "body": {
-                                                    "status": "NEW"
-                                                },
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "Insert_or_Merge_Entity_error": {
+                                                    "runAfter": {
+                                                        "Parse_JSON_object": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": {
+                                                            "status": "ERROR"
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "patch",
+                                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
                                                     }
                                                 },
-                                                "method": "patch",
-                                                "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
-                                            }
-                                        },
-                                        "Parse_JSON": {
-                                            "runAfter": {
-                                                "Set_xmlPayload": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ParseJson",
-                                            "inputs": {
-                                                "content": "@json(xml(variables('xmlPayload')))",
-                                                "schema": {
-                                                    "properties": {
-                                                        "?xml": {
+                                                "Insert_or_Merge_Entity_new": {
+                                                    "runAfter": {
+                                                        "Get_entity": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": {
+                                                            "status": "NEW"
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "patch",
+                                                        "path": "/Tables/@{encodeURIComponent('rotaFiles')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_File')?['Name'])}',RowKey='@{encodeURIComponent(items('For_each_File')?['Name'])}')"
+                                                    }
+                                                },
+                                                "Parse_JSON": {
+                                                    "runAfter": {
+                                                        "Set_xmlPayload": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "type": "ParseJson",
+                                                    "inputs": {
+                                                        "content": "@json(xml(variables('xmlPayload')))",
+                                                        "schema": {
                                                             "properties": {
-                                                                "@@encoding": {
-                                                                    "type": "string"
+                                                                "?xml": {
+                                                                    "properties": {
+                                                                        "@@encoding": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "@@standalone": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "@@version": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
                                                                 },
-                                                                "@@standalone": {
-                                                                    "type": "string"
-                                                                },
-                                                                "@@version": {
-                                                                    "type": "string"
+                                                                "rotaSchedule": {
+                                                                    "properties": {
+                                                                        "@@xmlns": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "courtListingProfiles": {
+                                                                            "properties": {
+                                                                                "courtListingProfile": {
+                                                                                    "items": {
+                                                                                        "properties": {
+                                                                                            "@@id": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "@@linkedSessionId": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "business": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "locationId": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "panel": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "session": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "sessionDate": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "updatedDate": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "venueId": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "welshSpeaking": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "@@id",
+                                                                                            "sessionDate",
+                                                                                            "session",
+                                                                                            "panel",
+                                                                                            "business",
+                                                                                            "venueId",
+                                                                                            "locationId",
+                                                                                            "welshSpeaking",
+                                                                                            "updatedDate"
+                                                                                        ],
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "type": "array"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "locations": {
+                                                                            "properties": {
+                                                                                "location": {
+                                                                                    "items": {
+                                                                                        "properties": {
+                                                                                            "locationId": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "name": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "locationId",
+                                                                                            "name"
+                                                                                        ],
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "type": "array"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "magistrates": {
+                                                                            "properties": {
+                                                                                "magistrate": {
+                                                                                    "items": {
+                                                                                        "properties": {
+                                                                                            "@@id": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "emailAddress": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "forenames": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "surname": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "title": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "@@id",
+                                                                                            "title",
+                                                                                            "surname",
+                                                                                            "forenames",
+                                                                                            "emailAddress"
+                                                                                        ],
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "type": "array"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "rotaPeriod": {
+                                                                            "properties": {
+                                                                                "endDate": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "justiceAreaName": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "justiceAreaType": {
+                                                                                    "type": "string"
+                                                                                },
+                                                                                "startDate": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "schedules": {
+                                                                            "properties": {
+                                                                                "schedule": {
+                                                                                    "items": {
+                                                                                        "properties": {
+                                                                                            "@@id": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "courtListingProfile": {
+                                                                                                "properties": {
+                                                                                                    "@@idref": {
+                                                                                                        "type": "string"
+                                                                                                    }
+                                                                                                },
+                                                                                                "type": "object"
+                                                                                            },
+                                                                                            "justice": {
+                                                                                                "properties": {
+                                                                                                    "@@idref": {
+                                                                                                        "type": "string"
+                                                                                                    }
+                                                                                                },
+                                                                                                "type": "object"
+                                                                                            },
+                                                                                            "slot": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "@@id",
+                                                                                            "courtListingProfile",
+                                                                                            "justice",
+                                                                                            "slot"
+                                                                                        ],
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "type": "array"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        },
+                                                                        "venues": {
+                                                                            "properties": {
+                                                                                "venue": {
+                                                                                    "items": {
+                                                                                        "properties": {
+                                                                                            "name": {
+                                                                                                "type": "string"
+                                                                                            },
+                                                                                            "venueId": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "venueId",
+                                                                                            "name"
+                                                                                        ],
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "type": "array"
+                                                                                }
+                                                                            },
+                                                                            "type": "object"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
                                                                 }
                                                             },
                                                             "type": "object"
-                                                        },
-                                                        "rotaSchedule": {
+                                                        }
+                                                    }
+                                                },
+                                                "Parse_JSON_object": {
+                                                    "runAfter": {
+                                                        "Parse_JSON": [
+                                                            "Failed"
+                                                        ]
+                                                    },
+                                                    "type": "ParseJson",
+                                                    "inputs": {
+                                                        "content": "@json(xml(variables('xmlPayload')))",
+                                                        "schema": {
                                                             "properties": {
-                                                                "@@xmlns": {
-                                                                    "type": "string"
-                                                                },
-                                                                "courtListingProfiles": {
+                                                                "districtJudges": {
                                                                     "properties": {
-                                                                        "courtListingProfile": {
-                                                                            "items": {
-                                                                                "properties": {
-                                                                                    "@@id": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "@@linkedSessionId": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "business": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "locationId": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "panel": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "session": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "sessionDate": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "updatedDate": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "venueId": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "welshSpeaking": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "required": [
-                                                                                    "@@id",
-                                                                                    "sessionDate",
-                                                                                    "session",
-                                                                                    "panel",
-                                                                                    "business",
-                                                                                    "venueId",
-                                                                                    "locationId",
-                                                                                    "welshSpeaking",
-                                                                                    "updatedDate"
-                                                                                ],
-                                                                                "type": "object"
-                                                                            },
-                                                                            "type": "array"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "locations": {
-                                                                    "properties": {
-                                                                        "location": {
-                                                                            "items": {
-                                                                                "properties": {
-                                                                                    "locationId": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "name": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "required": [
-                                                                                    "locationId",
-                                                                                    "name"
-                                                                                ],
-                                                                                "type": "object"
-                                                                            },
-                                                                            "type": "array"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "magistrates": {
-                                                                    "properties": {
-                                                                        "magistrate": {
+                                                                        "districtJudge": {
                                                                             "items": {
                                                                                 "properties": {
                                                                                     "@@id": {
@@ -854,88 +1024,7 @@
                                                                                 ],
                                                                                 "type": "object"
                                                                             },
-                                                                            "type": "array"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "rotaPeriod": {
-                                                                    "properties": {
-                                                                        "endDate": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "justiceAreaName": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "justiceAreaType": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "startDate": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "schedules": {
-                                                                    "properties": {
-                                                                        "schedule": {
-                                                                            "items": {
-                                                                                "properties": {
-                                                                                    "@@id": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "courtListingProfile": {
-                                                                                        "properties": {
-                                                                                            "@@idref": {
-                                                                                                "type": "string"
-                                                                                            }
-                                                                                        },
-                                                                                        "type": "object"
-                                                                                    },
-                                                                                    "justice": {
-                                                                                        "properties": {
-                                                                                            "@@idref": {
-                                                                                                "type": "string"
-                                                                                            }
-                                                                                        },
-                                                                                        "type": "object"
-                                                                                    },
-                                                                                    "slot": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "required": [
-                                                                                    "@@id",
-                                                                                    "courtListingProfile",
-                                                                                    "justice",
-                                                                                    "slot"
-                                                                                ],
-                                                                                "type": "object"
-                                                                            },
-                                                                            "type": "array"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "venues": {
-                                                                    "properties": {
-                                                                        "venue": {
-                                                                            "items": {
-                                                                                "properties": {
-                                                                                    "name": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "venueId": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "required": [
-                                                                                    "venueId",
-                                                                                    "name"
-                                                                                ],
-                                                                                "type": "object"
-                                                                            },
-                                                                            "type": "array"
+                                                                            "type": "object"
                                                                         }
                                                                     },
                                                                     "type": "object"
@@ -943,155 +1032,119 @@
                                                             },
                                                             "type": "object"
                                                         }
-                                                    },
-                                                    "type": "object"
+                                                    }
+                                                },
+                                                "Set_xmlPayload": {
+                                                    "runAfter": {},
+                                                    "type": "SetVariable",
+                                                    "inputs": {
+                                                        "name": "xmlPayload",
+                                                        "value": "@{body('Get_blob_content_using_path')}"
+                                                    }
                                                 }
-                                            }
-                                        },
-                                        "Parse_JSON_object": {
+                                            },
                                             "runAfter": {
-                                                "Parse_JSON": [
-                                                    "Failed"
+                                                "Get_blob_content_using_path": [
+                                                    "Succeeded"
                                                 ]
                                             },
-                                            "type": "ParseJson",
-                                            "inputs": {
-                                                "content": "@json(xml(variables('xmlPayload')))",
-                                                "schema": {
-                                                    "properties": {
-                                                        "districtJudges": {
-                                                            "properties": {
-                                                                "districtJudge": {
-                                                                    "items": {
-                                                                        "properties": {
-                                                                            "@@id": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "emailAddress": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "forenames": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "surname": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "title": {
-                                                                                "type": "string"
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "@@id",
-                                                                            "title",
-                                                                            "surname",
-                                                                            "forenames",
-                                                                            "emailAddress"
-                                                                        ],
-                                                                        "type": "object"
-                                                                    },
-                                                                    "type": "object"
+                                            "else": {
+                                                "actions": {
+                                                    "Create_File_in_Error_Folder": {
+                                                        "runAfter": {},
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "body": "@body('Get_blob_content_using_path')",
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
                                                                 }
                                                             },
-                                                            "type": "object"
+                                                            "method": "post",
+                                                            "path": "/datasets/default/files",
+                                                            "queries": {
+                                                                "folderPath": "/rota/error/",
+                                                                "name": "@items('For_each_File')?['Name']",
+                                                                "queryParametersSingleEncoded": true
+                                                            }
+                                                        },
+                                                        "runtimeConfiguration": {
+                                                            "contentTransfer": {
+                                                                "transferMode": "Chunked"
+                                                            }
                                                         }
                                                     },
-                                                    "type": "object"
+                                                    "Delete_blob": {
+                                                        "runAfter": {
+                                                            "Create_File_in_Error_Folder": [
+                                                                "Succeeded"
+                                                            ]
+                                                        },
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                }
+                                                            },
+                                                            "method": "delete",
+                                                            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
+                                                        }
+                                                    },
+                                                    "Update_read.me": {
+                                                        "runAfter": {
+                                                            "Delete_blob": [
+                                                                "Succeeded"
+                                                            ]
+                                                        },
+                                                        "type": "ApiConnection",
+                                                        "inputs": {
+                                                            "body": "@concat('Rota files to be processed')",
+                                                            "host": {
+                                                                "connection": {
+                                                                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                }
+                                                            },
+                                                            "method": "post",
+                                                            "path": "/datasets/default/files",
+                                                            "queries": {
+                                                                "folderPath": "/rota/input/",
+                                                                "name": "read.me",
+                                                                "queryParametersSingleEncoded": true
+                                                            }
+                                                        },
+                                                        "runtimeConfiguration": {
+                                                            "contentTransfer": {
+                                                                "transferMode": "Chunked"
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                            }
-                                        },
-                                        "Set_xmlPayload": {
-                                            "runAfter": {},
-                                            "type": "SetVariable",
-                                            "inputs": {
-                                                "name": "xmlPayload",
-                                                "value": "@{body('Get_blob_content_using_path')}"
-                                            }
+                                            },
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "endsWith": [
+                                                            "@items('For_each_File')?['Path']",
+                                                            ".xml"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
                                         }
                                     },
                                     "runAfter": {
-                                        "Get_blob_content_using_path": [
+                                        "Set_variable_rota_files_row_count": [
                                             "Succeeded"
                                         ]
-                                    },
-                                    "else": {
-                                        "actions": {
-                                            "Create_File_in_Error_Folder": {
-                                                "runAfter": {},
-                                                "type": "ApiConnection",
-                                                "inputs": {
-                                                    "body": "@body('Get_blob_content_using_path')",
-                                                    "host": {
-                                                        "connection": {
-                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                        }
-                                                    },
-                                                    "method": "post",
-                                                    "path": "/datasets/default/files",
-                                                    "queries": {
-                                                        "folderPath": "/rota/error/",
-                                                        "name": "@items('For_each_File')?['Name']",
-                                                        "queryParametersSingleEncoded": true
-                                                    }
-                                                },
-                                                "runtimeConfiguration": {
-                                                    "contentTransfer": {
-                                                        "transferMode": "Chunked"
-                                                    }
-                                                }
-                                            },
-                                            "Delete_blob": {
-                                                "runAfter": {
-                                                    "Create_File_in_Error_Folder": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ApiConnection",
-                                                "inputs": {
-                                                    "host": {
-                                                        "connection": {
-                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                        }
-                                                    },
-                                                    "method": "delete",
-                                                    "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(items('For_each_File')?['Path']))}"
-                                                }
-                                            },
-                                            "Update_read.me": {
-                                                "runAfter": {
-                                                    "Delete_blob": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ApiConnection",
-                                                "inputs": {
-                                                    "body": "@concat('Rota files to be processed')",
-                                                    "host": {
-                                                        "connection": {
-                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                        }
-                                                    },
-                                                    "method": "post",
-                                                    "path": "/datasets/default/files",
-                                                    "queries": {
-                                                        "folderPath": "/rota/input",
-                                                        "name": "read.me",
-                                                        "queryParametersSingleEncoded": true
-                                                    }
-                                                },
-                                                "runtimeConfiguration": {
-                                                    "contentTransfer": {
-                                                        "transferMode": "Chunked"
-                                                    }
-                                                }
-                                            }
-                                        }
                                     },
                                     "expression": {
                                         "and": [
                                             {
-                                                "endsWith": [
-                                                    "@items('For_each_File')?['Path']",
-                                                    ".xml"
+                                                "less": [
+                                                    "@variables('rotaFilesRowCount')",
+                                                    1
                                                 ]
                                             }
                                         ]
@@ -1372,6 +1425,24 @@
                                 ]
                             }
                         },
+                        "Initialize_variable_rotaFilesRowCount": {
+                            "runAfter": {
+                                "Initialize_snowErrorMessage": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "rotaFilesRowCount",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+
                         "Initialize_xmlPayload": {
                             "runAfter": {},
                             "type": "InitializeVariable",
@@ -1626,6 +1697,12 @@
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
                         }
+                    }
+                },
+                "runtimeConfiguration": {
+                    "lifetime": {
+                        "unit": "day",
+                        "count": 10
                     }
                 }
             }
