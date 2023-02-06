@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
 @SuppressWarnings("java:S2187")
+@Disabled("Disabled until http error code 503 has been fixed!")
 class PeopleApiSmokeTest extends SmokeTest {
 
     private String peopleHealthcheck = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
