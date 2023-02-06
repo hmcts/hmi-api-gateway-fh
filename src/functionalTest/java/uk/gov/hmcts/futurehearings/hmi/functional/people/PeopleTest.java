@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.people;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
+import org.junit.jupiter.api.Disabled;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
@@ -29,6 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings("java:S2699")
+@Disabled("Disabled until http error code 503 has been fixed!")
 public class PeopleTest extends FunctionalTest {
 
     @Value("${peopleRootContext}")
