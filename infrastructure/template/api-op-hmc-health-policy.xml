@@ -1,5 +1,46 @@
 <policies>
     <inbound>
+        <send-request ignore-error="false" timeout="20" response-variable-name="hmcClientResponse" mode="new">
+            <set-url>https://#{keyVaultHost}#/secrets/hmc-user-id/?api-version=7.0</set-url>
+            <set-method>GET</set-method>
+            <authentication-managed-identity resource="https://vault.azure.net" />
+        </send-request>
+        <set-variable name="hmcClient" value="@{
+                var secret = ((IResponse)context.Variables["hmcClientResponse"]).Body.As<JObject>();
+                return secret["value"].ToString();
+        }" />
+        <send-request ignore-error="false" timeout="20" response-variable-name="hmcSecretResponse" mode="new">
+            <set-url>https://#{keyVaultHost}#/secrets/hmc-user-pwd/?api-version=7.0</set-url>
+            <set-method>GET</set-method>
+            <authentication-managed-identity resource="https://vault.azure.net" />
+        </send-request>
+        <set-variable name="hmcSecret" value="@{
+                var secret = ((IResponse)context.Variables["hmcSecretResponse"]).Body.As<JObject>();
+                return secret["value"].ToString();
+        }" />
+        <send-request ignore-error="true" timeout="20" response-variable-name="bearerToken" mode="new">
+            <set-url>#{hmcOauthUrl}#</set-url>
+            <set-method>POST</set-method>
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/x-www-form-urlencoded</value>
+            </set-header>
+            <set-body>@{
+                return "username=" + (string)context.Variables["hmcClient"] + "&password=" + (string)context.Variables["hmcSecret"] + "&grant_type=password_credentials";}</set-body>
+        </send-request>
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (String)((IResponse)context.Variables["bearerToken"]).Body.As<JObject>()["idToken"])</value>
+        </set-header>
+        <set-header name="Content-Type" exists-action="override">
+            <value>application/json; charset=utf-8</value>
+        </set-header>
+        <set-header name="Accept" exists-action="override">
+            <value>application/json</value>
+        </set-header>
+        <set-header name="Subscription-Key" exists-action="override">
+            <value>@(context.Request.Headers.GetValueOrDefault("Ocp-Apim-Subscription-Key","unknown"))</value>
+        </set-header>
+        <!--  Don't expose APIM subscription key to the backend. -->
+        <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
         <rewrite-uri template="/" copy-unmatched-params="true" />
         <set-backend-service base-url="https://#{cftHost}#/hmc" />
     </inbound>
@@ -28,7 +69,7 @@
                         new JProperty("caller_id", "1475a0491b743414f0dc85e4464bcb7a"),
                         new JProperty("category", "Data Issue"),
                         new JProperty("contact_type", "Alert"),
-                        new JProperty("description", "elinks Health Endpoint is Down"),
+                        new JProperty("description", "HMC Health Endpoint is Down"),
                         new JProperty("impact", "2"),
                         new JProperty("service_offering", "138e0c541bc5bc507bdaddf0b24bcb2a"),
                         new JProperty("short_description", "HMI - API Gateway Error"),
