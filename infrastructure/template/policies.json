@@ -252,6 +252,12 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "hmc-health",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-hmc-health-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "server-error",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-server-error-policy.xml",
