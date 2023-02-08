@@ -288,7 +288,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    3
+                                                    10
                                                 ]
                                             }
                                         ]
@@ -310,7 +310,7 @@
                         },
                         "Initialize_variable_copyFilesCount": {
                             "runAfter": {
-                                "Initialize_variable_rota_files_row_count": [
+                                "Initialize_variable_rota_files_row_count_test": [
                                     "Succeeded"
                                 ]
                             },
@@ -325,7 +325,7 @@
                                 ]
                             }
                         },
-                        "Initialize_variable_rota_files_row_count": {
+                        "Initialize_variable_rota_files_row_count_test": {
                             "runAfter": {},
                             "type": "InitializeVariable",
                             "inputs": {
