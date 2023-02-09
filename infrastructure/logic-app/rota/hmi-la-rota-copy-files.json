@@ -7,12 +7,15 @@
             "type": "String"
         },
         "connections_azureblob_externalid": {
+            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
             "type": "string"
         },
         "connections_azuretables_externalid": {
+            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
             "type": "string"
         },
         "connections_azuretables_3_externalid": {
+            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables_1')]",
             "type": "string"
         }
     },
@@ -285,7 +288,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    20
+                                                    15
                                                 ]
                                             }
                                         ]
@@ -341,9 +344,6 @@
                                     "Succeeded"
                                 ]
                             },
-                            "metadata": {
-                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/primaryinput/"
-                            },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
@@ -352,7 +352,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg=='))}",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput/'))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
@@ -366,17 +366,17 @@
                     "$connections": {
                         "value": {
                             "azureblob": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionId": "[parameters('connections_azureblob_externalid')]",
                                 "connectionName": "azureblob",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
                             },
                             "azuretables": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionId": "[parameters('connections_azuretables_externalid')]",
                                 "connectionName": "azuretables",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             },
                             "azuretables_1": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables_1')]",
+                                "connectionId": "[parameters('connections_azuretables_3_externalid')]",
                                 "connectionName": "azuretables_1",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
