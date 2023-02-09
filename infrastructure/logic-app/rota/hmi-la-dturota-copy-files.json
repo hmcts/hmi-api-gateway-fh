@@ -285,7 +285,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    10
+                                                    4
                                                 ]
                                             }
                                         ]
