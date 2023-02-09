@@ -7,15 +7,12 @@
             "type": "String"
         },
         "connections_azureblob_externalid": {
-
             "type": "String"
         },
         "connections_azuretables_externalid": {
-
             "type": "String"
         },
         "connections_azuretables_3_externalid": {
-
             "type": "String"
         }
     },
@@ -30,7 +27,7 @@
                 "application": "hearings-management-interface",
                 "builtFrom": "hmcts/hmi-api-gateway-fh",
                 "businessarea": "cross-cutting",
-                "environment": "development"
+                "environment": "[parameters('environmentName')]"
             },
             "identity": {
                 "type": "SystemAssigned"
