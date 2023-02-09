@@ -2,38 +2,17 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "environmentName":{
-      "value": "development"
-    },
     "workflows_hmi_la_dturota_copy_files_dev_name": {
-      "defaultValue": "hmi-la-dturota-copy-files-dev",
-      "type": "String"
-    },
-    "storageAccountName":{
-      "value": "hmidtudev"
-    },
-    "storageAccessKey":{
-      "reference": {
-        "keyVault": {
-          "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-dev"
-        },
-        "secretName": "dtu-storage-account-key"
-      }
-    },
-    "keyvaultName":{
-      "value": "hmi-shared-kv-dev"
+      "value": null
     },
     "connections_azureblob_externalid": {
-      "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob",
-      "type": "String"
+      "value": null
     },
     "connections_azuretables_externalid": {
-      "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables",
-      "type": "String"
+      "value": null
     },
     "connections_azuretables_3_externalid": {
-      "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3",
-      "type": "String"
+      "value": null
     }
   }
 }
