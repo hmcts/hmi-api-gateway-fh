@@ -7,15 +7,6 @@
     },
     "workflows_hmi_la_dturota_copy_files_dev_name": {
       "value": "hmi-la-rota-copy-files-dev"
-    },
-    "connections_azureblob_externalid": {
-      "value": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]"
-    },
-    "connections_azuretables_externalid": {
-      "value": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]"
-    },
-    "connections_azuretables_3_externalid": {
-      "value": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables_1')]"
     }
   }
 }

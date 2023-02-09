@@ -4,18 +4,26 @@
     "parameters": {
         "workflows_hmi_la_dturota_copy_files_dev_name": {
             "defaultValue": "hmi-la-dturota-copy-files-dev",
-            "type": "String"
+            "type": "string"
         },
         "connections_azureblob_externalid": {
-            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob",
             "type": "string"
         },
         "connections_azuretables_externalid": {
-            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables",
             "type": "string"
         },
         "connections_azuretables_3_externalid": {
-            "defaultValue": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables_1')]",
+            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3",
+            "type": "string"
+        },
+        "connections_azureblob_externalid_id": {
+            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob",
+            "type": "string"
+        },
+        "connections_azuretables_externalid_id": {
+            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables",
             "type": "string"
         }
     },
@@ -25,7 +33,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmi_la_dturota_copy_files_dev_name')]",
-            "location": "[resourceGroup().location]",
+            "location": "uksouth",
             "tags": {
                 "application": "hearings-management-interface",
                 "builtFrom": "hmcts/hmi-api-gateway-fh",
@@ -288,7 +296,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    15
+                                                    22
                                                 ]
                                             }
                                         ]
@@ -368,17 +376,18 @@
                             "azureblob": {
                                 "connectionId": "[parameters('connections_azureblob_externalid')]",
                                 "connectionName": "azureblob",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                                "id": "[parameters('connections_azureblob_externalid_id')]"
                             },
                             "azuretables": {
                                 "connectionId": "[parameters('connections_azuretables_externalid')]",
                                 "connectionName": "azuretables",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                                "id": "[parameters('connections_azuretables_externalid_id')]"
+
                             },
                             "azuretables_1": {
                                 "connectionId": "[parameters('connections_azuretables_3_externalid')]",
-                                "connectionName": "azuretables_1",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                                "connectionName": "azuretables-3",
+                                "id": "[parameters('connections_azuretables_externalid_id')]"
                             }
                         }
                     }
