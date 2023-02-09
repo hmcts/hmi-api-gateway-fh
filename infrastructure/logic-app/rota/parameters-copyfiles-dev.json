@@ -2,8 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "environmentName":{
+      "value": "development"
+    },
     "workflows_hmi_la_dturota_copy_files_dev_name": {
-      "value": null
+      "value": "hmi-la-rota-copy-files-dev"
     },
     "connections_azureblob_externalid": {
       "value": null

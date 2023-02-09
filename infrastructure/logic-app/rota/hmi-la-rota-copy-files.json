@@ -7,16 +7,13 @@
             "type": "String"
         },
         "connections_azureblob_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob",
-            "type": "String"
+            "type": "string"
         },
         "connections_azuretables_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables",
-            "type": "String"
+            "type": "string"
         },
         "connections_azuretables_3_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3",
-            "type": "String"
+            "type": "string"
         }
     },
     "variables": {},
@@ -25,12 +22,12 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmi_la_dturota_copy_files_dev_name')]",
-            "location": "uksouth",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "application": "hearings-management-interface",
                 "builtFrom": "hmcts/hmi-api-gateway-fh",
                 "businessarea": "cross-cutting",
-                "environment": "development"
+                "environment": "[parameters('environmentName')]"
             },
             "identity": {
                 "type": "SystemAssigned"
@@ -288,7 +285,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    2
+                                                    20
                                                 ]
                                             }
                                         ]
@@ -369,19 +366,19 @@
                     "$connections": {
                         "value": {
                             "azureblob": {
-                                "connectionId": "[parameters('connections_azureblob_externalid')]",
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
                                 "connectionName": "azureblob",
-                                "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
                             },
                             "azuretables": {
-                                "connectionId": "[parameters('connections_azuretables_externalid')]",
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
                                 "connectionName": "azuretables",
-                                "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             },
                             "azuretables_1": {
-                                "connectionId": "[parameters('connections_azuretables_3_externalid')]",
-                                "connectionName": "azuretables-3",
-                                "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables_1')]",
+                                "connectionName": "azuretables_1",
+                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
                         }
                     }
