@@ -7,23 +7,18 @@
             "type": "string"
         },
         "connections_azureblob_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob",
             "type": "string"
         },
         "connections_azuretables_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables",
             "type": "string"
         },
         "connections_azuretables_3_externalid": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3",
             "type": "string"
         },
         "connections_azureblob_externalid_id": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob",
             "type": "string"
         },
         "connections_azuretables_externalid_id": {
-            "defaultValue": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables",
             "type": "string"
         }
     },
@@ -296,7 +291,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    22
+                                                    11
                                                 ]
                                             }
                                         ]
