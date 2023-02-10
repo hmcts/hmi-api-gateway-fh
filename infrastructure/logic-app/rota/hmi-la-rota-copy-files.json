@@ -125,7 +125,8 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables')]"
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-1')]"
             ],
             "properties": {
                 "state": "Enabled",
@@ -472,7 +473,7 @@
                             },
                             "azuretables_1": {
                                 "connectionId":"[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
-                                "connectionName": "azuretables-3",
+                                "connectionName": "azuretables-1",
                                 "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             }
                         }
