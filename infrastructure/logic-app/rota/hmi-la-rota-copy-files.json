@@ -90,7 +90,7 @@
                 ],
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables-3')]"
                 },
                 "parameterValues": {
                     "storageaccount": "[parameters('storageAccountName')]",
@@ -115,7 +115,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
                 "[resourceId('Microsoft.Web/connections', 'azuretables')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables-1')]"
+                "[resourceId('Microsoft.Web/connections', 'azuretables-3')]"
             ],
             "properties": {
                 "state": "Enabled",
