@@ -19,14 +19,6 @@
     "connections_azuretables_3_externalid": {
       "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3"
 
-    },
-    "connections_azureblob_externalid_id": {
-      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
-
-    },
-    "connections_azuretables_externalid_id": {
-      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
-
     }
   }
 }
