@@ -8,18 +8,6 @@
     "workflows_hmi_la_dturota_copy_files_dev_name": {
       "value": "hmi-la-rota-copy-files-dev"
     },
-    "connections_azureblob_externalid": {
-      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob"
-
-    },
-    "connections_azuretables_externalid": {
-      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables"
-
-    },
-    "connections_azuretables_3_externalid": {
-      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3"
-
-    },
     "storageAccountName":{
       "value": "hmidtudev"
     },

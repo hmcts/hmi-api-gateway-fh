@@ -6,15 +6,6 @@
             "defaultValue": "hmi-la-dturota-copy-files-dev",
             "type": "String"
         },
-        "connections_azureblob_externalid": {
-            "type": "String"
-        },
-        "connections_azuretables_externalid": {
-            "type": "String"
-        },
-        "connections_azuretables_3_externalid": {
-            "type": "String"
-        },
         "environmentName": {
             "type": "string"
         },
