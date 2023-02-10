@@ -17,6 +17,12 @@
         },
         "environmentName": {
             "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccessKey": {
+            "type": "securestring"
         }
     },
     "variables": {},
