@@ -16,7 +16,7 @@
             "type": "string"
         },
         "storageAccessKey": {
-            "type": "string"
+            "type": "securestring"
         }
     },
     "variables": {
