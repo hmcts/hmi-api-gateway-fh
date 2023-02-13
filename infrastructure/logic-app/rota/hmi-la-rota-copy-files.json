@@ -15,13 +15,10 @@
         "connections_azuretables_3_externalid": {
             "type": "string"
         },
-        "connections_azureblob_externalid_id": {
+        "environmentName":{
             "type": "string"
         },
-        "connections_azuretables_externalid_id": {
-            "type": "string"
-        },
-        "environmentName": {
+        "azureBlobIdCopyFiles":{
             "type": "string"
         }
     },
@@ -185,6 +182,72 @@
                                                                 },
                                                                 "runtimeConfiguration": {
                                                                     "contentTransfer": {
+                                                                        "transferMode": "Chunked"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "Delete_blob_rota_primary_input": {
+                                                                "runAfter": {
+                                                                    "Create_blob_in_rota_input_folder": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "headers": {
+                                                                        "SkipDeleteIfFileNotFoundOnServer": false
+                                                                    },
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "delete",
+                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
+                                                                }
+                                                            },
+                                                            "Get_blob_content_using_path_rota_primary_input": {
+                                                                "runAfter": {},
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/GetFileContentByPath",
+                                                                    "queries": {
+                                                                        "inferContentType": true,
+                                                                        "path": "@items('For_each')?['Path']",
+                                                                        "queryParametersSingleEncoded": true
+                                                                    }
+                                                                }
+                                                            },
+                                                            "Increment_variable_copyFilesCount": {
+                                                                "runAfter": {
+                                                                    "Delete_blob_rota_primary_input": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "IncrementVariable",
+                                                                "inputs": {
+                                                                    "name": "copyFilesCount",
+                                                                    "value": 1
+                                                                }
+                                                            },
+                                                            "Insert_or_Merge_Entity_(V2)": {
+                                                                "runAfter": {
+                                                                    "Increment_variable_copyFilesCount": [
+                                                                        "Succeeded"
+                                                                    ]
+                                                                },
+                                                                "type": "ApiConnection",
+                                                                "inputs": {
+                                                                    "body": {
+                                                                        "status": "COPIED"
+                                                                    },
+                                                                    "host": {
                                                                         "connection": {
                                                                             "name": "@parameters('$connections')['azuretables_1']['connectionId']"
                                                                         }
@@ -228,7 +291,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    25
+                                                    2
                                                 ]
                                             }
                                         ]
@@ -284,6 +347,9 @@
                                     "Succeeded"
                                 ]
                             },
+                            "metadata": {
+                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/primaryinput/"
+                            },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
@@ -292,7 +358,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput/'))}",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg=='))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
@@ -308,17 +374,17 @@
                             "azureblob": {
                                 "connectionId": "[parameters('connections_azureblob_externalid')]",
                                 "connectionName": "azureblob",
-                                "id": "[parameters('connections_azureblob_externalid_id')]"
+                                "id": "[parameters('azureBlobIdCopyFiles')]"
                             },
                             "azuretables": {
                                 "connectionId": "[parameters('connections_azuretables_externalid')]",
                                 "connectionName": "azuretables",
-                                "id": "[parameters('connections_azuretables_externalid_id')]"
+                                "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
                             },
                             "azuretables_1": {
                                 "connectionId": "[parameters('connections_azuretables_3_externalid')]",
                                 "connectionName": "azuretables-3",
-                                "id": "[parameters('connections_azuretables_externalid_id')]"
+                                "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
                             }
                         }
                     }
