@@ -43,6 +43,9 @@
         },
         "serviceNowCallerId": {
             "value": "1475a0491b743414f0dc85e4464bcb7a"
-        }
+        },
+		"laEnabled": {
+			"value": "Disabled"
+		}
     }
 }
