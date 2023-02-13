@@ -4,118 +4,43 @@
     "parameters": {
         "workflows_hmi_la_dturota_copy_files_dev_name": {
             "defaultValue": "hmi-la-dturota-copy-files-dev",
-            "type": "String"
+            "type": "string"
+        },
+        "connections_azureblob_externalid": {
+            "type": "string"
+        },
+        "connections_azuretables_externalid": {
+            "type": "string"
+        },
+        "connections_azuretables_3_externalid": {
+            "type": "string"
+        },
+        "connections_azureblob_externalid_id": {
+            "type": "string"
+        },
+        "connections_azuretables_externalid_id": {
+            "type": "string"
         },
         "environmentName": {
             "type": "string"
-        },
-        "storageAccountName": {
-            "type": "string"
-        },
-        "storageAccessKey": {
-            "type": "securestring"
         }
     },
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Web/connections",
-            "apiVersion": "2017-07-01",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
-                "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
-            "name": "azureblob",
-            "properties": {
-                "api": {
-                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
-                },
-                "displayName": "HMI DTU Rota",
-                "parameterValues": {
-                    "accountName": "[parameters('storageAccountName')]",
-                    "accessKey": "[parameters('storageAccessKey')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Web/connections",
-            "apiVersion": "2017-07-01",
-            "name": "azuretables",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
-                "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
-            "kind": "V1",
-            "properties": {
-                "displayName": "HMI DTU Rota",
-                "statuses": [
-                    {
-                        "status": "Connected"
-                    }
-                ],
-                "customParameterValues": {},
-                "api": {
-                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
-                },
-                "parameterValues": {
-                    "storageaccount": "[parameters('storageAccountName')]",
-                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Web/connections",
-            "apiVersion": "2017-07-01",
-            "name": "azuretables-3",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "environment": "[parameters('environmentName')]",
-                "application": "hearing-management-interface",
-                "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
-            },
-            "kind": "V1",
-            "properties": {
-                "displayName": "HMI DTU Rota",
-                "statuses": [
-                    {
-                        "status": "Connected"
-                    }
-                ],
-                "customParameterValues": {},
-                "api": {
-                    "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
-                },
-                "parameterValues": {
-                    "storageaccount": "[parameters('storageAccountName')]",
-                    "sharedKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('workflows_hmi_la_dturota_copy_files_dev_name')]",
-            "location": "[resourceGroup().location]",
+            "location": "uksouth",
             "tags": {
-                "environment": "[parameters('environmentName')]",
                 "application": "hearings-management-interface",
+                "builtFrom": "hmcts/hmi-api-gateway-fh",
                 "businessarea": "cross-cutting",
-                "builtFrom": "hmcts/hmi-api-gateway-fh"
+                "environment": "[parameters('environmentName')]"
             },
             "identity": {
                 "type": "SystemAssigned"
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', 'azureblob')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
-            ],
             "properties": {
                 "state": "Enabled",
                 "definition": {
@@ -260,72 +185,6 @@
                                                                 },
                                                                 "runtimeConfiguration": {
                                                                     "contentTransfer": {
-                                                                        "transferMode": "Chunked"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Delete_blob_rota_primary_input": {
-                                                                "runAfter": {
-                                                                    "Create_blob_in_rota_input_folder": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "headers": {
-                                                                        "SkipDeleteIfFileNotFoundOnServer": false
-                                                                    },
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "delete",
-                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
-                                                                }
-                                                            },
-                                                            "Get_blob_content_using_path_rota_primary_input": {
-                                                                "runAfter": {},
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "host": {
-                                                                        "connection": {
-                                                                            "name": "@parameters('$connections')['azureblob']['connectionId']"
-                                                                        }
-                                                                    },
-                                                                    "method": "get",
-                                                                    "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/GetFileContentByPath",
-                                                                    "queries": {
-                                                                        "inferContentType": true,
-                                                                        "path": "@items('For_each')?['Path']",
-                                                                        "queryParametersSingleEncoded": true
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Increment_variable_copyFilesCount": {
-                                                                "runAfter": {
-                                                                    "Delete_blob_rota_primary_input": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "IncrementVariable",
-                                                                "inputs": {
-                                                                    "name": "copyFilesCount",
-                                                                    "value": 1
-                                                                }
-                                                            },
-                                                            "Insert_or_Merge_Entity_(V2)": {
-                                                                "runAfter": {
-                                                                    "Increment_variable_copyFilesCount": [
-                                                                        "Succeeded"
-                                                                    ]
-                                                                },
-                                                                "type": "ApiConnection",
-                                                                "inputs": {
-                                                                    "body": {
-                                                                        "status": "COPIED"
-                                                                    },
-                                                                    "host": {
                                                                         "connection": {
                                                                             "name": "@parameters('$connections')['azuretables_1']['connectionId']"
                                                                         }
@@ -369,7 +228,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    21
+                                                    25
                                                 ]
                                             }
                                         ]
@@ -425,9 +284,6 @@
                                     "Succeeded"
                                 ]
                             },
-                            "metadata": {
-                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/primaryinput/"
-                            },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
@@ -436,7 +292,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg=='))}",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput/'))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
@@ -450,19 +306,19 @@
                     "$connections": {
                         "value": {
                             "azureblob": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azureblob')]",
+                                "connectionId": "[parameters('connections_azureblob_externalid')]",
                                 "connectionName": "azureblob",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureblob')]"
+                                "id": "[parameters('connections_azureblob_externalid_id')]"
                             },
                             "azuretables": {
-                                "connectionId": "[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/azuretables')]",
+                                "connectionId": "[parameters('connections_azuretables_externalid')]",
                                 "connectionName": "azuretables",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                                "id": "[parameters('connections_azuretables_externalid_id')]"
                             },
                             "azuretables_1": {
-                                "connectionId":"[concat('subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/keyvault')]",
+                                "connectionId": "[parameters('connections_azuretables_3_externalid')]",
                                 "connectionName": "azuretables-3",
-                                "id": "[concat('subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
+                                "id": "[parameters('connections_azuretables_externalid_id')]"
                             }
                         }
                     }

@@ -8,16 +8,25 @@
     "workflows_hmi_la_dturota_copy_files_dev_name": {
       "value": "hmi-la-rota-copy-files-dev"
     },
-    "storageAccountName":{
-      "value": "hmidtudev"
+    "connections_azureblob_externalid": {
+      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azureblob"
+
     },
-    "storageAccessKey":{
-      "reference": {
-        "keyVault": {
-          "id": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-dev"
-        },
-        "secretName": "dtu-storage-account-key"
-      }
+    "connections_azuretables_externalid": {
+      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables"
+
+    },
+    "connections_azuretables_3_externalid": {
+      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/resourceGroups/hmi-sharedinfra-dev-rg/providers/Microsoft.Web/connections/azuretables-3"
+
+    },
+    "connections_azureblob_externalid_id": {
+      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
+
+    },
+    "connections_azuretables_externalid_id": {
+      "value": "/subscriptions/867a878b-cb68-4de5-9741-361ac9e178b6/providers/Microsoft.Web/locations/uksouth/managedApis/azuretables"
+
     }
   }
 }
