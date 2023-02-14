@@ -839,7 +839,7 @@
                                             {
                                                 "less": [
                                                     "@variables('copyFilesCount')",
-                                                    2
+                                                    5
                                                 ]
                                             }
                                         ]
