@@ -601,7 +601,7 @@
                         }
                     },
                     "actions": {
-                        "Create_blob_readme_file_inside_primaryinput": {
+                        "Create_blob_readme_file_inside_input": {
                             "runAfter": {
                                 "Initialize_variable_copyFilesCount": [
                                     "Succeeded"
@@ -621,7 +621,7 @@
                                 "method": "post",
                                 "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
                                 "queries": {
-                                    "folderPath": "/rota/primaryinput/",
+                                    "folderPath": "/rota/input/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -717,7 +717,7 @@
                                                                     "method": "post",
                                                                     "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
                                                                     "queries": {
-                                                                        "folderPath": "/rota/input/",
+                                                                        "folderPath": "/rota/primaryinput/",
                                                                         "name": "@items('For_each')?['Name']",
                                                                         "queryParametersSingleEncoded": true
                                                                     }
@@ -893,12 +893,12 @@
                         },
                         "Lists_files": {
                             "runAfter": {
-                                "Create_blob_readme_file_inside_primaryinput": [
+                                "Create_blob_readme_file_inside_input": [
                                     "Succeeded"
                                 ]
                             },
                             "metadata": {
-                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/primaryinput/"
+                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/input/"
                             },
                             "type": "ApiConnection",
                             "inputs": {
