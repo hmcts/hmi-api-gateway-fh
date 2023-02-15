@@ -897,9 +897,6 @@
                                     "Succeeded"
                                 ]
                             },
-                            "metadata": {
-                                "JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg==": "/rota/input/"
-                            },
                             "type": "ApiConnection",
                             "inputs": {
                                 "host": {
