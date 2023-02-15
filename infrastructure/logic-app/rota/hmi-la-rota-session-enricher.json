@@ -587,7 +587,7 @@
                                     "destination": "@{concat('rota/output/', body('Parse_JSON')?['filename'])}",
                                     "overwrite": true,
                                     "queryParametersSingleEncoded": true,
-                                    "source": "@{concat('rota/input/', body('Parse_JSON')?['filename'])}"
+                                    "source": "@{concat('rota/primaryinput/', body('Parse_JSON')?['filename'])}"
                                 }
                             }
                         },
@@ -608,7 +608,7 @@
                                     }
                                 },
                                 "method": "delete",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/input/', body('Parse_JSON')?['filename'])))}"
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/primaryinput/', body('Parse_JSON')?['filename'])))}"
                             }
                         },
                         "For_each_CLP": {
@@ -749,7 +749,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/input/', body('Parse_JSON')?['filename'])))}/content",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(concat('rota/primaryinput/', body('Parse_JSON')?['filename'])))}/content",
                                 "queries": {
                                     "inferContentType": true
                                 }

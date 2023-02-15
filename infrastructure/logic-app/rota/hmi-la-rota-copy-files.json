@@ -581,9 +581,7 @@
                     "contentVersion": "1.0.0.0",
                     "parameters": {
                         "$connections": {
-                            "defaultValue": {
-
-                            },
+                            "defaultValue": {},
                             "type": "Object"
                         }
                     },
@@ -640,9 +638,7 @@
                                         "is_file_xml": {
                                             "actions": {
                                                 "Get_entities_for_rota_files": {
-                                                    "runAfter": {
-
-                                                    },
+                                                    "runAfter": {},
                                                     "type": "ApiConnection",
                                                     "inputs": {
                                                         "host": {
@@ -671,10 +667,8 @@
                                                 },
                                                 "file_processing_is_in_progress": {
                                                     "actions": {
-                                                        "Delete_blob_primary_input": {
-                                                            "runAfter": {
-
-                                                            },
+                                                        "Delete_blob_input": {
+                                                            "runAfter": {},
                                                             "type": "ApiConnection",
                                                             "inputs": {
                                                                 "headers": {
@@ -699,13 +693,13 @@
                                                         "actions": {
                                                             "Create_blob_in_rota_input_folder": {
                                                                 "runAfter": {
-                                                                    "Get_blob_content_using_path_rota_primary_input": [
+                                                                    "Get_blob_content_using_path_rota_input": [
                                                                         "Succeeded"
                                                                     ]
                                                                 },
                                                                 "type": "ApiConnection",
                                                                 "inputs": {
-                                                                    "body": "@body('Get_blob_content_using_path_rota_primary_input')",
+                                                                    "body": "@body('Get_blob_content_using_path_rota_input')",
                                                                     "headers": {
                                                                         "ReadFileMetadataFromServer": true
                                                                     },
@@ -728,7 +722,7 @@
                                                                     }
                                                                 }
                                                             },
-                                                            "Delete_blob_rota_primary_input": {
+                                                            "Delete_blob_rota_input": {
                                                                 "runAfter": {
                                                                     "Create_blob_in_rota_input_folder": [
                                                                         "Succeeded"
@@ -748,10 +742,8 @@
                                                                     "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent(items('For_each')?['Path']))}"
                                                                 }
                                                             },
-                                                            "Get_blob_content_using_path_rota_primary_input": {
-                                                                "runAfter": {
-
-                                                                },
+                                                            "Get_blob_content_using_path_rota_input": {
+                                                                "runAfter": {},
                                                                 "type": "ApiConnection",
                                                                 "inputs": {
                                                                     "host": {
@@ -770,7 +762,7 @@
                                                             },
                                                             "Increment_variable_copyFilesCount": {
                                                                 "runAfter": {
-                                                                    "Delete_blob_rota_primary_input": [
+                                                                    "Delete_blob_rota_input": [
                                                                         "Succeeded"
                                                                     ]
                                                                 },
@@ -815,9 +807,7 @@
                                                     "type": "If"
                                                 }
                                             },
-                                            "runAfter": {
-
-                                            },
+                                            "runAfter": {},
                                             "expression": {
                                                 "and": [
                                                     {
@@ -831,9 +821,7 @@
                                             "type": "If"
                                         }
                                     },
-                                    "runAfter": {
-
-                                    },
+                                    "runAfter": {},
                                     "expression": {
                                         "and": [
                                             {
@@ -877,9 +865,7 @@
                             }
                         },
                         "Initialize_variable_rota_files_row_count": {
-                            "runAfter": {
-
-                            },
+                            "runAfter": {},
                             "type": "InitializeVariable",
                             "inputs": {
                                 "variables": [
@@ -905,7 +891,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('JTJmcm90YSUyZnByaW1hcnlpbnB1dCUyZg=='))}",
+                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/input/'))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
@@ -913,9 +899,7 @@
                             }
                         }
                     },
-                    "outputs": {
-
-                    }
+                    "outputs": {}
                 },
                 "parameters": {
                     "$connections": {

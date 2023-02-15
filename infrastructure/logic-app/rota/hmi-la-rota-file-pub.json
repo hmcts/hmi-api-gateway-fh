@@ -645,7 +645,7 @@
                                 "method": "post",
                                 "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
                                 "queries": {
-                                    "folderPath": "/rota/input/",
+                                    "folderPath": "/rota/primaryinput/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -1123,7 +1123,7 @@
                                                             "method": "post",
                                                             "path": "/datasets/default/files",
                                                             "queries": {
-                                                                "folderPath": "/rota/input/",
+                                                                "folderPath": "/rota/primaryinput/",
                                                                 "name": "read.me",
                                                                 "queryParametersSingleEncoded": true
                                                             }
@@ -1209,10 +1209,10 @@
                                         "method": "post",
                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
                                         "queries": {
-                                            "destination": "/rota/input@{items('For_each_error_file')?['PartitionKey']}",
+                                            "destination": "/rota/primaryinput@{items('For_each_error_file')?['PartitionKey']}",
                                             "overwrite": true,
                                             "queryParametersSingleEncoded": true,
-                                            "source": "/rota/input/@{items('For_each_error_file')?['PartitionKey']}"
+                                            "source": "/rota/primaryinput/@{items('For_each_error_file')?['PartitionKey']}"
                                         }
                                     }
                                 },
@@ -1233,7 +1233,7 @@
                                             }
                                         },
                                         "method": "delete",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/input/',items('For_each_error_file')?['PartitionKey']))}"
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput/',items('For_each_error_file')?['PartitionKey']))}"
                                     }
                                 },
                                 "Get_secret_SNow_client": {
@@ -1597,7 +1597,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/input'))}",
+                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput'))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false
