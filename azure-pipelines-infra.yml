@@ -52,7 +52,10 @@ stages:
         - template: pipeline/stages/plan.yaml
           parameters:
             environment: ${{ environment }}
-            subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+            ${{ if eq(environment, 'perftest') }}:
+              subscription: DTS-SHAREDSERVICES-DEMO
+            ${{ else }}:
+              subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
             ${{ if eq(environment, 'prod') }}:
               dependsOn: Buildstg
             ${{ else }}:
