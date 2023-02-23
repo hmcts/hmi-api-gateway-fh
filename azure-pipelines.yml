@@ -58,10 +58,7 @@ stages:
         - template: pipeline/stages/apply.yaml
           parameters:
             environment: ${{ environment }}
-            ${{ if eq(environment, 'perftest') }}:
-              subscription: DTS-SHAREDSERVICES-DEMO
-            ${{ else }}:
-              subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
+            subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
             deploymentType: "app"
             ${{ if eq(environment, 'prod') }}:
               dependsOn: Wait${{ environment }}
@@ -72,9 +69,6 @@ stages:
           - template: pipeline/stages/test.yaml
             parameters:
               environment: ${{ environment }}
-              ${{ if eq(environment, 'perftest') }}:
-              subscription: DTS-SHAREDSERVICES-DEMO
-            ${{ else }}:
               subscription: DTS-SHAREDSERVICES-${{ upper(environment) }}
               dependsOn: Build${{ environment }}
         
