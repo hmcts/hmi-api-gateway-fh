@@ -1,12 +1,12 @@
-#data "azurerm_key_vault_secret" "instrumentation_key" {
-#  name         = "appins-instrumentation-key"
-#  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
-#}
-#
-#data "azurerm_key_vault_secret" "resource_id" {
-#  name         = "appins-resource-id"
-#  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
-#}
+data "azurerm_key_vault_secret" "instrumentation_key" {
+  name         = "appins-instrumentation-key"
+  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
+}
+
+data "azurerm_key_vault_secret" "resource_id" {
+  name         = "appins-resource-id"
+  key_vault_id = data.azurerm_key_vault.infra_key_vault.id
+}
 
 resource "azurerm_api_management_logger" "hmi_apim_logger" {
   name                = "hmi-apim-logger-${var.environment}"
