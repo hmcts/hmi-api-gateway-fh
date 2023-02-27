@@ -1,23 +1,22 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
-
-import org.junit.jupiter.api.Disabled;
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
-
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.common.rest;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import java.util.Map;

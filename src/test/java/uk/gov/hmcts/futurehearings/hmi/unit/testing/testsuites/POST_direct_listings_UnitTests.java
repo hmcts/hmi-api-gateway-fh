@@ -1,35 +1,32 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForCreate;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
-
-import lombok.extern.slf4j.Slf4j;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
+import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @Slf4j
 @SpringBootTest(classes = { Application.class })

@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
 import io.restassured.response.Response;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

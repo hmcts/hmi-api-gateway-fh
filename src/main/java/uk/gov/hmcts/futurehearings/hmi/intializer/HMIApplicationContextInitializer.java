@@ -1,5 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.intializer;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import uk.gov.hmcts.futurehearings.hmi.intializer.exception.HMIProcessException;
 
 import java.io.BufferedInputStream;
@@ -13,10 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 
 @Slf4j
 public class HMIApplicationContextInitializer implements

@@ -3,8 +3,9 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 import io.restassured.response.Response;
 
 import java.util.Map;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
 public class ResourcesResponseVerifier {
     private static final String MISSING_SUB_KEY_ERROR = "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API.";

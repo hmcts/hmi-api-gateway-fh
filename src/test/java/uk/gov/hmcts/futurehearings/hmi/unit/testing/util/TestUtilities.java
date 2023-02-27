@@ -2,15 +2,14 @@ package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-
-import static io.restassured.RestAssured.expect;
-
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import static io.restassured.RestAssured.expect;
 
 public class TestUtilities {
 

@@ -1,14 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j

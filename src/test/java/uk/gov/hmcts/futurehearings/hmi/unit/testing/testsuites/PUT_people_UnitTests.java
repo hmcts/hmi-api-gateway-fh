@@ -1,11 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.testsuites;
 
-import static io.restassured.RestAssured.given;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +15,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import io.restassured.response.Response;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
-import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static io.restassured.RestAssured.given;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForMissingOrInvalidAccessToken;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForMissingOrInvalidContentTypeHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForMissingOrInvalidHeader;
+import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForUpdate;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.readFileContents;
 
 @SpringBootTest(classes = { Application.class })
