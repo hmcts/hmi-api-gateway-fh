@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workflows_hmi_la_dturota_copy_files_dev_name": {
+      "value": "hmi-la-dturota-copy-files-test"
+    },
+    "environmentName":{
+      "value": "test"
+    },
+    "azureBlobIdCopyFiles":{
+      "value": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
+    },
+    "storageAccountName":{
+      "value": "hmidtutest"
+    },
+    "storageAccessKey":{
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/resourceGroups/hmi-sharedinfra-test-rg/providers/Microsoft.KeyVault/vaults/hmi-shared-kv-test"
+        },
+        "secretName": "dtu-storage-account-key"
+      }
+    }
+  }
+}
