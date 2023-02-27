@@ -6,7 +6,7 @@
       "value": "hmi-la-dturota-copy-files-test"
     },
     "environmentName":{
-      "value": "test"
+      "value": "testing"
     },
     "azureBlobIdCopyFiles":{
       "value": "/subscriptions/3eec5bde-7feb-4566-bfb6-805df6e10b90/providers/Microsoft.Web/locations/uksouth/managedApis/azureblob"
