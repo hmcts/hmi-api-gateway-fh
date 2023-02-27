@@ -29,7 +29,7 @@ class POSTHearingsValidationTest extends HearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(hearingsApiRootContext);
+        this.setRelativeUrl(hearingsApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);

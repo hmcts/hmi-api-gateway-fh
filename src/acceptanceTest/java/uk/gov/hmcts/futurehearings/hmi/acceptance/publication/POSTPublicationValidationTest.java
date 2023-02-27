@@ -24,7 +24,7 @@ public class POSTPublicationValidationTest extends PublicationValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(pihPublicationRootContext);
+        this.setRelativeUrl(pihPublicationRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-test-publication.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);

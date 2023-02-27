@@ -25,7 +25,7 @@ public class GETResourcesValidationTest extends ResourceValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(resourcesRootContext);
+        this.setRelativeUrl(resourcesRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETResourcesValidationVerifier());

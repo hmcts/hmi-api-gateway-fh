@@ -29,7 +29,7 @@ class PUTListingsValidationTest extends ListingsValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         listings_idRootContext = String.format(listings_idRootContext,"12345");
-        this.setRelativeURL(listings_idRootContext);
+        this.setRelativeUrl(listings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-listings-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);

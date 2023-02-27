@@ -26,7 +26,7 @@ public class GETSessionsByIDValidationTest extends SessionsValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         sessions_idRootContext = String.format(sessions_idRootContext,"12345");
-        this.setRelativeURL(sessions_idRootContext);
+        this.setRelativeUrl(sessions_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSessionByIdValidationVerifier());

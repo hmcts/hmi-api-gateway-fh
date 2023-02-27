@@ -27,7 +27,7 @@ public class POSTCloneVideoHearingsValidationTest extends VideoHearingValidation
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, "InvalidHearingId123");
-        this.setRelativeURL(cloneVideoHearingsRootContext);
+        this.setRelativeUrl(cloneVideoHearingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setSourceSystem("SNL");
         this.setInputPayloadFileName("video-hearing-request-standard.json");

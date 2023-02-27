@@ -24,7 +24,7 @@ public class PUTResourcesLinkedHearingGroupTest extends ResourceValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, "TEST");
-        this.setRelativeURL(resourcesLinkedHearingGroup_idRootContext);
+        this.setRelativeUrl(resourcesLinkedHearingGroup_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-resource-linked-hearing-group.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);

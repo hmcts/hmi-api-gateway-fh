@@ -16,7 +16,7 @@ public class RestClientTemplate {
     public static Response shouldExecute(final Headers headers,
                                          final String authorizationToken,
                                          final String requestBodyPayload,
-                                         final String requestURL,
+                                         final String requestUrl,
                                          final Map<String, String> params,
                                          final HttpStatus expectedHttpStatus,
                                          final HttpMethod httpMethod) {
@@ -29,7 +29,7 @@ public class RestClientTemplate {
                         .headers(headers)
                         .auth()
                         .oauth2(authorizationToken)
-                        .basePath(requestURL)
+                        .basePath(requestUrl)
                         .body(requestBodyPayload)
                         .when()
                         .post().then().extract().response();
@@ -40,19 +40,19 @@ public class RestClientTemplate {
                         .headers(headers)
                         .auth()
                         .oauth2(authorizationToken)
-                        .basePath(requestURL)
+                        .basePath(requestUrl)
                         .body(requestBodyPayload)
                         .when()
                         .put().then().extract().response();
             case DELETE:
-                if(requestBodyPayload == null) {
+                if (requestBodyPayload == null) {
                     return RestAssured
                             .expect().that().statusCode(expectedHttpStatus.value())
                             .given()
                             .headers(headers)
                             .auth()
                             .oauth2(authorizationToken)
-                            .basePath(requestURL)
+                            .basePath(requestUrl)
                             .when()
                             .delete().then().extract().response();
                 }
@@ -62,7 +62,7 @@ public class RestClientTemplate {
                         .headers(headers)
                         .auth()
                         .oauth2(authorizationToken)
-                        .basePath(requestURL)
+                        .basePath(requestUrl)
                         .body(requestBodyPayload)
                         .when()
                         .delete().then().extract().response();
@@ -74,7 +74,7 @@ public class RestClientTemplate {
                             .headers(headers)
                             .auth()
                             .oauth2(authorizationToken)
-                            .basePath(requestURL)
+                            .basePath(requestUrl)
                             .when()
                             .get().then().extract().response();
                 } else {
@@ -86,7 +86,7 @@ public class RestClientTemplate {
                             .headers(headers)
                             .auth()
                             .oauth2(authorizationToken)
-                            .basePath(requestURL)
+                            .basePath(requestUrl)
                             .when()
                             .get().then().extract().response();
                     log.debug(response.getBody().asString());
@@ -98,7 +98,7 @@ public class RestClientTemplate {
                         .headers(headers)
                         .auth()
                         .oauth2(authorizationToken)
-                        .basePath(requestURL)
+                        .basePath(requestUrl)
                         .when()
                         .options().then().extract().response();
             default:

@@ -11,19 +11,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 public class OAuthTokenGenerator {
 
-    public static final String generateOAuthToken(final String token_apiURL,
-                                                  final String token_apiTenantId,
+    public static final String generateOAuthToken(final String tokenApiUrl,
+                                                  final String tokenApiTenantId,
                                                   final String grantType,
                                                   final String clientID,
                                                   final String clientSecret,
                                                   final String scope,
                                                   final HttpStatus httpStatus) throws Exception {
 
-        String full_token_apiURL = String.format(token_apiURL, token_apiTenantId);
+        String fullTokenApiUrl = String.format(tokenApiUrl, tokenApiTenantId);
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, scope);
 
-        Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
+        Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, fullTokenApiUrl);
         assertEquals(httpStatus.value(), response.getStatusCode());
         return response.jsonPath().getString("access_token");
     }

@@ -27,7 +27,7 @@ class PUTDirectHearingsByIDValidationTest extends HearingValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         directhearings_idRootContext = String.format(directhearings_idRootContext,"12345");
-        this.setRelativeURL(directhearings_idRootContext);
+        this.setRelativeUrl(directhearings_idRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("direct-hearing-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);

@@ -24,7 +24,7 @@ class PUTPeopleValidationTest extends PeopleValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         people_idRootContext = String.format(people_idRootContext,"12345");
-        this.setRelativeURL(people_idRootContext);
+        this.setRelativeUrl(people_idRootContext);
         this.setInputPayloadFileName("PUT-people-payload.json");
         this.setHttpMethod(HttpMethod.PUT);
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);

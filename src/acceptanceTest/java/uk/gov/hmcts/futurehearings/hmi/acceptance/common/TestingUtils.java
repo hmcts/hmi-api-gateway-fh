@@ -13,7 +13,7 @@ public class TestingUtils {
 
     public static String readFileContents (final String path) throws IOException {
 
-        File file = ResourceUtils.getFile("classpath:"+path);
+        File file = ResourceUtils.getFile("classpath:" + path);
         log.debug("File Found : " + file.exists());
         return new String(Files.readAllBytes(Paths.get(file.toURI())));
     }

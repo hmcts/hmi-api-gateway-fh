@@ -50,7 +50,7 @@ public class PayloadHeaderDTOFactory {
 
     public static final Headers convertToRestAssuredHeaderRequiredHeaders(final SystemHeaderDTO systemHeaderDTO,
                                                                           final BusinessHeaderDTO businessHeaderDTO,
-                                                                          final Map<String, String> mapAddedHeaderValues) {
+                                                                    final Map<String, String> mapAddedHeaderValues) {
         List<Header> listOfHeaders = new ArrayList<Header>();
         Header contentTypeHeader =  new Header("Content-Type", systemHeaderDTO.contentType());
         listOfHeaders.add(contentTypeHeader);
@@ -70,9 +70,10 @@ public class PayloadHeaderDTOFactory {
         return headers;
     }
 
-    public static final Multimap<String, String> convertToMultiMapWithRequiredHeaders(final SystemHeaderDTO systemHeaderDTO,
-                                                                                      final BusinessHeaderDTO businessHeaderDTO,
-                                                                                      final Map<String, String> mapAddedHeaderValues) {
+    public static final Multimap<String, String> convertToMultiMapWithRequiredHeaders(
+                                                                    final SystemHeaderDTO systemHeaderDTO,
+                                                                    final BusinessHeaderDTO businessHeaderDTO,
+                                                                    final Map<String, String> mapAddedHeaderValues) {
         final Multimap<String, String> headerAsMultiMap = ArrayListMultimap.create();
         headerAsMultiMap.put("Content-Type", systemHeaderDTO.contentType());
         headerAsMultiMap.put("Accept", systemHeaderDTO.accept());
@@ -86,7 +87,7 @@ public class PayloadHeaderDTOFactory {
     }
 
     public static final Map<String, String> convertToMapWithMandatoryHeaders(final SystemHeaderDTO systemHeaderDTO,
-                                                                             final BusinessHeaderDTO businessHeaderDTO) {
+                                                                        final BusinessHeaderDTO businessHeaderDTO) {
         final Map<String, String> headerMap = new HashMap<>();
         headerMap.put("Content-Type", systemHeaderDTO.contentType());
         headerMap.put("Accept", systemHeaderDTO.accept());
@@ -126,16 +127,17 @@ public class PayloadHeaderDTOFactory {
         return headerMap;
     }
 
-    public static final Multimap<String, String> convertToMapAfterExtraMapFieldsAdded(final SystemHeaderDTO systemHeaderDTO,
-                                                                                 final BusinessHeaderDTO businessHeaderDTO,
-                                                                                 final Map<String, String> extraHeadersToAdd) {
+    public static final Multimap<String, String> convertToMapAfterExtraMapFieldsAdded(
+                                                                        final SystemHeaderDTO systemHeaderDTO,
+                                                                        final BusinessHeaderDTO businessHeaderDTO,
+                                                                        final Map<String, String> extraHeadersToAdd) {
 
         return convertToMultiMapWithRequiredHeaders(systemHeaderDTO, businessHeaderDTO, extraHeadersToAdd);
     }
 
     public static final Map<String, String> convertToMapAfterTruncatingHeaderKey(final SystemHeaderDTO systemHeaderDTO,
-                                                                                 final BusinessHeaderDTO businessHeaderDTO,
-                                                                                 final List<String> headersToTruncate) {
+                                                                            final BusinessHeaderDTO businessHeaderDTO,
+                                                                            final List<String> headersToTruncate) {
 
         final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
         if (Objects.nonNull(headersToTruncate)) {

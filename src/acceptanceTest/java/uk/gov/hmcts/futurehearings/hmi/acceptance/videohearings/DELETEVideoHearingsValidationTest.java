@@ -22,12 +22,12 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 class DELETEVideoHearingsValidationTest extends VideoHearingValidationTest {
 
     @Value("${videohearings_idRootContext}")
-    private String videohearings_idRootContext;
+    private String videoHearingsIdRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(videohearings_idRootContext);
+        this.setRelativeUrl(videoHearingsIdRootContext);
         this.setInputPayloadFileName("delete-video-hearing-request.json");
         this.setHttpMethod(HttpMethod.DELETE);
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);

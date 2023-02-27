@@ -31,7 +31,7 @@ class GETVideoHearingByUserValidationTest extends VideoHearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(videohearingsRootContext);
+        this.setRelativeUrl(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         setCheckUnsupportedDestinations(true);
@@ -45,7 +45,7 @@ class GETVideoHearingByUserValidationTest extends VideoHearingValidationTest {
         this.setUrlParams(buildQueryParams(usernameKey, usernameValue));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
@@ -63,7 +63,7 @@ class GETVideoHearingByUserValidationTest extends VideoHearingValidationTest {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),

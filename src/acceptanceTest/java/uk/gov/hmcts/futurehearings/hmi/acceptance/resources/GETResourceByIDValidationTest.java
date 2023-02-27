@@ -26,7 +26,7 @@ class GETResourceByIDValidationTest extends ResourceValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resources_idRootContext = String.format(resources_idRootContext,"12345");
-        this.setRelativeURL(resources_idRootContext);
+        this.setRelativeUrl(resources_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());

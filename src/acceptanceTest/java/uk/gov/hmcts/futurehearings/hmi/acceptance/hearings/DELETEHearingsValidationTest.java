@@ -26,7 +26,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(String.format(hearings_idRootContext,"12345"));
+        this.setRelativeUrl(String.format(hearings_idRootContext,"12345"));
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

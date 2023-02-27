@@ -22,7 +22,7 @@ public class POSTDirectListingValidationTest extends DirectListingValidationTest
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(listingsRootContext);
+        this.setRelativeUrl(listingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-direct-listing-mock.json");
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);

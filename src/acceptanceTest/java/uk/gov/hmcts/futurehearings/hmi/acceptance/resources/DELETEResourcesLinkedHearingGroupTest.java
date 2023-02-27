@@ -27,7 +27,7 @@ public class DELETEResourcesLinkedHearingGroupTest extends ResourceValidationTes
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, "123456");
-        this.setRelativeURL(resourcesLinkedHearingGroup_idRootContext);
+        this.setRelativeUrl(resourcesLinkedHearingGroup_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputFileDirectory(null);
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);

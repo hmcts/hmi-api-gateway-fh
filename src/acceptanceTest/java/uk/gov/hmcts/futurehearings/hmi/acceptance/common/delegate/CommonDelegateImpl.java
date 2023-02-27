@@ -45,7 +45,8 @@ public class CommonDelegateImpl implements CommonDelegate {
         } else {
             standardWireMockHeaders = headers;
         }
-        handleRestCall(targetURL, inputFile, standardWireMockHeaders, authorizationToken, params, httpMethod, status, inputFileDirectory, hmiVerifier, expectedMessage);
+        handleRestCall(targetURL, inputFile, standardWireMockHeaders, authorizationToken, params, httpMethod, status,
+                inputFileDirectory, hmiVerifier, expectedMessage);
 
     }
 
@@ -64,19 +65,25 @@ public class CommonDelegateImpl implements CommonDelegate {
         switch (httpMethod) {
             case POST:
             case PUT:
-                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory)
+                        + "/" + inputFile);
                 hmiVerifier.verify(status, expectedMessage,
-                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
+                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status,
+                                inputPayload));
                 break;
             case DELETE:
-                if(inputFileDirectory != null) {
-                    inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH, inputFileDirectory) + "/" + inputFile);
+                if (inputFileDirectory != null) {
+                    inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH,
+                            inputFileDirectory)
+                            + "/" + inputFile);
                 }
                 hmiVerifier.verify(status, expectedMessage,
-                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
+                        performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status,
+                                inputPayload));
                 break;
             case GET:
-                hmiVerifier.verify(status, expectedMessage, performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload));
+                hmiVerifier.verify(status, expectedMessage, performRESTCall(targetURL, headers, authorizationToken,
+                        params, httpMethod, status, inputPayload));
                 break;
             case OPTIONS:
                 performRESTCall(targetURL, headers, authorizationToken, params, httpMethod, status, inputPayload);

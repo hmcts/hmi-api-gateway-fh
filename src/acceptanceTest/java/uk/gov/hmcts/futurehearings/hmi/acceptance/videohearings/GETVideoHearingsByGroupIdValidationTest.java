@@ -23,13 +23,13 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommo
 public class GETVideoHearingsByGroupIdValidationTest extends VideoHearingValidationTest {
 
     @Value("${videoHearings_GroupIdRootContext}")
-    private String videoHearings_GroupIdRootContext;
+    private String videoHearingsGroupIdRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, "InvalidGroupId123");
-        this.setRelativeURL(videoHearings_GroupIdRootContext);
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "InvalidGroupId123");
+        this.setRelativeUrl(videoHearingsGroupIdRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setSourceSystem("SNL");
         this.setHttpSuccessStatus(HttpStatus.OK);

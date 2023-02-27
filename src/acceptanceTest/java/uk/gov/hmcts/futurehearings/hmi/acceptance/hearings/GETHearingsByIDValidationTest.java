@@ -26,7 +26,7 @@ class GETHearingsByIDValidationTest extends HearingValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         hearings_idRootContext = String.format(hearings_idRootContext,"12345");
-        this.setRelativeURL(hearings_idRootContext);
+        this.setRelativeUrl(hearings_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

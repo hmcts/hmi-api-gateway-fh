@@ -42,7 +42,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Headers createStandardPayloadHeaderWithDuplicateValues(final Map<String, String> duplicateHeaderValues, final String sourceSystem) {
+    public static Headers createStandardPayloadHeaderWithDuplicateValues(
+            final Map<String, String> duplicateHeaderValues, final String sourceSystem) {
 
         return buildHeaderWithDoubleValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -77,7 +78,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues( final String sourceSystem, final String destinationSystem) {
+    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues(
+            final String sourceSystem, final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -106,7 +108,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(
+            final String requestCreatedAt, final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -116,7 +119,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(
+            final String acceptType, final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,

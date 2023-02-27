@@ -23,10 +23,10 @@ class GETListingsByIDValidationTest extends ListingsValidationTest {
     private String listings_idRootContext;
 
     @BeforeAll
-    public void initialiseValues() throws Exception{
+    public void initialiseValues() throws Exception {
         super.initialiseValues();
         listings_idRootContext = String.format(listings_idRootContext,"12345");
-        this.setRelativeURL(listings_idRootContext);
+        this.setRelativeUrl(listings_idRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETListingsByIdValidationVerifier());

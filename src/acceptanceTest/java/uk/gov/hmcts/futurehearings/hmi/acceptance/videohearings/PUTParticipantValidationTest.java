@@ -23,15 +23,15 @@ import java.util.Random;
 public class PUTParticipantValidationTest extends VideoHearingValidationTest {
 
     @Value("${participants_idRootContext}")
-    private String participants_idRootContext;
+    private String participantsIdRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         String hearingId = String.valueOf(new Random().nextInt(99999999));
         String participantId = String.valueOf(new Random().nextInt(99999999));
-        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
-        this.setRelativeURL(participants_idRootContext);
+        participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
+        this.setRelativeUrl(participantsIdRootContext);
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-participants-request.json");
         this.setHttpSuccessStatus(HttpStatus.NO_CONTENT);

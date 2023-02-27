@@ -47,7 +47,7 @@ public abstract class ResourceValidationTest extends HMICommonHeaderTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("resources");
-        String authorizationToken = generateOAuthToken (token_apiURL,
+        String authorizationToken = generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType, clientID,
                 clientSecret,

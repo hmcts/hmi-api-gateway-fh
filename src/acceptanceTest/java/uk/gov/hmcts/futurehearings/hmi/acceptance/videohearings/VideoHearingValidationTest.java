@@ -22,10 +22,10 @@ public abstract class VideoHearingValidationTest extends HMICommonHeaderTest {
     private String targetInstance;
 
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    private String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    private String tokenApiTenantId;
 
     @Value("${grantType}")
     private String grantType;
@@ -46,8 +46,8 @@ public abstract class VideoHearingValidationTest extends HMICommonHeaderTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("video-hearing");
-        String authorizationToken = generateOAuthToken (token_apiURL,
-                token_apiTenantId,
+        String authorizationToken = generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,

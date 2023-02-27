@@ -14,6 +14,6 @@ public class GETSchedulesValidationVerifier implements HMISuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getList("$").size()>0);
+        assertTrue(response.getBody().jsonPath().getList("$").size() > 0);
     }
 }

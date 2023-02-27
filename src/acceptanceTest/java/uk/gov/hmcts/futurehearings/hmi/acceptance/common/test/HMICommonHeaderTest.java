@@ -41,7 +41,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 @SuppressWarnings("java:S5786")
 public abstract class HMICommonHeaderTest {
     private String authorizationToken;
-    private String relativeURL;
+    private String relativeUrl;
     private HttpMethod httpMethod;
     private HttpStatus httpSuccessStatus;
     private String inputFileDirectory;
@@ -50,10 +50,10 @@ public abstract class HMICommonHeaderTest {
     private Map<String, String> urlParams;
     private String sourceSystem;
     private String destinationSystem;
-    private final String[] AllAvailableDestinations = {"VH", "SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] allAvailableDestinations = {"VH", "SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
 
     protected String[] unsupportedDestinations = {"CFT"};
-    private boolean CheckUnsupportedDestinations;
+    private boolean checkUnsupportedDestinations;
 
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
@@ -68,7 +68,7 @@ public abstract class HMICommonHeaderTest {
     public void beforeAll(TestInfo info) {
         log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
         sourceSystem = "CFT";
-        CheckUnsupportedDestinations = false;
+        checkUnsupportedDestinations = false;
         setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         setHmiErrorVerifier(new HMICommonErrorVerifier());
     }
@@ -89,21 +89,22 @@ public abstract class HMICommonHeaderTest {
     }
 
     protected void extractUnsupportedDestinations(String[] supportedDestinations) {
-        var updatedArrayItems = RemoveItemsFromArray(AllAvailableDestinations.clone(), supportedDestinations);
+        var updatedArrayItems = RemoveItemsFromArray(allAvailableDestinations.clone(), supportedDestinations);
         setUnsupportedDestinations(updatedArrayItems);
     }
 
     //For individual API end points, Destination-System Header valid values are different and
-    //unsupported destinations may be all or a subset of the eight of these {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"}
+    //unsupported destinations may be all or a subset of the eight of these {"VH", "SNL", "CFT", "CRIME",
+    // "ELINKS", "RM", "PIH", "HMI-DTU"}
     //This is to test specified unsupported destinations for the specified API end point URL
     @ParameterizedTest (name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
     @MethodSource ("getUnsupportedDestinationsMethodSource")
     void test_destination_system_unsupported_value(String unsupportedDestinationSystem) throws Exception {
-        if (CheckUnsupportedDestinations) {
+        if (checkUnsupportedDestinations) {
             setHmiUnsupportedDestinationsErrorVerifier(new HMIUnsupportedDestinationsErrorVerifier());
             commonDelegate.test_expected_response_for_supplied_header(
                     getAuthorizationToken(),
-                    getRelativeURL(),
+                    getRelativeUrl(),
                     getInputPayloadFileName(),
                     createHeaderWithSourceAndDestinationSystemValues(sourceSystem, unsupportedDestinationSystem),
                     null,
@@ -126,7 +127,7 @@ public abstract class HMICommonHeaderTest {
     void test_successful_response_with_a_complete_header() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createCompletePayloadHeader(sourceSystem),
                 null,
                 getUrlParams(),
@@ -141,7 +142,7 @@ public abstract class HMICommonHeaderTest {
     void test_no_headers_populated() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(),
+                getRelativeUrl(),
                 getInputPayloadFileName(),
                 createHeaderWithAllValuesEmpty(),
                 //The Content Type Has to be Populated for Rest Assured to function properly
@@ -162,7 +163,7 @@ public abstract class HMICommonHeaderTest {
     void test_source_system_invalid_value() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithSourceSystemValue("R&M"),
                 null,
                 getUrlParams(),
@@ -173,14 +174,15 @@ public abstract class HMICommonHeaderTest {
                 "Missing/Invalid Header Source-System",null);
     }
 
-    //Destination-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME,CFT and ELINKS - This can only be verified manually and tested for
+    //Destination-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME,CFT and ELINKS -
+    // This can only be verified manually and tested for
     //dependant Azure Mock,EMULATOR or End Systems being available
     @Test
     @DisplayName("Destination System Header invalid value")
     void test_destination_system_invalid_value() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithSourceAndDestinationSystemValues(sourceSystem, "R&M"),
                 null,
                 getUrlParams(),
@@ -215,10 +217,11 @@ public abstract class HMICommonHeaderTest {
             "Invalid_Date_Format, 2019-10-12T07:20:00.00-01:00Z",
             "Invalid_Date_Format, 2019-10-12t07:20:00.00z",
     })
-    void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
+    void test_request_created_at_invalid_values(String requestCreatedAtKey, String requestCreatedAtVal)
+            throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
                 null,
                 getUrlParams(),
@@ -244,10 +247,11 @@ public abstract class HMICommonHeaderTest {
             "Valid_Date_Format, 2019-10-12T15:20:00Z",
             "Valid_Date_Format, 2019-10-12T07:20:00.00Z",
     })
-    void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal) throws Exception {
+    void test_request_created_at_with_valid_values(String requestCreatedAtKey, String requestCreatedAtVal)
+            throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
                 null,
                 getUrlParams(),
@@ -263,7 +267,7 @@ public abstract class HMICommonHeaderTest {
     void test_accept_at_with_invalid_value() throws Exception {
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithAcceptTypeAtSystemValue("application/pdf", sourceSystem),
                 null,
                 getUrlParams(),
@@ -276,7 +280,8 @@ public abstract class HMICommonHeaderTest {
 
     @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
     @CsvSource(value = {
-            //System Headers of Accept and Content-Type could not be duplicated as Rest Assured seems to remove the Duplication of valid same values.
+            //System Headers of Accept and Content-Type could not be duplicated as Rest Assured seems
+            // to remove the Duplication of valid same values.
             //This should be tested manually using Postman.
             "Source-System,NIL","Source-System,''","Source-System,CFT",
             "Destination-System,NIL","Destination-System,''","Destination-System,SNL",
@@ -290,7 +295,7 @@ public abstract class HMICommonHeaderTest {
         duplicateHeaderField.put(duplicateHeaderKey,duplicateHeaderValue);
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 null,
                 createStandardPayloadHeaderWithDuplicateValues(duplicateHeaderField, sourceSystem),
                 getUrlParams(),

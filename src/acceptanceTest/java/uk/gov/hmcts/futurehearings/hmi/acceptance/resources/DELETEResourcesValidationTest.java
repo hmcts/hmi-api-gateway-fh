@@ -30,7 +30,7 @@ class DELETEResourcesValidationTest extends ResourceValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resources_idRootContext = String.format(resources_idRootContext,"12345");
-        this.setRelativeURL(resources_idRootContext);
+        this.setRelativeUrl(resources_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-resource-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

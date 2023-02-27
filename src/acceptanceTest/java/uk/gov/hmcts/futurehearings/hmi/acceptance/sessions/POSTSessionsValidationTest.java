@@ -25,7 +25,7 @@ class POSTSessionsValidationTest extends SessionsValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(sessionsRootContext);
+        this.setRelativeUrl(sessionsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-sessions-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

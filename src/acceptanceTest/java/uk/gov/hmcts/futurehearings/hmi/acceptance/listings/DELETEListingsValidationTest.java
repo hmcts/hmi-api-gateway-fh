@@ -29,7 +29,7 @@ class DELETEListingsValidationTest extends ListingsValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         listings_idRootContext = String.format(listings_idRootContext, "12345");
-        this.setRelativeURL(listings_idRootContext);
+        this.setRelativeUrl(listings_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-listings-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

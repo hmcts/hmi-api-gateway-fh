@@ -28,13 +28,13 @@ class GETListingsValidationTest extends ListingsValidationTest {
     @Value("${listingsRootContext}")
     private String listingsRootContext;
 
-    private static final String LISTINGS_SUCCESS_MSG= "The request was received successfully.";
-    private static final String INVALID_QUERY_PARAMETER_MSG= "Invalid query parameter/s in the request URL.";
+    private static final String LISTINGS_SUCCESS_MSG = "The request was received successfully.";
+    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(listingsRootContext);
+        this.setRelativeUrl(listingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETListingsValidationVerifier());
@@ -42,12 +42,14 @@ class GETListingsValidationTest extends ListingsValidationTest {
     }
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
-    @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
-    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws Exception {
+    @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"},
+            nullValues = "NIL")
+    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue)
+            throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
@@ -58,12 +60,13 @@ class GETListingsValidationTest extends ListingsValidationTest {
     }
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
-    @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues= "NIL")
-    void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws Exception {
+    @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues = "NIL")
+    void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue)
+            throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),
@@ -87,7 +90,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
-                getRelativeURL(), getInputPayloadFileName(),
+                getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
                 null,
                 getUrlParams(),

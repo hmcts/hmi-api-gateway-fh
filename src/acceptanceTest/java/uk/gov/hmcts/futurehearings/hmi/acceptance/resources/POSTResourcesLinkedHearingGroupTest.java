@@ -27,7 +27,7 @@ public class POSTResourcesLinkedHearingGroupTest extends ResourceValidationTest 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(resourcesLinkedHearingGroupRootContext);
+        this.setRelativeUrl(resourcesLinkedHearingGroupRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-resource-linked-hearing-group.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);

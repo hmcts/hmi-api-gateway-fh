@@ -22,7 +22,7 @@ public class POSTSchedulesValidationTest extends SchedulesValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(schedulesApiRootContext);
+        this.setRelativeUrl(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("POST-schedules-payload.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);

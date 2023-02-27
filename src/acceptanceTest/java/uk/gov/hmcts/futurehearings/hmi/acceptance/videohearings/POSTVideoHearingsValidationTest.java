@@ -27,7 +27,7 @@ class POSTVideoHearingsValidationTest extends VideoHearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(videohearingsRootContext);
+        this.setRelativeUrl(videohearingsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("video-hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);

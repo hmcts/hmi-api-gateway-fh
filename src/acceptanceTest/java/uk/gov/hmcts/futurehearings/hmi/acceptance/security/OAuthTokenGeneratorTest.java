@@ -23,7 +23,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Test to Check the JWT Token Generator for OAuth, Note : In case of tests breaking - The client secret may change once a year")
+@DisplayName("Test to Check the JWT Token Generator for OAuth, Note : In case of tests breaking - "
+        + "The client secret may change once a year")
 @SuppressWarnings({"java:S2187","java:S5786","java:S2699"})
 class OAuthTokenGeneratorTest {
 
@@ -67,8 +68,8 @@ class OAuthTokenGeneratorTest {
     @NullSource
     @ValueSource(strings = {"trial_value", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_tenant_scenarios(final String tenantId) throws Exception {
-        final HttpStatus httpStatus = tenantId != null && tenantId.trim().equals("") ?
-                HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
+        final HttpStatus httpStatus = tenantId != null && tenantId.trim().equals("")
+                ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
         generateOAuthToken(token_apiURL,
                 tenantId,
                 grantType,clientID,

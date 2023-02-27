@@ -30,7 +30,7 @@ public class POSTParticipantValidationTest extends VideoHearingValidationTest {
         super.initialiseValues();
         String hearingId = String.valueOf(new Random().nextInt(99999999));
         participantsRootContext = String.format(participantsRootContext, hearingId);
-        this.setRelativeURL(participantsRootContext);
+        this.setRelativeUrl(participantsRootContext);
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-participants-request.json");
         this.setHttpSuccessStatus(HttpStatus.CREATED);

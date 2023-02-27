@@ -19,13 +19,13 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.people.PeopleValidationTest;
 class GETVideoHearingByIDValidationTest extends PeopleValidationTest {
 
     @Value("${videohearings_idRootContext}")
-    private String videohearings_idRootContext;
+    private String videoHearingsIdRootContext;
 
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        videohearings_idRootContext = String.format(videohearings_idRootContext,"12345");
-        this.setRelativeURL(videohearings_idRootContext);
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext,"12345");
+        this.setRelativeUrl(videoHearingsIdRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         setCheckUnsupportedDestinations(true);

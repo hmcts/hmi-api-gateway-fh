@@ -26,7 +26,7 @@ class DELETESessionsValidationTest extends SessionsValidationTest {
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         sessions_idRootContext = String.format(sessions_idRootContext,"12345");
-        this.setRelativeURL(sessions_idRootContext);
+        this.setRelativeUrl(sessions_idRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-sessions-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

@@ -25,7 +25,7 @@ class GETSchedulesValidationTest extends SchedulesValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(schedulesApiRootContext);
+        this.setRelativeUrl(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new GETSchedulesValidationVerifier());
