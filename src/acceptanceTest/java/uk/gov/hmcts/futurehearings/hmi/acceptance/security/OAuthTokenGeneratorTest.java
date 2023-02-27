@@ -1,24 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.security;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.callTokenGeneratorEndpoint;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -26,6 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+
+import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})

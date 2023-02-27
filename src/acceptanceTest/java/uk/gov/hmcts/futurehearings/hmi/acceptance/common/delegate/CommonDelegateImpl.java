@@ -1,6 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
@@ -10,13 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
-import io.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTemplate.shouldExecute;
 
 @Slf4j
 @Component("CommonDelegate")

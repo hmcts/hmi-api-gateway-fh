@@ -1,12 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public class GETListingsByIdValidationVerifier implements HMISuccessVerifier {

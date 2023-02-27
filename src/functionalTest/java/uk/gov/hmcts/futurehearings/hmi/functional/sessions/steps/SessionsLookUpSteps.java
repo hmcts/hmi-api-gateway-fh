@@ -1,12 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.sessions.steps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
-
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 @Slf4j
 public class SessionsLookUpSteps {

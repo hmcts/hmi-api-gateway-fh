@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common;
 
+import org.springframework.util.ResourceUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import org.springframework.util.ResourceUtils;
 
 public class TestingUtils {
 

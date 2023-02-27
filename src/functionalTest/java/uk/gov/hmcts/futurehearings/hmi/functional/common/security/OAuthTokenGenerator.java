@@ -1,11 +1,11 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.security;
 
-import static io.restassured.RestAssured.expect;
-
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+
+import static io.restassured.RestAssured.expect;
 
 @Slf4j
 public class OAuthTokenGenerator {

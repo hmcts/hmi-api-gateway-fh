@@ -1,26 +1,22 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.publication.steps.PublicationSteps;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)

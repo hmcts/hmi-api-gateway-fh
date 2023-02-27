@@ -1,15 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.directlisting;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
-
-import org.junit.Ignore;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps.DirectHearingSteps;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
@@ -20,6 +10,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+import uk.gov.hmcts.futurehearings.hmi.functional.directlisting.steps.DirectHearingSteps;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)

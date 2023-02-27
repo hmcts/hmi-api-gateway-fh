@@ -1,16 +1,16 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.resources.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointDelete;
-
-import java.util.Map;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointDelete;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
 @Slf4j
 public class ResourcesSteps {

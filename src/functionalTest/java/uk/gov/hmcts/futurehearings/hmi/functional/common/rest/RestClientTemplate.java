@@ -1,13 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.rest;
 
-import static net.serenitybdd.rest.SerenityRest.expect;
-import java.util.Map;
 import io.restassured.response.Response;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+
+import static net.serenitybdd.rest.SerenityRest.expect;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j

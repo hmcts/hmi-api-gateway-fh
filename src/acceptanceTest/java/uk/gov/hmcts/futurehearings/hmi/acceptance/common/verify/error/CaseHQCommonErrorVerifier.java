@@ -1,14 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Map;
-
 import io.restassured.response.Response;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @Slf4j
 @Component("CaseHQCommonErrorVerifier")

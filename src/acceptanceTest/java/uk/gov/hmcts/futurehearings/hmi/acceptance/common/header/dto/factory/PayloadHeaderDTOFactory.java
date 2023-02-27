@@ -1,14 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory;
 
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHeaderDTO;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDTO;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.restassured.http.Header;
@@ -17,6 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHeaderDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDTO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Accessors(fluent = true)
 @ToString

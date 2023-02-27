@@ -1,14 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
-import java.util.Map;
-
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 @Slf4j
 @Component("HMICommonErrorVerifier")

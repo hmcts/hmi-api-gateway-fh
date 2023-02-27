@@ -1,19 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
+import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
+import io.restassured.http.Headers;
+import org.springframework.http.MediaType;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersAdded;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
-import io.restassured.http.Headers;
-import org.springframework.http.MediaType;
 
 public class CommonHeaderHelper {
 

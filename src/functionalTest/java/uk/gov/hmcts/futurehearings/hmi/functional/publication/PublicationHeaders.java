@@ -1,7 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication;
 
-import java.util.Map;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -9,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.Map;
 
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
