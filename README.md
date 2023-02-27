@@ -104,11 +104,24 @@ The project uses [Gradle](https://gradle.org) as a build tool. It already contai
 
 To build the project execute the following command:
 
+###Copy Paste the link in browser for detailed steps to run following tests in local-https://tools.hmcts.net/confluence/display/HMI/HMI+QA+Functional+Testing
+
 ```bash
   ./gradlew build
 ```
+### Running the Unit Tests
+### Add application-test.docx file under Test Resources for Unit Testing in local.
+
+Change Directory to the root folder of the Project:
+
+Run the following command
+
+```bash
+  gradle clean Unit -DENDPOINT_URL='{url}' -DENDPOINT_HOST='{hostname}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey} -DAPI_LOG_LEVEL=OFF
 
 ### Running the Functional Tests
+### Add application-functional.docx file under functional Resources for Unit Testing in local.
+
 
 Change Directory to the root folder of the Project:
 
@@ -119,6 +132,8 @@ Run the following command
 ```
 
 ### Running the Smoke Tests
+### Add application-smoke.docx file under smoke Resources for Unit Testing in local.
+
 
 Change Directory to the root folder of the Project:
 
@@ -138,6 +153,8 @@ Run the following command
   gradle clean integration -DENDPOINT_URL='{url}' -DENDPOINT_SUBSCRIPTION_KEY={subscriptonKey}
 ```
 ### Running the Acceptance Tests
+### Add application-acceptance.docx file under acceptance Resources for Unit Testing in local.
+
 
 Change Directory to the root folder of the Project:
 
