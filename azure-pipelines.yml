@@ -49,7 +49,7 @@ stages:
       deploymentType: "app"
 
   - ${{ each environment in parameters.environments }}:
-    - ${{ if or(and(eq(environment, 'sbox'), eq(parameters.release, 'sbox')),and(eq(environment, 'dev'), eq(parameters.release, 'dev')),and(eq(environment, 'test'), eq(parameters.release, 'test')),and(eq(environment, 'ithc'), eq(parameters.release, 'ithc')),and(or(eq(environment, 'stg'),eq(environment, 'prod')), eq(parameters.release, 'release'))) }}:
+    - ${{ if or(and(eq(environment, 'sbox'), eq(parameters.release, 'sbox')),and(eq(environment, 'dev'), eq(parameters.release, 'dev')),and(eq(environment, 'test'), eq(parameters.release, 'test')),and(eq(environment, 'ithc'), eq(parameters.release, 'ithc')),and(eq(environment, 'demo'), eq(parameters.release, 'demo')),and(or(eq(environment, 'stg'),eq(environment, 'prod')), eq(parameters.release, 'release'))) }}:
       - ${{ if or(and(ne(environment, 'stg'), ne(environment, 'prod'), ne(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), True)), and(or(eq(environment, 'stg'), eq(environment, 'prod')), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) ) }}:
         - ${{ if eq(environment, 'prod') }}:
           - template: pipeline/stages/wait.yaml
