@@ -26,6 +26,7 @@ parameters:
     - dev
     - test
     - ithc
+    - demo
     - release
 
   - name: environments
@@ -35,6 +36,7 @@ parameters:
       - dev
       - test
       - ithc
+      - demo
       - stg
       - prod
 
