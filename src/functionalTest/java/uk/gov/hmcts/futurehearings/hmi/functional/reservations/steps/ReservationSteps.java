@@ -21,7 +21,7 @@ public class ReservationSteps {
                 headersAsMap,
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response;
     }
 }

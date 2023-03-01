@@ -1,21 +1,10 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsByQueryValidationVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsValidationVerifier;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectClasses;
@@ -26,6 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsByQueryValidationVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.hearings.verify.GETHearingsValidationVerifier;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -67,9 +65,9 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.BAD_REQUEST,  getInputFileDirectory(),
+                HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG, null);
     }
 
     //@ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
@@ -84,9 +82,9 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 null,
                 getUrlParams(),
                 getHttpMethod(),
-                HttpStatus.OK,  getInputFileDirectory(),
+                HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
     //@ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
@@ -102,7 +100,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 new GETHearingsByQueryValidationVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG, null);
     }
 
     //@ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
@@ -118,7 +116,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
     //@ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing Type) with and without value - Param : {0} --> {1}")
@@ -137,12 +135,12 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 hmiSuccessVerifier,
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
     //@ParameterizedTest(name = "All Query params (Hearing_Date & Hearing Type) with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft", "hearingDate,'',hearingType,''", "hearingDate,' ',hearingType,' '"})
-    void test_all_query_params_with_value( final String hearingDateKey,
+    void test_all_query_params_with_value(final String hearingDateKey,
                                            final String hearingDateValue,
                                            final String hearingTypeKey,
                                            final String hearingTypeValue) throws Exception {
@@ -156,7 +154,7 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                REQUEST_RECEIVED_SUCCESSFULLY_MSG,null);
+                REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
     //@ParameterizedTest(name = "All Query params with extra parameter (Hearing_Date & Hearing Type, Extra Params) with and without value - Param : {0} --> {1}")
@@ -177,6 +175,6 @@ class GETHearingsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                INVALID_QUERY_PARAMETER_MSG,null);
+                INVALID_QUERY_PARAMETER_MSG, null);
     }
 }

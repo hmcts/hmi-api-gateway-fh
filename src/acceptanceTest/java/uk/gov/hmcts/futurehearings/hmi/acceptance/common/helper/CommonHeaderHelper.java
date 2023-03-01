@@ -1,19 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
+import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
+import io.restassured.http.Headers;
+import org.springframework.http.MediaType;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersAdded;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
-import io.restassured.http.Headers;
-import org.springframework.http.MediaType;
 
 public class CommonHeaderHelper {
 
@@ -77,7 +77,7 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues( final String sourceSystem, final String destinationSystem) {
+    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues(final String sourceSystem, final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -93,9 +93,9 @@ public class CommonHeaderHelper {
                                                                      final String returnDescription) {
 
         Map<String,String> emulatorHeaderValues = new HashMap<>();
-        emulatorHeaderValues.put("returnHttpCode",returnHttpCode);
-        emulatorHeaderValues.put("returnErrorCode",returnErrorCode);
-        emulatorHeaderValues.put("returnDescription",returnDescription);
+        emulatorHeaderValues.put("returnHttpCode", returnHttpCode);
+        emulatorHeaderValues.put("returnErrorCode", returnErrorCode);
+        emulatorHeaderValues.put("returnDescription", returnDescription);
 
         return buildHeaderWithEmulatorValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -159,7 +159,7 @@ public class CommonHeaderHelper {
                 buildStandardBuinessHeaderPart(requestCreatedDate,
                         sourceSystem,
                         destinationSystem
-                        ),emulatorHeaders));
+                        ), emulatorHeaders));
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
@@ -202,11 +202,14 @@ public class CommonHeaderHelper {
                         ), extraHeaderValue);
     }
 
-    public static String[] RemoveItemsFromArray (String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
+    public static String[] RemoveItemsFromArray(String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
         var updatedArray = arrayToRemoveItemsFrom;
         if (!(arrayToRemoveItemsFrom == null) && arrayToRemoveItemsFrom.length > 0) {
             for (String s : itemsToBeRemoved) updatedArray = ArrayUtils.removeElement(updatedArray, s);
         }
         return updatedArray;
+    }
+
+    private CommonHeaderHelper() {
     }
 }

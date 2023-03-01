@@ -31,4 +31,3 @@ public class POSTDirectListingValidationTest extends DirectListingValidationTest
         this.extractUnsupportedDestinations(supportedDestinations);
     }
 }
-

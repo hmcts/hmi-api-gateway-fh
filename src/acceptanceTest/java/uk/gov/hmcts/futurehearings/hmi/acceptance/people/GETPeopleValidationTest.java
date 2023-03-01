@@ -1,14 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.people;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
-
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -19,6 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
+
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -42,11 +41,11 @@ class GETPeopleValidationTest extends PeopleValidationTest {
         this.setHttpSuccessStatus(HttpStatus.OK);
         this.setHmiSuccessVerifier(new HMICommonSuccessVerifier());
         this.setHmiErrorVerifier(new HMICommonErrorVerifier());
-        this.setUrlParams(Map.of("updated_since","2020-10-01"));
+        this.setUrlParams(Map.of("updated_since", "2020-10-01"));
     }
 
     @ParameterizedTest(name = "Test updated_since param with valid ISO 8601 date format (YYYY-mm-dd)  - Param : {0} --> {1}")
-    @CsvSource(value = {"updated_since, '2020-10-01'","updated_since,'2020-12-03T15:05:57Z'", "updated_since,'2020-12-03T15:05:57+00:00'",
+    @CsvSource(value = {"updated_since, '2020-10-01'", "updated_since,'2020-12-03T15:05:57Z'", "updated_since,'2020-12-03T15:05:57+00:00'",
             "updated_since,'20201203T150557Z'"})
     void test_updated_since_query_param_valid_value(final String updatedSinceKey, final String updatedSinceValue) throws Exception {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
@@ -59,11 +58,11 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SUCCESS_MSG,null);
+                SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Test per_page param without mandatory updated_since param - Param : {0} --> {1}")
-    @CsvSource(value = {"per_page, 50","per_page,' '", "per_page,NIL"}, nullValues= "NIL")
+    @CsvSource(value = {"per_page, 50", "per_page,' '", "per_page,NIL"}, nullValues = "NIL")
     void test_per_page_without_mandatory_updated_since_query_param(final String perPageKey, final String perPageValue) throws Exception {
         this.setUrlParams(buildQueryParams(perPageKey, perPageValue));
         commonDelegate.test_expected_response_for_supplied_header(
@@ -75,11 +74,11 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                UPDATED_SINCE_INVALID_DATE_FORMAT,null);
+                UPDATED_SINCE_INVALID_DATE_FORMAT, null);
     }
 
     @ParameterizedTest(name = "Test page param without mandatory updated_since param - Param : {0} --> {1}")
-    @CsvSource(value = {"page, 2","page,' '", "page,NIL"}, nullValues= "NIL")
+    @CsvSource(value = {"page, 2", "page,' '", "page,NIL"}, nullValues = "NIL")
     void test_page_without_mandatory_updated_since_queryparam(final String pageKey, final String pageValue) throws Exception {
         this.setUrlParams(buildQueryParams(pageKey, pageValue));
         commonDelegate.test_expected_response_for_supplied_header(
@@ -91,7 +90,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                UPDATED_SINCE_INVALID_DATE_FORMAT,null);
+                UPDATED_SINCE_INVALID_DATE_FORMAT, null);
     }
 
     @ParameterizedTest(name = "Test All query params with valid values - Param : {0} --> {1}")
@@ -109,7 +108,7 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                SUCCESS_MSG,null);
+                SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Test All query params with extra param - Param : {0} --> {1}")
@@ -128,6 +127,6 @@ class GETPeopleValidationTest extends PeopleValidationTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                ERROR_MSG,null);
+                ERROR_MSG, null);
     }
 }

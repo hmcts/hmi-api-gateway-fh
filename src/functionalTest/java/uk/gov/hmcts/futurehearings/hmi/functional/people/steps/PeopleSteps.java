@@ -1,14 +1,15 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.people.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.*;
-
-import java.util.Map;
-
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 public class PeopleSteps {
 
@@ -22,7 +23,7 @@ public class PeopleSteps {
                 headersAsMap,
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(),response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response;
     }
 
@@ -33,8 +34,8 @@ public class PeopleSteps {
         Response response = callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                null, HttpMethod.GET,HttpStatus.NOT_FOUND);
-        assertEquals(HttpStatus.NOT_FOUND.value(),response.getStatusCode());
+                null, HttpMethod.GET, HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
     }
 
 }

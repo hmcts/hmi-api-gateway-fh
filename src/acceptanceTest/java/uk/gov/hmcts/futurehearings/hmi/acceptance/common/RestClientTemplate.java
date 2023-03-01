@@ -1,14 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common;
 
-import java.util.Map;
-import java.util.Objects;
-
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 public class RestClientTemplate {
@@ -105,5 +105,8 @@ public class RestClientTemplate {
                 log.error("Http method not identified :" + httpMethod.name());
                 throw new IllegalArgumentException("HTTP method not identified");
         }
+    }
+
+    private RestClientTemplate() {
     }
 }

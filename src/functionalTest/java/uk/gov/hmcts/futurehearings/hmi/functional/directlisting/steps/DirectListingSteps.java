@@ -21,6 +21,6 @@ public class DirectListingSteps {
                 headersAsMap,
                 authorizationToken,
                 body, HttpMethod.POST, HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 }

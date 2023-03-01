@@ -107,4 +107,7 @@ public class QueryParamsHelper {
         queryParams.put(paramKey8, paramValue8);
         return queryParams;
     }
+
+    private QueryParamsHelper() {
+    }
 }

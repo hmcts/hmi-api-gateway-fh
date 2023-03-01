@@ -1,13 +1,13 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.*;
+import net.thucydides.core.annotations.Step;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-import net.thucydides.core.annotations.Step;
-
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 public class VideoHearingSteps {
 
@@ -56,7 +56,7 @@ public class VideoHearingSteps {
         callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                body, HttpMethod.DELETE,HttpStatus.BAD_REQUEST);
+                body, HttpMethod.DELETE, HttpStatus.BAD_REQUEST);
     }
 
     @Step("User makes a request to Get List of hearings for relevant search parameters on the Video Hearing API")
@@ -89,7 +89,7 @@ public class VideoHearingSteps {
         callRestEndpointWithPayload(apiURL,
                 headersAsMap,
                 authorizationToken,
-                null, HttpMethod.GET,HttpStatus.OK);
+                null, HttpMethod.GET, HttpStatus.OK);
     }
 
     @Step("User makes a request to add participant")

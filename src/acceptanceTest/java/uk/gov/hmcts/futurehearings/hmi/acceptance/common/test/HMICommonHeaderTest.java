@@ -1,16 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.test;
 
-import org.junit.jupiter.params.provider.MethodSource;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +12,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMIUnsupportedDestinationsErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMICommonSuccessVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HMISuccessVerifier;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.RemoveItemsFromArray;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceAndDestinationSystemValues;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithSourceSystemValue;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeaderWithDuplicateValues;
 
 @Slf4j
 @Setter
@@ -44,7 +50,7 @@ public abstract class HMICommonHeaderTest {
     private Map<String, String> urlParams;
     private String sourceSystem;
     private String destinationSystem;
-    private final String[] AllAvailableDestinations = {"VH", "SNL", "CFT", "CRIME","ELINKS", "RM", "PIH", "HMI-DTU"};
+    private final String[] AllAvailableDestinations = {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"};
 
     protected String[] unsupportedDestinations = {"CFT"};
     private boolean CheckUnsupportedDestinations;
@@ -90,8 +96,8 @@ public abstract class HMICommonHeaderTest {
     //For individual API end points, Destination-System Header valid values are different and
     //unsupported destinations may be all or a subset of the eight of these {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"}
     //This is to test specified unsupported destinations for the specified API end point URL
-    @ParameterizedTest (name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
-    @MethodSource ("getUnsupportedDestinationsMethodSource")
+    @ParameterizedTest(name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
+    @MethodSource("getUnsupportedDestinationsMethodSource")
     void test_destination_system_unsupported_value(String unsupportedDestinationSystem) throws Exception {
         if (CheckUnsupportedDestinations) {
             setHmiUnsupportedDestinationsErrorVerifier(new HMIUnsupportedDestinationsErrorVerifier());
@@ -127,7 +133,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpMethod(),
                 getHttpSuccessStatus(),
                 getInputFileDirectory(),
-                getHmiSuccessVerifier(), "The request was received successfully.",null);
+                getHmiSuccessVerifier(), "The request was received successfully.", null);
     }
     
     @Test
@@ -146,7 +152,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Source-System",null);
+                "Missing/Invalid Header Source-System", null);
     }
 
     //Source-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME and CFT - This can only be verified manually
@@ -164,7 +170,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Source-System",null);
+                "Missing/Invalid Header Source-System", null);
     }
 
     //Destination-System Header Valid value are SNL, RM, MOCK, EMULATOR,CRIME,CFT and ELINKS - This can only be verified manually and tested for
@@ -182,7 +188,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Destination-System",null);
+                "Missing/Invalid Header Destination-System", null);
     }
 
     @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} --> {1}")
@@ -220,7 +226,7 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Header Request-Created-At",null);
+                "Missing/Invalid Header Request-Created-At", null);
     }
 
     // @ParameterizedTest(name = "Request Created At System Header valid values - Param : {0} --> {1}")
@@ -249,7 +255,7 @@ public abstract class HMICommonHeaderTest {
                 getHttpSuccessStatus(),
                 getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.",null);
+                "The request was received successfully.", null);
     }
 
     @Test
@@ -265,23 +271,23 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.NOT_ACCEPTABLE,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                "Missing/Invalid Media Type",null);
+                "Missing/Invalid Media Type", null);
     }
 
     @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
     @CsvSource(value = {
             //System Headers of Accept and Content-Type could not be duplicated as Rest Assured seems to remove the Duplication of valid same values.
             //This should be tested manually using Postman.
-            "Source-System,NIL","Source-System,''","Source-System,CFT",
-            "Destination-System,NIL","Destination-System,''","Destination-System,SNL",
-            "Request-Created-At,NIL","Request-Created-At,''","Request-Created-At,2002-10-02T15:00:00Z"
+            "Source-System,NIL", "Source-System,''", "Source-System,CFT",
+            "Destination-System,NIL", "Destination-System,''", "Destination-System,SNL",
+            "Request-Created-At,NIL", "Request-Created-At,''", "Request-Created-At,2002-10-02T15:00:00Z"
     }, nullValues = "NIL")
     void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 
         final String expectedErrorMessage =
                         "Missing/Invalid Header " + duplicateHeaderKey;
         Map<String,String> duplicateHeaderField  = new HashMap<>();
-        duplicateHeaderField.put(duplicateHeaderKey,duplicateHeaderValue);
+        duplicateHeaderField.put(duplicateHeaderKey, duplicateHeaderValue);
         commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeURL(), getInputPayloadFileName(),
@@ -292,6 +298,6 @@ public abstract class HMICommonHeaderTest {
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
                 getHmiErrorVerifier(),
-                expectedErrorMessage,null);
+                expectedErrorMessage, null);
     }
 }

@@ -1,7 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -12,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -27,7 +26,7 @@ class DELETEHearingsValidationTest extends HearingValidationTest {
     @BeforeAll
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        this.setRelativeURL(String.format(hearings_idRootContext,"12345"));
+        this.setRelativeURL(String.format(hearings_idRootContext, "12345"));
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-hearing-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);

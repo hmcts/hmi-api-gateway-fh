@@ -2,8 +2,8 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.publication;
 
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public abstract class PublicationValidationTest extends HMICommonHeaderTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("publication");
-        String authorizationToken = generateOAuthToken (token_apiURL,
+        String authorizationToken = generateOAuthToken(token_apiURL,
                 token_apiTenantId,
                 grantType,
                 clientID,

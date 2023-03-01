@@ -1,14 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory;
 
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHeaderDTO;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDTO;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.restassured.http.Header;
@@ -17,6 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHeaderDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDTO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Accessors(fluent = true)
 @ToString
@@ -64,7 +63,7 @@ public class PayloadHeaderDTOFactory {
         Header requestCreatedAtHeader =  new Header("Request-Created-At", businessHeaderDTO.requestCreatedAt());
         listOfHeaders.add(requestCreatedAtHeader);
         mapAddedHeaderValues.forEach((key, value) -> {
-           Header extraHeader = new Header (key,value);
+           Header extraHeader = new Header(key, value);
             listOfHeaders.add(extraHeader);
         });
         Headers headers = new Headers(listOfHeaders);
@@ -120,7 +119,7 @@ public class PayloadHeaderDTOFactory {
 
         final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
         if (Objects.nonNull(headersToRemove)) {
-            headersToRemove.stream().forEach((o) -> {
+            headersToRemove.stream().forEach(o -> {
                 headerMap.remove(o.trim());
             });
         }
@@ -140,7 +139,7 @@ public class PayloadHeaderDTOFactory {
 
         final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDTO, businessHeaderDTO);
         if (Objects.nonNull(headersToTruncate)) {
-            headersToTruncate.stream().forEach((o) -> {
+            headersToTruncate.stream().forEach(o -> {
                 if (headerMap.containsKey(o)) {
                     String newKey = o.substring(0, o.length() - 1);
                     String newValue = headerMap.get(o);
@@ -151,5 +150,8 @@ public class PayloadHeaderDTOFactory {
             });
         }
         return headerMap;
+    }
+
+    private PayloadHeaderDTOFactory() {
     }
 }

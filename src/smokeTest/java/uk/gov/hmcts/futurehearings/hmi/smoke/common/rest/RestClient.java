@@ -1,6 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.common.rest;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import java.util.Map;
@@ -35,5 +34,8 @@ public class RestClient {
                 .auth().oauth2(authorizationToken)
                 .basePath(rootContext)
                 .when().get();
+    }
+
+    private RestClient() {
     }
 }

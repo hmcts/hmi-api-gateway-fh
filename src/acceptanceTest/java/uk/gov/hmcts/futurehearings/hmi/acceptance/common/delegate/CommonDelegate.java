@@ -1,14 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
-
-import java.io.IOException;
-import java.util.Map;
-
 import io.restassured.http.Headers;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
+
+import java.util.Map;
 
 public interface CommonDelegate {
 

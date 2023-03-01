@@ -1,12 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication.steps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-
-import java.util.Map;
-
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+
+import java.util.Map;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
 public class PublicationSteps {
 

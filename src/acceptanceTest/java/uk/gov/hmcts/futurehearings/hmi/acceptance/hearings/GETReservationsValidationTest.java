@@ -1,20 +1,19 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.hearings;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.platform.suite.api.IncludeTags;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
@@ -86,7 +85,7 @@ public class GETReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = "Testing valid and invalid values of the query parameters - requestLocationType, requestLocationId and requestLocationReferenceType - Param : {0} --> {1}")
     @CsvSource({"requestLocationType, Court, requestLocationId, 300, requestLocationReferenceType, EXTERNAL", "requestLocationType, ADHOC, requestLocationId, Unknown, requestLocationReferenceType, Undefined"})
-    void test_request_location_type_with_multiple_query_params (final String paramKey1,
+    void test_request_location_type_with_multiple_query_params(final String paramKey1,
                                                                 final String paramVal1,
                                                                 final String paramKey2,
                                                                 final String paramVal2,

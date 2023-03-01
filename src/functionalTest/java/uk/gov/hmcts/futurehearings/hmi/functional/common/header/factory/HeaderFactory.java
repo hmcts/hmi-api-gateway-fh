@@ -13,12 +13,12 @@ import java.util.Map;
 @Slf4j
 public class HeaderFactory {
 
-    public static Map<String,Object> createStandardHMIHeader(final String destinationSystem) {
+    public static Map<String, Object> createStandardHMIHeader(final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
 
-        Map<String,Object> headersAsMap = new HashMap<String,Object>();
+        Map<String,Object> headersAsMap = new HashMap<String, Object>();
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", "CFT");
@@ -27,12 +27,12 @@ public class HeaderFactory {
         //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
-    public static Map<String,Object> createStandardHMIHeader(final String sourceSystem, final String destinationSystem) {
+    public static Map<String, Object> createStandardHMIHeader(final String sourceSystem, final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
 
-        Map<String,Object> headersAsMap = new HashMap<String,Object>();
+        Map<String,Object> headersAsMap = new HashMap<String, Object>();
         headersAsMap.put("Content-Type", "application/json");
         headersAsMap.put("Accept", "application/json");
         headersAsMap.put("Source-System", sourceSystem);
@@ -40,5 +40,8 @@ public class HeaderFactory {
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
+    }
+
+    private HeaderFactory() {
     }
 }

@@ -1,17 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.listings;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsValidationVerifier;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,6 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HMICommonErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GETListingsValidationVerifier;
+
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createStandardPayloadHeader;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper.buildQueryParams;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
@@ -45,7 +42,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
     }
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
-    @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues= "NIL")
+    @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '", "date_of_listing,NIL"}, nullValues = "NIL")
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey, final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
         commonDelegate.test_expected_response_for_supplied_header(
@@ -57,11 +54,11 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                LISTINGS_SUCCESS_MSG,null);
+                LISTINGS_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
-    @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues= "NIL")
+    @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues = "NIL")
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey, final String hearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
         commonDelegate.test_expected_response_for_supplied_header(
@@ -73,7 +70,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                LISTINGS_SUCCESS_MSG,null);
+                LISTINGS_SUCCESS_MSG, null);
     }
 
     @ParameterizedTest(name = "Multiple params - (date_of_listing & hearing_type) - Param : {0} --> {1}")
@@ -97,7 +94,7 @@ class GETListingsValidationTest extends ListingsValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
                 getHmiSuccessVerifier(),
-                "The request was received successfully.",null);
+                "The request was received successfully.", null);
     }
 
 }
