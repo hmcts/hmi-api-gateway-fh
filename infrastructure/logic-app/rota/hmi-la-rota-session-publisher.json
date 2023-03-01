@@ -563,12 +563,12 @@
                                 "frequency": "Minute",
                                 "interval": 5
                             },
+                            "type": "Recurrence",
                             "runtimeConfiguration": {
                                 "concurrency": {
                                     "runs": 1
                                 }
-                            },
-                            "type": "Recurrence"
+                            }
                         }
                     },
                     "actions": {
@@ -624,56 +624,96 @@
                                 "For_each_schedule_in_session": {
                                     "foreach": "@body('Get_all_schedules_for_session')?['value']",
                                     "actions": {
-                                        "Append_to_array_variable_johDataArray": {
+                                        "Append_to_array_variable": {
                                             "runAfter": {
-                                                "Insert_or_Merge_Entity_CLP": [
+                                                "Set_variable_jsonJohs": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "AppendToArrayVariable",
                                             "inputs": {
-                                                "name": "johDataArray",
+                                                "name": "testPrepareJohs",
                                                 "value": "@variables('jsonJohs')"
                                             }
                                         },
+                                        "Append_to_string_variable_2": {
+                                            "runAfter": {
+                                                "Append_to_array_variable": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "AppendToStringVariable",
+                                            "inputs": {
+                                                "name": "testJOHString",
+                                                "value": "@variables('jsonJohs')"
+                                            }
+                                        },
+                                        "Condition": {
+                                            "actions": {
+                                                "Insert_or_Merge_Entity_CLP": {
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection",
+                                                    "inputs": {
+                                                        "body": {
+                                                            "business": "@{items('For_each_Session')?['business']}",
+                                                            "joh": "@{replace(variables('testJOHString'), '}{', '} , {')}",
+                                                            "locationId": "@{items('For_each_Session')?['locationId']}",
+                                                            "panel": "@{items('For_each_Session')?['panel']}",
+                                                            "session": "@{items('For_each_Session')?['session']}",
+                                                            "sessionDate": "@{items('For_each_Session')?['sessionDate']}",
+                                                            "venueId": "@{items('For_each_Session')?['venueId']}",
+                                                            "welshSpeaking": "@{items('For_each_Session')?['welshSpeaking']}"
+                                                        },
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "patch",
+                                                        "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "Append_to_string_variable_2": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "equals": [
+                                                            "@variables('limit')",
+                                                            "@length(body('Get_all_schedules_for_session')?['value'])"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
+                                        },
                                         "Get_joh_for_schedule": {
-                                            "runAfter": {},
+                                            "runAfter": {
+                                                "Increment_variable": [
+                                                    "Succeeded"
+                                                ]
+                                            },
                                             "type": "ApiConnection",
                                             "inputs": {
                                                 "host": {
                                                     "connection": {
-                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
+                                                        "name": "@parameters('$connections')['azuretables-1']['connectionId']"
                                                     }
                                                 },
                                                 "method": "get",
                                                 "path": "/Tables/@{encodeURIComponent('joh')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}',RowKey='@{encodeURIComponent(items('For_each_schedule_in_session')?['justice'])}')"
                                             }
                                         },
-                                        "Insert_or_Merge_Entity_CLP": {
-                                            "runAfter": {
-                                                "Set_variable_jsonJohs": [
-                                                    "Succeeded"
-                                                ]
-                                            },
-                                            "type": "ApiConnection",
+                                        "Increment_variable": {
+                                            "runAfter": {},
+                                            "type": "IncrementVariable",
                                             "inputs": {
-                                                "body": {
-                                                    "business": "@{items('For_each_Session')?['business']}",
-                                                    "joh": "@{items('For_each_Session')?['joh']}@{variables('jsonJohs')}",
-                                                    "locationId": "@{items('For_each_Session')?['locationId']}",
-                                                    "panel": "@{items('For_each_Session')?['panel']}",
-                                                    "session": "@{items('For_each_Session')?['session']}",
-                                                    "sessionDate": "@{items('For_each_Session')?['sessionDate']}",
-                                                    "venueId": "@{items('For_each_Session')?['venueId']}",
-                                                    "welshSpeaking": "@{items('For_each_Session')?['welshSpeaking']}"
-                                                },
-                                                "host": {
-                                                    "connection": {
-                                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
-                                                    }
-                                                },
-                                                "method": "patch",
-                                                "path": "/Tables/@{encodeURIComponent('CLP')}/entities(PartitionKey='@{encodeURIComponent(items('For_each_session')?['PartitionKey'])}',RowKey='@{encodeURIComponent(items('For_each_session')?['RowKey'])}')"
+                                                "name": "limit",
+                                                "value": 1
                                             }
                                         },
                                         "Set_variable_jsonJohs": {
@@ -685,7 +725,7 @@
                                             "type": "SetVariable",
                                             "inputs": {
                                                 "name": "jsonJohs",
-                                                "value": "{\n  \"isPresiding\": @{tolower(string(equals(items('For_each_schedule_in_session')?['slot'], 'CHAIR')))},\n  \"johId\": \"@{body('Get_joh_for_schedule')?['emailAddress']}\",\n  \"slot\": \"@{items('For_each_schedule_in_session')?['slot']}\"\n}"
+                                                "value": "{\"isPresiding\": @{tolower(string(equals(items('For_each_schedule_in_session')?['slot'], 'CHAIR')))},\"johId\": \"@{body('Get_joh_for_schedule')?['emailAddress']}\",\"slot\": \"@{items('For_each_schedule_in_session')?['slot']}\"}"
                                             }
                                         },
                                         "Set_variable_scheduleErrorBody": {
@@ -702,7 +742,7 @@
                                         }
                                     },
                                     "runAfter": {
-                                        "Get_all_schedules_for_session": [
+                                        "Set_variable_schedules_limit": [
                                             "Succeeded"
                                         ]
                                     },
@@ -881,6 +921,42 @@
                                         "value": "{}"
                                     }
                                 },
+                                "Set_variable_schedules_limit": {
+                                    "runAfter": {
+                                        "Set_variable_test_joh_string": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "limit",
+                                        "value": 0
+                                    }
+                                },
+                                "Set_variable_test_joh_string": {
+                                    "runAfter": {
+                                        "Set_variable_test_prepare_johs": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "testJOHString",
+                                        "value": " "
+                                    }
+                                },
+                                "Set_variable_test_prepare_johs": {
+                                    "runAfter": {
+                                        "Get_all_schedules_for_session": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "testPrepareJohs",
+                                        "value": []
+                                    }
+                                },
                                 "Update_session_status_complete": {
                                     "runAfter": {
                                         "Insert_or_Merge_Entity_with_errorMsg": [
@@ -919,11 +995,16 @@
                                 }
                             },
                             "runAfter": {
-                                "Get_entities_with_status_ready": [
+                                "Set_variable_limit1": [
                                     "Succeeded"
                                 ]
                             },
-                            "type": "Foreach"
+                            "type": "Foreach",
+                            "runtimeConfiguration": {
+                                "concurrency": {
+                                    "repetitions": 1
+                                }
+                            }
                         },
                         "Get_entities_CLP_failed": {
                             "runAfter": {
@@ -1113,7 +1194,7 @@
                         },
                         "Initialize_jsonJohs": {
                             "runAfter": {
-                                "Initialize_scheduleErrorBody": [
+                                "Initialize_judgeDataArray": [
                                     "Succeeded"
                                 ]
                             },
@@ -1127,8 +1208,28 @@
                                 ]
                             }
                         },
+                        "Initialize_judgeDataArray": {
+                            "runAfter": {
+                                "Initialize_scheduleErrorBody": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "judgeArray",
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
                         "Initialize_scheduleErrorBody": {
-                            "runAfter": {},
+                            "runAfter": {
+                                "Initialize_variable": [
+                                    "Succeeded"
+                                ]
+                            },
                             "type": "InitializeVariable",
                             "inputs": {
                                 "variables": [
@@ -1169,6 +1270,64 @@
                                         "type": "string"
                                     }
                                 ]
+                            }
+                        },
+                        "Initialize_variable": {
+                            "runAfter": {
+                                "Initialize_variable_testPrepareJohs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "testJOHString",
+                                        "type": "string"
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_variable_schedules_limit": {
+                            "runAfter": {},
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "limit",
+                                        "type": "integer",
+                                        "value": 0
+                                    }
+                                ]
+                            }
+                        },
+                        "Initialize_variable_testPrepareJohs": {
+                            "runAfter": {
+                                "Initialize_variable_schedules_limit": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "testPrepareJohs",
+                                        "type": "array",
+                                        "value": []
+                                    }
+                                ]
+                            }
+                        },
+                        "Set_variable_limit1": {
+                            "runAfter": {
+                                "Get_entities_with_status_ready": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "SetVariable",
+                            "inputs": {
+                                "name": "limit",
+                                "value": 0
                             }
                         }
                     },
