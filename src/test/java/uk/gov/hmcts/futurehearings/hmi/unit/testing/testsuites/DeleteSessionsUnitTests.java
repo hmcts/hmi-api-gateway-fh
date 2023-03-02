@@ -22,8 +22,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -40,7 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @ExtendWith(TestReporter.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /sessions - Delete Sessions")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyFields", "PMD.TooManyMethods"})
 class DeleteSessionsUnitTests {
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/delete-request-payload.json";
@@ -54,8 +54,8 @@ class DeleteSessionsUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -88,6 +88,9 @@ class DeleteSessionsUnitTests {
 
     private HmiHttpClient httpClient;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -97,8 +100,8 @@ class DeleteSessionsUnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -120,7 +123,7 @@ class DeleteSessionsUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDeleteSessionsRequestWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -130,8 +133,8 @@ class DeleteSessionsUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDeleteSessionsRequestWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -141,7 +144,7 @@ class DeleteSessionsUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDeleteSessionsRequestWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -151,8 +154,8 @@ class DeleteSessionsUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDeleteSessionsRequestWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteSessionById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

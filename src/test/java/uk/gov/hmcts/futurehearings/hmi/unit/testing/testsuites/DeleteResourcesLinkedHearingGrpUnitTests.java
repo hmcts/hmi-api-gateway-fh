@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -38,6 +38,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /resources/location - Update Location Resource")
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class DeleteResourcesLinkedHearingGrpUnitTests {
 
     @Value("${targetInstance}")
@@ -49,7 +50,7 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -82,6 +83,9 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
 
     private String linkedHearingGroupCtx;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -91,8 +95,8 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
@@ -112,7 +116,7 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDeleteLinkedHearingGroupResourceWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -121,8 +125,8 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDeleteLinkedHearingGroupResourceWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -131,7 +135,7 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDeleteLinkedHearingGroupResourceWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
@@ -140,8 +144,8 @@ public class DeleteResourcesLinkedHearingGrpUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDeleteLinkedHearingGroupResourceWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final Response response = whenDeleteLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }

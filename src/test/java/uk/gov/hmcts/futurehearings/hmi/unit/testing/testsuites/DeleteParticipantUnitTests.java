@@ -19,9 +19,9 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidHeader;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidToken;
@@ -37,8 +37,8 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantRespo
 @DisplayName("DELETE /{hearingId}/participants/{participantId} - Delete Participant")
 public class DeleteParticipantUnitTests {
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -68,8 +68,8 @@ public class DeleteParticipantUnitTests {
     private HmiHttpClient httpClient;
 
     private String participantIdCtx;
-    private String hearingId = String.valueOf(new Random().nextInt(99999999));
-    private String participantId = String.valueOf(new Random().nextInt(99999999));
+    private final String hearingId = String.valueOf(new Random().nextInt(99999999));
+    private final String participantId = String.valueOf(new Random().nextInt(99999999));
 
     @BeforeAll
     void setToken() {

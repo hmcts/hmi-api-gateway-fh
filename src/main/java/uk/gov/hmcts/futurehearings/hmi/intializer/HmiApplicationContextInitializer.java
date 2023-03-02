@@ -33,7 +33,6 @@ public class HmiApplicationContextInitializer implements
         log.info("The Set Path : " + processBuilder.directory().getAbsolutePath());
 
         final Process process = processBuilder.start();
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         processBuilder.environment();
         final int exitValue = process.waitFor();
 
@@ -44,11 +43,13 @@ public class HmiApplicationContextInitializer implements
                     + new String(new BufferedInputStream(process.getErrorStream()).readAllBytes()));
         }
 
-        String secretValue = null;
+        String secretValue = "";
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         while (bufferedReader.ready()) {
             secretValue = bufferedReader.readLine();
             log.info("Received from script: " + secretValue);
         }
+        bufferedReader.close();
         return secretValue;
     }
 

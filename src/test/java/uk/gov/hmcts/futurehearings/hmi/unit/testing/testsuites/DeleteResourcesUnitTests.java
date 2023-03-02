@@ -22,8 +22,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForDelete;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -40,7 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /resources - Delete Resources")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyFields", "PMD.TooManyMethods"})
 class DeleteResourcesUnitTests {
 
     private static final String CORRECT_DELETE_REQUEST_PAYLOAD = "requests/delete-request-payload.json";
@@ -54,8 +54,8 @@ class DeleteResourcesUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -87,6 +87,9 @@ class DeleteResourcesUnitTests {
     private String invalidClientSecret;
 
     private HmiHttpClient httpClient;
+
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
     
     @BeforeAll
     void setToken() {
@@ -97,8 +100,8 @@ class DeleteResourcesUnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -119,7 +122,7 @@ class DeleteResourcesUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDeleteResourcesRequestWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -129,8 +132,8 @@ class DeleteResourcesUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDeleteResourcesRequestWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -140,7 +143,7 @@ class DeleteResourcesUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDeleteResourcesRequestWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -150,8 +153,8 @@ class DeleteResourcesUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDeleteResourcesRequestWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/xml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/xml");
         final String input = givenAPayload(CORRECT_DELETE_REQUEST_PAYLOAD);
         final Response response = deleteResourceById(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
