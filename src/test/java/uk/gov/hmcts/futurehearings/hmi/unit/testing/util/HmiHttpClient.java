@@ -8,6 +8,8 @@ import java.util.Map;
 
 @Slf4j
 public class HmiHttpClient {
+
+    private static final String SSL_EXCEPTION = "SSL Exception occured. Trying again...";
     private String accessToken;
 
     public HmiHttpClient(String accessToken, String baseUri) {
@@ -29,7 +31,7 @@ public class HmiHttpClient {
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().get().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().get().then().extract().response();
         }
@@ -41,7 +43,7 @@ public class HmiHttpClient {
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().delete().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().delete().then().extract().response();
         }
@@ -53,7 +55,7 @@ public class HmiHttpClient {
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         }
@@ -65,7 +67,7 @@ public class HmiHttpClient {
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().put().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         }
@@ -101,7 +103,7 @@ public class HmiHttpClient {
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         }
@@ -113,7 +115,7 @@ public class HmiHttpClient {
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().put().then().extract().response();
         } catch (Exception exc) {
-            log.error("SSL Exception occured. Trying again...", exc);
+            log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
         }

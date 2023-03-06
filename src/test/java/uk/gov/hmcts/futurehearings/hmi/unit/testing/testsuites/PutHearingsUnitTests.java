@@ -21,8 +21,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForInvalidResource;
@@ -40,7 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /hearings - Update Hearings")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 class PutHearingsUnitTests {
 
     static final String CORRECT_UPDATE_HEARINGS_PAYLOAD = "requests/update-hearings-payload.json";
@@ -53,7 +53,7 @@ class PutHearingsUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -84,6 +84,9 @@ class PutHearingsUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -91,8 +94,8 @@ class PutHearingsUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
@@ -112,7 +115,7 @@ class PutHearingsUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testUpdateHearingsWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -122,8 +125,8 @@ class PutHearingsUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testUpdateHearingsWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -133,7 +136,7 @@ class PutHearingsUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testUpdateHearingsWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -143,8 +146,8 @@ class PutHearingsUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testUpdateHearingsWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_HEARINGS_PAYLOAD);
         final Response response = whenUpdateHearingsIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

@@ -22,8 +22,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForLinkedHearingGroup;
@@ -40,6 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /resources/linked-hearing-group - Create LinkedHearingGroup Resource")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.TooManyFields"})
 public class PostResourcesLinkedHearingGrpUnitTests {
 
     private static final String CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD =
@@ -54,8 +55,8 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -89,6 +90,9 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     private HmiHttpClient httpClient;
     private String linkedHearingGroupCtx;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -98,8 +102,8 @@ public class PostResourcesLinkedHearingGrpUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -120,7 +124,7 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -130,8 +134,8 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -141,7 +145,7 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -151,8 +155,8 @@ public class PostResourcesLinkedHearingGrpUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header for linked-hearing-group")
     void testCreateLinkedHearingGroupResourceWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final String input = givenAPayload(CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD);
         final Response response = createResource(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

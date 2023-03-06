@@ -18,8 +18,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -34,7 +34,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /video-hearings - Delete Video Hearings")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 public class DeleteVideoHearingsUnitTests {
 
     @Value("${targetInstance}")
@@ -75,7 +75,10 @@ public class DeleteVideoHearingsUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
 
     @BeforeAll
     void setToken() {
@@ -84,8 +87,8 @@ public class DeleteVideoHearingsUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -104,7 +107,7 @@ public class DeleteVideoHearingsUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testDeleteVideoHearingsRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final Response response = whenDeleteHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -113,8 +116,8 @@ public class DeleteVideoHearingsUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testDeleteVideoHearingsRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final Response response = whenDeleteHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -123,7 +126,7 @@ public class DeleteVideoHearingsUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testDeleteVideoHearingsRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final Response response = whenDeleteHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
@@ -132,8 +135,8 @@ public class DeleteVideoHearingsUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDeleteVideoHearingsRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final Response response = whenDeleteHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }

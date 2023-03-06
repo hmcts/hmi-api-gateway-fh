@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
+@SuppressWarnings({"PMD.JUnit4TestShouldUseTestAnnotation", "PMD.SimpleDateFormatNeedsLocale", "PMD.NullAssignment"})
 public class TestReporter implements TestWatcher, BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
     static ExtentReports objExtent;

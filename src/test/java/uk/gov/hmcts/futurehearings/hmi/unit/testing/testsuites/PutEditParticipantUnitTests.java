@@ -15,13 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantResponseVerifier.thenValidateResponseForAddParticipantWithInvalidHeader;
@@ -38,7 +37,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantRespo
 @DisplayName("PUT /{hearingId}/participants/{participantId} - Edit Participant")
 public class PutEditParticipantUnitTests {
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -65,15 +64,13 @@ public class PutEditParticipantUnitTests {
     private String participantsIdRootContext;
 
     private static String accessToken;
-    private HmiHttpClient httpClient;
     private String participantIdCtx;
-    private String hearingId = String.valueOf(new Random().nextInt(99999999));
-    private String participantId = String.valueOf(new Random().nextInt(99999999));
+    private final String hearingId = String.valueOf(new Random().nextInt(99999999));
+    private final String participantId = String.valueOf(new Random().nextInt(99999999));
 
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
-        this.httpClient = new HmiHttpClient(accessToken, targetInstance);
         participantIdCtx = String.format(participantsIdRootContext, hearingId, participantId);
     }
 

@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -38,7 +38,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SchedulesRespons
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /schedules - Retrieve Hearing Schedules")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 class GetSchedulesUnitTests {
 
     @Value("${targetInstance}")
@@ -50,8 +50,8 @@ class GetSchedulesUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -82,6 +82,9 @@ class GetSchedulesUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -91,12 +94,12 @@ class GetSchedulesUnitTests {
     void initialiseValues() {
 
         headersAsMap.put("Ocp-Apim-Trace", "true");
-        headersAsMap.put("Content-Type", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
 
         paramsAsMap.put("hearing_date", "2018-02-29T20:36:01Z");
         paramsAsMap.put("hearing_venue_id", "venueid");
@@ -118,7 +121,7 @@ class GetSchedulesUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testRetrieveHearingSchedulesRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -127,8 +130,8 @@ class GetSchedulesUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testRetrieveHearingSchedulesRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -138,7 +141,7 @@ class GetSchedulesUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testRetrieveHearingSchedulesRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -148,8 +151,8 @@ class GetSchedulesUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testDeleteHearingRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/xml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/xml");
 
         final Response response = whenRetrieveHearingSchedulesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

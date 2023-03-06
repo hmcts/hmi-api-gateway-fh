@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForInvalidResource;
@@ -38,7 +38,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /listings - Retrieve Listings")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 class GetListingsUnitTests {
 
     @Value("${targetInstance}")
@@ -50,8 +50,8 @@ class GetListingsUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -82,6 +82,14 @@ class GetListingsUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+    private static final String SOURCE_SYSTEM = "Source-System";
+    private static final String DESTINATION_SYSTEM = "Destination-System";
+    private static final String REQUEST_CREATED_AT = "Request-Created-At";
+    private static final String LIST_ID = "/list_id";
+
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -89,12 +97,12 @@ class GetListingsUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", destinationSystem);
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
+        headersAsMap.put(SOURCE_SYSTEM, "CFT");
+        headersAsMap.put(DESTINATION_SYSTEM, destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
-        headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
+        headersAsMap.put(REQUEST_CREATED_AT, "2018-01-29T20:36:01Z");
 
         paramsAsMap.put("date_of_listing", "2018-01-29 21:36:01Z");
         paramsAsMap.put("hearing_type", "VH");
@@ -112,7 +120,7 @@ class GetListingsUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testRetrieveListingsRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -122,8 +130,8 @@ class GetListingsUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testRetrieveListingsRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -133,7 +141,7 @@ class GetListingsUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testRetrieveListingsRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -143,8 +151,8 @@ class GetListingsUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testRetrieveListingsRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveListingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -152,7 +160,7 @@ class GetListingsUnitTests {
 
     @Order(6)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveListingsRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -162,7 +170,7 @@ class GetListingsUnitTests {
 
     @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveListingsRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -245,7 +253,7 @@ class GetListingsUnitTests {
     @Order(13)
     @DisplayName("Test for missing ContentType header - By ID")
     void testRetrieveListingsByIdRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
 
         final Response response = whenRetrieveListingsByIdRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -255,8 +263,8 @@ class GetListingsUnitTests {
     @Order(14)
     @DisplayName("Test for invalid ContentType header - By ID")
     void testRetrieveListingsByIdRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveListingsByIdRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -266,7 +274,7 @@ class GetListingsUnitTests {
     @Order(15)
     @DisplayName("Test for missing Accept header - By ID")
     void testRetrieveListingsByIdRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = whenRetrieveListingsByIdRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -276,8 +284,8 @@ class GetListingsUnitTests {
     @Order(16)
     @DisplayName("Test for invalid Accept header - By ID")
     void testRetrieveListingsByIdRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveListingsByIdRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -306,7 +314,7 @@ class GetListingsUnitTests {
 
     @Order(19)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveListingsByIdRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -316,7 +324,7 @@ class GetListingsUnitTests {
 
     @Order(20)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveListingsByIdRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -354,22 +362,22 @@ class GetListingsUnitTests {
 
     private Response whenRetrieveListingsByIdRequestIsInvokedForInvalidResource() {
         return retrieveListingsResponseForInvalidResource(listingsApiRootContext
-                + "/list_id" + "/get", headersAsMap, targetInstance);
+                + LIST_ID + "/get", headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIdIsInvokedWithCorrectHeadersAndNoParams() {
         return retrieveListingsResponseForCorrectHeadersAndNoParams(listingsApiRootContext
-                + "/list_id", headersAsMap, targetInstance);
+                + LIST_ID, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIdRequestIsInvokedWithMissingAccessToken() {
         return retrieveListingsResponseForMissingAccessToken(listingsApiRootContext
-                + "/list_id", headersAsMap, paramsAsMap, targetInstance);
+                + LIST_ID, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response whenRetrieveListingsByIdRequestIsInvokedWithMissingOrInvalidHeader() {
         return retrieveListingsResponseForMissingOrInvalidHeader(listingsApiRootContext
-                + "/list_id", headersAsMap, paramsAsMap, targetInstance);
+                + LIST_ID, headersAsMap, paramsAsMap, targetInstance);
     }
 
     private Response retrieveListingsResponseForInvalidResource(final String api,

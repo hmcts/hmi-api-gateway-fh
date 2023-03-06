@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponseVerifier.thenValidateResponseForAdditionalParam;
@@ -39,7 +39,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HearingsResponse
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /hearings - Retrieve Hearings")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 class GetHearingsGroupIdUnitTests {
 
     @Value("${targetInstance}")
@@ -51,8 +51,8 @@ class GetHearingsGroupIdUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -83,6 +83,9 @@ class GetHearingsGroupIdUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -91,8 +94,8 @@ class GetHearingsGroupIdUnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -115,7 +118,7 @@ class GetHearingsGroupIdUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testRetrieveHearingsRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -125,8 +128,8 @@ class GetHearingsGroupIdUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testRetrieveHearingsRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -136,7 +139,7 @@ class GetHearingsGroupIdUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testRetrieveHearingsRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -146,8 +149,8 @@ class GetHearingsGroupIdUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testRetrieveHearingsRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveHearingsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

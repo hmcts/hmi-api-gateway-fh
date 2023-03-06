@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -38,7 +38,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /resources - Retrieve Resources")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
 class GetResourcesUnitTests {
 
     @Value("${targetInstance}")
@@ -50,7 +50,7 @@ class GetResourcesUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -81,6 +81,13 @@ class GetResourcesUnitTests {
     @Value("${invalidClientSecret}")
     private String invalidClientSecret;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+    private static final String SOURCE_SYSTEM = "Source-System";
+    private static final String DESTINATION_SYSTEM = "Destination-System";
+    private static final String REQUEST_CREATED_AT = "Request-Created-At";
+    private static final String CASE = "/CASE123432";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -88,12 +95,12 @@ class GetResourcesUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", destinationSystem);
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
+        headersAsMap.put(SOURCE_SYSTEM, "CFT");
+        headersAsMap.put(DESTINATION_SYSTEM, destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
-        headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
+        headersAsMap.put(REQUEST_CREATED_AT, "2018-01-29T20:36:01Z");
     }
 
     @Test
@@ -108,7 +115,7 @@ class GetResourcesUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testRetrieveResourcesRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -117,8 +124,8 @@ class GetResourcesUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testRetrieveResourcesRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -128,7 +135,7 @@ class GetResourcesUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testRetrieveResourcesRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
@@ -137,8 +144,8 @@ class GetResourcesUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testRetrieveResourcesRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -146,7 +153,7 @@ class GetResourcesUnitTests {
 
     @Order(6)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -156,7 +163,7 @@ class GetResourcesUnitTests {
 
     @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -228,7 +235,7 @@ class GetResourcesUnitTests {
     @Order(12)
     @DisplayName("Test for missing ContentType header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
     }
@@ -237,8 +244,8 @@ class GetResourcesUnitTests {
     @Order(13)
     @DisplayName("Test for invalid ContentType header - Individual Resource")
     void testRetrieveIndividualResourcesRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -248,7 +255,7 @@ class GetResourcesUnitTests {
     @Order(14)
     @DisplayName("Test for missing Accept header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final Response response = whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
     }
@@ -257,8 +264,8 @@ class GetResourcesUnitTests {
     @Order(15)
     @DisplayName("Test for invalid Accept header - Individual Resource")
     void testRetrieveIndividualResourceRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveResourcesIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -275,7 +282,7 @@ class GetResourcesUnitTests {
 
     @Order(18)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveIndividualResourcesRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -285,7 +292,7 @@ class GetResourcesUnitTests {
 
     @Order(19)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveIndividualResourcesRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -323,22 +330,22 @@ class GetResourcesUnitTests {
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedForInvalidResource() {
-        return retrieveResourcesResponseForInvalidResource(resourcesApiRootContext + "get" + "/CASE123432",
+        return retrieveResourcesResponseForInvalidResource(resourcesApiRootContext + "get" + CASE,
                 headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedWithCorrectHeadersAndNoParams() {
-        return retrieveResourcesResponseForCorrectRequestAndNoParams(resourcesApiRootContext + "/CASE123432",
+        return retrieveResourcesResponseForCorrectRequestAndNoParams(resourcesApiRootContext + CASE,
                 headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedWithMissingAccessToken() {
-        return retrieveResourcesResponseForMissingAccessToken(resourcesApiRootContext + "/CASE123432",
+        return retrieveResourcesResponseForMissingAccessToken(resourcesApiRootContext + CASE,
                 headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveIndividualResourceIsInvokedWithMissingOrInvalidHeader() {
-        return retrieveResourcesResponseForMissingOrInvalidHeader(resourcesApiRootContext + "/CASE123432",
+        return retrieveResourcesResponseForMissingOrInvalidHeader(resourcesApiRootContext + CASE,
                 headersAsMap, targetInstance);
     }
 

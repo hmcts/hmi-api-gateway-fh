@@ -18,8 +18,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,7 +48,7 @@ class GetHealthUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -87,7 +87,7 @@ class GetHealthUnitTests {
     @Test
     @Order(1)
     @DisplayName("Test for Invalid Resource")
-    void testRetrieveHealthCheckForInvaalidResource() {
+    void testRetrieveHealthCheckForInvalidResource() {
         final Response response = whenRetrieveHealthCheckForInvalidResource();
         thenValidateResponseForInvalidResource(response);
     }
@@ -100,7 +100,8 @@ class GetHealthUnitTests {
         thenValidateResponseForRetrieve(response);
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
 
-        assertEquals(responseMap.get("project.version"), snlApiVersion);
+        assertEquals(responseMap.get("project.version"), snlApiVersion,
+                "Response doesn't match expected");
     }
 
     private Response whenRetrieveHealthCheckForInvalidResource() {

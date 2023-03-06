@@ -21,8 +21,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesResponseVerifier.thenValidateResponseForInvalidResource;
@@ -40,6 +40,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /resources/location - Update Location Resource")
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class PutResourcesLinkedHearingGrpUnitTests {
     static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD =
             "requests/update-resources-linked-hearing-group-payload.json";
@@ -53,7 +54,7 @@ public class PutResourcesLinkedHearingGrpUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -86,6 +87,9 @@ public class PutResourcesLinkedHearingGrpUnitTests {
 
     private String linkedHearingGroupCtx;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -95,8 +99,8 @@ public class PutResourcesLinkedHearingGrpUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
@@ -116,7 +120,7 @@ public class PutResourcesLinkedHearingGrpUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testUpdateLinkedHearingGroupResourceWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -126,8 +130,8 @@ public class PutResourcesLinkedHearingGrpUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testUpdateLinkedHearingGroupResourceWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -137,7 +141,7 @@ public class PutResourcesLinkedHearingGrpUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testUpdateLinkedHearingGroupResourceWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -147,8 +151,8 @@ public class PutResourcesLinkedHearingGrpUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testUpdateLinkedHearingGroupResourceWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD);
         final Response response = whenUpdateLinkedHearingGroupResourceIsInvokedWithMissingOrInvalidHeader(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

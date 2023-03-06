@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter.getObjStep;
 
-public class PubHubResponseVerifier {
+public final class PubHubResponseVerifier {
 
     public static void  thenValidateResponseForPost(Response response) {
         try {

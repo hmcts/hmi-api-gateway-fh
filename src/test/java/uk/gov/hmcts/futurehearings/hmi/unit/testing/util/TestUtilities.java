@@ -11,7 +11,8 @@ import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.expect;
 
-public class TestUtilities {
+@SuppressWarnings({"PMD.UseObjectForClearerAPI"})
+public final class TestUtilities {
 
     public static String readFileContents(final String path) throws IOException {
         final File file = ResourceUtils.getFile("classpath:" + path);

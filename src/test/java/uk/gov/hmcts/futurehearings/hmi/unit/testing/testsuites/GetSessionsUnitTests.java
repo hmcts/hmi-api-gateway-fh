@@ -21,8 +21,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.HmiHttpClient;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForInvalidResource;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -39,7 +39,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.SessionsResponse
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /sessions - Retrieve Sessions")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.TooManyMethods", "PMD.TooManyFields"})
 class GetSessionsUnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
@@ -50,9 +50,9 @@ class GetSessionsUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, String> paramsAsMap = new HashMap<>();
-    private final String bodyPayload = "";
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();
+    private static final String BODY_PAYLOAD = "";
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -85,6 +85,13 @@ class GetSessionsUnitTests {
 
     private HmiHttpClient httpClient;
 
+
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+    private static final String SOURCE_SYSTEM = "Source-System";
+    private static final String DESTINATION_SYSTEM = "Destination-System";
+    private static final String REQUEST_CREATED_AT = "Request-Created-At";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -94,12 +101,12 @@ class GetSessionsUnitTests {
     @BeforeEach
     void initialiseValues() {
 
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
-        headersAsMap.put("Source-System", "CFT");
-        headersAsMap.put("Destination-System", destinationSystem);
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
+        headersAsMap.put(SOURCE_SYSTEM, "CFT");
+        headersAsMap.put(DESTINATION_SYSTEM, destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
-        headersAsMap.put("Request-Created-At", "2018-01-29T20:36:01Z");
+        headersAsMap.put(REQUEST_CREATED_AT, "2018-01-29T20:36:01Z");
 
         paramsAsMap.put("requestSessionType", "ADHOC");
         paramsAsMap.put("requestStartDate", "2018-01-29 20:36:01Z");
@@ -121,7 +128,7 @@ class GetSessionsUnitTests {
     @Order(2)
     @DisplayName("Test for missing ContentType header")
     void testRetrieveSessionsRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -131,8 +138,8 @@ class GetSessionsUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testRetrieveSessionsRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -142,7 +149,7 @@ class GetSessionsUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testRetrieveSessionsRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -152,8 +159,8 @@ class GetSessionsUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testRetrieveSessionsRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -161,7 +168,7 @@ class GetSessionsUnitTests {
 
     @Order(6)
     @ParameterizedTest(name = "Test for missing {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveSessionsRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -171,7 +178,7 @@ class GetSessionsUnitTests {
 
     @Order(7)
     @ParameterizedTest(name = "Test for invalid {0} header")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveSessionsRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -206,7 +213,7 @@ class GetSessionsUnitTests {
         accessToken = TestUtilities.getToken(grantType, invalidClientID, invalidClientSecret,
                 invalidTokenUrl, invalidScope);
         httpClient.setAccessToken(accessToken);
-        final Response response = httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
+        final Response response = httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, BODY_PAYLOAD);
         thenValidateResponseForMissingOrInvalidAccessToken(response);
 
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -214,21 +221,21 @@ class GetSessionsUnitTests {
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedForInvalidResource() {
-        return httpClient.httpGet(sessionsApiRootContext + "get", headersAsMap, paramsAsMap, bodyPayload);
+        return httpClient.httpGet(sessionsApiRootContext + "get", headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithCorrectHeadersAndParams() {
         paramsAsMap.clear();
         paramsAsMap.put("requestSessionType", "any");
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 
     private Response whenRetrieveSessionsIsInvokedWithMissingAccessToken() {
-        return httpClient.httpGetNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
+        return httpClient.httpGetNoAuth(sessionsApiRootContext, headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 
     private Response whenRetrieveSessionsRequestIsInvokedWithMissingOrInvalidHeader() {
-        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, bodyPayload);
+        return httpClient.httpGet(sessionsApiRootContext, headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 
     @Test
@@ -237,7 +244,7 @@ class GetSessionsUnitTests {
     void testRetrieveSessionsByIdRequestForInvalidResource() {
 
         final Response response = httpClient.httpGet(sessionsApiRootContext + "/CASE1234/get",
-                headersAsMap, paramsAsMap, bodyPayload);
+                headersAsMap, paramsAsMap, BODY_PAYLOAD);
         thenValidateResponseForInvalidResource(response);
     }
 
@@ -245,7 +252,7 @@ class GetSessionsUnitTests {
     @Order(20)
     @DisplayName("Test for missing ContentType header - By ID")
     void testRetrieveSessionsByIdRequestWithMissingContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
+        headersAsMap.remove(CONTENT_TYPE);
 
         final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -255,8 +262,8 @@ class GetSessionsUnitTests {
     @Order(21)
     @DisplayName("Test for invalid ContentType header - By ID")
     void testRetrieveSessionsByIdRequestWithInvalidContentTypeHeader() {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
 
         final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -266,7 +273,7 @@ class GetSessionsUnitTests {
     @Order(22)
     @DisplayName("Test for missing Accept header - By ID")
     void testRetrieveSessionsByIdRequestWithMissingAcceptHeader() {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
 
         final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -276,8 +283,8 @@ class GetSessionsUnitTests {
     @Order(23)
     @DisplayName("Test for invalid Accept header - By ID")
     void testRetrieveSessionsByIdRequestWithInvalidAcceptHeader() {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
 
         final Response response = retrieveSessionById();
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -295,7 +302,7 @@ class GetSessionsUnitTests {
 
     @Order(26)
     @ParameterizedTest(name = "Test for missing {0} header - By ID")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveSessionsByIdRequestWithMissingHeader(String iteration) {
         headersAsMap.remove(iteration);
 
@@ -305,7 +312,7 @@ class GetSessionsUnitTests {
 
     @Order(27)
     @ParameterizedTest(name = "Test for invalid {0} header - By ID")
-    @ValueSource(strings = {"Source-System", "Destination-System", "Request-Created-At"})
+    @ValueSource(strings = {SOURCE_SYSTEM, DESTINATION_SYSTEM, REQUEST_CREATED_AT})
     void testRetrieveSessionsByIdRequestWithInvalidHeader(String iteration) {
         headersAsMap.remove(iteration);
         headersAsMap.put(iteration, "A");
@@ -344,11 +351,11 @@ class GetSessionsUnitTests {
 
     private Response retrieveSessionById() {
         return httpClient.httpGet(sessionsApiRootContext + "/CASE1234",
-                headersAsMap, paramsAsMap, bodyPayload);
+                headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 
     private Response retrieveSessionByIdNoAuth() {
         return httpClient.httpGetNoAuth(sessionsApiRootContext + "/CASE1234",
-                headersAsMap, paramsAsMap, bodyPayload);
+                headersAsMap, paramsAsMap, BODY_PAYLOAD);
     }
 }

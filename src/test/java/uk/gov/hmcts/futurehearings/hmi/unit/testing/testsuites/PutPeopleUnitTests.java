@@ -20,8 +20,8 @@ import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ElinksResponseVerifier.thenValidateResponseForMissingOrInvalidAcceptHeader;
@@ -37,6 +37,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /people - Update People")
+@SuppressWarnings({"PMD.TooManyMethods"})
 class PutPeopleUnitTests {
 
     private static final String CORRECT_UPDATE_PEOPLE_PAYLOAD = "requests/update-people-payload.json";
@@ -50,7 +51,7 @@ class PutPeopleUnitTests {
     @Value("${destinationSystem}")
     private String destinationSystem;
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     @Value("${tokenURL}")
     private String tokenUrl;
@@ -69,6 +70,9 @@ class PutPeopleUnitTests {
 
     private static String accessToken;
 
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String ACCEPT = "Accept";
+
     @BeforeAll
     void setToken() {
         accessToken = TestUtilities.getToken(grantType, clientID, clientSecret, tokenUrl, scope);
@@ -76,8 +80,8 @@ class PutPeopleUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        headersAsMap.put(CONTENT_TYPE, "application/json");
+        headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Type", "THEFT");
@@ -96,8 +100,8 @@ class PutPeopleUnitTests {
     @Test
     @Order(2)
     @DisplayName("Test for missing ContentType header")
-    void testpdatePeopleWithMissingContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
+    void testUpdatePeopleWithMissingContentTypeHeader() throws IOException {
+        headersAsMap.remove(CONTENT_TYPE);
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
         final Response response = whenUpdatePeopleIsInvoked(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -107,8 +111,8 @@ class PutPeopleUnitTests {
     @Order(3)
     @DisplayName("Test for invalid ContentType header")
     void testUpdatePeopleWithInvalidContentTypeHeader() throws IOException {
-        headersAsMap.remove("Content-Type");
-        headersAsMap.put("Content-Type", "application/xml");
+        headersAsMap.remove(CONTENT_TYPE);
+        headersAsMap.put(CONTENT_TYPE, "application/xml");
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
         final Response response = whenUpdatePeopleIsInvoked(input);
         thenValidateResponseForMissingOrInvalidContentTypeHeader(response);
@@ -118,7 +122,7 @@ class PutPeopleUnitTests {
     @Order(4)
     @DisplayName("Test for missing Accept header")
     void testUpdatePeopleWithMissingAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
+        headersAsMap.remove(ACCEPT);
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
         final Response response = whenUpdatePeopleIsInvoked(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);
@@ -128,8 +132,8 @@ class PutPeopleUnitTests {
     @Order(5)
     @DisplayName("Test for invalid Accept header")
     void testUpdatePeopleWithInvalidAcceptHeader() throws IOException {
-        headersAsMap.remove("Accept");
-        headersAsMap.put("Accept", "application/jsonxml");
+        headersAsMap.remove(ACCEPT);
+        headersAsMap.put(ACCEPT, "application/jsonxml");
         final String input = givenAPayload(CORRECT_UPDATE_PEOPLE_PAYLOAD);
         final Response response = whenUpdatePeopleIsInvoked(input);
         thenValidateResponseForMissingOrInvalidAcceptHeader(response);

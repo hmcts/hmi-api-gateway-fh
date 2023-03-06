@@ -18,8 +18,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestReporter;
 import uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponseVerifier.thenValidateResponseForRequestVideoHearingWithInvalidHeader;
@@ -36,10 +36,11 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /resources/video-hearing - Request Video Hearing")
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class GetVideoHearingsUnitTests {
 
-    private final Map<String, Object> headersAsMap = new HashMap<>();
-    private final Map<String, Object> queryParams = new HashMap<>();
+    private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
+    private final Map<String, Object> queryParams = new ConcurrentHashMap<>();
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -66,6 +67,8 @@ public class GetVideoHearingsUnitTests {
     private String grantType;
 
     private static String accessToken;
+
+    private static final String VIDEO_HEARING = "/video-hearing";
 
     @BeforeAll
     void setToken() {
@@ -160,31 +163,31 @@ public class GetVideoHearingsUnitTests {
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidContentType() {
         headersAsMap.put("Content-Type", "InvalidMedia");
-        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + VIDEO_HEARING, headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidMedia() {
         headersAsMap.put("Accept", "InvalidMedia");
-        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + VIDEO_HEARING, headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidDate() {
         headersAsMap.put("Request-Created-At", "InvalidDate");
-        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + VIDEO_HEARING, headersAsMap, targetInstance);
     }
 
     private Response whenRequestVideoHearingIsInvokedForWithInvalidToken() {
         return sendPostRequestForVideoHearingWithInvalidToken(resourcesApiRootContext
-                + "/video-hearing", headersAsMap, targetInstance);
+                + VIDEO_HEARING, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveVideoHearingIsInvoked() {
-        return sendGetRequestForVideoHearing(resourcesApiRootContext + "/video-hearing", headersAsMap, targetInstance);
+        return sendGetRequestForVideoHearing(resourcesApiRootContext + VIDEO_HEARING, headersAsMap, targetInstance);
     }
 
     private Response whenRetrieveVideoHearingIsInvokedWithQueryParam() {
         return sendGetRequestForVideoHearing(resourcesApiRootContext
-                + "/video-hearing", headersAsMap, queryParams, targetInstance);
+                + VIDEO_HEARING, headersAsMap, queryParams, targetInstance);
     }
 
     private Response whenRetrieveVideoHearingIsInvokedWithPathParam() {
