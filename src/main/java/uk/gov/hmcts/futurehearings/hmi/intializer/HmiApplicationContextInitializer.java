@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Slf4j
+@SuppressWarnings({"PMD.AvoidFileStream", "PMD.CloseResource", "PMD.DataflowAnomalyAnalysis"})
 public class HmiApplicationContextInitializer implements
         ApplicationContextInitializer<ConfigurableApplicationContext> {
 
