@@ -1209,7 +1209,7 @@
                                         "method": "post",
                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
                                         "queries": {
-                                            "destination": "/rota/primaryinput@{items('For_each_error_file')?['PartitionKey']}",
+                                            "destination": "/rota/primaryinput/@{items('For_each_error_file')?['PartitionKey']}",
                                             "overwrite": true,
                                             "queryParametersSingleEncoded": true,
                                             "source": "/rota/primaryinput/@{items('For_each_error_file')?['PartitionKey']}"
