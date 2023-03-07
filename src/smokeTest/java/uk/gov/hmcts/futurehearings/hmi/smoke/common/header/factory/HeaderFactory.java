@@ -1,8 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
@@ -10,11 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Slf4j
+@SuppressWarnings({"HideUtilityClassConstructor"})
 public class HeaderFactory {
 
-    public static Map<String, String> createStandardHMIHeader(final String destinationSystem) {
+    public static Map<String, String> createStandardHmiHeader(final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
@@ -26,9 +22,5 @@ public class HeaderFactory {
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         return headersAsMap;
-        //return Collections.unmodifiableMap(headersAsMap);
-    }
-
-    private HeaderFactory() {
     }
 }

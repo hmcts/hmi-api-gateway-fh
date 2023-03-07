@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import static uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory.HeaderFactory.createStandardHmiHeader;
 import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 @Setter(AccessLevel.PUBLIC)
@@ -34,10 +34,10 @@ public abstract class SmokeTest {
     private String targetInstance;
 
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    private String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    private String tokenApiTenantId;
 
     @Value("${grantType}")
     private String grantType;
@@ -71,15 +71,15 @@ public abstract class SmokeTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
 
-        this.authorizationToken = generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        this.authorizationToken = generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
 
-        headersAsMap = createStandardHMIHeader(destinationSystem);
+        headersAsMap = createStandardHmiHeader(destinationSystem);
     }
 
     @BeforeAll

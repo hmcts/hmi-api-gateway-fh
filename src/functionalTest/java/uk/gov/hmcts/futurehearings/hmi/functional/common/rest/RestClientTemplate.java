@@ -88,7 +88,4 @@ public class RestClientTemplate {
                 .basePath(apiURL)
                 .when().delete().then().extract().response();
     }
-
-    private RestClientTemplate() {
-    }
 }

@@ -41,7 +41,4 @@ public class HeaderFactory {
         //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
-
-    private HeaderFactory() {
-    }
 }

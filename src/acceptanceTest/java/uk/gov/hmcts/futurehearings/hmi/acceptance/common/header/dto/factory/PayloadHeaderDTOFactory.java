@@ -20,7 +20,6 @@ import java.util.Objects;
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 public class PayloadHeaderDTOFactory {
 
     public static final SystemHeaderDTO buildStandardSytemHeaderPart(final String contentType,
