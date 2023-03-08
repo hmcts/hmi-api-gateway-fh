@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class RestClient {
+public final class RestClient {
 
     public static Response makeGetRequest(final Map<String, String> headersAsMap,
                                           final String authorizationToken,

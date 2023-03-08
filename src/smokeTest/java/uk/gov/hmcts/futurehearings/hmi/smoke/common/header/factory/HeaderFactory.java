@@ -4,8 +4,8 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"HideUtilityClassConstructor"})
 public class HeaderFactory {
@@ -15,7 +15,7 @@ public class HeaderFactory {
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
 
-        Map<String,String> headersAsMap = new HashMap<String, String>();
+        Map<String,String> headersAsMap = new ConcurrentHashMap<>();
         headersAsMap.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         headersAsMap.put("Accept", MediaType.APPLICATION_JSON_VALUE);
         headersAsMap.put("Source-System", "CFT");

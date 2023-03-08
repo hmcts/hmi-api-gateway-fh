@@ -8,15 +8,16 @@ import org.springframework.http.HttpStatus;
 import static io.restassured.RestAssured.expect;
 
 @Slf4j
-public class OAuthTokenGenerator {
+@SuppressWarnings({"PMD.UseObjectForClearerAPI"})
+public final class OAuthTokenGenerator {
 
-    public static final String generateOAuthToken(final String tokenApiUrl,
+    public static String generateOAuthToken(final String tokenApiUrl,
                                                 final String tokenApiTenantId,
                                                 final String grantType,
                                                 final String clientID,
                                                 final String clientSecret,
                                                 final String scope,
-                                                final HttpStatus httpStatus) throws Exception {
+                                                final HttpStatus httpStatus) {
 
         String fullTokenApiUrl = String.format(tokenApiUrl, tokenApiTenantId);
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
@@ -26,7 +27,7 @@ public class OAuthTokenGenerator {
         return response.jsonPath().getString("access_token");
     }
 
-    public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
+    public static Response callTokenGeneratorEndpoint(final String bodyForToken,
                                                          final HttpStatus badRequest,
                                                          final String fullTokenApiUrl) {
 

@@ -8,38 +8,38 @@ import org.springframework.http.HttpStatus;
 import static io.restassured.RestAssured.expect;
 
 @Slf4j
-public class OAuthTokenGenerator {
+@SuppressWarnings("PMD.UseObjectForClearerAPI")
+public final class OAuthTokenGenerator {
 
-    public static final String generateOAuthToken(final String token_apiURL,
-                                                final String token_apiTenantId,
+    public static String generateOAuthToken(final String tokenApiUrl,
+                                                final String tokenApiTenantId,
                                                 final String grantType,
                                                 final String clientID,
                                                 final String clientSecret,
                                                 final String scope,
-                                                final HttpStatus httpStatus) throws Exception {
+                                                final HttpStatus httpStatus) {
 
-        String full_token_apiURL = String.format(token_apiURL, token_apiTenantId);
+        String fullTokenApiUrl = String.format(tokenApiUrl, tokenApiTenantId);
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",
                 grantType, clientID, clientSecret, scope);
 
-        Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, full_token_apiURL);
+        Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, fullTokenApiUrl);
         return response.jsonPath().getString("access_token");
     }
 
-    public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
+    public static Response callTokenGeneratorEndpoint(final String bodyForToken,
                                                          final HttpStatus badRequest,
-                                                         final String full_token_apiURL) {
-        Response response = expect().that().statusCode(badRequest.value())
+                                                         final String fullTokenApiUrl) {
+        return expect().that().statusCode(badRequest.value())
                 .given()
                 .body(bodyForToken)
                 .contentType(ContentType.URLENC)
-                .baseUri(full_token_apiURL)
+                .baseUri(fullTokenApiUrl)
                 .when()
                 .post()
                 .then()
                 .extract()
                 .response();
-        return response;
     }
 
     private OAuthTokenGenerator() {

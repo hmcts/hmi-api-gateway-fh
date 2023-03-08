@@ -15,11 +15,11 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -32,29 +32,30 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.H
 public class VideoHearingTest extends FunctionalTest {
 
     @Value("${videohearingsRootContext}")
-    protected String videohearingsRootContext;
+    protected String videoHearingsRootContext;
 
     @Value("${videohearings_idRootContext}")
-    protected String videohearings_idRootContext;
+    protected String videoHearingsIdRootContext;
 
     @Value("${participantsRootContext}")
     protected String participantsRootContext;
 
     @Value("${participants_idRootContext}")
-    protected String participants_idRootContext;
+    protected String participantsIdRootContext;
 
     @Steps
     VideoHearingSteps videoHearingSteps;
 
     @Before
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
 
     @Test
     public void testCreateVideoHearingWithEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("VH");
-        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videohearingsRootContext,
+        headersAsMap = createStandardHmiHeader("VH");
+        videoHearingSteps.shouldRequestVideoHearingWithInvalidPayload(videoHearingsRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.POST,
                 "{}");
@@ -62,9 +63,9 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testAmendVideoHearingWithEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("VH");
-        videohearings_idRootContext = String.format(videohearings_idRootContext, new Random().nextInt(99999999));
-        videoHearingSteps.shouldAmendVideoHearingWithInvalidPayload(videohearings_idRootContext,
+        headersAsMap = createStandardHmiHeader("VH");
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingSteps.shouldAmendVideoHearingWithInvalidPayload(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
                 "{}");
@@ -72,9 +73,9 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testDeleteVideoHearing() {
-        headersAsMap = createStandardHMIHeader("VH");
-        videohearings_idRootContext = String.format(videohearings_idRootContext, new Random().nextInt(99999999));
-        videoHearingSteps.shouldDeleteVideoHearing(videohearings_idRootContext,
+        headersAsMap = createStandardHmiHeader("VH");
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingSteps.shouldDeleteVideoHearing(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}");
@@ -82,11 +83,11 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testGetVideoHearing() {
-        headersAsMap = createStandardHMIHeader("VH");
-        Map<String, String> queryParameters = new HashMap<>();
+        headersAsMap = createStandardHmiHeader("VH");
+        Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("username", String.valueOf(new Random().nextInt(99999999)));
 
-        videoHearingSteps.performVideoHearingGetByUsername(videohearingsRootContext,
+        videoHearingSteps.performVideoHearingGetByUsername(videoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
                 queryParameters);
@@ -94,17 +95,17 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testGetVideoHearingById() {
-        headersAsMap = createStandardHMIHeader("VH");
+        headersAsMap = createStandardHmiHeader("VH");
         String hearingId = "4564616C-0F7E-4D70-B0D7-A1BBF0874D5D";
-        videohearings_idRootContext = String.format(videohearings_idRootContext, hearingId);
-        videoHearingSteps.performVideoHearingGetByHearingId(videohearings_idRootContext,
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
+        videoHearingSteps.performVideoHearingGetByHearingId(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken);
     }
 
     @Test
     public void testPostParticipant() {
-        headersAsMap = createStandardHMIHeader("VH");
+        headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(new Random().nextInt(99999999));
         participantsRootContext = String.format(participantsRootContext, hearingId);
         videoHearingSteps.performPostParticipant(participantsRootContext,
@@ -115,11 +116,11 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testPutParticipant() {
-        headersAsMap = createStandardHMIHeader("VH");
+        headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(new Random().nextInt(99999999));
         String participantId = String.valueOf(new Random().nextInt(99999999));
-        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
-        videoHearingSteps.performPutParticipant(participants_idRootContext,
+        participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
+        videoHearingSteps.performPutParticipant(participantsIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}");
@@ -127,11 +128,11 @@ public class VideoHearingTest extends FunctionalTest {
 
     @Test
     public void testDeleteParticipant() {
-        headersAsMap = createStandardHMIHeader("VH");
+        headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(new Random().nextInt(99999999));
         String participantId = String.valueOf(new Random().nextInt(99999999));
-        participants_idRootContext = String.format(participants_idRootContext, hearingId, participantId);
-        videoHearingSteps.performDeleteParticipant(participants_idRootContext,
+        participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
+        videoHearingSteps.performDeleteParticipant(participantsIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}");

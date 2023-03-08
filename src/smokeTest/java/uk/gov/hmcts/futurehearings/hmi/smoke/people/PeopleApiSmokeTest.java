@@ -19,30 +19,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
 @Disabled("Disabled until http error code 503 has been fixed!")
 class PeopleApiSmokeTest extends SmokeTest {
 
-    private String peopleHealthcheck = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
+    private static final String PEOPLE_HEALTH_CHECK = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValuesDefault();
-        setRootContext(peopleHealthcheck);
+        setRootContext(PEOPLE_HEALTH_CHECK);
     }
 
     @Test
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
         Response response = makeGetRequest(getRootContext());
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response codes should match");
     }
 
     public static Response makeGetRequest(final String rootContext) {
-        Response response = given()
+        return given()
                 .baseUri(rootContext)
                 .when()
                 .get();
-        return response;
     }
 }

@@ -14,11 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 @Setter(AccessLevel.PUBLIC)
@@ -27,7 +27,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTo
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class FunctionalTest {
+public class FunctionalTest {
 
     @Value("${targetInstance}")
     protected String targetInstance;
@@ -36,10 +36,10 @@ public abstract class FunctionalTest {
     protected String hearingApiRootContext;
 
     @Value("${token_apiURL}")
-    protected String token_apiURL;
+    protected String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    protected String token_apiTenantId;
+    protected String tokenApiTenantId;
 
     @Value("${grantType}")
     protected String grantType;
@@ -53,7 +53,7 @@ public abstract class FunctionalTest {
     @Value("${scope}")
     protected String scope;
 
-    protected Map<String, Object> headersAsMap = new HashMap<>();
+    protected Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
 
     protected String authorizationToken;
 
@@ -65,13 +65,13 @@ public abstract class FunctionalTest {
         RestAssured.baseURI = targetInstance;
         SerenityRest.useRelaxedHTTPSValidation();
 
-        this.authorizationToken = generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        this.authorizationToken = generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
                 HttpStatus.OK);
         this.setAuthorizationToken(authorizationToken);
-        headersAsMap = createStandardHMIHeader("SNL");
+        headersAsMap = createStandardHmiHeader("SNL");
     }
 }

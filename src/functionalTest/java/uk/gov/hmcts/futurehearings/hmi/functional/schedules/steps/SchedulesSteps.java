@@ -11,16 +11,17 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 public class SchedulesSteps {
 
     @Step("Request made to Sessions API with invalid payload")
-    public void shouldPostSessionsWithPayload(final String apiURL,
+    public void shouldPostSessionsWithPayload(final String apiUrl,
                                               final Map<String, Object> headersAsMap,
                                               final String authorizationToken,
                                               final HttpMethod httpMethod,
                                               final String body) {
-                callRestEndpointWithPayload(apiURL,
+        callRestEndpointWithPayload(apiUrl,
                 headersAsMap,
                 authorizationToken,
                 body,
                 httpMethod,
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST)
+        ;
     }
 }

@@ -15,11 +15,11 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -28,7 +28,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.H
         "I want to be able to execute the tests for People API"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"java:S2699", "PMD.UseDiamondOperator"})
 @Disabled("Disabled until http error code 503 has been fixed!")
 public class PeopleTest extends FunctionalTest {
 
@@ -36,24 +36,25 @@ public class PeopleTest extends FunctionalTest {
     protected String peopleRootContext;
 
     @Value("${people_idRootContext}")
-    protected String people_idRootContext;
+    protected String peopleIdRootContext;
 
     @Steps
     PeopleSteps peopleSteps;
 
     @Before
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
 
     @Test
     public void testPeopleLookUp() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
+        Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
         queryParameters.put("page", "1");
 
-        headersAsMap = createStandardHMIHeader("ELINKS");
+        headersAsMap = createStandardHmiHeader("ELINKS");
         peopleSteps.shouldFetchListOfPeople(peopleRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -62,9 +63,9 @@ public class PeopleTest extends FunctionalTest {
 
     @Test
     public void testPersonLookUp() {
-        people_idRootContext = String.format(people_idRootContext, new Random().nextInt(99999999));
-        headersAsMap = createStandardHMIHeader("ELINKS");
-        peopleSteps.shouldGetByPeopleId(people_idRootContext,
+        peopleIdRootContext = String.format(peopleIdRootContext, new Random().nextInt(99999999));
+        headersAsMap = createStandardHmiHeader("ELINKS");
+        peopleSteps.shouldGetByPeopleId(peopleIdRootContext,
                 headersAsMap,
                 authorizationToken);
     }

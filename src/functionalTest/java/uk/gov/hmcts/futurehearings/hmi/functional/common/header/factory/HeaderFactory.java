@@ -1,40 +1,39 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Slf4j
+@SuppressWarnings({"HideUtilityClassConstructor", "PMD.UseDiamondOperator"})
 public class HeaderFactory {
 
-    public static Map<String, Object> createStandardHMIHeader(final String destinationSystem) {
+    private static final String JSON = "application/json";
+
+    public static Map<String, Object> createStandardHmiHeader(final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
 
-        Map<String,Object> headersAsMap = new HashMap<String, Object>();
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        Map<String,Object> headersAsMap = new ConcurrentHashMap<>();
+        headersAsMap.put("Content-Type", JSON);
+        headersAsMap.put("Accept", JSON);
         headersAsMap.put("Source-System", "CFT");
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
-    public static Map<String, Object> createStandardHMIHeader(final String sourceSystem, final String destinationSystem) {
+
+    public static Map<String, Object> createStandardHmiHeader(final String sourceSystem,
+                                                             final String destinationSystem) {
 
         final LocalDateTime now = LocalDateTime.now();
         final String requestCreatedAt = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss'Z'"));
 
-        Map<String,Object> headersAsMap = new HashMap<String, Object>();
-        headersAsMap.put("Content-Type", "application/json");
-        headersAsMap.put("Accept", "application/json");
+        Map<String,Object> headersAsMap = new ConcurrentHashMap<>();
+        headersAsMap.put("Content-Type", JSON);
+        headersAsMap.put("Accept", JSON);
         headersAsMap.put("Source-System", sourceSystem);
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);

@@ -23,13 +23,13 @@ import java.util.Random;
         "I want to be able to execute the tests for Resources API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class ResourcesAPITest extends FunctionalTest {
+public class ResourcesApiTest extends FunctionalTest {
 
     @Value("${resourcesLinkedHearingGroupRootContext}")
     private String resourcesLinkedHearingGroupRootContext;
 
     @Value("${resourcesLinkedHearingGroup_idRootContext}")
-    private String resourcesLinkedHearingGroup_idRootContext;
+    private String resourcesLinkedHearingGroupIdRootContext;
 
     @Steps
     ResourcesSteps resourceSteps;
@@ -44,8 +44,8 @@ public class ResourcesAPITest extends FunctionalTest {
     @Test
     public void testAmendLinkedHearingGroup() {
         int randomId = new Random().nextInt(99999999);
-        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, randomId);
-        resourceSteps.shouldAmendLinkedHearingGroupWithEmptyPayload(resourcesLinkedHearingGroup_idRootContext,
+        resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
+        resourceSteps.shouldAmendLinkedHearingGroupWithEmptyPayload(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
                 "{}");
@@ -54,8 +54,8 @@ public class ResourcesAPITest extends FunctionalTest {
     @Test
     public void testDeleteLinkedHearingGroupInvalid() {
         int randomId = new Random().nextInt(99999999);
-        resourcesLinkedHearingGroup_idRootContext = String.format(resourcesLinkedHearingGroup_idRootContext, randomId);
-        resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroup_idRootContext,
+        resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
+        resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpMethod.DELETE);

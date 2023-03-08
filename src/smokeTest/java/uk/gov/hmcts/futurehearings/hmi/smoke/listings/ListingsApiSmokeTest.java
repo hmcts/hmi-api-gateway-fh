@@ -19,13 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Listing Context")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
 class ListingsApiSmokeTest extends SmokeTest {
 
     @Value("${listingsApiRootContext}")
     private String listingsApiRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         setRootContext(listingsApiRootContext);
@@ -37,6 +38,6 @@ class ListingsApiSmokeTest extends SmokeTest {
         Response response = RestClient.makeGetRequest(getHeadersAsMap(), getAuthorizationToken(),
                 getRootContext());
 
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response codes should match");
     }
 }

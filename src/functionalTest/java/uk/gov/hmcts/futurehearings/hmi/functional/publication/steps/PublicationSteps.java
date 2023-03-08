@@ -10,19 +10,6 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 
 public class PublicationSteps {
 
-    @Step("Successful creation of data using the Publication API")
-    public void createPublicationWithValidHeadersAndPayload(final String apiUrl,
-                                                         final Map<String, Object> headersAsMap,
-                                                         final String authorizationToken,
-                                                         final String body) {
-        callRestEndpointWithPayload(apiUrl,
-                headersAsMap,
-                authorizationToken,
-                body,
-                HttpMethod.POST,
-                HttpStatus.CREATED);
-    }
-
     @Step("Invalid headers, Bad request creating data using the Publication API")
     public void createPublicationWithInvalidPayload(final String apiUrl,
                                                     final Map<String, Object> headersAsMap,
@@ -49,6 +36,11 @@ public class PublicationSteps {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    public void createPublicationWithValidHeadersAndPayload(String pihPublicationRootContext, Map<String, Object> headersAsMap, String authorizationToken, HttpMethod post, HttpStatus created, String s) {
+    public void createPublicationWithValidHeadersAndPayload(String pihPublicationRootContext,
+                                                            Map<String, Object> headersAsMap,
+                                                            String authorizationToken,
+                                                            HttpMethod post,
+                                                            HttpStatus created,
+                                                            String string) {
     }
 }

@@ -31,6 +31,7 @@ public class DirectListingTest extends FunctionalTest {
     DirectListingSteps directListingSteps;
 
     @Before
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }

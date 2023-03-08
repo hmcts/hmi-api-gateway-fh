@@ -23,13 +23,13 @@ import java.util.Random;
         "I want to be able to execute the tests for Hearings API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class HearingsAPITest extends FunctionalTest {
+public class HearingsApiTest extends FunctionalTest {
 
     @Value("${hearingsApiRootContext}")
     protected String hearingsApiRootContext;
 
     @Value("${hearings_idRootContext}")
-    protected String hearings_idRootContext;
+    protected String hearingsIdRootContext;
 
     @Steps
     HearingsSteps hearingsSteps;
@@ -46,7 +46,7 @@ public class HearingsAPITest extends FunctionalTest {
     public void testAmendHearingWithEmptyPayload() {
         int randomId = new Random().nextInt(99999999);
 
-        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext, randomId),
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
                 "{}");
@@ -56,7 +56,7 @@ public class HearingsAPITest extends FunctionalTest {
     public void testDeleteHearingWithEmptyPayload() {
         int randomId = new Random().nextInt(99999999);
 
-        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearings_idRootContext, randomId),
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken, HttpMethod.DELETE,
                 "{}");

@@ -12,14 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
 @Slf4j
+@SuppressWarnings("PMD.LawOfDemeter")
 public class HearingsSteps {
     @Step("User amends a Hearing request with invalid payload")
-    public void shouldRequestHearingWithInvalidPayload(final String apiURL,
+    public void shouldRequestHearingWithInvalidPayload(final String apiUrl,
                                     final Map<String, Object> headersAsMap,
                                     final String authorizationToken, final HttpMethod httpMethod,
                                     final String body) {
 
-        Response response = callRestEndpointWithPayload(apiURL,
+        Response response = callRestEndpointWithPayload(apiUrl,
                 headersAsMap,
                 authorizationToken,
                 body,

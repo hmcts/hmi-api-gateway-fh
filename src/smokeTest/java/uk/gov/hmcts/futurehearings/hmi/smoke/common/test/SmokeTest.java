@@ -14,8 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.smoke.common.header.factory.HeaderFactory.createStandardHmiHeader;
@@ -28,7 +28,7 @@ import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGe
 @ActiveProfiles("smoke")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("java:S5786")
-public abstract class SmokeTest {
+public class SmokeTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
@@ -51,7 +51,7 @@ public abstract class SmokeTest {
     @Value("${scope}")
     private String scope;
 
-    private Map<String, String> headersAsMap = new HashMap<String, String>();
+    private Map<String, String> headersAsMap = new ConcurrentHashMap<>();
 
     private String authorizationToken;
 
@@ -83,7 +83,7 @@ public abstract class SmokeTest {
     }
 
     @BeforeAll
-    public void initialiseValuesDefault() throws Exception {
+    public void initialiseValuesDefault() {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.config = RestAssured.config()

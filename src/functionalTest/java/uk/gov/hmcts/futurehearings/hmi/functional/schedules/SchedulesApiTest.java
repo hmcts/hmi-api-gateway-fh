@@ -14,7 +14,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.schedules.steps.SchedulesSteps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.H
         "I want to be able to execute the tests for Schedules API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class SchedulesAPITest extends FunctionalTest {
+public class SchedulesApiTest extends FunctionalTest {
 
     @Value("${schedulesApiRootContext}")
     protected String schedulesApiRootContext;
@@ -33,7 +33,7 @@ public class SchedulesAPITest extends FunctionalTest {
 
     @Test
     public void testCreateScheduleWithEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("SNL");
+        headersAsMap = createStandardHmiHeader("SNL");
         schedulesSteps.shouldPostSessionsWithPayload(schedulesApiRootContext,
                 headersAsMap, authorizationToken, HttpMethod.POST, "{}");
     }

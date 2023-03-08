@@ -30,12 +30,13 @@ public class DirectHearingTest extends FunctionalTest {
     protected String sessionsRootContext;
 
     @Value("${directhearings_idRootContext}")
-    protected String directhearings_idRootContext;
+    protected String directHearingsIdRootContext;
 
     @Steps
     DirectHearingSteps directHearingSteps;
 
     @Before
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
@@ -43,8 +44,9 @@ public class DirectHearingTest extends FunctionalTest {
     @Test
     public void testDirectHearing() throws Exception {
 
-        String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
-        directHearingSteps.performDirectHearingListingForGivenSessionId(directhearings_idRootContext,
+        String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/"
+                + "hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
+        directHearingSteps.performDirectHearingListingForGivenSessionId(directHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 inputBodyForDirectListing);
