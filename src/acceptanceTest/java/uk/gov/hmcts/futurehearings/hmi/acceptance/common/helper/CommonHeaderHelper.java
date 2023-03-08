@@ -5,15 +5,13 @@ import io.restassured.http.Headers;
 import org.springframework.http.MediaType;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardBuinessHeaderPart;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.buildStandardSytemHeaderPart;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapAfterHeadersAdded;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithAllHeaders;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToMapWithMandatoryHeaders;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDTOFactory.convertToRestAssuredHeaderRequiredHeaders;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.buildStandardBusinessHeaderPart;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.buildStandardSystemHeaderPart;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.convertToMapWithAllHeaders;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.convertToMapWithMandatoryHeaders;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.convertToRestAssuredHeaderRequiredHeaders;
 
 public class CommonHeaderHelper {
 
@@ -42,7 +40,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Headers createStandardPayloadHeaderWithDuplicateValues(final Map<String, String> duplicateHeaderValues, final String sourceSystem) {
+    public static Headers createStandardPayloadHeaderWithDuplicateValues(
+            final Map<String, String> duplicateHeaderValues, final String sourceSystem) {
 
         return buildHeaderWithDoubleValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -77,7 +76,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues(final String sourceSystem, final String destinationSystem) {
+    public static Map<String, String> createHeaderWithSourceAndDestinationSystemValues(final String sourceSystem,
+        final String destinationSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -87,26 +87,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithEmulatorValues(final String destinationSystem,
-                                                                     final String returnHttpCode,
-                                                                     final String returnErrorCode,
-                                                                     final String returnDescription) {
-
-        Map<String,String> emulatorHeaderValues = new HashMap<>();
-        emulatorHeaderValues.put("returnHttpCode", returnHttpCode);
-        emulatorHeaderValues.put("returnErrorCode", returnErrorCode);
-        emulatorHeaderValues.put("returnDescription", returnDescription);
-
-        return buildHeaderWithEmulatorValues(MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_JSON_VALUE,
-                "2012-03-19T07:22:00Z",
-                "CFT",
-                destinationSystem,
-                emulatorHeaderValues
-        );
-    }
-
-    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithRequestCreatedAtSystemValue(final String requestCreatedAt,
+        final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
@@ -116,7 +98,8 @@ public class CommonHeaderHelper {
         );
     }
 
-    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType, final String sourceSystem) {
+    public static Map<String, String> createHeaderWithAcceptTypeAtSystemValue(final String acceptType,
+        final String sourceSystem) {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
@@ -132,34 +115,16 @@ public class CommonHeaderHelper {
                                                              final String sourceSystem,
                                                              final String destinationSystem
                                                              ) {
-        return Collections.unmodifiableMap(convertToMapWithMandatoryHeaders(buildStandardSytemHeaderPart(
+        return Collections.unmodifiableMap(convertToMapWithMandatoryHeaders(buildStandardSystemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 null,
                 null),
-                buildStandardBuinessHeaderPart(requestCreatedDate,
+                buildStandardBusinessHeaderPart(requestCreatedDate,
                         sourceSystem,
                         destinationSystem
                        )));
-    }
-
-    private static Map<String, String> buildHeaderWithEmulatorValues(final String contentType,
-                                                                     final String acceptType,
-                                                                     final String requestCreatedDate,
-                                                                     final String sourceSystem,
-                                                                     final String destinationSystem,
-                                                                     final Map<String, String> emulatorHeaders) {
-        return Collections.unmodifiableMap(convertToMapAfterHeadersAdded(buildStandardSytemHeaderPart(
-                contentType,
-                acceptType,
-                null,
-                null,
-                null),
-                buildStandardBuinessHeaderPart(requestCreatedDate,
-                        sourceSystem,
-                        destinationSystem
-                        ), emulatorHeaders));
     }
 
     private static Map<String, String> buildHeaderWithValues(final String contentType,
@@ -170,13 +135,13 @@ public class CommonHeaderHelper {
                                                              final String sourceSystem,
                                                              final String destinationSystem
                                                              ) {
-        return Collections.unmodifiableMap(convertToMapWithAllHeaders(buildStandardSytemHeaderPart(
+        return Collections.unmodifiableMap(convertToMapWithAllHeaders(buildStandardSystemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 contentEncoding,
                 cacheControl),
-                buildStandardBuinessHeaderPart(requestCreatedDate,
+                buildStandardBusinessHeaderPart(requestCreatedDate,
                         sourceSystem,
                         destinationSystem
                         )));
@@ -190,22 +155,24 @@ public class CommonHeaderHelper {
                                                        final String sourceSystem,
                                                        final String destinationSystem,
                                                        final Map<String, String> extraHeaderValue) {
-        return convertToRestAssuredHeaderRequiredHeaders(buildStandardSytemHeaderPart(
+        return convertToRestAssuredHeaderRequiredHeaders(buildStandardSystemHeaderPart(
                 contentType,
                 acceptType,
                 null,
                 contentEncoding,
                 cacheControl),
-                buildStandardBuinessHeaderPart(requestCreatedDate,
+                buildStandardBusinessHeaderPart(requestCreatedDate,
                         sourceSystem,
                         destinationSystem
                         ), extraHeaderValue);
     }
 
-    public static String[] RemoveItemsFromArray(String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
+    public static String[] removeItemsFromArray(String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
         var updatedArray = arrayToRemoveItemsFrom;
         if (!(arrayToRemoveItemsFrom == null) && arrayToRemoveItemsFrom.length > 0) {
-            for (String s : itemsToBeRemoved) updatedArray = ArrayUtils.removeElement(updatedArray, s);
+            for (String s : itemsToBeRemoved) {
+                updatedArray = ArrayUtils.removeElement(updatedArray, s);
+            }
         }
         return updatedArray;
     }

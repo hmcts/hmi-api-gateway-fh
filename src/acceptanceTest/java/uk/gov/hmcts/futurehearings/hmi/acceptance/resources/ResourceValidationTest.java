@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HmiCommonHeaderTest;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
@@ -17,16 +17,16 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class ResourceValidationTest extends HMICommonHeaderTest {
+public abstract class ResourceValidationTest extends HmiCommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
 
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    private String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    private String tokenApiTenantId;
 
     @Value("${grantType}")
     private String grantType;
@@ -47,8 +47,8 @@ public abstract class ResourceValidationTest extends HMICommonHeaderTest {
         RestAssured.config = RestAssured.config()
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("resources");
-        String authorizationToken = generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        String authorizationToken = generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,

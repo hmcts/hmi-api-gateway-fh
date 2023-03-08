@@ -23,15 +23,16 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Test to Check the JWT Token Generator for OAuth, Note : In case of tests breaking - The client secret may change once a year")
+@DisplayName("Test to Check the JWT Token Generator for OAuth, Note :"
+        + " In case of tests breaking - The client secret may change once a year")
 @SuppressWarnings({"java:S2187", "java:S5786", "java:S2699"})
 class OAuthTokenGeneratorTest {
 
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    private String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    private String tokenApiTenantId;
 
     @Value("${grantType}")
     private String grantType;
@@ -55,8 +56,8 @@ class OAuthTokenGeneratorTest {
     @Test
     @DisplayName("Successfully validated response with an xml payload")
     void test_get_token_successfully() throws Exception {
-        generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
@@ -69,7 +70,7 @@ class OAuthTokenGeneratorTest {
     void test_get_token_with_negative_tenant_scenarios(final String tenantId) throws Exception {
         final HttpStatus httpStatus = tenantId != null && "".equals(tenantId.trim())
                 ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
-        generateOAuthToken(token_apiURL,
+        generateOAuthToken(tokenApiUrl,
                 tenantId,
                 grantType, clientID,
                 clientSecret,
@@ -82,8 +83,8 @@ class OAuthTokenGeneratorTest {
     @ValueSource(strings = {"", "authorization_code", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_grant_type(final String grantType) throws Exception {
 
-        generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
@@ -95,8 +96,8 @@ class OAuthTokenGeneratorTest {
     @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_client_id(final String clientID) throws Exception {
 
-        generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
@@ -107,8 +108,8 @@ class OAuthTokenGeneratorTest {
     @NullAndEmptySource
     @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
     void test_get_token_with_negative_client_secret(final String clientSecret) throws Exception {
-        generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,
@@ -119,8 +120,8 @@ class OAuthTokenGeneratorTest {
     @NullAndEmptySource
     @ValueSource(strings = {"", "test_id", "api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default"})
     void test_get_token_with_negative_scope(final String scope) throws Exception {
-        generateOAuthToken(token_apiURL,
-                token_apiTenantId,
+        generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,

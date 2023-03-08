@@ -3,16 +3,16 @@ package uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate;
 import io.restassured.http.Headers;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDTO;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HMIVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDto;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
 import java.util.Map;
 
 public interface CommonDelegate {
 
 
-    public void test_expected_response_for_supplied_header(final String authorizationToken,
-                                                           final String targetURL,
+    void test_expected_response_for_supplied_header(final String authorizationToken,
+                                                           final String targetUrl,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,
                                                            final Headers headers,
@@ -20,7 +20,7 @@ public interface CommonDelegate {
                                                            final HttpMethod httpMethod,
                                                            final HttpStatus status,
                                                            final String inputFileDirectory,
-                                                           final HMIVerifier hmiVerifier,
+                                                           final HmiVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDTO delegateDT0) throws Exception;
+                                                           final DelegateDto delegateDT0) throws Exception;
 }
