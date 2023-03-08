@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.CommonDelegate;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HmiCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HmiErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HmiUnsupportedDestinationsErrorVerifier;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommonSuccessVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiSuccessVerifier;
 
 import java.util.HashMap;
@@ -62,6 +64,11 @@ public abstract class HmiCommonHeaderTest {
 
     @BeforeEach
     public void beforeEach(TestInfo info) {
+        log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
+        sourceSystem = "CFT";
+        checkUnsupportedDestinations = false;
+        setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
+        setHmiErrorVerifier(new HmiCommonErrorVerifier());
         log.debug("Before execution : " + info.getTestMethod().get().getName());
     }
 
