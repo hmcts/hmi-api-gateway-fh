@@ -18,7 +18,11 @@ public class HeaderFactory {
         Map<String,Object> headersAsMap = new ConcurrentHashMap<>();
         headersAsMap.put("Content-Type", JSON);
         headersAsMap.put("Accept", JSON);
-        headersAsMap.put("Source-System", "CFT");
+        if ("PIH".equals(destinationSystem)) {
+            headersAsMap.put("Source-System", "EMULATOR");
+        } else {
+            headersAsMap.put("Source-System", "CFT");
+        }
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         //return Collections.unmodifiableMap(headersAsMap);

@@ -4,26 +4,31 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.publication.steps.PublicationSteps;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"Testing the Publication API is working correctly"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class TestPublicationTest extends PihFunctionalTest {
+public class PublicationTest extends PihFunctionalTest {
 
     @Value("${pihPublicationRootContext}")
     private String pihPublicationRootContext;
@@ -34,46 +39,44 @@ public class TestPublicationTest extends PihFunctionalTest {
     @Steps
     PublicationSteps publicationSteps;
 
+    private static final LocalDateTime CURRENT_DATETIME = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+
     @BeforeEach
     @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
 
+
     private void setPnIMandatoryHeaders(Map<String, Object> headersAsMap) {
         publicationHeaders.setPnIMandatoryHeaders(headersAsMap,
-                "GENERAL_PUBLICATION",
-                "SJP_PUBLIC_LIST",
-                "1234",
-                "2022-02-11T09:39:41.362Z",
+                "LIST",
+                "CARE_STANDARDS_LIST",
+                "5555",
+                CURRENT_DATETIME.toString(),
                 "ENGLISH");
     }
 
     private void setPnIAdditionalHeaders(Map<String, Object> headersAsMap) {
         publicationHeaders.setPnIAdditionalHeaders(headersAsMap,
-                "daily-ward",
                 "PUBLIC",
-                "2022-02-09T10:00:00.368Z",
-                "2022-02-14T10:00:00"
+                CURRENT_DATETIME.toString(),
+                CURRENT_DATETIME.plusDays(1).toString()
         );
     }
 
+    /**
+     * Successful create publication test to P&I.
+     */
     @Test
-    public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
-        setPnIMandatoryHeaders(headersAsMap);
-        publicationSteps.createPublicationWithValidHeadersAndPayload(
-                pihPublicationRootContext,
-                headersAsMap,
-                authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.CREATED,
-                "{}"
+    public void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(Files.newInputStream(Paths.get("src/functionalTest/"
+                + "resources/uk/gov/hmcts/futurehearings/hmi/functional/"
+                + "Publications.input/POST-Publication-request.json")),
+                writer,
+                Charset.defaultCharset()
         );
-    }
-
-    @Test
-    public void testCreatePublicationWithAllValidHeadersAndPayload() {
-
         setPnIMandatoryHeaders(headersAsMap);
         setPnIAdditionalHeaders(headersAsMap);
 
@@ -81,23 +84,13 @@ public class TestPublicationTest extends PihFunctionalTest {
                 pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.CREATED,
-                "{}"
+                writer.toString()
         );
     }
 
-    @Test
-    public void testCreatePublicationWithDestinationHeaderOnly() {
-        Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
-        headersAsMap.put("Destination-System", "PIH");
-        publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
-                headersAsMap,
-                authorizationToken,
-                "{}"
-        );
-    }
-
+    /**
+     * Invalid header test to P&I.
+     */
     @Test
     public void tesCreatePublicationWithInvalidHeader() {
         setPnIMandatoryHeaders(headersAsMap);
@@ -110,6 +103,9 @@ public class TestPublicationTest extends PihFunctionalTest {
         );
     }
 
+    /**
+     * Unauthorised test to P&I.
+     */
     @Test
     public void testCreatePublicationUnauthorized() {
         setPnIMandatoryHeaders(headersAsMap);
