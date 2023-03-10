@@ -40,7 +40,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
     }
 
     private void test_response_for_supplied_parameter() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(),
                 getInputPayloadFileName(),

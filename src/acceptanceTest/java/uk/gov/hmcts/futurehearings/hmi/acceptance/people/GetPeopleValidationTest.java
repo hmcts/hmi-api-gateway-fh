@@ -53,7 +53,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
     void test_updated_since_query_param_valid_value(final String updatedSinceKey,
                                                     final String updatedSinceValue) throws Exception {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -70,7 +70,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
     void test_per_page_without_mandatory_updated_since_query_param(final String perPageKey,
                                                                    final String perPageValue) throws Exception {
         this.setUrlParams(buildQueryParams(perPageKey, perPageValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -87,7 +87,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
     void test_page_without_mandatory_updated_since_queryparam(final String pageKey,
                                                               final String pageValue) throws Exception {
         this.setUrlParams(buildQueryParams(pageKey, pageValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -105,7 +105,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                                          final String paramKey2, final String paramVal2,
                                          final String paramKey3, final String paramVal3) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2, paramKey3, paramVal3));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -126,7 +126,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                                                 final String paramKey4, final String paramVal4) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2,
                 paramVal2, paramKey3, paramVal3, paramKey4, paramVal4));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),

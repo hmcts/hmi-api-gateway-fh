@@ -58,7 +58,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_invalid_query_param_with_value() throws Exception {
         this.setUrlParams(buildQueryParams("extra_param_key", " "));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -76,7 +76,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
     void test_hearing_date_query_param_with_value(final String hearingDateKey,
                                                         final String hearingDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -93,7 +93,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
     void test_invalid_hearing_id_casehq_query_param_with_value(final String hearingIdCaseHqKey,
                                                                final String hearingIdCaseHqValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingIdCaseHqKey, hearingIdCaseHqValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -111,7 +111,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey,
                                                  final String hearingIdCaseHqValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingIdCaseHqValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -133,7 +133,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                               final String hearingTypeValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -155,7 +155,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                            final String hearingTypeValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -179,7 +179,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                            final String extraParamValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue, extraParamKey, extraParamValue));
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),

@@ -25,7 +25,6 @@ public class HeaderFactory {
         }
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
-        //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
 
@@ -41,7 +40,6 @@ public class HeaderFactory {
         headersAsMap.put("Source-System", sourceSystem);
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
-        //return Collections.unmodifiableMap(headersAsMap);
         return headersAsMap;
     }
 }
