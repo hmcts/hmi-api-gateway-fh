@@ -36,11 +36,16 @@ public class PublicationSteps {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    public void createPublicationWithValidHeadersAndPayload(String pihPublicationRootContext,
-                                                            Map<String, Object> headersAsMap,
-                                                            String authorizationToken,
-                                                            HttpMethod post,
-                                                            HttpStatus created,
-                                                            String string) {
+    public void createPublicationWithValidHeadersAndPayload(final String apiUrl,
+                                                            final Map<String, Object> headersAsMap,
+                                                            final String authorizationToken,
+                                                            final String body) {
+
+        callRestEndpointWithPayload(apiUrl,
+                headersAsMap,
+                authorizationToken,
+                body,
+                HttpMethod.POST,
+                HttpStatus.CREATED);
     }
 }

@@ -32,11 +32,9 @@ public class PublicationHeaders {
     }
 
     protected void setPnIAdditionalHeaders(Map<String, Object> headersAsMap,
-                                           String sourceArtefactIdValue,
                                            String sensitivityValue,
                                            String displayFromValue,
                                            String displayToValue) {
-        headersAsMap.put("x-source-artefact-id", sourceArtefactIdValue);
         headersAsMap.put("x-sensitivity", sensitivityValue);
         headersAsMap.put("x-display-from", displayFromValue);
         headersAsMap.put("x-display-to", displayToValue);
