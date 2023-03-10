@@ -373,7 +373,7 @@ dependencies {
     smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging-httpcomponents', version: versions.reformLogging
     smokeTestCompile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
 
-    smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+    smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '5.3.0'
     smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
     smokeTestImplementation 'io.rest-assured:rest-assured:4.2.0'
     smokeTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
@@ -394,7 +394,7 @@ dependencies {
     integrationTestImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     integrationTestCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     integrationTestImplementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: versions.serenity
-    integrationTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+    integrationTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '5.3.0'
     integrationTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
     integrationTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     integrationTestCompileOnly 'org.projectlombok:lombok:1.18.12'
@@ -415,7 +415,7 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
     acceptanceTestCompile("org.springframework.boot:spring-boot-starter-test")
-    acceptanceTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '4.2.0'
+    acceptanceTestImplementation group: 'io.rest-assured', name: 'xml-path', version: '5.3.0'
     acceptanceTestImplementation group: 'io.rest-assured', name: 'json-path', version: '4.2.0'
     acceptanceTestImplementation 'io.rest-assured:rest-assured:4.2.0'
     acceptanceTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
