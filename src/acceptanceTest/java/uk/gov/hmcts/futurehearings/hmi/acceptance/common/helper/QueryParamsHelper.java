@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class QueryParamsHelper {
 
-    public final static Map<String, String> buildQueryParams(final String paramKey, final String paramValue) {
+    public static final Map<String, String> buildQueryParams(final String paramKey, final String paramValue) {
         final Map<String, String>  queryParams = new HashMap<>();
         queryParams.put(paramKey, paramValue);
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey, final String paramValue,
+    public static final Map<String, String> buildQueryParams(final String paramKey, final String paramValue,
                                                              final String paramKey1, final String paramValue1) {
         final Map<String, String>  queryParams = new HashMap<>();
         queryParams.put(paramKey, paramValue);
@@ -19,7 +19,7 @@ public class QueryParamsHelper {
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3) {
         final Map<String, String>  queryParams = new HashMap<>();
@@ -29,7 +29,7 @@ public class QueryParamsHelper {
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
                                                              final String paramKey4, final String paramValue4) {
@@ -41,7 +41,7 @@ public class QueryParamsHelper {
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
                                                              final String paramKey4, final String paramValue4,
@@ -55,7 +55,7 @@ public class QueryParamsHelper {
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
                                                              final String paramKey4, final String paramValue4,
@@ -70,7 +70,8 @@ public class QueryParamsHelper {
         queryParams.put(paramKey6, paramValue6);
         return queryParams;
     }
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
                                                              final String paramKey4, final String paramValue4,
@@ -88,7 +89,7 @@ public class QueryParamsHelper {
         return queryParams;
     }
 
-    public final static Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
+    public static final Map<String, String> buildQueryParams(final String paramKey1, final String paramValue1,
                                                              final String paramKey2, final String paramValue2,
                                                              final String paramKey3, final String paramValue3,
                                                              final String paramKey4, final String paramValue4,
@@ -106,5 +107,8 @@ public class QueryParamsHelper {
         queryParams.put(paramKey7, paramValue7);
         queryParams.put(paramKey8, paramValue8);
         return queryParams;
+    }
+
+    private QueryParamsHelper() {
     }
 }

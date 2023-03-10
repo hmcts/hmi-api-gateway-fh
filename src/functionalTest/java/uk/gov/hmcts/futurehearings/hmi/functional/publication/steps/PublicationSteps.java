@@ -1,27 +1,14 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication.steps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
-
-import java.util.Map;
-
 import net.thucydides.core.annotations.Step;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-public class PublicationSteps {
+import java.util.Map;
 
-    @Step("Successful creation of data using the Publication API")
-    public void createPublicationWithValidHeadersAndPayload(final String apiUrl,
-                                                         final Map<String, Object> headersAsMap,
-                                                         final String authorizationToken,
-                                                         final String body) {
-        callRestEndpointWithPayload(apiUrl,
-                headersAsMap,
-                authorizationToken,
-                body,
-                HttpMethod.POST,
-                HttpStatus.CREATED);
-    }
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+
+public class PublicationSteps {
 
     @Step("Invalid headers, Bad request creating data using the Publication API")
     public void createPublicationWithInvalidPayload(final String apiUrl,
@@ -49,6 +36,11 @@ public class PublicationSteps {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    public void createPublicationWithValidHeadersAndPayload(String pihPublicationRootContext, Map<String, Object> headersAsMap, String authorizationToken, HttpMethod post, HttpStatus created, String s) {
+    public void createPublicationWithValidHeadersAndPayload(String pihPublicationRootContext,
+                                                            Map<String, Object> headersAsMap,
+                                                            String authorizationToken,
+                                                            HttpMethod post,
+                                                            HttpStatus created,
+                                                            String string) {
     }
 }

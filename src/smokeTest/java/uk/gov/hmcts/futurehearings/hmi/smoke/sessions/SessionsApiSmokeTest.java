@@ -13,8 +13,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,13 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Sessions Context")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
 class SessionsApiSmokeTest extends SmokeTest {
 
     @Value("${sessionsApiRootContext}")
     private String sessionsApiRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         this.setDestinationSystem("MOCK");
         super.initialiseValues();
@@ -38,13 +39,13 @@ class SessionsApiSmokeTest extends SmokeTest {
     @Test
     @DisplayName("Smoke Test to test the sessions endpoint")
     void testSessionsHmiApiGet() {
-        final Map<String, String> queryParams = new HashMap<>();
+        final Map<String, String> queryParams = new ConcurrentHashMap<>();
         queryParams.put("requestSessionType", "DS");
         queryParams.put("requestLocationId", "301");
 
         Response response = RestClient.makeGetRequest(getHeadersAsMap(),
                 getAuthorizationToken(), queryParams, getRootContext());
 
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response code should match");
     }
 }

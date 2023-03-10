@@ -1,12 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
-
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
-
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Steps;
@@ -15,7 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -24,24 +23,26 @@ import org.springframework.test.context.ActiveProfiles;
 @SuppressWarnings("java:S2699")
 public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
-    private static final String ValidGroupIdInVhTest1 = "f138520a-2a20-4b08-9777-a53fbb651e33";
+    private static final String VALID_GROUP_ID = "f138520a-2a20-4b08-9777-a53fbb651e33";
+    private static final String SNL = "SNL";
 
     @Value("${videoHearings_GroupIdRootContext}")
-    protected String videoHearings_GroupIdRootContext;
+    protected String videoHearingsGroupIdRootContext;
 
     @Steps
     VideoHearingSteps videoHearingSteps;
 
     @Before
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
 
     @Test
     public void testGetVideoHearingsWithInvalidGroupIdAndNoPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, "123");
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.BAD_REQUEST,
@@ -50,9 +51,9 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     @Test
     public void testGetVideoHearingsWithInvalidGroupIdAndEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext,"123");
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.BAD_REQUEST,
@@ -61,9 +62,9 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     @Test
     public void testGetVideoHearingsWithInvalidGroupIdAndPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, "123");
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.BAD_REQUEST,
@@ -72,9 +73,9 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     @Test
     public void testGetsVideoHearingWithValidGroupIdAndNoPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, ValidGroupIdInVhTest1);
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.OK,
@@ -83,9 +84,9 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     @Test
     public void testGetsVideoHearingWithValidGroupIdAndEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, ValidGroupIdInVhTest1);
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.OK,
@@ -94,9 +95,9 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     @Test
     public void testGetVideoHearingsWithValidGroupIdAndPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        videoHearings_GroupIdRootContext = String.format(videoHearings_GroupIdRootContext, ValidGroupIdInVhTest1);
-        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearings_GroupIdRootContext,
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
+        videoHearingSteps.performGetVideoHearingsByGroupIdWithSpecifiedStatus(videoHearingsGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.OK,

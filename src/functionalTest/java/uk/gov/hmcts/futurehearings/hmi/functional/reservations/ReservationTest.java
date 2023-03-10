@@ -1,28 +1,22 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.reservations;
 
+import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-import org.junit.Ignore;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.reservations.steps.ReservationSteps;
-import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
-
-import lombok.extern.slf4j.Slf4j;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+import uk.gov.hmcts.futurehearings.hmi.functional.reservations.steps.ReservationSteps;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -31,6 +25,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.H
         "I want to be able to execute the tests for Reservation API"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
+@SuppressWarnings({"PMD.LinguisticNaming", "PMD.LawOfDemeter", "PMD.UseDiamondOperator"})
 public class ReservationTest extends FunctionalTest {
 
     @Value("${reservationsApiRootContext}")
@@ -41,9 +36,9 @@ public class ReservationTest extends FunctionalTest {
 
     @Test
     public void testReservationsLookUp() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
+        Map<String, String> queryParameters = new ConcurrentHashMap<>();
 
-        headersAsMap = createStandardHMIHeader("SNL");
+        headersAsMap = createStandardHmiHeader("SNL");
         headersAsMap.put("Content-Type", "application/json; charset=utf-8");
         reservationSteps.shouldFetchListOfReservations(reservationsApiRootContext,
                 headersAsMap,

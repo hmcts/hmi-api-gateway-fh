@@ -1,33 +1,29 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.publication.steps.PublicationSteps;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"Testing the Publication API is working correctly"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class TestPublicationTest extends PIHFunctionalTest {
+public class TestPublicationTest extends PihFunctionalTest {
 
     @Value("${pihPublicationRootContext}")
     private String pihPublicationRootContext;
@@ -39,6 +35,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
     PublicationSteps publicationSteps;
 
     @BeforeEach
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
@@ -58,26 +55,27 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 "PUBLIC",
                 "2022-02-09T10:00:00.368Z",
                 "2022-02-14T10:00:00"
-                );
+        );
     }
 
-     @Test
+    @Test
     public void testCreatePublicationWithValidMandatoryHeadersAndPayload() {
-         setPnIMandatoryHeaders(headersAsMap);
+        setPnIMandatoryHeaders(headersAsMap);
         publicationSteps.createPublicationWithValidHeadersAndPayload(
                 pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpMethod.POST,
                 HttpStatus.CREATED,
-                "{}");
+                "{}"
+        );
     }
 
-     @Test
+    @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() {
 
-         setPnIMandatoryHeaders(headersAsMap);
-         setPnIAdditionalHeaders(headersAsMap);
+        setPnIMandatoryHeaders(headersAsMap);
+        setPnIAdditionalHeaders(headersAsMap);
 
         publicationSteps.createPublicationWithValidHeadersAndPayload(
                 pihPublicationRootContext,
@@ -85,29 +83,31 @@ public class TestPublicationTest extends PIHFunctionalTest {
                 authorizationToken,
                 HttpMethod.POST,
                 HttpStatus.CREATED,
-                "{}");
+                "{}"
+        );
     }
 
     @Test
     public void testCreatePublicationWithDestinationHeaderOnly() {
-        Map<String, Object> headersAsMap = new HashMap<>();
+        Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
         headersAsMap.put("Destination-System", "PIH");
         publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                "{}");
+                "{}"
+        );
     }
 
     @Test
-    //@Ignore
     public void tesCreatePublicationWithInvalidHeader() {
         setPnIMandatoryHeaders(headersAsMap);
-        publicationHeaders.setAHeader(headersAsMap,"x-type","invalid x-type");
+        publicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
 
         publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                "{}");
+                "{}"
+        );
     }
 
     @Test
@@ -116,6 +116,7 @@ public class TestPublicationTest extends PIHFunctionalTest {
         publicationSteps.createPublicationUnauthorized(pihPublicationRootContext,
                 headersAsMap,
                 "Invalid token 123456",
-                "{}");
+                "{}"
+        );
     }
 }
