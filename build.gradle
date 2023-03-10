@@ -379,7 +379,7 @@ dependencies {
     smokeTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
 
     smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
-    smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+    smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.9.2"
     smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
     smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     smokeTestCompileOnly 'org.projectlombok:lombok:1.18.12'
@@ -401,7 +401,7 @@ dependencies {
     integrationTestImplementation "ch.qos.logback:logback-classic:1.2.3"
     integrationTestImplementation "org.assertj:assertj-core:3.8.0"
     integrationTestImplementation "junit:junit:${junitVersion}"
-    integrationTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+    integrationTestImplementation "org.junit.vintage:junit-vintage-engine:5.9.2"
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
@@ -449,7 +449,7 @@ dependencies {
     functionalTestImplementation "ch.qos.logback:logback-classic:1.2.3"
     functionalTestImplementation "org.assertj:assertj-core:3.8.0"
     functionalTestImplementation "junit:junit:${junitVersion}"
-    functionalTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
+    functionalTestImplementation "org.junit.vintage:junit-vintage-engine:5.9.2"
     functionalTestCompile("org.springframework.boot:spring-boot-starter-test")
     functionalTestCompile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
     functionalTestImplementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
