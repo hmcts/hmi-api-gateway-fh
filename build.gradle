@@ -347,7 +347,7 @@ dependencies {
     //testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
     //testImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
     //testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
-    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
     testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
     testImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
@@ -378,7 +378,7 @@ dependencies {
     smokeTestImplementation 'io.rest-assured:rest-assured:4.2.0'
     smokeTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
 
-    smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+    smokeTestImplementation "org.junit.jupiter:junit-jupiter-api:5.9.2"
     smokeTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
     smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
     smokeTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -420,7 +420,7 @@ dependencies {
     acceptanceTestImplementation 'io.rest-assured:rest-assured:4.2.0'
     acceptanceTestImplementation 'io.rest-assured:json-schema-validator:4.2.0'
 
-    acceptanceTestImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    acceptanceTestImplementation "org.junit.jupiter:junit-jupiter:5.9.2"
     acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.6.2'
     acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.6.2'
     acceptanceTestImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.6.2'
