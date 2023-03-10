@@ -11,7 +11,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDto;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class CommonDelegateImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
 
-    public void testExpectedResponseForSuppliedHeader(final String authorizationToken,
+    public void test_expected_response_for_supplied_header(final String authorizationToken,
                                                            final String targetUrl,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,
@@ -36,7 +35,7 @@ public class CommonDelegateImpl implements CommonDelegate {
                                                            final String inputFileDirectory,
                                                            final HmiVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDto delegateFlyweightDT0) throws IOException {
+                                                           final DelegateDto delegateFlyweightDT0) throws Exception {
 
         log.debug("The value of the target header (Header Map) : " + standardHeaderMap);
         log.debug("The value of the target header (Wiremock Header) :" + standardHeaderMap);
@@ -60,7 +59,7 @@ public class CommonDelegateImpl implements CommonDelegate {
                                 final HttpStatus status,
                                 final String inputFileDirectory,
                                 final HmiVerifier hmiVerifier,
-                                final String expectedMessage) throws IOException {
+                                final String expectedMessage) throws Exception {
 
         String inputPayload = null;
         switch (httpMethod) {

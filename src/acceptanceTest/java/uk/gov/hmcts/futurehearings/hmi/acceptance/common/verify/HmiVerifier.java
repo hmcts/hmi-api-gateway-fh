@@ -5,5 +5,5 @@ import org.springframework.http.HttpStatus;
 
 public interface HmiVerifier {
 
-    void verify(HttpStatus expectedHttpStatus, String expectedMessage, Response response);
+    void verify(HttpStatus expectedHttpStatus, String expectedMessage, Response response) throws Exception;
 }

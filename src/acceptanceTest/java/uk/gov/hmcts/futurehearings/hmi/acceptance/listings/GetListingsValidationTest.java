@@ -47,7 +47,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
     void test_date_of_listing_queryparam_with_value(final String dateOfListingKey,
                                                     final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -64,7 +64,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey,
                                                  final String hearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -88,7 +88,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
                                               final String paramKey2,
                                               final String paramVal2) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),

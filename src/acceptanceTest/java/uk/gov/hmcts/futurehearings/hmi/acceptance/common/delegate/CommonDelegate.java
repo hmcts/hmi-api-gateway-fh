@@ -6,13 +6,12 @@ import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDto;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
-import java.io.IOException;
 import java.util.Map;
 
 public interface CommonDelegate {
 
 
-    void testExpectedResponseForSuppliedHeader(final String authorizationToken,
+    void test_expected_response_for_supplied_header(final String authorizationToken,
                                                            final String targetUrl,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,
@@ -23,5 +22,5 @@ public interface CommonDelegate {
                                                            final String inputFileDirectory,
                                                            final HmiVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDto delegateDT0) throws IOException;
+                                                           final DelegateDto delegateDT0) throws Exception;
 }

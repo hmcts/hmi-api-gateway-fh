@@ -58,7 +58,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void test_invalid_query_param_with_value() throws Exception {
         this.setUrlParams(buildQueryParams("extra_param_key", " "));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -70,12 +70,13 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 INVALID_QUERY_PARAMETER_MSG, null);
     }
 
+    //@ParameterizedTest(name = "Hearing Date with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingDate, date", "hearingDate,''", "hearingDate,' '", "hearingDate,NIL",
             "hearingDate, 2002-10-02T10:00:00-05:00"}, nullValues = "NIL")
     void test_hearing_date_query_param_with_value(final String hearingDateKey,
                                                         final String hearingDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingDateKey, hearingDateValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -87,11 +88,12 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
+    //@ParameterizedTest(name = "Hearing Id CaseHQ with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingIdCaseHQ, 234"})
     void test_invalid_hearing_id_casehq_query_param_with_value(final String hearingIdCaseHqKey,
                                                                final String hearingIdCaseHqValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingIdCaseHqKey, hearingIdCaseHqValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -103,12 +105,13 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 INVALID_QUERY_PARAMETER_MSG, null);
     }
 
+    //@ParameterizedTest(name = "Hearing Type with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingType, Theft", "hearingType,''", "hearingType,' '",
             "hearingType,NIL"}, nullValues = "NIL")
     void test_hearing_type_queryparam_with_value(final String hearingTypeKey,
                                                  final String hearingIdCaseHqValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingIdCaseHqValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -120,6 +123,8 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
+    //@ParameterizedTest(name = "Multiple params (Hearing_Date & Hearing Type)
+    // with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft",
             "hearingDate,'',hearingType,''", "hearingDate,' ',hearingType,' '"})
     void test_multiple_query_params_with_value(final String hearingDateKey,
@@ -128,7 +133,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                               final String hearingTypeValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -140,6 +145,8 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
+    //@ParameterizedTest(name = "All Query params (Hearing_Date & Hearing Type)
+    // with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft",
             "hearingDate,'',hearingType,''", "hearingDate,' ',hearingType,' '"})
     void test_all_query_params_with_value(final String hearingDateKey,
@@ -148,7 +155,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                            final String hearingTypeValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -160,6 +167,8 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 REQUEST_RECEIVED_SUCCESSFULLY_MSG, null);
     }
 
+    //@ParameterizedTest(name = "All Query params with extra parameter (Hearing_Date & Hearing Type,
+    // Extra Params) with and without value - Param : {0} --> {1}")
     @CsvSource(value = {"hearingDate,2002-10-02T10:00:00-05:00,hearingType,Theft,extra_param,extravalue",
             "hearingDate,'',hearingType,'',extra_param,''", "hearingDate,' ',hearingType,' ',extra_param, ' '"})
     void test_all_query_params_with_extra_params(final String hearingDateKey,
@@ -170,7 +179,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                                            final String extraParamValue) throws Exception {
         this.setUrlParams(QueryParamsHelper.buildQueryParams(hearingDateKey,
                 hearingDateValue, hearingTypeKey, hearingTypeValue, extraParamKey, extraParamValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),

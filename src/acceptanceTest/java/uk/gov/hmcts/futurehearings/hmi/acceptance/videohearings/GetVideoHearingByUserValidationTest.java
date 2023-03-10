@@ -43,7 +43,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
     @CsvSource(value = {"username,'abc124'", "username,''", "username,' '", "username,NIL"}, nullValues = "NIL")
     void test_username_query_param_valid_value(final String usernameKey, final String usernameValue) throws Exception {
         this.setUrlParams(buildQueryParams(usernameKey, usernameValue));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -61,7 +61,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
                                                final String paramKey2, final String paramVal2
                                                ) throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        commonDelegate.test_expected_response_for_supplied_header(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
