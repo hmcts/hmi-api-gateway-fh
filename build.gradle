@@ -399,7 +399,7 @@ dependencies {
     integrationTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     integrationTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     integrationTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-    integrationTestImplementation "org.assertj:assertj-core:3.8.0"
+    integrationTestImplementation "org.assertj:assertj-core:3.24.2"
     integrationTestImplementation "junit:junit:${junitVersion}"
     integrationTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
 
@@ -447,7 +447,7 @@ dependencies {
     functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
     functionalTestCompileOnly 'org.projectlombok:lombok:1.18.12'
     functionalTestImplementation "ch.qos.logback:logback-classic:1.2.3"
-    functionalTestImplementation "org.assertj:assertj-core:3.8.0"
+    functionalTestImplementation "org.assertj:assertj-core:3.24.2"
     functionalTestImplementation "junit:junit:${junitVersion}"
     functionalTestImplementation "org.junit.vintage:junit-vintage-engine:5.6.2"
     functionalTestCompile("org.springframework.boot:spring-boot-starter-test")
