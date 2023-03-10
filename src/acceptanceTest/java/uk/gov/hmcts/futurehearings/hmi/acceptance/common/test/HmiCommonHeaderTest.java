@@ -21,8 +21,8 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HmiUnsuppo
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommonSuccessVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiSuccessVerifier;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
@@ -91,7 +91,7 @@ public abstract class HmiCommonHeaderTest {
     void test_destination_system_unsupported_value(String unsupportedDestinationSystem) throws Exception {
         if (checkUnsupportedDestinations) {
             setHmiUnsupportedDestinationsErrorVerifier(new HmiUnsupportedDestinationsErrorVerifier());
-            commonDelegate.test_expected_response_for_supplied_header(
+            commonDelegate.testExpectedResponseForSuppliedHeader(
                     getAuthorizationToken(),
                     getRelativeUrl(),
                     getInputPayloadFileName(),
@@ -114,7 +114,7 @@ public abstract class HmiCommonHeaderTest {
     // @Test
     @DisplayName("Successfully validated response with all the header values")
     void test_successful_response_with_a_complete_header() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createCompletePayloadHeader(sourceSystem),
@@ -129,7 +129,7 @@ public abstract class HmiCommonHeaderTest {
     @Test
     @DisplayName("Headers with all empty values")
     void test_no_headers_populated() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(),
                 getInputPayloadFileName(),
@@ -151,7 +151,7 @@ public abstract class HmiCommonHeaderTest {
     @Test
     @DisplayName("Source System Header invalid value")
     void test_source_system_invalid_value() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithSourceSystemValue("R&M"),
@@ -170,7 +170,7 @@ public abstract class HmiCommonHeaderTest {
     @Test
     @DisplayName("Destination System Header invalid value")
     void test_destination_system_invalid_value() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithSourceAndDestinationSystemValues(sourceSystem, "R&M"),
@@ -209,7 +209,7 @@ public abstract class HmiCommonHeaderTest {
     })
     void test_request_created_at_invalid_values(String requestCreatedAtKey,
                                                 String requestCreatedAtVal) throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
@@ -239,7 +239,7 @@ public abstract class HmiCommonHeaderTest {
     })
     void test_request_created_at_with_valid_values(String requestCreatedAtKey,
                                                    String requestCreatedAtVal) throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
@@ -255,7 +255,7 @@ public abstract class HmiCommonHeaderTest {
     @Test
     @DisplayName("Accept System Header invalid value")
     void test_accept_at_with_invalid_value() throws Exception {
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createHeaderWithAcceptTypeAtSystemValue("application/pdf", sourceSystem),
@@ -281,9 +281,9 @@ public abstract class HmiCommonHeaderTest {
 
         final String expectedErrorMessage =
                         "Missing/Invalid Header " + duplicateHeaderKey;
-        Map<String,String> duplicateHeaderField  = new HashMap<>();
+        Map<String,String> duplicateHeaderField  = new ConcurrentHashMap<>();
         duplicateHeaderField.put(duplicateHeaderKey, duplicateHeaderValue);
-        commonDelegate.test_expected_response_for_supplied_header(
+        commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 null,

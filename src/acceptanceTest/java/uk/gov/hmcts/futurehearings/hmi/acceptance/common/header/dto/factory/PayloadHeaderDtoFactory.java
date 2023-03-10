@@ -9,9 +9,9 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHead
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Accessors(fluent = true)
 @ToString
@@ -63,7 +63,7 @@ public class PayloadHeaderDtoFactory {
     public static final Map<String, String> convertToMapWithMandatoryHeaders(final SystemHeaderDto systemHeaderDto,
         final BusinessHeaderDto businessHeaderDto) {
 
-        final Map<String, String> headerMap = new HashMap<>();
+        final Map<String, String> headerMap = new ConcurrentHashMap<>();
         headerMap.put("Content-Type", systemHeaderDto.contentType());
         headerMap.put("Accept", systemHeaderDto.accept());
         headerMap.put("Source-System", businessHeaderDto.sourceSystem());
