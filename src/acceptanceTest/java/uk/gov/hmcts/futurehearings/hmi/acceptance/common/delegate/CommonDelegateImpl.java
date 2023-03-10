@@ -24,7 +24,7 @@ public class CommonDelegateImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
 
-    public void test_expected_response_for_supplied_header(final String authorizationToken,
+    public void testExpectedResponseForSuppliedHeader(final String authorizationToken,
                                                            final String targetUrl,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,

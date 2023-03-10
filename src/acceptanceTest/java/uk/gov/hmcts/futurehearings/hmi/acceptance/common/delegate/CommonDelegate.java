@@ -11,7 +11,7 @@ import java.util.Map;
 public interface CommonDelegate {
 
 
-    void test_expected_response_for_supplied_header(final String authorizationToken,
+    void testExpectedResponseForSuppliedHeader(final String authorizationToken,
                                                            final String targetUrl,
                                                            final String inputFile,
                                                            final Map<String, String> standardHeaderMap,

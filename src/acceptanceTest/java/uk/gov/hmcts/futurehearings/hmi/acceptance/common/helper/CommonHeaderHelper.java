@@ -16,6 +16,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.facto
 public class CommonHeaderHelper {
 
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
+    private static final String REQUEST_CREATED_DATE = "2012-03-19T07:22:00Z";
     private static final String DESTINATION_SYSTEM = MOCK_DESTINATION_SYSTEM;
 
     public static Map<String, String> createCompletePayloadHeader(final String sourceSystem) {
@@ -24,7 +25,7 @@ public class CommonHeaderHelper {
                 MediaType.APPLICATION_JSON_VALUE,
                 "no-cache",
                 null,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 sourceSystem,
                 DESTINATION_SYSTEM
         );
@@ -34,7 +35,7 @@ public class CommonHeaderHelper {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 "CFT",
                 DESTINATION_SYSTEM
         );
@@ -47,7 +48,7 @@ public class CommonHeaderHelper {
                 MediaType.APPLICATION_JSON_VALUE,
                 "no-cache",
                 null,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 sourceSystem,
                 DESTINATION_SYSTEM,
                 duplicateHeaderValues
@@ -70,7 +71,7 @@ public class CommonHeaderHelper {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 sourceSystem,
                 DESTINATION_SYSTEM
         );
@@ -81,7 +82,7 @@ public class CommonHeaderHelper {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_JSON_VALUE,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 sourceSystem,
                 destinationSystem
         );
@@ -103,7 +104,7 @@ public class CommonHeaderHelper {
 
         return buildHeaderWithValues(MediaType.APPLICATION_JSON_VALUE,
                 acceptType,
-                "2012-03-19T07:22:00Z",
+                REQUEST_CREATED_DATE,
                 sourceSystem,
                 DESTINATION_SYSTEM
         );
