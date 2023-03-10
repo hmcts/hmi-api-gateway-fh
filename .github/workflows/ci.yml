@@ -1,0 +1,44 @@
+name: Java gradle checks
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+
+jobs:
+  build-gradle-project:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout project sources
+      uses: actions/checkout@v2
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Run CheckStyle Main
+      run: ./gradlew checkStyleMain
+    - name: Run PMD Main
+      run: ./gradlew pmdMain
+    - name: Run CheckStyle Test
+      run: ./gradlew checkStyleTest
+    - name: Run PMD Test
+      run: ./gradlew pmdTest
+    - name: Run CheckStyle Acceptance Test
+      run: ./gradlew checkStyleAcceptanceTest
+    - name: Run PMD Acceptance Test
+      run: ./gradlew pmdAcceptanceTest
+    - name: Run CheckStyle Smoke Test
+      run: ./gradlew checkStyleSmokeTest
+    - name: Run PMD Smoke Test
+      run: ./gradlew pmdSmokeTest
+    - name: Run CheckStyle Integration Test
+      run: ./gradlew checkStyleIntegrationTest
+    - name: Run PMD Integration Test
+      run: ./gradlew pmdIntegrationTest
+    - name: Run CheckStyle Functional Test
+      run: ./gradlew checkStyleFunctionalTest
+    - name: Run PMD Functional Test
+      run: ./gradlew pmdFunctionalTest
+
+
+
+
+
