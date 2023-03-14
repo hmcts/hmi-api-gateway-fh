@@ -24,6 +24,7 @@ public class PostCloneVideoHearingsValidationTest extends VideoHearingValidation
     private String cloneVideoHearingsRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, "InvalidHearingId123");

@@ -13,7 +13,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.facto
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.convertToMapWithMandatoryHeaders;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.factory.PayloadHeaderDtoFactory.convertToRestAssuredHeaderRequiredHeaders;
 
-public class CommonHeaderHelper {
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.DataflowAnomalyAnalysis"})
+public final class CommonHeaderHelper {
 
     private static final String MOCK_DESTINATION_SYSTEM = "MOCK";
     private static final String REQUEST_CREATED_DATE = "2012-03-19T07:22:00Z";
@@ -170,7 +171,7 @@ public class CommonHeaderHelper {
 
     public static String[] removeItemsFromArray(String[] arrayToRemoveItemsFrom, String... itemsToBeRemoved) {
         var updatedArray = arrayToRemoveItemsFrom;
-        if (!(arrayToRemoveItemsFrom == null) && arrayToRemoveItemsFrom.length > 0) {
+        if (arrayToRemoveItemsFrom != null && arrayToRemoveItemsFrom.length > 0) {
             for (String s : itemsToBeRemoved) {
                 updatedArray = ArrayUtils.removeElement(updatedArray, s);
             }

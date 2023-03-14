@@ -23,6 +23,7 @@ class GetSchedulesValidationTest extends SchedulesValidationTest {
     private String schedulesApiRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(schedulesApiRootContext);

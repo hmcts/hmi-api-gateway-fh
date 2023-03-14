@@ -24,7 +24,6 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiSucce
 import java.util.HashMap;
 import java.util.Map;
 
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createCompletePayloadHeader;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAcceptTypeAtSystemValue;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithAllValuesEmpty;
 import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHeaderHelper.createHeaderWithRequestCreatedAtSystemValue;
@@ -36,7 +35,8 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 @Slf4j
 @Setter
 @Getter
-@SuppressWarnings("java:S5786")
+@SuppressWarnings({"java:S5786", "PMD.AbstractClassWithoutAbstractMethod",
+        "PMD.TooManyFields", "PMD.UseConcurrentHashMap", "PMD.UnusedPrivateMethod"})
 public abstract class HmiCommonHeaderTest {
     private String authorizationToken;
     private String relativeUrl;
@@ -77,7 +77,7 @@ public abstract class HmiCommonHeaderTest {
         log.debug("After execution : " + info.getTestMethod().get().getName());
     }
 
-    protected void extractUnsupportedDestinations(String[] supportedDestinations) {
+    protected void extractUnsupportedDestinations(String... supportedDestinations) {
         var updatedArrayItems = removeItemsFromArray(allAvailableDestinations.clone(), supportedDestinations);
         setUnsupportedDestinations(updatedArrayItems);
     }
@@ -88,7 +88,7 @@ public abstract class HmiCommonHeaderTest {
     //This is to test specified unsupported destinations for the specified API end point URL
     @ParameterizedTest(name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
     @MethodSource("getUnsupportedDestinationsMethodSource")
-    void test_destination_system_unsupported_value(String unsupportedDestinationSystem) throws Exception {
+    void testDestinationSystemUnsupportedValue(String unsupportedDestinationSystem) throws Exception {
         if (checkUnsupportedDestinations) {
             setHmiUnsupportedDestinationsErrorVerifier(new HmiUnsupportedDestinationsErrorVerifier());
             commonDelegate.testExpectedResponseForSuppliedHeader(
@@ -110,25 +110,10 @@ public abstract class HmiCommonHeaderTest {
     private String[] getUnsupportedDestinationsMethodSource() {
         return getUnsupportedDestinations();
     }
-
-    // @Test
-    @DisplayName("Successfully validated response with all the header values")
-    void test_successful_response_with_a_complete_header() throws Exception {
-        commonDelegate.testExpectedResponseForSuppliedHeader(
-                getAuthorizationToken(),
-                getRelativeUrl(), getInputPayloadFileName(),
-                createCompletePayloadHeader(sourceSystem),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                getHttpSuccessStatus(),
-                getInputFileDirectory(),
-                getHmiSuccessVerifier(), "The request was received successfully.", null);
-    }
     
     @Test
     @DisplayName("Headers with all empty values")
-    void test_no_headers_populated() throws Exception {
+    void tesToHeadersPopulated() throws Exception {
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(),
@@ -150,7 +135,7 @@ public abstract class HmiCommonHeaderTest {
     // and tested for dependant EMULATOR or End Systems being available
     @Test
     @DisplayName("Source System Header invalid value")
-    void test_source_system_invalid_value() throws Exception {
+    void testSourceSystemInvalidValue() throws Exception {
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
@@ -169,7 +154,7 @@ public abstract class HmiCommonHeaderTest {
     //dependant Azure Mock,EMULATOR or End Systems being available
     @Test
     @DisplayName("Destination System Header invalid value")
-    void test_destination_system_invalid_value() throws Exception {
+    void testDestinationSystemInvalidValue() throws Exception {
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
@@ -207,7 +192,7 @@ public abstract class HmiCommonHeaderTest {
             "Invalid_Date_Format, 2019-10-12T07:20:00.00-01:00Z",
             "Invalid_Date_Format, 2019-10-12t07:20:00.00z",
     })
-    void test_request_created_at_invalid_values(String requestCreatedAtKey,
+    void testRequestCreatedAtInvalidValues(String requestCreatedAtKey,
                                                 String requestCreatedAtVal) throws Exception {
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
@@ -222,39 +207,9 @@ public abstract class HmiCommonHeaderTest {
                 "Missing/Invalid Header Request-Created-At", null);
     }
 
-    // @ParameterizedTest(name = "Request Created At System Header valid values - Param : {0} --> {1}")
-    @CsvSource({
-            "Valid_Date_Format, 2019-10-12T07:20:00",
-            "Valid_Date_Format, 2019-10-12T07:20:11.1111",
-            "Valid_Date_Format, 2019-10-12T07:20:00+00:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00+01:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00+01:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00-02:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00.00",
-            "Valid_Date_Format, 2019-10-12T07:20:00.00+01:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00.00-01:00",
-            "Valid_Date_Format, 2019-10-12T07:20:00Z",
-            "Valid_Date_Format, 2019-10-12T15:20:00Z",
-            "Valid_Date_Format, 2019-10-12T07:20:00.00Z",
-    })
-    void test_request_created_at_with_valid_values(String requestCreatedAtKey,
-                                                   String requestCreatedAtVal) throws Exception {
-        commonDelegate.testExpectedResponseForSuppliedHeader(
-                getAuthorizationToken(),
-                getRelativeUrl(), getInputPayloadFileName(),
-                createHeaderWithRequestCreatedAtSystemValue(requestCreatedAtVal, sourceSystem),
-                null,
-                getUrlParams(),
-                getHttpMethod(),
-                getHttpSuccessStatus(),
-                getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                "The request was received successfully.", null);
-    }
-
     @Test
     @DisplayName("Accept System Header invalid value")
-    void test_accept_at_with_invalid_value() throws Exception {
+    void testAcceptAtWithInvalidValue() throws Exception {
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
@@ -277,7 +232,7 @@ public abstract class HmiCommonHeaderTest {
             "Destination-System,NIL", "Destination-System,''", "Destination-System,SNL",
             "Request-Created-At,NIL", "Request-Created-At,''", "Request-Created-At,2002-10-02T15:00:00Z"
         }, nullValues = "NIL")
-    void test_duplicate_headers(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
+    void testDuplicateHeaders(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 
         final String expectedErrorMessage =
                         "Missing/Invalid Header " + duplicateHeaderKey;

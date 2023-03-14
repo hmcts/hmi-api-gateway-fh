@@ -22,6 +22,7 @@ public class PostPublicationValidationTest extends PublicationValidationTest {
     private String pihPublicationRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(pihPublicationRootContext);

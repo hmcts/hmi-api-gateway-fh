@@ -26,6 +26,7 @@ public class PostParticipantValidationTest extends VideoHearingValidationTest {
     private String participantsRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         String hearingId = String.valueOf(new Random().nextInt(99999999));

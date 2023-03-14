@@ -23,6 +23,7 @@ class PostSessionsValidationTest extends SessionsValidationTest {
     private String sessionsRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(sessionsRootContext);

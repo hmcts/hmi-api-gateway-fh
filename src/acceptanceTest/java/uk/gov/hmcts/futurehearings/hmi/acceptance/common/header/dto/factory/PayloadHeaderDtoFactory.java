@@ -9,17 +9,20 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.BusinessHead
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.header.dto.SystemHeaderDto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-public class PayloadHeaderDtoFactory {
+@SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.DataflowAnomalyAnalysis", "PMD.UseDiamondOperator"})
+public final class PayloadHeaderDtoFactory {
 
-    public static final SystemHeaderDto buildStandardSystemHeaderPart(final String contentType,
-        final String accept, final String authorization, final String contentEncoding, final String cacheControl) {
+    public static SystemHeaderDto buildStandardSystemHeaderPart(final String contentType, final String accept,
+                                                                final String authorization,
+                                                                final String contentEncoding,
+                                                                final String cacheControl) {
         return SystemHeaderDto.builder()
                 .contentType(contentType)
                 .accept(accept)
@@ -29,8 +32,9 @@ public class PayloadHeaderDtoFactory {
                 .build();
     }
 
-    public static final BusinessHeaderDto buildStandardBusinessHeaderPart(final String requestCreatedAt,
-        final String sourceSystem, final String destinationSystem) {
+    public static BusinessHeaderDto buildStandardBusinessHeaderPart(final String requestCreatedAt,
+                                                                    final String sourceSystem,
+                                                                    final String destinationSystem) {
         return BusinessHeaderDto.builder()
                 .requestCreatedAt(requestCreatedAt)
                 .sourceSystem(sourceSystem)
@@ -38,8 +42,9 @@ public class PayloadHeaderDtoFactory {
                 .build();
     }
 
-    public static final Headers convertToRestAssuredHeaderRequiredHeaders(final SystemHeaderDto systemHeaderDto,
-        final BusinessHeaderDto businessHeaderDto, final Map<String, String> mapAddedHeaderValues) {
+    public static Headers convertToRestAssuredHeaderRequiredHeaders(final SystemHeaderDto systemHeaderDto,
+                                                                    final BusinessHeaderDto businessHeaderDto,
+                                                                    final Map<String, String> mapAddedHeaderValues) {
 
         List<Header> listOfHeaders = new ArrayList<Header>();
         Header contentTypeHeader =  new Header("Content-Type", systemHeaderDto.contentType());
@@ -56,14 +61,13 @@ public class PayloadHeaderDtoFactory {
             Header extraHeader = new Header(key, value);
             listOfHeaders.add(extraHeader);
         });
-        Headers headers = new Headers(listOfHeaders);
-        return headers;
+        return new Headers(listOfHeaders);
     }
 
-    public static final Map<String, String> convertToMapWithMandatoryHeaders(final SystemHeaderDto systemHeaderDto,
-        final BusinessHeaderDto businessHeaderDto) {
+    public static Map<String, String> convertToMapWithMandatoryHeaders(final SystemHeaderDto systemHeaderDto,
+                                                                       final BusinessHeaderDto businessHeaderDto) {
 
-        final Map<String, String> headerMap = new HashMap<>();
+        final Map<String, String> headerMap = new ConcurrentHashMap<>();
         headerMap.put("Content-Type", systemHeaderDto.contentType());
         headerMap.put("Accept", systemHeaderDto.accept());
         headerMap.put("Source-System", businessHeaderDto.sourceSystem());
@@ -72,20 +76,11 @@ public class PayloadHeaderDtoFactory {
         return headerMap;
     }
 
-    public static final Map<String, String> convertToMapWithAllHeaders(final SystemHeaderDto systemHeaderDto,
-                                                                       final BusinessHeaderDto businessHeaderDto) {
+    public static Map<String, String> convertToMapWithAllHeaders(final SystemHeaderDto systemHeaderDto,
+                                                                 final BusinessHeaderDto businessHeaderDto) {
         final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDto, businessHeaderDto);
         headerMap.put("Cache-Control", systemHeaderDto.cacheControl());
         headerMap.put("Content-Encoding", systemHeaderDto.contentEncoding());
-        return headerMap;
-    }
-
-    public static final Map<String, String> convertToMapAfterHeadersAdded(final SystemHeaderDto systemHeaderDto,
-                                                                            final BusinessHeaderDto businessHeaderDto,
-                                                                            final Map<String,String> headersToAdd) {
-
-        final Map<String, String> headerMap = convertToMapWithMandatoryHeaders(systemHeaderDto, businessHeaderDto);
-        headerMap.putAll(headersToAdd);
         return headerMap;
     }
 

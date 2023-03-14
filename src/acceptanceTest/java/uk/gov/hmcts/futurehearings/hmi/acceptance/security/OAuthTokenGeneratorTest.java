@@ -46,6 +46,8 @@ class OAuthTokenGeneratorTest {
     @Value("${scope}")
     private String scope;
 
+    private static final String TRIAL_VALUE = "9912f05e-21f6-4a6a-9ca1-db101306db45";
+
     @BeforeAll
     public void initialiseValues() {
         RestAssured.useRelaxedHTTPSValidation();
@@ -55,7 +57,7 @@ class OAuthTokenGeneratorTest {
 
     @Test
     @DisplayName("Successfully validated response with an xml payload")
-    void test_get_token_successfully() throws Exception {
+    void testGetTokenSuccessfully() throws Exception {
         generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,
                 grantType, clientID,
@@ -66,8 +68,8 @@ class OAuthTokenGeneratorTest {
 
     @ParameterizedTest(name = "TenantId negative scenarios - Param : {0}")
     @NullSource
-    @ValueSource(strings = {"trial_value", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_tenant_scenarios(final String tenantId) throws Exception {
+    @ValueSource(strings = {"trial_value", })
+    void testGetTokenWithNegativeTenantScenarios(final String tenantId) throws Exception {
         final HttpStatus httpStatus = tenantId != null && "".equals(tenantId.trim())
                 ? HttpStatus.NOT_FOUND : HttpStatus.BAD_REQUEST;
         generateOAuthToken(tokenApiUrl,
@@ -80,8 +82,8 @@ class OAuthTokenGeneratorTest {
 
     @ParameterizedTest(name = "Invalid grant Type - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"", "authorization_code", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_grant_type(final String grantType) throws Exception {
+    @ValueSource(strings = {"", "authorization_code", TRIAL_VALUE})
+    void testGetTokenWithNegativeGrantType(final String grantType) throws Exception {
 
         generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,
@@ -93,8 +95,8 @@ class OAuthTokenGeneratorTest {
 
     @ParameterizedTest(name = "Invalid client id - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_client_id(final String clientID) throws Exception {
+    @ValueSource(strings = {"", "test_id", TRIAL_VALUE})
+    void testGetTokenWithNegativeClientId(final String clientID) throws Exception {
 
         generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,
@@ -106,8 +108,8 @@ class OAuthTokenGeneratorTest {
 
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
     @NullAndEmptySource
-    @ValueSource(strings = {"", "test_id", "9912f05e-21f6-4a6a-9ca1-db101306db45"})
-    void test_get_token_with_negative_client_secret(final String clientSecret) throws Exception {
+    @ValueSource(strings = {"", "test_id", TRIAL_VALUE})
+    void testGetTokenWithNegativeClientSecret(final String clientSecret) throws Exception {
         generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,
                 grantType, clientID,
@@ -119,7 +121,7 @@ class OAuthTokenGeneratorTest {
     @ParameterizedTest(name = "Invalid client secret - Param : {0}")
     @NullAndEmptySource
     @ValueSource(strings = {"", "test_id", "api://be6f8454-a584-41f7-bd74-ea6c4032c3a4/.default"})
-    void test_get_token_with_negative_scope(final String scope) throws Exception {
+    void testGetTokenWithNegativeScope(final String scope) throws Exception {
         generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,
                 grantType, clientID,

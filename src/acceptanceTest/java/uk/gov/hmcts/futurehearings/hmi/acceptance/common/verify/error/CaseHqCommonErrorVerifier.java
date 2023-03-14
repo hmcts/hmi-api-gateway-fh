@@ -13,8 +13,10 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 @Component("CaseHQCommonErrorVerifier")
 @NoArgsConstructor
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class CaseHqCommonErrorVerifier implements HmiErrorVerifier {
 
+    @Override
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {
@@ -23,7 +25,6 @@ public class CaseHqCommonErrorVerifier implements HmiErrorVerifier {
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
         assertEquals(2, response.getBody().jsonPath().getMap("$").size());
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
-        //assertEquals(expectedHttpStatus.value(), responseMap.get("statusCode"));
         assertEquals(expectedMessage, responseMap.get("errorDesc"));
     }
 }

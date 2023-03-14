@@ -23,6 +23,7 @@ class DeleteSessionsValidationTest extends SessionsValidationTest {
     private String sessionsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         sessionsIdRootContext = String.format(sessionsIdRootContext, "12345");

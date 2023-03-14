@@ -22,6 +22,7 @@ class GetVideoHearingByIdValidationTest extends PeopleValidationTest {
     private String videoHearingsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, "12345");
