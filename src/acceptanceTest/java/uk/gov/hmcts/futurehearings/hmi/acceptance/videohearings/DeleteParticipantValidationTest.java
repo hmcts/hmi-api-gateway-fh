@@ -26,6 +26,7 @@ class DeleteParticipantValidationTest extends VideoHearingValidationTest {
     private String participantsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         String hearingId = String.valueOf(new Random().nextInt(99999999));

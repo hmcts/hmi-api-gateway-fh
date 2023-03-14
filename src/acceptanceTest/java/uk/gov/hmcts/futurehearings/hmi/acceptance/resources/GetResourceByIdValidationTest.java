@@ -23,6 +23,7 @@ class GetResourceByIdValidationTest extends ResourceValidationTest {
     private String resourcesIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesIdRootContext = String.format(resourcesIdRootContext, "12345");

@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 @Component("HMICommonSuccessVerifier")
 public class HmiCommonSuccessVerifier implements HmiSuccessVerifier {
+
+    @Override
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {

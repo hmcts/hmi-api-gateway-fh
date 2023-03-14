@@ -23,6 +23,7 @@ class GetHearingsByIdValidationTest extends HearingValidationTest {
     private String hearingsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         hearingsIdRootContext = String.format(hearingsIdRootContext, "12345");

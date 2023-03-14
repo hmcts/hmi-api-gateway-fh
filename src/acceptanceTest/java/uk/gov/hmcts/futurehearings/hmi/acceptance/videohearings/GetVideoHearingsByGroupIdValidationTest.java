@@ -26,6 +26,7 @@ public class GetVideoHearingsByGroupIdValidationTest extends VideoHearingValidat
     private String videoHearingsGroupIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "InvalidGroupId123");

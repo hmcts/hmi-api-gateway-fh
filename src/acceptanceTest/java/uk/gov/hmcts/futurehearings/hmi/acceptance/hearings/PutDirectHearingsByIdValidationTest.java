@@ -24,6 +24,7 @@ class PutDirectHearingsByIdValidationTest extends HearingValidationTest {
     private String directhearingsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         directhearingsIdRootContext = String.format(directhearingsIdRootContext, "12345");

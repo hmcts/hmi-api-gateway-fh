@@ -13,6 +13,8 @@ import static org.junit.Assert.assertNotNull;
 @Slf4j
 @Component("CFTEmulatorErrorVerifier")
 public class CftEmulatorErrorVerifier implements HmiErrorVerifier {
+
+    @Override
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {

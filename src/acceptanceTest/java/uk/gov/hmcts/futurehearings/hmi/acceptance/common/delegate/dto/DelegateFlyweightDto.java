@@ -22,6 +22,8 @@ import java.util.Map;
 @EqualsAndHashCode
 public class DelegateFlyweightDto implements DelegateDto {
 
+    private static final long serialVersionUID = 1L;
+
     private String targetSubscriptionKey;
     private String authorizationToken;
     private String targetUrl;
