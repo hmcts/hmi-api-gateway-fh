@@ -36,3 +36,6 @@ jobs:
       run: ./gradlew checkStyleFunctionalTest
     - name: Run PMD Functional Test
       run: ./gradlew pmdFunctionalTest
+    # Won't fail build for now. Will enable failed build once security ticket applied 
+    - name: Run Security Check
+      run: ./gradlew -DdependencyCheck.failBuild=false dependencyCheckAggregate
