@@ -38,4 +38,4 @@ jobs:
       run: ./gradlew pmdFunctionalTest
     # Won't fail build for now. Will enable failed build once security ticket applied 
     - name: Run Security Check
-      run: ./gradlew -DdependencyCheck.failBuild=false dependencyCheckAggregate
+      run: ./gradlew --no-daemon -DdependencyCheck.failBuild=false dependencyCheckAggregate
