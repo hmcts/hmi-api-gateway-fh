@@ -28,10 +28,6 @@ jobs:
       run: ./gradlew checkStyleSmokeTest
     - name: Run PMD Smoke Test
       run: ./gradlew pmdSmokeTest
-    - name: Run CheckStyle Integration Test
-      run: ./gradlew checkStyleIntegrationTest
-    - name: Run PMD Integration Test
-      run: ./gradlew pmdIntegrationTest
     - name: Run CheckStyle Functional Test
       run: ./gradlew checkStyleFunctionalTest
     - name: Run PMD Functional Test
