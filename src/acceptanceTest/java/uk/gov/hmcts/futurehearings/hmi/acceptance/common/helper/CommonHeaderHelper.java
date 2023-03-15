@@ -1,7 +1,8 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper;
 
-import com.microsoft.applicationinsights.boot.dependencies.apachecommons.lang3.ArrayUtils;
+
 import io.restassured.http.Headers;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.MediaType;
 
 import java.util.Collections;
