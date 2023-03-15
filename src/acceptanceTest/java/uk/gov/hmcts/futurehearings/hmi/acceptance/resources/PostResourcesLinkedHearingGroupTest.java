@@ -25,6 +25,7 @@ public class PostResourcesLinkedHearingGroupTest extends ResourceValidationTest 
     private String resourcesLinkedHearingGroupRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(resourcesLinkedHearingGroupRootContext);

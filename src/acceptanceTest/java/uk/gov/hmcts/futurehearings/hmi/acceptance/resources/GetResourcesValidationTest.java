@@ -23,6 +23,7 @@ public class GetResourcesValidationTest extends ResourceValidationTest {
     private String resourcesRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(resourcesRootContext);

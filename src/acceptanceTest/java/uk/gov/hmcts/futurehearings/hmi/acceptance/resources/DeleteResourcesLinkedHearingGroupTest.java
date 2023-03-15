@@ -24,6 +24,7 @@ public class DeleteResourcesLinkedHearingGroupTest extends ResourceValidationTes
     private String resourcesLinkedHearingGroupIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, "123456");

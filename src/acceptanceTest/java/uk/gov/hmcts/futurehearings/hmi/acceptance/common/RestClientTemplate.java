@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-public class RestClientTemplate {
+@SuppressWarnings({"PMD.LinguisticNaming", "PMD.CyclomaticComplexity"})
+public final class RestClientTemplate {
 
     public static Response shouldExecute(final Headers headers,
                                          final String authorizationToken,
@@ -67,7 +68,7 @@ public class RestClientTemplate {
                         .when()
                         .delete().then().extract().response();
             case GET:
-                if (Objects.isNull(params) || params.size() == 0) {
+                if (Objects.isNull(params) || params.isEmpty()) {
                     return RestAssured
                             .expect().that().statusCode(expectedHttpStatus.value())
                             .given()

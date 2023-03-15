@@ -21,6 +21,7 @@ public class PutResourcesLinkedHearingGroupTest extends ResourceValidationTest {
     private String resourcesLinkedHearingGroupIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, "TEST");

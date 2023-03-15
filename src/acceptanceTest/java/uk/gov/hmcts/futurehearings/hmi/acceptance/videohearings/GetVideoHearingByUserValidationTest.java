@@ -29,6 +29,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
     private static final String ERROR_MSG = "Invalid query params.";
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(videohearingsRootContext);
@@ -41,7 +42,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
 
     @ParameterizedTest(name = "Test username with invalid values  - Param : {0} --> {1}")
     @CsvSource(value = {"username,'abc124'", "username,''", "username,' '", "username,NIL"}, nullValues = "NIL")
-    void test_username_query_param_valid_value(final String usernameKey, final String usernameValue) throws Exception {
+    void testUsernameQueryParamValidValue(final String usernameKey, final String usernameValue) throws Exception {
         this.setUrlParams(buildQueryParams(usernameKey, usernameValue));
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
@@ -56,10 +57,10 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
     }
 
     @ParameterizedTest(name = "Test All query params with extra param - Param : {0} --> {1}")
-    @CsvSource(value = {"username,abc123,extra_param,extra", "username,,extra_param,"})
-    void test_all_query_param_with_extra_param(final String paramKey1, final String paramVal1,
-                                               final String paramKey2, final String paramVal2
-                                               ) throws Exception {
+    @CsvSource({"username,abc123,extra_param,extra", "username,,extra_param,"})
+    void testAllQueryParamWithExtraParam(final String paramKey1, final String paramVal1,
+                                               final String paramKey2, final String paramVal2)
+            throws Exception {
         this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),

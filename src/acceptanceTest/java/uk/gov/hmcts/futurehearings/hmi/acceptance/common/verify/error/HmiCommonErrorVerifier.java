@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 @Component("HMICommonErrorVerifier")
 public class HmiCommonErrorVerifier implements HmiErrorVerifier {
+
+    @Override
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {

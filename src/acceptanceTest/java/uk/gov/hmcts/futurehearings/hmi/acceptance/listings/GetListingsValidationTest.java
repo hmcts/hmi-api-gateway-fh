@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryParamsHelper;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.error.HmiCommonErrorVerifier;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GetListingsValidationVerifier;
 
@@ -29,9 +28,9 @@ class GetListingsValidationTest extends ListingsValidationTest {
     private String listingsRootContext;
 
     private static final String LISTINGS_SUCCESS_MSG = "The request was received successfully.";
-    private static final String INVALID_QUERY_PARAMETER_MSG = "Invalid query parameter/s in the request URL.";
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(listingsRootContext);
@@ -44,7 +43,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '",
             "date_of_listing,NIL"}, nullValues = "NIL")
-    void test_date_of_listing_queryparam_with_value(final String dateOfListingKey,
+    void testDateOfListingQueryParamWithValue(final String dateOfListingKey,
                                                     final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
         commonDelegate.testExpectedResponseForSuppliedHeader(
@@ -61,7 +60,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Hearing Type with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"hearing_type, VH", "hearing_type,' '", "hearing_type,NIL"}, nullValues = "NIL")
-    void test_hearing_type_queryparam_with_value(final String hearingTypeKey,
+    void testHearingTypeQueryParamWithValue(final String hearingTypeKey,
                                                  final String hearingTypeValue) throws Exception {
         this.setUrlParams(buildQueryParams(hearingTypeKey, hearingTypeValue));
         commonDelegate.testExpectedResponseForSuppliedHeader(
@@ -83,11 +82,11 @@ class GetListingsValidationTest extends ListingsValidationTest {
                 "date_of_listing,NIL,hearing_type,NIL",
                 "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
                 "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
-    void test_multiple_query_params(final String paramKey1,
+    void testMultipleQueryParams(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,
                                               final String paramVal2) throws Exception {
-        this.setUrlParams(QueryParamsHelper.buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
+        this.setUrlParams(buildQueryParams(paramKey1, paramVal1, paramKey2, paramVal2));
         commonDelegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),

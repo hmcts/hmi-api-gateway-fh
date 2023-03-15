@@ -25,6 +25,7 @@ class DeleteVideoHearingsValidationTest extends VideoHearingValidationTest {
     private String videoHearingsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(videoHearingsIdRootContext);

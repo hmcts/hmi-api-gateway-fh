@@ -25,6 +25,7 @@ class PostVideoHearingsValidationTest extends VideoHearingValidationTest {
     private String videohearingsRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(videohearingsRootContext);

@@ -8,6 +8,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
 import java.util.Map;
 
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.UseObjectForClearerAPI"})
 public interface CommonDelegate {
 
 

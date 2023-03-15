@@ -20,6 +20,7 @@ public class PostDirectListingValidationTest extends DirectListingValidationTest
     private String listingsRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(listingsRootContext);

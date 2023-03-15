@@ -13,6 +13,8 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 @Component("HMIVerifier")
 public class HmiUnsupportedDestinationsErrorVerifier implements HmiVerifier {
+
+    @Override
     public void verify(HttpStatus httpStatus, String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());

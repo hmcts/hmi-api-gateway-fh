@@ -27,6 +27,7 @@ class PostHearingsValidationTest extends HearingValidationTest {
     private String hearingsApiRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         this.setRelativeUrl(hearingsApiRootContext);

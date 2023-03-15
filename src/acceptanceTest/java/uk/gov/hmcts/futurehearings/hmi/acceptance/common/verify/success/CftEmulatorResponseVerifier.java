@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Slf4j
 @Component("CFTEmulatorResponseVerifier")
 public class CftEmulatorResponseVerifier implements HmiSuccessVerifier {
+
+    @Override
     public void verify(HttpStatus expectedHttpStatus,
                        String expectedMessage,
                        Response response) {

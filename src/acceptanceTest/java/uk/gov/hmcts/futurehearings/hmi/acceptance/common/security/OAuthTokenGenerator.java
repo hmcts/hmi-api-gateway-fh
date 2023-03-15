@@ -9,9 +9,10 @@ import static io.restassured.RestAssured.expect;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
-public class OAuthTokenGenerator {
+@SuppressWarnings({"PMD.UseObjectForClearerAPI"})
+public final class OAuthTokenGenerator {
 
-    public static final String generateOAuthToken(final String tokenApiUrl,
+    public static String generateOAuthToken(final String tokenApiUrl,
                                                   final String tokenApiTenantId,
                                                   final String grantType,
                                                   final String clientID,
@@ -28,10 +29,10 @@ public class OAuthTokenGenerator {
         return response.jsonPath().getString("access_token");
     }
 
-    public static final Response callTokenGeneratorEndpoint(final String bodyForToken,
+    public static Response callTokenGeneratorEndpoint(final String bodyForToken,
                                                             final HttpStatus badRequest,
                                                             final String fullTokenApiUrl) {
-        Response response = expect().that().statusCode(badRequest.value())
+        return expect().that().statusCode(badRequest.value())
                 .given()
                 .body(bodyForToken)
                 .contentType(ContentType.URLENC)
@@ -41,7 +42,6 @@ public class OAuthTokenGenerator {
                 .then()
                 .extract()
                 .response();
-        return response;
     }
 
     private OAuthTokenGenerator() {

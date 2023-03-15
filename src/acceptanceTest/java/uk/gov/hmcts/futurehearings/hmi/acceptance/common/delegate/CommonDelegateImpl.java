@@ -11,6 +11,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.TestingUtils;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.delegate.dto.DelegateDto;
 import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +21,12 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.RestClientTempla
 
 @Slf4j
 @Component("CommonDelegate")
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.UseObjectForClearerAPI", "PMD.DataflowAnomalyAnalysis"})
 public class CommonDelegateImpl implements CommonDelegate {
 
     private static final String INPUT_FILE_PATH = "uk/gov/hmcts/futurehearings/hmi/acceptance/%s/input";
 
+    @Override
     public void testExpectedResponseForSuppliedHeader(final String authorizationToken,
                                                            final String targetUrl,
                                                            final String inputFile,
@@ -39,8 +42,8 @@ public class CommonDelegateImpl implements CommonDelegate {
 
         log.debug("The value of the target header (Header Map) : " + standardHeaderMap);
         log.debug("The value of the target header (Wiremock Header) :" + standardHeaderMap);
-        Headers standardWireMockHeaders = null;
-        if (Objects.nonNull(standardHeaderMap) && standardHeaderMap.size() > 0) {
+        Headers standardWireMockHeaders;
+        if (Objects.nonNull(standardHeaderMap) && !standardHeaderMap.isEmpty()) {
             standardWireMockHeaders = convertHeaderMapToWireMockHeaders(standardHeaderMap);
         } else {
             standardWireMockHeaders = headers;
@@ -59,17 +62,16 @@ public class CommonDelegateImpl implements CommonDelegate {
                                 final HttpStatus status,
                                 final String inputFileDirectory,
                                 final HmiVerifier hmiVerifier,
-                                final String expectedMessage) throws Exception {
+                                final String expectedMessage) throws IOException {
 
-        String inputPayload = null;
+        String inputPayload = "";
         switch (httpMethod) {
             case POST:
             case PUT:
-                inputPayload = TestingUtils.readFileContents(String.format(INPUT_FILE_PATH,
-                        inputFileDirectory) + "/" + inputFile);
                 hmiVerifier.verify(status, expectedMessage,
                         performRestCall(targetUrl, headers, authorizationToken,
-                                params, httpMethod, status, inputPayload));
+                                params, httpMethod, status, TestingUtils.readFileContents(String.format(INPUT_FILE_PATH,
+                                        inputFileDirectory) + "/" + inputFile)));
                 break;
             case DELETE:
                 if (inputFileDirectory != null) {
@@ -112,13 +114,11 @@ public class CommonDelegateImpl implements CommonDelegate {
     }
 
     private static Headers convertHeaderMapToWireMockHeaders(final Map<String, String> headerMap) {
-
         List<Header> listOfHeaders = new ArrayList<>();
         headerMap.forEach((key, value) -> {
             Header header = new Header(key, value);
             listOfHeaders.add(header);
         });
-        Headers headers = new Headers(listOfHeaders);
-        return headers;
+        return new Headers(listOfHeaders);
     }
 }

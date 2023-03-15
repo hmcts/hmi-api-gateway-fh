@@ -26,6 +26,7 @@ class DeleteListingsValidationTest extends ListingsValidationTest {
     private String listingsIdRootContext;
 
     @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
         listingsIdRootContext = String.format(listingsIdRootContext, "12345");
