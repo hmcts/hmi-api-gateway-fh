@@ -6,10 +6,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.smoke.common.rest.RestClient;
 import uk.gov.hmcts.futurehearings.hmi.smoke.common.test.SmokeTest;
 
 import static io.restassured.RestAssured.given;
@@ -20,23 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI People Context")
 @SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
-@Disabled("Disabled until http error code 503 has been fixed!")
 class PeopleApiSmokeTest extends SmokeTest {
 
-    private static final String PEOPLE_HEALTH_CHECK = "https://hmi-apim.test.platform.hmcts.net/hmi/elinks-health";
+    @Value("${peopleHealthcheck}")
+    private String peopleHealthcheck;
 
     @BeforeAll
     @Override
     public void initialiseValues() throws Exception {
         super.initialiseValuesDefault();
-        setRootContext(PEOPLE_HEALTH_CHECK);
+        setRootContext(peopleHealthcheck);
     }
 
     @Test
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
-        Response response = makeGetRequest(getRootContext());
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response codes should match");
+        Response response = RestClient.makeGetRequest(getRootContext());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response codes do not match");
     }
 
     public static Response makeGetRequest(final String rootContext) {

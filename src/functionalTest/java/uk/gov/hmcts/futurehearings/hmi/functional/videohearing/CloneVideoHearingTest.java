@@ -40,7 +40,6 @@ public class CloneVideoHearingTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-    @Disabled("This Test is skipped as we are getting service unavailable - 503")
     @Test
     public void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");

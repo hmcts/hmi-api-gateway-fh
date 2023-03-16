@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Hearing Context")
 @SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
-@Disabled
 public class CrimeApiSmokeTest extends SmokeTest {
 
     @Value("${crimeHealthCheckRootContext}")
