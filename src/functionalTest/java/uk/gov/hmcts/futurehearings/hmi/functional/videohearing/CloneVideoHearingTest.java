@@ -5,7 +5,6 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,7 +39,6 @@ public class CloneVideoHearingTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-    @Disabled("This Test is skipped as we are getting service unavailable - 503")
     @Test
     public void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
