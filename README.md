@@ -5,7 +5,7 @@
 ## Purpose
 
 The purpose of this README is to speed up the creation,usage and management of tests for the Functional,
-Acceptance, Integration, Contract and Smoke Tests.
+Acceptance, Integration, Contract and Smoke Tests..
 
 ## What's inside
 
