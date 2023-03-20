@@ -82,8 +82,9 @@ public class HmiApplicationContextInitializer implements
         try {
             executeProcess(property.getProperty("key"),
                     property.getProperty("value"));
-        } catch (Exception exception) {
+        } catch (IOException | InterruptedException | HmiProcessException exception) {
             log.error("ERROR while executing the process of the shell file", exception.getLocalizedMessage());
+            Thread.currentThread().interrupt();
         }
     }
 }

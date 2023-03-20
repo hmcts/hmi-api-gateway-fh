@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantRespo
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /{hearingId}/participants/{participantId} - Delete Participant")
-public class DeleteParticipantUnitTests {
+class DeleteParticipantUnitTests {
 
     private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
     private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();

@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /video-hearings - Update Video Hearings")
 @SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
-public class PutVideoHearingsUnitTests {
+class PutVideoHearingsUnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;
