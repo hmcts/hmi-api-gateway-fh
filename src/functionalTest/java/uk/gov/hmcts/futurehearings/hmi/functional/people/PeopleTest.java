@@ -14,6 +14,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +41,13 @@ public class PeopleTest extends FunctionalTest {
     @Steps
     PeopleSteps peopleSteps;
 
+    private final Random rand;
+
+    public PeopleTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @Before
     @Override
     public void initialiseValues() throws Exception {
@@ -61,7 +70,7 @@ public class PeopleTest extends FunctionalTest {
 
     @Test
     public void testPersonLookUp() {
-        peopleIdRootContext = String.format(peopleIdRootContext, new Random().nextInt(99999999));
+        peopleIdRootContext = String.format(peopleIdRootContext, rand.nextInt(99999999));
         headersAsMap = createStandardHmiHeader("ELINKS");
         peopleSteps.shouldGetByPeopleId(peopleIdRootContext,
                 headersAsMap,

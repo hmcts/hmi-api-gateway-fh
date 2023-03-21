@@ -27,9 +27,10 @@ public class PutParticipantValidationTest extends VideoHearingValidationTest {
     @Value("${participants_idRootContext}")
     private String participantsIdRootContext;
 
-    private Random rand;
+    private final Random rand;
 
     public PutParticipantValidationTest() throws NoSuchAlgorithmException {
+        super();
         rand = SecureRandom.getInstanceStrong();
     }
 

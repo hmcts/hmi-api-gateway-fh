@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"HideUtilityClassConstructor", "PMD.UseDiamondOperator"})
-public class HeaderFactory {
+public class HeaderFactory { //NOSONAR
 
     private static final String SOURCE_SYSTEM = "Source-System";
 

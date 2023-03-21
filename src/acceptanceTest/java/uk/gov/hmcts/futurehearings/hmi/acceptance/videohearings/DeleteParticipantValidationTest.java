@@ -27,9 +27,11 @@ class DeleteParticipantValidationTest extends VideoHearingValidationTest {
     @Value("${participants_idRootContext}")
     private String participantsIdRootContext;
 
-    private Random rand = SecureRandom.getInstanceStrong();
+    private final Random rand;
 
     DeleteParticipantValidationTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
     }
 
     @BeforeAll
