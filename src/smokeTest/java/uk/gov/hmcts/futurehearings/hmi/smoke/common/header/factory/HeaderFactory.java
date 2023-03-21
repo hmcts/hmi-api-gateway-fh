@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"HideUtilityClassConstructor"})
-public class HeaderFactory {
+public class HeaderFactory { //NOSONAR
 
     public static Map<String, String> createStandardHmiHeader(final String destinationSystem) {
 
