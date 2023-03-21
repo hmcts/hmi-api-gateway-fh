@@ -42,9 +42,9 @@ public abstract class PublicationValidationTest extends HmiCommonHeaderTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance; //NOSONAR
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
+        RestAssured.config = RestAssured.config() //NOSONAR
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("publication");
         String authorizationToken = generateOAuthToken(tokenApiUrl,

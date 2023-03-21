@@ -18,7 +18,7 @@ public final class OAuthTokenGenerator {
                                                   final String clientID,
                                                   final String clientSecret,
                                                   final String scope,
-                                                  final HttpStatus httpStatus) throws Exception {
+                                                  final HttpStatus httpStatus) throws Exception { //NOSONAR
 
         String fullTokenApiUrl = String.format(tokenApiUrl, tokenApiTenantId);
         final String bodyForToken = String.format("grant_type=%s&client_id=%s&client_secret=%s&scope=%s",

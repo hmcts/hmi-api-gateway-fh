@@ -29,7 +29,7 @@ public class GetResourcesValidationTest extends ResourceValidationTest {
         this.setRelativeUrl(resourcesRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetResourcesValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetResourcesValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

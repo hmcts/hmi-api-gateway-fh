@@ -28,7 +28,7 @@ class PutSessionsValidationTest extends SessionsValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired(required = true)
-    public CommonDelegate commonDelegate;
+    public CommonDelegate delegate;
 
     @Value("${sessions_idRootContext}")
     private String sessionsIdRootContext;
@@ -42,7 +42,7 @@ class PutSessionsValidationTest extends SessionsValidationTest {
         this.setHttpMethod(HttpMethod.PUT);
         this.setInputPayloadFileName("put-sessions-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

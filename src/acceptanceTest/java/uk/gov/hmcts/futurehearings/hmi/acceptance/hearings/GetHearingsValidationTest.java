@@ -33,7 +33,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
 
     @Qualifier("CommonDelegate")
     @Autowired
-    private CommonDelegate commonDelegate;
+    private CommonDelegate delegate;
 
     @Value("${hearingsApiRootContext}")
     private String hearingsApiRootContext;
@@ -46,15 +46,15 @@ class GetHearingsValidationTest extends HearingValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetHearingsValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetHearingsValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 
     @Test
     @DisplayName("Testing the Endpoint with an Invalid Query Parameter")
     void testInvalidQueryParamWithValue() throws Exception {
         this.setUrlParams(buildQueryParams("extra_param_key", " "));
-        commonDelegate.testExpectedResponseForSuppliedHeader(
+        delegate.testExpectedResponseForSuppliedHeader(
                 getAuthorizationToken(),
                 getRelativeUrl(), getInputPayloadFileName(),
                 createStandardPayloadHeader(),
@@ -62,7 +62,7 @@ class GetHearingsValidationTest extends HearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 INVALID_QUERY_PARAMETER_MSG, null);
     }
 }

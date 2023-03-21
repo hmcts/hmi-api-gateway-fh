@@ -34,7 +34,7 @@ public class GetVideoHearingsByGroupIdValidationTest extends VideoHearingValidat
         this.setHttpMethod(HttpMethod.GET);
         this.setSourceSystem("SNL");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

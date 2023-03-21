@@ -56,25 +56,28 @@ public abstract class HmiCommonHeaderTest {
     @Autowired(required = false)
     public CommonDelegate commonDelegate;
 
-    public HmiSuccessVerifier hmiSuccessVerifier;
+    public HmiSuccessVerifier hmiSuccessVerifier; //NOSONAR
 
-    public HmiErrorVerifier hmiErrorVerifier;
+    public HmiErrorVerifier hmiErrorVerifier; //NOSONAR
 
-    public HmiUnsupportedDestinationsErrorVerifier hmiUnsupportedDestinationsErrorVerifier;
+    public HmiUnsupportedDestinationsErrorVerifier hmiUnsupportedDestinationsErrorVerifier; //NOSONAR
 
     @BeforeEach
     public void beforeEach(TestInfo info) {
-        log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
+        info.getTestClass().ifPresent(value ->
+                log.debug("Test execution Class Initiated: " + value.getName()));
         sourceSystem = "CFT";
         checkUnsupportedDestinations = false;
-        setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        setHmiErrorVerifier(new HmiCommonErrorVerifier());
-        log.debug("Before execution : " + info.getTestMethod().get().getName());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
+        info.getTestClass().ifPresent(value ->
+                log.debug("Before execution : " + value.getName()));
     }
 
     @AfterEach
     public void afterEach(TestInfo info) {
-        log.debug("After execution : " + info.getTestMethod().get().getName());
+        info.getTestClass().ifPresent(value ->
+                log.debug("After execution : " + value.getName()));
     }
 
     protected void extractUnsupportedDestinations(String... supportedDestinations) {
@@ -84,13 +87,13 @@ public abstract class HmiCommonHeaderTest {
 
     //For individual API end points, Destination-System Header valid values are different and
     //unsupported destinations may be all or a subset of the eight of these
-    // {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"}
+    // {"VH", "SNL", "CFT", "CRIME", "ELINKS", "RM", "PIH", "HMI-DTU"} //NOSONAR
     //This is to test specified unsupported destinations for the specified API end point URL
     @ParameterizedTest(name = "Testing unsupported destinations  - unsupportedDestinationSystem : {0}")
     @MethodSource("getUnsupportedDestinationsMethodSource")
     void testDestinationSystemUnsupportedValue(String unsupportedDestinationSystem) throws Exception {
         if (checkUnsupportedDestinations) {
-            setHmiUnsupportedDestinationsErrorVerifier(new HmiUnsupportedDestinationsErrorVerifier());
+            hmiUnsupportedDestinationsErrorVerifier = new HmiUnsupportedDestinationsErrorVerifier();
             commonDelegate.testExpectedResponseForSuppliedHeader(
                     getAuthorizationToken(),
                     getRelativeUrl(),
@@ -101,13 +104,13 @@ public abstract class HmiCommonHeaderTest {
                     getHttpMethod(),
                     HttpStatus.BAD_REQUEST,
                     getInputFileDirectory(),
-                    getHmiUnsupportedDestinationsErrorVerifier(),
+                    hmiUnsupportedDestinationsErrorVerifier,
                     unsupportedDestinationSystem + " destination doesn't support this functionality",
                     null);
         }
     }
 
-    private String[] getUnsupportedDestinationsMethodSource() {
+    private String[] getUnsupportedDestinationsMethodSource() { //NOSONAR
         return getUnsupportedDestinations();
     }
     
@@ -126,7 +129,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 "Missing/Invalid Header Source-System", null);
     }
 
@@ -145,7 +148,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 "Missing/Invalid Header Source-System", null);
     }
 
@@ -164,7 +167,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 "Missing/Invalid Header Destination-System", null);
     }
 
@@ -203,7 +206,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 "Missing/Invalid Header Request-Created-At", null);
     }
 
@@ -219,7 +222,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.NOT_ACCEPTABLE,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 "Missing/Invalid Media Type", null);
     }
 
@@ -247,7 +250,7 @@ public abstract class HmiCommonHeaderTest {
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST,
                 getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 expectedErrorMessage, null);
     }
 }

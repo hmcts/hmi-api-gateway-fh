@@ -30,7 +30,7 @@ class PostSessionsValidationTest extends SessionsValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("post-sessions-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

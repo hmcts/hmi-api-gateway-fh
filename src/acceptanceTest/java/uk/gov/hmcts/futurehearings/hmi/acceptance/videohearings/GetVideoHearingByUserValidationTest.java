@@ -52,7 +52,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 SUCCESS_MSG, null);
     }
 
@@ -70,7 +70,7 @@ class GetVideoHearingByUserValidationTest extends VideoHearingValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 ERROR_MSG, null);
     }
 }

@@ -29,7 +29,7 @@ class GetSchedulesValidationTest extends SchedulesValidationTest {
         this.setRelativeUrl(schedulesApiRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetSchedulesValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetSchedulesValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

@@ -30,7 +30,7 @@ public class GetSessionsByIdValidationTest extends SessionsValidationTest {
         this.setRelativeUrl(sessionsIdRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetSessionByIdValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetSessionByIdValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

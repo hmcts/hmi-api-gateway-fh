@@ -34,7 +34,7 @@ class PostHearingsValidationTest extends HearingValidationTest {
         this.setHttpMethod(HttpMethod.POST);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.ACCEPTED);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

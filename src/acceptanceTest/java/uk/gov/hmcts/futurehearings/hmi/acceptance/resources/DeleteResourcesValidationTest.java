@@ -35,7 +35,7 @@ class DeleteResourcesValidationTest extends ResourceValidationTest {
         this.setHttpMethod(HttpMethod.DELETE);
         this.setInputPayloadFileName("delete-resource-request-valid.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

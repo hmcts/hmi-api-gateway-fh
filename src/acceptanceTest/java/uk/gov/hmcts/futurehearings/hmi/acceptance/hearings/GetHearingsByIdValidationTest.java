@@ -31,7 +31,7 @@ class GetHearingsByIdValidationTest extends HearingValidationTest {
         this.setHttpMethod(HttpMethod.GET);
         this.setInputPayloadFileName("hearing-request-standard.json");
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

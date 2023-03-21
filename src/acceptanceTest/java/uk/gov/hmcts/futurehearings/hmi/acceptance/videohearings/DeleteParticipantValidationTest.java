@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Slf4j
@@ -25,12 +27,17 @@ class DeleteParticipantValidationTest extends VideoHearingValidationTest {
     @Value("${participants_idRootContext}")
     private String participantsIdRootContext;
 
+    private Random rand = SecureRandom.getInstanceStrong();
+
+    DeleteParticipantValidationTest() throws NoSuchAlgorithmException {
+    }
+
     @BeforeAll
     @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
-        String participantId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
+        String participantId = String.valueOf(rand.nextInt(99999999));
         participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
         this.setRelativeUrl(participantsIdRootContext);
         this.setHttpMethod(HttpMethod.DELETE);
