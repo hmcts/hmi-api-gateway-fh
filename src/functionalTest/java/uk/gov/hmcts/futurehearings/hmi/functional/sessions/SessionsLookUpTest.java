@@ -5,7 +5,6 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings({"PMD.TooManyMethods"})
-@Ignore
 public class SessionsLookUpTest extends FunctionalTest {
 
     private static final String REQUEST_SESSION_TYPE = "requestSessionType";
@@ -115,7 +113,6 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put("requestJurisdiction", "CIV");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         sessionsLookUpSteps.checkSessionsForAllTheRelevantQueryParameters(sessionsRootContext,
                 headersAsMap,
