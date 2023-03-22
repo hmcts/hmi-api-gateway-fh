@@ -3,7 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.crime;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI Hearing Context")
 @SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
-@Disabled
 public class CrimeApiSmokeTest extends SmokeTest {
 
     @Value("${crimeHealthCheckRootContext}")

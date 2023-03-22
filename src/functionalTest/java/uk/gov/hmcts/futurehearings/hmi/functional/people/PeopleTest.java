@@ -6,7 +6,6 @@ import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +28,6 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.H
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings({"java:S2699", "PMD.UseDiamondOperator"})
-@Disabled("Disabled until http error code 503 has been fixed!")
 public class PeopleTest extends FunctionalTest {
 
     @Value("${peopleRootContext}")
