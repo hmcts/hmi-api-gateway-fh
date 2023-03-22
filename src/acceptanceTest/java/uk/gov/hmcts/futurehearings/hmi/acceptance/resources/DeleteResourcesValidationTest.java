@@ -21,6 +21,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DeleteResourcesValidationTest.class)
 @IncludeTags("Delete")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class DeleteResourcesValidationTest extends ResourceValidationTest {
 
     @Value("${resources_idRootContext}")

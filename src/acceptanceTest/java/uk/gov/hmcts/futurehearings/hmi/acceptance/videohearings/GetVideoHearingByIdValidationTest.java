@@ -15,7 +15,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.people.PeopleValidationTest;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases","java:S2187"})
 class GetVideoHearingByIdValidationTest extends PeopleValidationTest {
 
     @Value("${videohearings_idRootContext}")

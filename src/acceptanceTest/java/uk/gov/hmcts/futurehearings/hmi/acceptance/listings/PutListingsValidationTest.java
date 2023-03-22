@@ -19,7 +19,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PutListingsValidationTest.class)
 @IncludeTags("Put")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 class PutListingsValidationTest extends ListingsValidationTest {
 
     @Value("${listings_idRootContext}")

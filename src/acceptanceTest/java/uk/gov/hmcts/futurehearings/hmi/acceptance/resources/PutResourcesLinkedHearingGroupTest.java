@@ -14,7 +14,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 public class PutResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
     @Value("${resourcesLinkedHearingGroup_idRootContext}")

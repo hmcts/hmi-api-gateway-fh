@@ -20,6 +20,7 @@ import java.util.Random;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PostVideoHearingsValidationTest.class)
 @IncludeTags("Post")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public class PostParticipantValidationTest extends VideoHearingValidationTest {
 
     @Value("${participantsRootContext}")

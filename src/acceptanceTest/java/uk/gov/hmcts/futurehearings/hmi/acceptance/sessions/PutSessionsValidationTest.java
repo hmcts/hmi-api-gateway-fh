@@ -24,6 +24,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PutSessionsValidationTest.class)
 @IncludeTags("Put")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class PutSessionsValidationTest extends SessionsValidationTest {
 
     @Qualifier("CommonDelegate")

@@ -18,6 +18,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("acceptance")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public abstract class DirectListingValidationTest extends HmiCommonHeaderTest {
 
     @Value("${targetInstance}")
