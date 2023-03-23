@@ -1,11 +1,9 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.hearings;
 
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -17,7 +15,6 @@ import uk.gov.hmcts.futurehearings.hmi.functional.hearings.steps.HearingsSteps;
 import java.util.Random;
 
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
 @Narrative(text = {"In order to test that the Hearing Functionality is working properly",
         "As a tester",
         "I want to be able to execute the tests for Hearings API methods works in a lifecycle mode of execution"})

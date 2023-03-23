@@ -301,10 +301,26 @@ dependencies {
     }
     testImplementation group: 'org.springframework.security', name: 'spring-security-test'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-    testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
-    testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
-    testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
+    //testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+    functionalTestImplementation("io.rest-assured:rest-assured:${versions.restAssured}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+        exclude group: 'org.codehaus.groovy', module: 'groovy'
+    }
+    //testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
+    functionalTestImplementation("io.rest-assured:json-schema-validator:${versions.restAssured}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+        exclude group: 'org.codehaus.groovy', module: 'groovy'
+    }
+    //testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
+    functionalTestImplementation("o.rest-assured:xml-path:${versions.restAssured}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+        exclude group: 'org.codehaus.groovy', module: 'groovy'
+    }
+    //testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
+    functionalTestImplementation("o.rest-assured:json-path:${versions.restAssured}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+        exclude group: 'org.codehaus.groovy', module: 'groovy'
+    }
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api',version: versions.junit
     testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api',version: versions.junitPlatform
     testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
@@ -314,9 +330,15 @@ dependencies {
     smokeTestImplementation sourceSets.test.runtimeClasspath
     acceptanceTestImplementation sourceSets.main.runtimeClasspath
     acceptanceTestImplementation sourceSets.test.runtimeClasspath
+    functionalTestImplementation sourceSets.main.runtimeClasspath
+    functionalTestImplementation sourceSets.test.runtimeClasspath
 
     functionalTestImplementation("net.serenity-bdd:serenity-rest-assured:${versions.serenity}") {
         exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+    }
+
+    functionalTestImplementation("io.rest-assured:rest-assured:${versions.restAssured}") {
+        exclude group: 'org.codehaus.groovy', module: 'groovy'
     }
 
     functionalTestImplementation("org.springframework.boot:spring-boot-starter-test")
