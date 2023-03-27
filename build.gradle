@@ -15,7 +15,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '2.7.8'
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'org.owasp.dependencycheck' version '8.0.2'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'org.sonarqube' version '3.0'
@@ -38,7 +38,7 @@ defaultTasks 'clean', 'test', 'aggregate'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 
@@ -278,53 +278,51 @@ repositories {
 
 
 def versions = [
-        junit           : '5.9.2',
-        junitPlatform   : '1.9.2',
+        junit           : '5.6.2',
+        junitPlatform   : '1.6.2',
         reformLogging   : '5.1.7',
         springBoot      : springBoot.class.package.implementationVersion,
         springfoxSwagger: '2.9.2',
         pact_version    : '3.6.15',
-        serenity        : '3.6.12',
-        restAssured     : '5.3.0',
+        serenity        : '2.2.9',
+        restAssured     : '4.2.0',
         serenityreporter: '2.1.4',
         assertJ         : '3.8.0',
         logbackVersion  : '1.2.3'
 ]
 
+ext.libraries = [
+        junit5: [
+                "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
+                "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+                "org.junit.jupiter:junit-jupiter-params:${versions.junit}",
+                "org.junit.platform:junit-platform-commons:${versions.junitPlatform}",
+                "org.junit.platform:junit-platform-engine:${versions.junitPlatform}"
+        ]
+]
+
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.3.RELEASE'
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
-        exclude group: 'junit', module: 'junit'
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api',version: versions.junit
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api',version: versions.junitPlatform
-    testImplementation group: 'org.apiguardian', name: 'apiguardian-api', version: '1.1.2'
-    testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
+    testImplementation "org.junit.jupiter:junit-jupiter:${versions.junit}"
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
+    testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
 
     smokeTestImplementation sourceSets.main.runtimeClasspath
     smokeTestImplementation sourceSets.test.runtimeClasspath
     acceptanceTestImplementation sourceSets.main.runtimeClasspath
     acceptanceTestImplementation sourceSets.test.runtimeClasspath
-    functionalTestImplementation sourceSets.main.runtimeClasspath
-    functionalTestImplementation sourceSets.test.runtimeClasspath
-
-    functionalTestImplementation("net.serenity-bdd:serenity-rest-assured:${versions.serenity}") {
-        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
-    }
 
     functionalTestImplementation("org.springframework.boot:spring-boot-starter-test")
     functionalTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+    functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-    functionalTestImplementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.6'
 }
 
 mainClassName = 'uk.gov.hmcts.reform.demo.Application'
@@ -370,4 +368,3 @@ rootProject.tasks.named('processFunctionalTestResources') {
 rootProject.tasks.named('processAcceptanceTestResources') {
     duplicatesStrategy = 'include'
 }
-

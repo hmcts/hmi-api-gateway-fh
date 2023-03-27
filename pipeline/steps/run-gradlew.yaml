@@ -20,5 +20,5 @@ steps:
       publishJUnitResults: ${{ parameters.publishJUnitResults }}
       testResultsFiles: '**/TEST-*.xml'
       javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'
+      jdkVersionOption: '1.11'
       sonarQubeRunAnalysis: ${{ parameters.sonarAnalysis }}

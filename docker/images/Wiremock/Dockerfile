@@ -1,4 +1,4 @@
-FROM openjdk:17-oracle
+FROM openjdk:11
 LABEL maintainer="HMI-QA"
 ENV WIREMOCK_VERSION 2.27.1
 WORKDIR /opt/app/wiremock
