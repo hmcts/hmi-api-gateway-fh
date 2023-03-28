@@ -10,7 +10,7 @@ Acceptance, Integration, Contract and Smoke Tests.
 ## What's inside
 
 The template is a working application with a minimal setup. It contains:
- * application set up code.
+ * application set up code
  * Developer Tests
  * QA Tests (Smoke, Acceptance, Contract, Functional and Security)
  * docker setup
