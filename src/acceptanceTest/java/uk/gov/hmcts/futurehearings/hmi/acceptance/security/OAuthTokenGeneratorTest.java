@@ -51,7 +51,7 @@ class OAuthTokenGeneratorTest {
     @BeforeAll
     public void initialiseValues() {
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
+        RestAssured.config = RestAssured.config() //NOSONAR
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
 

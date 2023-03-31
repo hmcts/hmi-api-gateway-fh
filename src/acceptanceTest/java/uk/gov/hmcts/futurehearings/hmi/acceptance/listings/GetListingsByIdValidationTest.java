@@ -30,7 +30,7 @@ class GetListingsByIdValidationTest extends ListingsValidationTest {
         this.setRelativeUrl(listingsIdRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetListingsByIdValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetListingsByIdValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 }

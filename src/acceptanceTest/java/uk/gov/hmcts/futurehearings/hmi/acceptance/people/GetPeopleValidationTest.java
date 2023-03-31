@@ -41,8 +41,8 @@ class GetPeopleValidationTest extends PeopleValidationTest {
         this.setRelativeUrl(peopleRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new HmiCommonSuccessVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new HmiCommonSuccessVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
         this.setUrlParams(Map.of("updated_since", "2020-10-01"));
     }
 
@@ -62,7 +62,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 SUCCESS_MSG, null);
     }
 
@@ -79,7 +79,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 UPDATED_SINCE_INVALID_DATE_FORMAT, null);
     }
 
@@ -96,7 +96,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiErrorVerifier(),
+                hmiErrorVerifier,
                 UPDATED_SINCE_INVALID_DATE_FORMAT, null);
     }
 
@@ -114,7 +114,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 SUCCESS_MSG, null);
     }
 
@@ -135,7 +135,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.BAD_REQUEST, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 ERROR_MSG, null);
     }
 }

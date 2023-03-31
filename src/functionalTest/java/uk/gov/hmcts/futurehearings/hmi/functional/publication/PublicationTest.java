@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.thucydides.core.annotations.Narrative;
 import net.thucydides.core.annotations.Steps;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -15,8 +14,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.publication.steps.PublicationSteps;
 
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -31,7 +30,7 @@ import java.util.Map;
 public class PublicationTest extends PihFunctionalTest {
 
     @Value("${pihPublicationRootContext}")
-    private String pihPublicationRootContext;
+    private String publicationAndInformationRootContext;
 
     @Steps
     PublicationHeaders publicationHeaders;
@@ -70,21 +69,20 @@ public class PublicationTest extends PihFunctionalTest {
      */
     @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/functionalTest/"
+        String fileText;
+        try (InputStream mockFile = Files.newInputStream(Paths.get("src/functionalTest/"
                 + "resources/uk/gov/hmcts/futurehearings/hmi/functional/"
-                + "Publications.input/POST-Publication-request.json")),
-                writer,
-                Charset.defaultCharset()
-        );
+                + "Publications.input/POST-Publication-request.json"))) {
+            fileText = new String(mockFile.readAllBytes(), StandardCharsets.UTF_8);
+        }
         setPnIMandatoryHeaders(headersAsMap);
         setPnIAdditionalHeaders(headersAsMap);
 
         publicationSteps.createPublicationWithValidHeadersAndPayload(
-                pihPublicationRootContext,
+                publicationAndInformationRootContext,
                 headersAsMap,
                 authorizationToken,
-                writer.toString()
+                fileText
         );
     }
 
@@ -96,7 +94,7 @@ public class PublicationTest extends PihFunctionalTest {
         setPnIMandatoryHeaders(headersAsMap);
         publicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
 
-        publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
+        publicationSteps.createPublicationWithInvalidPayload(publicationAndInformationRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}"
@@ -109,7 +107,7 @@ public class PublicationTest extends PihFunctionalTest {
     @Test
     public void testCreatePublicationUnauthorized() {
         setPnIMandatoryHeaders(headersAsMap);
-        publicationSteps.createPublicationUnauthorized(pihPublicationRootContext,
+        publicationSteps.createPublicationUnauthorized(publicationAndInformationRootContext,
                 headersAsMap,
                 "Invalid token 123456",
                 "{}"

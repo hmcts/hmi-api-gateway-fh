@@ -32,22 +32,6 @@ public class ResourcesSteps {
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 
-    @Step("User performs amend of a linked hearing group with an empty payload")
-    public void shouldAmendLinkedHearingGroupWithEmptyPayload(final String apiUrl,
-                                              final Map<String, Object> headersAsMap,
-                                              final String authorizationToken,
-                                              final HttpMethod httpMethod,
-                                              final String body) {
-
-        Response response = callRestEndpointWithPayload(apiUrl,
-                headersAsMap,
-                authorizationToken,
-                body,
-                httpMethod,
-                HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
-    }
-
     @Step("User performs the deletion of a linked hearing group")
     public void shouldDeleteLinkedHearingGroupInvalid(final String apiUrl,
                                                       final Map<String, Object> headersAsMap,

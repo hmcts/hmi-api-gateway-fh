@@ -14,6 +14,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Slf4j
@@ -34,6 +36,13 @@ public class ResourcesApiTest extends FunctionalTest {
     @Steps
     ResourcesSteps resourceSteps;
 
+    private final Random rand;
+
+    public ResourcesApiTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @Test
     public void testRequestLinkedHearingGroup() {
         resourceSteps.shouldCreateLinkedHearingGroup(resourcesLinkedHearingGroupRootContext,
@@ -43,9 +52,9 @@ public class ResourcesApiTest extends FunctionalTest {
 
     @Test
     public void testAmendLinkedHearingGroup() {
-        int randomId = new Random().nextInt(99999999);
+        int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
-        resourceSteps.shouldAmendLinkedHearingGroupWithEmptyPayload(resourcesLinkedHearingGroupIdRootContext,
+        resourceSteps.shouldCreateLinkedHearingGroup(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
                 "{}");
@@ -53,7 +62,7 @@ public class ResourcesApiTest extends FunctionalTest {
 
     @Test
     public void testDeleteLinkedHearingGroupInvalid() {
-        int randomId = new Random().nextInt(99999999);
+        int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
         resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,

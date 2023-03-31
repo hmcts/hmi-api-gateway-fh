@@ -29,11 +29,11 @@ public class DelegateFlyweightDto implements DelegateDto {
     private String targetUrl;
     private String inputFile;
     private Map<String, String> standardHeaderMap;
-    private Headers headers;
+    private transient Headers headers;
     private Map<String, String> params;
     private HttpMethod httpMethod;
-    private HttpStatus status;
+    private transient HttpStatus status;
     private String inputFileDirectory;
-    private HmiVerifier hmiVerifier;
+    private transient HmiVerifier hmiVerifier;
     private String expectedMessage;
 }

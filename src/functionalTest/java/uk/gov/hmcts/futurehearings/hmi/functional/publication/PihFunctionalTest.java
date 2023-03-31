@@ -59,10 +59,10 @@ public class PihFunctionalTest {
 
     @Before
     public void initialiseValues() throws Exception {
-        RestAssured.config =
+        RestAssured.config = //NOSONAR
                 SerenityRest.config()
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance;  //NOSONAR
         SerenityRest.useRelaxedHTTPSValidation();
 
         this.authorizationToken = generateOAuthToken(tokenApiUrl,

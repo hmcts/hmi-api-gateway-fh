@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"HideUtilityClassConstructor", "PMD.UseDiamondOperator"})
-public class HeaderFactory {
+public class HeaderFactory { //NOSONAR
+
+    private static final String SOURCE_SYSTEM = "Source-System";
 
     private static final String JSON = "application/json";
 
@@ -19,9 +21,9 @@ public class HeaderFactory {
         headersAsMap.put("Content-Type", JSON);
         headersAsMap.put("Accept", JSON);
         if ("PIH".equals(destinationSystem)) {
-            headersAsMap.put("Source-System", "EMULATOR");
+            headersAsMap.put(SOURCE_SYSTEM, "EMULATOR");
         } else {
-            headersAsMap.put("Source-System", "CFT");
+            headersAsMap.put(SOURCE_SYSTEM, "CFT");
         }
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
@@ -37,7 +39,7 @@ public class HeaderFactory {
         Map<String,Object> headersAsMap = new ConcurrentHashMap<>();
         headersAsMap.put("Content-Type", JSON);
         headersAsMap.put("Accept", JSON);
-        headersAsMap.put("Source-System", sourceSystem);
+        headersAsMap.put(SOURCE_SYSTEM, sourceSystem);
         headersAsMap.put("Destination-System", destinationSystem);
         headersAsMap.put("Request-Created-At", requestCreatedAt);
         return headersAsMap;

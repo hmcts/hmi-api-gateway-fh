@@ -37,7 +37,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /resources/video-hearing - Request Video Hearing")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class GetVideoHearingsUnitTests {
+class GetVideoHearingsUnitTests {
 
     private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
     private final Map<String, Object> queryParams = new ConcurrentHashMap<>();

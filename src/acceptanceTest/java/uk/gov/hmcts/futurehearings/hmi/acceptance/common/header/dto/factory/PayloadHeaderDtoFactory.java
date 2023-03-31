@@ -46,7 +46,7 @@ public final class PayloadHeaderDtoFactory {
                                                                     final BusinessHeaderDto businessHeaderDto,
                                                                     final Map<String, String> mapAddedHeaderValues) {
 
-        List<Header> listOfHeaders = new ArrayList<Header>();
+        List<Header> listOfHeaders = new ArrayList<>();
         Header contentTypeHeader =  new Header("Content-Type", systemHeaderDto.contentType());
         listOfHeaders.add(contentTypeHeader);
         Header acceptHeader =  new Header("Accept", systemHeaderDto.accept());

@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("DELETE /video-hearings - Delete Video Hearings")
 @SuppressWarnings({"java:S2699", "PMD.TooManyMethods"})
-public class DeleteVideoHearingsUnitTests {
+class DeleteVideoHearingsUnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;

@@ -15,6 +15,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,6 +48,13 @@ public class VideoHearingTest extends FunctionalTest {
     @Steps
     VideoHearingSteps videoHearingSteps;
 
+    private final Random rand;
+
+    public VideoHearingTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @Before
     @Override
     public void initialiseValues() throws Exception {
@@ -64,7 +73,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testAmendVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
-        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         videoHearingSteps.shouldAmendVideoHearingWithInvalidPayload(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken, HttpMethod.PUT,
@@ -74,7 +83,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testDeleteVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
-        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         videoHearingSteps.shouldDeleteVideoHearing(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -85,7 +94,7 @@ public class VideoHearingTest extends FunctionalTest {
     public void testGetVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
-        queryParameters.put("username", String.valueOf(new Random().nextInt(99999999)));
+        queryParameters.put("username", String.valueOf(rand.nextInt(99999999)));
 
         videoHearingSteps.performVideoHearingGetByUsername(videoHearingsRootContext,
                 headersAsMap,
@@ -106,7 +115,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testPostParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
         participantsRootContext = String.format(participantsRootContext, hearingId);
         videoHearingSteps.performPostParticipant(participantsRootContext,
                 headersAsMap,
@@ -117,8 +126,8 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testPutParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
-        String participantId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
+        String participantId = String.valueOf(rand.nextInt(99999999));
         participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
         videoHearingSteps.performPutParticipant(participantsIdRootContext,
                 headersAsMap,
@@ -129,8 +138,8 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testDeleteParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
-        String participantId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
+        String participantId = String.valueOf(rand.nextInt(99999999));
         participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
         videoHearingSteps.performDeleteParticipant(participantsIdRootContext,
                 headersAsMap,
