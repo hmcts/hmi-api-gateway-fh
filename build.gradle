@@ -303,7 +303,7 @@ ext.libraries = [
 
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.3.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
