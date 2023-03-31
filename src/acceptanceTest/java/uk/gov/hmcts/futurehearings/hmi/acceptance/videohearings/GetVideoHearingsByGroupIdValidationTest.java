@@ -20,6 +20,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(GetVideoHearingsByGroupIdValidationTest.class)
 @IncludeTags("Get")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public class GetVideoHearingsByGroupIdValidationTest extends VideoHearingValidationTest {
 
     @Value("${videoHearings_GroupIdRootContext}")

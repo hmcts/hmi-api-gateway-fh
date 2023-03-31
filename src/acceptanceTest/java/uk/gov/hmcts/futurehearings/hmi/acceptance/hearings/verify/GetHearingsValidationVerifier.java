@@ -8,6 +8,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiSucce
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public class GetHearingsValidationVerifier implements HmiSuccessVerifier {
 
     @Override

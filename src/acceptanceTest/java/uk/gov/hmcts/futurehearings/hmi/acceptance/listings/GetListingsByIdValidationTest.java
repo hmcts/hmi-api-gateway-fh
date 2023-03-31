@@ -16,7 +16,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.listings.verify.GetListingsByI
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 class GetListingsByIdValidationTest extends ListingsValidationTest {
 
     @Value("${listings_idRootContext}")

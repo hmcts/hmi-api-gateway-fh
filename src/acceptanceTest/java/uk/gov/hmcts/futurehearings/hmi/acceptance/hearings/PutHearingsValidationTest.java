@@ -19,6 +19,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PutHearingsValidationTest.class)
 @IncludeTags("Put")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class PutHearingsValidationTest extends HearingValidationTest {
 
     @Value("${hearings_idRootContext}")

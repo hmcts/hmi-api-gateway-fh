@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryPara
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 class GetPeopleValidationTest extends PeopleValidationTest {
 
     @Value("${peopleRootContext}")

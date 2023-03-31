@@ -16,6 +16,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTo
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases","java:S2187"})
 public abstract class SessionsValidationTest extends HmiCommonHeaderTest {
 
     @Value("${targetInstance}")

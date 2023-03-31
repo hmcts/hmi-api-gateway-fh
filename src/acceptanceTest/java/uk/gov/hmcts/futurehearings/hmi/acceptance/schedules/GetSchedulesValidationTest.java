@@ -17,6 +17,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.schedules.verify.GetSchedulesV
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class GetSchedulesValidationTest extends SchedulesValidationTest {
 
     @Value("${schedulesApiRootContext}")

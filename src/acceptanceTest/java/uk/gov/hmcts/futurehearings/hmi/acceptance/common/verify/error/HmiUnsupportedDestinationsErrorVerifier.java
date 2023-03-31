@@ -8,7 +8,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.HmiVerifier;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @Component("HMIVerifier")

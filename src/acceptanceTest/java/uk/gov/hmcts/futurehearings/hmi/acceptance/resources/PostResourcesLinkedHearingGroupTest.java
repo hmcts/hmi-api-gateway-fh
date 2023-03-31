@@ -18,7 +18,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PostResourcesLinkedHearingGroupTest.class)
 @IncludeTags("POST")
-@SuppressWarnings("java:S2187")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 public class PostResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
     @Value("${resourcesLinkedHearingGroupRootContext}")
