@@ -19,6 +19,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(PostVideoHearingsValidationTest.class)
 @IncludeTags("Post")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class PostVideoHearingsValidationTest extends VideoHearingValidationTest {
 
     @Value("${videohearingsRootContext}")

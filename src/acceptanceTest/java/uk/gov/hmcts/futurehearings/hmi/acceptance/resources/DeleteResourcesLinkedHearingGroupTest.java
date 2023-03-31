@@ -18,6 +18,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DeleteResourcesValidationTest.class)
 @IncludeTags("Delete")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public class DeleteResourcesLinkedHearingGroupTest extends ResourceValidationTest {
 
     @Value("${resourcesLinkedHearingGroup_idRootContext}")

@@ -20,6 +20,7 @@ import uk.gov.hmcts.futurehearings.hmi.acceptance.common.verify.success.HmiCommo
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SelectClasses(DeleteListingsValidationTest.class)
 @IncludeTags("Delete")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 class DeleteListingsValidationTest extends ListingsValidationTest {
 
     @Value("${listings_idRootContext}")

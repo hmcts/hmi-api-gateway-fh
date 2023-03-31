@@ -14,6 +14,7 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
 public class PostSchedulesValidationTest extends SchedulesValidationTest {
 
     @Value("${schedulesApiRootContext}")
