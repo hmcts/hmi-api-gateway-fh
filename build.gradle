@@ -312,7 +312,7 @@ dependencies {
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
     testImplementation "org.junit.jupiter:junit-jupiter:${versions.junit}"
     testImplementation group: 'org.junit.platform', name: 'junit-platform-suite-api', version: '1.6.2'
-    testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.2'
+    testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
 
     smokeTestImplementation sourceSets.main.runtimeClasspath
     smokeTestImplementation sourceSets.test.runtimeClasspath
