@@ -57,7 +57,7 @@ public class HearingsApiTest extends FunctionalTest {
     @Test
     public void testAmendHearingWithEmptyPayload() {
         int randomId = rand.nextInt(99999999);
-        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
+        Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken,
                 "{}",
@@ -69,7 +69,7 @@ public class HearingsApiTest extends FunctionalTest {
     @Test
     public void testDeleteHearingWithEmptyPayload() {
         int randomId = rand.nextInt(99999999);
-        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
+        Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken,
                 "{}",
