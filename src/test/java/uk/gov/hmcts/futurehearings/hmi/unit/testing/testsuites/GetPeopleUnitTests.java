@@ -35,7 +35,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ListingsResponse
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("GET /people - Retrieve People")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class GetPeopleUnitTests {
+class GetPeopleUnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;

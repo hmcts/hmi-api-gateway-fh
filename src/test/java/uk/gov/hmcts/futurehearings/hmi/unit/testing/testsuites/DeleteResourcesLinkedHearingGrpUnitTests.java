@@ -39,7 +39,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ResourcesRespons
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /resources/location - Update Location Resource")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class DeleteResourcesLinkedHearingGrpUnitTests {
+class DeleteResourcesLinkedHearingGrpUnitTests {
 
     @Value("${targetInstance}")
     private String targetInstance;

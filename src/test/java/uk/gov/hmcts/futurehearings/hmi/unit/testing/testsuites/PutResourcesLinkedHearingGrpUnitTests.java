@@ -41,7 +41,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("PUT /resources/location - Update Location Resource")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class PutResourcesLinkedHearingGrpUnitTests {
+class PutResourcesLinkedHearingGrpUnitTests {
     static final String CORRECT_UPDATE_LOCATION_RESOURCE_PAYLOAD =
             "requests/update-resources-linked-hearing-group-payload.json";
 

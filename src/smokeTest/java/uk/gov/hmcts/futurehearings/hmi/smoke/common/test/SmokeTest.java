@@ -61,14 +61,16 @@ public class SmokeTest {
 
     @BeforeAll
     public void beforeAll(TestInfo info) {
-        log.debug("Test execution Class Initiated: " + info.getTestClass().get().getName());
+        info.getTestClass().ifPresent(value ->
+            log.debug("Test execution Class Initiated: " + value.getName())
+        );
     }
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance; //NOSONAR
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
+        RestAssured.config = RestAssured.config() //NOSONAR
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
 
         this.authorizationToken = generateOAuthToken(tokenApiUrl,
@@ -84,9 +86,9 @@ public class SmokeTest {
 
     @BeforeAll
     public void initialiseValuesDefault() {
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance; //NOSONAR
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
+        RestAssured.config = RestAssured.config() //NOSONAR
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
 }

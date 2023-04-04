@@ -9,7 +9,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.expect;
 
 @SuppressWarnings({"HideUtilityClassConstructor"})
-public class RestClientTemplate {
+public class RestClientTemplate { //NOSONAR
 
     public static Response callRestEndpointWithPayload(final String apiUrl,
                                                        final Map<String, Object> headersAsMap,

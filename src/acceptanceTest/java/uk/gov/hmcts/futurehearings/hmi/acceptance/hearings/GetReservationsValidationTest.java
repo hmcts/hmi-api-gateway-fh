@@ -54,7 +54,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
                 getHttpMethod(),
                 HttpStatus.OK,
                 getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 null,
                 null);
     }

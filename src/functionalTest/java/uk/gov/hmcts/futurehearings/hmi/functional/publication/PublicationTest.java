@@ -11,10 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -27,7 +28,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 public class PublicationTest extends PihFunctionalTest {
 
     @Value("${pihPublicationRootContext}")
-    private String pihPublicationRootContext;
+    private String publicationAndInformationRootContext;
 
     private static final LocalDateTime CURRENT_DATETIME = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
@@ -57,13 +58,11 @@ public class PublicationTest extends PihFunctionalTest {
 
     @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
-        String data = "";
-        try (InputStream mockFile = this.getClass().getClassLoader()
-                .getResourceAsStream("uk/gov/hmcts/futurehearings/hmi/functional/" +
-                        "Publications.input/POST-Publication-request.json")) {
-            try (Reader reader = new InputStreamReader(mockFile)) {
-                data = CharStreams.toString(reader);
-            }
+        String fileText;
+        try (InputStream mockFile = Files.newInputStream(Paths.get("src/functionalTest/"
+                + "resources/uk/gov/hmcts/futurehearings/hmi/functional/"
+                + "Publications.input/POST-Publication-request.json"))) {
+            fileText = new String(mockFile.readAllBytes(), StandardCharsets.UTF_8);
         }
         setPnIMandatoryHeaders(headersAsMap);
         setPnIAdditionalHeaders(headersAsMap);
@@ -71,7 +70,7 @@ public class PublicationTest extends PihFunctionalTest {
         callRestEndpointWithPayload(pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                data,
+                fileText,
                 HttpMethod.POST,
                 HttpStatus.CREATED);
     }

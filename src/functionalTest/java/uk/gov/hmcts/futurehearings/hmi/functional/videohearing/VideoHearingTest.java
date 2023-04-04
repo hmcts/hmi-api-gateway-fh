@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +39,13 @@ public class VideoHearingTest extends FunctionalTest {
     @Value("${participants_idRootContext}")
     protected String participantsIdRootContext;
 
+    private final Random rand;
+
+    public VideoHearingTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @BeforeAll
     @Override
     public void initialiseValues() throws Exception {
@@ -55,7 +64,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testAmendVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
-        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         callRestEndpointWithPayload(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -65,7 +74,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testDeleteVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
-        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, new Random().nextInt(99999999));
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         callRestEndpointWithPayload(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -76,7 +85,7 @@ public class VideoHearingTest extends FunctionalTest {
     public void testGetVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
-        queryParameters.put("username", String.valueOf(new Random().nextInt(99999999)));
+        queryParameters.put("username", String.valueOf(rand.nextInt(99999999)));
         callRestEndpointWithQueryParams(videoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
@@ -97,7 +106,7 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testPostParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
         participantsRootContext = String.format(participantsRootContext, hearingId);
         callRestEndpointWithPayload(participantsRootContext,
                 headersAsMap,
@@ -108,8 +117,8 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testPutParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
-        String participantId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
+        String participantId = String.valueOf(rand.nextInt(99999999));
         participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
         callRestEndpointWithPayload(participantsIdRootContext,
                 headersAsMap,
@@ -120,8 +129,8 @@ public class VideoHearingTest extends FunctionalTest {
     @Test
     public void testDeleteParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = String.valueOf(new Random().nextInt(99999999));
-        String participantId = String.valueOf(new Random().nextInt(99999999));
+        String hearingId = String.valueOf(rand.nextInt(99999999));
+        String participantId = String.valueOf(rand.nextInt(99999999));
         participantsIdRootContext = String.format(participantsIdRootContext, hearingId, participantId);
         callRestEndpointWithPayload(participantsIdRootContext,
                 headersAsMap,

@@ -41,7 +41,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /resources/linked-hearing-group - Create LinkedHearingGroup Resource")
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.TooManyFields"})
-public class PostResourcesLinkedHearingGrpUnitTests {
+class PostResourcesLinkedHearingGrpUnitTests {
 
     private static final String CORRECT_CREATE_LINKED_HEARING_GROUP_RESOURCE_PAYLOAD =
             "requests/create-resources-linked-hearing-group-payload.json";

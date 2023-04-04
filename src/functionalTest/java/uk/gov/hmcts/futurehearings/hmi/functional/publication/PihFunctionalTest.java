@@ -59,11 +59,11 @@ public class PihFunctionalTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        RestAssured.config =
+        RestAssured.config = //NOSONAR
                 RestAssured.config()
                         .sslConfig(sslConfig().relaxedHTTPSValidation())
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance; //NOSONAR
 
         this.authorizationToken = generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,

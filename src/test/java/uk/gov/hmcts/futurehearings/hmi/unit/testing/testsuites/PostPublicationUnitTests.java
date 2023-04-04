@@ -41,7 +41,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.TestUtilities.re
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /pih/publication - Create/Update Publication")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class PostPublicationUnitTests {
+class PostPublicationUnitTests {
     private static final String CORRECT_UPDATE_PUBLICATION_PAYLOAD = "requests/create-publication-payload.json";
 
     @Value("${targetInstance}")

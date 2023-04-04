@@ -34,7 +34,7 @@ import static uk.gov.hmcts.futurehearings.hmi.unit.testing.util.ParticipantRespo
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("POST /{hearingId}/participants - Add Participant")
-public class PostAddParticipantUnitTests {
+class PostAddParticipantUnitTests {
 
     private final Map<String, Object> headersAsMap = new ConcurrentHashMap<>();
     private final Map<String, String> paramsAsMap = new ConcurrentHashMap<>();

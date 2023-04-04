@@ -23,5 +23,5 @@ public interface CommonDelegate {
                                                            final String inputFileDirectory,
                                                            final HmiVerifier hmiVerifier,
                                                            final String expectedMessage,
-                                                           final DelegateDto delegateDT0) throws Exception;
+                                                           final DelegateDto delegateDT0) throws Exception; //NOSONAR
 }

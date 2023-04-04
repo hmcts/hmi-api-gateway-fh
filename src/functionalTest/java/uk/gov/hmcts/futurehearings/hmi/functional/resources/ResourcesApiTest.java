@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +38,13 @@ public class ResourcesApiTest extends FunctionalTest {
         super.initialiseValues();
     }
 
+    private final Random rand;
+
+    public ResourcesApiTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @Test
     public void testRequestLinkedHearingGroup() {
         Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupRootContext,
@@ -49,7 +58,7 @@ public class ResourcesApiTest extends FunctionalTest {
 
     @Test
     public void testAmendLinkedHearingGroup() {
-        int randomId = new Random().nextInt(99999999);
+        int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
         Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
@@ -62,7 +71,7 @@ public class ResourcesApiTest extends FunctionalTest {
 
     @Test
     public void testDeleteLinkedHearingGroupInvalid() {
-        int randomId = new Random().nextInt(99999999);
+        int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
         Response response = callRestEndpointDelete(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,

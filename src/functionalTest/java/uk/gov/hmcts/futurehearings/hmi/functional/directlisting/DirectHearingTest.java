@@ -13,6 +13,8 @@ import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
@@ -35,7 +37,7 @@ public class DirectHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testDirectHearing() throws Exception {
+    public void testDirectHearing() throws IOException {
 
         String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/"
                 + "hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
@@ -46,9 +48,5 @@ public class DirectHearingTest extends FunctionalTest {
                 HttpStatus.BAD_REQUEST);
         log.info(response.getBody().asString());
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
-        /*directHearingSteps.performDirectHearingListingForGivenSessionId(directHearingsIdRootContext,
-                headersAsMap,
-                authorizationToken,
-                inputBodyForDirectListing);*/
     }
 }

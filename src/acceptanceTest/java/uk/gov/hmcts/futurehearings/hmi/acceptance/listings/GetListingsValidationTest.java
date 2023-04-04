@@ -36,8 +36,8 @@ class GetListingsValidationTest extends ListingsValidationTest {
         this.setRelativeUrl(listingsRootContext);
         this.setHttpMethod(HttpMethod.GET);
         this.setHttpSuccessStatus(HttpStatus.OK);
-        this.setHmiSuccessVerifier(new GetListingsValidationVerifier());
-        this.setHmiErrorVerifier(new HmiCommonErrorVerifier());
+        hmiSuccessVerifier = new GetListingsValidationVerifier();
+        hmiErrorVerifier = new HmiCommonErrorVerifier();
     }
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
@@ -54,7 +54,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 LISTINGS_SUCCESS_MSG, null);
     }
 
@@ -71,7 +71,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
+                hmiSuccessVerifier,
                 LISTINGS_SUCCESS_MSG, null);
     }
 
@@ -95,8 +95,8 @@ class GetListingsValidationTest extends ListingsValidationTest {
                 getUrlParams(),
                 getHttpMethod(),
                 HttpStatus.OK, getInputFileDirectory(),
-                getHmiSuccessVerifier(),
-                "The request was received successfully.", null);
+                hmiSuccessVerifier,
+                LISTINGS_SUCCESS_MSG, null);
     }
 
 }

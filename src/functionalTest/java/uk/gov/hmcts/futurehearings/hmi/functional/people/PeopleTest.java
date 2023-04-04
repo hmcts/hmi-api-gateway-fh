@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +34,13 @@ public class PeopleTest extends FunctionalTest {
 
     @Value("${people_idRootContext}")
     protected String peopleIdRootContext;
+
+    private final Random rand;
+
+    public PeopleTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
 
     @BeforeAll
     @Override
@@ -56,7 +65,7 @@ public class PeopleTest extends FunctionalTest {
 
     @Test
     public void testPersonLookUp() {
-        peopleIdRootContext = String.format(peopleIdRootContext, new Random().nextInt(99999999));
+        peopleIdRootContext = String.format(peopleIdRootContext, rand.nextInt(99999999));
         headersAsMap = createStandardHmiHeader("ELINKS");
         Response response = callRestEndpointWithPayload(peopleIdRootContext,
                 headersAsMap,

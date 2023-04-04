@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +36,13 @@ public class HearingsApiTest extends FunctionalTest {
         super.initialiseValues();
     }
 
+    private final Random rand;
+
+    public HearingsApiTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
     @Test
     public void testRequestHearingWithEmptyPayload() {
         Response response = callRestEndpointWithPayload(hearingsApiRootContext,
@@ -47,8 +56,8 @@ public class HearingsApiTest extends FunctionalTest {
 
     @Test
     public void testAmendHearingWithEmptyPayload() {
-        int randomId = new Random().nextInt(99999999);
-        Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
+        int randomId = rand.nextInt(99999999);
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken,
                 "{}",
@@ -59,8 +68,8 @@ public class HearingsApiTest extends FunctionalTest {
 
     @Test
     public void testDeleteHearingWithEmptyPayload() {
-        int randomId = new Random().nextInt(99999999);
-        Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
+        int randomId = rand.nextInt(99999999);
+        hearingsSteps.shouldRequestHearingWithInvalidPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
                 authorizationToken,
                 "{}",

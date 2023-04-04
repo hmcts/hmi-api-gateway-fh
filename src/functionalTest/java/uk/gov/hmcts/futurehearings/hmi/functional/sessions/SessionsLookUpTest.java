@@ -25,6 +25,8 @@ public class SessionsLookUpTest extends FunctionalTest {
     private static final String DESTINATION_SYSTEM = "Destination-System";
     private static final String SNL = "SNL";
     private static final String AVAILABLE_SLOT_COUNT = "requestAvailableSlotCount";
+    private static final String FALSE = "false";
+    private Integer availableSlotCount = 1;
 
     @Value("${sessionsRootContext}")
     protected String sessionsRootContext;
@@ -102,7 +104,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() {
+    public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() { //NOSONAR
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
@@ -116,7 +118,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForRequestSessionTypeAndGroupBooking() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put("requestGroupBooking", "false");
+        queryParameters.put("requestGroupBooking", FALSE);
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         callRestEndpointWithQueryParams(sessionsRootContext,
                 headersAsMap,
@@ -152,7 +154,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForRequestSessionTypeAndReturnAllSessions() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put("requestReturnAllSessions", "false");
+        queryParameters.put("requestReturnAllSessions", FALSE);
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         callRestEndpointWithQueryParams(sessionsRootContext,
                 headersAsMap,
@@ -164,7 +166,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForRequestSessionTypeAndIncludeDummyRooms() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put("requestIncludeDummyRooms", "false");
+        queryParameters.put("requestIncludeDummyRooms", FALSE);
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         callRestEndpointWithQueryParams(sessionsRootContext,
                 headersAsMap,
@@ -188,7 +190,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValue() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put(AVAILABLE_SLOT_COUNT, "1");
+        queryParameters.put(AVAILABLE_SLOT_COUNT, availableSlotCount.toString());
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         callRestEndpointWithQueryParams(sessionsRootContext,
                 headersAsMap,
@@ -199,8 +201,9 @@ public class SessionsLookUpTest extends FunctionalTest {
     @Test
     public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValuePlusOne() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
+        availableSlotCount = availableSlotCount + 1;
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
-        queryParameters.put(AVAILABLE_SLOT_COUNT, "2");
+        queryParameters.put(AVAILABLE_SLOT_COUNT, availableSlotCount.toString());
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
         callRestEndpointWithQueryParams(sessionsRootContext,
                 headersAsMap,
