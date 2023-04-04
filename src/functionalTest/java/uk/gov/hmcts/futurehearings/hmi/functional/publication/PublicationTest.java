@@ -1,43 +1,33 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.publication;
 
+import com.google.common.io.CharStreams;
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Steps;
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.publication.steps.PublicationSteps;
 
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
-@Narrative(text = {"Testing the Publication API is working correctly"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 public class PublicationTest extends PihFunctionalTest {
 
     @Value("${pihPublicationRootContext}")
     private String pihPublicationRootContext;
-
-    @Steps
-    PublicationHeaders publicationHeaders;
-
-    @Steps
-    PublicationSteps publicationSteps;
 
     private static final LocalDateTime CURRENT_DATETIME = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
@@ -49,7 +39,7 @@ public class PublicationTest extends PihFunctionalTest {
 
 
     private void setPnIMandatoryHeaders(Map<String, Object> headersAsMap) {
-        publicationHeaders.setPnIMandatoryHeaders(headersAsMap,
+        PublicationHeaders.setPnIMandatoryHeaders(headersAsMap,
                 "LIST",
                 "CARE_STANDARDS_LIST",
                 "5555",
@@ -58,61 +48,55 @@ public class PublicationTest extends PihFunctionalTest {
     }
 
     private void setPnIAdditionalHeaders(Map<String, Object> headersAsMap) {
-        publicationHeaders.setPnIAdditionalHeaders(headersAsMap,
+        PublicationHeaders.setPnIAdditionalHeaders(headersAsMap,
                 "PUBLIC",
                 CURRENT_DATETIME.toString(),
                 CURRENT_DATETIME.plusDays(1).toString()
         );
     }
 
-    /**
-     * Successful create publication test to P&I.
-     */
     @Test
     public void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(Files.newInputStream(Paths.get("src/functionalTest/"
-                + "resources/uk/gov/hmcts/futurehearings/hmi/functional/"
-                + "Publications.input/POST-Publication-request.json")),
-                writer,
-                Charset.defaultCharset()
-        );
+        String data = "";
+        try (InputStream mockFile = this.getClass().getClassLoader()
+                .getResourceAsStream("uk/gov/hmcts/futurehearings/hmi/functional/" +
+                        "Publications.input/POST-Publication-request.json")) {
+            try (Reader reader = new InputStreamReader(mockFile)) {
+                data = CharStreams.toString(reader);
+            }
+        }
         setPnIMandatoryHeaders(headersAsMap);
         setPnIAdditionalHeaders(headersAsMap);
 
-        publicationSteps.createPublicationWithValidHeadersAndPayload(
-                pihPublicationRootContext,
+        callRestEndpointWithPayload(pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                writer.toString()
-        );
+                data,
+                HttpMethod.POST,
+                HttpStatus.CREATED);
     }
 
-    /**
-     * Invalid header test to P&I.
-     */
     @Test
     public void tesCreatePublicationWithInvalidHeader() {
         setPnIMandatoryHeaders(headersAsMap);
-        publicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
+        PublicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
 
-        publicationSteps.createPublicationWithInvalidPayload(pihPublicationRootContext,
+        callRestEndpointWithPayload(pihPublicationRootContext,
                 headersAsMap,
                 authorizationToken,
-                "{}"
-        );
+                "{}",
+                HttpMethod.POST,
+                HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Unauthorised test to P&I.
-     */
     @Test
     public void testCreatePublicationUnauthorized() {
         setPnIMandatoryHeaders(headersAsMap);
-        publicationSteps.createPublicationUnauthorized(pihPublicationRootContext,
+        callRestEndpointWithPayload(pihPublicationRootContext,
                 headersAsMap,
                 "Invalid token 123456",
-                "{}"
-        );
+                "{}",
+                HttpMethod.POST,
+                HttpStatus.UNAUTHORIZED);
     }
 }

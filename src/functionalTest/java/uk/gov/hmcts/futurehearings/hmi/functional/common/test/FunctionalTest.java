@@ -1,12 +1,12 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.test;
 
 import io.restassured.RestAssured;
+import io.restassured.config.SSLConfig;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.rest.SerenityRest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.config.EncoderConfig.encoderConfig;
+import static io.restassured.config.SSLConfig.sslConfig;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTokenGenerator.generateOAuthToken;
 
@@ -57,13 +58,12 @@ public class FunctionalTest {
 
     protected String authorizationToken;
 
-    @Before
     public void initialiseValues() throws Exception {
         RestAssured.config =
-                SerenityRest.config()
+                RestAssured.config()
+                        .sslConfig(sslConfig().relaxedHTTPSValidation())
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         RestAssured.baseURI = targetInstance;
-        SerenityRest.useRelaxedHTTPSValidation();
 
         this.authorizationToken = generateOAuthToken(tokenApiUrl,
                 tokenApiTenantId,

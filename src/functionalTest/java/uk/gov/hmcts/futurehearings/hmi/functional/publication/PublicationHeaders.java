@@ -16,9 +16,9 @@ import java.util.Map;
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-public class PublicationHeaders {
+public final class PublicationHeaders {
 
-    protected void setPnIMandatoryHeaders(Map<String, Object> headersAsMap,
+    public static void setPnIMandatoryHeaders(Map<String, Object> headersAsMap,
                                           String typeValue,
                                           String listTypeValue,
                                           String courtIdValue,
@@ -31,7 +31,7 @@ public class PublicationHeaders {
         headersAsMap.put("x-language", languageValue);
     }
 
-    protected void setPnIAdditionalHeaders(Map<String, Object> headersAsMap,
+    public static void setPnIAdditionalHeaders(Map<String, Object> headersAsMap,
                                            String sensitivityValue,
                                            String displayFromValue,
                                            String displayToValue) {
@@ -41,7 +41,7 @@ public class PublicationHeaders {
 
     }
 
-    protected void setAHeader(Map<String, Object> headersAsMap,
+    public static void setAHeader(Map<String, Object> headersAsMap,
                               String headerKey,
                               String headerValue) {
         headersAsMap.put(headerKey, headerValue);

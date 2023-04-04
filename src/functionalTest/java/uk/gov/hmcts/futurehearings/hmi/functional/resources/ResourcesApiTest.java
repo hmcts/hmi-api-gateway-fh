@@ -1,26 +1,24 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.resources;
 
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Steps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.resources.steps.ResourcesSteps;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointDelete;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
-@Narrative(text = {"In order to test that the Resources API is functioning properly",
-        "As a tester",
-        "I want to be able to execute the tests for Resources API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 public class ResourcesApiTest extends FunctionalTest {
@@ -31,33 +29,45 @@ public class ResourcesApiTest extends FunctionalTest {
     @Value("${resourcesLinkedHearingGroup_idRootContext}")
     private String resourcesLinkedHearingGroupIdRootContext;
 
-    @Steps
-    ResourcesSteps resourceSteps;
+
+    @BeforeAll
+    @Override
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+    }
 
     @Test
     public void testRequestLinkedHearingGroup() {
-        resourceSteps.shouldCreateLinkedHearingGroup(resourcesLinkedHearingGroupRootContext,
-                headersAsMap, authorizationToken, HttpMethod.POST,
-                "{}");
+        Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}",
+                HttpMethod.POST,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 
     @Test
     public void testAmendLinkedHearingGroup() {
         int randomId = new Random().nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
-        resourceSteps.shouldAmendLinkedHearingGroupWithEmptyPayload(resourcesLinkedHearingGroupIdRootContext,
+        Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
-                authorizationToken, HttpMethod.PUT,
-                "{}");
+                authorizationToken,
+                "{}",
+                HttpMethod.PUT,
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 
     @Test
     public void testDeleteLinkedHearingGroupInvalid() {
         int randomId = new Random().nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
-        resourceSteps.shouldDeleteLinkedHearingGroupInvalid(resourcesLinkedHearingGroupIdRootContext,
+        Response response = callRestEndpointDelete(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.DELETE);
+                HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 }
