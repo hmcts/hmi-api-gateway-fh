@@ -99,6 +99,7 @@ test {
     include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
     failFast = false
     testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
     enableAssertions = true
     scanForTestClasses = true
