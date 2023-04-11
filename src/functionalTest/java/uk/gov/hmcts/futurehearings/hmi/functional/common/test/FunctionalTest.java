@@ -26,6 +26,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.security.OAuthTo
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("PMD")
 public class FunctionalTest {
 
     @Value("${targetInstance}")

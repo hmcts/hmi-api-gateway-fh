@@ -36,7 +36,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.CommonHea
 @Setter
 @Getter
 @SuppressWarnings({"java:S5786", "PMD.AbstractClassWithoutAbstractMethod",
-        "PMD.TooManyFields", "PMD.UseConcurrentHashMap", "PMD.UnusedPrivateMethod"})
+    "PMD.TooManyFields", "PMD.UseConcurrentHashMap", "PMD.UnusedPrivateMethod"})
 public abstract class HmiCommonHeaderTest {
     private String authorizationToken;
     private String relativeUrl;
@@ -173,27 +173,27 @@ public abstract class HmiCommonHeaderTest {
 
     @ParameterizedTest(name = "Request Created At System Header invalid values - Param : {0} --> {1}")
     @CsvSource({"Null_Value, null", "Empty_Space,\" \"", "Invalid_Value, value",
-            "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
-            "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
-            "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
-            "Invalid_Date_Format, 2002-10-02T15:00:00*05Z",
-            "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
-            "Invalid_Date_Format, 2019-10-12 07:20:50.52Z",
-            "Invalid_Date_Format, 2019-10-12 07:20:Z",
-            "Invalid_Date_Format, 2019-10-12 07:20:00",
-            "Invalid_Date_Format, 2019-02-00T07:20:00Z",
-            "Invalid_Date_Format, 2019-12-32T07:20:00Z",
-            "Invalid_Date_Format, 2019-02-10T24:00:00Z",
-            "Invalid_Date_Format, 2019-02-10T23:60:00Z",
-            "Invalid_Date_Format, 2019-02-10T23:50:60Z",
-            "Invalid_Date_Format, 2019-02-10T23:59:61Z",
-            "Invalid_Date_Format, 20-02-10T07:20:00Z",
-            "Invalid_Date_Format, 2019-10-12T07:20:00+01:00Z",
-            "Invalid_Date_Format, 2019-10-12T07:20:00+01:61Z",
-            "Invalid_Date_Format, 2019-10-12T07:20:00-02:00Z",
-            "Invalid_Date_Format, 2019-10-12T07:20:00.00+01:00Z",
-            "Invalid_Date_Format, 2019-10-12T07:20:00.00-01:00Z",
-            "Invalid_Date_Format, 2019-10-12t07:20:00.00z",
+        "Invalid_Date_Format, 2002-02-31T10:00:30-05:00Z",
+        "Invalid_Date_Format, 2002-02-31T1000:30-05:00",
+        "Invalid_Date_Format, 2002-02-31T10:00-30-05:00",
+        "Invalid_Date_Format, 2002-10-02T15:00:00*05Z",
+        "Invalid_Date_Format, 2002-10-02 15:00?0005Z",
+        "Invalid_Date_Format, 2019-10-12 07:20:50.52Z",
+        "Invalid_Date_Format, 2019-10-12 07:20:Z",
+        "Invalid_Date_Format, 2019-10-12 07:20:00",
+        "Invalid_Date_Format, 2019-02-00T07:20:00Z",
+        "Invalid_Date_Format, 2019-12-32T07:20:00Z",
+        "Invalid_Date_Format, 2019-02-10T24:00:00Z",
+        "Invalid_Date_Format, 2019-02-10T23:60:00Z",
+        "Invalid_Date_Format, 2019-02-10T23:50:60Z",
+        "Invalid_Date_Format, 2019-02-10T23:59:61Z",
+        "Invalid_Date_Format, 20-02-10T07:20:00Z",
+        "Invalid_Date_Format, 2019-10-12T07:20:00+01:00Z",
+        "Invalid_Date_Format, 2019-10-12T07:20:00+01:61Z",
+        "Invalid_Date_Format, 2019-10-12T07:20:00-02:00Z",
+        "Invalid_Date_Format, 2019-10-12T07:20:00.00+01:00Z",
+        "Invalid_Date_Format, 2019-10-12T07:20:00.00-01:00Z",
+        "Invalid_Date_Format, 2019-10-12t07:20:00.00z",
     })
     void testRequestCreatedAtInvalidValues(String requestCreatedAtKey,
                                                 String requestCreatedAtVal) throws Exception {
@@ -228,12 +228,12 @@ public abstract class HmiCommonHeaderTest {
 
     @ParameterizedTest(name = "Duplicate System headers with valid values - Param : {0} --> {1}")
     @CsvSource(value = {
-            //System Headers of Accept and Content-Type could not be
-            // duplicated as Rest Assured seems to remove the Duplication of valid same values.
-            //This should be tested manually using Postman.
-            "Source-System,NIL", "Source-System,''", "Source-System,CFT",
-            "Destination-System,NIL", "Destination-System,''", "Destination-System,SNL",
-            "Request-Created-At,NIL", "Request-Created-At,''", "Request-Created-At,2002-10-02T15:00:00Z"
+        //System Headers of Accept and Content-Type could not be
+        // duplicated as Rest Assured seems to remove the Duplication of valid same values.
+        //This should be tested manually using Postman.
+        "Source-System,NIL", "Source-System,''", "Source-System,CFT",
+        "Destination-System,NIL", "Destination-System,''", "Destination-System,SNL",
+        "Request-Created-At,NIL", "Request-Created-At,''", "Request-Created-At,2002-10-02T15:00:00Z"
         }, nullValues = "NIL")
     void testDuplicateHeaders(String duplicateHeaderKey, String duplicateHeaderValue) throws Exception {
 

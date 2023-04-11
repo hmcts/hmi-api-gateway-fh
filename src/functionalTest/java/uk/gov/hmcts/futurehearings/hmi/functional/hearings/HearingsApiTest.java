@@ -22,7 +22,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class HearingsApiTest extends FunctionalTest {
+@SuppressWarnings({"PMD.LawOfDemeter"})
+class HearingsApiTest extends FunctionalTest {
 
     @Value("${hearingsApiRootContext}")
     protected String hearingsApiRootContext;
@@ -30,13 +31,13 @@ public class HearingsApiTest extends FunctionalTest {
     @Value("${hearings_idRootContext}")
     protected String hearingsIdRootContext;
 
+    private final Random rand;
+
     @BeforeEach
     @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
-
-    private final Random rand;
 
     public HearingsApiTest() throws NoSuchAlgorithmException {
         super();
@@ -44,18 +45,19 @@ public class HearingsApiTest extends FunctionalTest {
     }
 
     @Test
-    public void testRequestHearingWithEmptyPayload() {
+    void testRequestHearingWithEmptyPayload() {
         Response response = callRestEndpointWithPayload(hearingsApiRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}",
                 HttpMethod.POST,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testAmendHearingWithEmptyPayload() {
+    void testAmendHearingWithEmptyPayload() {
         int randomId = rand.nextInt(99999999);
         Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
@@ -63,11 +65,12 @@ public class HearingsApiTest extends FunctionalTest {
                 "{}",
                 HttpMethod.PUT,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testDeleteHearingWithEmptyPayload() {
+    void testDeleteHearingWithEmptyPayload() {
         int randomId = rand.nextInt(99999999);
         Response response = callRestEndpointWithPayload(String.format(hearingsIdRootContext, randomId),
                 headersAsMap,
@@ -75,6 +78,7 @@ public class HearingsApiTest extends FunctionalTest {
                 "{}",
                 HttpMethod.DELETE,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 }

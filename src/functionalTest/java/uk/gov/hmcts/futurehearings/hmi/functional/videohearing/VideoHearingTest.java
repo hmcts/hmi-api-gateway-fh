@@ -24,8 +24,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class VideoHearingTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class VideoHearingTest extends FunctionalTest {
 
     @Value("${videohearingsRootContext}")
     protected String videoHearingsRootContext;
@@ -53,7 +53,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testCreateVideoHearingWithEmptyPayload() {
+    void testCreateVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
         callRestEndpointWithPayload(videoHearingsRootContext,
                 headersAsMap,
@@ -62,7 +62,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testAmendVideoHearingWithEmptyPayload() {
+    void testAmendVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         callRestEndpointWithPayload(videoHearingsIdRootContext,
@@ -72,7 +72,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testDeleteVideoHearing() {
+    void testDeleteVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
         callRestEndpointWithPayload(videoHearingsIdRootContext,
@@ -82,7 +82,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearing() {
+    void testGetVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("username", String.valueOf(rand.nextInt(99999999)));
@@ -93,7 +93,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearingById() {
+    void testGetVideoHearingById() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = "4564616C-0F7E-4D70-B0D7-A1BBF0874D5D";
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
@@ -104,7 +104,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testPostParticipant() {
+    void testPostParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
         participantsRootContext = String.format(participantsRootContext, hearingId);
@@ -115,7 +115,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testPutParticipant() {
+    void testPutParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
         String participantId = String.valueOf(rand.nextInt(99999999));
@@ -127,7 +127,7 @@ public class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testDeleteParticipant() {
+    void testDeleteParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
         String participantId = String.valueOf(rand.nextInt(99999999));

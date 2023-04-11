@@ -17,8 +17,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class GetVideoHearingsByGroupIdTest extends FunctionalTest {
 
     private static final String VALID_GROUP_ID = "f138520a-2a20-4b08-9777-a53fbb651e33";
     private static final String SNL = "SNL";
@@ -33,7 +33,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearingsWithInvalidGroupIdAndNoPayload() {
+    void testGetVideoHearingsWithInvalidGroupIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,
@@ -43,7 +43,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearingsWithInvalidGroupIdAndEmptyPayload() {
+    void testGetVideoHearingsWithInvalidGroupIdAndEmptyPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,
@@ -53,7 +53,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearingsWithInvalidGroupIdAndPayload() {
+    void testGetVideoHearingsWithInvalidGroupIdAndPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, "123");
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,
@@ -63,7 +63,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetsVideoHearingWithValidGroupIdAndNoPayload() {
+    void testGetsVideoHearingWithValidGroupIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,
@@ -73,7 +73,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetsVideoHearingWithValidGroupIdAndEmptyPayload() {
+    void testGetsVideoHearingWithValidGroupIdAndEmptyPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,
@@ -83,7 +83,7 @@ public class GetVideoHearingsByGroupIdTest extends FunctionalTest {
     }
 
     @Test
-    public void testGetVideoHearingsWithValidGroupIdAndPayload() {
+    void testGetVideoHearingsWithValidGroupIdAndPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         videoHearingsGroupIdRootContext = String.format(videoHearingsGroupIdRootContext, VALID_GROUP_ID);
         callRestEndpointWithPayload(videoHearingsGroupIdRootContext,

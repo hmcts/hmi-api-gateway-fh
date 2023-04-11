@@ -19,7 +19,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings({"PMD.TooManyMethods"})
-public class SessionsLookUpTest extends FunctionalTest {
+class SessionsLookUpTest extends FunctionalTest {
 
     private static final String REQUEST_SESSION_TYPE = "requestSessionType";
     private static final String DESTINATION_SYSTEM = "Destination-System";
@@ -41,7 +41,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionType() {
+    void testSuccessfulGetSessionForRequestSessionType() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
@@ -53,7 +53,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndDuration() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndDuration() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "DS");
         queryParameters.put("requestDuration", "360");
@@ -65,7 +65,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndLocation() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndLocation() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "DS");
         queryParameters.put("requestLocationId", "300");
@@ -79,7 +79,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndStartDateAndEndDate() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndStartDateAndEndDate() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestStartDate", "2022-02-25T09:00:00Z");
@@ -92,7 +92,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndPanelType() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndPanelType() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestPanelType", "Adult");
@@ -104,7 +104,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() { //NOSONAR
+    void testSuccessfulGetSessionForRequestSessionTypeAndJurisdiction() { //NOSONAR
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
@@ -115,7 +115,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndGroupBooking() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndGroupBooking() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestGroupBooking", FALSE);
@@ -127,7 +127,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndAvailableDuration() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndAvailableDuration() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestAvailableDuration", "200");
@@ -139,7 +139,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndAvailableSlotCount() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndAvailableSlotCount() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put(AVAILABLE_SLOT_COUNT, "2");
@@ -151,7 +151,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndReturnAllSessions() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndReturnAllSessions() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestReturnAllSessions", FALSE);
@@ -163,7 +163,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestSessionTypeAndIncludeDummyRooms() {
+    void testSuccessfulGetSessionForRequestSessionTypeAndIncludeDummyRooms() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put("requestIncludeDummyRooms", FALSE);
@@ -175,7 +175,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testInvalidGetSessionForSessionRequestTypeAndAvailableSlotCountMinValueMinusOne() {
+    void testInvalidGetSessionForSessionRequestTypeAndAvailableSlotCountMinValueMinusOne() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put(AVAILABLE_SLOT_COUNT, "0");
@@ -187,7 +187,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValue() {
+    void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValue() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
         queryParameters.put(AVAILABLE_SLOT_COUNT, availableSlotCount.toString());
@@ -199,7 +199,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValuePlusOne() {
+    void testSuccessfulGetSessionForSessionRequestTypeAndAvailableSlotCountMinValuePlusOne() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         availableSlotCount = availableSlotCount + 1;
         queryParameters.put(REQUEST_SESSION_TYPE, "CJ");
@@ -212,7 +212,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestServiceCode() {
+    void testSuccessfulGetSessionForRequestServiceCode() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("requestServiceCode", "1");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
@@ -223,7 +223,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestHearingType() {
+    void testSuccessfulGetSessionForRequestHearingType() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("requestHearingType", "AC");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);
@@ -234,7 +234,7 @@ public class SessionsLookUpTest extends FunctionalTest {
     }
 
     @Test
-    public void testSuccessfulGetSessionForRequestRoomAttributes() {
+    void testSuccessfulGetSessionForRequestRoomAttributes() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("requestRoomAttributes", "8");
         headersAsMap.put(DESTINATION_SYSTEM, SNL);

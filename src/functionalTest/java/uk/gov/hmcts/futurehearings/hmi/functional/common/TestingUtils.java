@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Log4j2
+@SuppressWarnings("PMD")
 public final class TestingUtils {
 
     public static String readFileContents(final String path) throws IOException {

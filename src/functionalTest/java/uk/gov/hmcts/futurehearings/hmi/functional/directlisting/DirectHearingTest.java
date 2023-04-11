@@ -21,8 +21,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class DirectHearingTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class DirectHearingTest extends FunctionalTest {
 
     @Value("${sessionsRootContext}")
     protected String sessionsRootContext;
@@ -37,7 +37,7 @@ public class DirectHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testDirectHearing() throws IOException {
+    void testDirectHearing() throws IOException {
 
         String inputBodyForDirectListing = readFileContents("uk/gov/hmcts/futurehearings/"
                 + "hmi/functional/direct-listing/input/PUT-Hearing-Direct-Listing-Payload.json");
@@ -47,6 +47,7 @@ public class DirectHearingTest extends FunctionalTest {
                 inputBodyForDirectListing, HttpMethod.PUT,
                 HttpStatus.BAD_REQUEST);
         log.info(response.getBody().asString());
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 }

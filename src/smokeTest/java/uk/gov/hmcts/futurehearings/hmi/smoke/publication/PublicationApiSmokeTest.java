@@ -34,7 +34,7 @@ class PublicationApiSmokeTest extends SmokeTest {
 
     @Test
     @DisplayName("Smoke Test to test the publication health endpoint")
-    public void testPublicationHmiApiGet() {
+    void testPublicationHmiApiGet() {
         Response response = RestClient.makeGetRequest(getRootContext());
         assertEquals(HttpStatus.OK.value(), response.getStatusCode(), "Response codes should match");
     }

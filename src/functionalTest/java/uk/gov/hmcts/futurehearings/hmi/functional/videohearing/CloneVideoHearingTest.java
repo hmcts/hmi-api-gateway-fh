@@ -17,8 +17,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class CloneVideoHearingTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class CloneVideoHearingTest extends FunctionalTest {
 
     private static final String VALID_HEARING_ID_IN_VH_TEST = "bab5ccb9-1cc5-4a24-9d26-b9c0aafaf43f";
     private static final String SNL = "SNL";
@@ -33,7 +33,7 @@ public class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
+    void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
         callRestEndpointWithPayload(cloneVideoHearingsRootContext,
@@ -43,7 +43,7 @@ public class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testCloneVideoHearingWithInvalidHearingIdAndEmptyPayload() {
+    void testCloneVideoHearingWithInvalidHearingIdAndEmptyPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, "123");
         callRestEndpointWithPayload(cloneVideoHearingsRootContext,
@@ -53,7 +53,7 @@ public class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndEmptyPayload() {
+    void testCloneVideoHearingWithValidHearingIdAndEmptyPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
         callRestEndpointWithPayload(cloneVideoHearingsRootContext,
@@ -64,7 +64,7 @@ public class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndPayload() {
+    void testCloneVideoHearingWithValidHearingIdAndPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
         callRestEndpointWithPayload(cloneVideoHearingsRootContext,

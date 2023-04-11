@@ -5,7 +5,7 @@ plugins {
     id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.springframework.boot' version '2.7.10'
-    id 'org.owasp.dependencycheck' version '8.0.2'
+    id 'org.owasp.dependencycheck' version '8.1.2'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'org.sonarqube' version '4.0.0.2929'
     id 'org.gradle.test-retry' version '1.5.2'
@@ -96,12 +96,6 @@ test {
     group = 'Delivery pipeline'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
-    failFast = false
-    testLogging.showStandardStreams = true
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-    enableAssertions = true
-    scanForTestClasses = true
 }
 
 task functional(type: Test) {
@@ -116,11 +110,6 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-    failFast = true
-    include "uk/gov/hmcts/futurehearings/hmi/integration/hearing/**"
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
 task smoke(type: Test) {
@@ -132,13 +121,6 @@ task smoke(type: Test) {
     description = "Runs Smoke Tests"
     testClassesDirs = sourceSets.smokeTest.output.classesDirs
     classpath = sourceSets.smokeTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/smoke/**"
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-
-    enableAssertions = true
-    scanForTestClasses = true
 }
 
 task acceptance(type: Test) {
@@ -147,12 +129,6 @@ task acceptance(type: Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/acceptance/**"
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-    enableAssertions = true
-    scanForTestClasses = true
 }
 
 clean {
@@ -161,17 +137,21 @@ clean {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.29'
+    toolVersion = '10.5.0'
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 pmd {
-    toolVersion = "6.18.0"
+    toolVersion = "6.52.0"
     sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
     reportsDir = file("$project.buildDir/reports/pmd")
     // https://github.com/pmd/pmd/issues/876
     ruleSets = []
     ruleSetFiles = files("config/pmd/ruleset.xml")
+}
+
+jacoco {
+    toolVersion = "0.8.8"
 }
 
 jacocoTestReport {
@@ -180,6 +160,16 @@ jacocoTestReport {
         xml.enabled = true
         csv.enabled = false
         xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
     }
 }
 

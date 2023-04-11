@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("smoke")
 @DisplayName("Smoke Test for the HMI CFT Health Check Context")
 @SuppressWarnings({"java:S2187", "PMD.LawOfDemeter"})
-public class CftApiSmokeTest extends SmokeTest {
+class CftApiSmokeTest extends SmokeTest {
 
     @Value("${cftHealthCheckRootContext}")
     private String cftHealthCheckRootContext;

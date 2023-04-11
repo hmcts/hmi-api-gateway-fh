@@ -3,7 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.publication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,10 +23,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class PublicationTest extends PihFunctionalTest {
-
-    @Value("${pihPublicationRootContext}")
-    private String publicationAndInformationRootContext;
+@SuppressWarnings({"PMD.LawOfDemeter"})
+class PublicationTest extends PihFunctionalTest {
 
     private static final LocalDateTime CURRENT_DATETIME = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
@@ -56,7 +53,7 @@ public class PublicationTest extends PihFunctionalTest {
     }
 
     @Test
-    public void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
+    void testCreatePublicationWithAllValidHeadersAndPayload() throws IOException {
         String fileText;
         try (InputStream mockFile = Files.newInputStream(Paths.get("src/functionalTest/"
                 + "resources/uk/gov/hmcts/futurehearings/hmi/functional/"
@@ -75,7 +72,7 @@ public class PublicationTest extends PihFunctionalTest {
     }
 
     @Test
-    public void tesCreatePublicationWithInvalidHeader() {
+    void tesCreatePublicationWithInvalidHeader() {
         setPnIMandatoryHeaders(headersAsMap);
         PublicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
 
@@ -88,7 +85,7 @@ public class PublicationTest extends PihFunctionalTest {
     }
 
     @Test
-    public void testCreatePublicationUnauthorized() {
+    void testCreatePublicationUnauthorized() {
         setPnIMandatoryHeaders(headersAsMap);
         callRestEndpointWithPayload(pihPublicationRootContext,
                 headersAsMap,

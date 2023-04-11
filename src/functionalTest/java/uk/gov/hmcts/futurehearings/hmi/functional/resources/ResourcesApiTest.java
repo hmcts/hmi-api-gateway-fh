@@ -23,7 +23,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class ResourcesApiTest extends FunctionalTest {
+@SuppressWarnings({"PMD.LawOfDemeter"})
+class ResourcesApiTest extends FunctionalTest {
 
     @Value("${resourcesLinkedHearingGroupRootContext}")
     private String resourcesLinkedHearingGroupRootContext;
@@ -31,6 +32,7 @@ public class ResourcesApiTest extends FunctionalTest {
     @Value("${resourcesLinkedHearingGroup_idRootContext}")
     private String resourcesLinkedHearingGroupIdRootContext;
 
+    private final Random rand;
 
     @BeforeAll
     @Override
@@ -38,26 +40,25 @@ public class ResourcesApiTest extends FunctionalTest {
         super.initialiseValues();
     }
 
-    private final Random rand;
-
     public ResourcesApiTest() throws NoSuchAlgorithmException {
         super();
         rand = SecureRandom.getInstanceStrong();
     }
 
     @Test
-    public void testRequestLinkedHearingGroup() {
+    void testRequestLinkedHearingGroup() {
         Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}",
                 HttpMethod.POST,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testAmendLinkedHearingGroup() {
+    void testAmendLinkedHearingGroup() {
         int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
         Response response = callRestEndpointWithPayload(resourcesLinkedHearingGroupIdRootContext,
@@ -66,17 +67,19 @@ public class ResourcesApiTest extends FunctionalTest {
                 "{}",
                 HttpMethod.PUT,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testDeleteLinkedHearingGroupInvalid() {
+    void testDeleteLinkedHearingGroupInvalid() {
         int randomId = rand.nextInt(99999999);
         resourcesLinkedHearingGroupIdRootContext = String.format(resourcesLinkedHearingGroupIdRootContext, randomId);
         Response response = callRestEndpointDelete(resourcesLinkedHearingGroupIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 }

@@ -18,8 +18,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class DirectListingTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class DirectListingTest extends FunctionalTest {
 
     @Value("${listingsRootContext}")
     protected String listingsRootContext;
@@ -31,11 +31,12 @@ public class DirectListingTest extends FunctionalTest {
     }
 
     @Test
-    public void testDirectListing() {
+    void testDirectListing() {
         Response response = callRestEndpointWithPayload(listingsRootContext,
                 headersAsMap,
                 authorizationToken,
                 "{}", HttpMethod.POST, HttpStatus.BAD_REQUEST);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode(),
+                "Status code do not matcht");
     }
 }

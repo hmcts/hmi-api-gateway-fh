@@ -17,7 +17,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class SchedulesApiTest extends FunctionalTest {
+class SchedulesApiTest extends FunctionalTest {
 
     @Value("${schedulesApiRootContext}")
     protected String schedulesApiRootContext;
@@ -29,7 +29,7 @@ public class SchedulesApiTest extends FunctionalTest {
     }
 
     @Test
-    public void testCreateScheduleWithEmptyPayload() {
+    void testCreateScheduleWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("SNL");
         callRestEndpointWithPayload(schedulesApiRootContext,
                 headersAsMap,

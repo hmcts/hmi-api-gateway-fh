@@ -26,8 +26,8 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings({"java:S2699", "PMD.UseDiamondOperator"})
-public class PeopleTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.UseDiamondOperator","PMD.LawOfDemeter"})
+class PeopleTest extends FunctionalTest {
 
     @Value("${peopleRootContext}")
     protected String peopleRootContext;
@@ -49,7 +49,7 @@ public class PeopleTest extends FunctionalTest {
     }
 
     @Test
-    public void testPeopleLookUp() {
+    void testPeopleLookUp() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
@@ -60,17 +60,19 @@ public class PeopleTest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testPersonLookUp() {
+    void testPersonLookUp() {
         peopleIdRootContext = String.format(peopleIdRootContext, rand.nextInt(99999999));
         headersAsMap = createStandardHmiHeader("ELINKS");
         Response response = callRestEndpointWithPayload(peopleIdRootContext,
                 headersAsMap,
                 authorizationToken,
                 null, HttpMethod.GET, HttpStatus.NOT_FOUND);
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 }

@@ -69,7 +69,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = DISPLAY_NAME + "requestStartDate : {0} --> {1}")
     @CsvSource(value = {"requestStartDate,2018-01-29 20:36:01Z", "requestStartDate,AD12H",
-            "requestStartDate,''", "requestStartDate,' '", "requestStartDate,NIL"}, nullValues = NIL)
+        "requestStartDate,''", "requestStartDate,' '", "requestStartDate,NIL"}, nullValues = NIL)
     void testRequestStartDateQueryParam(final String requestStartDateKey,
                                              final String requestStartDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestStartDateKey, requestStartDateValue));
@@ -78,7 +78,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = DISPLAY_NAME + "- requestEndDate : {0} --> {1}")
     @CsvSource(value = {"requestEndDate, 2018-01-29 20:36:01Z", "requestEndDate, AD12H",
-            "requestEndDate, ''", "requestEndDate, ' '", "requestEndDate, NIL"}, nullValues = NIL)
+        "requestEndDate, ''", "requestEndDate, ' '", "requestEndDate, NIL"}, nullValues = NIL)
     void testRequestEndDateQueryParam(final String requestEndDateKey,
                                            final String requestEndDateValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestEndDateKey, requestEndDateValue));
@@ -87,7 +87,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = DISPLAY_NAME + "requestDuration : {0} --> {1}")
     @CsvSource(value = {"requestDuration, 360", "requestDuration, case01", "requestDuration, ''",
-            "requestDuration, ' '", "requestDuration, NIL"}, nullValues = NIL)
+        "requestDuration, ' '", "requestDuration, NIL"}, nullValues = NIL)
     void testRequestDurationQueryParam(final String requestDurationKey,
                                            final String requestDurationValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestDurationKey, requestDurationValue));
@@ -111,7 +111,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = DISPLAY_NAME + "requestComments : {0} --> {1}")
     @CsvSource(value = {"requestComments, civil case", "requestComments, ADHOC", "requestComments, ''",
-            "requestComments, ' '", "requestComments, NIL"}, nullValues = NIL)
+        "requestComments, ' '", "requestComments, NIL"}, nullValues = NIL)
     void testRequestCommentsQueryParam(final String requestCommentsKey,
                                            final String requestCommentsValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestCommentsKey, requestCommentsValue));
@@ -120,7 +120,7 @@ public class GetReservationsValidationTest extends HearingValidationTest {
 
     @ParameterizedTest(name = DISPLAY_NAME + "requestExternalId : {0} --> {1}")
     @CsvSource(value = {"requestExternalId, TEST_EXTERNAL_ID", "requestExternalId, ADHOC",
-            "requestExternalId, ''", "requestExternalId, ' '", "requestExternalId, NIL"}, nullValues = NIL)
+        "requestExternalId, ''", "requestExternalId, ' '", "requestExternalId, NIL"}, nullValues = NIL)
     void testRequestExternalIdQueryParam(final String requestExternalIdKey,
                                               final String requestExternalIdValue) throws Exception {
         this.setUrlParams(buildQueryParams(requestExternalIdKey, requestExternalIdValue));

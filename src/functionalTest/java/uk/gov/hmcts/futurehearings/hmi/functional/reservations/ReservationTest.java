@@ -22,7 +22,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
 @SuppressWarnings({"PMD.LinguisticNaming", "PMD.LawOfDemeter", "PMD.UseDiamondOperator"})
-public class ReservationTest extends FunctionalTest {
+class ReservationTest extends FunctionalTest {
 
     @Value("${reservationsApiRootContext}")
     protected String reservationsApiRootContext;
@@ -34,7 +34,7 @@ public class ReservationTest extends FunctionalTest {
     }
 
     @Test
-    public void testReservationsLookUp() {
+    void testReservationsLookUp() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
 
         headersAsMap = createStandardHmiHeader("SNL");
@@ -43,7 +43,8 @@ public class ReservationTest extends FunctionalTest {
                 headersAsMap,
                 authorizationToken,
                 queryParameters, HttpStatus.OK);
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
 }
