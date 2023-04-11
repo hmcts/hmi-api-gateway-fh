@@ -1,6 +1,7 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.schedules;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,12 @@ public class SchedulesApiTest extends FunctionalTest {
 
     @Value("${schedulesApiRootContext}")
     protected String schedulesApiRootContext;
+
+    @BeforeAll
+    @Override
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+    }
 
     @Test
     public void testCreateScheduleWithEmptyPayload() {

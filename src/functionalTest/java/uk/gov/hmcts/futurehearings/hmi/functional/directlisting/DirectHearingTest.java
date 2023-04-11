@@ -12,9 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 

@@ -16,7 +16,8 @@ import java.util.Map;
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-public final class PublicationHeaders {
+@SuppressWarnings({"HideUtilityClassConstructor"})
+public final class PublicationHeaders { //NOSONAR
 
     public static void setPnIMandatoryHeaders(Map<String, Object> headersAsMap,
                                           String typeValue,
