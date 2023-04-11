@@ -100,6 +100,7 @@ test {
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
     failFast = true
+    useJUnitPlatform()
 }
 
 task functional(type: Test) {
