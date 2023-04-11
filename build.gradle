@@ -96,6 +96,12 @@ test {
     group = 'Delivery pipeline'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
+    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
+    failFast = false
+    testLogging.showStandardStreams = true
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    enableAssertions = true
+    scanForTestClasses = true
 }
 
 task functional(type: Test) {
