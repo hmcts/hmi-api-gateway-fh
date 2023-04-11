@@ -1,13 +1,13 @@
 plugins {
     id 'application'
     id 'checkstyle'
-    id 'pmd'
-    id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
     id 'org.springframework.boot' version '2.7.10'
     id 'org.owasp.dependencycheck' version '8.1.2'
-    id 'com.github.ben-manes.versions' version '0.28.0'
     id 'org.sonarqube' version '4.0.0.2929'
+    id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'pmd'
     id 'org.gradle.test-retry' version '1.5.2'
     id 'io.freefair.lombok' version '6.6.3'
 }
@@ -27,6 +27,14 @@ defaultTasks 'clean', 'test', 'aggregate'
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "https://jitpack.io"
     }
 }
 
@@ -74,21 +82,16 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked" << "-Werror"
 }
 
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
+
 tasks.withType(Test) {
     useJUnitPlatform()
+
     testLogging {
         exceptionFormat = 'full'
     }
-}
-
-configurations {
-
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-    functionalTestCompile.extendsFrom testCompile
-    functionalTestRuntime.extendsFrom testRuntime
-    acceptanceTestCompile.extendsFrom testCompile
-    acceptanceTestRuntime.extendsFrom testRuntime
 }
 
 test {
@@ -96,13 +99,7 @@ test {
     group = 'Delivery pipeline'
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    include "uk/gov/hmcts/futurehearings/hmi/unit/testing/**"
-    failFast = false
-    testLogging.showStandardStreams = true
-    systemProperties System.getProperties()
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-    enableAssertions = true
-    scanForTestClasses = true
+    failFast = true
 }
 
 task functional(type: Test) {
@@ -226,16 +223,6 @@ dependencyManagement {
         }
     }
 }
-
-repositories {
-    mavenLocal()
-    jcenter()
-    mavenCentral()
-    maven {
-        url "https://jitpack.io"
-    }
-}
-
 
 def versions = [
         junit           : '5.6.2',
