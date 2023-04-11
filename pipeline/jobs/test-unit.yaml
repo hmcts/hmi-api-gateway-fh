@@ -39,7 +39,7 @@ jobs:
       filePath: /src/test/resources/     
   - template: ../steps/run-gradlew.yaml
     parameters:
-      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://hmi-apim.test.platform.hmcts.net -DENDPOINT_HOST=hmi-apim.test.platform.hmcts.net
+      command: clean test -DENDPOINT_SUBSCRIPTION_KEY=$(subscriptionKey) -DENDPOINT_URL=https://$(hostName) -DENDPOINT_HOST=$(hostName)
   - template: ../steps/zip-test-results.yaml
     parameters:
       zipName: test_unit_unittests
