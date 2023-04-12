@@ -49,6 +49,7 @@ jobs:
       storageContainer: $(storageContainer)
   - template: ../steps/publish-test-results.yaml
     parameters:
+      zipName: test_functional_gradle
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
