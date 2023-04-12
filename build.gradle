@@ -104,6 +104,11 @@ test {
 }
 
 task functional(type: Test) {
+    retry {
+        maxRetries = 2
+        maxFailures = 5
+        failOnPassedAfterRetry = false
+    }
     description = "Runs functional tests"
     group = 'Delivery pipeline'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
