@@ -40,6 +40,10 @@ jobs:
     parameters:
       zipName: test_functional_gradle
       directory: /build/reports/tests/functional
+  - template: ../steps/zip-test-results.yaml
+    parameters:
+      zipName: test_functional_gradle_tests
+      directory: /build/reports/tests/functional
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: test_functional_gradle
@@ -49,7 +53,7 @@ jobs:
       storageContainer: $(storageContainer)
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: test_functional_gradle
+      zipName: test_functional_gradle_tests
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
