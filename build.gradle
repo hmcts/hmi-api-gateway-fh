@@ -100,7 +100,7 @@ test {
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
     failFast = true
-    systemProperties System.getProperties()
+    systemProperties System.getProperties() //COMMENT THIS LINE WHEN RUN TEST ON LOCAL
 }
 
 task functional(type: Test) {
@@ -108,7 +108,7 @@ task functional(type: Test) {
     group = 'Delivery pipeline'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
-    systemProperties System.getProperties()
+    systemProperties System.getProperties() //COMMENT THIS LINE WHEN RUN TEST ON LOCAL
 }
 
 task integration(type: Test) {
@@ -116,7 +116,7 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-    systemProperties System.getProperties()
+    systemProperties System.getProperties() //COMMENT THIS LINE WHEN RUN TEST ON LOCAL
 }
 
 task smoke(type: Test) {
@@ -128,7 +128,7 @@ task smoke(type: Test) {
     description = "Runs Smoke Tests"
     testClassesDirs = sourceSets.smokeTest.output.classesDirs
     classpath = sourceSets.smokeTest.runtimeClasspath
-    systemProperties System.getProperties()
+    systemProperties System.getProperties() //COMMENT THIS LINE WHEN RUN TEST ON LOCAL
 }
 
 task acceptance(type: Test) {
@@ -137,7 +137,7 @@ task acceptance(type: Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.acceptanceTest.output.classesDirs
     classpath = sourceSets.acceptanceTest.runtimeClasspath
-    systemProperties System.getProperties()
+    systemProperties System.getProperties() //COMMENT THIS LINE WHEN RUN TEST ON LOCAL
 }
 
 clean {
