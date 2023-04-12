@@ -40,10 +40,6 @@ jobs:
     parameters:
       zipName: test_functional_gradle
       directory: /build/reports/tests/functional
-  - template: ../steps/zip-test-results.yaml
-    parameters:
-      zipName: test_functional_serenity
-      directory: /target/site/serenity
   - template: ../steps/publish-test-results.yaml
     parameters:
       zipName: test_functional_gradle
@@ -53,7 +49,6 @@ jobs:
       storageContainer: $(storageContainer)
   - template: ../steps/publish-test-results.yaml
     parameters:
-      zipName: test_functional_serenity
       subscription: ${{ parameters.subscription }}
       resourceGroup: $(devopsResourceGroup)
       storageAccount: $(devopsStorageAccount)
