@@ -15,6 +15,7 @@ public class GetResourceByIdValidationVerifier implements HmiSuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertEquals(22, response.getBody().jsonPath().getMap("$").size());
+        assertEquals(22, response.getBody().jsonPath().getMap("$").size(),
+                "Size of Json is not 22");
     }
 }

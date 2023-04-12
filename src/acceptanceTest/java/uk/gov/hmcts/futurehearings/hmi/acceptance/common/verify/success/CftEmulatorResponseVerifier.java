@@ -20,7 +20,9 @@ public class CftEmulatorResponseVerifier implements HmiSuccessVerifier {
                        Response response) {
         log.debug("Response" + response.getBody().asString());
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(), response.statusCode());
-        assertNotNull(responseMap.get("description"));
+        assertEquals(expectedHttpStatus.value(), response.statusCode(),
+                "Status code do not match");
+        assertNotNull(responseMap.get("description"),
+                "Description cannot be null");
     }
 }

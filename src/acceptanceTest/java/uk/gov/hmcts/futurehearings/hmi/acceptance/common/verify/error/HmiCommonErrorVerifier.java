@@ -18,9 +18,12 @@ public class HmiCommonErrorVerifier implements HmiErrorVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size(),
+                "Body size is not 2");
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedHttpStatus.value(), responseMap.get("statusCode"));
-        assertEquals(expectedMessage, responseMap.get("message"));
+        assertEquals(expectedHttpStatus.value(), responseMap.get("statusCode"),
+                "Status code do not match");
+        assertEquals(expectedMessage, responseMap.get("message"),
+                "Message do not match");
     }
 }

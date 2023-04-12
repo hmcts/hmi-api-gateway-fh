@@ -23,7 +23,7 @@ import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.helper.QueryPara
 @ActiveProfiles("acceptance")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @IncludeTags("GET")
-public class GetReservationsValidationTest extends HearingValidationTest {
+class GetReservationsValidationTest extends HearingValidationTest {
 
     private static final String NIL = "NIL";
     private static final String DISPLAY_NAME = "Testing valid and invalid values of the query parameter - ";

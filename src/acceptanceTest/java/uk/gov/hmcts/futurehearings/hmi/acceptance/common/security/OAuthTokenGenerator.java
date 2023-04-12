@@ -25,7 +25,8 @@ public final class OAuthTokenGenerator {
                 grantType, clientID, clientSecret, scope);
 
         Response response = callTokenGeneratorEndpoint(bodyForToken, httpStatus, fullTokenApiUrl);
-        assertEquals(httpStatus.value(), response.getStatusCode());
+        assertEquals(httpStatus.value(), response.getStatusCode(),
+                "Status code do not match");
         return response.jsonPath().getString("access_token");
     }
 

@@ -16,6 +16,7 @@ public class GetHearingsValidationVerifier implements HmiSuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getList("$").isEmpty());
+        assertTrue(response.getBody().jsonPath().getList("$").isEmpty(),
+                "Body is empty");
     }
 }

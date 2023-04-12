@@ -12,16 +12,16 @@ import java.util.Map;
 public interface CommonDelegate {
 
 
-    void testExpectedResponseForSuppliedHeader(final String authorizationToken,
-                                                           final String targetUrl,
-                                                           final String inputFile,
-                                                           final Map<String, String> standardHeaderMap,
-                                                           final Headers headers,
-                                                           final Map<String, String> params,
-                                                           final HttpMethod httpMethod,
-                                                           final HttpStatus status,
-                                                           final String inputFileDirectory,
-                                                           final HmiVerifier hmiVerifier,
-                                                           final String expectedMessage,
-                                                           final DelegateDto delegateDT0) throws Exception; //NOSONAR
+    void testExpectedResponseForSuppliedHeader(String authorizationToken,
+                                                           String targetUrl,
+                                                           String inputFile,
+                                                           Map<String, String> standardHeaderMap,
+                                                           Headers headers,
+                                                           Map<String, String> params,
+                                                           HttpMethod httpMethod,
+                                                           HttpStatus status,
+                                                           String inputFileDirectory,
+                                                           HmiVerifier hmiVerifier,
+                                                           String expectedMessage,
+                                                           DelegateDto delegateDT0) throws Exception; //NOSONAR
 }
