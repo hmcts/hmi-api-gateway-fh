@@ -16,6 +16,7 @@ public class HmiCommonSuccessVerifier implements HmiSuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug("Response" + response.getBody().asString());
-        assertEquals(expectedHttpStatus.value(), response.statusCode());
+        assertEquals(expectedHttpStatus.value(), response.statusCode(),
+                "Status code do not match");
     }
 }

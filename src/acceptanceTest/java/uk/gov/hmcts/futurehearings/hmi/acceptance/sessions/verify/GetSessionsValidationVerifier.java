@@ -16,6 +16,7 @@ public class GetSessionsValidationVerifier implements HmiSuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getList("$").isEmpty());
+        assertTrue(response.getBody().jsonPath().getList("$").isEmpty(),
+                "Response body is not empty");
     }
 }

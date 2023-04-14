@@ -49,8 +49,8 @@ class GetPeopleValidationTest extends PeopleValidationTest {
     @ParameterizedTest(name = "Test updated_since param with valid ISO 8601 date format "
             + "(YYYY-mm-dd)  - Param : {0} --> {1}")
     @CsvSource({"updated_since, '2020-10-01'", "updated_since,'2020-12-03T15:05:57Z'",
-            "updated_since,'2020-12-03T15:05:57+00:00'",
-            "updated_since,'20201203T150557Z'"})
+        "updated_since,'2020-12-03T15:05:57+00:00'",
+        "updated_since,'20201203T150557Z'"})
     void testUpdatedSinceQueryParamValidValue(final String updatedSinceKey,
                                                     final String updatedSinceValue) throws Exception {
         this.setUrlParams(buildQueryParams(updatedSinceKey, updatedSinceValue));
@@ -120,7 +120,7 @@ class GetPeopleValidationTest extends PeopleValidationTest {
 
     @ParameterizedTest(name = "Test All query params with extra param - Param : {0} --> {1}")
     @CsvSource({"updatedSince,2018-04-10,page,1,per_page,50,extra_param,extra",
-            "updatedSince,2018-04-10,page,2,per_page,100,extra_param,"})
+        "updatedSince,2018-04-10,page,2,per_page,100,extra_param,"})
     void testAllQueryParamWithExtraParam(final String paramKey1, final String paramVal1,
                                                final String paramKey2, final String paramVal2,
                                                final String paramKey3, final String paramVal3,

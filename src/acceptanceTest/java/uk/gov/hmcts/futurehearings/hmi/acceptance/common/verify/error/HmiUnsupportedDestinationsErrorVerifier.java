@@ -20,6 +20,7 @@ public class HmiUnsupportedDestinationsErrorVerifier implements HmiVerifier {
         log.debug(response.getBody().asString());
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
         String actualMessage = (String) responseMap.get("message");
-        assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedMessage, actualMessage,
+                "Message do not match");
     }
 }

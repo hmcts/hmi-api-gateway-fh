@@ -42,7 +42,7 @@ class GetListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Date of listing with and without values - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing, 2018-01-29 21:36:01Z", "date_of_listing,' '",
-            "date_of_listing,NIL"}, nullValues = "NIL")
+        "date_of_listing,NIL"}, nullValues = "NIL")
     void testDateOfListingQueryParamWithValue(final String dateOfListingKey,
                                                     final String dateOfListingValue) throws Exception {
         this.setUrlParams(buildQueryParams(dateOfListingKey, dateOfListingValue));
@@ -77,11 +77,11 @@ class GetListingsValidationTest extends ListingsValidationTest {
 
     @ParameterizedTest(name = "Multiple params - (date_of_listing & hearing_type) - Param : {0} --> {1}")
     @CsvSource(value = {"date_of_listing,2018-01-29 20:36:01Z,hearing_type,VH",
-                "date_of_listing,'',hearing_type,''",
-                "date_of_listing,' ',hearing_type,' '",
-                "date_of_listing,NIL,hearing_type,NIL",
-                "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
-                "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
+        "date_of_listing,'',hearing_type,''",
+        "date_of_listing,' ',hearing_type,' '",
+        "date_of_listing,NIL,hearing_type,NIL",
+        "date_of_listing,2018-01-29 20:36:01Z,hearing_type,",
+        "date_of_listing,,hearing_type,2018-01-29 20:36:01Z"}, nullValues = "NIL")
     void testMultipleQueryParams(final String paramKey1,
                                               final String paramVal1,
                                               final String paramKey2,

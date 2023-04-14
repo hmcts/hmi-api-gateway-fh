@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-import static net.serenitybdd.rest.SerenityRest.expect;
+import static io.restassured.RestAssured.expect;
 
 @SuppressWarnings({"HideUtilityClassConstructor"})
 public class RestClientTemplate { //NOSONAR

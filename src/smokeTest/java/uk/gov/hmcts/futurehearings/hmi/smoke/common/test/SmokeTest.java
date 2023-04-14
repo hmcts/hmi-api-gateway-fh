@@ -27,7 +27,7 @@ import static uk.gov.hmcts.futurehearings.hmi.smoke.common.security.OAuthTokenGe
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("smoke")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings("java:S5786")
+@SuppressWarnings({"java:S5786", "PMD"})
 public class SmokeTest {
 
     @Value("${targetInstance}")

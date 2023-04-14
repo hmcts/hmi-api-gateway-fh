@@ -16,6 +16,7 @@ public class GetSessionByIdValidationVerifier implements HmiSuccessVerifier {
                        String expectedMessage,
                        Response response) {
         log.debug(response.getBody().asString());
-        assertTrue(response.getBody().jsonPath().getMap("$").size() > 1);
+        assertTrue(response.getBody().jsonPath().getMap("$").size() > 1,
+                "Response body is empty");
     }
 }

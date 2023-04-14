@@ -66,8 +66,7 @@ public class CommonDelegateImpl implements CommonDelegate {
 
         String inputPayload = "";
         switch (httpMethod) {
-            case POST:
-            case PUT:
+            case POST, PUT:
                 hmiVerifier.verify(status, expectedMessage,
                         performRestCall(targetUrl, headers, authorizationToken,
                                 params, httpMethod, status, TestingUtils.readFileContents(String.format(INPUT_FILE_PATH,

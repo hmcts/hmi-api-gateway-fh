@@ -22,9 +22,12 @@ public class CaseHqCommonErrorVerifier implements HmiErrorVerifier {
                        Response response) {
 
         log.debug(response.getBody().asString());
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode());
-        assertEquals(2, response.getBody().jsonPath().getMap("$").size());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.statusCode(),
+                "Status code do not match");
+        assertEquals(2, response.getBody().jsonPath().getMap("$").size(),
+                "Size of Json do not match");
         Map<String, ?> responseMap = response.getBody().jsonPath().getMap("$");
-        assertEquals(expectedMessage, responseMap.get("errorDesc"));
+        assertEquals(expectedMessage, responseMap.get("errorDesc"),
+                "Error description do not match");
     }
 }

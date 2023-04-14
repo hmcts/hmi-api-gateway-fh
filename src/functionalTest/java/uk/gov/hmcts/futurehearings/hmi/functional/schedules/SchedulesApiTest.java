@@ -1,40 +1,41 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.schedules;
 
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Steps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.schedules.steps.SchedulesSteps;
 
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
-@Narrative(text = {"In order to test that the Schedules API is functioning properly",
-        "As a tester",
-        "I want to be able to execute the tests for Schedules API methods works in a lifecycle mode of execution"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-public class SchedulesApiTest extends FunctionalTest {
+class SchedulesApiTest extends FunctionalTest {
 
     @Value("${schedulesApiRootContext}")
     protected String schedulesApiRootContext;
 
-    @Steps
-    SchedulesSteps schedulesSteps;
+    @BeforeAll
+    @Override
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+    }
 
     @Test
-    public void testCreateScheduleWithEmptyPayload() {
+    void testCreateScheduleWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("SNL");
-        schedulesSteps.shouldPostSessionsWithPayload(schedulesApiRootContext,
-                headersAsMap, authorizationToken, HttpMethod.POST, "{}");
+        callRestEndpointWithPayload(schedulesApiRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}",
+                HttpMethod.POST,
+                HttpStatus.BAD_REQUEST);
     }
 }

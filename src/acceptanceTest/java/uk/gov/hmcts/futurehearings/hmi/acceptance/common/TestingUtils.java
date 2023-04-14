@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Slf4j
+@SuppressWarnings("PMD")
 public final class TestingUtils {
 
     public static String readFileContents(final String path) throws IOException {
