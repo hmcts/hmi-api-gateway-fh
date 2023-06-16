@@ -19,7 +19,7 @@ resources:
       endpoint: hmcts
 
 schedules:
-- cron: "0 1 * * *"
+- cron: "0 17 * * *"
   displayName: Nightly
   branches:
     include:
