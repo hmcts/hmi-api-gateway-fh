@@ -39,9 +39,6 @@ class GetHealthUnitTests {
     @Value("${targetInstance}")
     private String targetInstance;
 
-    @Value("${snlApiVersion}")
-    private String snlApiVersion;
-
     @Value("${hmiApiRootContext}")
     private String hmiApiRootContext;
 
@@ -94,13 +91,13 @@ class GetHealthUnitTests {
 
     @Test
     @Order(2)
-    @DisplayName("Test for Correct Headers and Version Number")
+    @DisplayName("Test for Correct Headers")
     void testRetrieveSnlHealthcheckWithCorrectHeaders() {
         final Response response = whenRetrieveSnlHealthcheckWithCorrectHeaders();
         thenValidateResponseForRetrieve(response);
         Map<String, String> responseMap = response.getBody().jsonPath().getMap("$");
 
-        assertEquals(responseMap.get("project.version"), snlApiVersion,
+        assertEquals("success", responseMap.get("database.connectivity"),
                 "Response doesn't match expected");
     }
 
