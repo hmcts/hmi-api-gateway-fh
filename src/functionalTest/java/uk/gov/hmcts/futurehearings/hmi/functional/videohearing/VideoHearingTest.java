@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -94,10 +93,9 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    @Disabled
     void testGetVideoHearingById() {
         headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = "4564616C-0F7E-4D70-B0D7-A1BBF0874D5D";
+        String hearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
         callRestEndpointWithPayload(videoHearingsIdRootContext,
                 headersAsMap,

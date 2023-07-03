@@ -2,7 +2,6 @@ package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 @SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
 class CloneVideoHearingTest extends FunctionalTest {
 
-    private static final String VALID_HEARING_ID_IN_VH_TEST = "bab5ccb9-1cc5-4a24-9d26-b9c0aafaf43f";
+    private static final String VALID_HEARING_ID_IN_VH_TEST = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
     private static final String SNL = "SNL";
 
     @Value("${cloneVideoHearingsRootContext}")
@@ -34,7 +33,6 @@ class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    @Disabled
     void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
@@ -55,7 +53,6 @@ class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    @Disabled
     void testCloneVideoHearingWithValidHearingIdAndEmptyPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
@@ -67,7 +64,6 @@ class CloneVideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    @Disabled
     void testCloneVideoHearingWithValidHearingIdAndPayload() {
         headersAsMap = createStandardHmiHeader(SNL, "VH");
         cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
