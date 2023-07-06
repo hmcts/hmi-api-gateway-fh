@@ -99,7 +99,6 @@ class DeleteHearingsUnitTests {
 
     @BeforeEach
     void initialiseValues() {
-        System.out.println("THE TARGET INSTANCE IS: " + targetInstance);
         headersAsMap.put(CONTENT_TYPE, "application/json");
         headersAsMap.put(ACCEPT, "application/json");
         headersAsMap.put("Source-System", "CFT");
