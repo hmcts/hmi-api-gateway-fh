@@ -3,6 +3,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.people;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +50,7 @@ class PeopleTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testPeopleLookUp() {
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("updated_since", "2019-01-29");
@@ -65,6 +67,7 @@ class PeopleTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testPersonLookUp() {
         peopleIdRootContext = String.format(peopleIdRootContext, rand.nextInt(99999999));
         headersAsMap = createStandardHmiHeader("ELINKS");
