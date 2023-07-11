@@ -3,7 +3,6 @@ package uk.gov.hmcts.futurehearings.hmi.smoke.people;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +34,6 @@ class PeopleApiSmokeTest extends SmokeTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("Smoke Test to test the people endpoint")
     void testPeopleHmiApiGet() {
         Response response = RestClient.makeGetRequest(getRootContext());
