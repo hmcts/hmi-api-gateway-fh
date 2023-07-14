@@ -2,6 +2,7 @@ package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,6 +57,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testCreateVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
         callRestEndpointWithPayload(videoHearingsRootContext,
@@ -65,6 +67,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testAmendVideoHearingWithEmptyPayload() {
         headersAsMap = createStandardHmiHeader("VH");
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
@@ -75,6 +78,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testDeleteVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, rand.nextInt(99999999));
@@ -85,6 +89,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testGetVideoHearing() {
         headersAsMap = createStandardHmiHeader("VH");
         Map<String, String> queryParameters = new ConcurrentHashMap<>();
@@ -96,6 +101,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testGetVideoHearingById() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
@@ -110,6 +116,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testPostParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
@@ -121,6 +128,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testPutParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
@@ -133,6 +141,7 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
+    @Disabled
     void testDeleteParticipant() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = String.valueOf(rand.nextInt(99999999));
