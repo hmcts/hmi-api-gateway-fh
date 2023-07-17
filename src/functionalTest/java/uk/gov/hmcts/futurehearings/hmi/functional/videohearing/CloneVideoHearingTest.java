@@ -22,7 +22,7 @@ import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientT
 class CloneVideoHearingTest extends FunctionalTest {
 
     @Value("${targetInstance}")
-    protected String TARGET_INSTANCE;
+    protected String targetInstance;
 
     private String validHearingId = "";
 
@@ -35,7 +35,7 @@ class CloneVideoHearingTest extends FunctionalTest {
     @Override
     public void initialiseValues() throws Exception {
 
-        if (TARGET_INSTANCE.contains("staging")) {
+        if (targetInstance.contains("staging")) {
             validHearingId = "f761c4ee-3eb8-45f2-b5fe-011bbf800f29";
         } else {
             validHearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";

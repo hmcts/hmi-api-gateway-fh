@@ -41,7 +41,7 @@ class VideoHearingTest extends FunctionalTest {
     protected String participantsIdRootContext;
 
     @Value("${targetInstance}")
-    protected String TARGET_INSTANCE;
+    protected String targetInstance;
 
     private final Random rand;
 
@@ -105,7 +105,7 @@ class VideoHearingTest extends FunctionalTest {
     void testGetVideoHearingById() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
-        if (TARGET_INSTANCE.contains("staging")) {
+        if (targetInstance.contains("staging")) {
             hearingId = "f761c4ee-3eb8-45f2-b5fe-011bbf800f29";
         }
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
