@@ -52,6 +52,14 @@ public class RestClientTemplate { //NOSONAR
                         .basePath(apiUrl)
                         .when().get().then().extract().response();
                 break;
+            case PATCH:
+                response = expect().that().statusCode(httpStatus.value())
+                        .given().body(payloadBody)
+                        .headers(headersAsMap)
+                        .auth().oauth2(authorizationToken)
+                        .basePath(apiUrl)
+                        .when().patch().then().extract().response();
+                break;
             default:
                 throw new UnsupportedOperationException("This REST method is not Supported....");
         }

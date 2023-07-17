@@ -61,6 +61,18 @@ public class HmiHttpClient {
         }
     }
 
+    public Response httpPatch(final String basePath, final Map<String, Object> headersAsMap,
+                             final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().patch().then().extract().response();
+        } catch (Exception exc) {
+            log.error(SSL_EXCEPTION, exc);
+            return RestAssured.given().auth().oauth2(accessToken).queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().patch().then().extract().response();
+        }
+    }
+
     public Response httpPut(final String basePath, final Map<String, Object> headersAsMap,
                              final Map<String, String> paramsAsMap, String payloadBody) {
         try {
@@ -106,6 +118,18 @@ public class HmiHttpClient {
             log.error(SSL_EXCEPTION, exc);
             return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
                     .body(payloadBody).basePath(basePath).when().post().then().extract().response();
+        }
+    }
+
+    public Response httpPatchNoAuth(final String basePath, final Map<String, Object> headersAsMap,
+                                   final Map<String, String> paramsAsMap, String payloadBody) {
+        try {
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().patch().then().extract().response();
+        } catch (Exception exc) {
+            log.error(SSL_EXCEPTION, exc);
+            return RestAssured.given().queryParams(paramsAsMap).headers(headersAsMap)
+                    .body(payloadBody).basePath(basePath).when().patch().then().extract().response();
         }
     }
 

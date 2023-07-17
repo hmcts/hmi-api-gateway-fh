@@ -1,0 +1,79 @@
+package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
+
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+
+@Slf4j
+@SpringBootTest(classes = {Application.class})
+@ActiveProfiles("functional")
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class CancelVideoHearingTest extends FunctionalTest  {
+
+    private static final String VALID_HEARING_ID_IN_VH_TEST = "933cf0bb-418c-4664-892b-00b56f05fae9";
+    private static final String SNL = "SNL";
+
+    @Value("${cancelVideoHearingsRootContext}")
+    protected String cancelVideoHearingsRootContext;
+
+    @BeforeAll
+    @Override
+    public void initialiseValues() throws Exception {
+        super.initialiseValues();
+    }
+
+    @Test
+    void testCancelVideoHearingWithValidHearingIdAndNoPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cancelVideoHearingsRootContext = String.format(cancelVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
+        callRestEndpointWithPayload(cancelVideoHearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                "", HttpMethod.PATCH, HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testCancelVideoHearingWithInvalidHearingIdAndEmptyPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cancelVideoHearingsRootContext = String.format(cancelVideoHearingsRootContext, "123");
+        callRestEndpointWithPayload(cancelVideoHearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{\"updated_by\": \"string\"},{\"cancel_reason\": \"string\"}",
+                HttpMethod.PATCH, HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testCancelVideoHearingWithValidHearingIdAndEmptyPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cancelVideoHearingsRootContext = String.format(cancelVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
+        callRestEndpointWithPayload(cancelVideoHearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{}",
+                HttpMethod.PATCH,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testCancelVideoHearingWithValidHearingIdAndPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cancelVideoHearingsRootContext = String.format(cancelVideoHearingsRootContext, VALID_HEARING_ID_IN_VH_TEST);
+        callRestEndpointWithPayload(cancelVideoHearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                "{\"updated_by\": \"string\",\"cancel_reason\": \"string\"}",
+                HttpMethod.PATCH,
+                HttpStatus.NO_CONTENT);
+    }
+}
