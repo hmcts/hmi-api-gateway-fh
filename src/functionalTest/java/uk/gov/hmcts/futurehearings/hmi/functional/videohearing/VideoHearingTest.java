@@ -40,6 +40,9 @@ class VideoHearingTest extends FunctionalTest {
     @Value("${participants_idRootContext}")
     protected String participantsIdRootContext;
 
+    @Value("${targetInstance}")
+    protected String targetInstance;
+
     private final Random rand;
 
     public VideoHearingTest() throws NoSuchAlgorithmException {
@@ -102,6 +105,9 @@ class VideoHearingTest extends FunctionalTest {
     void testGetVideoHearingById() {
         headersAsMap = createStandardHmiHeader("VH");
         String hearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
+        if (targetInstance.contains("staging")) {
+            hearingId = "f761c4ee-3eb8-45f2-b5fe-011bbf800f29";
+        }
         videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
         callRestEndpointWithPayload(videoHearingsIdRootContext,
                 headersAsMap,
