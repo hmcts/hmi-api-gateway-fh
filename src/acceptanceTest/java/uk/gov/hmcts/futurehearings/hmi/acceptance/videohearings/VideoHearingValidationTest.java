@@ -1,11 +1,5 @@
 package uk.gov.hmcts.futurehearings.hmi.acceptance.videohearings;
 
-import static io.restassured.config.EncoderConfig.encoderConfig;
-import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
-
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HMICommonHeaderTest;
-
 import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,20 +7,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.acceptance.common.test.HmiCommonHeaderTest;
+
+import static io.restassured.config.EncoderConfig.encoderConfig;
+import static uk.gov.hmcts.futurehearings.hmi.acceptance.common.security.OAuthTokenGenerator.generateOAuthToken;
 
 @Slf4j
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("acceptance")
-public abstract class VideoHearingValidationTest extends HMICommonHeaderTest {
+@SuppressWarnings({"PMD.TestClassWithoutTestCases"})
+public abstract class VideoHearingValidationTest extends HmiCommonHeaderTest {
 
     @Value("${targetInstance}")
     private String targetInstance;
 
     @Value("${token_apiURL}")
-    private String token_apiURL;
+    private String tokenApiUrl;
 
     @Value("${token_apiTenantId}")
-    private String token_apiTenantId;
+    private String tokenApiTenantId;
 
     @Value("${grantType}")
     private String grantType;
@@ -42,13 +42,13 @@ public abstract class VideoHearingValidationTest extends HMICommonHeaderTest {
 
     @BeforeAll
     public void initialiseValues() throws Exception {
-        RestAssured.baseURI = targetInstance;
+        RestAssured.baseURI = targetInstance;  //NOSONAR
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.config = RestAssured.config()
+        RestAssured.config = RestAssured.config()  //NOSONAR
                 .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
         this.setInputFileDirectory("video-hearing");
-        String authorizationToken = generateOAuthToken (token_apiURL,
-                token_apiTenantId,
+        String authorizationToken = generateOAuthToken(tokenApiUrl,
+                tokenApiTenantId,
                 grantType, clientID,
                 clientSecret,
                 scope,

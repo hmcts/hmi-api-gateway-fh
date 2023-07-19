@@ -1,19 +1,17 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common.rest;
 
-import static net.serenitybdd.rest.SerenityRest.expect;
-import java.util.Map;
 import io.restassured.response.Response;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Slf4j
-public class RestClientTemplate {
+import java.util.Map;
 
-    public static Response callRestEndpointWithPayload(final String apiURL,
+import static io.restassured.RestAssured.expect;
+
+@SuppressWarnings({"HideUtilityClassConstructor"})
+public class RestClientTemplate { //NOSONAR
+
+    public static Response callRestEndpointWithPayload(final String apiUrl,
                                                        final Map<String, Object> headersAsMap,
                                                        final String authorizationToken,
                                                        final String payloadBody,
@@ -27,7 +25,7 @@ public class RestClientTemplate {
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
-                        .basePath(apiURL)
+                        .basePath(apiUrl)
                         .when().post().then().extract().response();
                 break;
             case PUT:
@@ -35,7 +33,7 @@ public class RestClientTemplate {
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
-                        .basePath(apiURL)
+                        .basePath(apiUrl)
                         .when().put().then().extract().response();
                 break;
             case DELETE:
@@ -43,7 +41,7 @@ public class RestClientTemplate {
                         .given().body(payloadBody)
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
-                        .basePath(apiURL)
+                        .basePath(apiUrl)
                         .when().delete().then().extract().response();
                 break;
             case GET :
@@ -51,7 +49,7 @@ public class RestClientTemplate {
                         .given()
                         .headers(headersAsMap)
                         .auth().oauth2(authorizationToken)
-                        .basePath(apiURL)
+                        .basePath(apiUrl)
                         .when().get().then().extract().response();
                 break;
             default:
@@ -60,7 +58,7 @@ public class RestClientTemplate {
         return response;
     }
 
-    public static Response callRestEndpointWithQueryParams(final String apiURL,
+    public static Response callRestEndpointWithQueryParams(final String apiUrl,
                                                            final Map<String, Object> headersAsMap,
                                                            final String authorizationToken,
                                                            final Map<String, String> queryParams,
@@ -71,11 +69,11 @@ public class RestClientTemplate {
                 .queryParams(queryParams)
                 .headers(headersAsMap)
                 .auth().oauth2(authorizationToken)
-                .basePath(apiURL)
+                .basePath(apiUrl)
                 .when().get().then().extract().response();
     }
 
-    public static Response callRestEndpointDelete(final String apiURL,
+    public static Response callRestEndpointDelete(final String apiUrl,
                                             final Map<String, Object> headersAsMap,
                                             final String authorizationToken,
                                             final HttpStatus httpStatus) {
@@ -83,7 +81,7 @@ public class RestClientTemplate {
                 .given()
                 .headers(headersAsMap)
                 .auth().oauth2(authorizationToken)
-                .basePath(apiURL)
+                .basePath(apiUrl)
                 .when().delete().then().extract().response();
     }
 }

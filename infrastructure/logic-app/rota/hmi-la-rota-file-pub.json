@@ -578,7 +578,22 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', 'azureblob')]",
                 "[resourceId('Microsoft.Web/connections', 'keyvault')]",
-                "[resourceId('Microsoft.Web/connections', 'azuretables')]"
+                "[resourceId('Microsoft.Web/connections', 'azuretables')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-1')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-2')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-3')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-4')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-5')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-6')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-7')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-8')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-9')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-10')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-11')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-12')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-13')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-14')]",
+                "[resourceId('Microsoft.Web/connections', 'azuretables-15')]"
             ],
             "properties": {
                 "state": "Enabled",
@@ -630,7 +645,7 @@
                                 "method": "post",
                                 "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files",
                                 "queries": {
-                                    "folderPath": "/rota/input/",
+                                    "folderPath": "/rota/primaryinput/",
                                     "name": "read.me",
                                     "queryParametersSingleEncoded": true
                                 }
@@ -650,7 +665,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "get",
@@ -705,7 +720,7 @@
                                                     "inputs": {
                                                         "host": {
                                                             "connection": {
-                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                             }
                                                         },
                                                         "method": "get",
@@ -725,7 +740,7 @@
                                                         },
                                                         "host": {
                                                             "connection": {
-                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                             }
                                                         },
                                                         "method": "patch",
@@ -745,7 +760,7 @@
                                                         },
                                                         "host": {
                                                             "connection": {
-                                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                                             }
                                                         },
                                                         "method": "patch",
@@ -1108,7 +1123,7 @@
                                                             "method": "post",
                                                             "path": "/datasets/default/files",
                                                             "queries": {
-                                                                "folderPath": "/rota/input/",
+                                                                "folderPath": "/rota/primaryinput/",
                                                                 "name": "read.me",
                                                                 "queryParametersSingleEncoded": true
                                                             }
@@ -1194,10 +1209,10 @@
                                         "method": "post",
                                         "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/copyFile",
                                         "queries": {
-                                            "destination": "/rota/input@{items('For_each_error_file')?['PartitionKey']}",
+                                            "destination": "/rota/primaryinput/@{items('For_each_error_file')?['PartitionKey']}",
                                             "overwrite": true,
                                             "queryParametersSingleEncoded": true,
-                                            "source": "/rota/input/@{items('For_each_error_file')?['PartitionKey']}"
+                                            "source": "/rota/primaryinput/@{items('For_each_error_file')?['PartitionKey']}"
                                         }
                                     }
                                 },
@@ -1218,7 +1233,7 @@
                                             }
                                         },
                                         "method": "delete",
-                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/input/',items('For_each_error_file')?['PartitionKey']))}"
+                                        "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput/',items('For_each_error_file')?['PartitionKey']))}"
                                     }
                                 },
                                 "Get_secret_SNow_client": {
@@ -1298,7 +1313,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "patch",
@@ -1326,7 +1341,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -1349,7 +1364,7 @@
                             "inputs": {
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                        "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                     }
                                 },
                                 "method": "get",
@@ -1520,7 +1535,7 @@
                                     "inputs": {
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                                "name": "@parameters('$connections')[concat('azuretables-',rand(1,15))]['connectionId']"
                                             }
                                         },
                                         "method": "get",
@@ -1582,7 +1597,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/input'))}",
+                                "path": "/datasets/default/foldersV2/@{encodeURIComponent(encodeURIComponent('/rota/primaryinput'))}",
                                 "queries": {
                                     "nextPageMarker": "",
                                     "useFlatListing": false

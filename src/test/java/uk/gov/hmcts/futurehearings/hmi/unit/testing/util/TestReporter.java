@@ -1,36 +1,36 @@
 package uk.gov.hmcts.futurehearings.hmi.unit.testing.util;
 
+import com.aventstack.extentreports.AnalysisStrategy;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import com.aventstack.extentreports.AnalysisStrategy;
-
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
-import java.util.Optional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
+@SuppressWarnings("PMD")
 public class TestReporter implements TestWatcher, BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
     static ExtentReports objExtent;
-    static ExtentTest objTest, objStep;
-    static int counter=0;
+    static ExtentTest objTest;
+    static ExtentTest objStep;
+    static int counter;
 
     String timeStamp = new SimpleDateFormat("yyyyMMdd HH.mm.ss").format(new Date());
-    private final String REPORT_FOLDER_PATH = "./build/reports/unittests/"+"Run_" + timeStamp + ".html";
+    private final String reportFolderPath = "./build/reports/unittests/" + "Run_" + timeStamp + ".html";
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        if (counter==0){
-
+        if (counter == 0) {
             objExtent = new ExtentReports();
             objExtent.setAnalysisStrategy(AnalysisStrategy.CLASS);
-            ExtentSparkReporter spark = new ExtentSparkReporter(REPORT_FOLDER_PATH);
+            ExtentSparkReporter spark = new ExtentSparkReporter(reportFolderPath);
             objExtent.attachReporter(spark);
             counter++;
         }
@@ -42,9 +42,9 @@ public class TestReporter implements TestWatcher, BeforeAllCallback, AfterAllCal
     }
 
     @Override
-    public void beforeEach(ExtensionContext Context) {
+    public void beforeEach(ExtensionContext context) {
 
-        objStep = objTest.createNode(Context.getDisplayName());
+        objStep = objTest.createNode(context.getDisplayName());
 
     }
 
@@ -72,8 +72,8 @@ public class TestReporter implements TestWatcher, BeforeAllCallback, AfterAllCal
     @Override
     public void afterAll(ExtensionContext context) {
         objExtent.flush();
-        objStep=null;
-        objTest=null;
+        objStep = null;
+        objTest = null;
     }
 
 }

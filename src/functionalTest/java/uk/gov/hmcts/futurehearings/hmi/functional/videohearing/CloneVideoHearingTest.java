@@ -1,90 +1,92 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
-
-import org.junit.jupiter.api.Disabled;
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.videohearing.steps.VideoHearingSteps;
-
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.thucydides.core.annotations.Steps;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-public class CloneVideoHearingTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.LawOfDemeter"})
+class CloneVideoHearingTest extends FunctionalTest {
 
-    private static final String ValidHearingIdInVhTest1 = "bab5ccb9-1cc5-4a24-9d26-b9c0aafaf43f";
+    @Value("${targetInstance}")
+    protected String targetInstance;
+
+    private String validHearingId = "";
+
+    private static final String SNL = "SNL";
 
     @Value("${cloneVideoHearingsRootContext}")
     protected String cloneVideoHearingsRootContext;
 
-    @Steps
-    VideoHearingSteps videoHearingSteps;
-
-    @Before
+    @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
+
+        if (targetInstance.contains("staging")) {
+            validHearingId = "f761c4ee-3eb8-45f2-b5fe-011bbf800f29";
+        } else {
+            validHearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
+        }
+
         super.initialiseValues();
     }
 
-    @Disabled("This Test is skipped as we are getting service unavailable - 503")
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, ValidHearingIdInVhTest1);
-        videoHearingSteps.shouldRequestCloneVideoHearing(cloneVideoHearingsRootContext,
+    @Disabled
+    void testCloneVideoHearingWithValidHearingIdAndNoPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, validHearingId);
+        callRestEndpointWithPayload(cloneVideoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.BAD_REQUEST,
-                "");
+                "", HttpMethod.POST, HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void testCloneVideoHearingWithInvalidHearingIdAndEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext,"123");
-        videoHearingSteps.shouldRequestCloneVideoHearing(cloneVideoHearingsRootContext,
+    @Disabled
+    void testCloneVideoHearingWithInvalidHearingIdAndEmptyPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, "123");
+        callRestEndpointWithPayload(cloneVideoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.BAD_REQUEST,
-                "{}");
+                "{}", HttpMethod.POST, HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndEmptyPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, ValidHearingIdInVhTest1);
-        videoHearingSteps.shouldRequestCloneVideoHearing(cloneVideoHearingsRootContext,
+    @Disabled
+    void testCloneVideoHearingWithValidHearingIdAndEmptyPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, validHearingId);
+        callRestEndpointWithPayload(cloneVideoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.NO_CONTENT,
-                "{}");
+                "{}", HttpMethod.POST,
+                HttpStatus.NO_CONTENT);
     }
 
     @Test
-    public void testCloneVideoHearingWithValidHearingIdAndPayload() {
-        headersAsMap = createStandardHMIHeader("SNL", "VH");
-        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, ValidHearingIdInVhTest1);
-        videoHearingSteps.shouldRequestCloneVideoHearing(cloneVideoHearingsRootContext,
+    @Disabled
+    void testCloneVideoHearingWithValidHearingIdAndPayload() {
+        headersAsMap = createStandardHmiHeader(SNL, "VH");
+        cloneVideoHearingsRootContext = String.format(cloneVideoHearingsRootContext, validHearingId);
+        callRestEndpointWithPayload(cloneVideoHearingsRootContext,
                 headersAsMap,
                 authorizationToken,
-                HttpMethod.POST,
-                HttpStatus.NO_CONTENT,
-                "{\"status\": 0}");
+                "{\"status\": 0}", HttpMethod.POST,
+                HttpStatus.NO_CONTENT);
     }
 }

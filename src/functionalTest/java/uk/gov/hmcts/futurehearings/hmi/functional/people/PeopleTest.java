@@ -1,72 +1,78 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.people;
 
-import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHMIHeader;
-
-import org.junit.jupiter.api.Disabled;
-import uk.gov.hmcts.futurehearings.hmi.Application;
-import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
-import uk.gov.hmcts.futurehearings.hmi.functional.people.steps.PeopleSteps;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.thucydides.core.annotations.Narrative;
-import net.thucydides.core.annotations.Steps;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import uk.gov.hmcts.futurehearings.hmi.Application;
+import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
 
 @Slf4j
-@RunWith(SpringIntegrationSerenityRunner.class)
-@Narrative(text = {"In order to test that the People Functionality is working properly",
-        "As a tester",
-        "I want to be able to execute the tests for People API"})
 @SpringBootTest(classes = {Application.class})
 @ActiveProfiles("functional")
-@SuppressWarnings("java:S2699")
-@Disabled("Disabled until http error code 503 has been fixed!")
-public class PeopleTest extends FunctionalTest {
+@SuppressWarnings({"java:S2699", "PMD.UseDiamondOperator","PMD.LawOfDemeter"})
+class PeopleTest extends FunctionalTest {
 
     @Value("${peopleRootContext}")
     protected String peopleRootContext;
 
     @Value("${people_idRootContext}")
-    protected String people_idRootContext;
+    protected String peopleIdRootContext;
 
-    @Steps
-    PeopleSteps peopleSteps;
+    private final Random rand;
 
-    @Before
+    public PeopleTest() throws NoSuchAlgorithmException {
+        super();
+        rand = SecureRandom.getInstanceStrong();
+    }
+
+    @BeforeAll
+    @Override
     public void initialiseValues() throws Exception {
         super.initialiseValues();
     }
 
     @Test
-    public void testPeopleLookUp() {
-        Map<String, String> queryParameters = new HashMap<String, String>();
+    void testPeopleLookUp() {
+        Map<String, String> queryParameters = new ConcurrentHashMap<>();
         queryParameters.put("updated_since", "2019-01-29");
         queryParameters.put("per_page", "52");
         queryParameters.put("page", "1");
 
-        headersAsMap = createStandardHMIHeader("ELINKS");
-        peopleSteps.shouldFetchListOfPeople(peopleRootContext,
+        headersAsMap = createStandardHmiHeader("ELINKS");
+        Response response = callRestEndpointWithQueryParams(peopleRootContext,
                 headersAsMap,
                 authorizationToken,
-                queryParameters);
+                queryParameters, HttpStatus.OK);
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 
     @Test
-    public void testPersonLookUp() {
-        people_idRootContext = String.format(people_idRootContext, new Random().nextInt(99999999));
-        headersAsMap = createStandardHMIHeader("ELINKS");
-        peopleSteps.shouldGetByPeopleId(people_idRootContext,
+    void testPersonLookUp() {
+        peopleIdRootContext = String.format(peopleIdRootContext, rand.nextInt(99999999));
+        headersAsMap = createStandardHmiHeader("ELINKS");
+        Response response = callRestEndpointWithPayload(peopleIdRootContext,
                 headersAsMap,
-                authorizationToken);
+                authorizationToken,
+                null, HttpMethod.GET, HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode(),
+                "Status code do not match");
     }
 }
