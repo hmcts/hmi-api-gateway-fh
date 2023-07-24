@@ -236,7 +236,7 @@ dependencyManagement {
 
 def versions = [
         junit           : '5.6.2',
-        junitPlatform   : '1.6.2',
+        junitPlatform   : '1.10.0',
         springBoot      : springBoot.class.package.implementationVersion,
         restAssured     : '5.3.0',
         aventstack      : '5.0.2'
