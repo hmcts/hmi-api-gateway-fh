@@ -72,7 +72,7 @@ class PublicationTest extends PihFunctionalTest {
     }
 
     @Test
-    void tesCreatePublicationWithInvalidHeader() {
+    void testCreatePublicationWithInvalidHeader() {
         setPnIMandatoryHeaders(headersAsMap);
         PublicationHeaders.setAHeader(headersAsMap, "x-type", "invalid x-type");
 
