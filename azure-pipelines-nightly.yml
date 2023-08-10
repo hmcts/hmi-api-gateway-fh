@@ -35,10 +35,7 @@ parameters:
   - name: environments
     type: object
     default:
-      - sbox
-      - dev
       - test
-      - ithc
       - stg
 
   - name: runPerfTestIn
