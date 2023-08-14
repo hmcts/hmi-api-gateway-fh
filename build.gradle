@@ -9,7 +9,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'pmd'
     id 'org.gradle.test-retry' version '1.5.2'
-    id 'io.freefair.lombok' version '6.6.3'
+    id 'io.freefair.lombok' version '8.2.2'
 }
 
 apply plugin: 'base'
