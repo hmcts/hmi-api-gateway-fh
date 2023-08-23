@@ -11,7 +11,7 @@
             </issuers>
             <required-claims>
                 <claim name="roles" match="all">
-                    <value>hmiGateway</value>
+                    <value>#{oAuthRole}#</value>
                 </claim>
             </required-claims>
         </validate-jwt>
