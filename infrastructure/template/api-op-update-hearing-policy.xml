@@ -110,7 +110,7 @@
 				<set-backend-service base-url="https://#{sAndLHost}#/rest/hmcts/resources/hearings" />
 			</when>
 			<when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "CRIME")">
-				<rewrite-uri template="/snltestin/hearings/{hearing-id}" copy-unmatched-params="true" />
+				<rewrite-uri template="/sandl-in/hearings/{hearing-id}" copy-unmatched-params="true" />
 				<authentication-certificate certificate-id="crimecert" />
 				<set-header name="Authorization" exists-action="delete" />
 				<set-backend-service base-url="https://#{crimeHost}#/" />
