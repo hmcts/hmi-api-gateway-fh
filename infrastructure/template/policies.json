@@ -246,6 +246,24 @@
       "errorAction"  : "Stop"
     },
     {
+      "operationId"  : "add-judicial-officer",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-add-joh-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "update-judicial-officer",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-edit-joh-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
+      "operationId"  : "delete-judicial-officer",
+      "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
+      "templateFile" : "api-op-vh-delete-joh-policy.xml",
+      "errorAction"  : "Stop"
+    },
+    {
       "operationId"  : "crime-health",
       "format"       : "application/vnd.ms-azure-apim.policy.raw+xml",
       "templateFile" : "api-op-crime-health-policy.xml",
