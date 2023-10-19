@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.common;
 
+import io.restassured.response.Response;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.util.ResourceUtils;
 
@@ -16,6 +17,11 @@ public final class TestingUtils {
         File file = ResourceUtils.getFile("classpath:" + path);
         log.info("File found: " + file.exists());
         return new String(Files.readAllBytes(Paths.get(file.toURI())));
+    }
+
+    public static String getHearingId(Response response) {
+        String newlyCreatedHearing = response.getHeader("Location");
+        return newlyCreatedHearing.substring(newlyCreatedHearing.lastIndexOf('/') + 1);
     }
 
     private TestingUtils() {
