@@ -1,5 +1,6 @@
 package uk.gov.hmcts.futurehearings.hmi.functional.videohearing;
 
+import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,15 @@ import org.springframework.test.context.ActiveProfiles;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.getHearingId;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithQueryParams;
@@ -41,6 +45,8 @@ class VideoHearingTest extends FunctionalTest {
 
     @Value("${targetInstance}")
     protected String targetInstance;
+
+    static final String CREATE_VH_LISTINGS_PAYLOAD = "requests/create-vh-listings-payload.json";
 
     private final Random rand;
 
@@ -96,13 +102,16 @@ class VideoHearingTest extends FunctionalTest {
     }
 
     @Test
-    void testGetVideoHearingById() {
-        headersAsMap = createStandardHmiHeader("VH");
-        String hearingId = "9ba41f11-f288-4c3a-b1b2-de0dc0dd59c3";
-        if (targetInstance.contains("staging")) {
-            hearingId = "f761c4ee-3eb8-45f2-b5fe-011bbf800f29";
-        }
-        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, hearingId);
+    void testGetVideoHearingById() throws IOException {
+        headersAsMap = createStandardHmiHeader("SNL", "VH");
+        Response response = callRestEndpointWithPayload(videoHearingsRootContext,
+                headersAsMap,
+                authorizationToken,
+                readFileContents(CREATE_VH_LISTINGS_PAYLOAD),
+                HttpMethod.POST, HttpStatus.CREATED);
+
+        String validHearingId = getHearingId(response);
+        videoHearingsIdRootContext = String.format(videoHearingsIdRootContext, validHearingId);
         callRestEndpointWithPayload(videoHearingsIdRootContext,
                 headersAsMap,
                 authorizationToken,

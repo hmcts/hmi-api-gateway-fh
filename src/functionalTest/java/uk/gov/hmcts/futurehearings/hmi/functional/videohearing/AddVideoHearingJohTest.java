@@ -9,15 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.ResourceUtils;
 import uk.gov.hmcts.futurehearings.hmi.Application;
 import uk.gov.hmcts.futurehearings.hmi.functional.common.test.FunctionalTest;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.getHearingId;
+import static uk.gov.hmcts.futurehearings.hmi.functional.common.TestingUtils.readFileContents;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.header.factory.HeaderFactory.createStandardHmiHeader;
 import static uk.gov.hmcts.futurehearings.hmi.functional.common.rest.RestClientTemplate.callRestEndpointWithPayload;
 
@@ -97,15 +95,5 @@ class AddVideoHearingJohTest extends FunctionalTest {
                 readFileContents(CREATE_VH_LISTINGS_JOH_PAYLOAD),
                 HttpMethod.POST,
                 HttpStatus.NOT_FOUND);
-    }
-
-    private String readFileContents(final String path) throws IOException {
-        final File file = ResourceUtils.getFile("classpath:" + path);
-        return new String(Files.readAllBytes(Paths.get(file.toURI())));
-    }
-
-    private String getHearingId(Response response) {
-        String newlyCreatedHearing = response.getHeader("Location");
-        return newlyCreatedHearing.substring(newlyCreatedHearing.lastIndexOf('/') + 1);
     }
 }
