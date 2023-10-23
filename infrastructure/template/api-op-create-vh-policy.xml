@@ -70,7 +70,7 @@
                         </set-header>
                     </otherwise>
                 </choose>
-                <rewrite-uri template="/" copy-unmatched-params="true" />
+                <rewrite-uri template="/" copy-unmatched-params="false" />
                 <choose>
                     <when condition="@((bool)context.Variables["versionRequest"])">
                         <set-backend-service base-url="#{vhHost}#/v2/hearings" />
