@@ -1,6 +1,32 @@
 <policies>
     <inbound>
         <base />
+        <set-variable name="versionRequest" value="@{
+            string[] qryPrmKeys = context.Request.Url.Query.Keys.ToArray();
+            string[] allowedKeys = {"version"};
+            bool v2Request = false;
+            if(context.Request.Url.Query.Count &gt; 0){
+                for (int i = 0; i &lt; qryPrmKeys.Count(); i++)
+                {
+                    bool keyFound = false;
+                    for (int j = 0; j &lt; allowedKeys.Count(); j++)
+                    {
+                        if (qryPrmKeys[i] == allowedKeys[j]){
+                            keyFound = true;
+                            break;
+                        }
+                    }
+                    if(keyFound){
+                        if(context.Request.Url.Query["version"][0] == "v2") {
+                            v2Request = true;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return v2Request;
+        }" />
         <choose>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "VH")">
                 <cache-lookup-value key="vhAuth" variable-name="vhAuthToken" default-value="" />
@@ -45,7 +71,14 @@
                     </otherwise>
                 </choose>
                 <rewrite-uri template="/{hearingId}" copy-unmatched-params="true" />
-                <set-backend-service base-url="#{vhHost}#/hearings" />
+                <choose>
+                    <when condition="@((bool)context.Variables["versionRequest"])">
+                        <set-backend-service base-url="#{vhHost}#/v2/hearings" />
+                    </when>
+                    <otherwise>
+                        <set-backend-service base-url="#{vhHost}#/hearings" />
+                    </otherwise>
+                </choose>
             </when>
             <when condition="@(context.Request.Headers.GetValueOrDefault("Destination-System","") == "MOCK")">
                 <mock-response status-code="200" content-type="application/json" />
